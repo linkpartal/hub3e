@@ -8,6 +8,7 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
+    	var_dump();
         return $this->render('EcoleBundle:Default:index.html.twig');
     }
 }
