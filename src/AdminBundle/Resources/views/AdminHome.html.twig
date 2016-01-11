@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('image/Logo_Hub_3e.png') }}" />
+    {% block CSS %}{% endblock %}
+
+    <title>HUB3E - {% block title %}Home{% endblock %}</title>
+
+</head>
+<body>
+
+<div class="container">
+
+{% block TopBar %}
+
+     <div class="row" style="height: 32px; background: #2A76CC;">
+        <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="border: 0;padding: 4.5px;height: 100%;">
+            <a href="{{ path('metier_user_admin') }}" >     <img src="" style="height: 21px;width: 100%" >        </a>
+        </div>
+        <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="margin-left: 7.5px;border: 0;padding: 4.5px;height: 21px;float: left;">
+            <button onclick="postiframe('{{ path("addtier",{'type':'1'}) }}')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+                    ></button>
+
+            <button>Ecole</button>
+
+        </div>
+         <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 7.5px;border: 0;padding: 4.5px;height: 21px;float: left;">
+             <button onclick="postiframe('{{ path("addtier",{'type':'0'}) }}')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+                     ></button>
+
+             <button>Société</button>
+
+         </div>
+         <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 7.5px;border: 0;padding: 4.5px;height: 21px;float: left;">
+             <button onclick="postiframe('{{ path("metier_user_addlicence") }}')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+                    ></button>
+
+             <button>Licences</button>
+         </div>
+         <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 7.5px;border: 0;padding: 4.5px;height: 21px;float: left;">
+             <button onclick="postiframe('{{ path('AddUser',{'from':'super','id':'-1'}) }}')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+                     ></button>
+
+             <button>Utilisateurs</button>
+         </div>
+    </div>
+
+
+{% endblock %}
+    <div class="row" style="height: 100%">
+
+        {% block LeftBar %}
+        <div class="col-xs-2">
+
+            <select title="" id="leftselect" name="myddl" class="btn btn-default dropdown-toggle">
+                <option value="ecole">Voir Ecoles</option>
+                <option value="societe">Voir Sociétés</option>
+                <option value="licence">Voir Licences</option>
+                <option value="user">Voir Utilisateurs</option>
+                <option value="QCM">Gestion QCM</option>
+                <option value="modele">Gestion Modèles</option>
+            </select>
+
+            <div id="ecole" class="list-group col-xs-2 leftbar">
+                {% if ecoles is defined %}
+                    {% for e in ecoles %}
+                        <button onclick="postiframe('{{ path('metier_user_affiche',{'id': e.getId} ) }}')" id="{{ e.getId }}" type="button" class="list-group-item butonLigne">
+                            <div class="col-xs-12 part" title="{{e.getTier.getRaisonSoc}}">{{e.getTier.getRaisonSoc}}</div>
+                            <div class="col-xs-12 part"
+                                 style="height: 31px; text-align: left;">
+                                <div class="col-xs-9 part" title="{{ e.getVille }}">{{ e.getVille }}</div>
+                                <!--span class="badge">New</span-->
+                                {% if e.getActive %}
+                                    <div class="col-xs-1 active"></div>
+                                {% else %}
+                                    <div class="col-xs-1 inactive"></div>
+                                {% endif %}
+                            </div>
+                        </button>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div id="societe" class="list-group col-xs-2 leftbar"
+                 style="visibility: hidden;">
+                {% if societes is defined %}
+                    {% for s in societes %}
+                        <button onclick="postiframe('{{ path('metier_user_affiche',{'id': s.getId }) }}')" id="{{ s.getId }}" type="button" class="list-group-item butonLigne">
+                            <div class="col-xs-12 part" title="{{s.getTier.getRaisonSoc}}">{{s.getTier.getRaisonSoc}}</div>
+                            <div class="col-xs-12 part"
+                                 style="height: 31px; text-align: left;">
+                                <div class="col-xs-9 part" title="{{ s.getVille }}">{{ s.getVille }}</div>
+                                <!--span class="badge">New</span-->
+                                {% if s.getActive %}
+                                    <div class="col-xs-1 active"></div>
+                                {% else %}
+                                    <div class="col-xs-1 inactive"></div>
+                                {% endif %}
+                            </div>
+                        </button>
+                    {% endfor %}
+                {% endif %}
+
+            </div>
+            <div id="licence" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                {% if AllLicences is defined %}
+                    {% for lic in AllLicences %}
+                        <button id="{{ lic.getId }}" type="button" class="list-group-item butonLigne">
+                            <div class="col-xs-12 part" title="{{lic.getLibelle}}">{{lic.getLibelle}}</div>
+                            <div class="col-xs-12 part"
+                                 style="height: 31px; text-align: left;">
+                                <div class="col-xs-9 part" title="{{ lic.getDuree }}">{{lic.getDuree }}</div>
+                            </div>
+                        </button>
+                    {% endfor %}
+                {% endif %}
+
+            </div>
+            <div id="user" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                {% if users is defined %}
+                    {% for u in users %}
+                        <button id="{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                            <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
+                            <div class="col-xs-12 part"
+                                 style="height: 31px; text-align: left;">
+                                <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
+                                <span class="badge">New</span>
+                                <div class="col-xs-1 online"></div>
+                            </div>
+                        </button>
+                    {% endfor %}
+                {% endif %}
+
+            </div>
+            <div id="QCM" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                {% if qcms is defined %}
+                    {% for qcm in qcms %}
+                        <button onclick="postiframe('{{ path('loadgestionQCM',{'id': qcm.getId} ) }}')" id="{{ qcm.getId }}" type="button" class="list-group-item butonLigne">
+                            <div class="col-xs-12 part">{{qcm.getNom}}</div>
+                            <div class="col-xs-12 part"
+                                 style="height: 31px; text-align: left;">
+                                <div class="col-xs-9 part"></div>
+                                <span class="badge">New</span>
+                                <div class="col-xs-1 online"></div>
+                            </div>
+                        </button>
+                    {% endfor %}
+                {% endif %}
+
+            </div>
+            <div id="modele" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+
+
+            </div>
+        </div>
+        {% endblock %}
+
+
+        <div class="col-xs-10" style="height: 100%" >
+
+            <div class="row" style="height: 40px; margin: 0; background: #2F88CE;">
+
+                <div class="input-group col-xs-offset-1 col-xs-6" style="margin-top: 5px; float: left;">
+                    <span class="glyphicon glyphicon-search input-group-addon"
+                          id="basic-addon1"></span>
+                    <input onkeyup="search(this.value)" type="text" class="recherche" aria-describedby="basic-addon1"
+                           style="height: 27px;">
+                </div>
+
+                <div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px;">
+                    <button type="button" class="btn btn-default dropdown-toggle"
+                            data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"
+                            style="width: 100%; height: 20px; border-radius: 0; background: none; border: 0;">
+                        Filtre <span class="glyphicon glyphicon-menu-down"
+                                     aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+
+            {% block Content%}
+                {% if url is defined %}
+                    <iframe id="iframe" src="{{ url }}"></iframe>
+                {% else %}
+                    <iframe id="iframe" src="{{ path('admin_iframeload') }}"></iframe>
+                {% endif %}
+            {% endblock %}
+        </div>
+
+    </div>
+
+</div>
+<script src="//code.jquery.com/jquery.min.js"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script language="JavaScript">
+    document.getElementById("leftselect").onchange = function(){
+        var x = document.getElementById("leftselect").value;
+        if(x=='QCM')
+        {
+            document.getElementById("iframe").src = '{{ path('loadgestionQCM') }}';
+        }
+        if(x=='modele')
+        {
+            document.getElementById("iframe").src = '{{ path('creeNewModele') }}';
+        }
+
+        document.getElementById('ecole').style.visibility= 'hidden';
+        document.getElementById('societe').style.visibility= 'hidden';
+        document.getElementById('licence').style.visibility= 'hidden';
+        document.getElementById('user').style.visibility= 'hidden';
+        document.getElementById('QCM').style.visibility= 'hidden';
+        document.getElementById('modele').style.visibility= 'hidden';
+        document.getElementById(x).style.visibility='visible';
+
+    };
+    function postiframe(url) {
+        document.getElementById("iframe").src = url;
+    }
+    function stringWith (str, prefix) {
+        var ustring = str.toUpperCase();
+        var uprefix = prefix.toUpperCase();
+        if (ustring.indexOf(uprefix) >= 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    };
+    function search(mot){
+
+        var buttons = document.getElementById('ecole').getElementsByClassName('butonLigne');
+
+        var i=0;
+        while(i<buttons.length)
+        {
+            buttons[i].style.display="block";
+            var c = buttons[i].children;
+            if (!stringWith(c[0].getAttribute('title'), mot) && !stringWith(c[1].children[0].title, mot)) {
+                buttons[i].style.display="none";
+            }
+            i++;
+        }
+
+        var buttons = document.getElementById('societe').getElementsByClassName('butonLigne');
+
+        var i=0;
+        while(i<buttons.length)
+        {
+            buttons[i].style.display="block";
+            var c = buttons[i].children;
+            if (!stringWith(c[0].getAttribute('title'), mot) && !stringWith(c[1].children[0].title, mot)) {
+                buttons[i].style.display="none";
+            }
+            i++;
+        }
+        var buttons = document.getElementById('licence').getElementsByClassName('butonLigne');
+
+        var i=0;
+        while(i<buttons.length)
+        {
+            buttons[i].style.display="block";
+            var c = buttons[i].children;
+            if (!stringWith(c[0].getAttribute('title'), mot) && !stringWith(c[1].children[0].title, mot)) {
+                buttons[i].style.display="none";
+            }
+            i++;
+        }
+        var buttons = document.getElementById('user').getElementsByClassName('butonLigne');
+
+        var i=0;
+        while(i<buttons.length)
+        {
+            buttons[i].style.display="block";
+            var c = buttons[i].children;
+            if (!stringWith(c[0].getAttribute('title'), mot) && !stringWith(c[1].children[0].title, mot)) {
+                buttons[i].style.display="none";
+            }
+            i++;
+        }
+    };
+</script>
+
+{% block JS %}
+
+{% endblock %}
+</body>
+</html>
+

@@ -1,0 +1,38 @@
+@CHARSET "utf-8";
+
+.inputcontainer
+{
+    border: none !important;
+    border-radius: 0 !important;
+    border-bottom: 1px solid #1B2024 !important;
+    width: 100%;
+    display: table;
+}
+.formulaire
+{
+    background-color: white;
+}
+
+.inputcontainer label
+{
+    height: 60px;
+    padding: 10px 0 10px 0 !important;
+    display: inline-block !important;
+    border: none !important;
+    color: #7F7F7F !important;
+    font : 20px arial;
+    margin: 0 !important;
+    line-height: 200%;
+}
+.inputcontainer .champ
+{
+    margin: 9px;
+    border: none;
+    color: black !important;
+    font : 20px arial;
+    height: 40px;
+    padding: 10px 0;
+    background-color: #D3D3D3;
+    width: 250px;
+}
+

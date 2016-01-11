@@ -1,0 +1,169 @@
+<?php
+
+namespace GenericBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Licencesociete
+ *
+ * @ORM\Table(name="licencesociete", indexes={@ORM\Index(name="fk_Licence_copy1_Societe1_idx", columns={"Societe_id"})})
+ * @ORM\Entity
+ */
+class Licencesociete
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="idLicence", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $idlicence;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Libelle", type="string", length=45, nullable=true)
+     */
+    private $libelle;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255, nullable=false)
+     */
+    private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="DateDebut", type="string", length=45, nullable=true)
+     */
+    private $datedebut;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="DateFin", type="string", length=45, nullable=true)
+     */
+    private $datefin;
+
+    /**
+     * @var \Societe
+     *
+     * @ORM\ManyToOne(targetEntity="Societe")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="Societe_id", referencedColumnName="id", onDelete="CASCADE")
+     * })
+     */
+    private $societe;
+
+
+
+    /**
+     * Get idlicence
+     *
+     * @return integer
+     */
+    public function getIdlicence()
+    {
+        return $this->idlicence;
+    }
+
+    /**
+     * Set libelle
+     *
+     * @param string $libelle
+     *
+     * @return Licencesociete
+     */
+    public function setLibelle($libelle)
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    /**
+     * Get libelle
+     *
+     * @return string
+     */
+    public function getLibelle()
+    {
+        return $this->libelle;
+    }
+
+    /**
+     * Set datedebut
+     *
+     * @param string $datedebut
+     *
+     * @return Licencesociete
+     */
+    public function setDatedebut($datedebut)
+    {
+        $this->datedebut = $datedebut;
+
+        return $this;
+    }
+
+    /**
+     * Get datedebut
+     *
+     * @return string
+     */
+    public function getDatedebut()
+    {
+        return $this->datedebut;
+    }
+
+    /**
+     * Set datefin
+     *
+     * @param string $datefin
+     *
+     * @return Licencesociete
+     */
+    public function setDatefin($datefin)
+    {
+        $this->datefin = $datefin;
+
+        return $this;
+    }
+
+    /**
+     * Get datefin
+     *
+     * @return string
+     */
+    public function getDatefin()
+    {
+        return $this->datefin;
+    }
+
+    /**
+     * Set societe
+     *
+     * @param \GenericBundle\Entity\Societe $societe
+     *
+     * @return Licencesociete
+     */
+    public function setSociete(\GenericBundle\Entity\Societe $societe = null)
+    {
+        $this->societe = $societe;
+
+        return $this;
+    }
+
+    /**
+     * Get societe
+     *
+     * @return \GenericBundle\Entity\Societe
+     */
+    public function getSociete()
+    {
+        return $this->societe;
+    }
+}

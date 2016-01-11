@@ -1,0 +1,151 @@
+{% extends "AdminBundle:Admin:iFrameContent.html.twig" %}
+{% block title %}Associer écoles{% endblock %}
+{% block CSS %}<link rel="stylesheet" href="{{ asset('css/ajout.css') }}" />{% endblock %}
+{% block Content%}
+
+    <div class="row" style="height: 60px; margin: 0;">
+        <img class="col-xs-1" src="data:image/jpg;base64,{{ ecole.getLogo }}"
+             style="padding: 10px; height: 40px;">
+        <div class="col-xs-4">
+            <div class="col-xs-12"
+                 style="height: 20px; text-align: left; padding: 15px;">{{ ecole.getNom }} - {{ ecole.getVille }}</div>
+            <div class="col-xs-12" style="height: 20px; text-align: left;">{{ecole.getAdresse }}, {{ ecole.getCodePostal }} {{ ecole.getVille }}</div>
+        </div>
+        <div class="col-xs-offset-5 col-xs-1">
+            <div class="col-xs-12" style="height: 20px;; padding-top: 10px;">549</div>
+            <div class="col-xs-12" style="height: 20px;">Apprenant</div>
+        </div>
+        <div class=" col-xs-1">
+            <div class="col-xs-12" style="height: 20px; padding-top: 10px;">151</div>
+            <div class="col-xs-12" style="height: 20px;">Missions</div>
+        </div>
+    </div>
+
+    <div class="row" style="margin: 0;overflow-y: auto;height: calc(100% - 224px)">
+
+        <div class="col-xs-9"
+             style="background: rgb(238, 241, 246); height: 100%;">
+
+            <div class="col-xs-12" style="height: 50px;">
+                <div class="btn-group"
+                     style="height: 35px; width: 100%; padding: 15px 0 0 15px;">
+                    <select title="" id="select_info_ecole" class="btn btn-default dropdown-toggle">
+                        <option value="info_ecole">Information</option>
+                        <option value="info_licence_ecole">Licences</option>
+                        <option value="info_user_ecole">Utilisateurs</option>
+                        <option selected="selected" value="info_ecole_ecole">Ecoles liées</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-xs-12" style="margin-bottom: 50px">
+                <div id="info_ecole" class="list-group affichage"
+                     style="display: none;">
+
+                    <label class="list-group-item info" >Nom école : {{ecole.getNom}}</label>
+                    <label class="list-group-item info" >Adresse : {{ecole.getAdresse}}</label>
+                    <label class="list-group-item info" >Code Postal : {{ecole.getCodepostal}}</label>
+                    <label class="list-group-item info" >Ville : {{ecole.getVille}}</label>
+                    <label class="list-group-item info" >Téléphone : {{ecole.getTelephone}}</label>
+                    <label class="list-group-item info" >FAX : {{ecole.getFax}}</label>
+                    <label class="list-group-item info" >Responsable école : {{ecole.getResponsable}}</label>
+                    <label class="list-group-item info" >Téléphone responsable école : {{ecole.getTelResponsable}}</label>
+                    <label class="list-group-item info" >Email responsable école : {{ecole.getMailResponsable}}</label>
+                    <label class="list-group-item info" >Site web : {{ecole.getSite}}</label>
+                    <img alt="Logo" src="data:image/jpg;base64,{{ ecole.getLogo }}"/>
+                </div>
+
+                <div id="info_licence_ecole" class="list-group affichage"
+                     style="display: none;">
+
+                    <table id="tableLibs">
+                        <tr>
+                            <td>Id</td>
+                            <td>Libelle</td>
+                            <td>Decription</td>
+                            <td>Date début</td>
+                            <td>Date Fin</td>
+                            <td style="border: none"><button onclick="post('{{ path('metier_user_instance') }}',{'from':'ecole',idecole:{{ ecole.getId }}})" type="button" style="border: none">+</button></td>
+                        </tr>
+                        {% if libs is defined %}
+                            {% for lib in libs %}
+                                <tr>
+                                    <td>{{ lib.getIdLicence }}</td>
+                                    <td>{{ lib.getLibelle }}</td>
+                                    <td>{{ lib.getDescription }}</td>
+                                    <td>{{ lib.getDatedebut }}</td>
+                                    <td>{{ lib.getDatefin }}</td>
+                                    <td style="border: none"><button onclick="supprimerligne('{{ path('supprimer_LicenceEcole',{'id': lib.getIdLicence}) }}',this)" type="button" style="border: none">x</button></td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </table>
+
+                </div>
+
+                <div id="info_user_ecole" class="list-group affichage"
+                     style="display: none;">
+
+                    <table>
+                        <tr>
+                            <td>Id</td>
+                            <td>Username</td>
+                            <td>Email</td>
+                            <td>Dernière Connexion</td>
+                            <td style="border: none"><button onclick="post('{{ path('AddUser',{'from':'ecole','id': ecole.getId}) }}')" type="button" style="border: none">+</button></td>
+                        </tr>
+                        {% if usersecole is defined %}
+                            {% for user in usersecole %}
+                                <tr>
+                                    <td>{{ user.getId }}</td>
+                                    <td>{{ user.getUsername }}</td>
+                                    <td>{{ user.getEmail }}</td>
+                                    <td>{{ user.getLastLogin|date('Y-m-d') }}</td>
+                                    <td style="border: none"><button type="button" style="border: none">x</button></td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </table>
+
+                </div>
+
+                <div id="info_ecole_ecole" class="list-group affichage">
+
+                    <form class="formulaire" id="formLicence" action="{{ path("ecoles_assiciated",{'id':id}) }}" method="post">
+                        <select title="" name="ecoles[]" multiple>
+                            {% for ecole in ecoles %}
+                                <option value="{{ ecole.getNom }}">{{ ecole.getNom }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="envoyer">
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-3"
+             style="background: rgb(238, 241, 246); height: 100%;">
+            <div class="list-group"
+                 style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
+                <button type="button" class="list-group-item rightMenu" style="background-color: limegreen">
+                    <div class="col-xs-12" style="display: inline-table;color: white;">Active</div>
+                </button>
+                <button onclick="post('{{ path('addecole',{'id': ecole.getId }) }}',{})" type="button" class="list-group-item rightMenu" style="background-color: #2A76CC">
+                    <div class="col-xs-12"  style="display: inline-table;color: white;">Modifier la fiche</div>
+
+                </button>
+                <button onclick="post('{{ path('supprimerecole',{'id': ecole.getId }) }}',{})" type="button" class="list-group-item rightMenu" style="background-color: #2A76CC">
+                    <div class="col-xs-12"  style="display: inline-table;color: white;">Supprimer l'ecole</div>
+
+                </button>
+                <button onclick="alert('Ce button n\'est pas encore fonctionel!')" type="button" class="list-group-item rightMenu" style="background-color: #2A76CC">
+                    <div class="col-xs-12"  style="display: inline-table;color: white;">Gérer les droits</div>
+
+                </button>
+
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

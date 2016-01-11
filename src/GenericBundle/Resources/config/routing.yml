@@ -1,0 +1,15 @@
+metier_user_login:
+    path:     /
+    defaults: { _controller: GenericBundle:Default:loadlogin }
+
+metier_user_check:
+    path:     /log
+    defaults: { _controller: GenericBundle:Default:check }
+
+change_password:
+    path: /change-password/{username}
+    defaults: {_controller: GenericBundle:Default:changePassword }
+
+password_changed:
+    path: /passwordchanged
+    defaults: {_controller: GenericBundle:Default:passwordChanged }

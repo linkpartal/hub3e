@@ -1,0 +1,15 @@
+ecole:
+    resource: "@EcoleBundle/Resources/config/routing.yml"
+    prefix:   /
+
+admin:
+    resource: "@AdminBundle/Resources/config/routing.yml"
+    prefix:   /
+
+generic:
+    resource: "@GenericBundle/Resources/config/routing.yml"
+    prefix:   /
+
+# app/config/routing.yml
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"

@@ -1,0 +1,545 @@
+<?php
+
+namespace GenericBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
+/**
+ * Ecole
+ *
+ * @ORM\Table(name="ecole")
+ * @ORM\Entity
+ */
+class Ecole
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="siret", type="string", length=20, nullable=false)
+     */
+    private $siret;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Nom", type="string", length=45, nullable=false, unique = true)
+     */
+    private $nom;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Adresse", type="string", length=255, nullable=true)
+     */
+    private $adresse;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="codepostal", type="string", length=25, nullable=true)
+     */
+    private $codepostal;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Ville", type="string", length=25, nullable=true)
+     */
+    private $ville;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telephone", type="string", length=20, nullable=true)
+     */
+    private $telephone;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fax", type="string", length=20, nullable=true)
+     */
+    private $fax;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Responsable", type="string", length=45, nullable=true)
+     */
+    private $responsable;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telResponsable", type="string", length=20, nullable=true)
+     */
+    private $telresponsable;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mailResponsable", type="string", length=45, nullable=true)
+     */
+    private $mailresponsable;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Site", type="string", length=255, nullable=true)
+     */
+    private $site;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="geocode", type="string", length=255, nullable=true)
+     */
+    private $geocode;
+
+    /**
+     * @var blob
+     *
+     * @ORM\Column(name="logo", type="blob", nullable=true)
+     */
+    private $logo;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Qcmdef", inversedBy="ecole")
+     * @ORM\JoinTable(name="qcmdef_has_ecole",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="ecole_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="QCMDef_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $qcmdef;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Ecole", inversedBy="ecole")
+     * @ORM\JoinTable(name="ecole_has_ecole",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="ecole_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="ecole_id1", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $ecole1;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->qcmdef = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ecole1 = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set siret
+     *
+     * @param string $siret
+     *
+     * @return Ecole
+     */
+    public function setSiret($siret)
+    {
+        $this->siret = $siret;
+
+        return $this;
+    }
+
+    /**
+     * Get siret
+     *
+     * @return string
+     */
+    public function getSiret()
+    {
+        return $this->siret;
+    }
+
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     *
+     * @return Ecole
+     */
+    public function setNom($nom)
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    /**
+     * Set adresse
+     *
+     * @param string $adresse
+     *
+     * @return Ecole
+     */
+    public function setAdresse($adresse)
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    /**
+     * Get adresse
+     *
+     * @return string
+     */
+    public function getAdresse()
+    {
+        return $this->adresse;
+    }
+
+    /**
+     * Set codepostal
+     *
+     * @param string $codepostal
+     *
+     * @return Ecole
+     */
+    public function setCodepostal($codepostal)
+    {
+        $this->codepostal = $codepostal;
+
+        return $this;
+    }
+
+    /**
+     * Get codepostal
+     *
+     * @return string
+     */
+    public function getCodepostal()
+    {
+        return $this->codepostal;
+    }
+
+    /**
+     * Set ville
+     *
+     * @param string $ville
+     *
+     * @return Ecole
+     */
+    public function setVille($ville)
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    /**
+     * Get ville
+     *
+     * @return string
+     */
+    public function getVille()
+    {
+        return $this->ville;
+    }
+
+    /**
+     * Set telephone
+     *
+     * @param string $telephone
+     *
+     * @return Ecole
+     */
+    public function setTelephone($telephone)
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    /**
+     * Get telephone
+     *
+     * @return string
+     */
+    public function getTelephone()
+    {
+        return $this->telephone;
+    }
+
+    /**
+     * Set fax
+     *
+     * @param string $fax
+     *
+     * @return Ecole
+     */
+    public function setFax($fax)
+    {
+        $this->fax = $fax;
+
+        return $this;
+    }
+
+    /**
+     * Get fax
+     *
+     * @return string
+     */
+    public function getFax()
+    {
+        return $this->fax;
+    }
+
+    /**
+     * Set responsable
+     *
+     * @param string $responsable
+     *
+     * @return Ecole
+     */
+    public function setResponsable($responsable)
+    {
+        $this->responsable = $responsable;
+
+        return $this;
+    }
+
+    /**
+     * Get responsable
+     *
+     * @return string
+     */
+    public function getResponsable()
+    {
+        return $this->responsable;
+    }
+
+    /**
+     * Set telresponsable
+     *
+     * @param string $telresponsable
+     *
+     * @return Ecole
+     */
+    public function setTelresponsable($telresponsable)
+    {
+        $this->telresponsable = $telresponsable;
+
+        return $this;
+    }
+
+    /**
+     * Get telresponsable
+     *
+     * @return string
+     */
+    public function getTelresponsable()
+    {
+        return $this->telresponsable;
+    }
+
+    /**
+     * Set mailresponsable
+     *
+     * @param string $mailresponsable
+     *
+     * @return Ecole
+     */
+    public function setMailresponsable($mailresponsable)
+    {
+        $this->mailresponsable = $mailresponsable;
+
+        return $this;
+    }
+
+    /**
+     * Get mailresponsable
+     *
+     * @return string
+     */
+    public function getMailresponsable()
+    {
+        return $this->mailresponsable;
+    }
+
+    /**
+     * Set site
+     *
+     * @param string $site
+     *
+     * @return Ecole
+     */
+    public function setSite($site)
+    {
+        $this->site = $site;
+
+        return $this;
+    }
+
+    /**
+     * Get site
+     *
+     * @return string
+     */
+    public function getSite()
+    {
+        return $this->site;
+    }
+
+    /**
+     * Set geocode
+     *
+     * @param string $geocode
+     *
+     * @return Ecole
+     */
+    public function setGeocode($geocode)
+    {
+        $this->geocode = $geocode;
+
+        return $this;
+    }
+
+    /**
+     * Get geocode
+     *
+     * @return string
+     */
+    public function getGeocode()
+    {
+        return $this->geocode;
+    }
+
+    /**
+     * Add qcmdef
+     *
+     * @param \GenericBundle\Entity\Qcmdef $qcmdef
+     *
+     * @return Ecole
+     */
+    public function addQcmdef(\GenericBundle\Entity\Qcmdef $qcmdef)
+    {
+        $this->qcmdef[] = $qcmdef;
+
+        return $this;
+    }
+
+    /**
+     * Remove qcmdef
+     *
+     * @param \GenericBundle\Entity\Qcmdef $qcmdef
+     */
+    public function removeQcmdef(\GenericBundle\Entity\Qcmdef $qcmdef)
+    {
+        $this->qcmdef->removeElement($qcmdef);
+    }
+
+    /**
+     * Get qcmdef
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQcmdef()
+    {
+        return $this->qcmdef;
+    }
+
+    /**
+     * Set logo
+     *
+     * @param string $logo
+     *
+     * @return Ecole
+     */
+    public function setLogo($logo)
+    {
+        $this->logo = $logo;
+
+        return $this;
+    }
+
+    /**
+     * Get logo
+     *
+     * @return string
+     */
+    public function getLogo()
+    {
+        return $this->logo;
+    }
+
+    /**
+     * Add ecole1
+     *
+     * @param \GenericBundle\Entity\Ecole $ecole1
+     *
+     * @return Ecole
+     */
+    public function addEcole1(\GenericBundle\Entity\Ecole $ecole1)
+    {
+        $this->ecole1[] = $ecole1;
+
+        return $this;
+    }
+
+    /**
+     * Remove ecole1
+     *
+     * @param \GenericBundle\Entity\Ecole $ecole1
+     */
+    public function removeEcole1(\GenericBundle\Entity\Ecole $ecole1)
+    {
+        $this->ecole1->removeElement($ecole1);
+    }
+
+    /**
+     * Get ecole1
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEcole1()
+    {
+        return $this->ecole1;
+    }
+}

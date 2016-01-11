@@ -1,0 +1,4 @@
+services:
+#    generic.example:
+#        class: GenericBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

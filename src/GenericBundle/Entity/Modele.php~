@@ -1,0 +1,55 @@
+<?php
+
+namespace GenericBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Modele
+ *
+ * @ORM\Table(name="modele")
+ * @ORM\Entity
+ */
+class Modele
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nom", type="string", length=45, nullable=false)
+     */
+    private $nom;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Etablissement", inversedBy="modele")
+     * @ORM\JoinTable(name="modele_has_etablissement",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="modele_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="etablissement_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $etablissement;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->etablissement = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+}
+

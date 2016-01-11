@@ -1,0 +1,107 @@
+<?php
+
+namespace GenericBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Questionnaire
+ *
+ * @ORM\Table(name="questionnaire", indexes={@ORM\Index(name="IDX_7A64DAF77EF1B1E", columns={"ecole_id"})})
+ * @ORM\Entity
+ */
+class Questionnaire
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Question", type="string", length=255, nullable=false)
+     */
+    private $question;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="reponse", type="array", nullable=false)
+     */
+    private $reponse;
+
+    /**
+     * @var \Ecole
+     *
+     * @ORM\ManyToOne(targetEntity="Ecole")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="ecole_id", referencedColumnName="id")
+     * })
+     */
+    private $ecole;
+
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set question
+     *
+     * @param string $question
+     *
+     * @return Questionnaire
+     */
+    public function setQuestion($question)
+    {
+        $this->question = $question;
+
+        return $this;
+    }
+
+    /**
+     * Get question
+     *
+     * @return string
+     */
+    public function getQuestion()
+    {
+        return $this->question;
+    }
+
+    /**
+     * Set ecole
+     *
+     * @param \GenericBundle\Entity\Ecole $ecole
+     *
+     * @return Questionnaire
+     */
+    public function setEcole(\GenericBundle\Entity\Ecole $ecole = null)
+    {
+        $this->ecole = $ecole;
+
+        return $this;
+    }
+
+    /**
+     * Get ecole
+     *
+     * @return \GenericBundle\Entity\Ecole
+     */
+    public function getEcole()
+    {
+        return $this->ecole;
+    }
+}

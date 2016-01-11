@@ -1,0 +1,99 @@
+metier_user_admin:
+    path : /admin
+    defaults: { _controller: AdminBundle:Default:load}
+
+admin_iframeload:
+    path: /admin/iframe
+    defaults: { _controller: AdminBundle:Default:loadiframe}
+
+addtier:
+    path : /admin/addecole/type={type}
+    defaults: { _controller: AdminBundle:Ecole:addtier}
+
+checkExist:
+    path : /admin/checkExist
+    defaults: { _controller: AdminBundle:Ecole:checkExist}
+
+tieradded:
+    path : /admin/added
+    defaults: { _controller: AdminBundle:Ecole:tieradded}
+
+metier_user_addlicence:
+    path : /admin/addlicence
+    defaults: { _controller: AdminBundle:LicenceDef:addlicence}
+
+metier_user_licenceadded:
+    path : /admin/licenceadded
+    defaults: { _controller: AdminBundle:LicenceDef:licenceadded}
+
+metier_user_affiche:
+    path: /admin/affichage/id={id}
+    defaults: { _controller: AdminBundle:Default:affichage}
+
+metier_user_instance:
+    path:  /admin/ecolelicence
+    defaults: { _controller: AdminBundle:LicenceDef:associer}
+
+metier_user_associated:
+    path:  /admin/associated
+    defaults: { _controller: AdminBundle:LicenceDef:associated}
+
+supprimer_Licence:
+    path:  /admin/suppLicence/{id}
+    defaults: {_controller: AdminBundle:Ecole:suppLicence}
+
+AddUser:
+    path:  /admin/addUser/from={from}&id={id}
+    defaults: {_controller: AdminBundle:User:addUserEcole}
+
+user_added:
+    path:  /admin/Useradded
+    defaults: {_controller: AdminBundle:User:UserAdded}
+
+loadgestionQCM:
+    path:     /admin/gestionQCM/{id}
+    defaults: { _controller: AdminBundle:QCM:load, id :ajouter }
+
+Add_QCM:
+    path: /admin/addQCM
+    defaults: { _controller: AdminBundle:QCM:add }
+
+supprimer_QCM:
+    path: /admin/supprimerQCM/rep={rep}&qst={qst}&qcm={qcm}
+    defaults: { _controller: AdminBundle:QCM:supprimer }
+
+supprimeretablissement:
+    path : /admin/supprimeretab/id={id}
+    defaults: { _controller: AdminBundle:Ecole:supprimeretab}
+
+associer_ecoles:
+    path : /admin/associerecoles/id={id}
+    defaults: { _controller: AdminBundle:Ecole:assosierecoles}
+
+ecoles_assiciated:
+    path: /admin/ecolesassociated/id={id}
+    defaults: { _controller: AdminBundle:Ecole:ecolesassociated}
+
+creeNewModele:
+    path: /admin/creeNewModele
+    defaults: { _controller: AdminBundle:Default:creeNewModele}
+
+saveNewModele:
+    path: /admin/saveNewModele
+    defaults: { _controller: AdminBundle:Default:saveNewModele}
+
+modifieretab:
+    path: /admin/modifieretablissement/{id}
+    defaults: { _controller: AdminBundle:Ecole:modifier}
+
+etabmodif:
+    path: /admin/etabmodif
+    defaults: { _controller: AdminBundle:Ecole:etabModif}
+
+supprimerQCM:
+    path: /admin/supprimerQCM/nom={nom}
+    defaults: { _controller: AdminBundle:QCM:deleteQcm}
+
+activate:
+    path: /admin/activate/id={id}
+    defaults: { _controller: AdminBundle:Ecole:activate}

@@ -1,0 +1,43 @@
+<?php
+
+namespace GenericBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Reponse
+ *
+ * @ORM\Table(name="reponse", indexes={@ORM\Index(name="IDX_5FB6DEC7CE07E8FF", columns={"questionnaire_id"})})
+ * @ORM\Entity
+ */
+class Reponse
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Question", type="string", length=255, nullable=false)
+     */
+    private $question;
+
+    /**
+     * @var \Questionnaire
+     *
+     * @ORM\ManyToOne(targetEntity="Questionnaire")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="questionnaire_id", referencedColumnName="id")
+     * })
+     */
+    private $questionnaire;
+
+
+}
+

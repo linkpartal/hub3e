@@ -1,0 +1,40 @@
+# app/config/security.yml
+security:
+    encoders:
+        FOS\UserBundle\Model\UserInterface: bcrypt
+
+    role_hierarchy:
+        ROLE_APPRENANT:   ROLE_USER
+        ROLE_RECRUTEUR:   ROLE_APPRENANT
+        ROLE_TUTEUR:      ROLE_APPRENANT
+        ROLE_ADMINECOLE:  ROLE_RECRUTEUR
+        ROLE_ADMINSOC:    ROLE_TUTEUR
+        ROLE_SUPER_ADMIN: [ROLE_ADMINECOLE, ROLE_ADMINSOC]
+
+    providers:
+        fos_userbundle:
+            entity:
+                class: GenericBundle:User
+
+    firewalls:
+        main:
+            pattern: ^/
+            form_login:
+                provider: fos_userbundle
+                csrf_token_generator: security.csrf.token_manager # Use form.csrf_provider instead for Symfony <2.4
+
+            remember_me:
+                secret:      %secret%
+                lifetime: 3000000
+                path:     /
+
+            logout:
+                path:    /logout
+                target:  /login
+            anonymous:    true
+
+    access_control:
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: ROLE_SUPER_ADMIN }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin.*, roles: ROLE_SUPER_ADMIN }
