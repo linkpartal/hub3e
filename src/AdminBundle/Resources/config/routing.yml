@@ -97,3 +97,7 @@ supprimerQCM:
 activate:
     path: /admin/activate/id={id}
     defaults: { _controller: AdminBundle:Ecole:activate}
+
+adresses_tier:
+    path: /admin/adresse/id={id}
+    defaults: { _controller: AdminBundle:Ecole:adresses}

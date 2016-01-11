@@ -68,7 +68,7 @@
             <div id="ecole" class="list-group col-xs-2 leftbar">
                 {% if ecoles is defined %}
                     {% for e in ecoles %}
-                        <button onclick="postiframe('{{ path('metier_user_affiche',{'id': e.getId} ) }}')" id="{{ e.getId }}" type="button" class="list-group-item butonLigne">
+                        <button onclick="postiframe('{{ path('metier_user_affiche',{'id': e.getId} ) }}',{{ e.getId }})" id="{{ e.getId }}" type="button" class="list-group-item butonLigne">
                             <div class="col-xs-12 part" title="{{e.getTier.getRaisonSoc}}">{{e.getTier.getRaisonSoc}}</div>
                             <div class="col-xs-12 part"
                                  style="height: 31px; text-align: left;">
@@ -88,7 +88,7 @@
                  style="visibility: hidden;">
                 {% if societes is defined %}
                     {% for s in societes %}
-                        <button onclick="postiframe('{{ path('metier_user_affiche',{'id': s.getId }) }}')" id="{{ s.getId }}" type="button" class="list-group-item butonLigne">
+                        <button onclick="postiframe('{{ path('metier_user_affiche',{'id': s.getId }) }}',{{ s.getId }})" id="{{ s.getId }}" type="button" class="list-group-item butonLigne">
                             <div class="col-xs-12 part" title="{{s.getTier.getRaisonSoc}}">{{s.getTier.getRaisonSoc}}</div>
                             <div class="col-xs-12 part"
                                  style="height: 31px; text-align: left;">
@@ -178,6 +178,9 @@
                         Filtre <span class="glyphicon glyphicon-menu-down"
                                      aria-hidden="true"></span>
                     </button>
+                    <ul id="filtre" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+
+                    </ul>
                 </div>
             </div>
 
@@ -216,8 +219,36 @@
         document.getElementById(x).style.visibility='visible';
 
     };
-    function postiframe(url) {
+    function postiframe(url,id) {
         document.getElementById("iframe").src = url;
+        var route = '{{path('adresses_tier',{'id':"_id" })}}';
+        var route = route.replace("_id", id);
+        $.ajax({
+            type: 'get',
+            url: route,
+            dataType: 'json',
+            success: function(data){
+                var filtre = document.getElementById("filtre");
+                while (filtre.firstChild) {
+                    filtre.removeChild(filtre.firstChild);
+                }
+                for (var i = 0; i < data.adresses.length; i++)
+                {
+                    var obj = JSON.parse(data.adresses[i]);
+
+                    var li = document.createElement("li");
+
+                    var a = document.createElement("a");
+                    a.setAttribute('href',obj.id);
+                    a.innerHTML = obj.adresse;
+
+                    li.appendChild(a);
+
+                    filtre.appendChild(li);
+                }
+
+            }
+        });
     }
     function stringWith (str, prefix) {
         var ustring = str.toUpperCase();

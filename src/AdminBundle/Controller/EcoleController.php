@@ -3,6 +3,7 @@
 namespace AdminBundle\Controller;
 
 use GenericBundle\Entity\Etablissement;
+use GenericBundle\Entity\Notification;
 use GenericBundle\Entity\Tier;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -81,14 +82,32 @@ class EcoleController extends Controller
             $etablissement->setTier($tier);
 
             $em->persist($etablissement);
+            $em->flush();
+
+            $superadmins = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_SUPER_ADMIN');
+
+            foreach($superadmins as $admin){
+                $notif = new Notification();
+                $notif->setEntite($etablissement->getId());
+                if($etablissement->getTier()->getEcole())
+                {
+                    $notif->setType('Ecole');
+                }
+                else{
+                    $notif->setType('Societe');
+                }
+                $notif->setUsers($admin);
+                $em->persist($notif);
+                $em->flush();
+            }
+
+
         }
 
         $em->flush();
         return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
 
     }
-
-
 
     public function suppLicenceAction($id)
     {
@@ -223,5 +242,19 @@ class EcoleController extends Controller
         $this->getDoctrine()->getEntityManager()->flush();
 
         return $reponse;
+    }
+
+    public function adressesAction($id){
+        $em = $this->getDoctrine()->getEntityManager();
+        $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($id);
+        $etablissements = $em->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$etablissement->getTier()));
+        $adresses = array();
+        foreach($etablissements as $value)
+        {
+            $adresse = array('id'=>$value->getId(),'adresse' => $value->getAdresse());
+            array_push($adresses, json_encode($adresse) );
+        }
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('adresses'=>$adresses));
     }
 }
