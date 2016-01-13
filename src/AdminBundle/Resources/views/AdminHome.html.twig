@@ -19,7 +19,7 @@
 
      <div class="row" style="height: 32px; background: #2A76CC;">
         <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="border: 0;padding: 4.5px;height: 100%;">
-            <a href="{{ path('metier_user_admin') }}" >     <img src="" style="height: 21px;width: 100%" >        </a>
+            <a href="{{ path('metier_user_admin') }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 21px;width: 100%" >        </a>
         </div>
         <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="margin-left: 7.5px;border: 0;padding: 4.5px;height: 21px;float: left;">
             <button onclick="postiframe('{{ path("addtier",{'type':'1'}) }}')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
@@ -54,108 +54,116 @@
     <div class="row" style="height: 100%">
 
         {% block LeftBar %}
-        <div class="col-xs-2">
+            <div class="col-xs-2">
 
-            <select title="" id="leftselect" name="myddl" class="btn btn-default dropdown-toggle">
-                <option value="ecole">Voir Ecoles</option>
-                <option value="societe">Voir Sociétés</option>
-                <option value="licence">Voir Licences</option>
-                <option value="user">Voir Utilisateurs</option>
-                <option value="QCM">Gestion QCM</option>
-                <option value="modele">Gestion Modèles</option>
-            </select>
+                <select title="" id="leftselect" name="myddl" class="btn btn-default dropdown-toggle">
+                    <option value="ecole">Voir Ecoles</option>
+                    <option value="societe">Voir Sociétés</option>
+                    <option value="licence">Voir Licences</option>
+                    <option value="user">Voir Utilisateurs</option>
+                    <option value="QCM">Gestion QCM</option>
+                    <option value="modele">Gestion Modèles</option>
+                </select>
 
-            <div id="ecole" class="list-group col-xs-2 leftbar">
-                {% if ecoles is defined %}
-                    {% for e in ecoles %}
-                        <button onclick="postiframe('{{ path('metier_user_affiche',{'id': e.getId} ) }}')" id="{{ e.getId }}" type="button" class="list-group-item butonLigne">
+                <div id="ecole" class="list-group col-xs-2 leftbar">
+                    {% if ecoles is defined %}
+                        {% for e in ecoles %}
+                            <button onclick="postiframe('{{ path('metier_user_affiche',{'id': e.getId} ) }}',{{ e.getId }})" id="{{ e.getId }}" type="button" class="list-group-item butonLigne">
                             <div class="col-xs-12 part" title="{{e.getTier.getRaisonSoc}}">{{e.getTier.getRaisonSoc}}</div>
                             <div class="col-xs-12 part"
-                                 style="height: 31px; text-align: left;">
-                                <div class="col-xs-9 part" title="{{ e.getVille }}">{{ e.getVille }}</div>
-                                <!--span class="badge">New</span-->
+                            style="height: 31px; text-align: left;">
+                            <div class="col-xs-9 part" title="{{ e.getVille }}">{{ e.getVille }}</div>
+                                {% for notif in notifications %}
+                                    {% if e.getId == notif.getEntite and notif.getType == 'Ecole' %}
+                                        <span class="badge">New</span>
+                                    {% endif %}
+                                {% endfor %}
                                 {% if e.getActive %}
                                     <div class="col-xs-1 active"></div>
                                 {% else %}
                                     <div class="col-xs-1 inactive"></div>
                                 {% endif %}
                             </div>
-                        </button>
-                    {% endfor %}
-                {% endif %}
-            </div>
-            <div id="societe" class="list-group col-xs-2 leftbar"
-                 style="visibility: hidden;">
-                {% if societes is defined %}
-                    {% for s in societes %}
-                        <button onclick="postiframe('{{ path('metier_user_affiche',{'id': s.getId }) }}')" id="{{ s.getId }}" type="button" class="list-group-item butonLigne">
-                            <div class="col-xs-12 part" title="{{s.getTier.getRaisonSoc}}">{{s.getTier.getRaisonSoc}}</div>
-                            <div class="col-xs-12 part"
-                                 style="height: 31px; text-align: left;">
-                                <div class="col-xs-9 part" title="{{ s.getVille }}">{{ s.getVille }}</div>
-                                <!--span class="badge">New</span-->
-                                {% if s.getActive %}
-                                    <div class="col-xs-1 active"></div>
-                                {% else %}
-                                    <div class="col-xs-1 inactive"></div>
-                                {% endif %}
-                            </div>
-                        </button>
-                    {% endfor %}
-                {% endif %}
+                            </button>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div id="societe" class="list-group col-xs-2 leftbar"
+                     style="visibility: hidden;">
+                    {% if societes is defined %}
+                        {% for s in societes %}
+                            <button onclick="postiframe('{{ path('metier_user_affiche',{'id': s.getId }) }}',{{ s.getId }})" id="{{ s.getId }}" type="button" class="list-group-item butonLigne">
+                                <div class="col-xs-12 part" title="{{s.getTier.getRaisonSoc}}">{{s.getTier.getRaisonSoc}}</div>
+                                <div class="col-xs-12 part"
+                                     style="height: 31px; text-align: left;">
+                                    <div class="col-xs-9 part" title="{{ s.getVille }}">{{ s.getVille }}</div>
+                                    {% for notif in notifications %}
+                                        {% if s.getId == notif.getEntite and notif.getType == 'Societe' %}
+                                            <span class="badge">New</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if s.getActive %}
+                                        <div class="col-xs-1 active"></div>
+                                    {% else %}
+                                        <div class="col-xs-1 inactive"></div>
+                                    {% endif %}
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
 
-            </div>
-            <div id="licence" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
-                {% if AllLicences is defined %}
-                    {% for lic in AllLicences %}
-                        <button id="{{ lic.getId }}" type="button" class="list-group-item butonLigne">
-                            <div class="col-xs-12 part" title="{{lic.getLibelle}}">{{lic.getLibelle}}</div>
-                            <div class="col-xs-12 part"
-                                 style="height: 31px; text-align: left;">
-                                <div class="col-xs-9 part" title="{{ lic.getDuree }}">{{lic.getDuree }}</div>
-                            </div>
-                        </button>
-                    {% endfor %}
-                {% endif %}
+                </div>
+                <div id="licence" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                    {% if AllLicences is defined %}
+                        {% for lic in AllLicences %}
+                            <button id="{{ lic.getId }}" type="button" class="list-group-item butonLigne">
+                                <div class="col-xs-12 part" title="{{lic.getLibelle}}">{{lic.getLibelle}}</div>
+                                <div class="col-xs-12 part"
+                                     style="height: 31px; text-align: left;">
+                                    <div class="col-xs-9 part" title="{{ lic.getDuree }}">{{lic.getDuree }}</div>
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
 
-            </div>
-            <div id="user" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
-                {% if users is defined %}
-                    {% for u in users %}
-                        <button id="{{ u.getId }}" type="button" class="list-group-item butonLigne">
-                            <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
-                            <div class="col-xs-12 part"
-                                 style="height: 31px; text-align: left;">
-                                <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
-                                <span class="badge">New</span>
-                                <div class="col-xs-1 online"></div>
-                            </div>
-                        </button>
-                    {% endfor %}
-                {% endif %}
+                </div>
+                <div id="user" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                    {% if users is defined %}
+                        {% for u in users %}
+                            <button id="{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                                <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
+                                <div class="col-xs-12 part"
+                                     style="height: 31px; text-align: left;">
+                                    <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
+                                    <span class="badge">New</span>
+                                    <div class="col-xs-1 online"></div>
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
 
-            </div>
-            <div id="QCM" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
-                {% if qcms is defined %}
-                    {% for qcm in qcms %}
-                        <button onclick="postiframe('{{ path('loadgestionQCM',{'id': qcm.getId} ) }}')" id="{{ qcm.getId }}" type="button" class="list-group-item butonLigne">
-                            <div class="col-xs-12 part">{{qcm.getNom}}</div>
-                            <div class="col-xs-12 part"
-                                 style="height: 31px; text-align: left;">
-                                <div class="col-xs-9 part"></div>
-                                <span class="badge">New</span>
-                                <div class="col-xs-1 online"></div>
-                            </div>
-                        </button>
-                    {% endfor %}
-                {% endif %}
+                </div>
+                <div id="QCM" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                    {% if qcms is defined %}
+                        {% for qcm in qcms %}
+                            <button onclick="postiframe('{{ path('loadgestionQCM',{'id': qcm.getId} ) }}')" id="{{ qcm.getId }}" type="button" class="list-group-item butonLigne">
+                                <div class="col-xs-12 part">{{qcm.getNom}}</div>
+                                <div class="col-xs-12 part"
+                                     style="height: 31px; text-align: left;">
+                                    <div class="col-xs-9 part"></div>
+                                    <span class="badge">New</span>
+                                    <div class="col-xs-1 online"></div>
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
 
-            </div>
-            <div id="modele" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                </div>
+                <div id="modele" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
 
 
+                </div>
             </div>
-        </div>
         {% endblock %}
 
 
@@ -178,6 +186,9 @@
                         Filtre <span class="glyphicon glyphicon-menu-down"
                                      aria-hidden="true"></span>
                     </button>
+                    <ul id="filtre" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+
+                    </ul>
                 </div>
             </div>
 
@@ -216,8 +227,36 @@
         document.getElementById(x).style.visibility='visible';
 
     };
-    function postiframe(url) {
+    function postiframe(url,id) {
         document.getElementById("iframe").src = url;
+        var route = '{{path('adresses_tier',{'id':"_id" })}}';
+        var route = route.replace("_id", id);
+        $.ajax({
+            type: 'get',
+            url: route,
+            dataType: 'json',
+            success: function(data){
+                var filtre = document.getElementById("filtre");
+                while (filtre.firstChild) {
+                    filtre.removeChild(filtre.firstChild);
+                }
+                for (var i = 0; i < data.adresses.length; i++)
+                {
+                    var obj = JSON.parse(data.adresses[i]);
+
+                    var li = document.createElement("li");
+
+                    var a = document.createElement("a");
+                    a.setAttribute('href',obj.id);
+                    a.innerHTML = obj.adresse;
+
+                    li.appendChild(a);
+
+                    filtre.appendChild(li);
+                }
+
+            }
+        });
     }
     function stringWith (str, prefix) {
         var ustring = str.toUpperCase();

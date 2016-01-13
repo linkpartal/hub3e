@@ -3,12 +3,12 @@
 namespace AdminBundle\Controller;
 
 use GenericBundle\Entity\Etablissement;
+use GenericBundle\Entity\Notification;
 use GenericBundle\Entity\Tier;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class EcoleController extends Controller
 {
@@ -81,14 +81,32 @@ class EcoleController extends Controller
             $etablissement->setTier($tier);
 
             $em->persist($etablissement);
+            $em->flush();
+
+            $superadmins = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_SUPER_ADMIN');
+
+            foreach($superadmins as $admin){
+                $notif = new Notification();
+                $notif->setEntite($etablissement->getId());
+                if($etablissement->getTier()->getEcole())
+                {
+                    $notif->setType('Ecole');
+                }
+                else{
+                    $notif->setType('Societe');
+                }
+                $notif->setUser($admin);
+                $em->persist($notif);
+                $em->flush();
+            }
+
+
         }
 
         $em->flush();
         return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
 
     }
-
-
 
     public function suppLicenceAction($id)
     {
@@ -113,20 +131,6 @@ class EcoleController extends Controller
         $etab->setSuspendu(true);
         $em->flush();
         return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
-    }
-
-    public function assosierecolesAction($id)
-    {
-        $ecoles = $this->getDoctrine()->getRepository('GenericBundle:Ecole')->findAll();
-        $ecole = $this->getDoctrine()->getRepository('GenericBundle:Ecole')->find($id);
-        if($ecole->getLogo())
-        {
-            $ecole->setLogo(base64_encode(stream_get_contents($ecole->getLogo())));
-        }
-        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licenceecole')->findBy(array('ecoleecole'=>$ecole ));
-        $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('ecole'=>$ecole ));
-        return $this->render('AdminBundle:Admin:associerEcoles.html.twig',array('ecole'=>$ecole,'libs'=>$licences,'usersecole'=>$users,'ecoles'=>$ecoles,'id'=>$ecole->getId()));
-
     }
 
     public function ecolesassociatedAction($id, Request $request)
@@ -223,5 +227,19 @@ class EcoleController extends Controller
         $this->getDoctrine()->getEntityManager()->flush();
 
         return $reponse;
+    }
+
+    public function adressesAction($id){
+        $em = $this->getDoctrine()->getEntityManager();
+        $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($id);
+        $etablissements = $em->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$etablissement->getTier()));
+        $adresses = array();
+        foreach($etablissements as $value)
+        {
+            $adresse = array('id'=>$value->getId(),'adresse' => $value->getAdresse());
+            array_push($adresses, json_encode($adresse) );
+        }
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('adresses'=>$adresses));
     }
 }
