@@ -195,14 +195,6 @@ iframe
 	margin: 15px 0 0 15px;
 	padding: 0 0;
 	border-left: 10px solid white;
-	border-right: 10px solid white !important;
+	border-right: 10px solid white;
 	text-align: left;
-}
-
-.popup
-{
-	position: absolute;
-	display: none;
-	background-color: white;
-	z-index: 5;
 }

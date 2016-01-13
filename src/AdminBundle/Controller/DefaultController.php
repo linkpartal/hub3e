@@ -8,6 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends Controller
 {
     public function loadAction(){
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
+
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAll();
         $ecoles = array();
         $societes = array();
@@ -25,7 +29,7 @@ class DefaultController extends Controller
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $qcms = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findAll();
 
-        return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,'users'=>$users,'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms));
+        return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,'notifications'=>$notifications,'users'=>$users,'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms));
     }
 
     public function loadiframeAction()
@@ -35,8 +39,24 @@ class DefaultController extends Controller
 
     public function affichageAction($id)
     {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
         $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
+        if($etablissement->getTier()->getEcole())
+        {
+            $type = 'Ecole';
+        }
+        else{
+            $type = 'Societe';
+        }
+        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('user'=>$user,'entite'=>$etablissement->getId(),'type'=>$type));
+        if($notifications)
+        {
+            $this->getDoctrine()->getEntityManager()->remove($notifications);
+            $this->getDoctrine()->getEntityManager()->flush();
+        }
+
         if($etablissement->getTier()->getLogo())
         {
             $etablissement->getTier()->setLogo(base64_encode(stream_get_contents($etablissement->getTier()->getLogo())));

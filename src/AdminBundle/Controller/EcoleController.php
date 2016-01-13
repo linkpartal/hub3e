@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class EcoleController extends Controller
 {
@@ -96,7 +95,7 @@ class EcoleController extends Controller
                 else{
                     $notif->setType('Societe');
                 }
-                $notif->setUsers($admin);
+                $notif->setUser($admin);
                 $em->persist($notif);
                 $em->flush();
             }
@@ -132,20 +131,6 @@ class EcoleController extends Controller
         $etab->setSuspendu(true);
         $em->flush();
         return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
-    }
-
-    public function assosierecolesAction($id)
-    {
-        $ecoles = $this->getDoctrine()->getRepository('GenericBundle:Ecole')->findAll();
-        $ecole = $this->getDoctrine()->getRepository('GenericBundle:Ecole')->find($id);
-        if($ecole->getLogo())
-        {
-            $ecole->setLogo(base64_encode(stream_get_contents($ecole->getLogo())));
-        }
-        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licenceecole')->findBy(array('ecoleecole'=>$ecole ));
-        $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('ecole'=>$ecole ));
-        return $this->render('AdminBundle:Admin:associerEcoles.html.twig',array('ecole'=>$ecole,'libs'=>$licences,'usersecole'=>$users,'ecoles'=>$ecoles,'id'=>$ecole->getId()));
-
     }
 
     public function ecolesassociatedAction($id, Request $request)

@@ -43,7 +43,7 @@ class Notification
      *   @ORM\JoinColumn(name="users_id", referencedColumnName="id")
      * })
      */
-    private $users;
+    private $user;
 
 
 
@@ -112,9 +112,9 @@ class Notification
      *
      * @return Notification
      */
-    public function setUsers(\GenericBundle\Entity\User $users = null)
+    public function setUser(\GenericBundle\Entity\User $user = null)
     {
-        $this->users = $users;
+        $this->user = $user;
 
         return $this;
     }
@@ -124,8 +124,8 @@ class Notification
      *
      * @return \GenericBundle\Entity\User
      */
-    public function getUsers()
+    public function getUser()
     {
-        return $this->users;
+        return $this->user;
     }
 }

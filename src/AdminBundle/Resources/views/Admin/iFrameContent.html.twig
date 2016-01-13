@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/ajout.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     {% block CSS %}{% endblock %}
 
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
@@ -17,30 +18,43 @@
     {% block Content %}
 
         {% if etablissement is defined %}
-            <div id="instanceLicence" class="popup col-xs-3">
+            <div id="instanceLicence" class="popup">
+                <div onclick="hide(this)" class="close"></div>
+                <div class="col-xs-offset-1 col-xs-9 col-xs-offset-2" style="padding: 0;border:20px solid white;display: block">
+                    <div class="btn-group" style="width: 100%">
+                        <button type="button" class="btn btn-default dropdown-toggle nav"
+                                data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                            Filtre
+                        </button>
+                        <ul id="filtre" class="dropdown-menu" aria-labelledby="dropdownMenu1">
 
-                <form class="formulaire" id="formInstanceLicence" action="{{ path("metier_user_associated") }}" method="post">
-                    <input class="champ" type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
-
-                    <div class="inputcontainer">
-                        <label class="list-group-item" >Libelle :</label>
-                        <select title="Licencedef" name="Licencedef">
-                            {% for def in licencedef %}
-                                <option value="{{ def.getId }}">{{ def.getLibelle }}</option>
-                            {% endfor %}
-                        </select>
+                        </ul>
                     </div>
 
-                    <div class="inputcontainer">
-                        <label class="list-group-item" for="Date">Date Début : </label>
-                        <input type="date" class="form-control champ" id="Date" name="_Date">
+                    <div class="div_form" >
+                        <form  id="formInstanceLicence" action="{{ path("metier_user_associated") }}" method="post">
+                            <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
+                            <select class="input" title="Licencedef" name="Licencedef">
+                                <option selected="selected">Select Your LicenceDef</option>
+                                {% for def in licencedef %}
+                                    <option value="{{ def.getId }}">{{ def.getLibelle }}</option>
+                                {% endfor %}
+                            </select>
+
+                            <input class="input" placeholder="Date Début" type="date" class="form-control champ" id="Date" name="_Date">
+
+
+                        </form>
+
                     </div>
-
-                    <input type="submit" value="valider">
-                </form>
-
+                    <div class="div_button">
+                        <button class="blue" type="button">valider
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div id="adduser" class="popup col-xs-3">
+            <div id="adduser" class="popup col-xs-3" style="display: none">
 
                 <form class="formulaire" id="formadduser" action="{{ path("user_added") }}" method="post">
                     <input type="hidden" id="id" name="_id" value="{{ etablissement.getId }}">
@@ -69,7 +83,7 @@
                 </form>
             </div>
             {% if etablissement.getTier.getEcole %}
-                <div id="associerecole" class="popup col-xs-3">
+                <div id="associerecole" class="popup col-xs-3" style="display: none">
 
                     <form class="formulaire" id="formAssiation" action="{{ path("ecoles_assiciated",{'id':etablissement.getId}) }}" method="post">
                         <select title="" name="ecoles[]" multiple>
@@ -231,11 +245,11 @@
                                 <div class="col-xs-12" style="display: inline-table;color: white;">Désactive</div>
                             </button>
                         {% endif %}
-                        <button onclick="post('{{ path('modifieretab',{'id': etablissement.getId }) }}',{})" type="button" class="list-group-item rightMenu" style="background-color: #2A76CC">
+                        <button onclick="post('{{ path('modifieretab',{'id': etablissement.getId }) }}')" type="button" class="list-group-item rightMenu" style="background-color: #2A76CC">
                             <div class="col-xs-12"  style="display: inline-table;color: white;">Modifier la fiche</div>
 
                         </button>
-                        <button onclick="post('{{ path('supprimeretablissement',{'id': etablissement.getId }) }}',{})" type="button" class="list-group-item rightMenu" style="background-color: #2A76CC">
+                        <button onclick="post('{{ path('supprimeretablissement',{'id': etablissement.getId }) }}')" type="button" class="list-group-item rightMenu" style="background-color: #2A76CC">
                             <div class="col-xs-12"  style="display: inline-table;color: white;">Supprimer l'établissement</div>
 
                         </button>
@@ -256,6 +270,7 @@
 </div>
 <script src="//code.jquery.com/jquery.min.js"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/PopUp.js') }}"></script>
 <script language="JavaScript">
     {% if etablissement is defined %}
     document.getElementById("select_info").onchange = function(){
@@ -274,28 +289,8 @@
     function show(div){
         document.getElementById(div).style.display = 'block';
     }
-    function post(path, params, method) {
-        method = method || "post"; // Set method to post by default if not specified.
-
-        // The rest of this code assumes you are not using a library.
-        // It can be made less wordy if you use one.
-        var form = document.createElement("form");
-        form.setAttribute("method", method);
-        form.setAttribute("action", path);
-
-        for(var key in params) {
-            if(params.hasOwnProperty(key)) {
-                var hiddenField = document.createElement("input");
-                hiddenField.setAttribute("type", "hidden");
-                hiddenField.setAttribute("name", key);
-                hiddenField.setAttribute("value", params[key]);
-
-                form.appendChild(hiddenField);
-            }
-        }
-
-        document.body.appendChild(form);
-        form.submit();
+    function post(path) {
+        window.location = path;
     }
     function submitform(form) {
         document.getElementById(form).submit();
