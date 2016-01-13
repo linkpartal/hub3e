@@ -50,6 +50,20 @@ class Licence
     private $description;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="max_app", type="integer", nullable=false)
+     */
+    private $maxapp;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="max_mission", type="integer", nullable=false)
+     */
+    private $maxmission;
+
+    /**
      * @var \Tier
      *
      * @ORM\ManyToOne(targetEntity="Tier")
@@ -189,5 +203,53 @@ class Licence
     public function getTier()
     {
         return $this->tier;
+    }
+
+    /**
+     * Set maxapp
+     *
+     * @param integer $maxapp
+     *
+     * @return Licence
+     */
+    public function setMaxapp($maxapp)
+    {
+        $this->maxapp = $maxapp;
+
+        return $this;
+    }
+
+    /**
+     * Get maxapp
+     *
+     * @return integer
+     */
+    public function getMaxapp()
+    {
+        return $this->maxapp;
+    }
+
+    /**
+     * Set maxmission
+     *
+     * @param integer $maxmission
+     *
+     * @return Licence
+     */
+    public function setMaxmission($maxmission)
+    {
+        $this->maxmission = $maxmission;
+
+        return $this;
+    }
+
+    /**
+     * Get maxmission
+     *
+     * @return integer
+     */
+    public function getMaxmission()
+    {
+        return $this->maxmission;
     }
 }

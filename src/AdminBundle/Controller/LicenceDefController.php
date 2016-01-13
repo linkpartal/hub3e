@@ -19,6 +19,8 @@ class LicenceDefController extends Controller
         $licence->setLibelle($_REQUEST['_Libelle']);
         $licence->setDescription($_REQUEST['_Description']);
         $licence->setDuree($_REQUEST['_Duree']);
+        $licence->setMaxmission($_REQUEST['_maxmiss']);
+        $licence->setMaxapp($_REQUEST['_maxapp']);
         $em=$this->getDoctrine()->getManager();
         $em->persist($licence);
         $em->flush();
@@ -49,6 +51,8 @@ class LicenceDefController extends Controller
             $licence = new Licence();
             $licence->setLibelle($licencedef->getLibelle());
             $licence->setDescription($licencedef->getDescription());
+            $licence->setMaxapp($licencedef->getMaxapp());
+            $licence->setMaxmission($licencedef->getMaxmission());
             $licence->setTier($etablissement->getTier());
             $date=date_create($request->get('_Date'));
             $licence->setDatedebut(date_format($date,"d/m/Y"));

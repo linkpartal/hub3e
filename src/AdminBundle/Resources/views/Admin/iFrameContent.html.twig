@@ -32,8 +32,9 @@
                         </ul>
                     </div>
 
-                    <div class="div_form" >
+
                         <form  id="formInstanceLicence" action="{{ path("metier_user_associated") }}" method="post">
+                            <div class="div_form" >
                             <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
                             <select class="input" title="Licencedef" name="Licencedef">
                                 <option selected="selected">Select Your LicenceDef</option>
@@ -44,14 +45,13 @@
 
                             <input class="input" placeholder="Date Début" type="date" class="form-control champ" id="Date" name="_Date">
 
-
+                            </div>
+                            <div class="div_button">
+                                <input class="blue" type="submit" value="Valider">
+                            </div>
                         </form>
 
-                    </div>
-                    <div class="div_button">
-                        <button class="blue" type="button">valider
-                        </button>
-                    </div>
+
                 </div>
             </div>
             <div id="adduser" class="popup col-xs-3" style="display: none">

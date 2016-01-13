@@ -104,7 +104,8 @@ class EcoleController extends Controller
         }
 
         $em->flush();
-        return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('succes'=>'Tous les etablissement sont ajouter'));
 
     }
 

@@ -121,7 +121,16 @@
                 {
                     if(data['status']==='success')
                     {
-                        document.getElementById("form").submit();
+                        $.ajax({
+                            type: "POST",
+                            url: '{{ path('tieradded') }}',
+                            data: $("#"+form+"").serialize(),
+                            success: function(data)
+                            {
+                                console.log(data);
+                            }
+                        });
+                        window.parent.location.reload();
                     }
                     else
                     {
