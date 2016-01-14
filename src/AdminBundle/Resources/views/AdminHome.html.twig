@@ -12,12 +12,34 @@
 
 </head>
 <body>
+<div id="addsuperuser" class="popup col-xs-3">
+
+    <form id="formadduser" action="{{ path("user_added") }}" method="post">
+
+        <div class="inputcontainer">
+            <label class="list-group-item" for="Username">Username :</label>
+            <input type="text" class="champ form-control" id="Username" name="_Username">
+        </div>
+        <div class="inputcontainer">
+            <label class="list-group-item" style="vertical-align: top" for="mail">E-mail : </label>
+            <input type="email" class="champ form-control" id="mail" name="_mail">
+        </div>
+
+        <div class="inputcontainer">
+            <label class="list-group-item" >Role :</label>
+            <select title="" name="_role">
+                <option value="ROLE_SUPER_ADMIN">Super Administrateur</option>
+            </select>
+        </div>
+        <input type="submit" value="envoyer">
+    </form>
+</div>
+
 
 <div class="container">
 
 {% block TopBar %}
-
-     <div class="row" style="height: 32px; background: #2A76CC;">
+    <div class="row" style="height: 32px; background: #2A76CC;">
         <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="border: 0;padding: 4.5px;height: 100%;">
             <a href="{{ path('metier_user_admin') }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 21px;width: 100%" >        </a>
         </div>
@@ -42,7 +64,7 @@
              <button>Licences</button>
          </div>
          <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 7.5px;border: 0;padding: 4.5px;height: 21px;float: left;">
-             <button onclick="postiframe('{{ path('AddUser',{'from':'super','id':'-1'}) }}')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+             <button onclick="show('addsuperuser')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                      ></button>
 
              <button>Utilisateurs</button>
@@ -321,6 +343,9 @@
             }
             i++;
         }
+    };
+    function show(div){
+        document.getElementById(div).style.display = 'block';
     };
 </script>
 
