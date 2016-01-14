@@ -48,13 +48,15 @@ class UserController extends Controller
         $hash =  $this->get('security.password_encoder')->encodePassword($newuser, $password);
         $newuser->setPassword($hash);
 
-        $etab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_id'));
+
         if($request->get('_role')=='ROLE_ADMINSOC' || $request->get('_role')=='ROLE_ADMINECOLE')
         {
+            $etab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_id'));
             $newuser->setTier($etab->getTier());
         }
         if($request->get('_role')=='ROLE_RECRUTE' || $request->get('_role')=='ROLE_TUTEUR')
         {
+            $etab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_id'));
             $newuser->setEtablissement($etab);
         }
 
@@ -73,9 +75,15 @@ class UserController extends Controller
             );
         $this->get('mailer')->send($message);
 
+        if($request->get('_id'))
+        {
+            return $this->forward('AdminBundle:Default:affichage',array('idliste'=>$request->get('_from'),'id'=>$request->get('_id')));
+        }
+        else
+        {
+            return $this->redirect($this->generateUrl('metier_user_admin'));
+        }
 
-
-        return $this->forward('AdminBundle:Default:affichage',array('idliste'=>$request->get('_from'),'id'=>$request->get('_id')));
 
     }
 }

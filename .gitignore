@@ -10,4 +10,4 @@
 !var/sessions/.gitkeep
 /phpunit.xml
 /NewEntity/
-/.idea/
+/.idea/workspace.xml

@@ -2,9 +2,9 @@
 
 .popup{
     position: absolute;
-    display: block;
+    display: none;
     background-color: white;
-    z-index: 50 !important;
+    z-index: 5;
     height: 100%;
     width: 100%;
     background-color: rgba(0,0,0,0.5)

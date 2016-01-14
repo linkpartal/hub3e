@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="icon" type="image/png" href="{{ asset('image/Logo_Hub_3e.png') }}" />
     {% block CSS %}{% endblock %}
 
@@ -12,29 +13,54 @@
 
 </head>
 <body>
+
 <div id="addsuperuser" class="popup col-xs-3">
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block">
 
-    <form id="formadduser" action="{{ path("user_added") }}" method="post">
+        <form id="formadduser" action="{{ path("user_added") }}" method="post">
 
-        <div class="inputcontainer">
-            <label class="list-group-item" for="Username">Username :</label>
-            <input type="text" class="champ form-control" id="Username" name="_Username">
-        </div>
-        <div class="inputcontainer">
-            <label class="list-group-item" style="vertical-align: top" for="mail">E-mail : </label>
-            <input type="email" class="champ form-control" id="mail" name="_mail">
-        </div>
+            <div class="div_form" >
+                <input type="text" class="input" id="Username" name="_Username" placeholder="Username">
 
-        <div class="inputcontainer">
-            <label class="list-group-item" >Role :</label>
-            <select title="" name="_role">
-                <option value="ROLE_SUPER_ADMIN">Super Administrateur</option>
-            </select>
-        </div>
-        <input type="submit" value="envoyer">
-    </form>
+                <input type="email" class="input" id="mail" name="_mail" placeholder="Email">
+
+                <select title="" name="_role">
+                    <option value="ROLE_SUPER_ADMIN">Super Administrateur</option>
+                </select>
+            </div>
+            <div class="div_button">
+                <input class="blue" type="submit" value="envoyer">
+            </div>
+        </form>
+    </div>
+
 </div>
+<div id="addLicenceDef" class="popup col-xs-3">
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block">
+        <form class="formulaire" id="formLicence" action="{{ path("metier_user_licenceadded") }}" method="post">
+            <div class="div_form" >
 
+                <input placeholder="Libelle" class="input" type="text" maxlength="10" id="Libelle" name="_Libelle">
+
+                <textarea form="formLicence" placeholder="Description" class="input" maxlength="255" id="Description" name="_Description" style="width: 50%;height: 100px;display: inline-flex"></textarea>
+
+                <input class="input" type="number"  min="1" max="365" placeholder="Durée" id="Duree" name="_Duree">
+
+                <input class="input" type="number"  min="1" max="365" placeholder="Maximum d'apprenant" id="maxapp" name="_maxapp">
+
+                <input class="input" type="number"  min="1" max="365" placeholder="Maximum de mission" id="maxmiss" name="_maxmiss">
+
+            </div>
+            <div class="div_button">
+                <input class="blue" type="submit" value="envoyer">
+            </div>
+        </form>
+
+
+    </div>
+</div>
 
 <div class="container">
 
@@ -58,7 +84,7 @@
 
          </div>
          <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 7.5px;border: 0;padding: 4.5px;height: 21px;float: left;">
-             <button onclick="postiframe('{{ path("metier_user_addlicence") }}')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+             <button onclick="show('addLicenceDef')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                     ></button>
 
              <button>Licences</button>
@@ -226,8 +252,10 @@
     </div>
 
 </div>
+
 <script src="//code.jquery.com/jquery.min.js"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/PopUp.js') }}"></script>
 <script language="JavaScript">
     document.getElementById("leftselect").onchange = function(){
         var x = document.getElementById("leftselect").value;

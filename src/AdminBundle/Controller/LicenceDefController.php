@@ -24,7 +24,7 @@ class LicenceDefController extends Controller
         $em=$this->getDoctrine()->getManager();
         $em->persist($licence);
         $em->flush();
-        return $this->render("AdminBundle:Admin:iFrameContent.html.twig");
+        return $this->redirect($this->generateUrl('metier_user_admin'));
     }
 
     public function associerAction(Request $request)
