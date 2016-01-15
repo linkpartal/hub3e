@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
-    public function loadAction(){
+    public function loadAction($url){
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
@@ -28,8 +28,11 @@ class DefaultController extends Controller
         $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findAll();
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $qcms = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findAll();
+        $serializer = \JMS\Serializer\SerializerBuilder::create()->build();
+        $jsonContent = $serializer->serialize($notifications, 'json');
 
-        return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,'notifications'=>$notifications,'users'=>$users,'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms));
+        return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$users,
+            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'url'=>$url));
     }
 
     public function loadiframeAction()

@@ -198,3 +198,10 @@ iframe
 	border-right: 10px solid white;
 	text-align: left;
 }
+
+.notifTopbar
+{
+	position: relative;
+	background-color: red;
+	top: -6px;
+}

@@ -17,59 +17,60 @@
 <div class="container" style="padding: 0;">
     {% block Content %}
 
-        {% if etablissement is defined %}
-            <div id="instanceLicence" class="popup">
-                <div onclick="hide(this)" class="close"></div>
-                <div class="col-xs-offset-1 col-xs-9 col-xs-offset-2" style="padding: 0;border:20px solid white;display: block">
-                    <div class="btn-group" style="width: 100%">
-                        <button type="button" class="btn btn-default dropdown-toggle nav"
-                                data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                            Filtre
-                        </button>
-                        <ul id="filtre" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    {% if etablissement is defined %}
+        <div id="instanceLicence" class="popup">
+            <div onclick="hide(this)" class="close"></div>
+            <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block">
+                <!--div class="btn-group" style="width: 100%">
+                <button type="button" class="btn btn-default dropdown-toggle nav"
+                        data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                    Filtre
+                </button>
+                <ul id="filtre" class="dropdown-menu" aria-labelledby="dropdownMenu1">
 
-                        </ul>
+                </ul>
+            </div-->
+
+
+                <form  class="formulaire" id="formInstanceLicence" action="{{ path("metier_user_associated") }}" method="post">
+                    <div class="div_form" >
+                        <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
+                        <select class="input" title="Licencedef" name="Licencedef">
+                            <option selected="selected">Select Your LicenceDef</option>
+                            {% for def in licencedef %}
+                                <option value="{{ def.getId }}">{{ def.getLibelle }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <input class="input" placeholder="Date Début" type="date" class="form-control champ" id="Date" name="_Date">
+
                     </div>
+                    <div class="div_button">
+                        <input class="blue" type="submit" value="Valider">
+                    </div>
+                </form>
 
 
-                        <form  id="formInstanceLicence" action="{{ path("metier_user_associated") }}" method="post">
-                            <div class="div_form" >
-                            <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
-                            <select class="input" title="Licencedef" name="Licencedef">
-                                <option selected="selected">Select Your LicenceDef</option>
-                                {% for def in licencedef %}
-                                    <option value="{{ def.getId }}">{{ def.getLibelle }}</option>
-                                {% endfor %}
-                            </select>
-
-                            <input class="input" placeholder="Date Début" type="date" class="form-control champ" id="Date" name="_Date">
-
-                            </div>
-                            <div class="div_button">
-                                <input class="blue" type="submit" value="Valider">
-                            </div>
-                        </form>
-
-
-                </div>
             </div>
-            <div id="adduser" class="popup col-xs-3" style="display: none">
+        </div>
+        <div id="adduser" class="popup">
+            <div onclick="hide(this)" class="close"></div>
+            <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block">
 
                 <form class="formulaire" id="formadduser" action="{{ path("user_added") }}" method="post">
-                    <input type="hidden" id="id" name="_id" value="{{ etablissement.getId }}">
-                    <div class="inputcontainer">
-                        <label class="list-group-item" for="Username">Username :</label>
-                        <input type="text" class="champ form-control" id="Username" name="_Username">
-                    </div>
-                    <div class="inputcontainer">
-                        <label class="list-group-item" style="vertical-align: top" for="mail">E-mail : </label>
-                        <input type="email" class="champ form-control" id="mail" name="_mail">
-                    </div>
+                    <div class="div_form" >
+                        <input type="hidden" id="id" name="_id" value="{{ etablissement.getId }}">
 
-                    <div class="inputcontainer">
-                        <label class="list-group-item" >Role :</label>
-                        <select title="" name="_role">
+                        <input placeholder="Username" type="text" class="input" id="Username" name="_Username">
+
+
+                        <input placeholder="Email" type="email" class="input" id="mail" name="_mail">
+
+
+
+                        <select class="input" title="" name="_role">
+                            <option selected="selected">Sélectionner un role</option>
                             {% if etablissement.getTier.getEcole %}
                                 <option value="ROLE_ADMINECOLE">Administrateur école</option>
                                 <option value="ROLE_RECRUTE">Recruteur Placeur</option>
@@ -78,25 +79,35 @@
                                 <option value="ROLE_TUTEUR">Tuteur</option>
                             {% endif %}
                         </select>
-                    </div>
-                    <input type="submit" value="envoyer">
-                </form>
-            </div>
-            {% if etablissement.getTier.getEcole %}
-                <div id="associerecole" class="popup col-xs-3" style="display: none">
 
+                    </div>
+                    <div class="div_button">
+                        <input class="blue" type="submit" value="envoyer">
+                    </div>
+            </form>
+        </div>
+    </div>
+        {% if etablissement.getTier.getEcole %}
+            <div id="associerecole" class="popup">
+                <div onclick="hide(this)" class="close"></div>
+                <div class="col-xs-offset-4 col-xs-4" style="padding: 0;border:20px solid white;display: block">
                     <form class="formulaire" id="formAssiation" action="{{ path("ecoles_assiciated",{'id':etablissement.getId}) }}" method="post">
-                        <select title="" name="ecoles[]" multiple>
-                            {% for tier in tiers %}
-                                {% if tier.getEcole %}
-                                    <option value="{{ tier.getId }}">{{ tier.getRaisonSoc }}</option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
-                        <input type="submit" value="envoyer">
+                        <div class="div_form">
+                            <select class="input" title="" style="height: 100px" name="ecoles[]" multiple>
+                                {% for tier in tiers %}
+                                    {% if tier.getEcole %}
+                                        <option value="{{ tier.getId }}">{{ tier.getRaisonSoc }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="div_button">
+                            <input class="blue" type="submit" value="envoyer">
+                        </div>
                     </form>
                 </div>
-            {% endif %}
+            </div>
+        {% endif %}
 
             <div class="row" style="height: 60px; margin: 0;">
                 <img class="col-xs-1" src="data:image/jpg;base64,{{ etablissement.getTier.getLogo }}"
@@ -158,6 +169,8 @@
                                     <td>Id</td>
                                     <td>Libelle</td>
                                     <td>Decription</td>
+                                    <td>Nbre max d'apprenants</td>
+                                    <td>Nbre max de missions</td>
                                     <td>Date début</td>
                                     <td>Date Fin</td>
                                     <td style="border: none"><button onclick="show('instanceLicence')"
@@ -169,6 +182,8 @@
                                             <td>{{ lib.getId }}</td>
                                             <td>{{ lib.getLibelle }}</td>
                                             <td>{{ lib.getDescription }}</td>
+                                            <td>{{ lib.getMaxapp }}</td>
+                                            <td>{{ lib.getMaxmission }}</td>
                                             <td>{{ lib.getDatedebut }}</td>
                                             <td>{{ lib.getDatefin }}</td>
                                             <td style="border: none"><button onclick="supprimerligne('{{ path('supprimer_Licence',{'id': lib.getId}) }}',this)"
@@ -285,6 +300,30 @@
         {% endif %}
         document.getElementById(x).style.display='block';
     };
+    function active(route) {
+        $.ajax({
+            type: 'get',
+            url: route,
+            error: function (response) {
+                console.log(response);
+            },
+            success: function (data) {
+                console.log('etablissement{{ etablissement.getId }}');
+                if (data['succes'] == '0') {
+                    document.getElementById("activate").style.backgroundColor = 'red';
+                    document.getElementById("activate").firstElementChild.innerHTML = 'Désactive';
+                    window.parent.document.getElementById('active{{ etablissement.getId }}').style.backgroundColor = 'red';
+                }
+                else {
+                    document.getElementById("activate").style.backgroundColor = 'limegreen';
+                    document.getElementById("activate").firstElementChild.innerHTML = 'Active';
+                    window.parent.document.getElementById('active{{ etablissement.getId }}').style.backgroundColor = 'limegreen';
+                }
+
+            }
+        });
+
+    };
     {% endif %}
     function post(path) {
         window.location = path;
@@ -302,28 +341,6 @@
             success: function(data){console.log(data);}
         });
         document.getElementById("tableLibs").deleteRow(champs.parentNode.parentNode.rowIndex);
-    }
-    function active(route) {
-        $.ajax({
-            type: 'get',
-            url: route,
-            error: function (response) {
-                console.log(response);
-            },
-            success: function(data){
-                if(data['succes']=='0')
-                {
-                    document.getElementById("activate").style.backgroundColor = 'red';
-                    document.getElementById("activate").firstElementChild.innerHTML = 'Désactive';
-                }
-                else
-                {
-                    document.getElementById("activate").style.backgroundColor = 'limegreen';
-                    document.getElementById("activate").firstElementChild.innerHTML = 'Active';
-                }
-
-            }
-        });
     }
 </script>
 {% block JS %}

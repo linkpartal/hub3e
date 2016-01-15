@@ -70,7 +70,7 @@ class User extends BaseUser
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Mission", mappedBy="apprenant")
+     * @ORM\ManyToMany(targetEntity="Mission", mappedBy="users")
      */
     private $missionmission;
 

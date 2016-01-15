@@ -12,7 +12,7 @@
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
 
 </head>
-<body>
+<body onload="putbadged()">
 
 <div id="addsuperuser" class="popup col-xs-3">
     <div onclick="hide(this)" class="close"></div>
@@ -21,13 +21,29 @@
         <form id="formadduser" action="{{ path("user_added") }}" method="post">
 
             <div class="div_form" >
-                <input type="text" class="input" id="Username" name="_Username" placeholder="Username">
+                <div class="col-xs-6 input-colonne">
+                    <input type="text" class="input" id="Username" name="_Username" placeholder="Username">
 
-                <input type="email" class="input" id="mail" name="_mail" placeholder="Email">
+                    <input type="email" class="input " id="mail" name="_mail" placeholder="Email">
 
-                <select title="" name="_role">
-                    <option value="ROLE_SUPER_ADMIN">Super Administrateur</option>
-                </select>
+                    <select class="input" title="" name="_role">
+                        <option value="ROLE_SUPER_ADMIN">Super Administrateur</option>
+                    </select>
+                </div>
+                <div class="col-xs-6">
+                    <select class="input " style="width: 25%; margin-right: 10px" title="" name="civilite">
+                        <option value="Mr">Mr.</option>
+                        <option value="Mme">Mme.</option>
+                        <option value="Mlle">Mlle.</option>
+                    </select>
+
+                    <input type="text" class="input" style="width: calc(75% - 10px);" id="Prenom" name="_Prenom" placeholder="Prénom">
+                    <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom">
+
+                    <input type="tel" class="input " id="Tel" name="_Tel" placeholder="Tel">
+                </div>
+
+
             </div>
             <div class="div_button">
                 <input class="blue" type="submit" value="envoyer">
@@ -44,13 +60,16 @@
 
                 <input placeholder="Libelle" class="input" type="text" maxlength="10" id="Libelle" name="_Libelle">
 
-                <textarea form="formLicence" placeholder="Description" class="input" maxlength="255" id="Description" name="_Description" style="width: 50%;height: 100px;display: inline-flex"></textarea>
-
                 <input class="input" type="number"  min="1" max="365" placeholder="Durée" id="Duree" name="_Duree">
-
+</div>
+                <div class="col-xs-6">
                 <input class="input" type="number"  min="1" max="365" placeholder="Maximum d'apprenant" id="maxapp" name="_maxapp">
 
                 <input class="input" type="number"  min="1" max="365" placeholder="Maximum de mission" id="maxmiss" name="_maxmiss">
+               </div>
+                <textarea form="formLicence" placeholder="Description" class="input" maxlength="255" id="Description" name="_Description" style="height: 100px;display: inline-flex"></textarea>
+
+
 
             </div>
             <div class="div_button">
@@ -69,27 +88,27 @@
         <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="border: 0;padding: 4.5px;height: 100%;">
             <a href="{{ path('metier_user_admin') }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 21px;width: 100%" >        </a>
         </div>
-        <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="margin-left: 7.5px;border: 0;padding: 4.5px;height: 21px;float: left;">
+        <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
             <button onclick="postiframe('{{ path("addtier",{'type':'1'}) }}')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                     ></button>
 
-            <button>Ecole</button>
+            <button id="ecoletop">Ecole</button>
 
         </div>
-         <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 7.5px;border: 0;padding: 4.5px;height: 21px;float: left;">
+         <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
              <button onclick="postiframe('{{ path("addtier",{'type':'0'}) }}')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                      ></button>
 
-             <button>Société</button>
+             <button id="societetop" >Société </button>
 
          </div>
-         <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 7.5px;border: 0;padding: 4.5px;height: 21px;float: left;">
+         <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
              <button onclick="show('addLicenceDef')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                     ></button>
 
              <button>Licences</button>
          </div>
-         <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 7.5px;border: 0;padding: 4.5px;height: 21px;float: left;">
+         <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
              <button onclick="show('addsuperuser')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                      ></button>
 
@@ -116,21 +135,16 @@
                 <div id="ecole" class="list-group col-xs-2 leftbar">
                     {% if ecoles is defined %}
                         {% for e in ecoles %}
-                            <button onclick="postiframe('{{ path('metier_user_affiche',{'id': e.getId} ) }}',{{ e.getId }})" id="{{ e.getId }}" type="button" class="list-group-item butonLigne">
-                            <div class="col-xs-12 part" title="{{e.getTier.getRaisonSoc}}">{{e.getTier.getRaisonSoc}}</div>
-                            <div class="col-xs-12 part"
-                            style="height: 31px; text-align: left;">
-                            <div class="col-xs-9 part" title="{{ e.getVille }}">{{ e.getVille }}</div>
-                                {% for notif in notifications %}
-                                    {% if e.getId == notif.getEntite and notif.getType == 'Ecole' %}
-                                        <span class="badge">New</span>
+                            <button onclick="postiframe('{{ path('metier_user_affiche',{'id': e.getId} ) }}',{{ e.getId }},this)" id="etablissement{{ e.getId }}" type="button" class="list-group-item butonLigne">
+                                <div class="col-xs-12 part" title="{{e.getTier.getRaisonSoc}}">{{e.getTier.getRaisonSoc}}</div>
+                                <div class="col-xs-12 part"
+                                     style="height: 31px; text-align: left;">
+                                    <div class="col-xs-9 part" title="{{ e.getVille }}">{{ e.getVille }}</div>
+                                    {% if e.getActive %}
+                                        <div class="col-xs-1 active" id="active{{ e.getId }}"></div>
+                                    {% else %}
+                                        <div class="col-xs-1 inactive" id="active{{ e.getId }}"></div>
                                     {% endif %}
-                                {% endfor %}
-                                {% if e.getActive %}
-                                    <div class="col-xs-1 active"></div>
-                                {% else %}
-                                    <div class="col-xs-1 inactive"></div>
-                                {% endif %}
                             </div>
                             </button>
                         {% endfor %}
@@ -140,20 +154,15 @@
                      style="visibility: hidden;">
                     {% if societes is defined %}
                         {% for s in societes %}
-                            <button onclick="postiframe('{{ path('metier_user_affiche',{'id': s.getId }) }}',{{ s.getId }})" id="{{ s.getId }}" type="button" class="list-group-item butonLigne">
+                            <button onclick="postiframe('{{ path('metier_user_affiche',{'id': s.getId }) }}',{{ s.getId }},this)" id="etablissement{{ s.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{s.getTier.getRaisonSoc}}">{{s.getTier.getRaisonSoc}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
                                     <div class="col-xs-9 part" title="{{ s.getVille }}">{{ s.getVille }}</div>
-                                    {% for notif in notifications %}
-                                        {% if s.getId == notif.getEntite and notif.getType == 'Societe' %}
-                                            <span class="badge">New</span>
-                                        {% endif %}
-                                    {% endfor %}
                                     {% if s.getActive %}
-                                        <div class="col-xs-1 active"></div>
+                                        <div class="col-xs-1 active" id="active{{ s.getId }}"></div>
                                     {% else %}
-                                        <div class="col-xs-1 inactive"></div>
+                                        <div class="col-xs-1 inactive" id="active{{ s.getId }}"></div>
                                     {% endif %}
                                 </div>
                             </button>
@@ -164,7 +173,7 @@
                 <div id="licence" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if AllLicences is defined %}
                         {% for lic in AllLicences %}
-                            <button id="{{ lic.getId }}" type="button" class="list-group-item butonLigne">
+                            <button id="licence{{ lic.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{lic.getLibelle}}">{{lic.getLibelle}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -178,7 +187,7 @@
                 <div id="user" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if users is defined %}
                         {% for u in users %}
-                            <button id="{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                            <button id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -194,7 +203,7 @@
                 <div id="QCM" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if qcms is defined %}
                         {% for qcm in qcms %}
-                            <button onclick="postiframe('{{ path('loadgestionQCM',{'id': qcm.getId} ) }}')" id="{{ qcm.getId }}" type="button" class="list-group-item butonLigne">
+                            <button onclick="postiframe('{{ path('loadgestionQCM',{'id': qcm.getId} ) }}')" id="qcm{{ qcm.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part">{{qcm.getNom}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -241,11 +250,9 @@
             </div>
 
             {% block Content%}
-                {% if url is defined %}
-                    <iframe id="iframe" src="{{ url }}"></iframe>
-                {% else %}
-                    <iframe id="iframe" src="{{ path('admin_iframeload') }}"></iframe>
-                {% endif %}
+
+                    <iframe id="iframe" src="{{ path(url) }}"></iframe>
+
             {% endblock %}
         </div>
 
@@ -277,7 +284,7 @@
         document.getElementById(x).style.visibility='visible';
 
     };
-    function postiframe(url,id) {
+    function postiframe(url,id,button) {
         document.getElementById("iframe").src = url;
         var route = '{{path('adresses_tier',{'id':"_id" })}}';
         var route = route.replace("_id", id);
@@ -307,6 +314,8 @@
 
             }
         });
+        var elements = button.getElementsByClassName("badge");
+        elements[0].parentNode.removeChild(elements[0]);
     }
     function stringWith (str, prefix) {
         var ustring = str.toUpperCase();
@@ -372,9 +381,53 @@
             i++;
         }
     };
-    function show(div){
-        document.getElementById(div).style.display = 'block';
-    };
+    function putbadged()
+    {
+        var notifs = JSON.parse('{{ notifications|raw }}');
+        var ecole =0;
+        var societe = 0;
+        for(var i = 0; i< notifs.length;i++)
+        {
+            var span = document.createElement("span");
+            span.className = 'badge';
+            span.innerHTML = 'New';
+            if(notifs[i].type == 'Ecole')
+            {
+                ecole++;
+                var active = document.getElementById("active"+ notifs[i].entite);
+                if(active != null){active.parentNode.insertBefore(span,active);}
+
+            }
+            if(notifs[i].type == 'Societe')
+            {
+                societe++;
+                var active = document.getElementById("active"+ notifs[i].entite);
+                if(active != null){active.parentNode.insertBefore(span,active);}
+
+            }
+        }
+
+        if(ecole > 0)
+        {
+            var spanecole = document.createElement("span");
+            spanecole.className = 'badge';
+            spanecole.className = spanecole.className + ' notifTopbar';
+            spanecole.innerHTML = 20;
+            spanecole.style.left ="30px";
+            var buttonecole = document.getElementById("ecoletop");
+            buttonecole.appendChild(spanecole);
+        }
+        if(societe >0)
+        {var spansociete = document.createElement("span");
+            spansociete.className = 'badge';
+            spansociete.className = spansociete.className + ' notifTopbar';
+            spansociete.innerHTML = societe;
+            spansociete.style.left ="20px";
+            var buttonsociete = document.getElementById("societetop");
+            buttonsociete.appendChild(spansociete);
+        }
+
+    }
 </script>
 
 {% block JS %}

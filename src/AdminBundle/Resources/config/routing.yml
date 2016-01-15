@@ -1,6 +1,6 @@
 metier_user_admin:
-    path : /admin
-    defaults: { _controller: AdminBundle:Default:load}
+    path : /admin{url}
+    defaults: { _controller: AdminBundle:Default:load, url:'admin_iframeload'}
 
 admin_iframeload:
     path: /admin/iframe
