@@ -58,7 +58,7 @@ body {
 }
 
 .butonLigne .part .active {
-	background: limegreen;
+	background: #94C400;
 	height:9px;
 	border-radius: 100%;
 	margin: 3px 0;
@@ -95,7 +95,7 @@ outline: 0;
 }
 
 .rightMenu{
-	height: 35px;
+	height: 46px;
 	padding: 0 !important;
 	display: block !important;
 	border: none !important;
@@ -108,12 +108,12 @@ outline: 0;
 }
 
 .info{
-	height: 60px;
+	height: 40px;
 	padding: 10px 0 10px 0 !important;
 	display: block !important;
 	border: none !important;
 	border-radius: 0 !important;
-	border-bottom: 1px solid #1B2024 !important;
+	border-bottom: 1px solid #7F7F7F !important;
 	color: #7F7F7F !important;
 	font : 20px arial;
 	margin: 0 !important;
@@ -124,7 +124,7 @@ table
 {
 	width: 100%;
 	background-color: white;
-	border-collapse: collapse; /* Les bordures du tableau seront collées (plus joli) */
+	border-collapse: collapse; /* Le /* Les bordures du tableau seront collées (plus joli) */
 }
 td
 {
@@ -172,7 +172,7 @@ iframe
 .topbaradd + button
 {
 	padding: 0px;
-	background: #1C5AA5 ;
+	background: #1654b7 ;
 	border: none;margin: 0 ;
 	height: 21px;
 	width: calc(100% - 21px);
@@ -187,6 +187,7 @@ iframe
 	border-radius: 0;
 	background: #1C5AA5;
 	border: 0;
+	color: white;
 }
 
 .affichage
