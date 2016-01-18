@@ -4,6 +4,7 @@ namespace AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use \JMS\Serializer\SerializerBuilder;
 
 class DefaultController extends Controller
 {
@@ -28,7 +29,7 @@ class DefaultController extends Controller
         $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findAll();
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $qcms = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findAll();
-        $serializer = \JMS\Serializer\SerializerBuilder::create()->build();
+        $serializer = SerializerBuilder::create()->build();
         $jsonContent = $serializer->serialize($notifications, 'json');
 
         return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$users,

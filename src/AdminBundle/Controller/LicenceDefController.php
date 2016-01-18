@@ -27,22 +27,6 @@ class LicenceDefController extends Controller
         return $this->redirect($this->generateUrl('metier_user_admin'));
     }
 
-    public function associerAction(Request $request)
-    {
-        $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findAll();
-        $ecole = $this->getDoctrine()->getRepository('GenericBundle:Ecole')->find($request->get('idecole'));
-        if($ecole->getLogo())
-        {
-            $ecole->setLogo(base64_encode(stream_get_contents($ecole->getLogo())));
-        }
-        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licenceecole')->findBy(array('ecoleecole'=>$ecole ));
-        $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('ecole'=>$ecole ));
-
-        return $this->render('AdminBundle:Admin:instanceLicence.html.twig',array('licencedef'=>$licencedef,
-            'ecole'=>$ecole,'libs'=>$licences,'usersecole'=>$users));
-
-
-    }
     public function associatedAction(Request $request)
     {
             $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->find($request->get('Licencedef'));

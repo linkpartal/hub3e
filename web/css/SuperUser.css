@@ -63,7 +63,7 @@ body {
 	border-radius: 100%;
 	margin: 3px 0;
 	width: 9px;
-	left:50px;
+	float: right;
 }
 
 .butonLigne .part .inactive {
@@ -72,7 +72,7 @@ body {
 	border-radius: 100%;
 	margin: 3px 0;
 	width: 9px;
-	left:50px;
+	float: right;
 }
 
 .recherche{
