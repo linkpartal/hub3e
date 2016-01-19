@@ -260,4 +260,9 @@ class User extends BaseUser
     {
         return $this->telephone;
     }
+
+    public function getExpiredAt()
+    {
+        return $this->expiresAt;
+    }
 }

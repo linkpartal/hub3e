@@ -185,7 +185,7 @@
                 <div id="user" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if users is defined %}
                         {% for u in users %}
-                            <button id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                            <button onclick="postiframe('{{ path('metier_user_afficheUser',{'id': u.getId} ) }}')" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">

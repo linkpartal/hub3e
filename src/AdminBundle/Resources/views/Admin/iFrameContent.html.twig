@@ -58,33 +58,53 @@
             <div onclick="hide(this)" class="close"></div>
             <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block">
 
-                <form class="formulaire" id="formadduser" action="{{ path("user_added") }}" method="post">
+
+
+                <form id="formadduser" class="formulaire" action="{{ path("user_added") }}" method="post">
+
                     <div class="div_form" >
-                        <input type="hidden" id="id" name="_id" value="{{ etablissement.getId }}">
+                        <div class="col-xs-6 input-colonne">
+                            <input type="text" class="input" id="Username" name="_Username" placeholder="Username">
 
-                        <input placeholder="Username" type="text" class="input" id="Username" name="_Username">
+                            <input type="email" class="input " id="mail" name="_mail" placeholder="Email">
 
+                            <select class="input" title="" name="_role">
+                                <option selected="selected">Sélectionner un role</option>
+                                {% if etablissement.getTier.getEcole %}
+                                    <option value="ROLE_ADMINECOLE">Administrateur école</option>
+                                    <option value="ROLE_RECRUTE">Recruteur Placeur</option>
+                                {% else %}
+                                    <option value="ROLE_ADMINSOC">Administrateur Société</option>
+                                    <option value="ROLE_TUTEUR">Tuteur</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="col-xs-6">
+                            <select class="input " style="width: 25%; margin-right: 10px" title="" name="civilite">
+                                <option value="Mr">Mr.</option>
+                                <option value="Mme">Mme.</option>
+                                <option value="Mlle">Mlle.</option>
+                            </select>
 
-                        <input placeholder="Email" type="email" class="input" id="mail" name="_mail">
+                            <input type="text" class="input" style="width: calc(75% - 10px);" id="Prenom" name="_Prenom" placeholder="Prénom">
+                            <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom">
 
+                            <input type="tel" class="input " id="Tel" name="_Tel" placeholder="Tel">
+                        </div>
 
-
-                        <select class="input" title="" name="_role">
-                            <option selected="selected">Sélectionner un role</option>
-                            {% if etablissement.getTier.getEcole %}
-                                <option value="ROLE_ADMINECOLE">Administrateur école</option>
-                                <option value="ROLE_RECRUTE">Recruteur Placeur</option>
-                            {% else %}
-                                <option value="ROLE_ADMINSOC">Administrateur Société</option>
-                                <option value="ROLE_TUTEUR">Tuteur</option>
-                            {% endif %}
-                        </select>
 
                     </div>
                     <div class="div_button">
                         <input class="blue" type="submit" value="envoyer">
                     </div>
-            </form>
+                </form>
+
+
+
+
+
+
+
         </div>
     </div>
         {% if etablissement.getTier.getEcole %}
