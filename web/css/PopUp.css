@@ -5,6 +5,7 @@
     display: none;
     z-index: 5;
     height: 100%;
+    overflow-y: auto;
     width: 100%;
     background-color: rgba(0,0,0,0.5)
 }

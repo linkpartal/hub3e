@@ -47,6 +47,6 @@ class LicenceDefController extends Controller
             $em=$this->getDoctrine()->getManager();
             $em->persist($licence);
             $em->flush();
-            return $this->forward('AdminBundle:Default:affichage',array('id'=>$request->get('_idetab')));
+            return $this->redirect($this->generateUrl('metier_user_affiche',array('id'=>$request->get('_idetab'))));
     }
 }

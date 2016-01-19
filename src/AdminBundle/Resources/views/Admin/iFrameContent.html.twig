@@ -109,26 +109,26 @@
             </div>
         {% endif %}
 
-    <div class="row" style="height: 78px; margin: 0;">
-        <img class="col-xs-1" src="data:image/jpg;base64,{{ etablissement.getTier.getLogo }}"
-             style="padding: 10px; height: 40px;">
-        <div class="col-xs-4">
-            <div class="col-xs-12"
-            style="height: 30px; text-align: left; padding: 10px;"><label style="font-size: large" >{{ etablissement.getTier.getRaisonSoc }}&nbsp;-&nbsp;  </label><label style="font-size: large;color:#2A76CC" > {{ etablissement.getVille }}</label></div>
-        <div class="col-xs-12" style="height: 20px; text-align: left;">{{etablissement.getAdresse }}, {{ etablissement.getCodePostal }} {{ etablissement.getVille }}</div>
-    </div>
-    <div class="col-xs-offset-5 col-xs-1">
-        <div class="col-xs-12" style="height: 30px;; padding-top: 10px;"><label style="font-size: large;color:#2A76CC" > 549</label></div>
-        <div class="col-xs-12" style="height: 20px;">Apprenant</div>
-    </div>
-    <div class=" col-xs-1">
-        <div class="col-xs-12" style="height: 30px; padding-top: 10px;"><label style="font-size: large;color:#2A76CC" > 151</label></div>
-        <div class="col-xs-12" style="height: 20px;">Missions</div>
-    </div>
-</div>
+        <div class="row" style="height: 78px; margin: 0;">
+            <img class="col-xs-1" src="data:image/jpg;base64,{{ etablissement.getTier.getLogo }}"
+                 style="padding: 10px; height: 40px;">
+            <div class="col-xs-4">
+                <div class="col-xs-12"
+                     style="height: 30px; text-align: left; padding: 10px;"><label style="font-size: large" >{{ etablissement.getTier.getRaisonSoc }}&nbsp;-&nbsp;  </label><label style="font-size: large;color:#2A76CC" > {{ etablissement.getVille }}</label></div>
+                <div class="col-xs-12" style="height: 20px; text-align: left;">{{etablissement.getAdresse }}, {{ etablissement.getCodePostal }} {{ etablissement.getVille }}</div>
+            </div>
+            <div class="col-xs-offset-5 col-xs-1">
+                <div class="col-xs-12" style="height: 30px;; padding-top: 10px;"><label style="font-size: large;color:#2A76CC" > 549</label></div>
+                <div class="col-xs-12" style="height: 20px;">Apprenant</div>
+            </div>
+            <div class=" col-xs-1">
+                <div class="col-xs-12" style="height: 30px; padding-top: 10px;"><label style="font-size: large;color:#2A76CC" > 151</label></div>
+                <div class="col-xs-12" style="height: 20px;">Missions</div>
+            </div>
+        </div>
 
 
-<div class="row" style="background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;height: 100%">
+<div class="row" style="background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;height: calc(100% - 78px)">
 
                 <div class="col-xs-9"
                      style="background: rgb(238, 241, 246); height: 100%;">
@@ -162,63 +162,65 @@
                             <img alt="Fond ecran" src="data:image/jpg;base64,{{ etablissement.getTier.getFondecran }}"/>
                         </div>
 
-                        <div id="info_licence" class="list-group affichage"
+                        <div id="info_licence" class="list-group"
                              style="display: none;">
 
-                            <table id="tableLibs">
-                                <tr>
-                                    <td>Id</td>
-                                    <td>Libelle</td>
-                                    <td>Decription</td>
-                                    <td>Nbre max d'apprenants</td>
-                                    <td>Nbre max de missions</td>
-                                    <td>Date début</td>
-                                    <td>Date Fin</td>
-                                    <td style="border: none"><button onclick="show('instanceLicence')"
-                                                                     type="button" style="border: none">+</button></td>
-                                </tr>
                                 {% if libs is defined %}
                                     {% for lib in libs %}
-                                        <tr>
-                                            <td>{{ lib.getId }}</td>
-                                            <td>{{ lib.getLibelle }}</td>
-                                            <td>{{ lib.getDescription }}</td>
-                                            <td>{{ lib.getMaxapp }}</td>
-                                            <td>{{ lib.getMaxmission }}</td>
-                                            <td>{{ lib.getDatedebut }}</td>
-                                            <td>{{ lib.getDatefin }}</td>
-                                            <td style="border: none"><button onclick="supprimerligne('{{ path('supprimer_Licence',{'id': lib.getId}) }}',this)"
-                                                                             type="button" style="border: none">x</button></td>
-                                        </tr>
+                                        {% set iddiv = random()  %}
+                                        <div class="col-xs-12 Liste">
+                                            <div class="row">
+                                                <label class="cell" >Licence : <label>{{ lib.getId }}</label></label>
+                                                <label class="cell">Libelle : <label>{{ lib.getLibelle }}</label> <button style="float: right" type="button" data-toggle="collapse" data-target="#licence{{ iddiv }}"></button></label>
+
+                                            </div>
+                                            <div id="licence{{ iddiv }}" class="collapse in" >
+                                            <div class="row">
+                                                <label class="cell">Nombre max d'apprenants : <label>{{ lib.getMaxapp }}</label></label>
+                                                <label class="cell">Nombre max de mission  : <label>{{ lib.getMaxmission }}</label></label>
+                                            </div>
+                                            <div class="row">
+                                                <label class="cell">Date de début : <label>{{ lib.getDatedebut }}</label></label>
+                                                <label class="cell">Date de fin : <label>{{ lib.getDatefin }}</label></label>
+                                            </div>
+                                            </div>
+                                            <!--button-- onclick="supprimerligne('{{ path('supprimer_Licence',{'id': lib.getId}) }}',this)"
+                                                                             type="button" style="border: none">x</button-->
+                                        </div>
                                     {% endfor %}
                                 {% endif %}
-                            </table>
 
                         </div>
 
                         <div id="info_user" class="list-group affichage"
                              style="display: none;">
 
-                            <table>
-                                <tr>
-                                    <td>Id</td>
-                                    <td>Username</td>
-                                    <td>Email</td>
-                                    <td>Dernière Connexion</td>
-                                    <td style="border: none"><button onclick="show('adduser')" type="button" style="border: none">+</button></td>
-                                </tr>
                                 {% if users is defined %}
                                     {% for user in users %}
-                                        <tr>
-                                            <td>{{ user.getId }}</td>
-                                            <td>{{ user.getUsername }}</td>
-                                            <td>{{ user.getEmail }}</td>
-                                            <td>{{ user.getLastLogin|date('d/m/Y') }}</td>
-                                            <td style="border: none"><button type="button" style="border: none">x</button></td>
-                                        </tr>
+                                        {% set iddiv = random()  %}
+                                        <div class="col-xs-12 Liste">
+                                            <div class="row">
+                                                <label class="cell">Email : <label>{{ user.getEmail }}</label></label>
+                                                <label class="cell">Username : <label>{{ user.getUsername }}</label> <button style="float: right" type="button" data-toggle="collapse" data-target="#user{{ iddiv }}"></button></label>
+
+                                            </div>
+                                            <div id="user{{ iddiv }}" class="collapse in" >
+                                                <div class="row">
+                                                    <label class="cell">Nom : <label>{{ user.getNom }}</label></label>
+                                                    <label class="cell">Prénom  : <label>{{ user.getPrenom }}</label></label>
+                                                </div>
+                                                <div class="row">
+                                                    <label class="cell">Téléphone : <label>{{ user.getTelephone }}</label></label>
+                                                    <label class="cell">Dernière connexion : <label>
+                                                            {% if user.getLastLogin %}{{ user.getLastLogin|date('d/m/Y') }}
+                                                                {% else %}Jamais
+                                                            {% endif %}</label></label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     {% endfor %}
                                 {% endif %}
-                            </table>
+
 
                         </div>
                         {% if etablissement.getTier.getEcole %}
@@ -254,23 +256,31 @@
                          style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
                         {% if etablissement.getActive %}
                             <button onclick="active('{{ path('activate',{'id':etablissement.getId}) }}')" id="activate" type="button" class="list-group-item rightMenu" style="background-color: #94C400">
-                                <div class="col-xs-12" style="display: inline-table;color: white;height: 46px;margin-top:10px;">ACTIVE</div>
+                                <div class="col-xs-12" style="color: white;">ACTIVE</div>
                             </button>
                         {% else %}
                             <button onclick="active('{{ path('activate',{'id':etablissement.getId}) }}')" id="activate" type="button" class="list-group-item rightMenu" style="background-color: red">
-                                <div class="col-xs-12" style="display: inline-table;color: white;height: 46px;margin-top:10px;">DÉSACTIVE</div>
+                                <div class="col-xs-12" style="color: white;">DÉSACTIVE</div>
                             </button>
                         {% endif %}
-                        <button onclick="post('{{ path('modifieretab',{'id': etablissement.getId }) }}')" type="button" class="list-group-item rightMenu" style="background-color: #E4E4E4">
-                            <div class="col-xs-12"  style="display: inline-table;color: #868686;height: 46px;margin-top:10px;">Modifier la fiche</div>
+                        <button onclick="post('{{ path('modifieretab',{'id': etablissement.getId }) }}')" type="button" class="list-group-item rightMenu">
+                            <div class="col-xs-12">Modifier la fiche</div>
 
                         </button>
-                        <button onclick="post('{{ path('supprimeretablissement',{'id': etablissement.getId }) }}')" type="button" class="list-group-item rightMenu" style="background-color: #E4E4E4">
-                            <div class="col-xs-12"  style="display: inline-table;color: #868686;height: 46px;margin-top:10px;">Supprimer l'établissement</div>
+                        <button onclick="post('{{ path('supprimeretablissement',{'id': etablissement.getId }) }}')" type="button" class="list-group-item rightMenu">
+                            <div class="col-xs-12">Supprimer l'établissement</div>
 
                         </button>
-                        <button onclick="alert('Ce button n\'est pas encore fonctionel!')" type="button" class="list-group-item rightMenu" style="background-color: #E4E4E4">
-                            <div class="col-xs-12"  style="display: inline-table;color: #868686;height: 46px;margin-top:10px;">Gérer les droits</div>
+                        <button onclick="alert('Ce button n\'est pas encore fonctionel!')" type="button" class="list-group-item rightMenu">
+                            <div class="col-xs-12">Gérer les droits</div>
+
+                        </button>
+                        <button onclick="show('instanceLicence')" type="button" class="list-group-item rightMenu">
+                            <div class="col-xs-12">Instancier une licence</div>
+
+                        </button>
+                        <button onclick="show('adduser')" type="button" class="list-group-item rightMenu">
+                            <div class="col-xs-12">Ajouter un utilisateur</div>
 
                         </button>
                     </div>
@@ -284,68 +294,69 @@
         {% endif %}
     {% endblock %}
 </div>
-<script src="//code.jquery.com/jquery.min.js"></script>
-<script src="{{ asset('js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('js/PopUp.js') }}"></script>
-<script language="JavaScript">
-    {% if etablissement is defined %}
-    document.getElementById("select_info").onchange = function(){
-        var x = document.getElementById("select_info").value;
-        document.getElementById('info_etab').style.display= 'none';
-        document.getElementById('info_licence').style.display= 'none';
-        document.getElementById('info_user').style.display= 'none';
-        {% if etablissement is defined %}
-        {% if etablissement.getTier.getEcole %}
-        document.getElementById('info_tier_tier').style.display= 'none';
-        {% endif %}
-        {% endif %}
-        document.getElementById(x).style.display='block';
-    };
-    function active(route) {
-        $.ajax({
-            type: 'get',
-            url: route,
-            error: function (response) {
-                console.log(response);
-            },
-            success: function (data) {
-                console.log('etablissement{{ etablissement.getId }}');
-                if (data['succes'] == '0') {
-                    document.getElementById("activate").style.backgroundColor = 'red';
-                    document.getElementById("activate").firstElementChild.innerHTML = 'Désactive';
-                    window.parent.document.getElementById('active{{ etablissement.getId }}').style.backgroundColor = 'red';
-                }
-                else {
-                    document.getElementById("activate").style.backgroundColor = '#94C400';
-                    document.getElementById("activate").firstElementChild.innerHTML = 'Active';
-                    window.parent.document.getElementById('active{{ etablissement.getId }}').style.backgroundColor = '#94C400';
-                }
 
-            }
-        });
-
-    };
-    {% endif %}
-    function post(path) {
-        window.location = path;
-    }
-    function submitform(form) {
-        document.getElementById(form).submit();
-    }
-    function supprimerligne(route, champs) {
-        $.ajax({
-            type: 'get',
-            url: route,
-            error: function (response) {
-                console.log(response);
-            },
-            success: function(data){console.log(data);}
-        });
-        document.getElementById("tableLibs").deleteRow(champs.parentNode.parentNode.rowIndex);
-    }
-</script>
 {% block JS %}
     <script src="http://maps.googleapis.com/maps/api/js"></script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/PopUp.js') }}"></script>
+    <script language="JavaScript">
+        {% if etablissement is defined %}
+        document.getElementById("select_info").onchange = function(){
+            var x = document.getElementById("select_info").value;
+            document.getElementById('info_etab').style.display= 'none';
+            document.getElementById('info_licence').style.display= 'none';
+            document.getElementById('info_user').style.display= 'none';
+            {% if etablissement is defined %}
+            {% if etablissement.getTier.getEcole %}
+            document.getElementById('info_tier_tier').style.display= 'none';
+            {% endif %}
+            {% endif %}
+            document.getElementById(x).style.display='block';
+        };
+        function active(route) {
+            $.ajax({
+                type: 'get',
+                url: route,
+                error: function (response) {
+                    console.log(response);
+                },
+                success: function (data) {
+                    console.log('etablissement{{ etablissement.getId }}');
+                    if (data['succes'] == '0') {
+                        document.getElementById("activate").style.backgroundColor = 'red';
+                        document.getElementById("activate").firstElementChild.innerHTML = 'Désactive';
+                        window.parent.document.getElementById('active{{ etablissement.getId }}').style.backgroundColor = 'red';
+                    }
+                    else {
+                        document.getElementById("activate").style.backgroundColor = '#94C400';
+                        document.getElementById("activate").firstElementChild.innerHTML = 'Active';
+                        window.parent.document.getElementById('active{{ etablissement.getId }}').style.backgroundColor = '#94C400';
+                    }
+
+                }
+            });
+
+        };
+        {% endif %}
+        function post(path) {
+            window.location = path;
+        };
+        function submitform(form) {
+            document.getElementById(form).submit();
+        };
+        function supprimerligne(route, champs) {
+            $.ajax({
+                type: 'get',
+                url: route,
+                error: function (response) {
+                    console.log(response);
+                },
+                success: function(data){console.log(data);}
+            });
+            document.getElementById("tableLibs").deleteRow(champs.parentNode.parentNode.rowIndex);
+        };
+    </script>
 {% endblock %}
 </body>
 </html>

@@ -503,6 +503,14 @@
         clone.style.display = 'block';
 
         document.getElementById("adressecontainer").appendChild(clone);
+        var parentdiv = dup.parentNode;
+        var close =dup.parentNode.parentNode;
+        if(parentdiv.offsetHeight  > close.offsetHeight )
+        {
+            close.style.height = parentdiv.offsetHeight;
+            clone.children[0].style.height = parentdiv.offsetHeight;
+        }
+
         i++;
     };
     function submitAjaxForm(url,form){
@@ -527,7 +535,7 @@
         var geocodes = document.getElementsByName('_Geocode[]');
         if(geocodes.length==1)
         {
-            submitAjaxForm('{{ path('checkExist') }}','form');
+            alert('Vous devez remplir au moins une adresse');
         }
         for(var i = 1; i<geocodes.length;i++)
         {

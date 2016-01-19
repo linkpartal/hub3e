@@ -1,4 +1,5 @@
 @CHARSET "utf-8";
+@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css");
 
 [class*="col-"] {
 	text-align: center;
@@ -100,8 +101,8 @@ outline: 0;
 	display: block !important;
 	border: none !important;
 	border-radius: 0 !important;
-	border-bottom: 1px solid #1B2024 !important;
-	color: white !important;
+	background-color: #E4E4E4;
+	color: #868686;
 	font : 10px arial;
 	margin: 0 !important;
 	line-height: 250%;
@@ -124,7 +125,7 @@ table
 {
 	width: 100%;
 	background-color: white;
-	border-collapse: collapse; /* Le /* Les bordures du tableau seront collées (plus joli) */
+	border-collapse: collapse;
 }
 td
 {
@@ -204,5 +205,72 @@ iframe
 {
 	position: relative;
 	background-color: red;
+	color: white;
+	text-align: center;
 	top: -6px;
+	font: 12px Roboto bold;
+}
+
+.Liste
+{
+	background: white;
+	margin: 15px 0 0 15px;
+	padding: 0 0;
+	text-align: left;
+	display: table;
+	border-collapse: collapse;
+	width: calc(100% - 15px);
+}
+.Liste .row
+{
+	border-bottom: 1px solid black;
+	border-left: 15px solid white;
+	border-right: 15px solid white;
+	display: table-row
+}
+.Liste .row .cell
+{
+	height: 40px;
+	padding: 10px 0 10px 0 !important;
+	width: 50%;
+	display: table-cell;
+	border: none !important;
+	border-radius: 0 !important;
+	color: #7F7F7F !important;
+	font : 20px arial;
+	margin: 0 !important;
+}
+
+.Liste .row .cell label
+{
+	color: black;
+}
+
+.Liste .row .cell button
+{
+	background-color: white;
+	border: none;
+}
+.Liste .row .cell button.collapsed:before
+{
+	font-family: 'Glyphicons Halflings';
+	content:" \e252";
+}
+.Liste .row .cell button:before
+{
+	font-family: 'Glyphicons Halflings';
+	content:" \e253";
+}
+.Liste .row .cell button:before
+{
+	font-family: 'Glyphicons Halflings';
+	content:" \e253";
+}
+.Liste .collapse.in {display: table-row-group;}
+.Liste .collapsing {
+	position: relative;
+	height: 0;
+	overflow: hidden;
+	display: table-row-group;
+.transition(height .35s ease);
 }
