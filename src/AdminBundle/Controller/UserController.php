@@ -78,7 +78,7 @@ class UserController extends Controller
 
         if($request->get('_id'))
         {
-            return $this->forward('AdminBundle:Default:affichage',array('idliste'=>$request->get('_from'),'id'=>$request->get('_id')));
+            return $this->redirect($this->generateUrl('metier_user_affiche',array('id'=>$request->get('_id'))));
         }
         else
         {

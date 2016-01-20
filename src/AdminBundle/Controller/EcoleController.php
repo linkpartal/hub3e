@@ -104,8 +104,8 @@ class EcoleController extends Controller
         }
 
         $em->flush();
-        $reponse = new JsonResponse();
-        return $reponse->setData(array('succes'=>'Tous les etablissement sont ajouter'));
+
+        return $this->redirect($this->generateUrl('metier_user_admin'));
 
     }
 

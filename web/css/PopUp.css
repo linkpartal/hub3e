@@ -3,9 +3,9 @@
 .popup{
     position: absolute;
     display: none;
-    background-color: white;
     z-index: 5;
     height: 100%;
+    overflow-y: auto;
     width: 100%;
     background-color: rgba(0,0,0,0.5)
 }
@@ -14,7 +14,7 @@
 {
     height: 100%;
     width: 100%;
-    position: absolute
+    position: absolute;
 }
 
 .popup .nav
@@ -46,7 +46,7 @@
 }
 .popup .div_form .input-colonne
 {
-    border-right: 10px solid white;
+    border-right: 15px solid white;
 }
 .popup .div_form .input
 {
@@ -73,3 +73,9 @@
     background-color: rgb(61, 138, 212);
     height: 40px
 }
+
+.toggle
+{
+    text-align: left;
+}
+
