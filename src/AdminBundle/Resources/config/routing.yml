@@ -22,18 +22,10 @@ metier_user_affiche:
     path: /admin/affichage/id={id}
     defaults: { _controller: AdminBundle:Default:affichage}
 
-<<<<<<< HEAD
-=======
 metier_user_afficheUser:
     path: /admin/affichageUser/id={id}
     defaults: { _controller: AdminBundle:Default:affichageUser}
 
-
-metier_user_instance:
-    path:  /admin/ecolelicence
-    defaults: { _controller: AdminBundle:LicenceDef:associer}
-
->>>>>>> refs/remotes/origin/abdellah
 metier_user_associated:
     path:  /admin/associated
     defaults: { _controller: AdminBundle:LicenceDef:associated}
@@ -62,17 +54,10 @@ supprimeretablissement:
     path : /admin/supprimeretab/id={id}
     defaults: { _controller: AdminBundle:Ecole:supprimeretab}
 
-<<<<<<< HEAD
-=======
 supprimereUtilisateur:
     path : /admin/supprimeruser/id={id}
     defaults: { _controller: AdminBundle:User:supprimeruser}
 
-associer_ecoles:
-    path : /admin/associerecoles/id={id}
-    defaults: { _controller: AdminBundle:Ecole:assosierecoles}
-
->>>>>>> refs/remotes/origin/abdellah
 ecoles_assiciated:
     path: /admin/ecolesassociated/id={id}
     defaults: { _controller: AdminBundle:Ecole:ecolesassociated}
