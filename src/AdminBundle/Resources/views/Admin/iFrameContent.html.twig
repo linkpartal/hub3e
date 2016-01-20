@@ -61,8 +61,9 @@
 
 
                 <form id="formadduser" class="formulaire" action="{{ path("user_added") }}" method="post">
-
+                    <input type="hidden" id="id" name="_id" value="{{ etablissement.getId }}">
                     <div class="div_form" >
+
                         <div class="col-xs-6 input-colonne">
                             <input type="text" class="input" id="Username" name="_Username" placeholder="Username">
 

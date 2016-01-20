@@ -22,7 +22,7 @@ class EcoleController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $reponse = new JsonResponse();
-        $tier = $em->getRepository('GenericBgetRaisonSocundle:Tier')->findOneBy(array('siren'=>$request->get('_SIREN')));
+        $tier = $em->getRepository('GenericBundle:Tier')->findOneBy(array('siren'=>$request->get('_SIREN')));
 
 
         if ($tier) {
