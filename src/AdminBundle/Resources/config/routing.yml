@@ -105,3 +105,7 @@ expired:
 adresses_tier:
     path: /adresse/id={id}
     defaults: { _controller: AdminBundle:Ecole:adresses}
+
+adresses_tier_user:
+    path: /admin/adresse/id={id}
+    defaults: { _controller: AdminBundle:User:adresses}

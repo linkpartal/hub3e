@@ -120,38 +120,20 @@
                                 <div class="col-xs-12" style="display: inline-table;color: white;height: 46px;margin-top:10px;">DÉSACTIVE</div>
                             </button>
                         {% endif %}
-                        <button onclick="post('{{ path('modifierUser',{'id': User.getId }) }}')" type="button" class="list-group-item rightMenu" style="background-color: #E4E4E4">
-                            <div class="col-xs-12"  style="display: inline-table;color: #868686;height: 46px;margin-top:10px;">Modifier la fiche</div>
+                        <button onclick="post('{{ path('modifierUser',{'id': User.getId }) }}')" type="button" class="list-group-item rightMenu" >
+                            <div class="col-xs-12"  >Modifier la fiche</div>
 
                         </button>
 
-                        <button onclick="post('{{ path('supprimereUtilisateur',{'id': User.getId }) }}',{})" type="button" class="list-group-item rightMenu" style="background-color: #E4E4E4">
-                            <div class="col-xs-12"  style="display: inline-table;color: #868686;height: 46px;margin-top:10px;">Supprimer l'utilisateur</div>
+                        <button onclick="post('{{ path('supprimereUtilisateur',{'id': User.getId }) }}',{})" type="button" class="list-group-item rightMenu" >
+                            <div class="col-xs-12" >Supprimer l'utilisateur</div>
 
                         </button>
 
                     </div>
                 </div>
 
-                <div class="col-xs-3"
-                     style="height: 100%;">
-                    <div class="list-group"
-                         style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
 
-                        <button onclick="post('{{ path('modifieretab',{'id': -9 }) }}')" type="button" class="list-group-item rightMenu" style="background-color: #E4E4E4">
-                            <div class="col-xs-12"  style="display: inline-table;color: #868686;height: 46px;margin-top:10px;">Modifier la fiche</div>
-
-                        </button>
-                        <button onclick="post('{{ path('supprimeretablissement',{'id':-1 }) }}')" type="button" class="list-group-item rightMenu" style="background-color: #E4E4E4">
-                            <div class="col-xs-12"  style="display: inline-table;color: #868686;height: 46px;margin-top:10px;">Supprimer l'établissement</div>
-
-                        </button>
-                        <button onclick="alert('Ce button n\'est pas encore fonctionel!')" type="button" class="list-group-item rightMenu" style="background-color: #E4E4E4">
-                            <div class="col-xs-12"  style="display: inline-table;color: #868686;height: 46px;margin-top:10px;">Gérer les droits</div>
-
-                        </button>
-                    </div>
-                </div>
 
             </div>
 
@@ -174,12 +156,12 @@
                 if (data['succes'] == '0') {
                     document.getElementById("expired").style.backgroundColor = 'red';
                     document.getElementById("expired").firstElementChild.innerHTML = 'Désactive';
-                    window.parent.document.getElementById('expire{{ User.getId }}').style.backgroundColor = 'red';
+                    window.parent.document.getElementById('active{{ User.getId }}').style.backgroundColor = 'red';
                 }
                 else {
                     document.getElementById("expired").style.backgroundColor = '#94C400';
                     document.getElementById("expired").firstElementChild.innerHTML = 'Active';
-                    window.parent.document.getElementById('expire{{ User.getId }}').style.backgroundColor = '#94C400';
+                    window.parent.document.getElementById('active{{ User.getId }}').style.backgroundColor = '#94C400';
                 }
 
             }
@@ -188,10 +170,10 @@
     };
     function post(path) {
         window.location = path;
-    }
+    };
     function submitform(form) {
         document.getElementById(form).submit();
-    }
+    };
     function supprimerligne(route, champs) {
         $.ajax({
             type: 'get',
@@ -202,7 +184,7 @@
             success: function(data){console.log(data);}
         });
         document.getElementById("tableLibs").deleteRow(champs.parentNode.parentNode.rowIndex);
-    }
+    };
 </script>
 {% block JS %}
     <script src="http://maps.googleapis.com/maps/api/js"></script>

@@ -99,13 +99,14 @@ outline: 0;
 	height: 46px;
 	padding: 0 !important;
 	display: block !important;
-	border: none !important;
-	border-radius: 0 !important;
+	border:solid 1px #d2d2d2 !important;
+	border-radius: 0  !important;
 	background-color: #E4E4E4;
 	color: #868686;
 	font : 10px arial;
 	margin: 0 !important;
 	line-height: 250%;
+	border-color:#FF0000;
 }
 
 .info{

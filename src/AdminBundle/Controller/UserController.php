@@ -5,6 +5,10 @@ namespace AdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use GenericBundle\Entity\Etablissement;
+use GenericBundle\Entity\Notification;
+use GenericBundle\Entity\Tier;
+
 
 class UserController extends Controller
 {
@@ -70,6 +74,17 @@ class UserController extends Controller
         $em->persist($newuser);
         $em->flush();
 
+        $superadmins = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_SUPER_ADMIN');
+
+        foreach($superadmins as $admin){
+            $notif = new Notification();
+            $notif->setEntite($newuser->getId());
+            $notif->setType('Utilisateur');
+            $notif->setUser($admin);
+            $em->persist($notif);
+            $em->flush();
+        }
+
         //send password
         $message = \Swift_Message::newInstance()
             ->setSubject('Email')
@@ -134,7 +149,7 @@ class UserController extends Controller
         $user->setPrenom($request->get('_Prenom'));
         $user->setTelephone($request->get('_Tel'));
         $user->setUsername($request->get('_Username'));
-        $user->setMail($request->get('_Mail'));
+        $user->setEmail($request->get('_Mail'));
 
         $em->flush();
 
@@ -155,6 +170,26 @@ class UserController extends Controller
 
         $em->remove($user);
         $em->flush();
+
+
+
+
+
+
         return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
+    }
+
+    public function adressesAction($id){
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository('GenericBundle:User')->find($id);
+        $user = $em->getRepository('GenericBundle:User')->findBy(array('tier'=>$user->getTier()));
+        $adresses = array();
+        foreach($user as $value)
+        {
+            $adresse = array('id'=>$value->getId(),'adresse' => $value->getAdresse());
+            array_push($adresses, json_encode($adresse) );
+        }
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('adresses'=>$adresses));
     }
 }

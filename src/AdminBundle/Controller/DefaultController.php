@@ -84,12 +84,15 @@ class DefaultController extends Controller
 
         $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $userid = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
+        $type = 'Utilisateur';
+        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('user'=>$user,'entite'=>$userid->getId(),'type'=>$type));
+        if($notifications)
+        {
+            $this->getDoctrine()->getEntityManager()->remove($notifications);
+            $this->getDoctrine()->getEntityManager()->flush();
+        }
 
 
-
-
-
-        $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
         return $this->render('AdminBundle:Admin:iFrameContentUser.html.twig',array('licencedef'=>$licencedef,'User'=>$userid
             ));
     }
