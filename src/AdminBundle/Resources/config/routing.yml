@@ -1,103 +1,107 @@
 metier_user_admin:
-    path : /admin{url}
-    defaults: { _controller: AdminBundle:Default:load, url:'admin_iframeload'}
+    path : /
+    defaults: { _controller: AdminBundle:Default:load}
 
 admin_iframeload:
-    path: /admin/iframe
+    path: /iframe
     defaults: { _controller: AdminBundle:Default:loadiframe}
 
 checkExist:
-    path : /admin/checkExist
+    path : /checkExist
     defaults: { _controller: AdminBundle:Ecole:checkExist}
 
 tieradded:
-    path : /admin/added
+    path : /added
     defaults: { _controller: AdminBundle:Ecole:tieradded}
 
 metier_user_licenceadded:
-    path : /admin/licenceadded
+    path : /licenceadded
     defaults: { _controller: AdminBundle:LicenceDef:licenceadded}
 
 metier_user_affiche:
-    path: /admin/affichage/id={id}
+    path: /affichage/id={id}
     defaults: { _controller: AdminBundle:Default:affichage}
 
 metier_user_afficheUser:
-    path: /admin/affichageUser/id={id}
+    path: /affichageUser/id={id}
     defaults: { _controller: AdminBundle:Default:affichageUser}
 
+admin_afficheLicence:
+    path: /affichageLicence/id={id}
+    defaults: { _controller: AdminBundle:LicenceDef:affichageLicence}
+
 metier_user_associated:
-    path:  /admin/associated
+    path:  /associated
     defaults: { _controller: AdminBundle:LicenceDef:associated}
 
 supprimer_Licence:
-    path:  /admin/suppLicence/{id}
+    path:  /suppLicence/{id}
     defaults: {_controller: AdminBundle:Ecole:suppLicence}
 
 user_added:
-    path:  /admin/Useradded
+    path:  /Useradded
     defaults: {_controller: AdminBundle:User:UserAdded}
 
 loadgestionQCM:
-    path:     /admin/gestionQCM/{id}
+    path:     /gestionQCM/{id}
     defaults: { _controller: AdminBundle:QCM:load, id :ajouter }
 
 Add_QCM:
-    path: /admin/addQCM
+    path: /addQCM
     defaults: { _controller: AdminBundle:QCM:add }
 
 supprimer_QCM:
-    path: /admin/supprimerQCM/rep={rep}&qst={qst}&qcm={qcm}
+    path: /supprimerQCM/rep={rep}&qst={qst}&qcm={qcm}
     defaults: { _controller: AdminBundle:QCM:supprimer }
 
 supprimeretablissement:
-    path : /admin/supprimeretab/id={id}
+    path : /supprimeretab/id={id}
     defaults: { _controller: AdminBundle:Ecole:supprimeretab}
 
 supprimereUtilisateur:
-    path : /admin/supprimeruser/id={id}
+    path : /supprimeruser/id={id}
     defaults: { _controller: AdminBundle:User:supprimeruser}
 
 ecoles_assiciated:
-    path: /admin/ecolesassociated/id={id}
+    path: /ecolesassociated/id={id}
     defaults: { _controller: AdminBundle:Ecole:ecolesassociated}
 
 creeNewModele:
-    path: /admin/creeNewModele
+    path: /creeNewModele
     defaults: { _controller: AdminBundle:Default:creeNewModele}
 
 saveNewModele:
-    path: /admin/saveNewModele
+    path: /saveNewModele
     defaults: { _controller: AdminBundle:Default:saveNewModele}
 
 modifieretab:
-    path: /admin/modifieretablissement/{id}
+    path: /modifieretablissement/{id}
     defaults: { _controller: AdminBundle:Ecole:modifier}
 
 modifierUser:
-    path: /admin/modifierUtilisateur/{id}
+    path: /modifierUtilisateur/{id}
     defaults: { _controller: AdminBundle:User:modifier}
 
 etabmodif:
-    path: /admin/etabmodif
+    path: /etabmodif
     defaults: { _controller: AdminBundle:Ecole:etabModif}
 
 userModif:
-    path: /admin/userModif
+    path: /userModif
     defaults: { _controller: AdminBundle:User:userModif}
 
 supprimerQCM:
-    path: /admin/supprimerQCM/nom={nom}
+    path: /supprimerQCM/nom={nom}
     defaults: { _controller: AdminBundle:QCM:deleteQcm}
 
 activate:
-    path: /admin/activate/id={id}
+    path: /activate/id={id}
     defaults: { _controller: AdminBundle:Ecole:activate}
 
 expired:
-    path: /admin/expired/id={id}
+    path: /expired/id={id}
     defaults: { _controller: AdminBundle:User:expired}
 
 adresses_tier:
-    path: /admin/adresse/id={id}
+    path: /adresse/id={id}
     defaults: { _controller: AdminBundle:Ecole:adresses}

@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Etablissement
  *
  * @ORM\Table(name="etablissement", uniqueConstraints={@ORM\UniqueConstraint(name="SIRET_UNIQUE", columns={"SIRET"})}, indexes={@ORM\Index(name="fk_etablissement_societe1_idx", columns={"tier_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="GenericBundle\Repository\EtablissementRepository")
  */
 class Etablissement
 {

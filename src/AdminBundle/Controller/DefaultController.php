@@ -8,7 +8,7 @@ use \JMS\Serializer\SerializerBuilder;
 
 class DefaultController extends Controller
 {
-    public function loadAction($url){
+    public function loadAction(){
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
@@ -33,7 +33,7 @@ class DefaultController extends Controller
         $jsonContent = $serializer->serialize($notifications, 'json');
 
         return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$users,
-            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'url'=>$url));
+            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms));
     }
 
     public function loadiframeAction()

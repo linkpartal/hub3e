@@ -46,7 +46,8 @@ class DefaultController extends Controller
             }
             elseif(true === $this->get('security.authorization_checker')->isGranted('ROLE_ADMINECOLE'))
             {
-                return $this->forward('EcoleBundle:Default:index');
+                $ecole = $em->getRepository('GenericBundle:Tier')->find($user->getTier());
+                return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$ecole->getRaisonSoc())));
             }
             elseif(true === $this->get('security.authorization_checker')->isGranted('ROLE_USER'))
             {

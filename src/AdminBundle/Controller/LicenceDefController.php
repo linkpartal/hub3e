@@ -49,4 +49,11 @@ class LicenceDefController extends Controller
             $em->flush();
             return $this->redirect($this->generateUrl('metier_user_affiche',array('id'=>$request->get('_idetab'))));
     }
+
+    public function affichageLicenceAction($id)
+    {
+        $licence = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->find($id);
+
+        return $this->render('AdminBundle:Admin:afficheLicence.html.twig',array('licence'=>$licence));
+    }
 }

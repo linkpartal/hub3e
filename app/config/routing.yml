@@ -1,10 +1,10 @@
 ecole:
     resource: "@EcoleBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /ecole/
 
 admin:
     resource: "@AdminBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /admin/
 
 generic:
     resource: "@GenericBundle/Resources/config/routing.yml"

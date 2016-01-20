@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/adminecole.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="icon" type="image/png" href="{{ asset('image/Logo_Hub_3e.png') }}" />
     {% block CSS %}{% endblock %}
@@ -53,11 +53,11 @@
                 </div>
 
                 <div class="col-xs-6 input-colonne">
-                <input placeholder="Raison sociale" type="text" class="input" id="RaisonSoc" name="_RaisonSoc">
+                    <input placeholder="Raison sociale" type="text" class="input" id="RaisonSoc" name="_RaisonSoc">
 
 
-                <label for="image"><img id="backimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
-                <input onchange="readURL(this,'backimg');" accept="image/*" type="file" class="input" id="image" name="_image" style="display: none">
+                    <label for="image"><img id="backimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
+                    <input onchange="readURL(this,'backimg');" accept="image/*" type="file" class="input" id="image" name="_image" style="display: none">
                 </div>
 
                 <input  type="hidden" id="EcoleBool" name="_Ecole">
@@ -73,8 +73,7 @@
     </div>
 
 </div>
-
-<div id="addsuperuser" class="popup col-xs-3">
+<div id="adduser" class="popup col-xs-3">
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block">
 
@@ -87,7 +86,8 @@
                     <input type="email" class="input " id="mail" name="_mail" placeholder="Email">
 
                     <select class="input" title="" name="_role">
-                        <option value="ROLE_SUPER_ADMIN">Super Administrateur</option>
+                        <option value="ROLE_ADMINECOLE">Administrateur école</option>
+                        <option value="ROLE_RECRUTE">Recruteur Placeur</option>
                     </select>
                 </div>
                 <div class="col-xs-6">
@@ -112,70 +112,30 @@
     </div>
 
 </div>
-<div id="addLicenceDef" class="popup col-xs-3">
-    <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block;overflow: scroll">
-        <form class="formulaire" id="formLicence" action="{{ path("metier_user_licenceadded") }}" method="post">
-            <div class="div_form" >
-                <div class="col-xs-6 input-colonne">
-                    <input placeholder="Libelle" class="input" type="text" maxlength="10" id="Libelle" name="_Libelle">
-
-                    <input class="input" type="number"  min="1" max="365" placeholder="Durée" id="Duree" name="_Duree">
-                </div>
-                <div class="col-xs-6">
-                    <input class="input" type="number"  min="1" max="365" placeholder="Maximum d'apprenant" id="maxapp" name="_maxapp">
-
-                    <input class="input" type="number"  min="1" max="365" placeholder="Maximum de mission" id="maxmiss" name="_maxmiss">
-                </div>
-                <textarea form="formLicence" placeholder="Description" class="input" maxlength="255" id="Description" name="_Description" style="height: 100px;display: inline-flex"></textarea>
-
-
-
-            </div>
-            <div class="div_button">
-                <input class="blue" type="submit" value="envoyer">
-            </div>
-        </form>
-    </div>
-</div>
-
 <div class="container">
 
-{% block TopBar %}
-    <div class="row" style="height: 32px; background: #2975cb;">
-        <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="border: 0;padding: 4.5px;height: 100%;">
-            <a href="{{ path('metier_user_admin') }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 21px;width: 100%" >        </a>
+    {% block TopBar %}
+        <div class="row" style="height: 32px; background: #2975cb;">
+            <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="border: 0;padding: 4.5px;height: 100%;">
+                <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 21px;width: 100%" >        </a>
+            </div>
+            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+                <button onclick="show('addtier',0)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+                ></button>
+
+                <button id="societetop" >Société </button>
+
+            </div>
+            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+                <button onclick="show('adduser')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+                ></button>
+
+                <button>Utilisateurs</button>
+            </div>
         </div>
-        <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
-            <button onclick="show('addtier',1)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
-                    ></button>
-
-            <button id="ecoletop">Ecole</button>
-
-        </div>
-         <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
-             <button onclick="show('addtier',0)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
-                     ></button>
-
-             <button id="societetop" >Société </button>
-
-         </div>
-         <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
-             <button onclick="show('addLicenceDef')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
-                    ></button>
-
-             <button>Licences</button>
-         </div>
-         <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
-             <button onclick="show('addsuperuser')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
-                     ></button>
-
-             <button>Utilisateurs</button>
-         </div>
-    </div>
 
 
-{% endblock %}
+    {% endblock %}
     <div class="row" style="height: 100%">
 
         {% block LeftBar %}
@@ -186,14 +146,12 @@
                     <option value="societe">Voir Sociétés</option>
                     <option value="licence">Voir Licences</option>
                     <option value="user">Voir Utilisateurs</option>
-                    <option value="QCM">Gestion QCM</option>
-                    <option value="modele">Gestion Modèles</option>
                 </select>
 
                 <div id="ecole" class="list-group col-xs-2 leftbar">
                     {% if ecoles is defined %}
                         {% for e in ecoles %}
-                            <button onclick="postiframe('{{ path('metier_user_affiche',{'id': e.getId} ) }}',{{ e.getId }},this)" id="etablissement{{ e.getId }}" type="button" class="list-group-item butonLigne">
+                            <button onclick="postiframe('{{ path('ecole_admin_affiche',{'id': e.getId} ) }}',{{ e.getId }},this)" id="etablissement{{ e.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{e.getTier.getRaisonSoc}}">{{e.getTier.getRaisonSoc}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -203,7 +161,7 @@
                                     {% else %}
                                         <div class="col-xs-1 inactive" id="active{{ e.getId }}"></div>
                                     {% endif %}
-                            </div>
+                                </div>
                             </button>
                         {% endfor %}
                     {% endif %}
@@ -212,7 +170,7 @@
                      style="visibility: hidden;">
                     {% if societes is defined %}
                         {% for s in societes %}
-                            <button onclick="postiframe('{{ path('metier_user_affiche',{'id': s.getId }) }}',{{ s.getId }},this)" id="etablissement{{ s.getId }}" type="button" class="list-group-item butonLigne">
+                            <button onclick="postiframe('{{ path('ecole_admin_affiche',{'id': s.getId }) }}',{{ s.getId }},this)" id="etablissement{{ s.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{s.getTier.getRaisonSoc}}">{{s.getTier.getRaisonSoc}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -231,11 +189,11 @@
                 <div id="licence" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if AllLicences is defined %}
                         {% for lic in AllLicences %}
-                            <button onclick="postiframe('{{ path('admin_afficheLicence',{'id': lic.getId} ) }}')" id="licence{{ lic.getId }}" type="button" class="list-group-item butonLigne">
-                                <div class="col-xs-12 part" title="{{lic.getLibelle}}">{{lic.getLibelle}}</div>
+                            <button onclick="postiframe('{{ path('ecole_admin_afficheLicence',{'id': lic.getId} ) }}')" id="licence{{ lic.getId }}" type="button" class="list-group-item butonLigne">
+                                <div class="col-xs-12 part licence" title="{{lic.getLibelle}}">{{lic.getLibelle}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
-                                    <div class="col-xs-9 part" title="{{ lic.getDuree }}">{{lic.getDuree }}</div>
+                                    <div class="col-xs-9 part" title="{{ lic.getDatefin }}">{{lic.getDatefin }}</div>
                                 </div>
                             </button>
                         {% endfor %}
@@ -245,7 +203,7 @@
                 <div id="user" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if users is defined %}
                         {% for u in users %}
-                            <button onclick="postiframe('{{ path('metier_user_afficheUser',{'id': u.getId} ) }}')" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                            <button onclick="postiframe('{{ path('ecole_admin_afficheUser',{'id': u.getId} ) }}')" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -256,26 +214,6 @@
                             </button>
                         {% endfor %}
                     {% endif %}
-
-                </div>
-                <div id="QCM" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
-                    {% if qcms is defined %}
-                        {% for qcm in qcms %}
-                            <button onclick="postiframe('{{ path('loadgestionQCM',{'id': qcm.getId} ) }}')" id="qcm{{ qcm.getId }}" type="button" class="list-group-item butonLigne">
-                                <div class="col-xs-12 part">{{qcm.getNom}}</div>
-                                <div class="col-xs-12 part"
-                                     style="height: 31px; text-align: left;">
-                                    <div class="col-xs-9 part"></div>
-                                    <span class="badge">New</span>
-                                    <div class="col-xs-1 online"></div>
-                                </div>
-                            </button>
-                        {% endfor %}
-                    {% endif %}
-
-                </div>
-                <div id="modele" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
-
 
                 </div>
             </div>
@@ -299,7 +237,7 @@
                             aria-expanded="false"
                             style="width: 100%; height: 20px; border-radius: 0; background: none; border: 0;color: white">
                         Filtres <span class="glyphicon glyphicon-menu-down"
-                                     aria-hidden="true"></span>
+                                      aria-hidden="true"></span>
                     </button>
                     <ul id="filtre" class="dropdown-menu" aria-labelledby="dropdownMenu1">
 
@@ -309,7 +247,7 @@
 
             {% block Content%}
 
-                    <iframe id="iframe" src="{{ path('admin_iframeload') }}"></iframe>
+                <iframe id="iframe" src=""></iframe>
 
             {% endblock %}
         </div>
@@ -326,21 +264,10 @@
     var i = 1;
     document.getElementById("leftselect").onchange = function(){
         var x = document.getElementById("leftselect").value;
-        if(x=='QCM')
-        {
-            document.getElementById("iframe").src = '{{ path('loadgestionQCM') }}';
-        }
-        if(x=='modele')
-        {
-            document.getElementById("iframe").src = '{{ path('creeNewModele') }}';
-        }
-
         document.getElementById('ecole').style.visibility= 'hidden';
         document.getElementById('societe').style.visibility= 'hidden';
         document.getElementById('licence').style.visibility= 'hidden';
         document.getElementById('user').style.visibility= 'hidden';
-        document.getElementById('QCM').style.visibility= 'hidden';
-        document.getElementById('modele').style.visibility= 'hidden';
         document.getElementById(x).style.visibility='visible';
 
     };
@@ -576,4 +503,3 @@
 {% endblock %}
 </body>
 </html>
-
