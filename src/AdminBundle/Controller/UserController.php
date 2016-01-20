@@ -3,6 +3,7 @@
 namespace AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class UserController extends Controller
@@ -85,5 +86,76 @@ class UserController extends Controller
         }
 
 
+    }
+
+    public function expiredAction($id){
+        $utilis = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
+        $reponse = new JsonResponse();
+        if($utilis->isExpired())
+        {
+            $utilis->setExpired(false);
+            $reponse->setData(array('succes'=>'0'));
+        }
+        else{
+            $utilis->setExpired(true);
+            $reponse->setData(array('succes'=>'1'));
+        }
+        $this->getDoctrine()->getEntityManager()->flush();
+
+        return $reponse;
+    }
+
+    public function modifierAction($id)
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
+        $userid = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
+
+
+
+
+
+        $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
+        return $this->render('AdminBundle:Admin:modifierUtilisateur.html.twig',array('licencedef'=>$licencedef,'user'=>$userid
+        ));
+    }
+    public function userModifAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $em->getRepository('GenericBundle:User')->findOneBy(array('id'=>$request->get('_ID')));
+
+        $user->setCivilite($request->get('_Civilite'));
+        $user->setNom($request->get('_Nom'));
+        $user->setPrenom($request->get('_Prenom'));
+        $user->setTelephone($request->get('_Tel'));
+        $user->setUsername($request->get('_Username'));
+        $user->setMail($request->get('_Mail'));
+
+
+
+
+
+
+        $em->flush();
+
+        return $this->forward('AdminBundle:Default:affichageUser',array('id'=>$request->get('_ID')));
+    }
+
+
+    public function supprimeruserAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('GenericBundle:User')->find($id);
+
+        if(!$user)
+        {
+            throw new Exception('Aucun utilisateur ne posséde l\'id ' . $id);
+        }
+
+
+        $em->remove($user);
+        $em->flush();
+        return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
     }
 }

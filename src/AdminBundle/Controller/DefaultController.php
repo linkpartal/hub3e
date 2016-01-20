@@ -78,6 +78,22 @@ class DefaultController extends Controller
             'libs'=>$licences,'tiers'=>$tiers,'users'=>$users));
     }
 
+    public function affichageUserAction($id)
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
+        $userid = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
+
+
+
+
+
+        $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
+        return $this->render('AdminBundle:Admin:iFrameContentUser.html.twig',array('licencedef'=>$licencedef,'User'=>$userid
+            ));
+    }
+
     public function creeNewModeleAction()
     {
         $modeles = array();

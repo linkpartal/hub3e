@@ -1,0 +1,163 @@
+{% extends "AdminBundle:Admin:iFrameContent.html.twig" %}
+{% block title %}Ajouter utilisateur{% endblock %}
+
+{% block Content %}
+
+    <div id="instanceLicence" class="popup col-xs-3">
+
+        <form class="formulaire" id="formInstanceLicence" action="{{ path("metier_user_associated") }}" method="post">
+
+
+            <div class="inputcontainer">
+                <label class="list-group-item" >Libelle :</label>
+                <select title="Licencedef" name="Licencedef">
+                    {% for def in licencedef %}
+                        <option value="{{ def.getId }}">{{ def.getLibelle }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="inputcontainer">
+                <label class="list-group-item" for="Date">Date Début : </label>
+                <input type="date" class="form-control champ" id="Date" name="_Date">
+            </div>
+
+            <input type="submit" value="valider">
+        </form>
+
+    </div>
+    <div id="adduser" class="popup col-xs-3">
+
+        <form class="formulaire" id="formadduser" action="{{ path("user_added") }}" method="post">
+
+            <div class="inputcontainer">
+                <label class="list-group-item" for="Username">Username :</label>
+                <input type="text" class="champ form-control" id="Username" name="_Username">
+            </div>
+            <div class="inputcontainer">
+                <label class="list-group-item" style="vertical-align: top" for="mail">E-mail : </label>
+                <input type="email" class="champ form-control" id="mail" name="_mail">
+            </div>
+
+
+            <input type="submit" value="envoyer">
+        </form>
+    </div>
+
+
+
+
+    <div class="row" style="background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;height: 100%">
+
+        <div class="col-xs-9"
+             style="background: rgb(238, 241, 246); height: 100%;">
+
+
+
+            <div class="col-xs-12" style="margin-bottom: 50px">
+                <div id="info_etab" class="list-group affichage">
+
+                    <form class="formulaire" id="formUser" action="{{ path('userModif') }}" method="post" enctype="multipart/form-data">
+
+                        <input type="hidden" value="{{ user.getId }}" id="id" name="_ID">
+
+
+
+
+
+
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="civilite">Civilité :</label>
+
+                            <select   class="champ form-control " style="width: 25%; margin-right: 10px" title="" id="civilite"  name="_Civilite">
+                                {% if user.getCivilite == 'Mr' %}
+                                    <option selected="selected" value="Mr">Mr.</option>
+                                {% else %}
+                                    <option value="Mr">Mr.</option>
+                                {% endif %}
+
+                                {% if user.getCivilite == 'Mme' %}
+                                    <option selected="selected" value="Mme">Mme.</option>
+                                {% else %}
+                                    <option value="Mme">Mme.</option>
+                                {% endif %}
+
+                                {% if user.getCivilite == 'Mlle' %}
+                                    <option selected="selected" value="Mlle">Mlle.</option>
+                                {% else %}
+                                    <option value="Mlle">Mlle.</option>
+                                {% endif %}
+                            </select>
+                        </div>
+
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="Nom">Nom :</label>
+                            <input value="{{user.getNom}}" type="text" class="champ form-control" id="Nom" name="_Nom">
+                        </div>
+
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="Prenom">Prénom :</label>
+                            <input value="{{user.getPrenom}}" type="text" class="champ form-control" id="Prenom" name="_Prenom">
+                        </div>
+
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="Tel">Téléphone :</label>
+                            <input value="{{user.getTelephone}}" type="text" class="champ form-control" id="Telephone" name="_Tel">
+                        </div>
+
+
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="UserName">UserName :</label>
+                            <input value="{{user.getUserName}}" type="text" class="champ form-control" id="UserName" name="_Username">
+                        </div>
+
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="Mail">E-mail :</label>
+                            <input value="{{user.getMail}}" type="text" class="champ form-control" id="Mail" name="_Mail">
+                        </div>
+
+
+
+
+
+
+                    </form>
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+
+        <div class="col-xs-3"
+             style="height: 100%;">
+            <div class="list-group"
+                 style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
+                <button type="button" class="list-group-item rightMenu" style="background-color: limegreen">
+                    <div class="col-xs-12" style="display: inline-table;color: white;">Active</div>
+                </button>
+                <button onclick="envoyer()" type="button" class="list-group-item rightMenu" style="background-color: #2A76CC">
+                    <div class="col-xs-12"  style="display: inline-table;color: white;">valider</div>
+
+                </button>
+                <button onclick="post('{{ path('supprimeretablissement',{'id': user.getId }) }}',{})" type="button" class="list-group-item rightMenu" style="background-color: #2A76CC">
+                    <div class="col-xs-12"  style="display: inline-table;color: white;">Supprimer l'utilisateur</div>
+
+                </button>
+
+            </div>
+        </div>
+
+    </div>
+    <script>
+        function envoyer(){
+
+                    document.getElementById('formUser').submit();
+
+
+        }
+
+    </script>
+{% endblock %}
