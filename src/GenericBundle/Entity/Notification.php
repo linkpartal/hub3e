@@ -40,7 +40,7 @@ class Notification
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="users_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="users_id", referencedColumnName="id",onDelete="CASCADE")
      * })
      */
     private $user;

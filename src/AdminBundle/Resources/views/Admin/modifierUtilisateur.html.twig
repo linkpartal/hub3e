@@ -113,7 +113,7 @@
 
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="Mail">E-mail :</label>
-                            <input value="{{user.getMail}}" type="text" class="champ form-control" id="Mail" name="_Mail">
+                            <input value="{{user.getEmail}}" type="text" class="champ form-control" id="Mail" name="_Mail">
                         </div>
 
 
@@ -135,15 +135,21 @@
              style="height: 100%;">
             <div class="list-group"
                  style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
-                <button type="button" class="list-group-item rightMenu" style="background-color: limegreen">
-                    <div class="col-xs-12" style="display: inline-table;color: white;">Active</div>
-                </button>
-                <button onclick="envoyer()" type="button" class="list-group-item rightMenu" style="background-color: #2A76CC">
-                    <div class="col-xs-12"  style="display: inline-table;color: white;">valider</div>
+                {% if user.isExpired %}
+                    <button onclick="expire('{{ path('expired',{'id':user.getId}) }}')" id="expired" type="button" class="list-group-item rightMenu" style="background-color: #94C400">
+                        <div class="col-xs-12" style="display: inline-table;color: white;height: 46px;margin-top:10px;">ACTIVE</div>
+                    </button>
+                {% else %}
+                    <button onclick="expire('{{ path('expired',{'id':user.getId}) }}')" id="expired" type="button" class="list-group-item rightMenu" style="background-color: red">
+                        <div class="col-xs-12" style="display: inline-table;color: white;height: 46px;margin-top:10px;">DÉSACTIVE</div>
+                    </button>
+                {% endif %}
+                <button onclick="envoyer()" type="button" class="list-group-item rightMenu" >
+                    <div class="col-xs-12"  >valider</div>
 
                 </button>
-                <button onclick="post('{{ path('supprimeretablissement',{'id': user.getId }) }}',{})" type="button" class="list-group-item rightMenu" style="background-color: #2A76CC">
-                    <div class="col-xs-12"  style="display: inline-table;color: white;">Supprimer l'utilisateur</div>
+                <button onclick="post('{{ path('supprimeretablissement',{'id': user.getId }) }}',{})" type="button" class="list-group-item rightMenu" >
+                    <div class="col-xs-12"  >Supprimer l'utilisateur</div>
 
                 </button>
 
@@ -158,6 +164,29 @@
 
 
         }
+        function expire(route) {
+            $.ajax({
+                type: 'get',
+                url: route,
+                error: function (response) {
+                    console.log(response);
+                },
+                success: function (data) {
+                    if (data['succes'] == '0') {
+                        document.getElementById("expired").style.backgroundColor = 'red';
+                        document.getElementById("expired").firstElementChild.innerHTML = 'Désactive';
+                        window.parent.document.getElementById('expire{{ user.getId }}').style.backgroundColor = 'red';
+                    }
+                    else {
+                        document.getElementById("expired").style.backgroundColor = '#94C400';
+                        document.getElementById("expired").firstElementChild.innerHTML = 'Active';
+                        window.parent.document.getElementById('expire{{ user.getId }}').style.backgroundColor = '#94C400';
+                    }
+
+                }
+            });
+
+        };
 
     </script>
 {% endblock %}

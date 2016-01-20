@@ -150,27 +150,30 @@
             <button onclick="show('addtier',1)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                     ></button>
 
-            <button id="ecoletop">Ecole</button>
+            <button id="ecoletop" style="color:white ">{{ ecoles|length }} Ecoles</button>
 
         </div>
          <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
              <button onclick="show('addtier',0)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                      ></button>
 
-             <button id="societetop" >Société </button>
+             <button id="societetop" style="color:white ">{{ societes|length }} Société </button>
+
 
          </div>
          <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
              <button onclick="show('addLicenceDef')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                     ></button>
 
-             <button>Licences</button>
+
+             <button id="licencetop" style="color:white ">{{ AllLicences|length }} Licences</button>
          </div>
          <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
              <button onclick="show('addsuperuser')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                      ></button>
 
-             <button>Utilisateurs</button>
+
+             <button id="usertop" style="color:white ">{{ users|length }} Utilisateurs</button>
          </div>
     </div>
 
@@ -245,13 +248,18 @@
                 <div id="user" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if users is defined %}
                         {% for u in users %}
-                            <button onclick="postiframe('{{ path('metier_user_afficheUser',{'id': u.getId} ) }}')" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                            <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId }) }}',{{ u.getId }},this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
+
                                     <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
-                                    <span class="badge">New</span>
-                                    <div class="col-xs-1 online"></div>
+                                    {% if u.isExpired %}
+                                        <div class="col-xs-1 active" id="active{{ u.getId }}"></div>
+                                    {% else %}
+                                        <div class="col-xs-1 inactive" id="active{{ u.getId }}"></div>
+                                    {% endif %}
+
                                 </div>
                             </button>
                         {% endfor %}
@@ -381,6 +389,22 @@
         }
 
     };
+
+    function postiframeUser(url,id,button) {
+        document.getElementById("iframe").src = url;
+        var route = '{{path('adresses_tier_user',{'id':"_id" })}}';
+        var elements = button.getElementsByClassName("badge");
+        if(elements.length > 0)
+        {
+            elements[0].parentNode.removeChild(elements[0]);
+        }
+
+    };
+
+
+
+
+
     function stringWith (str, prefix) {
         var ustring = str.toUpperCase();
         var uprefix = prefix.toUpperCase();
@@ -449,6 +473,7 @@
         var notifs = JSON.parse('{{ notifications|raw }}');
         var ecole =0;
         var societe = 0;
+        var user = 0;
         for(var i = 0; i< notifs.length;i++)
         {
             var span = document.createElement("span");
@@ -464,6 +489,13 @@
             if(notifs[i].type == 'Societe')
             {
                 societe++;
+                var active = document.getElementById("active"+ notifs[i].entite);
+                if(active != null){active.parentNode.insertBefore(span,active);}
+
+            }
+            if(notifs[i].type == 'Utilisateur')
+            {
+                user++;
                 var active = document.getElementById("active"+ notifs[i].entite);
                 if(active != null){active.parentNode.insertBefore(span,active);}
 
@@ -488,6 +520,15 @@
             spansociete.style.left ="20px";
             var buttonsociete = document.getElementById("societetop");
             buttonsociete.appendChild(spansociete);
+        }
+        if(user >0)
+        {var spanuser = document.createElement("span");
+            spanuser.className = 'badge';
+            spanuser.className = spanuser.className + ' notifTopbar';
+            spanuser.innerHTML = user;
+            spanuser.style.left ="20px";
+            var buttonuser = document.getElementById("usertop");
+            buttonuser.appendChild(spanuser);
         }
 
     };

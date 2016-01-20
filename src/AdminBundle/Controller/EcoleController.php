@@ -12,10 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class EcoleController extends Controller
 {
-    public function addtierAction($type)
-    {
-        return $this->render('AdminBundle:Admin:ajoutecole.html.twig',array('type'=>$type));
-    }
 
     public function checkExistAction(Request $request)
     {
