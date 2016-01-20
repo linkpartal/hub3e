@@ -77,7 +77,7 @@ body {
 }
 
 .recherche{
-  width: 100%;
+  width: calc(100% - 40px);
   display: block;
   border: none;
   border-bottom: solid 1px #1abc9c;
