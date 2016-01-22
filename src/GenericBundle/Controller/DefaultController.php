@@ -2,11 +2,10 @@
 
 namespace GenericBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints\Date;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 class DefaultController extends Controller
 {
@@ -99,5 +98,36 @@ class DefaultController extends Controller
 
         return $this->redirect('login');
 
+    }
+
+    public function adressesAction($id){
+        $em = $this->getDoctrine()->getEntityManager();
+        $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($id);
+        $etablissements = $em->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$etablissement->getTier()));
+        $adresses = array();
+        foreach($etablissements as $value)
+        {
+            $adresse = array('id'=>$value->getId(),'adresse' => $value->getAdresse());
+            array_push($adresses, json_encode($adresse) );
+        }
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('adresses'=>$adresses));
+    }
+
+    public function expiredAction($id){
+        $utilis = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
+        $reponse = new JsonResponse();
+        if($utilis->isExpired())
+        {
+            $utilis->setExpired(false);
+            $reponse->setData(array('succes'=>'0'));
+        }
+        else{
+            $utilis->setExpired(true);
+            $reponse->setData(array('succes'=>'1'));
+        }
+        $this->getDoctrine()->getEntityManager()->flush();
+
+        return $reponse;
     }
 }

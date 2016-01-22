@@ -1,42 +1,31 @@
 <?php
 
-namespace AdminBundle\Controller;
+namespace UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use GenericBundle\Entity\Etablissement;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use GenericBundle\Entity\Notification;
-use GenericBundle\Entity\Tier;
 
-
-class UserController extends Controller
+class DefaultController extends Controller
 {
-    public function addUserEcoleAction($from,$id)
+    public function affichageUserAction($id)
     {
-        if($from=='ecole')
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
+        $userid = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
+        $type = 'Utilisateur';
+        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('user'=>$user,'entite'=>$userid->getId(),'type'=>$type));
+        if($notifications)
         {
-            $ecole = $this->getDoctrine()->getRepository('GenericBundle:Ecole')->find($id);
-            if($ecole->getLogo())
-            {
-                $ecole->setLogo(base64_encode(stream_get_contents($ecole->getLogo())));
-            }
-            $licences = $this->getDoctrine()->getRepository('GenericBundle:Licenceecole')->findBy(array('ecoleecole'=>$ecole ));
-            $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('ecole'=>$ecole ));
-            return $this->render('AdminBundle:Admin:AddUser.html.twig',array('ecole'=>$ecole,'libs'=>$licences,'usersecole'=>$users,'from'=>$from,'id'=>$id));
-        }
-        if($from=='societe')
-        {
-            $societe = $this->getDoctrine()->getRepository('GenericBundle:Societe')->find($id);
-            $etablissements = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findBy(array('societe'=>$societe));
-            $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('societe'=>$societe ));
-            $licences = $this->getDoctrine()->getRepository('GenericBundle:Licencesociete')->findBy(array('societe'=>$societe ));
-            return $this->render('AdminBundle:Admin:AddUser.html.twig',array('societe'=>$societe,'libs'=>$licences,'usersoc'=>$users,'etablissements'=>$etablissements,'from'=>$from,'id'=>$id));
-        }
-        else{
-            return $this->render('AdminBundle:Admin:AddUser.html.twig',array('from'=>$from,'id'=>$id));
+            $this->getDoctrine()->getEntityManager()->remove($notifications);
+            $this->getDoctrine()->getEntityManager()->flush();
         }
 
+
+        return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('licencedef'=>$licencedef,'User'=>$userid
+        ));
     }
 
     public function UserAddedAction(Request $request)
@@ -107,6 +96,28 @@ class UserController extends Controller
 
     }
 
+    public function modifierAction($id)
+    {
+        $userid = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
+        return $this->render('UserBundle:Gestion:modifierUtilisateur.html.twig',array('user'=>$userid));
+    }
+    public function userModifAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $em->getRepository('GenericBundle:User')->findOneBy(array('id'=>$request->get('_ID')));
+
+        $user->setCivilite($request->get('_Civilite'));
+        $user->setNom($request->get('_Nom'));
+        $user->setPrenom($request->get('_Prenom'));
+        $user->setTelephone($request->get('_Tel'));
+        $user->setUsername($request->get('_Username'));
+        $user->setEmail($request->get('_Mail'));
+
+        $em->flush();
+
+        return $this->forward('UserBundle:Default:affichageUser',array('id'=>$request->get('_ID')));
+    }
+
     public function expiredAction($id){
         $utilis = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
         $reponse = new JsonResponse();
@@ -123,40 +134,6 @@ class UserController extends Controller
 
         return $reponse;
     }
-
-    public function modifierAction($id)
-    {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-
-        $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
-        $userid = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
-
-
-
-
-
-        $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
-        return $this->render('AdminBundle:Admin:modifierUtilisateur.html.twig',array('licencedef'=>$licencedef,'user'=>$userid
-        ));
-    }
-    public function userModifAction(Request $request){
-        $em = $this->getDoctrine()->getManager();
-
-        $user = $em->getRepository('GenericBundle:User')->findOneBy(array('id'=>$request->get('_ID')));
-
-        $user->setCivilite($request->get('_Civilite'));
-        $user->setNom($request->get('_Nom'));
-        $user->setPrenom($request->get('_Prenom'));
-        $user->setTelephone($request->get('_Tel'));
-        $user->setUsername($request->get('_Username'));
-        $user->setEmail($request->get('_Mail'));
-
-        $em->flush();
-
-        return $this->forward('AdminBundle:Default:affichageUser',array('id'=>$request->get('_ID')));
-    }
-
-
     public function supprimeruserAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -170,26 +147,7 @@ class UserController extends Controller
 
         $em->remove($user);
         $em->flush();
-
-
-
-
-
-
-        return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
-    }
-
-    public function adressesAction($id){
-        $em = $this->getDoctrine()->getEntityManager();
-        $user = $em->getRepository('GenericBundle:User')->find($id);
-        $user = $em->getRepository('GenericBundle:User')->findBy(array('tier'=>$user->getTier()));
-        $adresses = array();
-        foreach($user as $value)
-        {
-            $adresse = array('id'=>$value->getId(),'adresse' => $value->getAdresse());
-            array_push($adresses, json_encode($adresse) );
-        }
         $reponse = new JsonResponse();
-        return $reponse->setData(array('adresses'=>$adresses));
+        return $reponse->setData(array('Succes'=>$this->generateUrl('')));
     }
 }

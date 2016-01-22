@@ -78,25 +78,6 @@ class DefaultController extends Controller
             'libs'=>$licences,'tiers'=>$tiers,'users'=>$users));
     }
 
-    public function affichageUserAction($id)
-    {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-
-        $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
-        $userid = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
-        $type = 'Utilisateur';
-        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('user'=>$user,'entite'=>$userid->getId(),'type'=>$type));
-        if($notifications)
-        {
-            $this->getDoctrine()->getEntityManager()->remove($notifications);
-            $this->getDoctrine()->getEntityManager()->flush();
-        }
-
-
-        return $this->render('AdminBundle:Admin:iFrameContentUser.html.twig',array('licencedef'=>$licencedef,'User'=>$userid
-            ));
-    }
-
     public function creeNewModeleAction()
     {
         $modeles = array();
@@ -117,8 +98,9 @@ class DefaultController extends Controller
     public function saveNewModeleAction(Request $request)
     {
         $myfile = fopen("./templates/". $request->get('_filename') .".html.twig","w");
+
         fwrite($myfile,$this->render('GenericBundle:Mail:'. $request->get('_modele'),array('Textarea'=>$request->get('_newtext')))->getContent());
         fclose($myfile);
-        return $this->render("AdminBundle:Admin:iFrameContent.html.twig");
+        return $this->redirect($this->generateUrl('admin_iframeload'));
     }
 }

@@ -13,20 +13,28 @@ class DefaultController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
+        $ecoles = array();
+        $ecoles = array_merge($ecoles,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($user->getTier()->getId()))  ;
+        foreach($user->getTier()->getTier1() as $partenaire) {
+            $ecoles = array_merge($ecoles, $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($partenaire->getId()));
+        }
 
-
-        $ecoles = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($user->getTier()->getId());
         $societes = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findSocietes();
 
 
-        $users = $this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($user->getTier());
+        $users = array();
+        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($user->getTier()));
+        foreach($user->getTier()->getTier1() as $partenaire) {
+            $users = array_merge($users, $this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($partenaire));
+        }
+
 
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$user->getTier()));
-        $qcms = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findAll();
+
         $serializer = SerializerBuilder::create()->build();
         $jsonContent = $serializer->serialize($notifications, 'json');
         return $this->render('EcoleBundle:Adminecole:index.html.twig', array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$users,
-            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms));
+            'AllLicences'=>$licences,'societes'=>$societes));
 
     }
     public function loadiframeAction()

@@ -22,23 +22,11 @@ supprimeretablissement:
     path : /admin/supprimeretab/id={id}
     defaults: { _controller: EcoleBundle:Ecole:supprimeretab}
 
-supprimereUtilisateur:
-    path : /admin/supprimeruser/id={id}
-    defaults: { _controller: EcoleBundle:User:supprimeruser}
-
 etabmodif:
     path: /admin/etabmodif
     defaults: { _controller: EcoleBundle:Ecole:etabModif}
 
-userModif:
-    path: /userModif
-    defaults: { _controller: EcoleBundle:User:userModif}
-
 activate:
     path: /admin/activate/id={id}
     defaults: { _controller: EcoleBundle:Ecole:activate}
-
-expired:
-    path: /admin/expired/id={id}
-    defaults: { _controller: EcoleBundle:User:expired}
 
