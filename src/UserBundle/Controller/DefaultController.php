@@ -3,9 +3,12 @@
 namespace UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Asset\Package;
+use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use GenericBundle\Entity\Notification;
+use GenericBundle\Entity\Modele;
 
 class DefaultController extends Controller
 {
@@ -60,8 +63,8 @@ class DefaultController extends Controller
 
 
         $em = $this->getDoctrine()->getManager();
-        $em->persist($newuser);
-        $em->flush();
+        //$em->persist($newuser);
+        //$em->flush();
 
         $superadmins = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_SUPER_ADMIN');
 
@@ -70,16 +73,24 @@ class DefaultController extends Controller
             $notif->setEntite($newuser->getId());
             $notif->setType('Utilisateur');
             $notif->setUser($admin);
-            $em->persist($notif);
-            $em->flush();
+            //$em->persist($notif);
+            //$em->flush();
         }
 
         //send password
+        if($request->get('_modele'))
+        {
+
+            $modele = 'GenericBundle:Mail/templates:'.$request->get('_modele').'_'.$this->get('security.token_storage')->getToken()->getUser()->getUsername().'.html.twig';
+        }
+        else{
+            $modele = 'GenericBundle:Mail:NewUser.html.twig';
+        }
         $message = \Swift_Message::newInstance()
             ->setSubject('Email')
             ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
             ->setTo($request->get('_mail'))
-            ->setBody($this->renderView('GenericBundle:Mail:NewUser.html.twig',array('username'=>$request->get('_Username'), 'password'=>$password))
+            ->setBody($this->renderView($modele,array('username'=>$request->get('_Username'), 'password'=>$password))
                 ,'text/html'
             );
         $this->get('mailer')->send($message);
@@ -149,5 +160,60 @@ class DefaultController extends Controller
         $em->flush();
         $reponse = new JsonResponse();
         return $reponse->setData(array('Succes'=>$this->generateUrl('')));
+    }
+
+    public function creeNewModeleAction($id)
+    {
+        /*
+        $modeles = array();
+        if ($handle = opendir('../src/GenericBundle/Resources/views/Mail')) {
+
+            while (false !== ($entry = readdir($handle))) {
+
+                if ($entry != "." && $entry != "..") {
+
+                    array_push($modeles,$entry);
+                }
+            }
+
+            closedir($handle);
+        }*/
+        if($id == 'ajouter')
+        {
+            return $this->render("UserBundle:Gestion:creeNewModele.html.twig");
+        }
+        else{
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $modele = $this->getDoctrine()->getRepository('GenericBundle:Modele')->find($id);
+            $d = new \DOMDocument;
+            @$d->loadHTML(file_get_contents('./templates/'. $modele->getId().'_'. $user->getUsername() .'.html.twig'));
+            $body = "";
+            foreach($d->getElementsByTagName("body")->item(0)->childNodes as $child) {
+                $body .= $d->saveHTML($child);
+            }
+
+            return $this->render("UserBundle:Gestion:creeNewModele.html.twig",array('modele'=>$modele,'body'=>$body));
+        }
+
+    }
+    public function saveNewModeleAction(Request $request)
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $modele = $this->getDoctrine()->getRepository('GenericBundle:Modele')->findOneBy(array('user'=>$user,'nom'=>$request->get('_filename')));
+        if(!$modele)
+        {
+            $modele = new Modele();
+            $modele->setNom($request->get('_filename'));
+            $modele->setUser($user);
+            $em = $this->getDoctrine()->getEntityManager();
+            $em->persist($modele);
+            $em->flush();
+        }
+
+        $myfile = fopen("../src/GenericBundle/Resources/views/Mail/templates/". $modele->getId()."_". $user->getUsername() .".html.twig","w");
+
+        fwrite($myfile,$this->render('GenericBundle:Mail:Modele.html.twig',array('Textarea'=>$request->get('_newtext')))->getContent());
+        fclose($myfile);
+        return $this->redirect($this->generateUrl('admin_iframeload'));
     }
 }

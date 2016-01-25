@@ -4,7 +4,7 @@ ecole_admin:
 
 admin_iframeload:
     path: /iframe
-    defaults: { _controller: EcoleBundle:Default:loadiframe}
+    defaults: { _controller: AdminBundle:Default:loadiframe}
 
 ecole_admin_affiche:
     path: /affichage/id={id}

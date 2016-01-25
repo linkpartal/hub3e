@@ -29,27 +29,15 @@ class Modele
     private $nom;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var \Tier
      *
-     * @ORM\ManyToMany(targetEntity="Etablissement", inversedBy="modele")
-     * @ORM\JoinTable(name="modele_has_etablissement",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="modele_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="etablissement_id", referencedColumnName="id")
-     *   }
-     * )
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * })
      */
-    private $etablissement;
+    private $user;
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->etablissement = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
 
     /**
@@ -87,36 +75,26 @@ class Modele
     }
 
     /**
-     * Add etablissement
+     * Set user
      *
-     * @param \GenericBundle\Entity\Etablissement $etablissement
+     * @param \GenericBundle\Entity\User $user
      *
      * @return Modele
      */
-    public function addEtablissement(\GenericBundle\Entity\Etablissement $etablissement)
+    public function setUser(\GenericBundle\Entity\User $user = null)
     {
-        $this->etablissement[] = $etablissement;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Remove etablissement
+     * Get user
      *
-     * @param \GenericBundle\Entity\Etablissement $etablissement
+     * @return \GenericBundle\Entity\User
      */
-    public function removeEtablissement(\GenericBundle\Entity\Etablissement $etablissement)
+    public function getUser()
     {
-        $this->etablissement->removeElement($etablissement);
-    }
-
-    /**
-     * Get etablissement
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEtablissement()
-    {
-        return $this->etablissement;
+        return $this->user;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace EcoleBundle\Controller;
 
+use GenericBundle\Entity\Modele;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use \JMS\Serializer\SerializerBuilder;
 
@@ -13,6 +14,7 @@ class DefaultController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
+        $modeles = $this->getDoctrine()->getRepository('GenericBundle:Modele')->findBy(array('user'=>$user));
         $ecoles = array();
         $ecoles = array_merge($ecoles,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($user->getTier()->getId()))  ;
         foreach($user->getTier()->getTier1() as $partenaire) {
@@ -29,23 +31,24 @@ class DefaultController extends Controller
         }
 
 
+
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$user->getTier()));
 
         $serializer = SerializerBuilder::create()->build();
         $jsonContent = $serializer->serialize($notifications, 'json');
         return $this->render('EcoleBundle:Adminecole:index.html.twig', array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$users,
-            'AllLicences'=>$licences,'societes'=>$societes));
+            'AllLicences'=>$licences,'societes'=>$societes,'modeles'=>$modeles));
 
     }
     public function loadiframeAction()
     {
-        return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
+        return $this->render('EcoleBundle:Adminecole:index.html.twig');
     }
 
     public function affichageAction($id)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
-
+        $modeles = $this->getDoctrine()->getRepository('GenericBundle:Modele')->findBy(array('user'=>$user));
         $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
         if($etablissement->getTier()->getEcole())
@@ -76,7 +79,7 @@ class DefaultController extends Controller
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
         $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
         return $this->render('AdminBundle:Admin:iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,
-            'libs'=>$licences,'tiers'=>$tiers,'users'=>$users));
+            'libs'=>$licences,'tiers'=>$tiers,'users'=>$users,'modeles'=>$modeles));
     }
 
     public function affichageUserAction($id)
@@ -100,30 +103,5 @@ class DefaultController extends Controller
         $licence = $this->getDoctrine()->getRepository('GenericBundle:Licence')->find($id);
 
         return $this->render('EcoleBundle:Adminecole:afficheLicence.html.twig',array('licence'=>$licence));
-    }
-
-    public function creeNewModeleAction()
-    {
-        $modeles = array();
-        if ($handle = opendir('../src/GenericBundle/Resources/views/Mail')) {
-
-            while (false !== ($entry = readdir($handle))) {
-
-                if ($entry != "." && $entry != "..") {
-
-                    array_push($modeles,$entry);
-                }
-            }
-
-            closedir($handle);
-        }
-        return $this->render("AdminBundle:Admin:creeNewModele.html.twig",array('modeles'=>$modeles));
-    }
-    public function saveNewModeleAction(Request $request)
-    {
-        $myfile = fopen("./templates/". $request->get('_filename') .".html.twig","w");
-        fwrite($myfile,$this->render('GenericBundle:Mail:'. $request->get('_modele'),array('Textarea'=>$request->get('_newtext')))->getContent());
-        fclose($myfile);
-        return $this->render("AdminBundle:Admin:iFrameContent.html.twig");
     }
 }

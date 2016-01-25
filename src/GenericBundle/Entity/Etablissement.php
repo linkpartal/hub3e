@@ -141,19 +141,11 @@ class Etablissement
     private $qcmdef;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Modele", mappedBy="etablissement")
-     */
-    private $modele;
-
-    /**
      * Constructor
      */
     public function __construct()
     {
         $this->qcmdef = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->modele = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -486,40 +478,6 @@ class Etablissement
     public function getQcmdef()
     {
         return $this->qcmdef;
-    }
-
-    /**
-     * Add modele
-     *
-     * @param \GenericBundle\Entity\Modele $modele
-     *
-     * @return Etablissement
-     */
-    public function addModele(\GenericBundle\Entity\Modele $modele)
-    {
-        $this->modele[] = $modele;
-
-        return $this;
-    }
-
-    /**
-     * Remove modele
-     *
-     * @param \GenericBundle\Entity\Modele $modele
-     */
-    public function removeModele(\GenericBundle\Entity\Modele $modele)
-    {
-        $this->modele->removeElement($modele);
-    }
-
-    /**
-     * Get modele
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getModele()
-    {
-        return $this->modele;
     }
 
     /**

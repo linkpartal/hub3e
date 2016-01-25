@@ -2,10 +2,6 @@ metier_user_admin:
     path : /
     defaults: { _controller: AdminBundle:Default:load}
 
-admin_iframeload:
-    path: /iframe
-    defaults: { _controller: AdminBundle:Default:loadiframe}
-
 checkExist:
     path : /checkExist
     defaults: { _controller: AdminBundle:Ecole:checkExist}
@@ -53,14 +49,6 @@ supprimeretablissement:
 ecoles_assiciated:
     path: /ecolesassociated/id={id}
     defaults: { _controller: AdminBundle:Ecole:ecolesassociated}
-
-creeNewModele:
-    path: /creeNewModele
-    defaults: { _controller: AdminBundle:Default:creeNewModele}
-
-saveNewModele:
-    path: /saveNewModele
-    defaults: { _controller: AdminBundle:Default:saveNewModele}
 
 modifieretab:
     path: /modifieretablissement/{id}

@@ -21,3 +21,11 @@ supprimereUtilisateur:
 modifierUser:
     path: /admin/modifierUtilisateur/{id}
     defaults: { _controller: UserBundle:Default:modifier}
+
+creeNewModele:
+    path: /admin/creeNewModele/id={id}
+    defaults: { _controller: UserBundle:Default:creeNewModele, id :ajouter}
+
+saveNewModele:
+    path: /admin/saveNewModele
+    defaults: { _controller: UserBundle:Default:saveNewModele}

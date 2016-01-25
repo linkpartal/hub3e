@@ -69,7 +69,7 @@
 
                             <input type="email" class="input " id="mail" name="_mail" placeholder="Email">
 
-                            <select class="input" title="" name="_role">
+                            <select class="input" title="" name="_role" style="width: calc( 50% - 5px); margin-right: 10px">
                                 <option selected="selected">Sélectionner un role</option>
                                 {% if etablissement.getTier.getEcole %}
                                     <option value="ROLE_ADMINECOLE">Administrateur école</option>
@@ -79,6 +79,14 @@
                                     <option value="ROLE_TUTEUR">Tuteur</option>
                                 {% endif %}
                             </select>
+                            {% if modeles is defined %}
+                                <select class="input" title="Choisissez un modèle à utiliser" name="_modele" style="width: calc( 50% - 5px)">
+                                    <option value="">Choisissez un modèle à utiliser</option>
+                                    {% for modele in modeles %}
+                                        <option value="{{ modele.getId }}">{{modele.getNom}}</option>
+                                    {% endfor %}
+                                </select>
+                            {% endif %}
                         </div>
                         <div class="col-xs-6">
                             <select class="input " style="width: 25%; margin-right: 10px" title="" name="civilite">

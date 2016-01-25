@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" href="{{ asset('image/Logo_Hub_3e.png') }}" />
     {% block CSS %}{% endblock %}
 
-    <title>HUB3E - {% block title %}Home{% endblock %}</title>
+    <title>HUB3E - {% block title %}Ecole{% endblock %}</title>
 
 </head>
 <body onload="putbadged()">
@@ -73,7 +73,7 @@
     </div>
 
 </div>
-<div id="adduser" class="popup col-xs-3">
+<!--div-- id="adduser" class="popup col-xs-3">
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block">
 
@@ -85,10 +85,19 @@
 
                     <input type="email" class="input " id="mail" name="_mail" placeholder="Email">
 
-                    <select class="input" title="" name="_role">
+                    <select class="input" title="Choisissez un role" name="_role" style="width: calc( 50% - 5px); margin-right: 10px">
+                        <option value="">Choisissez un role</option>
                         <option value="ROLE_ADMINECOLE">Administrateur école</option>
                         <option value="ROLE_RECRUTE">Recruteur Placeur</option>
                     </select>
+                    {% if modeles is defined %}
+                    <select class="input" title="Choisissez un modèle à utiliser" name="_modele" style="width: calc( 50% - 5px)">
+                        <option value="">Choisissez un modèle à utiliser</option>
+                        {% for modele in modeles %}
+                            <option value="{{ modele.getId }}">{{modele.getNom}}</option>
+                        {% endfor %}
+                    </select>
+                    {% endif %}
                 </div>
                 <div class="col-xs-6">
                     <select class="input " style="width: 25%; margin-right: 10px" title="" name="civilite">
@@ -111,7 +120,7 @@
         </form>
     </div>
 
-</div>
+</div-->
 <div class="container">
 
     {% block TopBar %}
@@ -146,6 +155,7 @@
                     <option value="societe">Voir Sociétés</option>
                     <option value="licence">Voir Licences</option>
                     <option value="user">Voir Utilisateurs</option>
+                    <option value="modele">Voir Modèles</option>
                 </select>
 
                 <div id="ecole" class="list-group col-xs-2 leftbar">
@@ -219,6 +229,15 @@
                             </button>
                         {% endfor %}
                     {% endif %}
+                </div>
+                <div id="modele" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                    {% if modeles is defined %}
+                        {% for modele in modeles %}
+                            <button onclick="postiframe('{{ path('creeNewModele',{'id': modele.getId} ) }}')"  id="modele{{ modele.getId }}" type="button" class="list-group-item butonLigne">
+                                <div class="col-xs-12 part">{{modele.getNom}}</div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
 
                 </div>
             </div>
@@ -269,6 +288,10 @@
     var i = 1;
     document.getElementById("leftselect").onchange = function(){
         var x = document.getElementById("leftselect").value;
+        if(x=='modele')
+        {
+            document.getElementById("iframe").src = '{{ path('creeNewModele') }}';
+        }
         document.getElementById('ecole').style.visibility= 'hidden';
         document.getElementById('societe').style.visibility= 'hidden';
         document.getElementById('licence').style.visibility= 'hidden';
