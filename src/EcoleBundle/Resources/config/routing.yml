@@ -42,3 +42,11 @@ expired:
     path: /admin/expired/id={id}
     defaults: { _controller: EcoleBundle:User:expired}
 
+addFormation:
+    path: /ajouterFormation
+    defaults: { _controller: EcoleBundle:Formation:ajouterFormation}
+
+afficherDoc:
+    path: /afficherDocument/{id}
+    defaults: { _controller: EcoleBundle:Formation:afficherDocument}
+

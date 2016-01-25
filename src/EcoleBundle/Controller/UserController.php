@@ -92,6 +92,9 @@ class UserController extends Controller
 
     }
 
+
+
+
     public function expiredAction($id){
         $utilis = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
         $reponse = new JsonResponse();

@@ -40,6 +40,7 @@ class DefaultController extends Controller
 
         $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
+
         if($etablissement->getTier()->getEcole())
         {
             $type = 'Ecole';
@@ -63,12 +64,22 @@ class DefaultController extends Controller
             $etablissement->getTier()->setFondecran(base64_encode(stream_get_contents($etablissement->getTier()->getFondecran())));
         }
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier() ));
+
+
+
+
+        $formation = array();
+
+        $formation = array_merge($formation,$this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$etablissement )));
+
+
         $users = array();
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
         $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
-        return $this->render('AdminBundle:Admin:iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,
-            'libs'=>$licences,'tiers'=>$tiers,'users'=>$users));
+        return $this->render('EcoleBundle:Adminecole:iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,
+            'libs'=>$licences,'tiers'=>$tiers,'users'=>$users,'formations'=>$formation));
+
     }
 
     public function affichageUserAction($id)

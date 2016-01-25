@@ -44,6 +44,7 @@ class DefaultController extends Controller
     public function affichageAction($id)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
+        $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->find($id);
 
         $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
@@ -75,7 +76,7 @@ class DefaultController extends Controller
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
         $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
         return $this->render('AdminBundle:Admin:iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,
-            'libs'=>$licences,'tiers'=>$tiers,'users'=>$users));
+            'libs'=>$licences,'tiers'=>$tiers,'users'=>$users,'formations'=>$formation));
     }
 
     public function affichageUserAction($id)
