@@ -12,7 +12,21 @@ class DefaultController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
-        $modeles = $this->getDoctrine()->getRepository('GenericBundle:Modele')->findBy(array('user'=>$user));
+        //get modeles
+        $modeles = array();
+        if ($handle = opendir('../src/GenericBundle/Resources/views/Mail/templates')) {
+
+            while (false !== ($entry = readdir($handle))) {
+
+                if ($entry != "." && $entry != "..") {
+
+                    array_push($modeles,$entry);
+                }
+            }
+
+            closedir($handle);
+        }
+
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAll();
         $ecoles = array();
         $societes = array();
@@ -78,5 +92,53 @@ class DefaultController extends Controller
         $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
         return $this->render('AdminBundle:Admin:iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,
             'libs'=>$licences,'tiers'=>$tiers,'users'=>$users,'formations'=>$formation));
+    }
+
+    public function creeNewModeleAction($id)
+    {
+        /*
+        $modeles = array();
+        if ($handle = opendir('../src/GenericBundle/Resources/views/Mail')) {
+
+            while (false !== ($entry = readdir($handle))) {
+
+                if ($entry != "." && $entry != "..") {
+
+                    array_push($modeles,$entry);
+                }
+            }
+
+            closedir($handle);
+        }*/
+        if($id == 'ajouter')
+        {
+            return $this->render("AdminBundle:Admin:creeNewModele.html.twig");
+        }
+        else{
+            $d = new \DOMDocument;
+            @$d->loadHTML(file_get_contents('../src/GenericBundle/Resources/views/Mail/templates/'. $id));
+            $body = "";
+            foreach($d->getElementsByTagName("body")->item(0)->childNodes as $child) {
+                $body .= $d->saveHTML($child);
+            }
+
+            return $this->render("AdminBundle:Admin:creeNewModele.html.twig",array('modele'=>$id,'body'=>$body));
+        }
+
+    }
+    public function saveNewModeleAction(Request $request)
+    {
+        if(".html.twig" === "" || (($temp = strlen($request->get('_filename')) - strlen('.html.twig')) >= 0 && strpos($request->get('_filename'), '.html.twig', $temp) !== FALSE))
+        {
+            $myfile = fopen("../src/GenericBundle/Resources/views/Mail/templates/". $request->get('_filename'),"w");
+        }
+        else{
+            $myfile = fopen("../src/GenericBundle/Resources/views/Mail/templates/". $request->get('_filename') .".html.twig","w");
+        }
+
+
+        fwrite($myfile,$this->render('GenericBundle:Mail:Modele.html.twig',array('Textarea'=>$request->get('_newtext')))->getContent());
+        fclose($myfile);
+        return $this->redirect($this->generateUrl('admin_iframeload'));
     }
 }

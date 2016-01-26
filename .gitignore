@@ -11,3 +11,4 @@
 /phpunit.xml
 /NewEntity/
 /.idea/
+/src/GenericBundle/Resources/views/Mail/templates/

@@ -212,35 +212,4 @@ class EcoleController extends Controller
 
         return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
     }
-
-    public function activateAction($id){
-        $etab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
-        $reponse = new JsonResponse();
-        if($etab->getActive())
-        {
-            $etab->setActive(false);
-            $reponse->setData(array('succes'=>'0'));
-        }
-        else{
-            $etab->setActive(true);
-            $reponse->setData(array('succes'=>'1'));
-        }
-        $this->getDoctrine()->getEntityManager()->flush();
-
-        return $reponse;
-    }
-
-    public function adressesAction($id){
-        $em = $this->getDoctrine()->getEntityManager();
-        $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($id);
-        $etablissements = $em->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$etablissement->getTier()));
-        $adresses = array();
-        foreach($etablissements as $value)
-        {
-            $adresse = array('id'=>$value->getId(),'adresse' => $value->getAdresse());
-            array_push($adresses, json_encode($adresse) );
-        }
-        $reponse = new JsonResponse();
-        return $reponse->setData(array('adresses'=>$adresses));
-    }
 }

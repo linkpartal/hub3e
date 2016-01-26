@@ -50,3 +50,12 @@ afficherDoc:
     path: /afficherDocument/{id}
     defaults: { _controller: EcoleBundle:Formation:afficherDocument}
 
+adresses_tier:
+    path: /admin/adresse/id={id}
+    defaults: { _controller: EcoleBundle:Default:adresses}
+
+activate:
+    path: /admin/activate/id={id}
+    defaults: { _controller: EcoleBundle:Default:activate}
+
+

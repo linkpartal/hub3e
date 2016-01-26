@@ -20,8 +20,8 @@
                     <form class="formulaire" id="form" action="{{ path("saveNewModele") }}" method="post">
                         <div class="inputcontainer">
                             <label class="list-group-item" for="filename" >Nom Fichier :</label>
-                            <label class="champ form-control" id="filename" name="_filename">{{ modele.getNom }}</label>
-                            <input type="hidden" class="champ form-control" id="filename" name="_filename" value="{{ modele.getNom }}">
+                            <label class="list-group-item">{{ modele }}</label>
+                            <input type="hidden" class="champ form-control" id="filename" name="_filename" value="{{ modele }}">
                         </div>
                         <div class="inputcontainer">
                             <label for="newtext" class="list-group-item" style="vertical-align: top">Text : </label>

@@ -85,19 +85,11 @@
 
                     <input type="email" class="input " id="mail" name="_mail" placeholder="Email">
 
-                    <select class="input" title="Choisissez un role" name="_role" style="width: calc( 50% - 5px); margin-right: 10px">
+                    <select class="input" title="Choisissez un role" name="_role">
                         <option value="">Choisissez un role</option>
                         <option value="ROLE_ADMINECOLE">Administrateur école</option>
                         <option value="ROLE_RECRUTE">Recruteur Placeur</option>
                     </select>
-                    {% if modeles is defined %}
-                    <select class="input" title="Choisissez un modèle à utiliser" name="_modele" style="width: calc( 50% - 5px)">
-                        <option value="">Choisissez un modèle à utiliser</option>
-                        {% for modele in modeles %}
-                            <option value="{{ modele.getId }}">{{modele.getNom}}</option>
-                        {% endfor %}
-                    </select>
-                    {% endif %}
                 </div>
                 <div class="col-xs-6">
                     <select class="input " style="width: 25%; margin-right: 10px" title="" name="civilite">
@@ -121,6 +113,23 @@
     </div>
 
 </div-->
+<div id="import" class="popup col-xs-3">
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
+        <form id="form" action="{{ path('import') }}" method="post" enctype="multipart/form-data">
+            <div class="div_form">
+
+                    <label title="CSV" for="CSV"><img id="backimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
+                    <input accept="image/*" type="file" class="input" id="CSV" name="_CSV" >
+
+            </div>
+            <div class="div_button">
+                <input class="blue" type="submit" value="envoyer">
+            </div>
+        </form>
+    </div>
+
+</div>
 <div class="container">
 
     {% block TopBar %}
@@ -141,6 +150,13 @@
 
                 <button>Utilisateurs</button>
             </div>
+
+            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+                <button onclick="show('import')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+                ></button>
+
+                <button>importe</button>
+            </div>
         </div>
 
 
@@ -155,7 +171,6 @@
                     <option value="societe">Voir Sociétés</option>
                     <option value="licence">Voir Licences</option>
                     <option value="user">Voir Utilisateurs</option>
-                    <option value="modele">Voir Modèles</option>
                 </select>
 
                 <div id="ecole" class="list-group col-xs-2 leftbar">
@@ -225,16 +240,6 @@
                         {% endfor %}
                     {% endif %}
                 </div>
-                <div id="modele" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
-                    {% if modeles is defined %}
-                        {% for modele in modeles %}
-                            <button onclick="postiframe('{{ path('creeNewModele',{'id': modele.getId} ) }}')"  id="modele{{ modele.getId }}" type="button" class="list-group-item butonLigne">
-                                <div class="col-xs-12 part">{{modele.getNom}}</div>
-                            </button>
-                        {% endfor %}
-                    {% endif %}
-
-                </div>
             </div>
         {% endblock %}
 
@@ -283,10 +288,6 @@
     var i = 1;
     document.getElementById("leftselect").onchange = function(){
         var x = document.getElementById("leftselect").value;
-        if(x=='modele')
-        {
-            document.getElementById("iframe").src = '{{ path('creeNewModele') }}';
-        }
         document.getElementById('ecole').style.visibility= 'hidden';
         document.getElementById('societe').style.visibility= 'hidden';
         document.getElementById('licence').style.visibility= 'hidden';
