@@ -403,8 +403,10 @@
         }
 
     };
+
     function postiframeUser(url,id,button) {
         document.getElementById("iframe").src = url;
+        var route = '{{path('adresses_tier_user',{'id':"_id" })}}';
         var elements = button.getElementsByClassName("badge");
         if(elements.length > 0)
         {
@@ -412,6 +414,11 @@
         }
 
     };
+
+
+
+
+
     function stringWith (str, prefix) {
         var ustring = str.toUpperCase();
         var uprefix = prefix.toUpperCase();

@@ -229,4 +229,18 @@ class EcoleController extends Controller
 
         return $reponse;
     }
+
+    public function adressesAction($id){
+        $em = $this->getDoctrine()->getEntityManager();
+        $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($id);
+        $etablissements = $em->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$etablissement->getTier()));
+        $adresses = array();
+        foreach($etablissements as $value)
+        {
+            $adresse = array('id'=>$value->getId(),'adresse' => $value->getAdresse());
+            array_push($adresses, json_encode($adresse) );
+        }
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('adresses'=>$adresses));
+    }
 }

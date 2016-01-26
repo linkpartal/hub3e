@@ -1,7 +1,3 @@
-user:
-    resource: "@UserBundle/Resources/config/routing.yml"
-    prefix:   /user/
-
 ecole:
     resource: "@EcoleBundle/Resources/config/routing.yml"
     prefix:   /ecole/

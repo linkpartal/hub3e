@@ -1,34 +1,42 @@
 <?php
 
-namespace UserBundle\Controller;
+namespace AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Asset\Package;
-use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use GenericBundle\Entity\Etablissement;
 use GenericBundle\Entity\Notification;
-use GenericBundle\Entity\Modele;
+use GenericBundle\Entity\Tier;
 
-class DefaultController extends Controller
+
+class UserController extends Controller
 {
-    public function affichageUserAction($id)
+    public function addUserEcoleAction($from,$id)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-
-        $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
-        $userid = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
-        $type = 'Utilisateur';
-        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('user'=>$user,'entite'=>$userid->getId(),'type'=>$type));
-        if($notifications)
+        if($from=='ecole')
         {
-            $this->getDoctrine()->getEntityManager()->remove($notifications);
-            $this->getDoctrine()->getEntityManager()->flush();
+            $ecole = $this->getDoctrine()->getRepository('GenericBundle:Ecole')->find($id);
+            if($ecole->getLogo())
+            {
+                $ecole->setLogo(base64_encode(stream_get_contents($ecole->getLogo())));
+            }
+            $licences = $this->getDoctrine()->getRepository('GenericBundle:Licenceecole')->findBy(array('ecoleecole'=>$ecole ));
+            $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('ecole'=>$ecole ));
+            return $this->render('AdminBundle:Admin:AddUser.html.twig',array('ecole'=>$ecole,'libs'=>$licences,'usersecole'=>$users,'from'=>$from,'id'=>$id));
+        }
+        if($from=='societe')
+        {
+            $societe = $this->getDoctrine()->getRepository('GenericBundle:Societe')->find($id);
+            $etablissements = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findBy(array('societe'=>$societe));
+            $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('societe'=>$societe ));
+            $licences = $this->getDoctrine()->getRepository('GenericBundle:Licencesociete')->findBy(array('societe'=>$societe ));
+            return $this->render('AdminBundle:Admin:AddUser.html.twig',array('societe'=>$societe,'libs'=>$licences,'usersoc'=>$users,'etablissements'=>$etablissements,'from'=>$from,'id'=>$id));
+        }
+        else{
+            return $this->render('AdminBundle:Admin:AddUser.html.twig',array('from'=>$from,'id'=>$id));
         }
 
-
-        return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('licencedef'=>$licencedef,'User'=>$userid
-        ));
     }
 
     public function UserAddedAction(Request $request)
@@ -63,8 +71,8 @@ class DefaultController extends Controller
 
 
         $em = $this->getDoctrine()->getManager();
-        //$em->persist($newuser);
-        //$em->flush();
+        $em->persist($newuser);
+        $em->flush();
 
         $superadmins = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_SUPER_ADMIN');
 
@@ -73,24 +81,16 @@ class DefaultController extends Controller
             $notif->setEntite($newuser->getId());
             $notif->setType('Utilisateur');
             $notif->setUser($admin);
-            //$em->persist($notif);
-            //$em->flush();
+            $em->persist($notif);
+            $em->flush();
         }
 
         //send password
-        if($request->get('_modele'))
-        {
-
-            $modele = 'GenericBundle:Mail/templates:'.$request->get('_modele').'_'.$this->get('security.token_storage')->getToken()->getUser()->getUsername().'.html.twig';
-        }
-        else{
-            $modele = 'GenericBundle:Mail:NewUser.html.twig';
-        }
         $message = \Swift_Message::newInstance()
             ->setSubject('Email')
             ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
             ->setTo($request->get('_mail'))
-            ->setBody($this->renderView($modele,array('username'=>$request->get('_Username'), 'password'=>$password))
+            ->setBody($this->renderView('GenericBundle:Mail:NewUser.html.twig',array('username'=>$request->get('_Username'), 'password'=>$password))
                 ,'text/html'
             );
         $this->get('mailer')->send($message);
@@ -106,10 +106,6 @@ class DefaultController extends Controller
 
 
     }
-
-
-
-
 
     public function expiredAction($id){
         $utilis = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
@@ -128,11 +124,20 @@ class DefaultController extends Controller
         return $reponse;
     }
 
-
     public function modifierAction($id)
     {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $userid = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
-        return $this->render('UserBundle:Gestion:modifierUtilisateur.html.twig',array('user'=>$userid));
+
+
+
+
+
+        $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
+        return $this->render('AdminBundle:Admin:modifierUtilisateur.html.twig',array('licencedef'=>$licencedef,'user'=>$userid
+        ));
     }
     public function userModifAction(Request $request){
         $em = $this->getDoctrine()->getManager();
@@ -148,8 +153,10 @@ class DefaultController extends Controller
 
         $em->flush();
 
-        return $this->forward('UserBundle:Default:affichageUser',array('id'=>$request->get('_ID')));
+        return $this->forward('AdminBundle:Default:affichageUser',array('id'=>$request->get('_ID')));
     }
+
+
     public function supprimeruserAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -163,62 +170,26 @@ class DefaultController extends Controller
 
         $em->remove($user);
         $em->flush();
+
+
+
+
+
+
+        return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
+    }
+
+    public function adressesAction($id){
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository('GenericBundle:User')->find($id);
+        $user = $em->getRepository('GenericBundle:User')->findBy(array('tier'=>$user->getTier()));
+        $adresses = array();
+        foreach($user as $value)
+        {
+            $adresse = array('id'=>$value->getId(),'adresse' => $value->getAdresse());
+            array_push($adresses, json_encode($adresse) );
+        }
         $reponse = new JsonResponse();
-        return $reponse->setData(array('Succes'=>$this->generateUrl('')));
-    }
-
-    public function creeNewModeleAction($id)
-    {
-        /*
-        $modeles = array();
-        if ($handle = opendir('../src/GenericBundle/Resources/views/Mail')) {
-
-            while (false !== ($entry = readdir($handle))) {
-
-                if ($entry != "." && $entry != "..") {
-
-                    array_push($modeles,$entry);
-                }
-            }
-
-            closedir($handle);
-        }*/
-        if($id == 'ajouter')
-        {
-            return $this->render("UserBundle:Gestion:creeNewModele.html.twig");
-        }
-        else{
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-            $modele = $this->getDoctrine()->getRepository('GenericBundle:Modele')->find($id);
-            $d = new \DOMDocument;
-            @$d->loadHTML(file_get_contents('./templates/'. $modele->getId().'_'. $user->getUsername() .'.html.twig'));
-            $body = "";
-            foreach($d->getElementsByTagName("body")->item(0)->childNodes as $child) {
-                $body .= $d->saveHTML($child);
-            }
-
-            return $this->render("UserBundle:Gestion:creeNewModele.html.twig",array('modele'=>$modele,'body'=>$body));
-        }
-
-    }
-    public function saveNewModeleAction(Request $request)
-    {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $modele = $this->getDoctrine()->getRepository('GenericBundle:Modele')->findOneBy(array('user'=>$user,'nom'=>$request->get('_filename')));
-        if(!$modele)
-        {
-            $modele = new Modele();
-            $modele->setNom($request->get('_filename'));
-            $modele->setUser($user);
-            $em = $this->getDoctrine()->getEntityManager();
-            $em->persist($modele);
-            $em->flush();
-        }
-
-        $myfile = fopen("../src/GenericBundle/Resources/views/Mail/templates/". $modele->getId()."_". $user->getUsername() .".html.twig","w");
-
-        fwrite($myfile,$this->render('GenericBundle:Mail:Modele.html.twig',array('Textarea'=>$request->get('_newtext')))->getContent());
-        fclose($myfile);
-        return $this->redirect($this->generateUrl('admin_iframeload'));
+        return $reponse->setData(array('adresses'=>$adresses));
     }
 }

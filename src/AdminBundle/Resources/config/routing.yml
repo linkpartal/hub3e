@@ -18,6 +18,10 @@ metier_user_affiche:
     path: /affichage/id={id}
     defaults: { _controller: AdminBundle:Default:affichage}
 
+metier_user_afficheUser:
+    path: /affichageUser/id={id}
+    defaults: { _controller: AdminBundle:Default:affichageUser}
+
 admin_afficheLicence:
     path: /affichageLicence/id={id}
     defaults: { _controller: AdminBundle:LicenceDef:affichageLicence}
@@ -29,6 +33,10 @@ metier_user_associated:
 supprimer_Licence:
     path:  /suppLicence/{id}
     defaults: {_controller: AdminBundle:Ecole:suppLicence}
+
+user_added:
+    path:  /Useradded
+    defaults: {_controller: AdminBundle:User:UserAdded}
 
 loadgestionQCM:
     path:     /gestionQCM/{id}
@@ -46,6 +54,10 @@ supprimeretablissement:
     path : /supprimeretab/id={id}
     defaults: { _controller: AdminBundle:Ecole:supprimeretab}
 
+supprimereUtilisateur:
+    path : /supprimeruser/id={id}
+    defaults: { _controller: AdminBundle:User:supprimeruser}
+
 ecoles_assiciated:
     path: /ecolesassociated/id={id}
     defaults: { _controller: AdminBundle:Ecole:ecolesassociated}
@@ -54,9 +66,17 @@ modifieretab:
     path: /modifieretablissement/{id}
     defaults: { _controller: AdminBundle:Ecole:modifier}
 
+modifierUser:
+    path: /modifierUtilisateur/{id}
+    defaults: { _controller: AdminBundle:User:modifier}
+
 etabmodif:
     path: /etabmodif
     defaults: { _controller: AdminBundle:Ecole:etabModif}
+
+userModif:
+    path: /userModif
+    defaults: { _controller: AdminBundle:User:userModif}
 
 supprimerQCM:
     path: /supprimerQCM/nom={nom}
@@ -65,3 +85,15 @@ supprimerQCM:
 activate:
     path: /activate/id={id}
     defaults: { _controller: AdminBundle:Ecole:activate}
+
+expired:
+    path: /expired/id={id}
+    defaults: { _controller: AdminBundle:User:expired}
+
+adresses_tier:
+    path: /adresse/id={id}
+    defaults: { _controller: AdminBundle:Ecole:adresses}
+
+adresses_tier_user:
+    path: /admin/adresse/id={id}
+    defaults: { _controller: AdminBundle:User:adresses}
