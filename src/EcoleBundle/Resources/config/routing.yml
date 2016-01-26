@@ -26,6 +26,10 @@ supprimereUtilisateur:
     path : /admin/supprimeruser/id={id}
     defaults: { _controller: EcoleBundle:User:supprimeruser}
 
+ecole_modifieretab:
+    path: /modifieretablissement/{id}
+    defaults: { _controller: EcoleBundle:Ecole:modifier}
+
 etabmodif:
     path: /admin/etabmodif
     defaults: { _controller: EcoleBundle:Ecole:etabModif}
@@ -49,4 +53,8 @@ addFormation:
 afficherDoc:
     path: /afficherDocument/{id}
     defaults: { _controller: EcoleBundle:Formation:afficherDocument}
+
+supprimerFormation:
+    path: /supprimerFormation/id={id}
+    defaults: { _controller: EcoleBundle:Formation:deleteFormation}
 

@@ -38,9 +38,11 @@ class Formation
     /**
      * @var string
      *
-     * @ORM\Column(name="Document", type="blob", length=65535, nullable=true)
+     * @ORM\Column(name="NomDoc", type="string", length=45, nullable=false)
      */
-    private $document;
+    private $nomDoc;
+
+
 
     /**
      * @var \Etablissement
@@ -205,6 +207,30 @@ class Formation
     public function getNom()
     {
         return $this->nom;
+    }
+
+    /**
+     * Set nomDoc
+     *
+     * @param string $nomDoc
+     *
+     * @return Formation
+     */
+    public function setNomDoc($nomDoc)
+    {
+        $this->nomDoc = $nomDoc;
+
+        return $this;
+    }
+
+    /**
+     * Get nomDoc
+     *
+     * @return string
+     */
+    public function getNomDoc()
+    {
+        return $this->nomDoc;
     }
 
 
