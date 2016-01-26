@@ -63,8 +63,8 @@ class DefaultController extends Controller
 
 
         $em = $this->getDoctrine()->getManager();
-        //$em->persist($newuser);
-        //$em->flush();
+        $em->persist($newuser);
+        $em->flush();
 
         $superadmins = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_SUPER_ADMIN');
 
@@ -73,8 +73,8 @@ class DefaultController extends Controller
             $notif->setEntite($newuser->getId());
             $notif->setType('Utilisateur');
             $notif->setUser($admin);
-            //$em->persist($notif);
-            //$em->flush();
+            $em->persist($notif);
+            $em->flush();
         }
 
         //send password
