@@ -1,0 +1,23 @@
+expired:
+    path: /admin/expired/id={id}
+    defaults: { _controller: UserBundle:Default:expired}
+
+userModif:
+    path: /admin/userModif
+    defaults: { _controller: UserBundle:Default:userModif}
+
+metier_user_afficheUser:
+    path: /admin/affichageUser/id={id}
+    defaults: { _controller: UserBundle:Default:affichageUser}
+
+user_added:
+    path:  /admin/Useradded
+    defaults: {_controller: UserBundle:Default:UserAdded}
+
+supprimereUtilisateur:
+    path : /admin/supprimeruser/id={id}
+    defaults: { _controller: UserBundle:Default:supprimeruser}
+
+modifierUser:
+    path: /admin/modifierUtilisateur/{id}
+    defaults: { _controller: UserBundle:Default:modifier}
