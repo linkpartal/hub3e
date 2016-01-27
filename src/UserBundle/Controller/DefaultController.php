@@ -189,11 +189,12 @@ class DefaultController extends Controller
         return $reponse->setData(array('Succes'=>$this->generateUrl('')));
     }
 
-    public function importAction(Request $request){
+    public function importAction(Request $request)
+    {
 
 
         $file = new \SplFileObject($_FILES['_CSV']['tmp_name']);
-        $reader = new CsvReader($file,';');
+        $reader = new CsvReader($file);
         $reader->setHeaderRowNumber(0,CsvReader::DUPLICATE_HEADERS_INCREMENT);
         foreach ($reader as $row) {
             var_dump($row);

@@ -111,23 +111,6 @@ class DefaultController extends Controller
         return $this->render('EcoleBundle:Adminecole:afficheLicence.html.twig',array('licence'=>$licence));
     }
 
-    public function activateAction($id){
-        $etab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
-        $reponse = new JsonResponse();
-        if($etab->getActive())
-        {
-            $etab->setActive(false);
-            $reponse->setData(array('succes'=>'0'));
-        }
-        else{
-            $etab->setActive(true);
-            $reponse->setData(array('succes'=>'1'));
-        }
-        $this->getDoctrine()->getEntityManager()->flush();
-
-        return $reponse;
-    }
-
     public function adressesAction($id){
         $em = $this->getDoctrine()->getEntityManager();
         $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($id);

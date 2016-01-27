@@ -1,22 +1,17 @@
 <?php
 
-namespace AdminBundle\Controller;
+namespace EcoleBundle\Controller;
 
 use GenericBundle\Entity\Etablissement;
 use GenericBundle\Entity\Notification;
 use GenericBundle\Entity\Tier;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class EcoleController extends Controller
 {
-    public function addtierAction($type)
-    {
-        return $this->render('AdminBundle:Admin:ajoutecole.html.twig',array('type'=>$type));
-    }
-
     public function checkExistAction(Request $request)
     {
 
@@ -109,7 +104,7 @@ class EcoleController extends Controller
 
         $em->flush();
 
-        return $this->redirect($this->generateUrl('metier_user_admin'));
+        return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$this->get('security.token_storage')->getToken()->getUser()->getTier()->getRaisonsoc())));
 
     }
 
@@ -220,6 +215,7 @@ class EcoleController extends Controller
     public function activateAction($id){
         $etab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
         $reponse = new JsonResponse();
+
         if($etab->getActive())
         {
             $etab->setActive(false);

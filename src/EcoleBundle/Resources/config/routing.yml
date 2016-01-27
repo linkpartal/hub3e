@@ -54,8 +54,10 @@ adresses_tier:
     path: /admin/adresse/id={id}
     defaults: { _controller: EcoleBundle:Default:adresses}
 
-activate:
-    path: /admin/activate/id={id}
-    defaults: { _controller: EcoleBundle:Default:activate}
+ecole_checkExist:
+    path : /checkExist
+    defaults: { _controller: EcoleBundle:Ecole:checkExist}
 
-
+ecole_tieradded:
+    path : /added
+    defaults: { _controller: EcoleBundle:Ecole:tieradded}

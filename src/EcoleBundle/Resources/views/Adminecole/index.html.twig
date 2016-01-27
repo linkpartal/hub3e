@@ -43,7 +43,7 @@
                 </div>
             </div>
         </div>
-        <form id="form" action="{{ path('tieradded') }}" method="post" enctype="multipart/form-data">
+        <form id="form" action="{{ path('ecole_tieradded') }}" method="post" enctype="multipart/form-data">
             <div class="div_form">
 
                 <div class="col-xs-6 input-colonne">
@@ -497,7 +497,7 @@
             geocoder.geocode({'address': address}, function (results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                     result.value = results[0].geometry.location ;
-                    submitAjaxForm('{{ path('checkExist') }}','form');
+                    submitAjaxForm('{{ path('ecole_checkExist') }}','form');
                 } else {
                     alert('Geocode was not successful for the following reason: ' + status);
                 }
