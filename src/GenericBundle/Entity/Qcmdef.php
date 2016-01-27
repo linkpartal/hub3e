@@ -29,6 +29,13 @@ class Qcmdef
     private $nom;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="affinite", type="boolean", nullable=false)
+     */
+    private $affinite;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Etablissement", mappedBy="qcmdef")
@@ -159,5 +166,29 @@ class Qcmdef
     public function getFormationformation()
     {
         return $this->formationformation;
+    }
+
+    /**
+     * Set affinite
+     *
+     * @param boolean $affinite
+     *
+     * @return Qcmdef
+     */
+    public function setAffinite($affinite)
+    {
+        $this->affinite = $affinite;
+
+        return $this;
+    }
+
+    /**
+     * Get affinite
+     *
+     * @return boolean
+     */
+    public function getAffinite()
+    {
+        return $this->affinite;
     }
 }
