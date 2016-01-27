@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/ajout.css') }}" />
@@ -115,6 +116,81 @@
 
         </div>
     </div>
+
+        <div id="addQCM" class="popup" >
+            <div onclick="hide(this)" class="close"></div>
+            <div class="col-xs-offset-1 col-xs-9" style=" padding: 0;border:20px solid white;display: block">
+
+
+
+                <form id="formaddQCM" class="formulaire" action="{{ path("user_added") }}" method="post" style="text-align: center" >
+                    <input type="hidden" id="id" name="_id" value="{{ etablissement.getId }}">
+                    <div class="div_form" style="text-align: center" >
+
+                        <section style="text-align: center" >
+                        <table class="tblQCM" style="text-align: center ; align:center;" >
+                            <tr>
+                                <td>
+                                    <div>
+                                        <select id="leftValues" size="10" multiple>
+                                            {% if QCMS is defined %}
+                                                {% for qcm in QCMS %}
+                                                    <option value="{{ qcm.getId }}">{{ qcm.getNom }}</option>
+                                                {% endfor %}
+                                            {% endif %}
+
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div >
+                                        <input type="button" id="btnRight" value="&gt;&gt;" />
+                                        <input type="button" id="btnLeft" value="&lt;&lt;" />
+
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <select id="rightValues" size="10" multiple>
+
+                                        </select>
+
+                                    </div>
+                                </td>
+
+
+
+                            </tr>
+
+
+                        </table>
+
+
+
+
+
+
+
+                        </section>
+
+
+
+
+
+                    </div>
+                    <div class="div_button">
+                        <input class="blue" type="submit" value="envoyer">
+                    </div>
+                </form>
+
+
+
+
+
+
+
+            </div>
+        </div>
         {% if etablissement.getTier.getEcole %}
             <div id="associerecole" class="popup">
                 <div onclick="hide(this)" class="close"></div>
@@ -245,6 +321,10 @@
                                                 </label>
                                                 <button class="blue"  onclick="supprimerformation('{{ path('supprimerFormation',{'id':formation.getId}) }}', this)">
                                                     <div   >Supprimer</div>
+
+                                                </button>&nbsp;&nbsp;
+                                                <button class="blue"  onclick="showqcm('addQCM',{{ formation.getId }})" >
+                                                    <div   >Ajouter un test</div>
 
                                                 </button>
 
@@ -415,6 +495,58 @@
             }
         };
 
+        $("#btnLeft").click(function () {
+            var selectedItem = $("#rightValues option:selected");
+            $("#leftValues").append(selectedItem);
+
+        });
+
+        $("#btnRight").click(function () {
+            var selectedItem = $("#leftValues option:selected");
+            $("#rightValues").append(selectedItem);
+
+            var route = '{{path('add_formation_qcm',{'id':"_id" })}}';
+            route = route.replace("_id", id);
+            $.ajax({
+                type: 'get',
+                url: route,
+                dataType: 'json',
+                success: function(data) {
+
+                }
+            });
+
+        });
+
+
+        function showqcm(div,id){
+            var popup = document.getElementById(div);
+            popup.style.display = 'block';
+            $("#rightValues > option").each(function(){
+                $("#leftValues").append(this);
+            });
+
+
+            var route = '{{path('formation_qcm',{'id':"_id" })}}';
+            route = route.replace("_id", id);
+            $.ajax({
+                type: 'get',
+                url: route,
+                dataType: 'json',
+                success: function(data) {
+
+
+                    var formation = JSON.parse(data.adresses);
+                    for (var i = 0; i < formation.length; i++)
+                    {
+                        var selectedItem = $('#leftValues option[value="'+formation[i].id+'"]');
+                        $("#rightValues").append(selectedItem);
+                    }
+                }
+            });
+
+
+        }
 
 
 

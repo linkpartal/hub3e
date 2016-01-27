@@ -58,3 +58,13 @@ supprimerFormation:
     path: /supprimerFormation/id={id}
     defaults: { _controller: EcoleBundle:Formation:deleteFormation}
 
+formation_qcm:
+    path: /Formation_qcm/id={id}
+    defaults: { _controller: EcoleBundle:Formation:formationQcm}
+
+add_formation_qcm:
+    path: /add_formation_qcm/id={id}
+    defaults: { _controller: EcoleBundle:Formation:formationAddQcm}
+
+
+

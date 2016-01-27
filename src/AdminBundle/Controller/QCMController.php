@@ -35,7 +35,6 @@ class QCMController extends Controller
 
     public function addAction(Request $request)
     {
-
         $em = $this->getDoctrine()->getEntityManager();
         //get qcm s'il existe.
         $qcm = $em->getRepository('GenericBundle:Qcmdef')->findOneBy(array('nom'=>$request->get('_Nom')));
@@ -44,11 +43,14 @@ class QCMController extends Controller
             //s'il n'existe pas le créer.
             $newqcm = new Qcmdef();
             $newqcm->setNom($request->get('_Nom'));
+
+            $newqcm->setAffinite(intval($request->get('_affinite')) );
             $em->persist($newqcm);
             $em->flush();
 
             $qcm= $newqcm;
         }
+        $em->flush();
 
         $questions = array();
 

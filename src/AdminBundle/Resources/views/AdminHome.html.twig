@@ -369,7 +369,7 @@
     function postiframe(url,id,button) {
         document.getElementById("iframe").src = url;
         var route = '{{path('adresses_tier',{'id':"_id" })}}';
-        var route = route.replace("_id", id);
+        route = route.replace("_id", id);
         $.ajax({
             type: 'get',
             url: route,
