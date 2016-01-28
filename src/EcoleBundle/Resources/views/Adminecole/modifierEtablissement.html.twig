@@ -175,7 +175,7 @@
                     <div class="col-xs-12" style="margin-bottom: 50px">
                         <div id="info_etab" class="list-group affichage">
 
-                            <form class="formulaire" id="formEtab" action="{{ path('etabmodif') }}" method="post" enctype="multipart/form-data">
+                            <form class="formulaire" id="formEtab" action="{{ path('ecole_etabmodif') }}" method="post" enctype="multipart/form-data">
 
                                 <input type="hidden" value="{{ etablissement.getSiret }}" id="SIRET" name="_SIRET">
 
@@ -346,8 +346,8 @@
                                 <div class="col-xs-12" style="color: white;">DÉSACTIVE</div>
                             </button>
                         {% endif %}
-                        <button onclick="post('{{ path('ecole_modifieretab',{'id': etablissement.getId }) }}')" type="button" class="list-group-item rightMenu">
-                            <div class="col-xs-12">Modifier la fiche</div>
+                        <button onclick="envoyer()" type="button" class="list-group-item rightMenu">
+                            <div class="col-xs-12">valider</div>
 
                         </button>
                         <button onclick="post('{{ path('supprimeretablissement',{'id': etablissement.getId }) }}')" type="button" class="list-group-item rightMenu">
@@ -455,8 +455,19 @@
 
             }
         };
-
-
+        function envoyer(){
+            var address = document.getElementById('Adresse').value +' ' +document.getElementById('Ville').value
+                    + ' ' + document.getElementById('CodeP').value  ;
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({'address': address}, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    document.getElementById('Geocode').value = results[0].geometry.location ;
+                    document.getElementById('formEtab').submit();
+                } else {
+                    console.log('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
 
 
     </script>

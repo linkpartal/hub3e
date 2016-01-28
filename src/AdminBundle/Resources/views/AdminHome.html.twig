@@ -254,7 +254,7 @@
                                      style="height: 31px; text-align: left;">
 
                                     <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
-                                    {% if u.isExpired %}
+                                    {% if not u.isExpired %}
                                         <div class="col-xs-1 active" id="active{{ u.getId }}"></div>
                                     {% else %}
                                         <div class="col-xs-1 inactive" id="active{{ u.getId }}"></div>
@@ -513,7 +513,6 @@
             spanecole.className = 'badge';
             spanecole.className = spanecole.className + ' notifTopbar';
             spanecole.innerHTML = ecole;
-            spanecole.style.left ="30px";
             var buttonecole = document.getElementById("ecoletop");
             buttonecole.appendChild(spanecole);
         }
@@ -522,7 +521,6 @@
             spansociete.className = 'badge';
             spansociete.className = spansociete.className + ' notifTopbar';
             spansociete.innerHTML = societe;
-            spansociete.style.left ="20px";
             var buttonsociete = document.getElementById("societetop");
             buttonsociete.appendChild(spansociete);
         }
@@ -531,7 +529,6 @@
             spanuser.className = 'badge';
             spanuser.className = spanuser.className + ' notifTopbar';
             spanuser.innerHTML = user;
-            spanuser.style.left ="20px";
             var buttonuser = document.getElementById("usertop");
             buttonuser.appendChild(spanuser);
         }

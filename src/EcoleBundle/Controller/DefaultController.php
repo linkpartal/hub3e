@@ -22,8 +22,21 @@ class DefaultController extends Controller
         foreach($user->getTier()->getTier1() as $partenaire) {
             $ecoles = array_merge($ecoles, $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($partenaire->getId()));
         }
+        foreach($ecoles as $key => $ecole)
+        {
+            if($ecole->getSuspendu())
+            {
+                unset($ecoles[$key]);
+            }
+        }
         $societes = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findSocietes();
-
+        foreach($societes as $key => $societe)
+        {
+            if($societe->getSuspendu())
+            {
+                unset($societes[$key]);
+            }
+        }
 
         $users = $this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($user->getTier());
 

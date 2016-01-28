@@ -34,10 +34,6 @@ supprimer_Licence:
     path:  /suppLicence/{id}
     defaults: {_controller: AdminBundle:Ecole:suppLicence}
 
-user_added:
-    path:  /Useradded
-    defaults: {_controller: AdminBundle:User:UserAdded}
-
 loadgestionQCM:
     path:     /gestionQCM/{id}
     defaults: { _controller: AdminBundle:QCM:load, id :ajouter }
@@ -49,14 +45,6 @@ Add_QCM:
 supprimer_QCM:
     path: /supprimerQCM/rep={rep}&qst={qst}&qcm={qcm}
     defaults: { _controller: AdminBundle:QCM:supprimer }
-
-supprimeretablissement:
-    path : /supprimeretab/id={id}
-    defaults: { _controller: AdminBundle:Ecole:supprimeretab}
-
-supprimereUtilisateur:
-    path : /supprimeruser/id={id}
-    defaults: { _controller: AdminBundle:User:supprimeruser}
 
 ecoles_assiciated:
     path: /ecolesassociated/id={id}

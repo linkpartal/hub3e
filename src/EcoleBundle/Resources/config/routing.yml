@@ -1,5 +1,5 @@
 ecole_admin:
-    path:     /admin/{ecole}
+    path:     /admin/Home/{ecole}
     defaults: { _controller: EcoleBundle:Default:loadAdmin }
 
 admin_iframeload:
@@ -12,7 +12,7 @@ ecole_admin_affiche:
 
 ecole_admin_afficheUser:
     path: /affichageUser/id={id}
-    defaults: { _controller: EcoleBundle:Default:affichageUser}
+    defaults: { _controller: UserBundle:Default:affichageUser}
 
 ecole_admin_afficheLicence:
     path: /affichageLicence/id={id}
@@ -22,21 +22,13 @@ supprimeretablissement:
     path : /admin/supprimeretab/id={id}
     defaults: { _controller: EcoleBundle:Ecole:supprimeretab}
 
-supprimereUtilisateur:
-    path : /admin/supprimeruser/id={id}
-    defaults: { _controller: EcoleBundle:User:supprimeruser}
-
 ecole_modifieretab:
     path: /modifieretablissement/{id}
     defaults: { _controller: EcoleBundle:Ecole:modifier}
 
-etabmodif:
+ecole_etabmodif:
     path: /admin/etabmodif
     defaults: { _controller: EcoleBundle:Ecole:etabModif}
-
-userModif:
-    path: /userModif
-    defaults: { _controller: EcoleBundle:User:userModif}
 
 activate:
     path: /admin/activate/id={id}

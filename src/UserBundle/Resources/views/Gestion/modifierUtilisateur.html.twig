@@ -91,7 +91,7 @@
              style="height: 100%;">
             <div class="list-group"
                  style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
-                {% if user.isExpired %}
+                {% if not user.isExpired %}
                     <button onclick="expire('{{ path('expired',{'id':user.getId}) }}')" id="expired" type="button" class="list-group-item rightMenu" style="background-color: #94C400">
                         <div class="col-xs-12" style="display: inline-table;color: white;height: 46px;margin-top:10px;">ACTIVE</div>
                     </button>
@@ -139,14 +139,14 @@
                 },
                 success: function (data) {
                     if (data['succes'] == '0') {
-                        document.getElementById("expired").style.backgroundColor = 'red';
-                        document.getElementById("expired").firstElementChild.innerHTML = 'Désactive';
-                        window.parent.document.getElementById('expire{{ user.getId }}').style.backgroundColor = 'red';
+                        document.getElementById("expired").style.backgroundColor = '#94C400';
+                        document.getElementById("expired").firstElementChild.innerHTML = 'Activer';
+                        window.parent.document.getElementById('expire{{ user.getId }}').style.backgroundColor = '#94C400';
                     }
                     else {
-                        document.getElementById("expired").style.backgroundColor = '#94C400';
-                        document.getElementById("expired").firstElementChild.innerHTML = 'Active';
-                        window.parent.document.getElementById('expire{{ user.getId }}').style.backgroundColor = '#94C400';
+                        document.getElementById("expired").style.backgroundColor = 'red';
+                        document.getElementById("expired").firstElementChild.innerHTML = 'Désactiver';
+                        window.parent.document.getElementById('expire{{ user.getId }}').style.backgroundColor = 'red';
                     }
 
                 }

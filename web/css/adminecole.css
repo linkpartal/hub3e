@@ -203,11 +203,12 @@ iframe
 
 .notifTopbar
 {
-    position: relative;
+    position: absolute;
     background-color: red;
     color: white;
     text-align: center;
-    top: -6px;
+    top: -3px;
+    right:-6px;
     font: 12px Roboto bold;
 }
 

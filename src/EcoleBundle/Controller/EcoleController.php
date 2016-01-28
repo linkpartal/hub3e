@@ -206,6 +206,7 @@ class EcoleController extends Controller
     }
 
     public function etabModifAction(Request $request){
+
         $em = $this->getDoctrine()->getManager();
         $etablissement = $em->getRepository('GenericBundle:Etablissement')->findOneBy(array('siret'=>$request->get('_SIRET')));
 
@@ -235,7 +236,7 @@ class EcoleController extends Controller
 
         $em->flush();
 
-        return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
+        return $this->render('EcoleBundle:Adminecole:iFrameContent.html.twig');
     }
 
     public function activateAction($id){

@@ -3,13 +3,10 @@
 namespace UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Asset\Package;
-use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use GenericBundle\Entity\Notification;
-use GenericBundle\Entity\Modele;
 use Ddeboer\DataImport\Reader\CsvReader;
 
 class DefaultController extends Controller
@@ -69,6 +66,8 @@ class DefaultController extends Controller
         $em->flush();
 
         $superadmins = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_SUPER_ADMIN');
+        $usercon = $this->get('security.token_storage')->getToken()->getUser();
+        $superadmins = array_merge($superadmins, $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$usercon->getTier())));
 
         foreach($superadmins as $admin){
             $notif = new Notification();
@@ -80,8 +79,6 @@ class DefaultController extends Controller
         }
 
         //send password
-        $usercon = $this->get('security.token_storage')->getToken()->getUser();
-
         if($usercon->getTier())
         {
             if($this->get('templating')->exists('GenericBundle:Mail/templates:'.$usercon->getTier()->getSiren().'_NewUser.html.twig'))
@@ -186,7 +183,15 @@ class DefaultController extends Controller
         $em->remove($user);
         $em->flush();
         $reponse = new JsonResponse();
-        return $reponse->setData(array('Succes'=>$this->generateUrl('')));
+        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_SUPER_ADMIN'))
+        {
+            return $reponse->setData(array('Succes'=>$this->generateUrl('metier_user_admin')));
+        }
+        elseif($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_ADMINECOLE'))
+        {
+            return $reponse->setData(array('Succes'=>$this->generateUrl('ecole_admin',array('ecole'=>$this->get('security.token_storage')->getToken()->getUser()->getTier()->getRaisonsoc()))));
+        }
+
     }
 
     public function importAction(Request $request)
