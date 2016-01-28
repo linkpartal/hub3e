@@ -77,3 +77,6 @@ ecole_checkExist:
 ecole_tieradded:
     path : /added
     defaults: { _controller: EcoleBundle:Ecole:tieradded}
+remove_formation_qcm:
+    path: /remove_formation_qcm/id_formation={idformation}/id_qcm={idqcm}
+    defaults: { _controller: EcoleBundle:Formation:formationRemoveQcm}

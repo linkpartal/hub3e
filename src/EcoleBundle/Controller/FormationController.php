@@ -9,6 +9,7 @@ namespace EcoleBundle\Controller;
 
 
 use GenericBundle\Entity\Formation;
+use GenericBundle\Entity\Qcmdef;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -94,12 +95,25 @@ class FormationController extends Controller
     public function formationAddQcmAction($idformation, $idqcm){
         $em = $this->getDoctrine()->getEntityManager();
         $formation = $em->getRepository('GenericBundle:Formation')->find($idformation);
-        $qcm = $em->getDoctrine()->getRepository('GenericBundle:Qcmdef')->find($idqcm);
+        $qcm = $em->getRepository('GenericBundle:Qcmdef')->find($idqcm);
         $qcm->addFormationformation($formation);
-        var_dump($formation);
-        var_dump($qcm); die;
         $em->persist($qcm);
         $em->flush();
+
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('succes'=>'0'));
+    }
+
+    public function formationRemoveQcmAction($idformation, $idqcm){
+        $em = $this->getDoctrine()->getEntityManager();
+        $formation = $em->getRepository('GenericBundle:Formation')->find($idformation);
+        $qcm = $em->getRepository('GenericBundle:Qcmdef')->find($idqcm);
+        $qcm->removeFormationformation($formation);
+        $em->persist($qcm);
+        $em->flush();
+
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('succes'=>'0'));
     }
 
 }
