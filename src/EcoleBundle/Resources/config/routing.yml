@@ -66,5 +66,14 @@ add_formation_qcm:
     path: /add_formation_qcm/id_formation={idformation}/id_qcm={idqcm}
     defaults: { _controller: EcoleBundle:Formation:formationAddQcm}
 
+adresses_tier:
+    path: /admin/adresse/id={id}
+    defaults: { _controller: EcoleBundle:Default:adresses}
 
+ecole_checkExist:
+    path : /checkExist
+    defaults: { _controller: EcoleBundle:Ecole:checkExist}
 
+ecole_tieradded:
+    path : /added
+    defaults: { _controller: EcoleBundle:Ecole:tieradded}

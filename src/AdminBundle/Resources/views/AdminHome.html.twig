@@ -86,17 +86,9 @@
 
                     <input type="email" class="input " id="mail" name="_mail" placeholder="Email">
 
-                    <select class="input" title="" name="_role" style="width: calc( 50% - 5px); margin-right: 10px">
+                    <select class="input" title="" name="_role">
                         <option value="ROLE_SUPER_ADMIN">Super Administrateur</option>
                     </select>
-                    {% if modeles is defined %}
-                        <select class="input" title="Choisissez un modèle à utiliser" name="_modele" style="width: calc( 50% - 5px)">
-                            <option value="">Choisissez un modèle à utiliser</option>
-                            {% for modele in modeles %}
-                                <option value="{{ modele.getId }}">{{modele.getNom}}</option>
-                            {% endfor %}
-                        </select>
-                    {% endif %}
                 </div>
                 <div class="col-xs-6">
                     <select class="input " style="width: 25%; margin-right: 10px" title="" name="civilite">
@@ -256,7 +248,7 @@
                 <div id="user" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if users is defined %}
                         {% for u in users %}
-                            <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId }) }}',{{ u.getId }},this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                            <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId }) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -293,8 +285,8 @@
                 <div id="modele" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if modeles is defined %}
                         {% for modele in modeles %}
-                            <button onclick="postiframe('{{ path('creeNewModele',{'id': modele.getId} ) }}')"  id="modele{{ modele.getId }}" type="button" class="list-group-item butonLigne">
-                                <div class="col-xs-12 part">{{modele.getNom}}</div>
+                            <button onclick="postiframe('{{ path('creeNewModele',{'id': modele} ) }}')" id="{{ modele }}" type="button" class="list-group-item butonLigne">
+                                <div class="col-xs-12 part">{{modele}}</div>
                             </button>
                         {% endfor %}
                     {% endif %}
@@ -404,9 +396,8 @@
 
     };
 
-    function postiframeUser(url,id,button) {
+    function postiframeUser(url,button) {
         document.getElementById("iframe").src = url;
-        var route = '{{path('adresses_tier_user',{'id':"_id" })}}';
         var elements = button.getElementsByClassName("badge");
         if(elements.length > 0)
         {

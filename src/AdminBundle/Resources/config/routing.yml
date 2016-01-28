@@ -82,18 +82,15 @@ supprimerQCM:
     path: /supprimerQCM/nom={nom}
     defaults: { _controller: AdminBundle:QCM:deleteQcm}
 
-activate:
-    path: /activate/id={id}
-    defaults: { _controller: AdminBundle:Ecole:activate}
-
 expired:
     path: /expired/id={id}
     defaults: { _controller: AdminBundle:User:expired}
 
-adresses_tier:
-    path: /adresse/id={id}
-    defaults: { _controller: AdminBundle:Ecole:adresses}
+creeNewModele:
+    path: /creeNewModele/id={id}
+    defaults: { _controller: AdminBundle:Default:creeNewModele, id :ajouter}
 
-adresses_tier_user:
-    path: /admin/adresse/id={id}
-    defaults: { _controller: AdminBundle:User:adresses}
+saveNewModele:
+    path: /saveNewModele
+    defaults: { _controller: AdminBundle:Default:saveNewModele}
+

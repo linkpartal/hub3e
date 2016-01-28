@@ -5,6 +5,7 @@ namespace EcoleBundle\Controller;
 use GenericBundle\Entity\Modele;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use \JMS\Serializer\SerializerBuilder;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class DefaultController extends Controller
 {
@@ -108,5 +109,19 @@ class DefaultController extends Controller
         $licence = $this->getDoctrine()->getRepository('GenericBundle:Licence')->find($id);
 
         return $this->render('EcoleBundle:Adminecole:afficheLicence.html.twig',array('licence'=>$licence));
+    }
+
+    public function adressesAction($id){
+        $em = $this->getDoctrine()->getEntityManager();
+        $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($id);
+        $etablissements = $em->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$etablissement->getTier()));
+        $adresses = array();
+        foreach($etablissements as $value)
+        {
+            $adresse = array('id'=>$value->getId(),'adresse' => $value->getAdresse());
+            array_push($adresses, json_encode($adresse) );
+        }
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('adresses'=>$adresses));
     }
 }

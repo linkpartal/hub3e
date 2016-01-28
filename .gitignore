@@ -12,3 +12,4 @@
 /NewEntity/
 /.idea/
 /web/formation_pdf/
+/src/GenericBundle/Resources/views/Mail/templates/
