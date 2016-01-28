@@ -115,8 +115,8 @@
 
 
 
-                <form id="formaddQCM" class="formulaire" action="{{ path("user_added") }}" method="post" style="text-align: center" >
-                    <input type="hidden" id="id" name="_id" value="{{ etablissement.getId }}">
+                <div id="formaddQCM" class="formulaire" style="text-align: center" >
+                    <label style="display:none" id="idformation"></label>
                     <div class="div_form" style="text-align: center" >
 
                         <section style="text-align: center" >
@@ -173,7 +173,7 @@
                     <div class="div_button">
                         <input class="blue" type="submit" value="envoyer">
                     </div>
-                </form>
+</div>
 
 
 
@@ -491,6 +491,18 @@
             var selectedItem = $("#rightValues option:selected");
             $("#leftValues").append(selectedItem);
 
+            var route = '{{path('remove_formation_qcm',{'idformation':"_id",'idqcm':"_idqcmright"})}}';
+            route = route.replace("_idqcmright", selectedItem.val());
+            route = route.replace("_id",document.getElementById("idformation").innerHTML);
+            $.ajax({
+                type: 'get',
+                url: route,
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                }
+            });
+
         });
 
         $("#btnRight").click(function () {
@@ -499,13 +511,14 @@
 
 
             var route = '{{path('add_formation_qcm',{'idformation':"_id",'idqcm':"_idqcmleft"})}}';
-            route = route.replace("_id", id);
+            route = route.replace("_idqcmleft", selectedItem.val());
+            route = route.replace("_id",document.getElementById("idformation").innerHTML);
             $.ajax({
                 type: 'get',
                 url: route,
                 dataType: 'json',
                 success: function(data) {
-
+                        console.log(data);
                 }
             });
 
@@ -514,6 +527,7 @@
 
         function showqcm(div,id){
             var popup = document.getElementById(div);
+            document.getElementById("idformation").innerHTML = id;
             popup.style.display = 'block';
             $("#rightValues > option").each(function(){
                 $("#leftValues").append(this);

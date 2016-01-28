@@ -54,7 +54,6 @@ afficherDoc:
     path: /afficherDocument/{id}
     defaults: { _controller: EcoleBundle:Formation:afficherDocument}
 
-
 adresses_tier:
     path: /admin/adresse/id={id}
     defaults: { _controller: EcoleBundle:Default:adresses}
@@ -78,3 +77,7 @@ formation_qcm:
 add_formation_qcm:
     path: /add_formation_qcm/id_formation={idformation}/id_qcm={idqcm}
     defaults: { _controller: EcoleBundle:Formation:formationAddQcm}
+
+remove_formation_qcm:
+    path: /remove_formation_qcm/id_formation={idformation}/id_qcm={idqcm}
+    defaults: { _controller: EcoleBundle:Formation:formationRemoveQcm}

@@ -233,7 +233,6 @@
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
                                     <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
-                                    <span class="badge">New</span>
                                     <div class="col-xs-1 online"></div>
                                 </div>
                             </button>
@@ -400,6 +399,7 @@
         var notifs = JSON.parse('{{ notifications|raw }}');
         var ecole =0;
         var societe = 0;
+        var user = 0;
         for(var i = 0; i< notifs.length;i++)
         {
             var span = document.createElement("span");
@@ -415,6 +415,13 @@
             if(notifs[i].type == 'Societe')
             {
                 societe++;
+                var active = document.getElementById("active"+ notifs[i].entite);
+                if(active != null){active.parentNode.insertBefore(span,active);}
+
+            }
+            if(notifs[i].type == 'Utilisateur')
+            {
+                user++;
                 var active = document.getElementById("active"+ notifs[i].entite);
                 if(active != null){active.parentNode.insertBefore(span,active);}
 
@@ -439,6 +446,15 @@
             spansociete.style.left ="20px";
             var buttonsociete = document.getElementById("societetop");
             buttonsociete.appendChild(spansociete);
+        }
+        if(user >0)
+        {var spanuser = document.createElement("span");
+            spanuser.className = 'badge';
+            spanuser.className = spanuser.className + ' notifTopbar';
+            spanuser.innerHTML = user;
+            spanuser.style.left ="20px";
+            var buttonuser = document.getElementById("usertop");
+            buttonuser.appendChild(spanuser);
         }
 
     };
