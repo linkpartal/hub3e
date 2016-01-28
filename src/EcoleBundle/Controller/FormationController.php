@@ -91,14 +91,15 @@ class FormationController extends Controller
         return $reponse->setData(array('adresses'=>$jsonContent));
     }
 
-    public function formationAddQcmAction($id){
+    public function formationAddQcmAction($idformation, $idqcm){
         $em = $this->getDoctrine()->getEntityManager();
-        $formation = $em->getRepository('GenericBundle:Formation')->find($id);
-        $serializer = SerializerBuilder::create()->build();
-        $jsonContent = $serializer->serialize($formation->getQcmdef(), 'json');
-        $reponse = new JsonResponse();
-
-        return $reponse->setData(array('adresses'=>$jsonContent));
+        $formation = $em->getRepository('GenericBundle:Formation')->find($idformation);
+        $qcm = $em->getDoctrine()->getRepository('GenericBundle:Qcmdef')->find($idqcm);
+        $qcm->addFormationformation($formation);
+        var_dump($formation);
+        var_dump($qcm); die;
+        $em->persist($qcm);
+        $em->flush();
     }
 
 }

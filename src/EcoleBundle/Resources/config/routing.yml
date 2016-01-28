@@ -76,5 +76,5 @@ formation_qcm:
     defaults: { _controller: EcoleBundle:Formation:formationQcm}
 
 add_formation_qcm:
-    path: /add_formation_qcm/id={id}
+    path: /add_formation_qcm/id_formation={idformation}/id_qcm={idqcm}
     defaults: { _controller: EcoleBundle:Formation:formationAddQcm}
