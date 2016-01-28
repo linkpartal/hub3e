@@ -160,8 +160,25 @@ class EcoleController extends Controller
 
     public function modifierAction($id)
     {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $modeles = $this->getDoctrine()->getRepository('GenericBundle:Modele')->findBy(array('user'=>$user));
         $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
+
+        if($etablissement->getTier()->getEcole())
+        {
+            $type = 'Ecole';
+        }
+        else{
+            $type = 'Societe';
+        }
+        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('user'=>$user,'entite'=>$etablissement->getId(),'type'=>$type));
+        if($notifications)
+        {
+            $this->getDoctrine()->getEntityManager()->remove($notifications);
+            $this->getDoctrine()->getEntityManager()->flush();
+        }
+
         if($etablissement->getTier()->getLogo())
         {
             $etablissement->getTier()->setLogo(base64_encode(stream_get_contents($etablissement->getTier()->getLogo())));
@@ -171,12 +188,21 @@ class EcoleController extends Controller
             $etablissement->getTier()->setFondecran(base64_encode(stream_get_contents($etablissement->getTier()->getFondecran())));
         }
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier() ));
+
+
+
+
+        $formation = array();
+
+        $formation = array_merge($formation,$this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$etablissement )));
+
+
         $users = array();
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
         $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
-        return $this->render('AdminBundle:Admin:modifierEtablissement.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,
-            'libs'=>$licences,'tiers'=>$tiers,'users'=>$users));
+        return $this->render('EcoleBundle:Adminecole:modifierEtablissement.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,
+            'libs'=>$licences,'tiers'=>$tiers,'users'=>$users,'modeles'=>$modeles,'formations'=>$formation));
     }
 
     public function etabModifAction(Request $request){

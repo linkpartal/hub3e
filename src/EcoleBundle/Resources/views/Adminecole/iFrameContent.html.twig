@@ -3,10 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/ajout.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
+
     {% block CSS %}{% endblock %}
 
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
@@ -36,6 +38,7 @@
                 <form  class="formulaire" id="formAjouterformation" action="{{ path('addFormation') }}" method="post" enctype="multipart/form-data">
                     <div class="div_form" >
                         <input type="hidden" id="idetab" name="_idetab" value="{{etablissement.getId}}">
+
                         <input type="text" class="input" id="Description" name="_Description" placeholder="Description">
                         <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom">
                         <label for="Pdf"><img   id="pdf" style="height: 100px;width: 100px" src="{{ asset('image/upload-arrow.png') }}"/></label><br>
@@ -105,6 +108,81 @@
 
         </div>
     </div>
+
+        <div id="addQCM" class="popup" >
+            <div onclick="hide(this)" class="close"></div>
+            <div class="col-xs-offset-1 col-xs-9" style=" padding: 0;border:20px solid white;display: block">
+
+
+
+                <form id="formaddQCM" class="formulaire" action="{{ path("user_added") }}" method="post" style="text-align: center" >
+                    <input type="hidden" id="id" name="_id" value="{{ etablissement.getId }}">
+                    <div class="div_form" style="text-align: center" >
+
+                        <section style="text-align: center" >
+                        <table class="tblQCM" style="text-align: center ; align:center;" >
+                            <tr>
+                                <td>
+                                    <div>
+                                        <select id="leftValues" size="10" multiple>
+                                            {% if QCMS is defined %}
+                                                {% for qcm in QCMS %}
+                                                    <option value="{{ qcm.getId }}">{{ qcm.getNom }}</option>
+                                                {% endfor %}
+                                            {% endif %}
+
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div >
+                                        <input type="button" id="btnRight" value="&gt;&gt;" />
+                                        <input type="button" id="btnLeft" value="&lt;&lt;" />
+
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <select id="rightValues" size="10" multiple>
+
+                                        </select>
+
+                                    </div>
+                                </td>
+
+
+
+                            </tr>
+
+
+                        </table>
+
+
+
+
+
+
+
+                        </section>
+
+
+
+
+
+                    </div>
+                    <div class="div_button">
+                        <input class="blue" type="submit" value="envoyer">
+                    </div>
+                </form>
+
+
+
+
+
+
+
+            </div>
+        </div>
         {% if etablissement.getTier.getEcole %}
             <div id="associerecole" class="popup">
                 <div onclick="hide(this)" class="close"></div>
@@ -228,8 +306,21 @@
                                         </div>
                                         <div id="formation{{ iddiv }}" class="collapse in" >
                                             <div class="row">
-                                                <label class="cell">Document :<img onclick="onclick=post('{{ path('afficherDoc',{'id': formation.getId }) }}')" src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px " alt="fichier de formation" /></label>
-                                                <a href="{{ path('afficherDoc',{'id': formation.getId }) }}"> read pdf file</a>
+                                                <label class="cell">Document :
+                                                    <a target="_blank" href="{{ asset('formation_pdf/'~ formation.getId ~'.pdf') }}" >
+                                                        <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px " alt="fichier de formation" >
+                                                    </a>
+                                                </label>
+                                                <button class="blue"  onclick="supprimerformation('{{ path('supprimerFormation',{'id':formation.getId}) }}', this)">
+                                                    <div   >Supprimer</div>
+
+                                                </button>&nbsp;&nbsp;
+                                                <button class="blue"  onclick="showqcm('addQCM',{{ formation.getId }})" >
+                                                    <div   >Ajouter un test</div>
+
+                                                </button>
+
+
                                             </div>
 
                                         </div>
@@ -286,7 +377,7 @@
                                 <div class="col-xs-12" style="color: white;">DÉSACTIVE</div>
                             </button>
                         {% endif %}
-                        <button onclick="post('{{ path('modifieretab',{'id': etablissement.getId }) }}')" type="button" class="list-group-item rightMenu">
+                        <button onclick="post('{{ path('ecole_modifieretab',{'id': etablissement.getId }) }}')" type="button" class="list-group-item rightMenu">
                             <div class="col-xs-12">Modifier la fiche</div>
 
                         </button>
@@ -364,7 +455,7 @@
         function submitform(form) {
             document.getElementById(form).submit();
         };
-        function supprimerligne(route, champs) {
+        function supprimerformation(route, champs) {
             $.ajax({
                 type: 'get',
                 url: route,
@@ -373,7 +464,8 @@
                 },
                 success: function(data){console.log(data);}
             });
-            document.getElementById("tableLibs").deleteRow(champs.parentNode.parentNode.rowIndex);
+            champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
+
         };
         function readURL(input,baliseimg) {
             if (input.files && input.files[0]) {
@@ -390,9 +482,63 @@
 
                 document.getElementById("NomPDF").innerText=input.files[0].name;
 
+
+
             }
         };
 
+        $("#btnLeft").click(function () {
+            var selectedItem = $("#rightValues option:selected");
+            $("#leftValues").append(selectedItem);
+
+        });
+
+        $("#btnRight").click(function () {
+            var selectedItem = $("#leftValues option:selected");
+            $("#rightValues").append(selectedItem);
+
+            var route = '{{path('add_formation_qcm',{'id':"_id" })}}';
+            route = route.replace("_id", id);
+            $.ajax({
+                type: 'get',
+                url: route,
+                dataType: 'json',
+                success: function(data) {
+
+                }
+            });
+
+        });
+
+
+        function showqcm(div,id){
+            var popup = document.getElementById(div);
+            popup.style.display = 'block';
+            $("#rightValues > option").each(function(){
+                $("#leftValues").append(this);
+            });
+
+
+            var route = '{{path('formation_qcm',{'id':"_id" })}}';
+            route = route.replace("_id", id);
+            $.ajax({
+                type: 'get',
+                url: route,
+                dataType: 'json',
+                success: function(data) {
+
+
+                    var formation = JSON.parse(data.adresses);
+                    for (var i = 0; i < formation.length; i++)
+                    {
+                        var selectedItem = $('#leftValues option[value="'+formation[i].id+'"]');
+                        $("#rightValues").append(selectedItem);
+                    }
+                }
+            });
+
+
+        }
 
 
 

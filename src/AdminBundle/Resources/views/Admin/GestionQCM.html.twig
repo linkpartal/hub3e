@@ -41,7 +41,14 @@
                                 <label class="list-group-item" style="height: 60px;" for="QCM">Nom du Questionnaire :</label>
                                 <input type="text" class="champ form-control" id="QCM" name="_Nom" value="{{ QCM.getNom }}">
                             </div>
-
+                            <div class="inputcontainer">
+                                <label class="list-group-item" style="height: 60px;" for="affinite">Test d'affinité :</label>
+                                {% if QCM.getAffinite %}
+                                <input type="text" class="champ form-control" id="affinite" name="_affinite" value="1">
+                                {% else %}
+                                    <input type="text" class="champ form-control" id="affinite" name="_affinite" value="0">
+                                {% endif %}
+                            </div>
                             {% if Questions is defined %}
                                 {% set i = 0 %}
                                 {% for question in Questions %}
@@ -111,6 +118,10 @@
                             <div class="inputcontainer">
                                 <label class="list-group-item" style="height: 60px;">Nom du Questionnaire :</label>
                                 <input type="text" class="champ form-control" id="QCM" name="_Nom">
+                            </div>
+                            <div class="inputcontainer">
+                                <label class="list-group-item" style="height: 60px;">Affinite :</label>
+                                <input type="text" class="champ form-control" placeholder="0 pour test formation/1 pour test d'affinité" id="affinite" name="_affinite">
                             </div>
 
                             <div id="button_container">

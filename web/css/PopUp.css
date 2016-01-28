@@ -73,9 +73,51 @@
     background-color: rgb(61, 138, 212);
     height: 40px
 }
+.blue
+{
+    border: 0;
+    font-size: 18px;
+    font-family: Roboto;
+    color: white;
+    text-align: left;
+    background-color: rgb(61, 138, 212);
+    height: 40px;
+    width:150px;
+    text-align:center;
+}
 
 .toggle
 {
     text-align: left;
+
+
+}
+.tblQCM {
+
+    border: 0;
+    width: 300px;
+    text-align: center;
+    align:center;
 }
 
+SELECT, INPUT[type="text"] {
+    width: 160px;
+    box-sizing: border-box;
+
+}
+SECTION {
+    padding: 8px;
+    background-color: #f0f0f0;
+    overflow: auto;
+    text-align: center;
+
+}
+SECTION > DIV {
+
+    padding: 4px;
+    text-align: center;
+}
+SECTION > DIV + DIV {
+    width: 40px;
+    text-align: center;
+}

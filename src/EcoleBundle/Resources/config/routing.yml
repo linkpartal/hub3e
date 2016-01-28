@@ -26,6 +26,10 @@ supprimereUtilisateur:
     path : /admin/supprimeruser/id={id}
     defaults: { _controller: EcoleBundle:User:supprimeruser}
 
+ecole_modifieretab:
+    path: /modifieretablissement/{id}
+    defaults: { _controller: EcoleBundle:Ecole:modifier}
+
 etabmodif:
     path: /admin/etabmodif
     defaults: { _controller: EcoleBundle:Ecole:etabModif}
@@ -50,6 +54,7 @@ afficherDoc:
     path: /afficherDocument/{id}
     defaults: { _controller: EcoleBundle:Formation:afficherDocument}
 
+
 adresses_tier:
     path: /admin/adresse/id={id}
     defaults: { _controller: EcoleBundle:Default:adresses}
@@ -61,3 +66,15 @@ ecole_checkExist:
 ecole_tieradded:
     path : /added
     defaults: { _controller: EcoleBundle:Ecole:tieradded}
+
+supprimerFormation:
+    path: /supprimerFormation/id={id}
+    defaults: { _controller: EcoleBundle:Formation:deleteFormation}
+
+formation_qcm:
+    path: /Formation_qcm/id={id}
+    defaults: { _controller: EcoleBundle:Formation:formationQcm}
+
+add_formation_qcm:
+    path: /add_formation_qcm/id={id}
+    defaults: { _controller: EcoleBundle:Formation:formationAddQcm}

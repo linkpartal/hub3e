@@ -7,13 +7,13 @@
  */
 namespace EcoleBundle\Controller;
 
-use GenericBundle\Entity\Etablissement;
+
 use GenericBundle\Entity\Formation;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\BrowserKit\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use \JMS\Serializer\SerializerBuilder;
 
 
 class FormationController extends Controller
@@ -26,21 +26,19 @@ class FormationController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $formation = new Formation();
 
-
-        $id=$request->get('_idetab');
-
-        $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
+        $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_idetab'));
 
 
         $formation->setEtablissement($etablissement);
         $formation->setDescriptif($request->get('_Description'));
-        if($_FILES && $_FILES['_PDF']['size'] >0)
-        {
-            $formation->setDocument(file_get_contents($_FILES['_PDF']['tmp_name']));
-        }
+
         $formation->setNom($request->get('_Nom'));
+        $formation->setNomDoc($_FILES['_PDF']['name']);
         $em->persist($formation);
         $em->flush();
+        $emplacementFinal = "./formation_pdf/". $formation->getId() .".pdf" ;
+        move_uploaded_file($_FILES['_PDF']['tmp_name'] , $emplacementFinal);
+
 
         return $this->render('EcoleBundle:Adminecole:iFrameContent.html.twig');
 
@@ -69,5 +67,38 @@ class FormationController extends Controller
 
     }
 
+    public function deleteFormationAction($id)
+    {
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $formation = $em->getRepository('GenericBundle:Formation')->find($id);
+        $em->remove($formation);
+        $em->flush();
+        unlink("./formation_pdf/".$id.'.pdf');
+
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('succes'=>'1'));
+
+    }
+
+    public function formationQcmAction($id){
+        $em = $this->getDoctrine()->getEntityManager();
+        $formation = $em->getRepository('GenericBundle:Formation')->find($id);
+        $serializer = SerializerBuilder::create()->build();
+        $jsonContent = $serializer->serialize($formation->getQcmdef(), 'json');
+        $reponse = new JsonResponse();
+
+        return $reponse->setData(array('adresses'=>$jsonContent));
+    }
+
+    public function formationAddQcmAction($id){
+        $em = $this->getDoctrine()->getEntityManager();
+        $formation = $em->getRepository('GenericBundle:Formation')->find($id);
+        $serializer = SerializerBuilder::create()->build();
+        $jsonContent = $serializer->serialize($formation->getQcmdef(), 'json');
+        $reponse = new JsonResponse();
+
+        return $reponse->setData(array('adresses'=>$jsonContent));
+    }
 
 }

@@ -44,7 +44,7 @@ class DefaultController extends Controller
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $modeles = $this->getDoctrine()->getRepository('GenericBundle:Modele')->findBy(array('user'=>$user));
-        $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
+        $qcms = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findBy(array('affinite'=>false));
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
 
         if($etablissement->getTier()->getEcole())
@@ -83,8 +83,8 @@ class DefaultController extends Controller
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
         $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
-        return $this->render('EcoleBundle:Adminecole:iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,
-            'libs'=>$licences,'tiers'=>$tiers,'users'=>$users,'modeles'=>$modeles,'formations'=>$formation));
+        return $this->render('EcoleBundle:Adminecole:iFrameContent.html.twig',array('etablissement'=>$etablissement,
+            'tiers'=>$tiers,'users'=>$users,'modeles'=>$modeles,'formations'=>$formation,'QCMS'=>$qcms));
 
     }
 
