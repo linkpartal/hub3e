@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/adminecole.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/ajout.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
 
@@ -171,7 +171,7 @@
 
                     </div>
                     <div class="div_button">
-                        <input class="blue" type="submit" value="envoyer">
+                        <button onclick="document.getElementById('addQCM').style.display = 'none';" class="blue" type="button">envoyer</button>
                     </div>
 </div>
 
@@ -301,7 +301,9 @@
                                     <div class="col-xs-12 Liste">
                                         <div class="row">
                                             <label class="cell">Description : <label>{{ formation.getDescriptif }}</label></label>
-                                            <label class="cell">Nom : <label>{{ formation.getNom }}</label> <button style="float: right" type="button" data-toggle="collapse" data-target="#formation{{ iddiv }}"></button></label>
+                                            <label class="cell">Nom : <label>{{ formation.getNom }}</label>
+                                                <button style="float: right" type="button" data-toggle="collapse" data-target="#formation{{ iddiv }}"></button>
+                                            </label>
 
                                         </div>
                                         <div id="formation{{ iddiv }}" class="collapse in" >
