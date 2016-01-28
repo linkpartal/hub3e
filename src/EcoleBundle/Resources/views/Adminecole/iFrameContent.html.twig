@@ -135,7 +135,7 @@
                                         <select id="leftValues" size="10" multiple>
                                             {% if QCMS is defined %}
                                                 {% for qcm in QCMS %}
-                                                    <option value="{{ qcm.getId }}">{{ qcm.getNom }}</option>
+                                                    <option name="_idqcmleft" value="{{ qcm.getId }}">{{ qcm.getNom }}</option>
                                                 {% endfor %}
                                             {% endif %}
 
@@ -505,7 +505,8 @@
             var selectedItem = $("#leftValues option:selected");
             $("#rightValues").append(selectedItem);
 
-            var route = '{{path('add_formation_qcm',{'id':"_id" })}}';
+
+            var route = '{{path('add_formation_qcm',{'idformation':"_id",'idqcm':"_idqcmleft"})}}';
             route = route.replace("_id", id);
             $.ajax({
                 type: 'get',
