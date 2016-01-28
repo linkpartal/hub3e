@@ -113,7 +113,7 @@ class EcoleController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $lic = $em->getRepository('GenericBundle:Licence')->find($id);
-        $em->remove($lic);
+        $lic->setSuspendu(true);
         $em->flush();
         $reponse = new JsonResponse();
         return $reponse->setData(array('Status'=>'Licence correctement supprimer'));

@@ -192,7 +192,10 @@
                                         <div class="col-xs-12 Liste">
                                             <div class="row">
                                                 <label class="cell" >Licence : <label>{{ lib.getId }}</label></label>
-                                                <label class="cell">Libelle : <label>{{ lib.getLibelle }}</label> <button style="float: right" type="button" data-toggle="collapse" data-target="#licence{{ iddiv }}"></button></label>
+                                                <label class="cell">Libelle : <label>{{ lib.getLibelle }}</label>
+                                                    <button onclick="supprimerligne('{{ path('supprimer_Licence',{'id': lib.getId}) }}',this)"
+                                                                             type="button" style=";float: right">x</button>
+                                                    <button class="button" style="float: right" type="button" data-toggle="collapse" data-target="#licence{{ iddiv }}"></button></label>
 
                                             </div>
                                             <div id="licence{{ iddiv }}" class="collapse in" >
@@ -205,8 +208,7 @@
                                                 <label class="cell">Date de fin : <label>{{ lib.getDatefin }}</label></label>
                                             </div>
                                             </div>
-                                            <!--button-- onclick="supprimerligne('{{ path('supprimer_Licence',{'id': lib.getId}) }}',this)"
-                                                                             type="button" style="border: none">x</button-->
+
                                         </div>
                                     {% endfor %}
                                 {% endif %}
@@ -222,7 +224,9 @@
                                         <div class="col-xs-12 Liste">
                                             <div class="row">
                                                 <label class="cell">Email : <label>{{ user.getEmail }}</label></label>
-                                                <label class="cell">Username : <label>{{ user.getUsername }}</label> <button style="float: right" type="button" data-toggle="collapse" data-target="#user{{ iddiv }}"></button></label>
+                                                <label class="cell">Username : <label>{{ user.getUsername }}</label>
+                                                    <button class="button" style="float: right" type="button" data-toggle="collapse" data-target="#user{{ iddiv }}"></button>
+                                                </label>
 
                                             </div>
                                             <div id="user{{ iddiv }}" class="collapse in" >
@@ -375,7 +379,7 @@
                 },
                 success: function(data){console.log(data);}
             });
-            document.getElementById("tableLibs").deleteRow(champs.parentNode.parentNode.rowIndex);
+            champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
         };
     </script>
 {% endblock %}

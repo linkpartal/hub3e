@@ -247,22 +247,22 @@ iframe
 	color: black;
 }
 
-.Liste .row .cell button
+.Liste .row .cell .button
 {
 	background-color: white;
 	border: none;
 }
-.Liste .row .cell button.collapsed:before
+.Liste .row .cell .button.collapsed:before
 {
 	font-family: 'Glyphicons Halflings';
 	content:" \e252";
 }
-.Liste .row .cell button:before
+.Liste .row .cell .button:before
 {
 	font-family: 'Glyphicons Halflings';
 	content:" \e253";
 }
-.Liste .row .cell button:before
+.Liste .row .cell .button:before
 {
 	font-family: 'Glyphicons Halflings';
 	content:" \e253";

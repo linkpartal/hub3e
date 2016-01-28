@@ -64,6 +64,13 @@ class Licence
     private $maxmission;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="suspendu", type="boolean", nullable=false)
+     */
+    private $suspendu;
+
+    /**
      * @var \Tier
      *
      * @ORM\ManyToOne(targetEntity="Tier")
@@ -251,5 +258,29 @@ class Licence
     public function getMaxmission()
     {
         return $this->maxmission;
+    }
+
+    /**
+     * Set suspendu
+     *
+     * @param boolean $suspendu
+     *
+     * @return Licence
+     */
+    public function setSuspendu($suspendu)
+    {
+        $this->suspendu = $suspendu;
+
+        return $this;
+    }
+
+    /**
+     * Get suspendu
+     *
+     * @return boolean
+     */
+    public function getSuspendu()
+    {
+        return $this->suspendu;
     }
 }

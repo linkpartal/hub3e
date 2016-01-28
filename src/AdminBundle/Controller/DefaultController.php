@@ -85,7 +85,7 @@ class DefaultController extends Controller
         {
             $etablissement->getTier()->setFondecran(base64_encode(stream_get_contents($etablissement->getTier()->getFondecran())));
         }
-        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier() ));
+        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier(),'suspendu'=>false ));
         $users = array();
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
@@ -126,6 +126,7 @@ class DefaultController extends Controller
         }
 
     }
+
     public function saveNewModeleAction(Request $request)
     {
         if(".html.twig" === "" || (($temp = strlen($request->get('_filename')) - strlen('.html.twig')) >= 0 && strpos($request->get('_filename'), '.html.twig', $temp) !== FALSE))
