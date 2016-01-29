@@ -19,8 +19,6 @@ use \JMS\Serializer\SerializerBuilder;
 
 class FormationController extends Controller
 {
-
-
     public function ajouterFormationAction(Request $request)
     {
 
@@ -46,10 +44,7 @@ class FormationController extends Controller
 
     }
 
-
-
-
-        public function afficherDocumentAction($id)
+    public function afficherDocumentAction($id)
     {
 
         $item = $this->getDoctrine()->getRepository('GenericBundle:Formation')->find($id);

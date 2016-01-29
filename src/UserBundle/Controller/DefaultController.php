@@ -2,6 +2,7 @@
 
 namespace UserBundle\Controller;
 
+use GenericBundle\Entity\ImportCandidat;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
@@ -196,14 +197,78 @@ class DefaultController extends Controller
 
     public function importAction(Request $request)
     {
-
-
         $file = new \SplFileObject($_FILES['_CSV']['tmp_name']);
         $reader = new CsvReader($file);
-        $reader->setHeaderRowNumber(0,CsvReader::DUPLICATE_HEADERS_INCREMENT);
+        $jump = 0;
+        $em = $this->getDoctrine()->getEntityManager();
         foreach ($reader as $row) {
-            var_dump($row);
+            if($jump++<2){
+                continue;
+            }
+            else{
+                $candidat = new ImportCandidat();
+                $candidat->setCivilite($row[1]);
+                $candidat->setNom($row[2]);
+                $candidat->setPrenom($row[3]);
+                $candidat->setDateNaissance($row[4]);
+                $candidat->setCPNaissance($row[5]);
+                $candidat->setTelephone($row[6]);
+                $candidat->setEmail($row[7]);
+                $candidat->setAdresse($row[8]);
+                $candidat->setCp($row[9]);
+                $candidat->setUser($this->get('security.token_storage')->getToken()->getUser());
+                if($row[13]=='oui')
+                {
+                    $candidat->setPermis(true);
+                }
+                elseif($row[13]=='non'){
+                    $candidat->setPermis(false);
+                }
+                if($row[14]=='oui')
+                {
+                    $candidat->setVehicule(true);
+                }
+                elseif($row[14]=='non'){
+                    $candidat->setVehicule(false);
+                }
+                $imports = $em->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser()));
+                foreach($imports as $value)
+                {
+                    if($value->getCivilite()==$row[1] and $value->getNom()==$row[2] and $value->getPrenom() == $row[3] and $value->getDateNaissance() == $row[4])
+                    {
+                        $candidat->setErreur('Duplicata dans le fichier');
+                    }
+                }
+                $database = $em->getRepository('GenericBundle:User')->findAll();
+                foreach($database as $value)
+                {
+                    if($value->getCivilite()==$row[1] and $value->getNom()==$row[2] and $value->getPrenom() == $row[3])
+                    {
+                        $candidat->setErreur('Duplicata dans la base de données');
+                    }
+                }
+            }
+            $em->persist($candidat);
+            $em->flush();
         }
-        die;
+        return $this->redirect($this->generateUrl('afficher_import'));
     }
+
+    public function afficherImportsAction()
+    {
+       return $this->render('UserBundle:Gestion:Import.html.twig',
+           array('imports'=>$this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser()))));
+    }
+
+    public function supprimerImportsAction($id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $import = $em->getRepository('GenericBundle:ImportCandidat')->find($id);
+        $em->remove($import);
+        $em->flush();
+
+        $response = new JsonResponse();
+        return $response->setData(array('Succes'=>'1'));
+    }
+
 }

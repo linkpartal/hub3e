@@ -38,14 +38,14 @@ class Tier
     /**
      * @var string
      *
-     * @ORM\Column(name="logo", type="blob", length=45, nullable=true)
+     * @ORM\Column(name="logo", type="blob", nullable=true)
      */
     private $logo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="fondEcran", type="blob", length=45, nullable=true)
+     * @ORM\Column(name="fondEcran", type="blob", nullable=true)
      */
     private $fondecran;
 

@@ -25,3 +25,11 @@ modifierUser:
 import:
     path: /admin/import
     defaults: { _controller: UserBundle:Default:import}
+
+afficher_import:
+    path: /admin/afficherimport
+    defaults: { _controller: UserBundle:Default:afficherImports}
+
+supprimer_import:
+    path: /admin/supprimerimport/{id}
+    defaults: { _controller: UserBundle:Default:supprimerImports}

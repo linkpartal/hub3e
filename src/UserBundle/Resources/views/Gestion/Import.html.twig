@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table style="border-collapse: collapse;">
+    <tr>
+        <td>Id</td>
+        <td>Civilite</td>
+        <td>Nom</td>
+        <td>Prénom</td>
+        <td>téléphone</td>
+        <td>Email</td>
+        <td>Erreur</td>
+        <td style="border: none"></td>
+    </tr>
+
+    {% for import in imports %}
+        <tr>
+            <td>{{ import.getId }}</td>
+            <td>{{ import.getCivilite }}</td>
+            <td>{{ import.getNom }}</td>
+            <td>{{ import.getPrenom }}</td>
+            <td>{{ import.getTelephone }}</td>
+            <td>{{ import.getEmail }}</td>
+            <td>{{ import.getErreur }}</td>
+            <td style="border: none"><button onclick="supprimerLigne('{{ path('supprimer_import',{'id': import.getId}) }}',this)" type="button" style="border: none">x</button></td>
+        </tr>
+    {% endfor %}
+</table>
+<script src="//code.jquery.com/jquery.min.js"></script>
+<script language="javascript">
+    function supprimerLigne(route,champs)
+    {
+        $.ajax({
+            type: 'get',
+            url: route,
+            error: function (response) {
+                console.log(response);
+            },
+            success: function(data){console.log(data);}
+        });
+        champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
+    }
+
+</script>
+</body>
+</html>
