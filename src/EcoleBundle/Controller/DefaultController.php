@@ -43,9 +43,33 @@ class DefaultController extends Controller
     public function affichageAction($id)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $modeles = $this->getDoctrine()->getRepository('GenericBundle:Modele')->findBy(array('user'=>$user));
-        $qcms = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findBy(array('affinite'=>false));
+        $qcmstest = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findBy(array('affinite'=>false));
+        $qcmsaffinite = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findBy(array('affinite'=>true));
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
+
+        $QcmNotEtab = array();
+
+
+        foreach($qcmsaffinite as $item)
+        {
+            if(!in_array ($item,$etablissement->getQcmdef()->toArray()))
+            {
+                array_push($QcmNotEtab,$item);
+            }
+            /*foreach($etablissement->getQcmdef() as $key => $value)
+            {
+                if($value == $item)
+                {
+                    break;
+                }
+                elseif($key == count($etablissement->getQcmdef())-1)
+                {
+                    var_dump($key);
+                    $QcmNotEtab = array_push($QcmNotEtab,$item);
+                }
+            }*/
+
+        }
 
         if($etablissement->getTier()->getEcole())
         {
@@ -84,7 +108,7 @@ class DefaultController extends Controller
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
         $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
         return $this->render('EcoleBundle:Adminecole:iFrameContent.html.twig',array('etablissement'=>$etablissement,
-            'tiers'=>$tiers,'users'=>$users,'modeles'=>$modeles,'formations'=>$formation,'QCMS'=>$qcms));
+            'tiers'=>$tiers,'users'=>$users,'formations'=>$formation,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab));
 
     }
 
@@ -124,4 +148,23 @@ class DefaultController extends Controller
         $reponse = new JsonResponse();
         return $reponse->setData(array('adresses'=>$adresses));
     }
+
+
+    public function loadQCMAction($id)
+    {
+
+            $qcm = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->find($id);
+            $questions = $this->getDoctrine()->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef'=>$qcm));
+            usort($questions,array('\GenericBundle\Entity\Questiondef','sort_questions_by_order'));
+            $reponses = array(array());
+            for($i = 0; $i < count($questions); $i++)
+            {
+                $reps = $this->getDoctrine()->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef'=>$questions[$i]));
+                usort($reps,array('\GenericBundle\Entity\Reponsedef','sort_reponses_by_order'));
+                $reponses[] = $reps;
+            }
+            return $this->render('EcoleBundle:Adminecole:LoadQCM.html.twig', array('QCM'=>$qcm ,'Questions'=>$questions,'reponses'=>$reponses));
+        }
+
+
 }

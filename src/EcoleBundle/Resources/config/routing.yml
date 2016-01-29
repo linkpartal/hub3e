@@ -80,3 +80,19 @@ ecole_tieradded:
 remove_formation_qcm:
     path: /remove_formation_qcm/id_formation={idformation}/id_qcm={idqcm}
     defaults: { _controller: EcoleBundle:Formation:formationRemoveQcm}
+
+etablissement_qcm:
+    path: /Etablissement_qcm/id={id}
+    defaults: { _controller: EcoleBundle:Etablissement:etablissementQcm}
+
+add_etablissement_qcm:
+    path: /add_etablissement_qcm/id_etablissement={idetablissement}/id_qcmaff={idqcmaff}
+    defaults: { _controller: EcoleBundle:Ecole:etablissementAddQcm}
+
+remove_etablissement_qcm:
+    path: /remove_etablissement_qcm/id_etablissement={idetablissement}/id_qcmaff={idqcmaff}
+    defaults: { _controller: EcoleBundle:Ecole:etablissementRemoveQcm}
+
+loadconsulterQCM:
+    path:     /consulterQCM/{id}
+    defaults: { _controller: EcoleBundle:Default:loadQCM }

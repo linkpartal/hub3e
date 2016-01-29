@@ -72,8 +72,11 @@
     text-align: left;
     background-color: rgb(61, 138, 212);
     height: 40px
+
+
 }
-.blue
+
+.form .info_formation .blue
 {
     border: 0;
     font-size: 18px;
@@ -81,10 +84,9 @@
     color: white;
     text-align: left;
     background-color: rgb(61, 138, 212);
-    height: 40px;
-    width:150px;
-    text-align:center;
+    height: 40px
 }
+
 
 .toggle
 {
