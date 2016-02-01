@@ -124,7 +124,7 @@
                             <tr>
                                 <td>
                                     <div>
-                                        <select id="leftValues" size="10" multiple>
+                                        <select onclick="ConsultationQCM('divconsQCM')" id="leftValues" size="10" multiple>
                                             {% if QCMS is defined %}
                                                 {% for qcm in QCMS %}
                                                     <option name="_idqcmleft" value="{{ qcm.getId }}">{{ qcm.getNom }}</option>
@@ -143,7 +143,7 @@
                                 </td>
                                 <td>
                                     <div>
-                                        <select id="rightValues" size="10" multiple>
+                                        <select onclick="ConsultationQCM('divconsQCM')" id="rightValues" size="10" multiple>
 
                                         </select>
 
@@ -165,15 +165,98 @@
 
                         </section>
 
-
+                        <div id="divconsQCM"></div>
 
 
 
                     </div>
                     <div class="div_button">
                         <button onclick="document.getElementById('addQCM').style.display = 'none';" class="blue" type="button">envoyer</button>
+
                     </div>
+
+
+
 </div>
+
+
+
+
+
+
+
+            </div>
+        </div>
+
+        <div id="addQCMAff" class="popup" >
+            <div onclick="hide(this)" class="close"></div>
+            <div class="col-xs-offset-1 col-xs-9" style=" padding: 0;border:20px solid white;display: block">
+
+
+
+                <div id="formaddQCMAff" class="formulaire" style="text-align: center" >
+                    <div class="div_form" style="text-align: center" >
+
+                        <section style="text-align: center" >
+                            <table class="tblQCM" style="text-align: center ; align:center;" >
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <select onclick="ConsultationQCMAff('divconsQCMAFF')" id="leftValuesAff" size="10" multiple>
+                                                {% if QCMSNOTETAB is defined %}
+                                                    {% for qcm in QCMSNOTETAB %}
+                                                        <option name="_idqcmleftaff" value="{{ qcm.getId }}">{{ qcm.getNom }}</option>
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div >
+                                            <input type="button" id="btnRightaff" value="&gt;&gt;" />
+                                            <input type="button" id="btnLeftaff" value="&lt;&lt;" />
+
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <select onclick="ConsultationQCMAff('divconsQCMAFF')" id="rightValuesAff" size="10" multiple>
+                                                {% for testaff in etablissement.getQcmdef %}
+                                                    <option name="_idqcmrightaff" value="{{ testaff.getId }}">{{ testaff.getNom }}</option>
+                                                {% endfor %}
+                                            </select>
+
+                                        </div>
+                                    </td>
+
+
+
+                                </tr>
+
+
+                            </table>
+
+
+                            <div id="divconsQCMAFF"></div>
+
+
+
+
+
+
+
+                        </section>
+
+
+
+
+
+                    </div>
+                    <div class="div_button">
+                        <input class="blue" type="submit" value="Fermer" onclick="FermerPopup('addQCMAff')">
+                    </div>
+                </div>
 
 
 
@@ -198,7 +281,7 @@
                             </select>
                         </div>
                         <div class="div_button">
-                            <input class="blue" type="submit" value="envoyer">
+                            <input class="blue" type="submit" value="envoyer" >
                         </div>
                     </form>
                 </div>
@@ -313,11 +396,11 @@
                                                         <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px " alt="fichier de formation" >
                                                     </a>
                                                 </label>
-                                                <button class="blue"  onclick="supprimerformation('{{ path('supprimerFormation',{'id':formation.getId}) }}', this)">
+                                                <button  style="border: 0;font-size: 18px;font-family: Roboto;color: white;background-color: rgb(61, 138, 212);height: 40px; width: 150px;"  onclick="supprimerformation('{{ path('supprimerFormation',{'id':formation.getId}) }}', this)">
                                                     <div   >Supprimer</div>
 
                                                 </button>&nbsp;&nbsp;
-                                                <button class="blue"  onclick="showqcm('addQCM',{{ formation.getId }})" >
+                                                <button  style="border: 0;font-size: 18px;font-family: Roboto;color: white;background-color: rgb(61, 138, 212);height: 40px; width: 150px;"  onclick="showqcm('addQCM',{{ formation.getId }})" >
                                                     <div   >Ajouter un test</div>
 
                                                 </button>
@@ -399,6 +482,10 @@
                             <div class="col-xs-12">Ajouter un utilisateur</div>
 
                         </button>
+                        <button onclick="show('addQCMAff',{{ etablissement.getId }})" type="button" class="list-group-item rightMenu">
+                            <div class="col-xs-12">Ajouter un test d'affinité</div>
+
+                        </button>
                     </div>
                 </div>
 
@@ -457,6 +544,89 @@
         function submitform(form) {
             document.getElementById(form).submit();
         };
+        function FermerPopup(div){
+            var popup = document.getElementById(div);
+
+            popup.style.display = 'none';
+
+        }
+
+        function ConsultationQCMAff(div){
+            var div = document.getElementById(div);
+
+            while (div.firstChild) {
+
+                div.removeChild(div.firstChild);
+
+            }
+
+          $("#rightValuesAff option:selected").each(function(){
+              route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
+              route = route.replace('_id',$(this).val());
+              var a = document.createElement("a");
+              a.setAttribute("href",route);
+              a.setAttribute("target","_blank");
+              a.innerHTML = 'visualiser le QCM ' + $(this).text() + '<br>';
+              div.appendChild(a);
+
+          });
+
+
+            $("#leftValuesAff option:selected").each(function(){
+                route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
+                route = route.replace('_id',$(this).val());
+                var a = document.createElement("a");
+                a.setAttribute("href",route);
+                a.setAttribute("target","_blank");
+                a.innerHTML = 'visualiser le QCM ' + $(this).text() + '<br>';
+                div.appendChild(a);
+
+            });
+
+
+
+
+
+        }
+
+        function ConsultationQCM(div){
+            var div = document.getElementById(div);
+
+            while (div.firstChild) {
+
+                div.removeChild(div.firstChild);
+
+            }
+
+            $("#rightValues option:selected").each(function(){
+                route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
+                route = route.replace('_id',$(this).val());
+                var a = document.createElement("a");
+                a.setAttribute("href",route);
+                a.setAttribute("target","_blank");
+                a.innerHTML = 'visualiser le QCM ' + $(this).text() + '<br>';
+                div.appendChild(a);
+
+            });
+
+
+            $("#leftValues option:selected").each(function(){
+                route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
+                route = route.replace('_id',$(this).val());
+                var a = document.createElement("a");
+                a.setAttribute("href",route);
+                a.setAttribute("target","_blank");
+                a.innerHTML = 'visualiser le QCM ' + $(this).text() + '<br>';
+                div.appendChild(a);
+
+            });
+
+
+
+
+
+        }
+
         function supprimerformation(route, champs) {
             $.ajax({
                 type: 'get',
@@ -542,6 +712,7 @@
                 type: 'get',
                 url: route,
                 dataType: 'json',
+
                 success: function(data) {
 
 
@@ -550,12 +721,54 @@
                     {
                         var selectedItem = $('#leftValues option[value="'+formation[i].id+'"]');
                         $("#rightValues").append(selectedItem);
+
                     }
                 }
             });
 
 
         }
+
+
+
+
+        $("#btnLeftaff").click(function () {
+            var selectedItem = $("#rightValuesAff option:selected");
+            $("#leftValuesAff").append(selectedItem);
+
+
+             var route = '{{path('remove_etablissement_qcm',{'idetablissement':etablissement.getId,'idqcmaff':"_idqcmrightaff"})}}';
+            route = route.replace("_idqcmrightaff", selectedItem.val());
+            $.ajax({
+                type: 'get',
+                url: route,
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                }
+            });
+
+        });
+
+        $("#btnRightaff").click(function () {
+            var selectedItem = $("#leftValuesAff option:selected");
+            $("#rightValuesAff").append(selectedItem);
+
+
+
+            var route = '{{path('add_etablissement_qcm',{'idetablissement':etablissement.getId,'idqcmaff':"_idqcmleftaff"})}}';
+            route = route.replace("_idqcmleftaff", selectedItem.val());
+
+           $.ajax({
+                type: 'get',
+                url: route,
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                }
+            });
+
+        });
 
 
 

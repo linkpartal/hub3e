@@ -3,6 +3,7 @@
 namespace EcoleBundle\Controller;
 
 use GenericBundle\Entity\Etablissement;
+use GenericBundle\Entity\Qcmdef;
 use GenericBundle\Entity\Notification;
 use GenericBundle\Entity\Tier;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -269,5 +270,39 @@ class EcoleController extends Controller
         }
         $reponse = new JsonResponse();
         return $reponse->setData(array('adresses'=>$adresses));
+    }
+
+    public function etablissementQcmAction($id){
+        $em = $this->getDoctrine()->getEntityManager();
+        $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($id);
+        $serializer = SerializerBuilder::create()->build();
+        $jsonContent = $serializer->serialize($etablissement->getQcmdef(), 'json');
+        $reponse = new JsonResponse();
+
+        return $reponse->setData(array('adresses'=>$jsonContent));
+    }
+
+    public function etablissementAddQcmAction($idetablissement, $idqcmaff){
+        $em = $this->getDoctrine()->getEntityManager();
+        $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($idetablissement);
+        $qcm = $em->getRepository('GenericBundle:Qcmdef')->find($idqcmaff);
+        $etablissement->addQcmdef($qcm);
+        $em->persist($etablissement);
+        $em->flush();
+
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('succes'=>'0'));
+    }
+
+    public function etablissementRemoveQcmAction($idetablissement, $idqcmaff){
+        $em = $this->getDoctrine()->getEntityManager();
+        $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($idetablissement);
+        $qcm = $em->getRepository('GenericBundle:Qcmdef')->find($idqcmaff);
+        $etablissement->removeQcmdef($qcm);
+        $em->persist($etablissement);
+        $em->flush();
+
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('succes'=>'0'));
     }
 }
