@@ -12,20 +12,6 @@ class DefaultController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
-        //get modeles
-        $modeles = array();
-        if ($handle = opendir('../src/GenericBundle/Resources/views/Mail/templates')) {
-
-            while (false !== ($entry = readdir($handle))) {
-
-                if ($entry != "." && $entry != "..") {
-
-                    array_push($modeles,$entry);
-                }
-            }
-
-            closedir($handle);
-        }
 
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAll();
         $ecoles = array();
@@ -47,7 +33,7 @@ class DefaultController extends Controller
         $jsonContent = $serializer->serialize($notifications, 'json');
 
         return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$users,
-            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'modeles'=>$modeles));
+            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms));
     }
 
     public function loadiframeAction()
@@ -62,7 +48,7 @@ class DefaultController extends Controller
 
         $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
-        $modeles = $this->getDoctrine()->getRepository('GenericBundle:Modele')->findBy(array('user'=>$user));
+
         if($etablissement->getTier()->getEcole())
         {
             $type = 'Ecole';

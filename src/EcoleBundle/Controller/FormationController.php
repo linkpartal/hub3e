@@ -39,7 +39,7 @@ class FormationController extends Controller
         move_uploaded_file($_FILES['_PDF']['tmp_name'] , $emplacementFinal);
 
 
-        return $this->render('EcoleBundle:Adminecole:iFrameContent.html.twig');
+        return $this->forward('EcoleBundle:Default:affichage',array('id'=>$request->get('_idetab')));
 
 
     }

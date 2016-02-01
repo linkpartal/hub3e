@@ -5,10 +5,25 @@ namespace GenericBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\AttributeOverrides;
+use Doctrine\ORM\Mapping\AttributeOverride;
+use Doctrine\ORM\Mapping\Column;
 
 /**
  * @ORM\Entity(repositoryClass="GenericBundle\Repository\UserRepository")
  * @ORM\Table(name="users")
+ * @AttributeOverrides({
+ *      @AttributeOverride(name="email",
+ *          column=@Column(
+ *              unique   = false
+ *          )
+ *      ),
+ *      @AttributeOverride(name="emailCanonical",
+ *          column=@Column(
+ *              unique   = false
+ *          )
+ *      )
+ * })
  */
 class User extends BaseUser
 {
