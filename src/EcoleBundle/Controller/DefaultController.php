@@ -2,7 +2,6 @@
 
 namespace EcoleBundle\Controller;
 
-use GenericBundle\Entity\Modele;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use \JMS\Serializer\SerializerBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,7 +14,8 @@ class DefaultController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
-
+        $serializer = $this->get('jms_serializer');
+        $jsonContent = $serializer->serialize($notifications, 'json');
         $ecoles = array();
         $ecoles = array_merge($ecoles,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($user->getTier()->getId()))  ;
         foreach($user->getTier()->getTier1() as $partenaire) {
@@ -41,8 +41,7 @@ class DefaultController extends Controller
 
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$user->getTier()));
 
-        $serializer = SerializerBuilder::create()->build();
-        $jsonContent = $serializer->serialize($notifications, 'json');
+
         return $this->render('EcoleBundle:Adminecole:index.html.twig', array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$users,
             'AllLicences'=>$licences,'societes'=>$societes));
     }

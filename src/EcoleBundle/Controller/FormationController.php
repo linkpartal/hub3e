@@ -78,9 +78,9 @@ class FormationController extends Controller
     }
 
     public function formationQcmAction($id){
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $formation = $em->getRepository('GenericBundle:Formation')->find($id);
-        $serializer = SerializerBuilder::create()->build();
+        $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($formation->getQcmdef(), 'json');
         $reponse = new JsonResponse();
 
@@ -88,7 +88,7 @@ class FormationController extends Controller
     }
 
     public function formationAddQcmAction($idformation, $idqcm){
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $formation = $em->getRepository('GenericBundle:Formation')->find($idformation);
         $qcm = $em->getRepository('GenericBundle:Qcmdef')->find($idqcm);
         $qcm->addFormationformation($formation);
@@ -100,7 +100,7 @@ class FormationController extends Controller
     }
 
     public function formationRemoveQcmAction($idformation, $idqcm){
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $formation = $em->getRepository('GenericBundle:Formation')->find($idformation);
         $qcm = $em->getRepository('GenericBundle:Qcmdef')->find($idqcm);
         $qcm->removeFormationformation($formation);

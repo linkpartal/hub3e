@@ -109,16 +109,6 @@ class EcoleController extends Controller
 
     }
 
-    public function suppLicenceAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $lic = $em->getRepository('GenericBundle:Licence')->find($id);
-        $em->remove($lic);
-        $em->flush();
-        $reponse = new JsonResponse();
-        return $reponse->setData(array('Status'=>'Licence correctement supprimer'));
-    }
-
     public function supprimeretabAction($id)
     {
         $em = $this->getDoctrine()->getManager();

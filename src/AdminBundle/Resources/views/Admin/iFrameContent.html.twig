@@ -265,7 +265,7 @@
                                             <td>{{ ecoles.getId }}</td>
                                             <td>{{ ecoles.getSiren }}</td>
                                             <td>{{ ecoles.getRaisonSoc }}</td>
-                                            <td style="border: none"><button onclick="" type="button" style="border: none">x</button></td>
+                                            <td style="border: none"><button onclick="supprimerPartenariat('{{ path('supprimerAssociationEcole',{'id_ecole':etablissement.getTier.getId,'id_liee':ecoles.getId }) }}',this)" type="button" style="border: none">x</button></td>
                                         </tr>
                                     {% endfor %}
                             </table>
@@ -380,6 +380,17 @@
                 success: function(data){console.log(data);}
             });
             champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
+        };
+        function supprimerPartenariat(route, champs) {
+            $.ajax({
+                type: 'get',
+                url: route,
+                error: function (response) {
+                    console.log(response);
+                },
+                success: function(data){console.log(data);}
+            });
+            champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
         };
     </script>
 {% endblock %}

@@ -68,7 +68,7 @@ class Licence
      *
      * @ORM\Column(name="suspendu", type="boolean", nullable=false)
      */
-    private $suspendu;
+    private $suspendu= false;
 
     /**
      * @var \Tier

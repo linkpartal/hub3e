@@ -34,70 +34,11 @@
                             <label class="list-group-item info" >Téléphone : <label style="color:black" >{{User.getTelephone}}</label></label>
                             <label class="list-group-item info" >UserName : <label style="color:black" >{{User.getUsername}}</label></label>
                             <label class="list-group-item info" >E-mail : <label style="color:black" >{{User.getEmail}}</label></label>
-                            <label class="list-group-item info" >Dérnière connexion : <label style="color:black" >{{User.getLastLogin|date('d/m/Y à H:i') }}</label></label>
+                            <label class="list-group-item info" >Dernière connexion : <label style="color:black" >{{User.getLastLogin|date('d/m/Y à H:i') }}</label></label>
                             <label class="list-group-item info" >Expiré le : <label style="color:black" >{{User.getExpiredAt|date('d/m/Y à H:i') }}</label></label>
 
                         </div>
 
-                        <div id="info_licence" class="list-group affichage"
-                             style="display: none;">
-
-                            <table id="tableLibs">
-                                <tr>
-                                    <td>Id</td>
-                                    <td>Libelle</td>
-                                    <td>Decription</td>
-                                    <td>Nbre max d'apprenants</td>
-                                    <td>Nbre max de missions</td>
-                                    <td>Date début</td>
-                                    <td>Date Fin</td>
-                                    <td style="border: none"><button onclick="show('instanceLicence')"
-                                                                     type="button" style="border: none">+</button></td>
-                                </tr>
-                                {% if libs is defined %}
-                                    {% for lib in libs %}
-                                        <tr>
-                                            <td>{{ lib.getId }}</td>
-                                            <td>{{ lib.getLibelle }}</td>
-                                            <td>{{ lib.getDescription }}</td>
-                                            <td>{{ lib.getMaxapp }}</td>
-                                            <td>{{ lib.getMaxmission }}</td>
-                                            <td>{{ lib.getDatedebut }}</td>
-                                            <td>{{ lib.getDatefin }}</td>
-                                            <td style="border: none"><button onclick="supprimerligne('{{ path('supprimer_Licence',{'id': lib.getId}) }}',this)"
-                                                                             type="button" style="border: none">x</button></td>
-                                        </tr>
-                                    {% endfor %}
-                                {% endif %}
-                            </table>
-
-                        </div>
-
-                        <div id="info_user" class="list-group affichage"
-                             style="display: none;">
-
-                            <table>
-                                <tr>
-                                    <td>Id</td>
-                                    <td>Username</td>
-                                    <td>Email</td>
-                                    <td>Dernière Connexion</td>
-                                    <td style="border: none"><button onclick="show('adduser')" type="button" style="border: none">+</button></td>
-                                </tr>
-                                {% if users is defined %}
-                                    {% for user in users %}
-                                        <tr>
-                                            <td>{{ user.getId }}</td>
-                                            <td>{{ user.getUsername }}</td>
-                                            <td>{{ user.getEmail }}</td>
-                                            <td>{{ user.getLastLogin|date('d/m/Y') }}</td>
-                                            <td style="border: none"><button type="button" style="border: none">x</button></td>
-                                        </tr>
-                                    {% endfor %}
-                                {% endif %}
-                            </table>
-
-                        </div>
 
                     </div>
                 </div>

@@ -216,6 +216,7 @@ class DefaultController extends Controller
                         $erreur='Duplicata dans le fichier' ;
                     }
                 }
+
                 $database = $em->getRepository('GenericBundle:User')->findAll();
                 foreach($database as $value)
                 {
@@ -233,7 +234,8 @@ class DefaultController extends Controller
                     $apprenant->setTelephone($row[6]);
                     $apprenant->setEmail($row[7]);
                     $apprenant->setUsername($row[3][0] . ''.$row[2]);
-
+                    $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($request->get('Etablissement'));
+                    $apprenant->setEtablissement($etablissement);
                     $apprenant->setPassword('import_passif');
 
                     $em->persist($apprenant);
@@ -266,6 +268,8 @@ class DefaultController extends Controller
                     $candidat->setEmail($row[7]);
                     $candidat->setAdresse($row[8]);
                     $candidat->setCp($row[9]);
+                    $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($request->get('Etablissement'));
+                    $candidat->setEtablissement($etablissement);
                     $candidat->setUser($this->get('security.token_storage')->getToken()->getUser());
                     if($row[13]=='oui')
                     {

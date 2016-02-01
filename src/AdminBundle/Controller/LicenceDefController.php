@@ -13,6 +13,7 @@ class LicenceDefController extends Controller
     {
         return $this->render('AdminBundle:Admin:ajoutelicence.html.twig');
     }
+
     public function licenceaddedAction()
     {
         $licence = new Licencedef();

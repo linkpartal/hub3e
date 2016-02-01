@@ -118,9 +118,15 @@
     <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
         <form id="form" action="{{ path('import') }}" method="post" enctype="multipart/form-data">
             <div class="div_form">
-
-                    <label title="CSV" for="CSV"><img id="backimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
-                    <input accept="image/*" type="file" class="input" id="CSV" name="_CSV" >
+                <label title="Etablissement" for="Etablissement"></label>
+                <select name="Etablissement">
+                    {% for etab in ecoles %}
+                        <option value="{{ etab.getId }}">{{ etab.getSiret }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <label title="CSV" for="CSV"><img id="backimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
+                <input accept="image/*" type="file" class="input" id="CSV" name="_CSV" >
 
             </div>
             <div class="div_button">
