@@ -10,6 +10,7 @@ function hide(div)
 }
 function show(div,hiddenval){
     var popup = document.getElementById(div);
+
     popup.style.display = 'block';
     if(div =='addtier')
     {

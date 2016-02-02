@@ -19,7 +19,9 @@ class AppKernel extends Kernel
             new GenericBundle\GenericBundle(),
             new AdminBundle\AdminBundle(),
             new EcoleBundle\EcoleBundle(),
-            new \UserBundle\UserBundle(),
+            new SocieteBundle\SocieteBundle(),
+            new UserBundle\UserBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

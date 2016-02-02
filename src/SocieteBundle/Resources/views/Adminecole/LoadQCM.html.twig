@@ -1,0 +1,68 @@
+
+
+{% block CSS %}<link rel="stylesheet" href="{{ asset('css/qcm.css') }}" />{% endblock %}
+{% block Content%}
+
+
+
+    {% if QCM is defined %}
+        <div class="row" style="margin: 0;overflow-y: auto;height: 100%">
+            <div class="col-xs-9"
+                 style="background: rgb(238, 241, 246); height: 100%;">
+
+                <div class="col-xs-12">
+                    <div class="list-group"
+                         style="background: #1B2024; margin: 30px 0 0 30px; padding: 0 0; border-left: 20px solid white; border-right: 20px solid white !important; text-align: left;">
+
+
+                        <form class="formulaire" id="form" action="{{ path('Add_QCM') }}" method="post">
+
+                            <div class="inputcontainer">
+                                <label class="list-group-item" style="height: 60px;" for="QCM">Nom du Questionnaire :</label>
+                                <input type="text" class="champ form-control" id="QCM" name="_Nom" value="{{ QCM.getNom }}">
+
+                            </div>
+                            <div class="inputcontainer">
+                                <label class="list-group-item" style="height: 60px;" for="affinite">Test d'affinité :</label>
+                                {% if QCM.getAffinite %}
+                                    <input type="text" class="champ form-control" id="affinite" name="_affinite" value="1">
+                                {% else %}
+                                    <input type="text" class="champ form-control" id="affinite" name="_affinite" value="0">
+                                {% endif %}
+                            </div>
+                            {% if Questions is defined %}
+                                {% set i = 0 %}
+                                {% for question in Questions %}
+                                    <div id="{{ i }}" class="inputcontainer" name="question">
+                                        <label class="list-group-item" style="height: 60px;" for="Question">Question :</label>
+
+                                        {% if reponses is defined %}
+                                            {% for reponse in reponses %}
+                                                {% for rep in reponse %}
+                                                    {%  if rep.getQuestiondef.getId == question.getId %}
+                                                        <div>
+                                                            <input title="reponse" type="text" class="champ form-control" id="inputrep" name="reponse[{{ i }}][]" value="{{ rep.getReponse }}">
+
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    {% set i = i + 1 %}
+                                {% endfor %}
+
+                            {% endif %}
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+{% endblock %}

@@ -1,6 +1,6 @@
 <?php
 
-namespace EcoleBundle\Controller;
+namespace SocieteBundle\Controller;
 
 use GenericBundle\Entity\Modele;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

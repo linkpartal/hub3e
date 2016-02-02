@@ -5,7 +5,7 @@
  * Date: 21/01/2016
  * Time: 11:19
  */
-namespace EcoleBundle\Controller;
+namespace SocieteBundle\Controller;
 
 
 use GenericBundle\Entity\Formation;

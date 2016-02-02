@@ -40,3 +40,4 @@ security:
         - { path: ^/admin, roles: ROLE_SUPER_ADMIN }
         - { path: ^/ecole/admin, roles: ROLE_ADMINECOLE}
         - { path: ^/user/admin, roles: [ROLE_ADMINECOLE,ROLE_ADMINSOC]}
+        - { path: ^/societe/admin, roles: ROLE_ADMINSOC}

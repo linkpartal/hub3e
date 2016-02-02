@@ -49,6 +49,11 @@ class DefaultController extends Controller
                 $ecole = $em->getRepository('GenericBundle:Tier')->find($user->getTier());
                 return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$ecole->getRaisonSoc())));
             }
+            elseif(true === $this->get('security.authorization_checker')->isGranted('ROLE_ADMINSOC'))
+            {
+                $societe = $em->getRepository('GenericBundle:Tier')->find($user->getTier());
+                return $this->redirect($this->generateUrl('societe_admin',array('societe'=>$societe->getRaisonSoc())));
+            }
             elseif(true === $this->get('security.authorization_checker')->isGranted('ROLE_USER'))
             {
                 return $this->redirect('http://youtube.com');

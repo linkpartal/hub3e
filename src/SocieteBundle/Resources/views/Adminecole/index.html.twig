@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/adminecole.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('image/Logo_Hub_3e.png') }}" />
+    {% block CSS %}{% endblock %}
+
+    <title>HUB3E - {% block title %}Ecole{% endblock %}</title>
+
+</head>
+<body onload="putbadged()">
+<div id="addtier" class="popup col-xs-3">
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
+        <div id="div_adresse" name="ajouterAdresse" style="border-bottom: 10px;display:none">
+            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+            <button class="toggle" type="button" onclick="supprimerAdresse(this)">-</button>
+            <div id="demo" class="collapse in">
+                <div class="col-xs-4 input-colonne">
+                    <input placeholder="Siret" class="input" type="text" id="SIRET" name="_SIRET[]" required>
+
+
+                    <input placeholder="Responsable" class="input" type="text" id="Resp" name="_Resp[]">
+                    <input placeholder="Téléphone responsable" class="input" type="tel" id="TelResp" name="_TelResp[]">
+
+                    <input placeholder="Adresse email responsable" class="input" type="email" id="MailResp" name="_MailResp[]">
+                    <input type="hidden" class="form-control" id="Geocode" name="_Geocode[]" required>
+
+
+                </div>
+                <div class="col-xs-8">
+                    <input  placeholder="Adresse postale" class="input" type="text" id="Adresse" name="_Adresse[]" required>
+                    <input  placeholder="Ville" class="input" type="text" id="Ville" name="_Ville[]" style="width: 50%; margin-right: 10px">
+                    <input  placeholder="Code postal" class="input" type="text" id="CodeP" name="_CodeP[]" style="width: calc(50% - 10px)">
+                    <input placeholder="Téléphone" class="input" type="tel" id="Tel" name="_Tel[]" style="width: 50%;margin-right: 10px">
+                    <input placeholder="Fax" class="input" type="tel" id="Fax" name="_Fax[]" style="width: calc(50% - 10px)">
+                    <input placeholder="Adresse du Site" class="input" type="url" id="Site" name="_Site[]">
+
+                </div>
+            </div>
+        </div>
+        <form id="form" action="{{ path('ecole_tieradded') }}" method="post" enctype="multipart/form-data">
+            <div class="div_form">
+
+                <div class="col-xs-6 input-colonne">
+                    <input placeholder="SIREN" type="text" class="input" id="SIREN" name="_SIREN">
+                    <label for="Logo"><img id="Logoimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label><br>
+                    <input onchange="readURL(this,'Logoimg');"  accept="image/*" type="file" class="input" id="Logo" name="_Logo" style="display: none">
+                </div>
+
+                <div class="col-xs-6 input-colonne">
+                    <input placeholder="Raison sociale" type="text" class="input" id="RaisonSoc" name="_RaisonSoc">
+
+
+                    <label for="image"><img id="backimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
+                    <input onchange="readURL(this,'backimg');" accept="image/*" type="file" class="input" id="image" name="_image" style="display: none">
+                </div>
+
+                <input  type="hidden" id="EcoleBool" name="_Ecole">
+                <div id="adressecontainer">
+
+                </div>
+                <button type="button" class="col-xs-12 blue" onclick="dupliqueradresse()">Ajouter une adresse</button>
+            </div>
+            <div class="div_button">
+                <button class="blue" type="button" onclick="envoyeradresses()">Envoyer</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+<!--div-- id="adduser" class="popup col-xs-3">
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block">
+
+        <form id="formadduser" action="{{ path("user_added") }}" method="post">
+
+            <div class="div_form" >
+                <div class="col-xs-6 input-colonne">
+                    <input type="text" class="input" id="Username" name="_Username" placeholder="Username">
+
+                    <input type="email" class="input " id="mail" name="_mail" placeholder="Email">
+
+                    <select class="input" title="Choisissez un role" name="_role">
+                        <option value="">Choisissez un role</option>
+                        <option value="ROLE_ADMINECOLE">Administrateur école</option>
+                        <option value="ROLE_RECRUTE">Recruteur Placeur</option>
+                    </select>
+                </div>
+                <div class="col-xs-6">
+                    <select class="input " style="width: 25%; margin-right: 10px" title="" name="civilite">
+                        <option value="Mr">Mr.</option>
+                        <option value="Mme">Mme.</option>
+                        <option value="Mlle">Mlle.</option>
+                    </select>
+
+                    <input type="text" class="input" style="width: calc(75% - 10px);" id="Prenom" name="_Prenom" placeholder="Prénom">
+                    <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom">
+
+                    <input type="tel" class="input " id="Tel" name="_Tel" placeholder="Tel">
+                </div>
+
+
+            </div>
+            <div class="div_button">
+                <input class="blue" type="submit" value="envoyer">
+            </div>
+        </form>
+    </div>
+
+</div-->
+<div id="import" class="popup col-xs-3">
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
+        <form id="form" action="{{ path('import') }}" method="post" enctype="multipart/form-data">
+            <div class="div_form">
+
+                    <label title="CSV" for="CSV"><img id="backimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
+                    <input accept="image/*" type="file" class="input" id="CSV" name="_CSV" >
+
+            </div>
+            <div class="div_button">
+                <input class="blue" type="submit" value="envoyer">
+            </div>
+        </form>
+    </div>
+
+</div>
+<div class="container">
+
+    {% block TopBar %}
+        <div class="row" style="height: 32px; background: #2975cb;">
+            <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="border: 0;padding: 4.5px;height: 100%;">
+                <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 21px;width: 100%" >        </a>
+            </div>
+            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+                <button onclick="show('addtier',0)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+                ></button>
+
+                <button id="societetop" style="color:white ">{{ societes|length }} Sociétés</button>
+
+            </div>
+            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="display: inline; margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+                <button onclick="show('adduser')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+                ></button>
+
+                <button id="usertop" style="color:white ">{{ users|length }} Utilisateurs</button>
+            </div>
+
+            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+                <button onclick="show('import')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+                ></button>
+
+                <button style="color:white ">importe</button>
+            </div>
+        </div>
+
+
+    {% endblock %}
+    <div class="row" style="height: 100%">
+
+        {% block LeftBar %}
+            <div class="col-xs-2">
+
+                <select title="" id="leftselect" name="myddl" class="btn btn-default dropdown-toggle">
+                    <option value="ecole">Voir Ecoles</option>
+                    <option value="societe">Voir Sociétés</option>
+                    <option value="licence">Voir Licences</option>
+                    <option value="user">Voir Utilisateurs</option>
+                </select>
+
+                <div id="ecole" class="list-group col-xs-2 leftbar">
+                    {% if ecoles is defined %}
+                        {% for e in ecoles %}
+                            <button onclick="postiframe('{{ path('ecole_admin_affiche',{'id': e.getId} ) }}',{{ e.getId }},this)" id="etablissement{{ e.getId }}" type="button" class="list-group-item butonLigne">
+                                <div class="col-xs-12 part" title="{{e.getTier.getRaisonSoc}}">{{e.getTier.getRaisonSoc}}</div>
+                                <div class="col-xs-12 part"
+                                     style="height: 31px; text-align: left;">
+                                    <div class="col-xs-9 part" title="{{ e.getVille }}">{{ e.getVille }}</div>
+                                    {% if e.getActive %}
+                                        <div class="col-xs-1 active" id="active{{ e.getId }}"></div>
+                                    {% else %}
+                                        <div class="col-xs-1 inactive" id="active{{ e.getId }}"></div>
+                                    {% endif %}
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div id="societe" class="list-group col-xs-2 leftbar"
+                     style="visibility: hidden;">
+                    {% if societes is defined %}
+                        {% for s in societes %}
+                            <button onclick="postiframe('{{ path('ecole_admin_affiche',{'id': s.getId }) }}',{{ s.getId }},this)" id="etablissement{{ s.getId }}" type="button" class="list-group-item butonLigne">
+                                <div class="col-xs-12 part" title="{{s.getTier.getRaisonSoc}}">{{s.getTier.getRaisonSoc}}</div>
+                                <div class="col-xs-12 part"
+                                     style="height: 31px; text-align: left;">
+                                    <div class="col-xs-9 part" title="{{ s.getVille }}">{{ s.getVille }}</div>
+                                    {% if s.getActive %}
+                                        <div class="col-xs-1 active" id="active{{ s.getId }}"></div>
+                                    {% else %}
+                                        <div class="col-xs-1 inactive" id="active{{ s.getId }}"></div>
+                                    {% endif %}
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
+
+                </div>
+                <div id="licence" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                    {% if AllLicences is defined %}
+                        {% for lic in AllLicences %}
+                            <button onclick="postiframe('{{ path('ecole_admin_afficheLicence',{'id': lic.getId} ) }}')" id="licence{{ lic.getId }}" type="button" class="list-group-item butonLigne">
+                                <div class="col-xs-12 part licence" title="{{lic.getLibelle}}">{{lic.getLibelle}}</div>
+                                <div class="col-xs-12 part"
+                                     style="height: 31px; text-align: left;">
+                                    <div class="col-xs-9 part" title="{{ lic.getDatefin }}">{{lic.getDatefin }}</div>
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
+
+                </div>
+                <div id="user" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                    {% if users is defined %}
+                        {% for u in users %}
+                            <button onclick="postUser('{{ path('ecole_admin_afficheUser',{'id': u.getId} ) }}')" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                                <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
+                                <div class="col-xs-12 part"
+                                     style="height: 31px; text-align: left;">
+                                    <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
+                                    {% if not u.isExpired %}
+                                        <div class="col-xs-1 active" id="active{{ u.getId }}"></div>
+                                    {% else %}
+                                        <div class="col-xs-1 inactive" id="active{{ u.getId }}"></div>
+                                    {% endif %}
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endblock %}
+
+
+        <div class="col-xs-10" style="height: 100%" >
+
+            <div class="row" style="height: 40px; margin: 0; background: #3988d7;">
+
+                <div class="input-group col-xs-offset-1 col-xs-6" style="margin-top: 5px; float: left;">
+                    <span class="glyphicon glyphicon-search input-group-addon topbaradd"
+                          id="basic-addon1" style="width: 27px;height: 27px;padding: 7px"></span>
+                    <input onkeyup="search(this.value)" type="text" class="recherche" aria-describedby="basic-addon1"
+                           style="height: 27px;">
+                </div>
+
+                <div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px;">
+                    <button type="button" class="btn btn-default dropdown-toggle"
+                            data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"
+                            style="width: 100%; height: 20px; border-radius: 0; background: none; border: 0;color: white">
+                        Filtres <span class="glyphicon glyphicon-menu-down"
+                                      aria-hidden="true"></span>
+                    </button>
+                    <ul id="filtre" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+
+                    </ul>
+                </div>
+            </div>
+
+            {% block Content%}
+
+                <iframe id="iframe" src=""></iframe>
+
+            {% endblock %}
+        </div>
+
+    </div>
+
+</div>
+
+<script src="//code.jquery.com/jquery.min.js"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/PopUp.js') }}"></script>
+<script src="http://maps.googleapis.com/maps/api/js"></script>
+<script language="JavaScript">
+    var i = 1;
+    document.getElementById("leftselect").onchange = function(){
+        var x = document.getElementById("leftselect").value;
+        document.getElementById('ecole').style.visibility= 'hidden';
+        document.getElementById('societe').style.visibility= 'hidden';
+        document.getElementById('licence').style.visibility= 'hidden';
+        document.getElementById('user').style.visibility= 'hidden';
+        document.getElementById(x).style.visibility='visible';
+
+    };
+    function postiframe(url,id,button) {
+        document.getElementById("iframe").src = url;
+        var route = '{{path('adresses_tier',{'id':"_id" })}}';
+        route = route.replace("_id", id);
+        $.ajax({
+            type: 'get',
+            url: route,
+            dataType: 'json',
+            success: function(data){
+                var filtre = document.getElementById("filtre");
+                while (filtre.firstChild) {
+                    filtre.removeChild(filtre.firstChild);
+                }
+                for (var i = 0; i < data.adresses.length; i++)
+                {
+                    var obj = JSON.parse(data.adresses[i]);
+
+                    var li = document.createElement("li");
+
+                    var a = document.createElement("a");
+                    a.setAttribute('href',obj.id);
+                    a.innerHTML = obj.adresse;
+
+                    li.appendChild(a);
+
+                    filtre.appendChild(li);
+                }
+
+            }
+        });
+        var elements = button.getElementsByClassName("badge");
+        if(elements.length > 0)
+        {
+            elements[0].parentNode.removeChild(elements[0]);
+        }
+
+    };
+    function postUser(url){
+        document.getElementById("iframe").src = url;
+    };
+    function stringWith (str, prefix) {
+        var ustring = str.toUpperCase();
+        var uprefix = prefix.toUpperCase();
+        if (ustring.indexOf(uprefix) >= 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    };
+    function search(mot){
+
+        var buttons = document.getElementById('ecole').getElementsByClassName('butonLigne');
+
+        var i=0;
+        while(i<buttons.length)
+        {
+            buttons[i].style.display="block";
+            var c = buttons[i].children;
+            if (!stringWith(c[0].getAttribute('title'), mot) && !stringWith(c[1].children[0].title, mot)) {
+                buttons[i].style.display="none";
+            }
+            i++;
+        }
+
+        var buttons = document.getElementById('societe').getElementsByClassName('butonLigne');
+
+        var i=0;
+        while(i<buttons.length)
+        {
+            buttons[i].style.display="block";
+            var c = buttons[i].children;
+            if (!stringWith(c[0].getAttribute('title'), mot) && !stringWith(c[1].children[0].title, mot)) {
+                buttons[i].style.display="none";
+            }
+            i++;
+        }
+        var buttons = document.getElementById('licence').getElementsByClassName('butonLigne');
+
+        var i=0;
+        while(i<buttons.length)
+        {
+            buttons[i].style.display="block";
+            var c = buttons[i].children;
+            if (!stringWith(c[0].getAttribute('title'), mot) && !stringWith(c[1].children[0].title, mot)) {
+                buttons[i].style.display="none";
+            }
+            i++;
+        }
+        var buttons = document.getElementById('user').getElementsByClassName('butonLigne');
+
+        var i=0;
+        while(i<buttons.length)
+        {
+            buttons[i].style.display="block";
+            var c = buttons[i].children;
+            if (!stringWith(c[0].getAttribute('title'), mot) && !stringWith(c[1].children[0].title, mot)) {
+                buttons[i].style.display="none";
+            }
+            i++;
+        }
+    };
+    function putbadged() {
+        var notifs = JSON.parse('{{ notifications|raw }}');
+        var ecole =0;
+        var societe = 0;
+        var user = 0;
+        for(var i = 0; i< notifs.length;i++)
+        {
+            var span = document.createElement("span");
+            span.className = 'badge';
+            span.innerHTML = 'New';
+            if(notifs[i].type == 'Ecole')
+            {
+                ecole++;
+                var active = document.getElementById("active"+ notifs[i].entite);
+                if(active != null){active.parentNode.insertBefore(span,active);}
+
+            }
+            if(notifs[i].type == 'Societe')
+            {
+                societe++;
+                var active = document.getElementById("active"+ notifs[i].entite);
+                if(active != null){active.parentNode.insertBefore(span,active);}
+
+            }
+            if(notifs[i].type == 'Utilisateur')
+            {
+                user++;
+                var active = document.getElementById("active"+ notifs[i].entite);
+                if(active != null){active.parentNode.insertBefore(span,active);}
+
+            }
+        }
+
+        if(ecole > 0)
+        {
+            var spanecole = document.createElement("span");
+            spanecole.className = 'badge';
+            spanecole.className = spanecole.className + ' notifTopbar';
+            spanecole.innerHTML = ecole;
+            var buttonecole = document.getElementById("ecoletop");
+            buttonecole.appendChild(spanecole);
+        }
+        if(societe >0)
+        {var spansociete = document.createElement("span");
+            spansociete.className = 'badge';
+            spansociete.className = spansociete.className + ' notifTopbar';
+            spansociete.innerHTML = societe;
+            var buttonsociete = document.getElementById("societetop");
+            buttonsociete.appendChild(spansociete);
+        }
+        if(user >0)
+        {var spanuser = document.createElement("span");
+            spanuser.className = 'badge';
+            spanuser.className = spanuser.className + ' notifTopbar';
+            spanuser.innerHTML = user;
+            var buttonuser = document.getElementById("usertop");
+            buttonuser.appendChild(spanuser);
+        }
+
+    };
+    function dupliqueradresse() {
+        var dup = document.getElementById("div_adresse");
+        var clone = dup.cloneNode(true);
+        var toggle = clone.children[0];
+        toggle.setAttribute("data-target","#Adresse" + i);
+        toggle.innerHTML="Adresse " + i;
+
+        var div = clone.children[2];
+        div.setAttribute("id","Adresse" + i);
+        clone.style.display = 'block';
+
+        document.getElementById("adressecontainer").appendChild(clone);
+        var parentdiv = dup.parentNode;
+        var close =dup.parentNode.parentNode;
+        if(parentdiv.offsetHeight  > close.offsetHeight )
+        {
+            close.style.height = parentdiv.offsetHeight;
+            clone.children[0].style.height = parentdiv.offsetHeight;
+        }
+
+        i++;
+    };
+    function submitAjaxForm(url,form){
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $("#"+form+"").serialize(),
+            success: function(data)
+            {
+                if(data['status']==='success')
+                {
+                    $("#"+form+"").submit();
+                }
+                else
+                {
+                    alert(data['status']); // show response from the php script.
+                }
+            }
+        });
+    };
+    function envoyeradresses(){
+        var geocodes = document.getElementsByName('_Geocode[]');
+        if(geocodes.length==1)
+        {
+            alert('Vous devez remplir au moins une adresse');
+        }
+        for(var i = 1; i<geocodes.length;i++)
+        {
+            var address = document.getElementsByName('_Adresse[]')[i].value +' ' +document.getElementsByName('_Ville[]')[i].value + ' ' + document.getElementsByName('_CodeP[]')[i].value  ;
+            var geocoder = new google.maps.Geocoder();
+
+            var result = geocodes[i];
+            geocoder.geocode({'address': address}, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    result.value = results[0].geometry.location ;
+                    submitAjaxForm('{{ path('ecole_checkExist') }}','form');
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+    };
+    function readURL(input,baliseimg) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#'+ baliseimg)
+                        .attr('src', e.target.result)
+                        .width(150)
+                        .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    };
+    function supprimerAdresse(div){
+        div.parentNode.parentNode.removeChild(div.parentNode);
+    }
+</script>
+
+{% block JS %}
+
+{% endblock %}
+</body>
+</html>

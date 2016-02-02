@@ -1,3 +1,7 @@
+societe:
+    resource: "@SocieteBundle/Resources/config/routing.yml"
+    prefix:   /societe/
+
 ecole:
     resource: "@EcoleBundle/Resources/config/routing.yml"
     prefix:   /ecole/

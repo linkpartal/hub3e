@@ -162,6 +162,8 @@
                                 <option value="info_user" style="color:black;">Utilisateurs</option>
                                 {% if etablissement.getTier.getEcole %}
                                 <option value="info_tier_tier" style="color:black;">Ecoles liées</option>
+                                    {% else %}
+                                 <option value="info_tier_tier" style="color:black;">Missions</option>
                                 {% endif %}
                             </select>
                         </div>
@@ -271,6 +273,14 @@
                             </table>
 
                         </div>
+
+                            {% else %}
+
+
+
+
+
+
                         {% endif %}
                     </div>
                 </div>
