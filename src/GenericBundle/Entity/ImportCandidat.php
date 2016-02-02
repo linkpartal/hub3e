@@ -116,6 +116,16 @@ class ImportCandidat
     private $user;
 
     /**
+     * @var \Etablissement
+     *
+     * @ORM\ManyToOne(targetEntity="Etablissement")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="etablissement_id", referencedColumnName="id")
+     * })
+     */
+    private $etablissement;
+
+    /**
      * Get id
      *
      * @return int
@@ -435,5 +445,29 @@ class ImportCandidat
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set etablissement
+     *
+     * @param \GenericBundle\Entity\Etablissement $etablissement
+     *
+     * @return ImportCandidat
+     */
+    public function setEtablissement(\GenericBundle\Entity\Etablissement $etablissement = null)
+    {
+        $this->etablissement = $etablissement;
+
+        return $this;
+    }
+
+    /**
+     * Get etablissement
+     *
+     * @return \GenericBundle\Entity\Etablissement
+     */
+    public function getEtablissement()
+    {
+        return $this->etablissement;
     }
 }

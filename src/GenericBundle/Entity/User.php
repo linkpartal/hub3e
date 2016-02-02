@@ -5,10 +5,25 @@ namespace GenericBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\AttributeOverrides;
+use Doctrine\ORM\Mapping\AttributeOverride;
+use Doctrine\ORM\Mapping\Column;
 
 /**
  * @ORM\Entity(repositoryClass="GenericBundle\Repository\UserRepository")
  * @ORM\Table(name="users")
+ * @AttributeOverrides({
+ *      @AttributeOverride(name="email",
+ *          column=@Column(
+ *              unique   = false
+ *          )
+ *      ),
+ *      @AttributeOverride(name="emailCanonical",
+ *          column=@Column(
+ *              unique   = false
+ *          )
+ *      )
+ * })
  */
 class User extends BaseUser
 {
@@ -72,7 +87,7 @@ class User extends BaseUser
      *
      * @ORM\ManyToMany(targetEntity="Mission", mappedBy="users")
      */
-    private $missionmission;
+    private $mission;
 
     /**
      * Constructor
@@ -80,7 +95,7 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
-        $this->missionmission = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->mission = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -140,7 +155,7 @@ class User extends BaseUser
      */
     public function addMissionmission(\GenericBundle\Entity\Mission $missionmission)
     {
-        $this->missionmission[] = $missionmission;
+        $this->mission[] = $missionmission;
 
         return $this;
     }
@@ -152,7 +167,7 @@ class User extends BaseUser
      */
     public function removeMissionmission(\GenericBundle\Entity\Mission $missionmission)
     {
-        $this->missionmission->removeElement($missionmission);
+        $this->mission->removeElement($missionmission);
     }
 
     /**
@@ -162,7 +177,7 @@ class User extends BaseUser
      */
     public function getMissionmission()
     {
-        return $this->missionmission;
+        return $this->mission;
     }
 
     /**

@@ -11,5 +11,6 @@
 /phpunit.xml
 /NewEntity/
 /.idea/
-/src/GenericBundle/Resources/views/Mail/templates/
-/web/formation_pdf/
+/src/GenericBundle/Resources/views/Mail/templates/*
+/web/formation_pdf/*
+/web/import_candidat_test - Copie.csv

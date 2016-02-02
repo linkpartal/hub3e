@@ -119,8 +119,20 @@
         <form id="form" action="{{ path('import') }}" method="post" enctype="multipart/form-data">
             <div class="div_form">
 
-                    <label title="CSV" for="CSV"><img id="backimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
-                    <input accept="image/*" type="file" class="input" id="CSV" name="_CSV" >
+                <select onchange="disabling(this)" title="Type d'import" name="Import">
+                    <option value="0">Apprenants</option>
+                    <option value="1">Sociétés</option>
+                    <option value="2">Missions</option>
+
+                </select>
+                <select title="Etablissement" name="Etablissement">
+                    {% for etab in ecoles %}
+                        <option value="{{ etab.getId }}">{{ etab.getSiret }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <label title="CSV" for="CSV"><img id="backimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
+                <input accept="image/*" type="file" class="input" id="CSV" name="_CSV" >
 
             </div>
             <div class="div_button">
@@ -155,7 +167,7 @@
                 <button onclick="show('import')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                 ></button>
 
-                <button style="color:white ">importe</button>
+                <button style="color:white ">importer</button>
             </div>
         </div>
 
@@ -218,7 +230,7 @@
                                 <div class="col-xs-12 part licence" title="{{lic.getLibelle}}">{{lic.getLibelle}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
-                                    <div class="col-xs-9 part" title="{{ lic.getDatefin }}">{{lic.getDatefin }}</div>
+                                    <div class="col-xs-9 part" title="{{ lic.getDatefin|date('d-m-Y') }}">{{lic.getDatefin|date('d-m-Y') }}</div>
                                 </div>
                             </button>
                         {% endfor %}
@@ -539,7 +551,12 @@
     };
     function supprimerAdresse(div){
         div.parentNode.parentNode.removeChild(div.parentNode);
-    }
+    };
+    function disabling(champ){
+        if(champ.options[champ.selectedIndex].value ==0){champ.nextElementSibling.style.display = 'inline-block';}
+        else{champ.nextElementSibling.style.display = 'none';}
+    };
+
 </script>
 
 {% block JS %}

@@ -212,4 +212,16 @@ class EcoleController extends Controller
 
         return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
     }
+
+    public function suppEcoleAssocAction($id_ecole,$id_liee)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tier = $em->getRepository('GenericBundle:Tier')->find($id_ecole);
+        $tierliee = $em->getRepository('GenericBundle:Tier')->find($id_liee);
+        $tier->removeTier1($tierliee);
+        $tierliee->removeTier1($tier);
+        $em->flush();
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('Status'=>'Licence correctement supprimer'));
+    }
 }

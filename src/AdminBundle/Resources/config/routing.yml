@@ -18,10 +18,6 @@ metier_user_affiche:
     path: /affichage/id={id}
     defaults: { _controller: AdminBundle:Default:affichage}
 
-metier_user_afficheUser:
-    path: /affichageUser/id={id}
-    defaults: { _controller: AdminBundle:Default:affichageUser}
-
 admin_afficheLicence:
     path: /affichageLicence/id={id}
     defaults: { _controller: AdminBundle:LicenceDef:affichageLicence}
@@ -54,10 +50,6 @@ modifieretab:
     path: /modifieretablissement/{id}
     defaults: { _controller: AdminBundle:Ecole:modifier}
 
-modifierUser:
-    path: /modifierUtilisateur/{id}
-    defaults: { _controller: AdminBundle:User:modifier}
-
 etabmodif:
     path: /etabmodif
     defaults: { _controller: AdminBundle:Ecole:etabModif}
@@ -70,10 +62,6 @@ supprimerQCM:
     path: /supprimerQCM/nom={nom}
     defaults: { _controller: AdminBundle:QCM:deleteQcm}
 
-expired:
-    path: /expired/id={id}
-    defaults: { _controller: AdminBundle:User:expired}
-
 creeNewModele:
     path: /creeNewModele/id={id}
     defaults: { _controller: AdminBundle:Default:creeNewModele, id :ajouter}
@@ -81,4 +69,8 @@ creeNewModele:
 saveNewModele:
     path: /saveNewModele
     defaults: { _controller: AdminBundle:Default:saveNewModele}
+
+supprimerAssociationEcole:
+    path: /suppressionAssociationEcole/{id_ecole}/{id_liee}
+    defaults: { _controller: AdminBundle:Ecole:suppEcoleAssoc}
 

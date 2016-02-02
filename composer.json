@@ -28,7 +28,6 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "symfony/finder": "^3.0",
-        "jms/serializer": "^1.1",
         "ddeboer/data-import": "@stable",
         "jms/serializer-bundle": "^1.1"
     },

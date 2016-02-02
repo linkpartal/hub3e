@@ -177,6 +177,7 @@ iframe
     border: none;margin: 0 ;
     height: 21px;
     width: calc(100% - 21px);
+    font: 12px Roboto;
 }
 
 #leftselect, #select_info
