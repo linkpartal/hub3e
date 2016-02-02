@@ -69,7 +69,7 @@ class Etablissement
     /**
      * @var string
      *
-     * @ORM\Column(name="geocode", type="string", length=45, nullable=false)
+     * @ORM\Column(name="geocode", type="string", length=45, nullable=true)
      */
     private $geocode;
 

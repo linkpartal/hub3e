@@ -118,8 +118,14 @@
     <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
         <form id="form" action="{{ path('import') }}" method="post" enctype="multipart/form-data">
             <div class="div_form">
-                <label title="Etablissement" for="Etablissement"></label>
-                <select name="Etablissement">
+
+                <select onchange="disabling(this)" title="Type d'import" name="Import">
+                    <option value="0">Apprenants</option>
+                    <option value="1">Sociétés</option>
+                    <option value="2">Missions</option>
+
+                </select>
+                <select title="Etablissement" name="Etablissement">
                     {% for etab in ecoles %}
                         <option value="{{ etab.getId }}">{{ etab.getSiret }}</option>
                     {% endfor %}
@@ -224,7 +230,7 @@
                                 <div class="col-xs-12 part licence" title="{{lic.getLibelle}}">{{lic.getLibelle}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
-                                    <div class="col-xs-9 part" title="{{ lic.getDatefin }}">{{lic.getDatefin }}</div>
+                                    <div class="col-xs-9 part" title="{{ lic.getDatefin|date('d-m-Y') }}">{{lic.getDatefin|date('d-m-Y') }}</div>
                                 </div>
                             </button>
                         {% endfor %}
@@ -545,7 +551,12 @@
     };
     function supprimerAdresse(div){
         div.parentNode.parentNode.removeChild(div.parentNode);
-    }
+    };
+    function disabling(champ){
+        if(champ.options[champ.selectedIndex].value ==0){champ.nextElementSibling.style.display = 'inline-block';}
+        else{champ.nextElementSibling.style.display = 'none';}
+    };
+
 </script>
 
 {% block JS %}

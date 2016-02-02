@@ -87,7 +87,7 @@ class User extends BaseUser
      *
      * @ORM\ManyToMany(targetEntity="Mission", mappedBy="users")
      */
-    private $missionmission;
+    private $mission;
 
     /**
      * Constructor
@@ -95,7 +95,7 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
-        $this->missionmission = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->mission = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -155,7 +155,7 @@ class User extends BaseUser
      */
     public function addMissionmission(\GenericBundle\Entity\Mission $missionmission)
     {
-        $this->missionmission[] = $missionmission;
+        $this->mission[] = $missionmission;
 
         return $this;
     }
@@ -167,7 +167,7 @@ class User extends BaseUser
      */
     public function removeMissionmission(\GenericBundle\Entity\Mission $missionmission)
     {
-        $this->missionmission->removeElement($missionmission);
+        $this->mission->removeElement($missionmission);
     }
 
     /**
@@ -177,7 +177,7 @@ class User extends BaseUser
      */
     public function getMissionmission()
     {
-        return $this->missionmission;
+        return $this->mission;
     }
 
     /**

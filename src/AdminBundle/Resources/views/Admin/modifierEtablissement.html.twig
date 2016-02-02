@@ -191,59 +191,69 @@
                     </form>
                 </div>
 
-                <div id="info_licence" class="list-group affichage"
+                <div id="info_licence" class="list-group"
                      style="display: none;">
 
-                    <table id="tableLibs">
-                        <tr>
-                            <td>Id</td>
-                            <td>Libelle</td>
-                            <td>Decription</td>
-                            <td>Date début</td>
-                            <td>Date Fin</td>
-                            <td style="border: none"><button onclick="show('instanceLicence')"
-                                                             type="button" style="border: none">+</button></td>
-                        </tr>
-                        {% if libs is defined %}
-                            {% for lib in libs %}
-                                <tr>
-                                    <td>{{ lib.getId }}</td>
-                                    <td>{{ lib.getLibelle }}</td>
-                                    <td>{{ lib.getDescription }}</td>
-                                    <td>{{ lib.getDatedebut }}</td>
-                                    <td>{{ lib.getDatefin }}</td>
-                                    <td style="border: none"><button onclick="supprimerligne('{{ path('supprimer_Licence',{'id': lib.getId}) }}',this)"
-                                                                     type="button" style="border: none">x</button></td>
-                                </tr>
-                            {% endfor %}
-                        {% endif %}
-                    </table>
+                    {% if libs is defined %}
+                        {% for lib in libs %}
+                            {% set iddiv = random()  %}
+                            <div class="col-xs-12 Liste">
+                                <div class="row">
+                                    <label class="cell" >Licence : <label>{{ lib.getId }}</label></label>
+                                    <label class="cell">Libelle : <label>{{ lib.getLibelle }}</label>
+                                        <button onclick="supprimerligne('{{ path('supprimer_Licence',{'id': lib.getId}) }}',this)"
+                                                type="button" style=";float: right">x</button>
+                                        <button class="button" style="float: right" type="button" data-toggle="collapse" data-target="#licence{{ iddiv }}"></button></label>
+
+                                </div>
+                                <div id="licence{{ iddiv }}" class="collapse in" >
+                                    <div class="row">
+                                        <label class="cell">Nombre max d'apprenants : <label>{{ lib.getMaxapp }}</label></label>
+                                        <label class="cell">Nombre max de mission  : <label>{{ lib.getMaxmission }}</label></label>
+                                    </div>
+                                    <div class="row">
+                                        <label class="cell">Date de début : <label>{{ lib.getDatedebut|date('d/m/Y') }}</label></label>
+                                        <label class="cell">Date de fin : <label>{{ lib.getDatefin|date('d/m/Y') }}</label></label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        {% endfor %}
+                    {% endif %}
 
                 </div>
 
                 <div id="info_user" class="list-group affichage"
                      style="display: none;">
 
-                    <table>
-                        <tr>
-                            <td>Id</td>
-                            <td>Username</td>
-                            <td>Email</td>
-                            <td>Dernière Connexion</td>
-                            <td style="border: none"><button onclick="show('adduser')" type="button" style="border: none">+</button></td>
-                        </tr>
-                        {% if users is defined %}
-                            {% for user in users %}
-                                <tr>
-                                    <td>{{ user.getId }}</td>
-                                    <td>{{ user.getUsername }}</td>
-                                    <td>{{ user.getEmail }}</td>
-                                    <td>{{ user.getLastLogin|date('d/m/Y') }}</td>
-                                    <td style="border: none"><button type="button" style="border: none">x</button></td>
-                                </tr>
-                            {% endfor %}
-                        {% endif %}
-                    </table>
+                    {% if users is defined %}
+                        {% for user in users %}
+                            {% set iddiv = random()  %}
+                            <div class="col-xs-12 Liste">
+                                <div class="row">
+                                    <label class="cell">Email : <label>{{ user.getEmail }}</label></label>
+                                    <label class="cell">Username : <label>{{ user.getUsername }}</label>
+                                        <button class="button" style="float: right" type="button" data-toggle="collapse" data-target="#user{{ iddiv }}"></button>
+                                    </label>
+
+                                </div>
+                                <div id="user{{ iddiv }}" class="collapse in" >
+                                    <div class="row">
+                                        <label class="cell">Nom : <label>{{ user.getNom }}</label></label>
+                                        <label class="cell">Prénom  : <label>{{ user.getPrenom }}</label></label>
+                                    </div>
+                                    <div class="row">
+                                        <label class="cell">Téléphone : <label>{{ user.getTelephone }}</label></label>
+                                        <label class="cell">Dernière connexion : <label>
+                                                {% if user.getLastLogin %}{{ user.getLastLogin|date('d/m/Y') }}
+                                                {% else %}Jamais
+                                                {% endif %}</label></label>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
 
                 </div>
                 {% if etablissement.getTier.getEcole %}
@@ -263,7 +273,7 @@
                                     <td>{{ ecoles.getId }}</td>
                                     <td>{{ ecoles.getSiren }}</td>
                                     <td>{{ ecoles.getRaisonSoc }}</td>
-                                    <td style="border: none"><button onclick="" type="button" style="border: none">x</button></td>
+                                    <td style="border: none"><button onclick="supprimerPartenariat('{{ path('supprimerAssociationEcole',{'id_ecole':etablissement.getTier.getId,'id_liee':ecoles.getId }) }}',this)" type="button" style="border: none">x</button></td>
                                 </tr>
                             {% endfor %}
                         </table>
