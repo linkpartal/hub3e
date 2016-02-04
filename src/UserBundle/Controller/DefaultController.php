@@ -223,53 +223,46 @@ class DefaultController extends Controller
     {
         $file = new \SplFileObject($uploadedfile);
         $reader = new CsvReader($file);
+        $rowinserted = array();
         $jump = 0;
         $em = $this->getDoctrine()->getEntityManager();
         foreach ($reader as $row) {
-            if($jump++<2 || (''==$row[1] and ''==$row[2] and '' == $row[3] and '' == $row[4])){
+            if ($jump++ < 2 || ('' == $row[1] and '' == $row[2] and '' == $row[3] and '' == $row[4])) {
                 continue;
             }
-            else{
+            else {
                 $erreur = null;
-
-                foreach($reader as $value)
+                if(in_array($row,$rowinserted))
                 {
-                    if($value[1]==$row[1] and $value[2]==$row[2] and $value[3] == $row[3] and $value[4] == $row[4])
-                    {
-                        $erreur='Duplicata dans le fichier' ;
-                    }
+                    $erreur = 'Duplicata dans le fichier';
                 }
-                if(!$erreur)
-                {
-                    $databaseduplica = $em->getRepository('GenericBundle:User')->findOneBy(array('civilite'=>$row[1],'nom'=>$row[2] ,'prenom'=> $row[3]) );
-                    if($databaseduplica)
-                    {
-                        $erreur ='Duplicata dans la base de données';
+                if (!$erreur) {
+                    $databaseduplica = $em->getRepository('GenericBundle:User')->findOneBy(array('civilite' => $row[1], 'nom' => $row[2], 'prenom' => $row[3]));
+                    if ($databaseduplica) {
+                        $erreur = 'Duplicata dans la base de données';
                     }
                 }
 
-                if(!$erreur)
-                {
+                if (!$erreur) {
                     $apprenant = new User();
                     $apprenant->setCivilite($row[1]);
                     $apprenant->setNom($row[2]);
                     $apprenant->setPrenom($row[3]);
                     $apprenant->setTelephone($row[6]);
                     $apprenant->setEmail($row[7]);
-                    $apprenant->setUsername($row[3][0] . ''.$row[2]);
+                    $apprenant->setUsername($row[3][0] . '' . $row[2]);
                     $apprenant->addRole('ROLE_APPRENANT');
                     $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($request->get('Etablissement'));
                     $apprenant->setEtablissement($etablissement);
                     $apprenant->setPassword('import_passif');
-
                     $em->persist($apprenant);
                     $em->flush();
-
+                    array_push($rowinserted,$row);
                     $superadmins = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_SUPER_ADMIN');
                     $usercon = $this->get('security.token_storage')->getToken()->getUser();
-                    $superadmins = array_merge($superadmins, $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$usercon->getTier())));
+                    $superadmins = array_merge($superadmins, $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier' => $usercon->getTier())));
 
-                    foreach($superadmins as $admin){
+                    foreach ($superadmins as $admin) {
                         $notif = new Notification();
                         $notif->setEntite($apprenant->getId());
                         $notif->setType('Utilisateur');
@@ -278,10 +271,10 @@ class DefaultController extends Controller
                         $em->flush();
                     }
 
-                    $em->persist($apprenant);
                     $em->flush();
                 }
-                else{
+                else
+                {
                     $candidat = new ImportCandidat();
                     $candidat->setCivilite($row[1]);
                     $candidat->setNom($row[2]);
@@ -295,29 +288,21 @@ class DefaultController extends Controller
                     $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($request->get('Etablissement'));
                     $candidat->setEtablissement($etablissement);
                     $candidat->setUser($this->get('security.token_storage')->getToken()->getUser());
-                    if($row[13]=='oui')
-                    {
+                    if ($row[13] == 'oui') {
                         $candidat->setPermis(true);
-                    }
-                    elseif($row[13]=='non'){
+                    } elseif ($row[13] == 'non') {
                         $candidat->setPermis(false);
                     }
-                    if($row[14]=='oui')
-                    {
+                    if ($row[14] == 'oui') {
                         $candidat->setVehicule(true);
-                    }
-                    elseif($row[14]=='non'){
+                    } elseif ($row[14] == 'non') {
                         $candidat->setVehicule(false);
                     }
                     $candidat->setErreur($erreur);
                     $em->persist($candidat);
                     $em->flush();
                 }
-
-
             }
-
-
         }
     }
 

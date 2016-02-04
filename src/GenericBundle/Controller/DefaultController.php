@@ -89,6 +89,7 @@ class DefaultController extends Controller
         $user = $userManager->findUserByUsername( $request->get('_username'));
 
         $hash =  $this->get('security.password_encoder')->encodePassword($user, $request->get('_password'));
+        //$user->setPlainPassword($request->get('_password'));
         $user->setPassword($hash);
 
         //Change Last Login to Now

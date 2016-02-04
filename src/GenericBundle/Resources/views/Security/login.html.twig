@@ -29,7 +29,7 @@
                             <label for="remember_me"><mark></mark> {{ 'security.login.remember_me'|trans }}</label>
                         </div>
                         <div class="col col-lg-6">
-                            <a title="Récupérer mon mot de passe">Mot de passe oublié?</a>
+                            <a href="{{ path('fos_user_resetting_request') }}" title="Récupérer mon mot de passe">Mot de passe oublié?</a>
                         </div>
                     </div>
 

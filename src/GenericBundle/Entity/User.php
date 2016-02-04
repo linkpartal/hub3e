@@ -63,6 +63,13 @@ class User extends BaseUser
     private $telephone;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="photos", type="blob", nullable=true)
+     */
+    private $photos;
+
+    /**
      * @var \Tier
      *
      * @ORM\ManyToOne(targetEntity="Tier")
@@ -399,5 +406,29 @@ class User extends BaseUser
     public function getSport()
     {
         return $this->sport;
+    }
+
+    /**
+     * Set photos
+     *
+     * @param string $photos
+     *
+     * @return User
+     */
+    public function setPhotos($photos)
+    {
+        $this->photos = $photos;
+
+        return $this;
+    }
+
+    /**
+     * Get photos
+     *
+     * @return string
+     */
+    public function getPhotos()
+    {
+        return $this->photos;
     }
 }
