@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping\Column;
 /**
  * @ORM\Entity(repositoryClass="GenericBundle\Repository\UserRepository")
  * @ORM\Table(name="users")
- * @AttributeOverrides({
+ *@AttributeOverrides({
  *      @AttributeOverride(name="email",
  *          column=@Column(
  *              unique   = false
@@ -85,9 +85,24 @@ class User extends BaseUser
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
+     * @ORM\ManyToMany(targetEntity="Culturel", mappedBy="users")
+     */
+    private $culturel;
+
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
      * @ORM\ManyToMany(targetEntity="Mission", mappedBy="users")
      */
     private $mission;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Sport", mappedBy="users")
+     */
+    private $sport;
 
     /**
      * Constructor
@@ -95,9 +110,10 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
+        $this->culturel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->mission = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sport = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
     /**
      * Set tier
      *
@@ -282,4 +298,106 @@ class User extends BaseUser
     }
 
 
+
+    /**
+     * Add culturel
+     *
+     * @param \GenericBundle\Entity\Culturel $culturel
+     *
+     * @return User
+     */
+    public function addCulturel(\GenericBundle\Entity\Culturel $culturel)
+    {
+        $this->culturel[] = $culturel;
+
+        return $this;
+    }
+
+    /**
+     * Remove culturel
+     *
+     * @param \GenericBundle\Entity\Culturel $culturel
+     */
+    public function removeCulturel(\GenericBundle\Entity\Culturel $culturel)
+    {
+        $this->culturel->removeElement($culturel);
+    }
+
+    /**
+     * Get culturel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCulturel()
+    {
+        return $this->culturel;
+    }
+
+    /**
+     * Add mission
+     *
+     * @param \GenericBundle\Entity\Mission $mission
+     *
+     * @return User
+     */
+    public function addMission(\GenericBundle\Entity\Mission $mission)
+    {
+        $this->mission[] = $mission;
+
+        return $this;
+    }
+
+    /**
+     * Remove mission
+     *
+     * @param \GenericBundle\Entity\Mission $mission
+     */
+    public function removeMission(\GenericBundle\Entity\Mission $mission)
+    {
+        $this->mission->removeElement($mission);
+    }
+
+    /**
+     * Get mission
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMission()
+    {
+        return $this->mission;
+    }
+
+    /**
+     * Add sport
+     *
+     * @param \GenericBundle\Entity\Sport $sport
+     *
+     * @return User
+     */
+    public function addSport(\GenericBundle\Entity\Sport $sport)
+    {
+        $this->sport[] = $sport;
+
+        return $this;
+    }
+
+    /**
+     * Remove sport
+     *
+     * @param \GenericBundle\Entity\Sport $sport
+     */
+    public function removeSport(\GenericBundle\Entity\Sport $sport)
+    {
+        $this->sport->removeElement($sport);
+    }
+
+    /**
+     * Get sport
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSport()
+    {
+        return $this->sport;
+    }
 }
