@@ -148,6 +148,13 @@ class Mission
     private $horaire;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="suspendu", type="boolean", nullable=true)
+     */
+    private $suspendu;
+
+    /**
      * @var \Etablissement
      *
      * @ORM\ManyToOne(targetEntity="Etablissement")
@@ -664,7 +671,7 @@ class Mission
     }
 
     /**
-     * Get nomcontrat
+     * Get nomcontact
      *
      * @return string
      */
@@ -816,5 +823,29 @@ class Mission
             $this->setCodemission($code);
         }
 
+    }
+
+    /**
+     * Set suspendu
+     *
+     * @param boolean $suspendu
+     *
+     * @return Mission
+     */
+    public function setSuspendu($suspendu)
+    {
+        $this->suspendu = $suspendu;
+
+        return $this;
+    }
+
+    /**
+     * Get suspendu
+     *
+     * @return boolean
+     */
+    public function getSuspendu()
+    {
+        return $this->suspendu;
     }
 }

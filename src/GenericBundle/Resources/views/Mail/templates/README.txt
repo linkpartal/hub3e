@@ -1,0 +1,1 @@
+Here are stored the models for the mailing.
