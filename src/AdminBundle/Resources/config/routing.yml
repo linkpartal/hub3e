@@ -18,6 +18,8 @@ metier_user_affiche:
     path: /affichage/id={id}
     defaults: { _controller: AdminBundle:Default:affichage}
 
+
+
 admin_afficheLicence:
     path: /affichageLicence/id={id}
     defaults: { _controller: AdminBundle:LicenceDef:affichageLicence}
@@ -74,3 +76,9 @@ supprimerAssociationEcole:
     path: /suppressionAssociationEcole/{id_ecole}/{id_liee}
     defaults: { _controller: AdminBundle:Ecole:suppEcoleAssoc}
 
+mission_added:
+    path: /mission_added
+    defaults: { _controller: AdminBundle:Ecole:addMission}
+admin_afficheMission:
+            path: /affichageMission/id={id}
+            defaults: { _controller: AdminBundle:Ecole:affichageMission}

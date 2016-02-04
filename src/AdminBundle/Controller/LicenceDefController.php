@@ -53,7 +53,6 @@ class LicenceDefController extends Controller
     public function affichageLicenceAction($id)
     {
         $licence = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->find($id);
-
         return $this->render('AdminBundle:Admin:afficheLicence.html.twig',array('licence'=>$licence));
     }
 }

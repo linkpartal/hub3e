@@ -30,7 +30,7 @@ class Licence
 
     /**
      * @var string
-     *
+     *²
      * @ORM\Column(name="DateDebut", type="date")
      */
     private $datedebut;

@@ -48,6 +48,8 @@ class DefaultController extends Controller
 
         $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
+      //  $formaEtab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findBy(array('etablissement'=>$etablissement));
+        $userMiss = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_TUTEUR');
 
         if($etablissement->getTier()->getEcole())
         {
@@ -76,8 +78,9 @@ class DefaultController extends Controller
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
         $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
+        $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array(),array('date' => 'DESC'));
         return $this->render('AdminBundle:Admin:iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,
-            'libs'=>$licences,'tiers'=>$tiers,'users'=>$users,'formations'=>$formation));
+            'libs'=>$licences,'tiers'=>$tiers,'users'=>$users,'formations'=>$formation, 'missions'=>$missions ,'usermis'=>$userMiss));
     }
 
     public function creeNewModeleAction($id)

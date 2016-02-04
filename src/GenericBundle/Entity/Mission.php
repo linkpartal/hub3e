@@ -54,21 +54,21 @@ class Mission
      *
      * @ORM\Column(name="NomContact", type="string", length=45, nullable=true)
      */
-    private $nomcontrat;
+    private $nomcontact;
 
     /**
      * @var string
      *
      * @ORM\Column(name="PrenomContact", type="string", length=45, nullable=true)
      */
-    private $prenomcontrat;
+    private $prenomcontact;
 
     /**
      * @var string
      *
      * @ORM\Column(name="FonctionContact", type="string", length=45, nullable=true)
      */
-    private $fonctioncontrat;
+    private $fonctioncontact;
 
     /**
      * @var string
@@ -505,14 +505,14 @@ class Mission
         $this->formation->removeElement($formation);
     }
 
+
+
     /**
-     * Set date
+     * @var string
      *
-     * @param \Date $date
-     *
-     * @return Mission
+     * @ORM\Column(name="Date", type="date")
      */
-    public function setDate(\Date $date)
+    public function setDate(\Datetime $date)
     {
         $this->date = $date;
 
@@ -650,15 +650,15 @@ class Mission
     }
 
     /**
-     * Set nomcontrat
+     * Set nomcontact
      *
-     * @param string $nomcontrat
+     * @param string $nomcontact
      *
      * @return Mission
      */
-    public function setNomcontrat($nomcontrat)
+    public function setNomcontact($nomcontact)
     {
-        $this->nomcontrat = $nomcontrat;
+        $this->nomcontact = $nomcontact;
 
         return $this;
     }
@@ -668,57 +668,57 @@ class Mission
      *
      * @return string
      */
-    public function getNomcontrat()
+    public function getNomcontact()
     {
-        return $this->nomcontrat;
+        return $this->nomcontact;
     }
 
     /**
-     * Set prenomcontrat
+     * Set prenomcontact
      *
-     * @param string $prenomcontrat
+     * @param string $prenomcontact
      *
      * @return Mission
      */
-    public function setPrenomcontrat($prenomcontrat)
+    public function setPrenomcontact($prenomcontact)
     {
-        $this->prenomcontrat = $prenomcontrat;
+        $this->prenomcontact = $prenomcontact;
 
         return $this;
     }
 
     /**
-     * Get prenomcontrat
+     * Get prenomcontact
      *
      * @return string
      */
-    public function getPrenomcontrat()
+    public function getPrenomcontact()
     {
-        return $this->prenomcontrat;
+        return $this->prenomcontact;
     }
 
     /**
-     * Set fonctioncontrat
+     * Set fonctioncontact
      *
-     * @param string $fonctioncontrat
+     * @param string $fonctioncontact
      *
      * @return Mission
      */
-    public function setFonctioncontrat($fonctioncontrat)
+    public function setFonctioncontact($fonctioncontact)
     {
-        $this->fonctioncontrat = $fonctioncontrat;
+        $this->fonctioncontact = $fonctioncontact;
 
         return $this;
     }
 
     /**
-     * Get fonctioncontrat
+     * Get fonctioncontact
      *
      * @return string
      */
-    public function getFonctioncontrat()
+    public function getFonctioncontact()
     {
-        return $this->fonctioncontrat;
+        return $this->fonctioncontact;
     }
 
     /**

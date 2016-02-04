@@ -380,9 +380,9 @@ class DefaultController extends Controller
                 $mission->setIntitule($row[18]);
                 $mission->setDescriptif($row[19]);
                 $mission->setDomaine($row[20]);
-                $mission->setNomcontrat($row[11]);
-                $mission->setPrenomcontrat($row[12]);
-                $mission->setFonctioncontrat($row[13]);
+                $mission->setNomcontact($row[11]);
+                $mission->setPrenomcontact($row[12]);
+                $mission->setFonctioncontact($row[13]);
                 $mission->setTelcontact($row[14]);
                 $mission->setEmailcontact($row[15]);
                 $mission->setEtablissement($etab_mission);

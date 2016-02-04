@@ -5,10 +5,13 @@ namespace AdminBundle\Controller;
 use GenericBundle\Entity\Etablissement;
 use GenericBundle\Entity\Notification;
 use GenericBundle\Entity\Tier;
+use GenericBundle\Entity\Mission;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
+
+
 
 class EcoleController extends Controller
 {
@@ -19,7 +22,6 @@ class EcoleController extends Controller
         $em = $this->getDoctrine()->getManager();
         $reponse = new JsonResponse();
         $tier = $em->getRepository('GenericBundle:Tier')->findOneBy(array('siren'=>$request->get('_SIREN')));
-
 
         if ($tier) {
             return $reponse->setData(array('status'=>$request->get('_SIREN') . ' appartient déjà à un tier existant.'));
@@ -117,6 +119,16 @@ class EcoleController extends Controller
         $em->flush();
         $reponse = new JsonResponse();
         return $reponse->setData(array('Status'=>'Licence correctement supprimer'));
+    }
+
+    public function suppMissionAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $lic = $em->getRepository('GenericBundle:Mission')->find($id);
+        $lic->setSuspendu(true);
+        $em->flush();
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('Status'=>'Mission correctement supprimer'));
     }
 
     public function supprimeretabAction($id)
@@ -223,5 +235,68 @@ class EcoleController extends Controller
         $em->flush();
         $reponse = new JsonResponse();
         return $reponse->setData(array('Status'=>'Licence correctement supprimer'));
+    }
+
+    public function addMissionAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $mission = new Mission();
+        $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_idetab'));
+        $mission->setEtablissement($etablissement);
+
+        $mission->setDescriptif($request->get('_Descriptif'));
+        $mission->setProfil($request->get('_Profil'));
+        $mission->setEtat($request->get('_Etat'));
+        $mission->setTypecontrat($request->get('_TypeContrat'));
+        $mission->setDomaine($request->get('_Domaine'));
+        $date = new \DateTime();
+        $mission->setDate($date);
+        $mission->setRemuneration($request->get('_Remuneration'));
+        $mission->setHoraire($request->get('_Horaire'));
+
+        $mission->setDatedebut(date_create($request->get('_Datedebut')) );
+        $mission->setDatefin(date_create($request->get('_Datefin')) );
+        $mission->setNomcontact($request->get('_NomContact'));
+        $mission->setPrenomContact($request->get('_PrenomContact'));
+        $mission->setFonctionContact($request->get('_FonctionContact'));
+        $mission->setTelContact($request->get('_TelContact'));
+        $mission->setEmailContact($request->get('_EmailContact'));
+        $mission->setIntitule($request->get('_Intitule'));
+        $mission->setEmploi($request->get('_Emploi'));
+        //$mission->setFormation($request->get('_idform'));
+
+        $us = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('userselect'));
+        $mission->setTuteur($us);
+
+       // var_dump($mission);die;
+        /*  $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_iduse'));
+          $mission->setTuteur($user);*/
+       /* $qb=$em->createQueryBuilder();
+        $qb->select('mission')
+           ->from('EcoleBundle:Default:affichage','mission')
+            ->orderBy('mission.date','ASC');
+        $query = $qb->getQuery();
+        $mission = $query->getResult();*/
+
+     //$mission=$this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('date', 'DESC'));
+
+
+        $em->persist($mission);
+        $em->flush();
+
+        $mission->genererCode();
+        $em->flush();
+
+
+
+        return $this->forward('EcoleBundle:Default:affichage',array('id'=>$etablissement->getId()));
+
+
+    }
+
+    public function affichageMissionAction($id)
+    {
+        $mission = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->find($id);
+        return $this->render('EcoleBundle:Adminecole:iFrameContent.html.twig',array('mission'=>$mission));
     }
 }
