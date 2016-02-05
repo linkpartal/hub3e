@@ -152,7 +152,7 @@ class Mission
      *
      * @ORM\Column(name="suspendu", type="boolean", nullable=true)
      */
-    private $suspendu;
+    private $suspendu= false;
 
     /**
      * @var \Etablissement

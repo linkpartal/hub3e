@@ -58,7 +58,6 @@
             <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block">
 
 
-
                 <form id="formadduser" class="formulaire" action="{{ path("user_added") }}" method="post">
                     <input type="hidden" id="id" name="_id" value="{{ etablissement.getId }}">
                     <div class="div_form" >
@@ -114,17 +113,19 @@
                 <form id="formaddmission" class="formulaire" action= "{{ path("mission_added") }}" method="post">
 
                     <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
-                    <div class="div_form" >
+                    <div class="div_form">
                         <div class="col-xs-6 input-colonne">
-
-                            <input type="text" class="input" id="Descriptif" name="_Descriptif" placeholder="Descriptif">
+                            <input type="text" class="input" id="Intitule" name="_Intitule" placeholder="Intitule" required>
+                            <input type="text" class="input " id="Domaine" name="_Domaine" placeholder="Domaine">
                             <input type="text" class="input" id="Profil" name="_Profil" placeholder="Profil">
                             <input type="text" class="input " id="Etat" name="_Etat" placeholder="Etat">
+                            <label style="float: left">Date debut :</label> <input style="display: inline-block;width: 200px" type="date" class="input" id="Datedebut" name="_Datedebut" title="Datedebut">
                             <input type="text" class="input " id="TypeContrat" name="_TypeContrat" placeholder="TypeContrat">
-                            <input type="text" class="input " id="Domaine" name="_Domaine" placeholder="Domaine">
+
                             <input type="text" class="input " id="Remuneration" name="_Remuneration" placeholder="Remuneration">
                             <input type="text" class="input " id="Horaire" name="_Horaire" placeholder="Horaire">
-                            <label style="float: left">Date debut :</label> <input style="display: inline-block;width: 200px" type="date" class="input" id="Datedebut" name="_Datedebut" title="Datedebut">
+
+
 
                         </div>
                         <div class="col-xs-6">
@@ -134,7 +135,7 @@
                             <input type="text" class="input" id="FonctionContact" name="_FonctionContact" placeholder="FonctionContact">
                             <input type="text" class="input" id="TelContact" name="_TelContact" placeholder="TelContact">
                             <input type="text" class="input" id="EmailContact" name="_EmailContact" placeholder="EmailContact">
-                            <input type="text" class="input" id="Intitule" name="_Intitule" placeholder="Intitule">
+
                             <input type="text" class="input " id="Emploi" name="_Emploi" placeholder="Emploi">
                             <label style="float: left">Date fin :</label><input style="display: inline-block;width: 200px" type="date" class="input " id="Datefin" name="_Datefin" title="Datefin">
 
@@ -149,7 +150,7 @@
 
                             </select>
                         </div>
-
+                        <textarea  type="text" style="height: 230px;" class="input" id="Descriptif" name="_Descriptif" placeholder="Descriptif"></textarea>
                     </div>
                     <div class="div_button">
                         <input class="blue" type="submit" value="envoyer">
@@ -355,7 +356,7 @@
 
                                                 <div class="row">
                                                     <label class="cell"  >CodeMission : <label style="font-size: medium">{{ mission.getCodemission }}</label></label>
-                                                    <label class="cell" >Date : <label style="font-size: medium" > {{ mission.getDate|date('d/m/Y')}}</label>
+                                                    <label class="cell" >Date : <label style="font-size: medium" > {{ mission.getDate|date('d/m/Y H:i')}}</label>
                                                         <button onclick="supprimerligne('{{ path('supprimer_Mission',{'id': mission.getId}) }}',this)"
                                                                 type="button" style=";float: right">x</button>
                                                         <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#mission{{ iddiv }}"></button>
@@ -364,7 +365,7 @@
                                                 </div>
                                                 <div id="mission{{ iddiv }}" class="collapse in" >
                                                     <div class="row">
-                                                        <label class="cell" >Descriptif : <label style="font-size: medium" >{{ mission.getDescriptif }}</label></label>
+                                                        <label class="cell">EmailContact  : <label style="font-size: medium">{{ mission.EmailContact }}</label></label>
                                                             <label class="cell">Profil : <label style="font-size: medium">{{ mission.getProfil }}</label></label>
                                                     </div>
                                                     <div class="row">
@@ -380,7 +381,7 @@
                                                         <label class="cell">Tuteur  : <label style="font-size: medium">{{ mission.getTuteur }}</label></label>
                                                     </div>
                                                     <div class="row">
-                                                        <label class="cell">EmailContact  : <label style="font-size: medium">{{ mission.EmailContact }}</label></label>
+                                                        <label class="cell" style="height: 280px;word-wrap: break-word;width: 150px;hyphens: auto;max-width: 100px;">Descriptif : <label style="font-size: medium" >{{ mission.getDescriptif }}</label></label>
                                                     </div>
 
                                                 </div>
@@ -390,8 +391,6 @@
 
 
                                 </div>
-
-
 
                         {% endif %}
                     </div>
@@ -467,6 +466,11 @@
             {% endif %}
             document.getElementById(x).style.display='block';
         };
+
+
+
+
+
         function active(route) {
             $.ajax({
                 type: 'get',
