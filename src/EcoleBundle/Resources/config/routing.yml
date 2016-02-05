@@ -89,3 +89,7 @@ remove_etablissement_qcm:
 loadconsulterQCM:
     path:     /consulterQCM/{id}
     defaults: { _controller: EcoleBundle:Default:loadQCM }
+
+etablissement_exist:
+    path: /existEtablissement/{id}
+    defaults: { _controller: EcoleBundle:Ecole:ExistEtab}
