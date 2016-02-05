@@ -4,7 +4,9 @@ namespace AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use GenericBundle\Entity\Mission;
 use \JMS\Serializer\SerializerBuilder;
+
 
 class DefaultController extends Controller
 {
@@ -28,12 +30,13 @@ class DefaultController extends Controller
         }
         $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findAll();
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
+        $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array(),array('date'=>'DESC'));
         $qcms = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findAll();
         $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');
 
         return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$users,
-            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms));
+            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'missions'=>$missions));
     }
 
     public function loadiframeAction()
@@ -48,6 +51,8 @@ class DefaultController extends Controller
 
         $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
+      //  $formaEtab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findBy(array('etablissement'=>$etablissement));
+        $userMiss = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_TUTEUR');
 
         if($etablissement->getTier()->getEcole())
         {
@@ -76,8 +81,13 @@ class DefaultController extends Controller
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
         $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
+        $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date' => 'DESC'));
+       //$mission = $this->getDoctrine()->getRepository('GenericBundle:Mission')->find($id);
+        // var_dump($mission);die;
+
+
         return $this->render('AdminBundle:Admin:iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,
-            'libs'=>$licences,'tiers'=>$tiers,'users'=>$users,'formations'=>$formation));
+            'libs'=>$licences,'tiers'=>$tiers,'users'=>$users,'formations'=>$formation, 'missions'=>$missions ,'usermis'=>$userMiss));
     }
 
     public function creeNewModeleAction($id)
@@ -128,4 +138,6 @@ class DefaultController extends Controller
         fclose($myfile);
         return $this->redirect($this->generateUrl('admin_iframeload'));
     }
+
+
 }

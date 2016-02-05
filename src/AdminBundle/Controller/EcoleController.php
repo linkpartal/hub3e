@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 
+
+
 class EcoleController extends Controller
 {
 
@@ -19,7 +21,6 @@ class EcoleController extends Controller
         $em = $this->getDoctrine()->getManager();
         $reponse = new JsonResponse();
         $tier = $em->getRepository('GenericBundle:Tier')->findOneBy(array('siren'=>$request->get('_SIREN')));
-
 
         if ($tier) {
             return $reponse->setData(array('status'=>$request->get('_SIREN') . ' appartient déjà à un tier existant.'));
@@ -119,6 +120,8 @@ class EcoleController extends Controller
         return $reponse->setData(array('Status'=>'Licence correctement supprimer'));
     }
 
+
+
     public function supprimeretabAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -128,7 +131,6 @@ class EcoleController extends Controller
         {
             throw new Exception('Aucune école ne posséde l\'id ' . $id);
         }
-
         $etab->setSuspendu(true);
         $em->flush();
         return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
@@ -224,4 +226,6 @@ class EcoleController extends Controller
         $reponse = new JsonResponse();
         return $reponse->setData(array('Status'=>'Licence correctement supprimer'));
     }
+
+
 }

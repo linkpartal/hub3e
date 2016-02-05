@@ -152,7 +152,7 @@ class Mission
      *
      * @ORM\Column(name="suspendu", type="boolean", nullable=true)
      */
-    private $suspendu;
+    private $suspendu= false;
 
     /**
      * @var \Etablissement
@@ -512,12 +512,12 @@ class Mission
         $this->formation->removeElement($formation);
     }
 
+
+
     /**
-     * Set date
+     * @var string
      *
-     * @param \Date $date
-     *
-     * @return Mission
+     * @ORM\Column(name="Date", type="date")
      */
     public function setDate(\DateTime $date)
     {

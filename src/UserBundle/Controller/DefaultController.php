@@ -361,6 +361,7 @@ class DefaultController extends Controller
 
                 $mission = new Mission();
                 $mission->setEtat('À pourvoir');
+
                 $mission->setTypecontrat(mb_convert_encoding($row[16],'UTF-8','auto'));
 
                 $mission->setIntitule(mb_convert_encoding($row[18],'UTF-8','auto'));

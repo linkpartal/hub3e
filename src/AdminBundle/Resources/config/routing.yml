@@ -18,9 +18,15 @@ metier_user_affiche:
     path: /affichage/id={id}
     defaults: { _controller: AdminBundle:Default:affichage}
 
+
+
 admin_afficheLicence:
     path: /affichageLicence/id={id}
     defaults: { _controller: AdminBundle:LicenceDef:affichageLicence}
+
+admin_afficheMission:
+        path: /affichageMission/id={id}
+        defaults: { _controller: AdminBundle:MissionDef:affichageMission}
 
 metier_user_associated:
     path:  /associated
@@ -29,6 +35,10 @@ metier_user_associated:
 supprimer_Licence:
     path:  /suppLicence/{id}
     defaults: {_controller: AdminBundle:Ecole:suppLicence}
+
+supprimer_Mission:
+        path:  /suppMission/{id}
+        defaults: {_controller: AdminBundle:MissionDef:suppMission}
 
 loadgestionQCM:
     path:     /gestionQCM/{id}
@@ -74,3 +84,14 @@ supprimerAssociationEcole:
     path: /suppressionAssociationEcole/{id_ecole}/{id_liee}
     defaults: { _controller: AdminBundle:Ecole:suppEcoleAssoc}
 
+mission_added:
+    path: /mission_added
+    defaults: { _controller: AdminBundle:MissionDef:addMission}
+
+modifierMission:
+    path: /modifierMiss/{id}
+    defaults: { _controller: AdminBundle:MissionDef:modifier}
+
+missionModif:
+        path: /missionModif
+        defaults: { _controller: AdminBundle:MissionDef:missionModif}
