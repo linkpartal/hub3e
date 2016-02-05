@@ -497,6 +497,8 @@
         i++;
     };
     function submitAjaxForm(url,form){
+        var idEtab
+        var route
         $.ajax({
             type: "POST",
             url: url,
@@ -505,11 +507,43 @@
             {
                 if(data['status']==='success')
                 {
-                    $("#"+form+"").submit();
+
+                    if (document.getElementById('SIREN').value=="")
+                    {
+                        alert('le SIREN est obligatoire');
+                    }
+                    else if (document.getElementById('RaisonSoc').value==""){
+                        alert('la raison sociale est obligatoire');
+                    }
+                    else
+                    {
+                        $("#"+form+"").submit();
+                    }
+
+
                 }
                 else
                 {
-                    alert(data['status']); // show response from the php script.
+                    idEtab=data['status'];
+                   // alert(idEtab);
+
+                   //alert(data['status']); // show response from the php script.
+
+
+                    route='{{ path('etablissement_exist',{'id':"_idEtab" }) }}';
+
+                    route = route.replace("_idEtab", idEtab);
+                    //window.open(route,'_blank');
+                    //var url = $(route).attr('href');
+                   // window.open(url, '_blank');
+                    $(location).prop('href', route).attr('target','_blank');
+
+
+
+                    //window.location.href=route;
+
+
+
                 }
             }
         });

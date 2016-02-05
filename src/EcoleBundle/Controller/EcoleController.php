@@ -18,11 +18,13 @@ class EcoleController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $reponse = new JsonResponse();
+
         $tier = $em->getRepository('GenericBundle:Tier')->findOneBy(array('siren'=>$request->get('_SIREN')));
 
 
         if ($tier) {
-            return $reponse->setData(array('status'=>$request->get('_SIREN') . ' appartient déjà à un tier existant.'));
+           return $reponse->setData(array('status'=>$tier->getid()));
+
         }
 
 
@@ -295,4 +297,33 @@ class EcoleController extends Controller
         $reponse = new JsonResponse();
         return $reponse->setData(array('succes'=>'0'));
     }
+
+
+
+    public function ExistEtabAction($id)
+    {
+
+        $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
+
+        if($etablissement->getTier()->getEcole())
+        {
+            $type = 'Ecole';
+        }
+        else{
+            $type = 'Societe';
+        }
+
+
+        if($etablissement->getTier()->getLogo())
+        {
+            $etablissement->getTier()->setLogo(base64_encode(stream_get_contents($etablissement->getTier()->getLogo())));
+        }
+        if($etablissement->getTier()->getFondecran())
+        {
+            $etablissement->getTier()->setFondecran(base64_encode(stream_get_contents($etablissement->getTier()->getFondecran())));
+        }
+
+        return $this->render('EcoleBundle:Adminecole:SocietExist.html.twig',array('etablissement'=>$etablissement));
+    }
 }
+
