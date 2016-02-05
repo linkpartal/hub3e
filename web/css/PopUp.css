@@ -102,24 +102,4 @@
     align:center;
 }
 
-SELECT, INPUT[type="text"] {
-    width: 160px;
-    box-sizing: border-box;
 
-}
-SECTION {
-    padding: 8px;
-    background-color: #f0f0f0;
-    overflow: auto;
-    text-align: center;
-
-}
-SECTION > DIV {
-
-    padding: 4px;
-    text-align: center;
-}
-SECTION > DIV + DIV {
-    width: 40px;
-    text-align: center;
-}

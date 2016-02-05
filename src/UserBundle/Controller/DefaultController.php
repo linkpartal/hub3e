@@ -424,4 +424,12 @@ class DefaultController extends Controller
         return $response->setData(array('Succes'=>'1'));
     }
 
+    public function afficherDuplicaAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $import = $em->getRepository('GenericBundle:ImportCandidat')->findBy($id);
+        //$users = $em->getRepository('GenericBundle:User')->findBy()
+            var_dump($import);die;
+    }
+
 }

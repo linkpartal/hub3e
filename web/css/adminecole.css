@@ -77,7 +77,7 @@ body {
 }
 
 .recherche{
-    width: calc(100% - 40px);
+    width: calc(100% - 40px) !important;
     display: block;
     border: none;
     border-bottom: solid 1px #1abc9c;
@@ -184,7 +184,6 @@ iframe
 {
     font:20px arial;
     width: 100%;
-    padding-left: 35%;
     height: 40px;
     border-radius: 0;
     background: #1C5AA5;

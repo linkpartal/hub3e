@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     <title>Title</title>
 </head>
-<body>
-<table style="border-collapse: collapse;">
+<body style="display: flex;">
+<table style="border-collapse: collapse;width: 50%;max-height: 100%">
     <tr>
         <td>Id</td>
         <td>Civilite</td>
@@ -16,7 +17,6 @@
         <td>Erreur</td>
         <td style="border: none"></td>
     </tr>
-
     {% for import in imports %}
         <tr>
             <td>{{ import.getId }}</td>
@@ -26,14 +26,17 @@
             <td>{{ import.getTelephone }}</td>
             <td>{{ import.getEmail }}</td>
             <td>{{ import.getErreur }}</td>
-            <td style="border: none"><button onclick="supprimerLigne('{{ path('supprimer_import',{'id': import.getId}) }}',this)" type="button" style="border: none">x</button></td>
+            <td style="border: none">
+                <button onclick="supprimerLigne('{{ path('supprimer_import',{'id': import.getId}) }}',this)" type="button" style="border: none">x</button>
+                <button onclick="voirduplica({{ import.getId }})" type="button" style="border: none">voir</button>
+            </td>
         </tr>
     {% endfor %}
 </table>
+<iframe id="iframe" src="" style="width: 50%;height: 100%;max-height: 100%;position: fixed;right: 0"></iframe>
 <script src="//code.jquery.com/jquery.min.js"></script>
 <script language="javascript">
-    function supprimerLigne(route,champs)
-    {
+    function supprimerLigne(route,champs) {
         $.ajax({
             type: 'get',
             url: route,
@@ -43,8 +46,13 @@
             success: function(data){console.log(data);}
         });
         champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
+    };
+    function voirduplica(id)
+    {
+        var route = '{{ path("afficher_duplica",{'id':"_id"}) }}';
+        route = route.replace('_id',id);
+        document.getElementById('iframe').src = route;
     }
-
 </script>
 </body>
 </html>

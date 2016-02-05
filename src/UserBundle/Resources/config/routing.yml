@@ -33,3 +33,7 @@ afficher_import:
 supprimer_import:
     path: /admin/supprimerimport/{id}
     defaults: { _controller: UserBundle:Default:supprimerImports}
+
+afficher_duplica:
+    path: /admin/afficherduplica/{id}
+    defaults: { _controller: UserBundle:Default:afficherDuplica}

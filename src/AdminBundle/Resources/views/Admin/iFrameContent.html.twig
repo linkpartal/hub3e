@@ -43,7 +43,7 @@
                             {% endfor %}
                         </select>
 
-                        <input class="input" placeholder="Date Début" type="date" class="form-control champ" id="Date" name="_Date">
+                        <input class="input" placeholder="Date Début" type="date" class="form-control champ" id="Date" name="_Date" disabled>
                     </div>
                     <div class="div_button">
                         <input class="blue" type="submit" value="Valider">
@@ -119,7 +119,7 @@
                             <input type="text" class="input " id="Domaine" name="_Domaine" placeholder="Domaine">
                             <input type="text" class="input" id="Profil" name="_Profil" placeholder="Profil">
                             <input type="text" class="input " id="Etat" name="_Etat" placeholder="Etat">
-                            <label style="float: left">Date debut :</label> <input style="display: inline-block;width: 200px" type="date" class="input" id="Datedebut" name="_Datedebut" title="Datedebut">
+                            <label style="float: left">Date debut :</label> <input style="display: inline-block;width: 200px" type="date" class="input" id="Datedebut" name="_Datedebut" title="Datedebut" disabled>
                             <input type="text" class="input " id="TypeContrat" name="_TypeContrat" placeholder="TypeContrat">
 
                             <input type="text" class="input " id="Remuneration" name="_Remuneration" placeholder="Remuneration">
@@ -137,7 +137,7 @@
                             <input type="text" class="input" id="EmailContact" name="_EmailContact" placeholder="EmailContact">
 
                             <input type="text" class="input " id="Emploi" name="_Emploi" placeholder="Emploi">
-                            <label style="float: left">Date fin :</label><input style="display: inline-block;width: 200px" type="date" class="input " id="Datefin" name="_Datefin" title="Datefin">
+                            <label style="float: left">Date fin :</label><input style="display: inline-block;width: 200px" type="date" class="input " id="Datefin" name="_Datefin" title="Datefin" disabled>
 
 
                             <select class="input"   name="userselect" title="" >
@@ -450,6 +450,11 @@
     <script src="//code.jquery.com/jquery.min.js"></script>
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('js/PopUp.js') }}"></script>
+    <script src="//cdn.jsdelivr.net/webshim/1.14.5/polyfiller.js"></script>
+    <script>
+        webshims.setOptions('forms-ext', {types: 'date'});
+        webshims.polyfill('forms forms-ext');
+    </script>
     <script language="JavaScript">
         {% if etablissement is defined %}
         document.getElementById("select_info").onchange = function(){
