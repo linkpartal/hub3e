@@ -16,12 +16,44 @@
                     <form class="formulaire" id="formMission" action="{{ path('missionModif') }}" method="post" enctype="multipart/form-data">
 
                         <input type="hidden" value="{{ mission.getId }}" id="id" name="_ID">
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="Profil">Profil :</label>
+                            <input value="{{mission.getProfil}}" type="text" class="champ form-control" id="Profil" name="_Profil">
+                        </div>
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="Intitule">Intitule :</label>
+                            <input value="{{mission.getIntitule}}" type="text" class="champ form-control" id="Intitule" name="_Intitule">
+                        </div>
 
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="Domaine">Domaine :</label>
+                            <input value="{{mission.getDomaine}}" type="text" class="champ form-control" id="Domaine" name="_Domaine">
+                        </div>
 
 
                         <div class="inputcontainer">
-                            <label class="list-group-item" style="height: 60px;" for="Nom">Domaine :</label>
-                            <input value="{{mission.getDomaine}}" type="text" class="champ form-control" id="Nom" name="_Domaine">
+                            <label class="list-group-item" style="height: 60px;" for="Etat">Etat :</label>
+                            <input value="{{mission.getEtat}}" type="text" class="champ form-control" id="Etat" name="_Etat">
+                        </div>
+
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="TypeContrat">TypeContrat :</label>
+                            <input value="{{mission.getTypeContrat}}" type="text" class="champ form-control" id="TypeContrat" name="_TypeContrat">
+                        </div>
+
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="Remuneration">Remuneration :</label>
+                            <input value="{{mission.getRemuneration}}" type="text" class="champ form-control" id="Remuneration" name="_Remuneration">
+                        </div>
+
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="NomContact">NomContact :</label>
+                            <input value="{{mission.getNomContact}}" type="text" class="champ form-control" id="NomContact" name="_NomContact">
+                        </div>
+
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="PrenomContact">PrenomContact :</label>
+                            <input value="{{mission.getPrenomContact}}" type="text" class="champ form-control" id="PrenomContact" name="_PrenomContact">
                         </div>
 
                         <div class="inputcontainer">
@@ -30,18 +62,22 @@
                         </div>
 
                         <div class="inputcontainer">
-                            <label class="list-group-item" style="height: 60px;" for="Tel">Profil :</label>
+                            <label class="list-group-item" style="height: 60px;" for="Profil">Profil :</label>
                             <input value="{{mission.getProfil}}" type="text" class="champ form-control" id="Profil" name="_Profil">
                         </div>
 
-
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="Datedebut">Datedebut :</label>
+                            <input value="{{mission.getDatedebut|date('d/m/Y')}}" type="date" class="champ form-control" id="Datedebut" name="_Datedebut">
+                        </div>
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px; max-width: 100%" for="Datefin">Datefin :</label>
+                            <input value="{{mission.getDatefin|date('d/m/Y')}}" type="date" class="champ form-control" id="Datefin" name="_Datefin">
+                        </div>
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 280px;word-wrap: break-word;hyphens: auto;max-width: 1000px" for="Descriptif">Descriptif :</label>
-                            <input value="{{mission.getDescriptif}}" type="text" class="champ form-control" id="Descriptif" name="_Descriptif">
+                            <textarea value="{{mission.getDescriptif}}"  style="height: 280px;width:700px"type="text" class="champ form-control" id="Descriptif" name="_Descriptif"></textarea>
                         </div>
-
-
-
                     </form>
                 </div>
 

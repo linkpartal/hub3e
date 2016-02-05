@@ -115,29 +115,26 @@
                     <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
                     <div class="div_form">
                         <div class="col-xs-6 input-colonne">
-                            <input type="text" class="input" id="Intitule" name="_Intitule" placeholder="Intitule" required>
-                            <input type="text" class="input " id="Domaine" name="_Domaine" placeholder="Domaine">
-                            <input type="text" class="input" id="Profil" name="_Profil" placeholder="Profil">
-                            <input type="text" class="input " id="Etat" name="_Etat" placeholder="Etat">
-                            <label style="float: left">Date debut :</label> <input style="display: inline-block;width: 200px" type="date" class="input" id="Datedebut" name="_Datedebut" title="Datedebut">
-                            <input type="text" class="input " id="TypeContrat" name="_TypeContrat" placeholder="TypeContrat">
-
-                            <input type="text" class="input " id="Remuneration" name="_Remuneration" placeholder="Remuneration">
-                            <input type="text" class="input " id="Horaire" name="_Horaire" placeholder="Horaire">
-
-
+                            <textarea type="text" class="input"style="height: 90px;"id="Profil" name="_Profil" placeholder="Profil" required SIZE="20" MAXLENGTH="255"style="max-width:450px"></textarea>
+                            <input type="text" class="input" id="Intitule" name="_Intitule" placeholder="Intitule" required MAXLENGTH="75">
+                            <input type="text" class="input " id="Domaine" name="_Domaine" placeholder="Domaine" required MAXLENGTH="45">
+                            <input type="text" class="input " id="Etat" name="_Etat" placeholder="Etat" required MAXLENGTH="45">
+                            <input type="text" class="input " id="TypeContrat" name="_TypeContrat" placeholder="TypeContrat" required MAXLENGTH="45">
+                            <label style="float: left">Date debut :</label> <input style="display: inline-block;width: 200px" type="date" class="input" id="Datedebut" name="_Datedebut" title="Datedebut" required >
+                            <input type="text" class="input " id="Remuneration" name="_Remuneration" placeholder="Remuneration" required MAXLENGTH="45">
+                            <input type="text" class="input " id="Horaire" name="_Horaire" placeholder="Horaire" required MAXLENGTH="45">
 
                         </div>
                         <div class="col-xs-6">
 
-                            <input type="text" class="input " id="NomContact" name="_NomContact" placeholder="NomContact">
-                            <input type="text" class="input " id="PrenomContact" name="_PrenomContact" placeholder="PrenomContact">
-                            <input type="text" class="input" id="FonctionContact" name="_FonctionContact" placeholder="FonctionContact">
-                            <input type="text" class="input" id="TelContact" name="_TelContact" placeholder="TelContact">
-                            <input type="text" class="input" id="EmailContact" name="_EmailContact" placeholder="EmailContact">
+                            <input type="text" class="input " id="NomContact" name="_NomContact" placeholder="NomContact"required MAXLENGTH="45">
+                            <input type="text" class="input " id="PrenomContact" name="_PrenomContact" placeholder="PrenomContact" required MAXLENGTH="45">
+                            <input type="text" class="input" id="FonctionContact" name="_FonctionContact" placeholder="FonctionContact" required MAXLENGTH="45">
+                            <input type="text" class="input" id="TelContact" name="_TelContact" placeholder="TelContact" required MAXLENGTH="45">
+                            <input type="text" class="input" id="EmailContact" name="_EmailContact" placeholder="EmailContact" required MAXLENGTH="45">
 
-                            <input type="text" class="input " id="Emploi" name="_Emploi" placeholder="Emploi">
-                            <label style="float: left">Date fin :</label><input style="display: inline-block;width: 200px" type="date" class="input " id="Datefin" name="_Datefin" title="Datefin">
+                            <input type="text" class="input " id="Emploi" name="_Emploi" placeholder="Emploi" required MAXLENGTH="45">
+                            <label style="float: left">Date fin :</label><input style="display: inline-block;width: 200px" type="date" class="input " id="Datefin" name="_Datefin" title="Datefin" required >
 
 
                             <select class="input"   name="userselect" title="" >
@@ -150,7 +147,7 @@
 
                             </select>
                         </div>
-                        <textarea  type="text" style="height: 230px;" class="input" id="Descriptif" name="_Descriptif" placeholder="Descriptif"></textarea>
+                        <textarea  type="text" style="height: 100px;" class="input" id="Descriptif" name="_Descriptif" placeholder="Descriptif" required MAXLENGTH="255"></textarea>
                     </div>
                     <div class="div_button">
                         <input class="blue" type="submit" value="envoyer">
@@ -499,6 +496,7 @@
         function post(path) {
             window.location = path;
         };
+
         function submitform(form) {
             document.getElementById(form).submit();
         };
