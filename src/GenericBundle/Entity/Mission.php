@@ -519,7 +519,7 @@ class Mission
      *
      * @return Mission
      */
-    public function setDate(\Date $date)
+    public function setDate(\DateTime $date)
     {
         $this->date = $date;
 
@@ -529,7 +529,7 @@ class Mission
     /**
      * Get date
      *
-     * @return \Date
+     * @return \DateTime
      */
     public function getDate()
     {

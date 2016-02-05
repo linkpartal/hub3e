@@ -1,3 +1,3 @@
 A Symfony project created on December 8, 2015, 12:22 pm.
 
-Utilisez le fichier ./web/import_candidat_test.csv pour test les imports
+Il est désormais possible d'importer un fichier excel directement sans passer par le format csv ni changer le format en UTF-8.
