@@ -98,12 +98,26 @@ class MissionDefController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $mission = $em->getRepository('GenericBundle:Mission')->findOneBy(array('id'=>$request->get('_ID')));
-
-        $mission->setCodemission($request->get('_Codemission'));
-        $mission->setDomaine($request->get('_Domaine'));
-        $mission->setEmailcontact($request->get('_Emailcontact'));
-        $mission->setDescriptif($request->get('_Descriptif'));
         $mission->setProfil($request->get('_Profil'));
+        $mission->setCodemission($request->get('_Codemission'));
+        $mission->setDescriptif($request->get('_Descriptif'));
+
+        $mission->setEtat($request->get('_Etat'));
+        $mission->setTypecontrat($request->get('_TypeContrat'));
+        $mission->setNomcontact($request->get('_NomContact'));
+        $mission->setPrenomContact($request->get('_PrenomContact'));
+        $mission->setFonctionContact($request->get('_FonctionContact'));
+        $mission->setTelContact($request->get('_TelContact'));
+        $mission->setEmailcontact($request->get('_Emailcontact'));
+        $mission->setIntitule($request->get('_Intitule'));
+        $mission->setDomaine($request->get('_Domaine'));
+        $mission->setDatedebut(date_create($request->get('_Datedebut')) );
+        $mission->setDatefin(date_create($request->get('_Datefin')) );
+        $mission->setEmploi($request->get('_Emploi'));
+        $mission->setRemuneration($request->get('_Remuneration'));
+        $mission->setHoraire($request->get('_Horaire'));
+
+
         $em->flush();
 
         return $this->forward('AdminBundle:MissionDef:affichageMission',array('id'=>$request->get('_ID')));

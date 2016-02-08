@@ -21,7 +21,7 @@
             <button class="toggle" type="button" onclick="supprimerAdresse(this)">-</button>
             <div id="demo" class="collapse in">
                 <div class="col-xs-4 input-colonne">
-                    <input placeholder="Siret" class="input" type="text" id="SIRET" name="_SIRET[]" maxlength="14" required>
+                    <input placeholder="Siret" class="input" type="text" id="SIRET" name="_SIRET[]" pattern=".{14}" maxlength="14" required>
 
 
                     <input placeholder="Responsable" class="input" type="text" id="Resp" name="_Resp[]" maxlength="45" required>
@@ -47,7 +47,7 @@
             <div class="div_form">
 
                 <div class="col-xs-6 input-colonne">
-                    <input placeholder="SIREN" type="text" class="input" id="SIREN" name="_SIREN" maxlength="9" required>
+                    <input placeholder="SIREN" type="text" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" required>
                     <label for="Logo"><img id="Logoimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label><br>
                     <input onchange="readURL(this,'Logoimg');"  accept="image/*" type="file" class="input" id="Logo" name="_Logo" style="display: none">
                 </div>
@@ -68,7 +68,9 @@
             </div>
             <div class="div_button">
                 <input type="submit" style="display: none">
+
                 <button id="submitTier" class="blue" type="button" onclick="envoyeradresses()">Envoyer</button>
+
             </div>
         </form>
     </div>
@@ -79,7 +81,7 @@
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block">
 
-        <form id="formadduser" action="{{ path("user_added") }}" method="post">
+        <form id="formadduser" action="{{ path("user_added") }}" onsubmit="document.getElementById('submituser').disabled=true" method="post">
 
             <div class="div_form" >
                 <div class="col-xs-6 input-colonne">
@@ -107,7 +109,7 @@
 
             </div>
             <div class="div_button">
-                <input class="blue" type="submit" value="envoyer">
+                <input  id="submituser" class="blue" type="submit" value="envoyer">
             </div>
         </form>
     </div>
@@ -116,17 +118,18 @@
 <div id="addLicenceDef" class="popup col-xs-3">
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block;overflow-y: auto">
-        <form class="formulaire" id="formLicence" action="{{ path("metier_user_licenceadded") }}" onsubmit="submitLicenceDef.disabled = true;" method="post">
+        <form class="formulaire" id="formLicence" action="{{ path("metier_user_licenceadded") }}" onsubmit="document.getElementById('submitlicencedef').disabled=true" method="post">
+
             <div class="div_form" >
                 <div class="col-xs-6 input-colonne">
-                    <input placeholder="Libelle" class="input" type="text" id="Libelle" name="_Libelle" maxlength="25" required>
+                    <input placeholder="Libelle" class="input" type="text" id="Libelle" name="_Libelle" maxlength="255" required >
 
-                    <input class="input" type="number"  min="1" max="99999" placeholder="Durée" id="Duree" name="_Duree" required>
+                    <input class="input" type="number"  min="1" max="99999" placeholder="Durée" id="Duree" name="_Duree" required maxlength="11" >
                 </div>
                 <div class="col-xs-6">
-                    <input class="input" type="number"  min="1" max="99999999" placeholder="Maximum d'apprenant" id="maxapp" name="_maxapp" required>
+                    <input class="input" type="number"  min="1" max="99999999" placeholder="Maximum d'apprenant" id="maxapp" name="_maxapp" required maxlength="11">
 
-                    <input class="input" type="number"  min="1" max="99999999" placeholder="Maximum de mission" id="maxmiss" name="_maxmiss" required>
+                    <input class="input" type="number"  min="1" max="99999999" placeholder="Maximum de mission" id="maxmiss" name="_maxmiss" required maxlength="11">
                 </div>
                 <textarea form="formLicence" placeholder="Description" class="input" maxlength="255" id="Description" name="_Description" style="height: 100px;display: inline-flex"></textarea>
 
@@ -135,6 +138,7 @@
             </div>
             <div class="div_button">
                 <input class="blue" name="submitLicenceDef" type="submit" value="envoyer">
+
             </div>
         </form>
     </div>
@@ -264,6 +268,8 @@
                             </button>
                         {% endfor %}
                     {% endif %}
+
+
 
                 </div>
                 <div id="mission" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
@@ -589,6 +595,9 @@
         });
     };
     function envoyeradresses(){
+        document.getElementById('submittier').disabled=true;//////
+
+
         var geocodes = document.getElementsByName('_Geocode[]');
         if(geocodes.length==1)
         {

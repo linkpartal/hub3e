@@ -21,7 +21,7 @@
             <button class="toggle" type="button" onclick="supprimerAdresse(this)">-</button>
             <div id="demo" class="collapse in">
                 <div class="col-xs-4 input-colonne">
-                    <input placeholder="Siret" class="input" type="text" id="SIRET" name="_SIRET[]" maxlength="14" required>
+                    <input placeholder="Siret" class="input" type="text" id="SIRET" name="_SIRET[]" pattern=".{14}" maxlength="14" required>
 
 
                     <input placeholder="Responsable" class="input" type="text" id="Resp" name="_Resp[]" maxlength="45" required>
@@ -47,7 +47,7 @@
             <div class="div_form">
 
                 <div class="col-xs-6 input-colonne">
-                    <input placeholder="SIREN" type="text" class="input" id="SIREN" name="_SIREN" maxlength="9" required>
+                    <input placeholder="SIREN" type="text" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" required>
                     <label for="Logo"><img id="Logoimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label><br>
                     <input onchange="readURL(this,'Logoimg');"  accept="image/*" type="file" class="input" id="Logo" name="_Logo" style="display: none">
                 </div>
@@ -68,7 +68,7 @@
             </div>
             <div class="div_button">
                 <input type="submit" style="display: none">
-                <button class="blue" type="button" onclick="envoyeradresses()">Envoyer</button>
+                <button id="submittier" class="blue" type="button" onclick="envoyeradresses()">Envoyer</button>
             </div>
         </form>
     </div>
@@ -117,7 +117,7 @@
 <div id="import" class="popup col-xs-3">
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
-        <form id="form" action="{{ path('import') }}" method="post" enctype="multipart/form-data">
+        <form id="form" action="{{ path('import') }}" onsubmit="document.getElementById('submitimport').disabled=true" method="post" enctype="multipart/form-data">
             <div class="div_form">
 
                 <select onchange="disabling(this)" title="Type d'import" name="Import">
@@ -137,7 +137,7 @@
 
             </div>
             <div class="div_button">
-                <input class="blue" type="submit" value="envoyer">
+                <input id ="submitimport" class="blue" type="submit" value="envoyer">
             </div>
         </form>
     </div>
@@ -515,8 +515,7 @@
         });
     };
     function envoyeradresses(){
-
-
+        document.getElementById('submittier').disabled=true;
         var geocodes = document.getElementsByName('_Geocode[]');
         if(geocodes.length==1)
         {

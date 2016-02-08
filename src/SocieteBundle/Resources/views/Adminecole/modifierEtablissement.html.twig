@@ -33,19 +33,19 @@
                 </div-->
 
 
-                    <form  class="formulaire" id="formAjouterformation" action="{{ path('addFormation') }}" method="post" enctype="multipart/form-data">
+                    <form  class="formulaire" id="formAjouterformation" action="{{ path('addFormation') }}" onsubmit="document.getElementById('submitaddformation').disabled=true" method="post" enctype="multipart/form-data">
                         <div class="div_form" >
                             <input type="hidden" id="idetab" name="_idetab" value="{{etablissement.getId}}">
 
-                            <input type="text" class="input" id="Description" name="_Description" placeholder="Description">
-                            <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom">
+                            <input type="text" class="input" id="Description" name="_Description" placeholder="Description" required maxlength="45">
+                            <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom" required maxlength="45">
                             <label for="Pdf"><img   id="pdf" style="height: 100px;width: 100px" src="{{ asset('image/upload-arrow.png') }}"/></label><br>
                             <input onchange="readURL(this,'pdf');"  accept="application/pdf" type="file" class="input" id="Pdf" name="_PDF" style="display: none"><br>
                             <label class="cell" id="NomPDF"></label>
 
                         </div>
                         <div class="div_button">
-                            <input class="blue" type="submit" value="Valider">
+                            <input id="submitaddformation" class="blue" type="submit" value="Valider">
                         </div>
                     </form>
 
@@ -58,14 +58,14 @@
 
 
 
-                    <form id="formadduser" class="formulaire" action="{{ path("user_added") }}" method="post">
+                    <form id="formadduser" class="formulaire" action="{{ path("user_added") }}" onsubmit="document.getElementById('submitadduser').disabled=true"  method="post">
                         <input type="hidden" id="id" name="_id" value="{{ etablissement.getId }}">
                         <div class="div_form" >
 
                             <div class="col-xs-6 input-colonne">
-                                <input type="text" class="input" id="Username" name="_Username" placeholder="Username">
+                                <input type="text" class="input" id="Username" name="_Username" placeholder="Username" required maxlength="255">
 
-                                <input type="email" class="input " id="mail" name="_mail" placeholder="Email">
+                                <input type="email" class="input " id="mail" name="_mail" placeholder="Email" required maxlength="255">
 
                                 <select class="input" title="Sélectionner un role" name="_role" style="width: calc( 50% - 5px); margin-right: 10px">
                                     <option selected="selected">Sélectionner un role</option>
@@ -93,16 +93,16 @@
                                     <option value="Mlle">Mlle.</option>
                                 </select>
 
-                                <input type="text" class="input" style="width: calc(75% - 10px);" id="Prenom" name="_Prenom" placeholder="Prénom">
-                                <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom">
+                                <input type="text" class="input" style="width: calc(75% - 10px);" id="Prenom" name="_Prenom" placeholder="Prénom" required maxlength="45">
+                                <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom" required maxlength="45">
 
-                                <input type="tel" class="input " id="Tel" name="_Tel" placeholder="Tel">
+                                <input type="tel" class="input " id="Tel" name="_Tel" placeholder="Tel" required maxlength="45">
                             </div>
 
 
                         </div>
                         <div class="div_button">
-                            <input class="blue" type="submit" value="envoyer">
+                            <input id="submitadduser" class="blue" type="submit" value="envoyer">
                         </div>
                     </form>
 
@@ -118,7 +118,7 @@
                 <div id="associerecole" class="popup">
                     <div onclick="hide(this)" class="close"></div>
                     <div class="col-xs-offset-4 col-xs-4" style="padding: 0;border:20px solid white;display: block">
-                        <form class="formulaire" id="formAssiation" action="{{ path("ecoles_assiciated",{'id':etablissement.getId}) }}" method="post">
+                        <form class="formulaire" id="formAssiation" action="{{ path("ecoles_assiciated",{'id':etablissement.getId}) }}" onsubmit="document.getElementById('submitform').disabled=true"  method="post">
                             <div class="div_form">
                                 <select class="input" title="" style="height: 100px" name="ecoles[]" multiple>
                                     {% for tier in tiers %}
@@ -129,7 +129,7 @@
                                 </select>
                             </div>
                             <div class="div_button">
-                                <input class="blue" type="submit" value="envoyer">
+                                <input id="submitform" class="blue" type="submit" value="envoyer">
                             </div>
                         </form>
                     </div>
@@ -177,48 +177,48 @@
 
                             <form class="formulaire" id="formEtab" action="{{ path('ecole_etabmodif') }}" method="post" enctype="multipart/form-data">
 
-                                <input type="hidden" value="{{ etablissement.getSiret }}" id="SIRET" name="_SIRET">
+                                <input type="hidden" value="{{ etablissement.getSiret }}" id="SIRET" name="_SIRET" maxlength="14">
 
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="RaisonSoc">Raison sociale :</label>
-                                    <input value="{{etablissement.getTier.getRaisonSoc}}" type="text" class="champ form-control" id="RaisonSoc" name="_RaisonSoc">
+                                    <input value="{{etablissement.getTier.getRaisonSoc}}" type="text" class="champ form-control" id="RaisonSoc" name="_RaisonSoc" maxlength="45">
                                 </div>
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="Adresse">Adresse : </label>
-                                    <input type="text" value="{{etablissement.getAdresse}}" class="champ form-control" id="Adresse" name="_Adresse">
+                                    <input type="text" value="{{etablissement.getAdresse}}" class="champ form-control" id="Adresse" name="_Adresse" maxlength="45">
                                 </div>
                                 <input type="hidden" class="form-control" id="Geocode" name="_Geocode" value="{{etablissement.getCodepostal}}">
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="CodeP">Code Postal : </label>
-                                    <input type="text" value="{{etablissement.getCodepostal}}" class="champ form-control" id="CodeP" name="_CodeP">
+                                    <input type="text" value="{{etablissement.getCodepostal}}" class="champ form-control" id="CodeP" name="_CodeP" maxlength="45">
                                 </div>
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="Ville">Ville : </label>
-                                    <input value="{{ etablissement.getVille }}" type="text" class="champ form-control" id="Ville" name="_Ville">
+                                    <input value="{{ etablissement.getVille }}" type="text" class="champ form-control" id="Ville" name="_Ville" maxlength="45">
                                 </div>
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="Tel">Téléphone : </label>
-                                    <input value="{{ etablissement.getTelephone }}" type="tel" class="champ form-control"  id="Tel" name="_Tel">
+                                    <input value="{{ etablissement.getTelephone }}" type="tel" class="champ form-control"  id="Tel" name="_Tel" maxlength="45">
                                 </div>
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="Fax">FAX : </label>
-                                    <input type="tel" value="{{ etablissement.getFax }}" class="champ form-control" id="Fax" name="_Fax">
+                                    <input type="tel" value="{{ etablissement.getFax }}" class="champ form-control" id="Fax" name="_Fax" maxlength="45">
                                 </div>
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="Resp">Responsable établissement : </label>
-                                    <input type="text" value="{{ etablissement.getResponsable }}" class="champ form-control" id="Resp" name="_Resp">
+                                    <input type="text" value="{{ etablissement.getResponsable }}" class="champ form-control" id="Resp" name="_Resp" maxlength="45">
                                 </div>
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="TelResp">Téléphone responsable établissement : </label>
-                                    <input type="tel" value="{{ etablissement.getTelResponsable }}" class="champ form-control" id="TelResp" name="_TelResp">
+                                    <input type="tel" value="{{ etablissement.getTelResponsable }}" class="champ form-control" id="TelResp" name="_TelResp" maxlength="45">
                                 </div>
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="MailResp">Email responsable établissement : </label>
-                                    <input value="{{ etablissement.getMailResponsable }}" type="email" class="champ form-control" id="MailResp" name="_MailResp">
+                                    <input value="{{ etablissement.getMailResponsable }}" type="email" class="champ form-control" id="MailResp" name="_MailResp" maxlength="45">
                                 </div>
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="Site">Site web : </label>
-                                    <input value="{{ etablissement.getSite }}" type="url" class="champ form-control" id="Site" name="_Site">
+                                    <input value="{{ etablissement.getSite }}" type="url" class="champ form-control" id="Site" name="_Site" maxlength="45">
                                 </div>
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="Logo">Logo : </label>
@@ -394,6 +394,7 @@
             document.getElementById(x).style.display='block';
         };
         function active(route) {
+            document.getElementById("activate").disabled = true;
             $.ajax({
                 type: 'get',
                 url: route,
@@ -405,6 +406,7 @@
                     if (data['succes'] == '0') {
                         document.getElementById("activate").style.backgroundColor = 'red';
                         document.getElementById("activate").firstElementChild.innerHTML = 'Désactive';
+                        document.getElementById("activate").disabled = false;
                         window.parent.document.getElementById('active{{ etablissement.getId }}').style.backgroundColor = 'red';
                     }
                     else {
@@ -456,6 +458,10 @@
             }
         };
         function envoyer(){
+
+
+            document.getElementById('formEtab').submit();
+
             var address = document.getElementById('Adresse').value +' ' +document.getElementById('Ville').value
                     + ' ' + document.getElementById('CodeP').value  ;
             var geocoder = new google.maps.Geocoder();

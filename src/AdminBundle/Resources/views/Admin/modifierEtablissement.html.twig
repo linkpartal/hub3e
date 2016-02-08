@@ -18,7 +18,7 @@
         </div-->
 
 
-            <form  class="formulaire" id="formInstanceLicence" action="{{ path("metier_user_associated") }}" method="post">
+            <form  class="formulaire" id="formInstanceLicence" action="{{ path("metier_user_associated") }}" onsubmit="document.getElementById('submitInstanceLicence').disabled=true" method="post">
                 <div class="div_form" >
                     <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
                     <select class="input" title="Licencedef" name="Licencedef">
@@ -28,11 +28,11 @@
                         {% endfor %}
                     </select>
 
-                    <input class="input" placeholder="Date Début" type="date" class="form-control champ" id="Date" name="_Date">
+                    <input class="input" placeholder="Date Début" type="date" data-date='{"buttonOnly": true, "calculateWidth": false}' class="form-control champ" id="Date" name="_Date" required>
 
                 </div>
                 <div class="div_button">
-                    <input class="blue" type="submit" value="Valider">
+                    <input id="submitInstanceLicence" class="blue" type="submit" value="Valider">
                 </div>
             </form>
 
@@ -43,14 +43,14 @@
         <div onclick="hide(this)" class="close"></div>
         <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block">
 
-            <form class="formulaire" id="formadduser" action="{{ path("user_added") }}" method="post">
+            <form class="formulaire" id="formadduser" action="{{ path("user_added") }}" onsubmit="document.getElementById('submitadduser').disabled=true" method="post">
                 <div class="div_form" >
                     <input type="hidden" id="id" name="_id" value="{{ etablissement.getId }}">
 
-                    <input placeholder="Username" type="text" class="input" id="Username" name="_Username">
+                    <input placeholder="Username" type="text" class="input" id="Username" name="_Username" maxlength="255" required>
 
 
-                    <input placeholder="Email" type="email" class="input" id="mail" name="_mail">
+                    <input placeholder="Email" type="email" class="input" id="mail" name="_mail"required maxlength="255">
 
 
 
@@ -67,7 +67,7 @@
 
                 </div>
                 <div class="div_button">
-                    <input class="blue" type="submit" value="envoyer">
+                    <input id="submitadduser" class="blue" type="submit" value="envoyer">
                 </div>
             </form>
         </div>
@@ -139,53 +139,53 @@
 
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="RaisonSoc">Raison sociale :</label>
-                            <input value="{{etablissement.getTier.getRaisonSoc}}" type="text" class="champ form-control" id="RaisonSoc" name="_RaisonSoc">
+                            <input value="{{etablissement.getTier.getRaisonSoc}}" type="text" class="champ form-control" id="RaisonSoc" name="_RaisonSoc"  maxlength="45">
                         </div>
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="Adresse">Adresse : </label>
-                            <input type="text" value="{{etablissement.getAdresse}}" class="champ form-control" id="Adresse" name="_Adresse">
+                            <input type="text" value="{{etablissement.getAdresse}}" class="champ form-control" id="Adresse" name="_Adresse"  maxlength="45">
                         </div>
-                        <input type="hidden" class="form-control" id="Geocode" name="_Geocode" value="{{etablissement.getCodepostal}}">
+                        <input type="hidden" class="form-control" id="Geocode" name="_Geocode" value="{{etablissement.getCodepostal}}"  maxlength="45">
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="CodeP">Code Postal : </label>
-                            <input type="text" value="{{etablissement.getCodepostal}}" class="champ form-control" id="CodeP" name="_CodeP">
+                            <input type="text" value="{{etablissement.getCodepostal}}" class="champ form-control" id="CodeP" name="_CodeP"  maxlength="45">
                         </div>
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="Ville">Ville : </label>
-                            <input value="{{ etablissement.getVille }}" type="text" class="champ form-control" id="Ville" name="_Ville">
+                            <input value="{{ etablissement.getVille }}" type="text" class="champ form-control" id="Ville" name="_Ville"  maxlength="45">
                         </div>
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="Tel">Téléphone : </label>
-                            <input value="{{ etablissement.getTelephone }}" type="tel" class="champ form-control"  id="Tel" name="_Tel">
+                            <input value="{{ etablissement.getTelephone }}" type="tel" class="champ form-control"  id="Tel" name="_Tel"  maxlength="45">
                         </div>
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="Fax">FAX : </label>
-                            <input type="tel" value="{{ etablissement.getFax }}" class="champ form-control" id="Fax" name="_Fax">
+                            <input type="tel" value="{{ etablissement.getFax }}" class="champ form-control" id="Fax" name="_Fax"  maxlength="45">
                         </div>
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="Resp">Responsable établissement : </label>
-                            <input type="text" value="{{ etablissement.getResponsable }}" class="champ form-control" id="Resp" name="_Resp">
+                            <input type="text" value="{{ etablissement.getResponsable }}" class="champ form-control" id="Resp" name="_Resp"  maxlength="45">
                         </div>
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="TelResp">Téléphone responsable établissement : </label>
-                            <input type="tel" value="{{ etablissement.getTelResponsable }}" class="champ form-control" id="TelResp" name="_TelResp">
+                            <input type="tel" value="{{ etablissement.getTelResponsable }}" class="champ form-control" id="TelResp" name="_TelResp"  maxlength="45">
                         </div>
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="MailResp">Email responsable établissement : </label>
-                            <input value="{{ etablissement.getMailResponsable }}" type="email" class="champ form-control" id="MailResp" name="_MailResp">
+                            <input value="{{ etablissement.getMailResponsable }}" type="email" class="champ form-control" id="MailResp" name="_MailResp"  maxlength="45">
                         </div>
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="Site">Site web : </label>
-                            <input value="{{ etablissement.getSite }}" type="url" class="champ form-control" id="Site" name="_Site">
+                            <input value="{{ etablissement.getSite }}" type="url" class="champ form-control" id="Site" name="_Site"  maxlength="45">
                         </div>
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="Logo">Logo : </label>
-                            <input accept="image/*" type="file" class="champ form-control" id="Logo" name="_Logo">
+                            <input accept="image/*" type="file" class="champ form-control" id="Logo" name="_Logo" >
                         </div>
                         <img alt="Logo" src="data:image/jpg;base64,{{ etablissement.getTier.getLogo }}"/>
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="image" style="position: ">image de fond : </label>
-                            <input accept="image/*" type="file" class="champ form-control" id="image" name="_image">
+                            <input accept="image/*" type="file" class="champ form-control" id="image" name="_image" >
                         </div>
                         <img alt="Fond ecran" src="data:image/jpg;base64,{{ etablissement.getTier.getFondecran }}"/>
                     </form>
@@ -312,8 +312,20 @@
         </div>
 
     </div>
+
+
+
+    <script src="//cdn.jsdelivr.net/webshim/1.14.5/polyfiller.js"></script>
     <script>
+        webshims.polyfill('forms forms-ext');
+    </script>
+    <script>
+
+
+
         function envoyer(){
+            document.getElementById('formEtab').submit();
+
             var address = document.getElementById('Adresse').value +' ' +document.getElementById('Ville').value
                     + ' ' + document.getElementById('CodeP').value  ;
             var geocoder = new google.maps.Geocoder();
@@ -326,7 +338,11 @@
                 }
             });
         }
-
+        $(function(){
+            $('[type="date"].min-today').prop('min', function(){
+                return new Date().toJSON().split('T')[0];
+            });
+        });
     </script>
 {% endblock %}
 
