@@ -21,24 +21,24 @@
             <button class="toggle" type="button" onclick="supprimerAdresse(this)">-</button>
             <div id="demo" class="collapse in">
                 <div class="col-xs-4 input-colonne">
-                    <input placeholder="Siret" class="input" type="text" id="SIRET" name="_SIRET[]" required>
+                    <input placeholder="Siret" class="input" type="text" id="SIRET" name="_SIRET[]" pattern=".{14}" maxlength="14" required>
 
 
-                    <input placeholder="Responsable" class="input" type="text" id="Resp" name="_Resp[]">
-                    <input placeholder="Téléphone responsable" class="input" type="tel" id="TelResp" name="_TelResp[]">
+                    <input placeholder="Responsable" class="input" type="text" id="Resp" name="_Resp[]" maxlength="45" required>
+                    <input placeholder="Téléphone responsable" class="input" type="tel" id="TelResp" name="_TelResp[]" maxlength="45" required>
 
-                    <input placeholder="Adresse email responsable" class="input" type="email" id="MailResp" name="_MailResp[]">
+                    <input placeholder="Adresse email responsable" class="input" type="email" id="MailResp" name="_MailResp[]" maxlength="45" required>
                     <input type="hidden" class="form-control" id="Geocode" name="_Geocode[]" required>
 
 
                 </div>
                 <div class="col-xs-8">
-                    <input  placeholder="Adresse postale" class="input" type="text" id="Adresse" name="_Adresse[]" required>
-                    <input  placeholder="Ville" class="input" type="text" id="Ville" name="_Ville[]" style="width: 50%; margin-right: 10px">
-                    <input  placeholder="Code postal" class="input" type="text" id="CodeP" name="_CodeP[]" style="width: calc(50% - 10px)">
-                    <input placeholder="Téléphone" class="input" type="tel" id="Tel" name="_Tel[]" style="width: 50%;margin-right: 10px">
-                    <input placeholder="Fax" class="input" type="tel" id="Fax" name="_Fax[]" style="width: calc(50% - 10px)">
-                    <input placeholder="Adresse du Site" class="input" type="url" id="Site" name="_Site[]">
+                    <input  placeholder="Adresse postale" class="input" type="text" id="Adresse" name="_Adresse[]" maxlength="45" required>
+                    <input  placeholder="Ville" class="input" type="text" id="Ville" name="_Ville[]" style="width: 50%; margin-right: 10px" maxlength="20" required>
+                    <input  placeholder="Code postal" class="input" type="text" id="CodeP" name="_CodeP[]" style="width: calc(50% - 10px)" maxlength="10" required>
+                    <input placeholder="Téléphone" class="input" type="tel" id="Tel" name="_Tel[]" style="width: 50%;margin-right: 10px" maxlength="10" required>
+                    <input placeholder="Fax" class="input" type="tel" id="Fax" name="_Fax[]" style="width: calc(50% - 10px)" maxlength="10" required>
+                    <input placeholder="Adresse du Site" class="input" type="url" id="Site" name="_Site[]" maxlength="45" required>
 
                 </div>
             </div>
@@ -47,13 +47,13 @@
             <div class="div_form">
 
                 <div class="col-xs-6 input-colonne">
-                    <input placeholder="SIREN" type="text" class="input" id="SIREN" name="_SIREN">
+                    <input placeholder="SIREN" type="text" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" required>
                     <label for="Logo"><img id="Logoimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label><br>
                     <input onchange="readURL(this,'Logoimg');"  accept="image/*" type="file" class="input" id="Logo" name="_Logo" style="display: none">
                 </div>
 
                 <div class="col-xs-6 input-colonne">
-                <input placeholder="Raison sociale" type="text" class="input" id="RaisonSoc" name="_RaisonSoc">
+                <input placeholder="Raison sociale" type="text" class="input" id="RaisonSoc" name="_RaisonSoc" maxlength="45" required>
 
 
                 <label for="image"><img id="backimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
@@ -67,7 +67,8 @@
                 <button type="button" class="col-xs-12 blue" onclick="dupliqueradresse()">Ajouter une adresse</button>
             </div>
             <div class="div_button">
-                <button class="blue" type="button" onclick="envoyeradresses()">Envoyer</button>
+                <input type="submit" style="display: none">
+                <button id="submittier" class="blue" type="button" onclick="envoyeradresses()">Envoyer</button>
             </div>
         </form>
     </div>
@@ -78,13 +79,13 @@
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block">
 
-        <form id="formadduser" action="{{ path("user_added") }}" method="post">
+        <form id="formadduser" action="{{ path("user_added") }}" onsubmit="document.getElementById('submituser').disabled=true" method="post">
 
             <div class="div_form" >
                 <div class="col-xs-6 input-colonne">
-                    <input type="text" class="input" id="Username" name="_Username" placeholder="Username">
+                    <input type="text" class="input" id="Username" name="_Username" placeholder="Username" maxlength="45" required>
 
-                    <input type="email" class="input " id="mail" name="_mail" placeholder="Email">
+                    <input type="email" class="input " id="mail" name="_mail" placeholder="Email" maxlength="45" required>
 
                     <select class="input" title="" name="_role">
                         <option value="ROLE_SUPER_ADMIN">Super Administrateur</option>
@@ -97,16 +98,16 @@
                         <option value="Mlle">Mlle.</option>
                     </select>
 
-                    <input type="text" class="input" style="width: calc(75% - 10px);" id="Prenom" name="_Prenom" placeholder="Prénom">
-                    <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom">
+                    <input type="text" class="input" style="width: calc(75% - 10px);" id="Prenom" name="_Prenom" placeholder="Prénom" maxlength="20" required>
+                    <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom" maxlength="20" required>
 
-                    <input type="tel" class="input " id="Tel" name="_Tel" placeholder="Tel">
+                    <input type="tel" class="input " id="Tel" name="_Tel" placeholder="Tel" maxlength="10" required>
                 </div>
 
 
             </div>
             <div class="div_button">
-                <input class="blue" type="submit" value="envoyer">
+                <input  id="submituser" class="blue" type="submit" value="envoyer">
             </div>
         </form>
     </div>
@@ -114,18 +115,18 @@
 </div>
 <div id="addLicenceDef" class="popup col-xs-3">
     <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block;overflow: scroll">
-        <form class="formulaire" id="formLicence" action="{{ path("metier_user_licenceadded") }}" method="post">
+    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block;overflow-y: auto">
+        <form class="formulaire" id="formLicence" action="{{ path("metier_user_licenceadded") }}" onsubmit="document.getElementById('submitlicencedef').disabled=true" method="post">
             <div class="div_form" >
                 <div class="col-xs-6 input-colonne">
-                    <input placeholder="Libelle" class="input" type="text" maxlength="10" id="Libelle" name="_Libelle">
+                    <input placeholder="Libelle" class="input" type="text" id="Libelle" name="_Libelle" maxlength="255" required >
 
-                    <input class="input" type="number"  min="1" max="365" placeholder="Durée" id="Duree" name="_Duree">
+                    <input class="input" type="number"  min="1" max="99999" placeholder="Durée" id="Duree" name="_Duree" required maxlength="11" >
                 </div>
                 <div class="col-xs-6">
-                    <input class="input" type="number"  min="1" max="365" placeholder="Maximum d'apprenant" id="maxapp" name="_maxapp">
+                    <input class="input" type="number"  min="1" max="99999999" placeholder="Maximum d'apprenant" id="maxapp" name="_maxapp" required maxlength="11">
 
-                    <input class="input" type="number"  min="1" max="365" placeholder="Maximum de mission" id="maxmiss" name="_maxmiss">
+                    <input class="input" type="number"  min="1" max="99999999" placeholder="Maximum de mission" id="maxmiss" name="_maxmiss" required maxlength="11">
                 </div>
                 <textarea form="formLicence" placeholder="Description" class="input" maxlength="255" id="Description" name="_Description" style="height: 100px;display: inline-flex"></textarea>
 
@@ -133,7 +134,7 @@
 
             </div>
             <div class="div_button">
-                <input class="blue" type="submit" value="envoyer">
+                <input id="submitlicencedef" class="blue" type="submit" value="envoyer">
             </div>
         </form>
     </div>
@@ -144,14 +145,12 @@
 {% block TopBar %}
     <div class="row" style="height: 32px; background: #2975cb;">
         <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="border: 0;padding: 4.5px;height: 100%;">
-            <a href="{{ path('metier_user_admin') }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 21px;width: 100%" >        </a>
+            <a href="{{ path('metier_user_admin') }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 21px;" >        </a>
         </div>
         <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
             <button onclick="show('addtier',1)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                     ></button>
-
             <button id="ecoletop" style="color:white ">{{ ecoles|length }} Ecoles</button>
-
         </div>
          <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
              <button onclick="show('addtier',0)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
@@ -266,6 +265,8 @@
                         {% endfor %}
                     {% endif %}
 
+
+
                 </div>
                 <div id="mission" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if missions is defined %}
@@ -344,9 +345,7 @@
             </div>
 
             {% block Content%}
-
-                    <iframe id="iframe" src="{{ path('admin_iframeload') }}"></iframe>
-
+                <iframe id="iframe" src="{{ path('admin_iframeload') }}"></iframe>
             {% endblock %}
         </div>
 
@@ -582,7 +581,7 @@
             {
                 if(data['status']==='success')
                 {
-                    $("#"+form+"").submit();
+                    $("#"+form+" input[type=submit]").click();
                 }
                 else
                 {
@@ -592,6 +591,9 @@
         });
     };
     function envoyeradresses(){
+        document.getElementById('submittier').disabled=true;//////
+
+
         var geocodes = document.getElementsByName('_Geocode[]');
         if(geocodes.length==1)
         {
@@ -608,7 +610,7 @@
                     result.value = results[0].geometry.location ;
                     submitAjaxForm('{{ path('checkExist') }}','form');
                 } else {
-                    alert('Geocode was not successful for the following reason: ' + status);
+                    alert('Pas de géocodage trouver pour l\'adresse spécifiée');
                 }
             });
         }

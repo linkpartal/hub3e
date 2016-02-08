@@ -21,24 +21,24 @@
             <button class="toggle" type="button" onclick="supprimerAdresse(this)">-</button>
             <div id="demo" class="collapse in">
                 <div class="col-xs-4 input-colonne">
-                    <input placeholder="Siret" class="input" type="text" id="SIRET" name="_SIRET[]" required>
+                    <input placeholder="Siret" class="input" type="text" id="SIRET" name="_SIRET[]" pattern=".{14}" maxlength="14" required>
 
 
-                    <input placeholder="Responsable" class="input" type="text" id="Resp" name="_Resp[]">
-                    <input placeholder="Téléphone responsable" class="input" type="tel" id="TelResp" name="_TelResp[]">
+                    <input placeholder="Responsable" class="input" type="text" id="Resp" name="_Resp[]" maxlength="45" required>
+                    <input placeholder="Téléphone responsable" class="input" type="tel" id="TelResp" name="_TelResp[]" maxlength="45" required>
 
-                    <input placeholder="Adresse email responsable" class="input" type="email" id="MailResp" name="_MailResp[]">
+                    <input placeholder="Adresse email responsable" class="input" type="email" id="MailResp" name="_MailResp[]" maxlength="45" required>
                     <input type="hidden" class="form-control" id="Geocode" name="_Geocode[]" required>
 
 
                 </div>
                 <div class="col-xs-8">
-                    <input  placeholder="Adresse postale" class="input" type="text" id="Adresse" name="_Adresse[]" required>
-                    <input  placeholder="Ville" class="input" type="text" id="Ville" name="_Ville[]" style="width: 50%; margin-right: 10px">
-                    <input  placeholder="Code postal" class="input" type="text" id="CodeP" name="_CodeP[]" style="width: calc(50% - 10px)">
-                    <input placeholder="Téléphone" class="input" type="tel" id="Tel" name="_Tel[]" style="width: 50%;margin-right: 10px">
-                    <input placeholder="Fax" class="input" type="tel" id="Fax" name="_Fax[]" style="width: calc(50% - 10px)">
-                    <input placeholder="Adresse du Site" class="input" type="url" id="Site" name="_Site[]">
+                    <input  placeholder="Adresse postale" class="input" type="text" id="Adresse" name="_Adresse[]" maxlength="45" required>
+                    <input  placeholder="Ville" class="input" type="text" id="Ville" name="_Ville[]" style="width: 50%; margin-right: 10px" maxlength="20" required>
+                    <input  placeholder="Code postal" class="input" type="text" id="CodeP" name="_CodeP[]" style="width: calc(50% - 10px)" maxlength="10" required>
+                    <input placeholder="Téléphone" class="input" type="tel" id="Tel" name="_Tel[]" style="width: 50%;margin-right: 10px" maxlength="10" required>
+                    <input placeholder="Fax" class="input" type="tel" id="Fax" name="_Fax[]" style="width: calc(50% - 10px)" maxlength="10" required>
+                    <input placeholder="Adresse du Site" class="input" type="url" id="Site" name="_Site[]" maxlength="45" required>
 
                 </div>
             </div>
@@ -47,13 +47,13 @@
             <div class="div_form">
 
                 <div class="col-xs-6 input-colonne">
-                    <input placeholder="SIREN" type="text" class="input" id="SIREN" name="_SIREN">
+                    <input placeholder="SIREN" type="text" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" required>
                     <label for="Logo"><img id="Logoimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label><br>
                     <input onchange="readURL(this,'Logoimg');"  accept="image/*" type="file" class="input" id="Logo" name="_Logo" style="display: none">
                 </div>
 
                 <div class="col-xs-6 input-colonne">
-                    <input placeholder="Raison sociale" type="text" class="input" id="RaisonSoc" name="_RaisonSoc">
+                    <input placeholder="Raison sociale" type="text" class="input" id="RaisonSoc" name="_RaisonSoc" maxlength="45" required>
 
 
                     <label for="image"><img id="backimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
@@ -67,7 +67,8 @@
                 <button type="button" class="col-xs-12 blue" onclick="dupliqueradresse()">Ajouter une adresse</button>
             </div>
             <div class="div_button">
-                <button class="blue" type="button" onclick="envoyeradresses()">Envoyer</button>
+                <input type="submit" style="display: none">
+                <button id="submittier" class="blue" type="button" onclick="envoyeradresses()">Envoyer</button>
             </div>
         </form>
     </div>
@@ -116,7 +117,7 @@
 <div id="import" class="popup col-xs-3">
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
-        <form id="form" action="{{ path('import') }}" method="post" enctype="multipart/form-data">
+        <form id="form" action="{{ path('import') }}" onsubmit="document.getElementById('submitimport').disabled=true" method="post" enctype="multipart/form-data">
             <div class="div_form">
 
                 <select onchange="disabling(this)" title="Type d'import" name="Import">
@@ -132,11 +133,11 @@
                 </select>
                 <br>
                 <label title="CSV" for="CSV"><img id="backimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
-                <input accept="image/*" type="file" class="input" id="CSV" name="_CSV" >
+                <input accept="image/*" type="file" class="input" id="CSV" name="_CSV" required>
 
             </div>
             <div class="div_button">
-                <input class="blue" type="submit" value="envoyer">
+                <input id ="submitimport" class="blue" type="submit" value="envoyer">
             </div>
         </form>
     </div>
@@ -147,7 +148,7 @@
     {% block TopBar %}
         <div class="row" style="height: 32px; background: #2975cb;">
             <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="border: 0;padding: 4.5px;height: 100%;">
-                <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 21px;width: 100%" >        </a>
+                <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 21px;" >        </a>
             </div>
             <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
                 <button onclick="show('addtier',0)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
@@ -517,7 +518,7 @@
                     }
                     else
                     {
-                        $("#"+form+"").submit();
+                        $("#"+form+" input[type=submit]").click();
                     }
 
 
@@ -549,6 +550,7 @@
         });
     };
     function envoyeradresses(){
+        document.getElementById('submittier').disabled=true;
         var geocodes = document.getElementsByName('_Geocode[]');
         if(geocodes.length==1)
         {
@@ -565,7 +567,7 @@
                     result.value = results[0].geometry.location ;
                     submitAjaxForm('{{ path('ecole_checkExist') }}','form');
                 } else {
-                    alert('Geocode was not successful for the following reason: ' + status);
+                    alert('Pas de géocodage trouver pour l\'adresse spécifiée');
                 }
             });
         }

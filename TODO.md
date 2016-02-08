@@ -1,5 +1,5 @@
 #TODO
-- [ ] Mettre une longueur maximum aux inputs correspandant à leur longueur max dans la base de données.
+- [x] Mettre une longueur maximum aux inputs correspandant à leur longueur max dans la base de données.
 - [ ] Vérifier les imports de bibliothéque dans chaque page.
 - [ ] Créer un bundle indépendant pour la gestion des tiers et des établissements.
 - [ ] Créer un bundle indépendant pour la gestion des missions.

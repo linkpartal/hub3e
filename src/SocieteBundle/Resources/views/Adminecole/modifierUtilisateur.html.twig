@@ -19,7 +19,7 @@
 
             <div class="inputcontainer">
                 <label class="list-group-item" for="Date">Date Début : </label>
-                <input type="date" class="form-control champ" id="Date" name="_Date">
+                <input type="date"  data-date='{"buttonOnly": true, "calculateWidth": false}' class="form-control champ" id="Date" name="_Date">
             </div>
 
             <input type="submit" value="valider">
@@ -32,11 +32,11 @@
 
             <div class="inputcontainer">
                 <label class="list-group-item" for="Username">Username :</label>
-                <input type="text" class="champ form-control" id="Username" name="_Username">
+                <input type="text" class="champ form-control" id="Username" name="_Username" required maxlength="255">
             </div>
             <div class="inputcontainer">
                 <label class="list-group-item" style="vertical-align: top" for="mail">E-mail : </label>
-                <input type="email" class="champ form-control" id="mail" name="_mail">
+                <input type="email" class="champ form-control" id="mail" name="_mail" required maxlength="255">
             </div>
 
 
@@ -92,28 +92,28 @@
 
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="Nom">Nom :</label>
-                            <input value="{{user.getNom}}" type="text" class="champ form-control" id="Nom" name="_Nom">
+                            <input value="{{user.getNom}}" type="text" class="champ form-control" id="Nom" name="_Nom" maxlength="45">
                         </div>
 
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="Prenom">Prénom :</label>
-                            <input value="{{user.getPrenom}}" type="text" class="champ form-control" id="Prenom" name="_Prenom">
+                            <input value="{{user.getPrenom}}" type="text" class="champ form-control" id="Prenom" name="_Prenom" maxlength="45">
                         </div>
 
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="Tel">Téléphone :</label>
-                            <input value="{{user.getTelephone}}" type="text" class="champ form-control" id="Telephone" name="_Tel">
+                            <input value="{{user.getTelephone}}" type="text" class="champ form-control" id="Telephone" name="_Tel" maxlength="45">
                         </div>
 
 
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="UserName">UserName :</label>
-                            <input value="{{user.getUserName}}" type="text" class="champ form-control" id="UserName" name="_Username">
+                            <input value="{{user.getUserName}}" type="text" class="champ form-control" id="UserName" name="_Username" maxlength="255">
                         </div>
 
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="Mail">E-mail :</label>
-                            <input value="{{user.getMail}}" type="text" class="champ form-control" id="Mail" name="_Mail">
+                            <input value="{{user.getMail}}" type="text" class="champ form-control" id="Mail" name="_Mail" maxlength="255">
                         </div>
 
 
@@ -151,6 +151,11 @@
         </div>
 
     </div>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/webshim/1.14.5/polyfiller.js"></script>
+    <script>
+        webshims.polyfill('forms forms-ext');
+    </script>
     <script>
         function envoyer(){
 
@@ -158,6 +163,11 @@
 
 
         }
+        $(function(){
+            $('[type="date"].min-today').prop('min', function(){
+                return new Date().toJSON().split('T')[0];
+            });
+        });
 
     </script>
 {% endblock %}

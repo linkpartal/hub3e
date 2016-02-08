@@ -5,19 +5,19 @@
 
     <div id="question" class="inputcontainer" name="question" style="display: none;">
         <label class="list-group-item" style="height: 60px;">Question :</label>
-        <input title="question" type="text" class="champ form-control" id="Question">
+        <input title="question" type="text" class="champ form-control" id="Question" required maxlength="255">
         <button onclick="dupliquer('reponse',this.parentNode.getAttribute('id'))" type="button">Ajouter Reponse</button>
         <button onclick="monter(this.parentNode)" type="button">Monter</button>
         <button onclick="descendre(this.parentNode)" type="button">Descendre</button>
         <button onclick="supprimer(this.parentNode)" type="button">Supprimer Question</button>
         <div id="reponse">
-            <input title="reponse" type="text" class="champ form-control" id="inputrep">
+            <input title="reponse" type="text" class="champ form-control" id="inputrep" required maxlength="45">
             <button onclick="monter(this.parentNode)" type="button">Monter</button>
             <button onclick="descendre(this.parentNode)" type="button">Descendre</button>
             <button onclick="supprimer(this.parentNode)" type="button">Supprimer</button>
         </div>
         <div>
-            <input title="reponse" type="text" class="champ form-control" id="inputrep">
+            <input title="reponse" type="text" class="champ form-control" id="inputrep" required maxlength="45">
             <button onclick="monter(this.parentNode)" type="button">Monter</button>
             <button onclick="descendre(this.parentNode)" type="button">Descendre</button>
             <button onclick="supprimer(this.parentNode)" type="button">Supprimer</button>
@@ -39,14 +39,14 @@
 
                             <div class="inputcontainer">
                                 <label class="list-group-item" style="height: 60px;" for="QCM">Nom du Questionnaire :</label>
-                                <input type="text" class="champ form-control" id="QCM" name="_Nom" value="{{ QCM.getNom }}">
+                                <input type="text" class="champ form-control" id="QCM" name="_Nom" value="{{ QCM.getNom }}" required maxlength="45">
                             </div>
                             <div class="inputcontainer">
                                 <label class="list-group-item" style="height: 60px;" for="affinite">Test d'affinité :</label>
                                 {% if QCM.getAffinite %}
-                                <input type="text" class="champ form-control" id="affinite" name="_affinite" value="1">
+                                <input type="text" class="champ form-control" id="affinite" name="_affinite" value="1" required maxlength="1">
                                 {% else %}
-                                    <input type="text" class="champ form-control" id="affinite" name="_affinite" value="0">
+                                    <input type="text" class="champ form-control" id="affinite" name="_affinite" value="0" required maxlength="1">
                                 {% endif %}
                             </div>
                             {% if Questions is defined %}
@@ -54,7 +54,7 @@
                                 {% for question in Questions %}
                                     <div id="{{ i }}" class="inputcontainer" name="question">
                                         <label class="list-group-item" style="height: 60px;" for="Question">Question :</label>
-                                        <input type="text" class="champ form-control" id="Question" name="questions[]" value="{{question.getQuestion  }}" >
+                                        <input type="text" class="champ form-control" id="Question" name="questions[]" value="{{question.getQuestion  }}" required maxlength="255">
                                         <button onclick="dupliquer('reponse',this.parentNode.getAttribute('id'))" type="button">Ajouter Reponse</button>
                                         <button onclick="monter(this.parentNode)" type="button">Monter</button>
                                         <button onclick="descendre(this.parentNode)" type="button">Descendre</button>
@@ -64,7 +64,7 @@
                                                 {% for rep in reponse %}
                                                     {%  if rep.getQuestiondef.getId == question.getId %}
                                                         <div>
-                                                            <input title="reponse" type="text" class="champ form-control" id="inputrep" name="reponse[{{ i }}][]" value="{{ rep.getReponse }}">
+                                                            <input title="reponse" type="text" class="champ form-control" id="inputrep" name="reponse[{{ i }}][]" value="{{ rep.getReponse }}" required maxlength="45">
                                                             <button onclick="monter(this.parentNode)" type="button">Monter</button>
                                                             <button onclick="descendre(this.parentNode)" type="button">Descendre</button>
                                                             <button onclick="supprimer(this.parentNode)" type="button">Supprimer</button>
@@ -117,11 +117,11 @@
 
                             <div class="inputcontainer">
                                 <label class="list-group-item" style="height: 60px;">Nom du Questionnaire :</label>
-                                <input type="text" class="champ form-control" id="QCM" name="_Nom">
+                                <input type="text" class="champ form-control" id="QCM" name="_Nom" required maxlength="45" >
                             </div>
                             <div class="inputcontainer">
                                 <label class="list-group-item" style="height: 60px;">Affinite :</label>
-                                <input type="text" class="champ form-control" placeholder="0 pour test formation/1 pour test d'affinité" id="affinite" name="_affinite">
+                                <input type="text" class="champ form-control" placeholder="0 pour test formation/1 pour test d'affinité" id="affinite" name="_affinite" required maxlength="1">
                             </div>
 
                             <div id="button_container">

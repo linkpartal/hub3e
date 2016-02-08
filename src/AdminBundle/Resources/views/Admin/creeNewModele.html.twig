@@ -21,7 +21,7 @@
                         <div class="inputcontainer">
                             <label class="list-group-item" for="filename" >Nom Fichier :</label>
                             <label class="list-group-item">{{ modele }}</label>
-                            <input type="hidden" class="champ form-control" id="filename" name="_filename" value="{{ modele }}">
+                            <input type="hidden" class="champ form-control" id="filename" name="_filename" value="{{ modele }}" maxlength="45" required>
                         </div>
                         <div class="inputcontainer">
                             <label for="newtext" class="list-group-item" style="vertical-align: top">Text : </label>
@@ -32,7 +32,7 @@
                         <form class="formulaire" id="form" action="{{ path("saveNewModele") }}" method="post">
                             <div class="inputcontainer">
                                 <label for="filename" class="list-group-item" >Nom Fichier :</label>
-                                <input type="text" class="champ form-control" id="filename" name="_filename">
+                                <input type="text" class="champ form-control" id="filename" name="_filename" maxlength="45" required>
                             </div>
                             <div class="inputcontainer">
                                 <label for="newtext" class="list-group-item" style="vertical-align: top">Text : </label>

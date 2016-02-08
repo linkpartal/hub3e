@@ -19,15 +19,15 @@
 
                             <div class="inputcontainer">
                                 <label class="list-group-item" style="height: 60px;" for="QCM">Nom du Questionnaire :</label>
-                                <input type="text" class="champ form-control" id="QCM" name="_Nom" value="{{ QCM.getNom }}">
+                                <input type="text" class="champ form-control" id="QCM" name="_Nom" value="{{ QCM.getNom }}" required maxlength="45">
 
                             </div>
                             <div class="inputcontainer">
                                 <label class="list-group-item" style="height: 60px;" for="affinite">Test d'affinité :</label>
                                 {% if QCM.getAffinite %}
-                                    <input type="text" class="champ form-control" id="affinite" name="_affinite" value="1">
+                                    <input type="text" class="champ form-control" id="affinite" name="_affinite" value="1" required maxlength="1">
                                 {% else %}
-                                    <input type="text" class="champ form-control" id="affinite" name="_affinite" value="0">
+                                    <input type="text" class="champ form-control" id="affinite" name="_affinite" value="0" required maxlength="1">
                                 {% endif %}
                             </div>
                             {% if Questions is defined %}
@@ -41,7 +41,7 @@
                                                 {% for rep in reponse %}
                                                     {%  if rep.getQuestiondef.getId == question.getId %}
                                                         <div>
-                                                            <input title="reponse" type="text" class="champ form-control" id="inputrep" name="reponse[{{ i }}][]" value="{{ rep.getReponse }}">
+                                                            <input title="reponse" type="text" class="champ form-control" id="inputrep" name="reponse[{{ i }}][]" value="{{ rep.getReponse }}" required maxlength="45">
 
                                                         </div>
                                                     {% endif %}
