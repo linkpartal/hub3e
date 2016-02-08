@@ -2,9 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     <title>Title</title>
 </head>
 <body>
-
+<table style="border-collapse: collapse;max-height: 100%">
+    <tr>
+        <td>Civilite</td>
+        <td>Nom</td>
+        <td>Prénom</td>
+        <td>téléphone</td>
+        <td>Email</td>
+    </tr>
+    {% for duplica in duplicas %}
+        <tr>
+            <td>{{ duplica.getCivilite }}</td>
+            <td>{{ duplica.getNom }}</td>
+            <td>{{ duplica.getPrenom }}</td>
+            <td>{{ duplica.getTelephone }}</td>
+            <td>{{ duplica.getEmail }}</td>
+        </tr>
+    {% endfor %}
+</table>
+<script src="//code.jquery.com/jquery.min.js"></script>
 </body>
 </html>

@@ -448,15 +448,6 @@
             }
         }
 
-        if(ecole > 0)
-        {
-            var spanecole = document.createElement("span");
-            spanecole.className = 'badge';
-            spanecole.className = spanecole.className + ' notifTopbar';
-            spanecole.innerHTML = ecole;
-            var buttonecole = document.getElementById("ecoletop");
-            buttonecole.appendChild(spanecole);
-        }
         if(societe >0)
         {var spansociete = document.createElement("span");
             spansociete.className = 'badge';
@@ -498,63 +489,49 @@
         i++;
     };
     function submitAjaxForm(url,form){
-        var idEtab
-        var route
+
+        var route;
         $.ajax({
             type: "POST",
             url: url,
-            data: $("#"+form+"").serialize(),
+            data: $("#"+form).serialize(),
             success: function(data)
             {
                 if(data['status']==='success')
                 {
-
-                    if (document.getElementById('SIREN').value=="")
-                    {
-                        alert('le SIREN est obligatoire');
-                    }
-                    else if (document.getElementById('RaisonSoc').value==""){
-                        alert('la raison sociale est obligatoire');
-                    }
-                    else
-                    {
-                        $("#"+form+" input[type=submit]").click();
-                    }
-
-
+                    $("#"+form+" input[type=submit]").click();
+                }
+                else if(data['status']==='exist')
+                {
+                    route='{{ path('etablissement_exist') }}';
+                    document.getElementById(form).action = route;
+                    $("#"+form+" input[type=submit]").click();
                 }
                 else
                 {
-                    idEtab=data['status'];
-                   // alert(idEtab);
-
-                   //alert(data['status']); // show response from the php script.
-
-
-                    route='{{ path('etablissement_exist',{'id':"_idEtab" }) }}';
-
-                    route = route.replace("_idEtab", idEtab);
-                    //window.open(route,'_blank');
-                    //var url = $(route).attr('href');
-                   // window.open(url, '_blank');
-                    $(location).prop('href', route).attr('target','_blank');
-
-
-
-                    //window.location.href=route;
-
-
-
+                    alert('Une erreur s\'est produite sur le serveur');
                 }
             }
         });
     };
     function envoyeradresses(){
+
+
         var geocodes = document.getElementsByName('_Geocode[]');
         if(geocodes.length==1)
         {
             alert('Vous devez remplir au moins une adresse');
         }
+        for(var j = 1;j<geocodes.length;j++){
+            var siret = document.getElementsByName('_SIRET[]')[j].value;
+            var test = siret.substring(0, 9);
+            if(test!=document.getElementById('SIREN').value)
+            {
+                alert('Le siret de l\'adresse '+ j + ' n\'est pas compatible avec le siren donné');
+                return;
+            }
+        }
+
         for(var i = 1; i<geocodes.length;i++)
         {
             var address = document.getElementsByName('_Adresse[]')[i].value +' ' +document.getElementsByName('_Ville[]')[i].value + ' ' + document.getElementsByName('_CodeP[]')[i].value  ;
@@ -564,7 +541,9 @@
             geocoder.geocode({'address': address}, function (results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                     result.value = results[0].geometry.location ;
-                    submitAjaxForm('{{ path('ecole_checkExist') }}','form');
+                    var check = '{{ path('ecole_checkExist',{'siren': '_siren' }) }}';
+                    check = check.replace('_siren',document.getElementById('SIREN').value)
+                    submitAjaxForm(check,'form');
                 } else {
                     alert('Pas de géocodage trouver pour l\'adresse spécifiée');
                 }

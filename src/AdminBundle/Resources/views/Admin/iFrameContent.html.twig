@@ -36,14 +36,13 @@
                 <form  class="formulaire" id="formInstanceLicence" action="{{ path("metier_user_associated") }}" method="post">
                     <div class="div_form" >
                         <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
-                        <select class="input" title="Licencedef" name="Licencedef">
-                            <option selected="selected">Select Your LicenceDef</option>
+                        <select class="input" title="Licencedef" name="Licencedef" required>
                             {% for def in licencedef %}
                                 <option value="{{ def.getId }}">{{ def.getLibelle }}</option>
                             {% endfor %}
                         </select>
 
-                        <input class="input" placeholder="Date Début" type="date" class="form-control champ" id="Date" name="_Date" disabled>
+                        <input class="date hide-spinbtns" placeholder="Date Début" type="date" id="Date" name="_Date" data-date='{"buttonOnly": true,	"calculateWidth": false}' required>
                     </div>
                     <div class="div_button">
                         <input class="blue" type="submit" value="Valider">
@@ -119,7 +118,7 @@
                             <input type="text" class="input " id="Domaine" name="_Domaine" placeholder="Domaine">
                             <input type="text" class="input" id="Profil" name="_Profil" placeholder="Profil">
                             <input type="text" class="input " id="Etat" name="_Etat" placeholder="Etat">
-                            <label style="float: left">Date debut :</label> <input style="display: inline-block;width: 200px" type="date" class="input" id="Datedebut" name="_Datedebut" title="Datedebut" disabled>
+                            <label style="float: left">Date debut :</label> <input style="display: inline-block;width: 200px" type="date" class="input" id="Datedebut" name="_Datedebut" title="Datedebut" >
                             <input type="text" class="input " id="TypeContrat" name="_TypeContrat" placeholder="TypeContrat">
 
                             <input type="text" class="input " id="Remuneration" name="_Remuneration" placeholder="Remuneration">
@@ -452,8 +451,7 @@
     <script src="{{ asset('js/PopUp.js') }}"></script>
     <script src="//cdn.jsdelivr.net/webshim/1.14.5/polyfiller.js"></script>
     <script>
-        webshims.setOptions('forms-ext', {types: 'date'});
-        webshims.polyfill('forms forms-ext');
+       webshims.polyfill('forms forms-ext');
     </script>
     <script language="JavaScript">
         {% if etablissement is defined %}
@@ -529,8 +527,12 @@
             });
             champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
         };
+        $(function(){
+            $('[type="date"].min-today').prop('min', function(){
+                return new Date().toJSON().split('T')[0];
+            });
+        });
     </script>
 {% endblock %}
 </body>
 </html>
-

@@ -15,172 +15,77 @@
 <body>
 
 <div class="container" style="padding: 0;">
-    {% block Content %}
+{% set siretsexistant =[] %}
+    <div class="col-xs-6" style="background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;height: 100%">
+        <div class="col-xs-12" style="margin-bottom: 50px;text-align:left;margin-left: 30px;">
+            <img style=" width:100px; height:100px;background:white;" alt="Logo" src="data:image/jpg;base64,{{ etablissements[0].getTier.getLogo }}">
+            <img style=" width:100px; height:100px;background:white;" alt="Logo" src="data:image/jpg;base64,{{ etablissements[0].getTier.getFondecran }}">
+            <br/>
+            <label class="list-group-item info"  >SIREN : <label style="color:black" > {{etablissements[0].getTier.getSIREN}}</label></label>
+            <label  class="list-group-item info">Raison Sociale : <label style="color:black" > {{etablissements[0].getTier.getRaisonSoc}}</label></label>
+            <br/>
+            <label>Etablissements excistant</label>
+            {% for etablissement in etablissements %}
+                {% set siretsexistant = siretsexistant|merge([etablissement.getSiret] ) %}
+                <label class="list-group-item info">Adresse :<label style="color:black" > {{etablissement.getSiret}}</label></label>
+                <label class="list-group-item info">Adresse :<label style="color:black" > {{etablissement.getAdresse}}</label></label>
 
-        {% if etablissement is defined %}
+                <label class="list-group-item info" >Code Postal : <label style="color:black" >{{etablissement.getCodepostal}}</label></label>
+                <label  class="list-group-item info">Ville : <label style="color:black" >{{etablissement.getVille}}</label></label>
+                <label  class="list-group-item info">Téléphone :<label style="color:black" > {{etablissement.getTelephone}}</label></label>
 
-            <div class="row" style="background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;height: calc(100% - 78px)">
+                <label  class="list-group-item info">FAX : <label style="color:black" >{{etablissement.getFax}}</label></label>
+                <label  class="list-group-item info">Responsable école :<label style="color:black" > {{etablissement.getResponsable}}</label></label>
+                <label  class="list-group-item info">Téléphone responsable établissement :<label style="color:black" > {{etablissement.getTelResponsable}}</label></label>
 
-                <div class="col-xs-9"
-                     style="background: rgb(238, 241, 246); height: 100%;">
+                <label  class="list-group-item info">Email responsable établissement :<label style="color:black" > {{etablissement.getMailResponsable}}</label></label>
+                <label  class="list-group-item info">Site web : <label style="color:black" >{{etablissement.getSite}}</label></label>
+                <br/>
 
+            {% endfor %}
+        </div>
 
-                    <div class="col-xs-12" style="margin-bottom: 50px">
-                        <div id="info_etab" style="text-align:left;margin-left: 30px;margin-top: 50px" >
-                            <table>
-                                <tr><td><img style=" width:100px; height:100px;background:white;" alt="Logo" src="data:image/jpg;base64,{{ etablissement.getTier.getLogo }}"  /></td>
-                                    <td></td>
-                                </tr>
-                            </table>
+    </div>
+    <div class="col-xs-6" style="background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;height: 100%">
+        <div class="col-xs-12" style="margin-bottom: 50px;text-align:left;margin-left: 30px;">
 
+            <label>Etablissements que vous essayez d'ajouter</label>
+            {% for key in sirets|keys  %}
+            {% if sirets[key] in siretsexistant %}
+            <div style="background-color: red">
+                {% else %}
+                <div style="background-color: green">
+                    {% endif %}
+                <label class="info">Siret :<label style="color:black" > {{sirets[key]}}</label></label>
+                    <label class="info">Adresse :<label style="color:black" > {{adresses[key]}}</label></label>
 
-                                <br/><br/>
+                    <label class=" info" >Code Postal : <label style="color:black" >{{codeps[key]}}</label></label>
+                    <label  class="info">Ville : <label style="color:black" >{{villes[key]}}</label></label>
+                    <label  class="info">Téléphone :<label style="color:black" > {{tels[key]}}</label></label>
 
-                                        <label class="list-group-item info"  >SIREN : <label style="color:black" > {{etablissement.getTier.getSIREN}}</label></label>
-                                        <label  class="list-group-item info">Raison Sociale : <label style="color:black" > {{etablissement.getTier.getRaisonSoc}}</label></label>
-                                        <label class="list-group-item info">Adresse :<label style="color:black" > {{etablissement.getAdresse}}</label></label>
+                    <label  class="info">FAX : <label style="color:black" >{{faxs[key]}}</label></label>
+                    <label  class="info">Responsable école :<label style="color:black" > {{resps[key]}}</label></label>
+                    <label  class="info">Téléphone responsable établissement :<label style="color:black" > {{telresps[key]}}</label></label>
 
-                                        <label class="list-group-item info" >Code Postal : <label style="color:black" >{{etablissement.getCodepostal}}</label></label>
-                                        <label  class="list-group-item info">Ville : <label style="color:black" >{{etablissement.getVille}}</label></label>
-                                        <label  class="list-group-item info">Téléphone :<label style="color:black" > {{etablissement.getTelephone}}</label></label>
-
-                                         <label  class="list-group-item info">FAX : <label style="color:black" >{{etablissement.getFax}}</label></label>
-                                        <label  class="list-group-item info">Responsable école :<label style="color:black" > {{etablissement.getResponsable}}</label></label>
-                                        <label  class="list-group-item info">Téléphone responsable établissement :<label style="color:black" > {{etablissement.getTelResponsable}}</label></label>
-
-                                         <label  class="list-group-item info">Email responsable établissement :<label style="color:black" > {{etablissement.getMailResponsable}}</label></label>
-                                        <label  class="list-group-item info"><label  >Site web : <label style="color:black" >{{etablissement.getSite}}</label></label><br/>
-
-
-
-
-
-
-
-
-
-                    </div><br/>
-                        <div style="align: center;" >
-
-                            <button  style="border: 0;font-size: 18px;font-family: Roboto;color: white;background-color: rgb(61, 138, 212);height: 40px; width: 150px;"  onclick="" >
-                                <div    >Confirmer</div>
-
-                            </button>
-
-                            <button  style="border: 0;font-size: 18px;font-family: Roboto;color: white;background-color: rgb(61, 138, 212);height: 40px; width: 150px;"  onclick="" >
-                                <div    >Annuler</div>
-
-                            </button>
-
-
-                        </div>
+                    <label  class="info">Email responsable établissement :<label style="color:black" > {{mailresps[key]}}</label></label>
+                    <label  class="info">Site web : <label style="color:black" >{{sites[key]}}</label></label>
                 </div>
-
-
-
-
+                <br/>
+                </div>
+            {% endfor %}
+            <div style="align: center;" >
+                <button  style="border: 0;font-size: 18px;font-family: Roboto;color: white;background-color: rgb(61, 138, 212);height: 40px; width: 150px;"  onclick="" >
+                    <div>Confirmer</div>
+                </button>
+                <button  style="border: 0;font-size: 18px;font-family: Roboto;color: white;background-color: rgb(61, 138, 212);height: 40px; width: 150px;"  onclick="" >
+                    <div>Annuler</div>
+                </button>
             </div>
-        {% elseif afflicence is defined %}
+        </div>
 
-        {% else %}
-            <p>Hello world</p>
-        {% endif %}
+    </div>
+    {% block JS %}
     {% endblock %}
 </div>
-
-{% block JS %}
-    <script src="http://maps.googleapis.com/maps/api/js"></script>
-    <script src="//code.jquery.com/jquery.min.js"></script>
-    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('js/PopUp.js') }}"></script>
-    <script language="JavaScript">
-        {% if etablissement is defined %}
-        document.getElementById("select_info").onchange = function(){
-            var x = document.getElementById("select_info").value;
-            document.getElementById('info_etab').style.display= 'none';
-            document.getElementById('info_user').style.display= 'none';
-            document.getElementById('info_formation').style.display= 'none';
-
-            document.getElementById(x).style.display='block';
-        };
-        function active(route) {
-            $.ajax({
-                type: 'get',
-                url: route,
-                error: function (response) {
-                    console.log(response);
-                },
-                success: function (data) {
-                    console.log('etablissement{{ etablissement.getId }}');
-                    if (data['succes'] == '0') {
-                        document.getElementById("activate").style.backgroundColor = 'red';
-                        document.getElementById("activate").firstElementChild.innerHTML = 'Désactive';
-                        window.parent.document.getElementById('active{{ etablissement.getId }}').style.backgroundColor = 'red';
-                    }
-                    else {
-                        document.getElementById("activate").style.backgroundColor = '#94C400';
-                        document.getElementById("activate").firstElementChild.innerHTML = 'Active';
-                        window.parent.document.getElementById('active{{ etablissement.getId }}').style.backgroundColor = '#94C400';
-                    }
-
-                }
-            });
-
-        };
-        {% endif %}
-        function post(path) {
-            window.location = path;
-        };
-        function submitform(form) {
-            document.getElementById(form).submit();
-        };
-        function supprimerformation(route, champs) {
-            $.ajax({
-                type: 'get',
-                url: route,
-                error: function (response) {
-                    console.log(response);
-                },
-                success: function(data){console.log(data);}
-            });
-            champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
-
-        };
-        function readURL(input,baliseimg) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#'+ baliseimg)
-                            .attr('src',"{{ asset('image/PDF.jpg') }}")
-                            .width(100)
-                            .height(100);
-
-                };
-
-                reader.readAsDataURL(input.files[0]);
-
-                document.getElementById("NomPDF").innerText=input.files[0].name;
-
-
-
-            }
-        };
-        function envoyer(){
-            var address = document.getElementById('Adresse').value +' ' +document.getElementById('Ville').value
-                    + ' ' + document.getElementById('CodeP').value  ;
-            var geocoder = new google.maps.Geocoder();
-            geocoder.geocode({'address': address}, function (results, status) {
-                if (status === google.maps.GeocoderStatus.OK) {
-                    document.getElementById('Geocode').value = results[0].geometry.location ;
-                    document.getElementById('formEtab').submit();
-                } else {
-                    console.log('Geocode was not successful for the following reason: ' + status);
-                }
-            });
-        }
-
-
-    </script>
-{% endblock %}
 </body>
 </html>

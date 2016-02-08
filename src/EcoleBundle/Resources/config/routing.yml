@@ -51,7 +51,7 @@ adresses_tier:
     defaults: { _controller: EcoleBundle:Default:adresses}
 
 ecole_checkExist:
-    path : /checkExist
+    path : /checkExist/{siren}
     defaults: { _controller: EcoleBundle:Ecole:checkExist}
 
 ecole_tieradded:
@@ -91,5 +91,5 @@ loadconsulterQCM:
     defaults: { _controller: EcoleBundle:Default:loadQCM }
 
 etablissement_exist:
-    path: /existEtablissement/{id}
+    path: /existEtablissement/
     defaults: { _controller: EcoleBundle:Ecole:ExistEtab}

@@ -43,7 +43,7 @@
                 </div>
             </div>
         </div>
-        <form id="form" action="{{ path('tieradded') }}" method="post" enctype="multipart/form-data">
+        <form id="form" action="{{ path('tieradded') }}" onsubmit="document.getElementById('submitTier').disabled = true;alert('submited');" method="post" enctype="multipart/form-data">
             <div class="div_form">
 
                 <div class="col-xs-6 input-colonne">
@@ -68,7 +68,7 @@
             </div>
             <div class="div_button">
                 <input type="submit" style="display: none">
-                <button class="blue" type="button" onclick="envoyeradresses()">Envoyer</button>
+                <button id="submitTier" class="blue" type="button" onclick="envoyeradresses()">Envoyer</button>
             </div>
         </form>
     </div>
@@ -116,7 +116,7 @@
 <div id="addLicenceDef" class="popup col-xs-3">
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block;overflow-y: auto">
-        <form class="formulaire" id="formLicence" action="{{ path("metier_user_licenceadded") }}" method="post">
+        <form class="formulaire" id="formLicence" action="{{ path("metier_user_licenceadded") }}" onsubmit="submitLicenceDef.disabled = true;" method="post">
             <div class="div_form" >
                 <div class="col-xs-6 input-colonne">
                     <input placeholder="Libelle" class="input" type="text" id="Libelle" name="_Libelle" maxlength="25" required>
@@ -134,7 +134,7 @@
 
             </div>
             <div class="div_button">
-                <input class="blue" type="submit" value="envoyer">
+                <input class="blue" name="submitLicenceDef" type="submit" value="envoyer">
             </div>
         </form>
     </div>

@@ -427,9 +427,9 @@ class DefaultController extends Controller
     public function afficherDuplicaAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $import = $em->getRepository('GenericBundle:ImportCandidat')->findBy($id);
-        //$users = $em->getRepository('GenericBundle:User')->findBy()
-            var_dump($import);die;
+        $import = $em->getRepository('GenericBundle:ImportCandidat')->find($id);
+        $users = $em->getRepository('GenericBundle:User')->findBy(array('civilite' =>$import->getCivilite()  , 'nom' => $import->getNom(), 'prenom' => $import->getPrenom()));
+        return $this->render('UserBundle:Gestion:IframeDuplicata.html.twig', array('duplicas'=>$users));
     }
 
 }

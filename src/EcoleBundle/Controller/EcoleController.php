@@ -13,32 +13,19 @@ use Symfony\Component\HttpFoundation\Request;
 
 class EcoleController extends Controller
 {
-    public function checkExistAction(Request $request)
+    public function checkExistAction($siren)
     {
 
         $em = $this->getDoctrine()->getManager();
         $reponse = new JsonResponse();
 
-        $tier = $em->getRepository('GenericBundle:Tier')->findOneBy(array('siren'=>$request->get('_SIREN')));
+        $tier = $em->getRepository('GenericBundle:Tier')->findOneBy(array('siren'=>$siren));
 
 
         if ($tier) {
-           return $reponse->setData(array('status'=>$tier->getid()));
-
+           return $reponse->setData(array('status'=>'exist'));
         }
 
-
-        for($i = 0; $i< count($request->get('_SIRET'));$i++)
-        {
-
-            $etablissement = $em->getRepository('GenericBundle:Etablissement')->findOneBy(array('siret'=>$request->get('_SIRET')[$i]));
-
-            if($etablissement)
-            {
-                return $reponse->setData(array('status'=>$request->get('_SIRET')[$i] . ' appartient déjà à un établissement existant.'));
-            }
-
-        }
         return $reponse->setData(array('status'=>'success'));
 
     }
@@ -300,30 +287,23 @@ class EcoleController extends Controller
 
 
 
-    public function ExistEtabAction($id)
+    public function ExistEtabAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+        $tier = $em->getRepository('GenericBundle:Tier')->findOneBy(array('siren'=>$request->get('_SIREN')));
 
-        $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
-
-        if($etablissement->getTier()->getEcole())
-        {
-            $type = 'Ecole';
-        }
-        else{
-            $type = 'Societe';
-        }
-
-
-        if($etablissement->getTier()->getLogo())
-        {
-            $etablissement->getTier()->setLogo(base64_encode(stream_get_contents($etablissement->getTier()->getLogo())));
-        }
-        if($etablissement->getTier()->getFondecran())
-        {
-            $etablissement->getTier()->setFondecran(base64_encode(stream_get_contents($etablissement->getTier()->getFondecran())));
-        }
-
-        return $this->render('EcoleBundle:Adminecole:SocietExist.html.twig',array('etablissement'=>$etablissement));
+        $etablissements = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$tier));
+        return $this->render('EcoleBundle:Adminecole:SocietExist.html.twig',array('etablissements'=>$etablissements,
+            'sirets'=>$request->get('_SIRET'),
+            'adresses'=>$request->get('_Adresse'),
+            'codeps'=>$request->get('_CodeP'),
+            'tels'=>$request->get('_Tel'),
+            'faxs'=>$request->get('_Fax'),
+            'villes'=>$request->get('_Ville'),
+            'resps'=>$request->get('_Resp'),
+            'telresps'=>$request->get('_TelResp'),
+            'mailresps'=>$request->get('_MailResp'),
+            'sites'=>$request->get('_Site')));
     }
 }
 
