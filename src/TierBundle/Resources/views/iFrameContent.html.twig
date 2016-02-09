@@ -193,7 +193,7 @@
                             <label style="display:none" id="idformation"></label>
                             <div class="div_form" style="text-align: center" >
                                 <section style="text-align: center" >
-                                    <table class="tblQCM" style="text-align: center ; align:center;" >
+                                    <table class="tblQCM" style="text-align: center ;" >
                                         <tr>
                                             <td>
                                                 <div>
@@ -236,11 +236,11 @@
                         <div id="formaddQCMAff" class="formulaire" style="text-align: center" >
                             <div class="div_form" style="text-align: center" >
                                 <section style="text-align: center" >
-                                    <table class="tblQCM" style="text-align: center ; align:center;" >
+                                    <table class="tblQCM" style="text-align: center ;" >
                                         <tr>
                                             <td>
                                                 <div>
-                                                    <select onclick="ConsultationQCMAff('divconsQCMAFF')" id="leftValuesAff" size="10" multiple>
+                                                    <select title="Tests d'affinité disponible" onclick="ConsultationQCMAff('divconsQCMAFF')" id="leftValuesAff" size="10" multiple>
                                                         {% if QCMSNOTETAB is defined %}
                                                             {% for qcm in QCMSNOTETAB %}
                                                                 <option name="_idqcmleftaff" value="{{ qcm.getId }}">{{ qcm.getNom }}</option>
@@ -257,7 +257,7 @@
                                             </td>
                                             <td>
                                                 <div>
-                                                    <select onclick="ConsultationQCMAff('divconsQCMAFF')" id="rightValuesAff" size="10" multiple>
+                                                    <select title="Tests d'affinité déjà associé" onclick="ConsultationQCMAff('divconsQCMAFF')" id="rightValuesAff" size="10" multiple>
                                                         {% for testaff in etablissement.getQcmdef %}
                                                             <option name="_idqcmrightaff" value="{{ testaff.getId }}">{{ testaff.getNom }}</option>
                                                         {% endfor %}
@@ -474,11 +474,11 @@
                                                     <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px " alt="fichier de formation" >
                                                 </a>
                                             </label>
-                                            <button  style="border: 0;font-size: 18px;font-family: Roboto;color: white;background-color: rgb(61, 138, 212);height: 40px; width: 150px;"  onclick="supprimerformation('{{ path('supprimerFormation',{'id':formation.getId}) }}', this)">
+                                            <button  style="border: 0;font: 18px Roboto white;background-color: rgb(61, 138, 212);height: 40px; width: 150px;"  onclick="supprimerformation('{{ path('supprimerFormation',{'id':formation.getId}) }}', this)">
                                                 <div   >Supprimer</div>
 
                                             </button>&nbsp;&nbsp;
-                                            <button  style="border: 0;font-size: 18px;font-family: Roboto;color: white;background-color: rgb(61, 138, 212);height: 40px; width: 150px;"  onclick="showqcm('addQCM',{{ formation.getId }})" >
+                                            <button  style="border: 0;font: 18px Roboto white;background-color: rgb(61, 138, 212);height: 40px; width: 150px;"  onclick="showqcm('addQCM',{{ formation.getId }})" >
                                                 <div   >Ajouter un test</div>
 
                                             </button>
@@ -680,13 +680,13 @@
                 }
             });
 
-        };
+        }
         function post(path) {
             window.location = path;
-        };
+        }
         function submitform(form) {
             document.getElementById(form).submit();
-        };
+        }
         function FermerPopup(div){
             var popup = document.getElementById(div);
 
@@ -696,8 +696,8 @@
 
         }
 
-        function ConsultationQCMAff(div){
-            var div = document.getElementById(div);
+        function ConsultationQCMAff(divid){
+            var div = document.getElementById(divid);
 
             while (div.firstChild) {
 
@@ -734,8 +734,8 @@
 
         }
 
-        function ConsultationQCM(div){
-            var div = document.getElementById(div);
+        function ConsultationQCM(divid){
+            var div = document.getElementById(divid);
 
             while (div.firstChild) {
 
@@ -783,7 +783,7 @@
             });
             champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
 
-        };
+        }
 
         function readURL(input,baliseimg) {
 
@@ -793,7 +793,7 @@
 
 
                 var reader = new FileReader();
-                reader.onload = function (e) {
+                reader.onload = function () {
                     $('#'+ baliseimg)
                             .attr('src',"{{ asset('image/PDF.jpg') }}")
                             .width(100)
@@ -815,7 +815,7 @@
                 document.getElementById("pdf").src="{{ asset('image/upload-arrow.png') }}";
             }
 
-        };
+        }
 
         $("#btnLeft").click(function () {
             var selectedItem = $("#rightValues option:selected");
@@ -926,12 +926,32 @@
             });
 
         });
-        function hideAjouterForm(champs)
-        {
+        function hideAjouterForm(champs) {
             champs.parentNode.style.display = 'none';
             document.getElementById("pdf").src = '{{ asset('image/upload-arrow.png') }}';
+        }
+        function supprimerligne(route, champs) {
+            $.ajax({
+                type: 'get',
+                url: route,
+                error: function (response) {
+                    console.log(response);
+                },
+                success: function(data){console.log(data);}
+            });
+            champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
         };
-
+        function supprimerPartenariat(route, champs) {
+            $.ajax({
+                type: 'get',
+                url: route,
+                error: function (response) {
+                    console.log(response);
+                },
+                success: function(data){console.log(data);}
+            });
+            champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
+        };
 
 
 

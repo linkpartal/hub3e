@@ -23,6 +23,15 @@ class DefaultController extends Controller
 
         $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $userid = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
+        $info = $this->getDoctrine()->getRepository('GenericBundle:Infocomplementaire')->find($id);
+        $Parents = $this->getDoctrine()->getRepository('GenericBundle:Parents')->findAll();
+
+        $Langue = $this->getDoctrine()->getRepository('GenericBundle:Langue')->findAll();
+
+        $Experience = $this->getDoctrine()->getRepository('GenericBundle:Experience')->findAll();
+        $Recommandation = $this->getDoctrine()->getRepository('GenericBundle:Recommandation')->findAll();
+        $Diplome = $this->getDoctrine()->getRepository('GenericBundle:Diplome')->findAll();
+        $Document = $this->getDoctrine()->getRepository('GenericBundle:Document')->findAll();
         $type = 'Utilisateur';
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('user'=>$user,'entite'=>$userid->getId(),'type'=>$type));
         if($notifications)
@@ -32,8 +41,8 @@ class DefaultController extends Controller
         }
 
 
-        return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('licencedef'=>$licencedef,'User'=>$userid
-        ));
+        return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('licencedef'=>$licencedef,'User'=>$userid,
+            'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue));
     }
 
     public function UserAddedAction(Request $request)

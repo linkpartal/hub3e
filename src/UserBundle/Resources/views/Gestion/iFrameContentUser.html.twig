@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -16,70 +16,313 @@
 
 <div class="container" style="padding: 0;">
     {% block Content %}
-        {% if User is defined %}
-            <div class="row" style="background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;height: 100%">
+    {% if User is defined %}
+    <div class="row" style="background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;height: 100%">
 
-                <div class="col-xs-9"
-                     style="background: rgb(238, 241, 246); height: 100%;">
+        <div class="col-xs-9"
+             style="background: rgb(238, 241, 246); height: 100%;">
+
+            <!-- **********************************tache des apprenants************************** -->
+
+            <div class="col-xs-12" style="height: 46px;">
+                <div style="height: 35px; width: 100%; padding: 15px 0 0 15px;">
+                    <select title="" id="select_info" class="btn btn-default dropdown-toggle" style="color:white;">
+                        <option value="info_user" style="color:black;">Données Utilisateur</option>
+                        {% if User.hasRole('ROLE_APPRENANT') %}
+                            <option value="info_Apprenant" style="color:black;">Details de l'Apprenant</option>
+                            <option value="" style="color:black;">Formation de l'Apprenant </option>
+                            <option value="info_parents" style="color:black;">Les Parents </option>
+                            <option value="info_Exp" style="color:black;">Expériences </option>
+                            <option value="info_recom" style="color:black;">Recommandations </option>
+                            <option value="info_diplome" style="color:black;">Diplomes </option>
+                            <option value="info_doc" style="color:black;">Documents </option>
+                        {% endif %}
+
+
+                    </select>
+                </div>
+            </div>
 
 
 
-                    <div class="col-xs-12" style="margin-bottom: 50px">
-                        <div id="info_etab" class="list-group affichage">
+            <div class="col-xs-12" style="margin-bottom: 50px">
+                <div id="info_user" class="list-group affichage">
+                    <label class="list-group-item info" >Civilité : <label style="color:black" >{{User.getCivilite}}</label></label>
+                    <label class="list-group-item info" >Nom : <label style="color:black" >{{User.getNom}}</label></label>
+                    <label class="list-group-item info" >Prénom : <label style="color:black" >{{User.getPrenom}}</label></label>
+                    <label class="list-group-item info" >Téléphone : <label style="color:black" >{{User.getTelephone}}</label></label>
+                    <label class="list-group-item info" >UserName : <label style="color:black" >{{User.getUsername}}</label></label>
+                    <label class="list-group-item info" >E-mail : <label style="color:black" >{{User.getEmail}}</label></label>
+                    <label class="list-group-item info" >Dernière connexion : <label style="color:black" >{{User.getLastLogin|date('d/m/Y à H:i') }}</label></label>
+                    <label class="list-group-item info" >Expiré le : <label style="color:black" >{{User.getExpiredAt|date('d/m/Y à H:i') }}</label></label>
 
+                </div>
 
-                            <label class="list-group-item info" >Civilité : <label style="color:black" >{{User.getCivilite}}</label></label>
-                            <label class="list-group-item info" >Nom : <label style="color:black" >{{User.getNom}}</label></label>
-                            <label class="list-group-item info" >Prénom : <label style="color:black" >{{User.getPrenom}}</label></label>
-                            <label class="list-group-item info" >Téléphone : <label style="color:black" >{{User.getTelephone}}</label></label>
-                            <label class="list-group-item info" >UserName : <label style="color:black" >{{User.getUsername}}</label></label>
-                            <label class="list-group-item info" >E-mail : <label style="color:black" >{{User.getEmail}}</label></label>
-                            <label class="list-group-item info" >Dernière connexion : <label style="color:black" >{{User.getLastLogin|date('d/m/Y à H:i') }}</label></label>
-                            <label class="list-group-item info" >Expiré le : <label style="color:black" >{{User.getExpiredAt|date('d/m/Y à H:i') }}</label></label>
+                {% if User.hasRole('ROLE_APPRENANT') %}
 
+                    <div id="info_Apprenant" class="col-xs-12 Liste" style="display:none;">
+
+                        <div class="row">
+                            <label class="cell" >Datenaissance : <label class="border:solid 1px steelblue; text-transform:uppercase; font-weight:bold; color:steelblue;" style="color:black" >{{User.getInfo.getDatenaissance|date('d/m/Y ') }}</label></label>
+                            <label class="cell" >Cp naissance  : <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" >{{User.getInfo.getCpnaissance}}</label></label>
+                        </div>
+                        <div class="row">
+                            <label class="cell" >Lieu naissance: <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" >{{User.getInfo.getLieunaissance}}</label></label>
+                            <label class="cell" >Adresse       : <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:250px" >{{User.getInfo.getAdresse}}</label></label>
+                        </div>
+                        <div class="row">
+                            <label class="cell" >Facebook      : <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" >{{User.getInfo.getFacebook}}</label></label>
+                            <label class="cell" >Linkedin      : <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" >{{User.getInfo.getLinkedin}}</label></label>
+                        </div>
+                        <div class="row">
+                            <label class="cell" >Mobilite      : <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" >{{User.getInfo.getMobilite}}</label></label>
+                            <label class="cell" >Fratrie       : <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" >{{User.getInfo.getFratrie}}</label></label>
+                        </div>
+                        <div class="row">
+                            <label class="cell" >Sport :
+                                {% for sport in User.getSport %}
+                                    <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" > {{ sport.getSport }},</label>
+                                {% endfor %}
+                            </label>
+
+                            <label class="cell" >Culturel :
+                                {% for culturel in User.getCulturel %}
+                                    <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" > {{ culturel.getCulturel }},</label>
+                                {% endfor %}
+                            </label>
+                        </div>
+                        <div class="row">
+                            <label class="cell" >Langue :
+                                {% if Langue is defined %}
+                                    {% for lang in Langue %}
+                                        <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" >{{ lang.getLangue }},</label>
+                                    {% endfor %}
+                                {% endif %}
+                            </label>
                         </div>
 
 
                     </div>
-                </div>
 
-                <div class="col-xs-3"
-                     style="height: 100%;">
-                    <div class="list-group"
-                         style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
-                        {% if not User.isExpired %}
-                            <button onclick="expire('{{ path('expired',{'id':User.getId}) }}')" id="expired" type="button" class="list-group-item rightMenu" style="background-color: #94C400">
-                                <div class="col-xs-12" style="display: inline-table;color: white;height: 46px;margin-top:10px;">Activer</div>
-                            </button>
-                        {% else %}
-                            <button onclick="expire('{{ path('expired',{'id':User.getId}) }}')" id="expired" type="button" class="list-group-item rightMenu" style="background-color: red">
-                                <div class="col-xs-12" style="display: inline-table;color: white;height: 46px;margin-top:10px;">Désactiver</div>
-                            </button>
+                {% endif %}
+
+                {% if User.hasRole('ROLE_APPRENANT') %}
+                    <div id="info_parents" class="list-group affichage" style="display:none">
+                        {% if Parents is defined %}
+                            {% for parent in Parents %}
+                                {% set iddiv = random()  %}
+                                <div class="col-xs-12 Liste">
+                                    <div class="row">
+                                        <label class="cell">Nom : <label>{{ parent.getNom }}</label></label>
+                                        <label class="cell">Prénom : <label>{{parent.getPrenom }}</label>
+                                            <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#parent{{ iddiv }}"></button></label>
+                                    </div>
+                                    <div id="parent{{ iddiv }}" class="collapse in" >
+                                        <div class="row">
+                                            <label class="cell">Telephone : <label>{{ parent.getTelephone }}</label></label>
+                                            <label class="cell">Adresse  : <label>{{ parent.getAdresse }}</label></label>
+                                        </div>
+                                        <div class="row">
+                                            <label class="cell">Email : <label>{{ parent.getEmail}}</label></label>
+                                            {% if parent.getNomjeunefille  %}
+                                                <label class="cell">Nom jeune fille  : <label>{{ parent.getNomjeunefille }}</label></label>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            {% endfor %}
                         {% endif %}
-                        <button onclick="post('{{ path('modifierUser',{'id': User.getId }) }}',false)" type="button" class="list-group-item rightMenu" >
-                            <div class="col-xs-12"  >Modifier la fiche</div>
-
-                        </button>
-
-                        <button onclick="post('{{ path('supprimereUtilisateur',{'id': User.getId }) }}',true)" type="button" class="list-group-item rightMenu" >
-                            <div class="col-xs-12" >Supprimer l'utilisateur</div>
-
-                        </button>
 
                     </div>
-                </div>
+
+
+
+                {% endif %}
+
+
+                {% if User.hasRole('ROLE_APPRENANT') %}
+                    <div id="info_Exp" class="list-group affichage" style="display:none">
+                        {% if Experience is defined %}
+                            {% for Exp in Experience %}
+                                {% set iddiv = random()  %}
+                                <div class="col-xs-12 Liste">
+                                    <div class="row">
+                                        <label class="cell">Nom societe : <label>{{ Exp.getNomsociete }}</label></label>
+                                        <label class="cell">Activite : <label>{{Exp.getActivite }}</label>
+                                            <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#exp{{ iddiv }}"></button></label>
+
+                                    </div>
+                                    <div id="exp{{ iddiv }}" class="collapse in" >
+                                        <div class="row">
+                                            <label class="cell">Lieu  : <label>{{ Exp.getLieu }}</label></label>
+                                            <label class="cell">Poste  : <label>{{ Exp.getPoste }}</label></label>
+                                        </div>
+                                        <div class="row">
+                                            <label class="cell">Nbreannee : <label>{{ Exp.getNbreannee}}</label></label>
+                                            <label class="cell">Description : <label>{{ Exp.getDescription }}</label></label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+
+
+
+                {% endif %}
+
+                {% if User.hasRole('ROLE_APPRENANT') %}
+                    <div id="info_recom" class="list-group affichage" style="display:none">
+                        {% if Recommandation is defined %}
+                            {% for Recom in Recommandation %}
+                                {% set iddiv = random()  %}
+                                <div class="col-xs-12 Liste">
+                                    <div class="row">
+                                        <label class="cell">Text  : <label>{{ Recom.getText }}</label></label>
+                                        <label class="cell">Nom : <label>{{Recom.getNom }}</label>
+                                            <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#recommandation{{ iddiv }}"></button></label>
+
+                                    </div>
+                                    <div id="recommandation{{ iddiv }}" class="collapse in" >
+                                        <div class="row">
+                                            <label class="cell">Fonction  : <label>{{ Recom.getFonction }}</label></label>
+                                            <label class="cell">Email  : <label>{{ Recom.getEmail }}</label></label>
+                                        </div>
+                                        <div class="row">
+                                            <label class="cell">Téléphone : <label>{{ Recom.getTelephone}}</label></label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+
+
+
+                {% endif %}
+
+
+                {% if User.hasRole('ROLE_APPRENANT') %}
+                    <div id="info_diplome" class="list-group affichage" style="display:none">
+                        {% if Diplome is defined %}
+                            {% for Dip in Diplome %}
+                                {% set iddiv = random()  %}
+                                <div class="col-xs-12 Liste">
+                                    <div class="row">
+                                        <label class="cell">Text  : <label>{{ Dip.getLibelle }}</label></label>
+                                        <label class="cell">Obtention : <label>{{Dip.getObtention }}</label>
+                                            <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#diplome{{ iddiv }}"></button></label>
+
+                                    </div>
+                                    <div id="diplome{{ iddiv }}" class="collapse in" >
+                                        <div class="row">
+                                            <label class="cell">Ecole  : <label>{{ Dip.getEcole}}</label></label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+
+
+
+                {% endif %}
+
+
+
+                {% if User.hasRole('ROLE_APPRENANT') %}
+                    <div id="info_doc" class="list-group affichage" style="display:none">
+                        {% if Document is defined %}
+                            {% for Doc in Document %}
+                                {% set iddiv = random()  %}
+                                <div class="col-xs-12 Liste">
+                                    <div class="row">
+                                        <label class="cell">Type   : <label>{{ Doc.getType }}</label></label>
+                                        <label class="cell">Extention : <label>{{Doc.getExtension }}</label>
+                                            <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#doc{{ iddiv }}"></button></label>
+
+                                    </div>
+                                    <div id="doc{{ iddiv }}" class="collapse in" >
+                                        <div class="row">
+                                            <label class="cell">Taille  : <label>{{ Doc.getTaille}}</label></label>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+
+
+
+                {% endif %}
+
 
 
 
             </div>
-        {% endif %}
+
+        </div>
+
+        <div class="col-xs-3"
+             style="height: 100%;">
+            <div class="list-group"
+                 style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
+                {% if not User.isExpired %}
+                    <button onclick="expire('{{ path('expired',{'id':User.getId}) }}')" id="expired" type="button" class="list-group-item rightMenu" style="background-color: #94C400">
+                        <div class="col-xs-12" style="display: inline-table;color: white;height: 46px;margin-top:10px;">Activer</div>
+                    </button>
+                {% else %}
+                    <button onclick="expire('{{ path('expired',{'id':User.getId}) }}')" id="expired" type="button" class="list-group-item rightMenu" style="background-color: red">
+                        <div class="col-xs-12" style="display: inline-table;color: white;height: 46px;margin-top:10px;">Désactiver</div>
+                    </button>
+                {% endif %}
+                <button onclick="post('{{ path('modifierUser',{'id': User.getId }) }}',false)" type="button" class="list-group-item rightMenu" >
+                    <div class="col-xs-12"  >Modifier la fiche</div>
+
+                </button>
+
+                <button onclick="post('{{ path('supprimereUtilisateur',{'id': User.getId }) }}',true)" type="button" class="list-group-item rightMenu" >
+                    <div class="col-xs-12" >Supprimer l'utilisateur</div>
+
+                </button>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    {% endif %}
     {% endblock %}
 </div>
 <script src="//code.jquery.com/jquery.min.js"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/PopUp.js') }}"></script>
 <script language="JavaScript">
+    {% if User is defined %}
+    document.getElementById("select_info").onchange = function(){
+        var x = document.getElementById("select_info").value;
+        document.getElementById('info_user').style.display= 'none';
+        document.getElementById('info_Apprenant').style.display= 'none';
+        document.getElementById('info_parents').style.display= 'none';
+        document.getElementById('info_Exp').style.display= 'none';
+        document.getElementById('info_recom').style.display= 'none';
+        document.getElementById('info_diplome').style.display= 'none';
+        document.getElementById('info_doc').style.display= 'none';
 
+
+        document.getElementById(x).style.display='block';
+    };
     function expire(route) {
         $.ajax({
             type: 'get',
@@ -113,7 +356,7 @@
                     alert('Une erreur s\'est produite');
                 },
                 success: function () {
-                        window.parent.location.reload();
+                    window.parent.location.reload();
                 }
             });
         }
@@ -122,9 +365,10 @@
             window.location = path;
         }
     };
+
+
+
+    {% endif %}
 </script>
-{% block JS %}
-    <script src="http://maps.googleapis.com/maps/api/js"></script>
-{% endblock %}
 </body>
 </html>

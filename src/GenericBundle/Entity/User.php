@@ -112,6 +112,16 @@ class User extends BaseUser
     private $sport;
 
     /**
+     * @var \Infocomplementaire
+     *
+     * @ORM\ManyToOne(targetEntity="Infocomplementaire")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="info_id", referencedColumnName="id")
+     * })
+     */
+    private $info;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -430,5 +440,29 @@ class User extends BaseUser
     public function getPhotos()
     {
         return $this->photos;
+    }
+
+    /**
+     * Set info
+     *
+     * @param \GenericBundle\Entity\Infocomplementaire $info
+     *
+     * @return User
+     */
+    public function setInfo(\GenericBundle\Entity\Infocomplementaire $info = null)
+    {
+        $this->info = $info;
+
+        return $this;
+    }
+
+    /**
+     * Get info
+     *
+     * @return \GenericBundle\Entity\Infocomplementaire
+     */
+    public function getInfo()
+    {
+        return $this->info;
     }
 }

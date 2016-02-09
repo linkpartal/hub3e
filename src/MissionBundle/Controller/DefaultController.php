@@ -38,7 +38,11 @@ class DefaultController extends Controller
         //$mission->setFormation($request->get('_idform'));
 
         $us = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('userselect'));
-        $mission->setTuteur($us);
+        if($us)
+        {
+            $mission->setTuteur($us);
+        }
+
 
         // var_dump($mission);die;
         /*  $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_iduse'));
@@ -61,7 +65,7 @@ class DefaultController extends Controller
 
 
 
-        return $this->forward('AdminBundle:Default:affichage',array('id'=>$etablissement->getId()));
+        return $this->redirect($this->generateUrl('affiche_etab',array('ecole'=>$etablissement->getId())));
 
 
     }

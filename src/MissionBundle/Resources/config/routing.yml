@@ -1,19 +1,19 @@
 admin_afficheMission:
     path: /affichageMission/id={id}
-    defaults: { _controller: AdminBundle:MissionDef:affichageMission}
+    defaults: { _controller: MissionBundle:Default:affichageMission}
 
 supprimer_Mission:
     path:  /suppMission/{id}
-    defaults: {_controller: AdminBundle:MissionDef:suppMission}
+    defaults: {_controller: MissionBundle:Default:suppMission}
 
 mission_added:
     path: /mission_added
-    defaults: { _controller: AdminBundle:MissionDef:addMission}
+    defaults: { _controller: MissionBundle:Default:addMission}
 
 modifierMission:
     path: /modifierMiss/{id}
-    defaults: { _controller: AdminBundle:MissionDef:modifier}
+    defaults: { _controller: MissionBundle:Default:modifier}
 
 missionModif:
     path: /missionModif
-    defaults: { _controller: AdminBundle:MissionDef:missionModif}
+    defaults: { _controller: MissionBundle:Default:missionModif}
