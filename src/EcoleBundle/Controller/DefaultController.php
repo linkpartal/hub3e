@@ -3,7 +3,6 @@
 namespace EcoleBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use \JMS\Serializer\SerializerBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class DefaultController extends Controller
@@ -50,79 +49,6 @@ class DefaultController extends Controller
     public function loadiframeAction()
     {
         return $this->render('EcoleBundle:Adminecole:index.html.twig');
-    }
-
-    public function affichageAction($id)
-    {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $qcmstest = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findBy(array('affinite'=>false));
-        $qcmsaffinite = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findBy(array('affinite'=>true));
-        $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
-
-        $QcmNotEtab = array();
-
-
-        foreach($qcmsaffinite as $item)
-        {
-            if(!in_array ($item,$etablissement->getQcmdef()->toArray()))
-            {
-                array_push($QcmNotEtab,$item);
-            }
-            /*foreach($etablissement->getQcmdef() as $key => $value)
-            {
-                if($value == $item)
-                {
-                    break;
-                }
-                elseif($key == count($etablissement->getQcmdef())-1)
-                {
-                    var_dump($key);
-                    $QcmNotEtab = array_push($QcmNotEtab,$item);
-                }
-            }*/
-
-        }
-
-        if($etablissement->getTier()->getEcole())
-        {
-            $type = 'Ecole';
-        }
-        else{
-            $type = 'Societe';
-        }
-        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('user'=>$user,'entite'=>$etablissement->getId(),'type'=>$type));
-        if($notifications)
-        {
-            $this->getDoctrine()->getEntityManager()->remove($notifications);
-            $this->getDoctrine()->getEntityManager()->flush();
-        }
-
-        if($etablissement->getTier()->getLogo())
-        {
-            $etablissement->getTier()->setLogo(base64_encode(stream_get_contents($etablissement->getTier()->getLogo())));
-        }
-        if($etablissement->getTier()->getFondecran())
-        {
-            $etablissement->getTier()->setFondecran(base64_encode(stream_get_contents($etablissement->getTier()->getFondecran())));
-        }
-        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier() ));
-
-
-
-
-        $formation = array();
-
-        $formation = array_merge($formation,$this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$etablissement )));
-
-
-        $users = array();
-        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
-        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
-
-        $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
-        return $this->render('EcoleBundle:Adminecole:iFrameContent.html.twig',array('etablissement'=>$etablissement,
-            'tiers'=>$tiers,'users'=>$users,'formations'=>$formation,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab));
-
     }
 
     public function affichageLicenceAction($id)

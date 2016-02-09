@@ -22,6 +22,8 @@ class AppKernel extends Kernel
             new SocieteBundle\SocieteBundle(),
             new UserBundle\UserBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
+            new TierBundle\TierBundle(),
+            new MissionBundle\MissionBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

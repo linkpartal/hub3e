@@ -1,6 +1,6 @@
 <?php
 
-namespace EcoleBundle\Controller;
+namespace TierBundle\Controller;
 
 use GenericBundle\Entity\Etablissement;
 use GenericBundle\Entity\Qcmdef;
@@ -11,7 +11,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class EcoleController extends Controller
+class DefaultController extends Controller
 {
     public function checkExistAction($siren)
     {
@@ -23,7 +23,7 @@ class EcoleController extends Controller
 
 
         if ($tier) {
-           return $reponse->setData(array('status'=>'exist'));
+            return $reponse->setData(array('status'=>'exist'));
         }
 
         return $reponse->setData(array('status'=>'success'));
@@ -47,8 +47,12 @@ class EcoleController extends Controller
             $tier->setFondecran(file_get_contents($_FILES['_image']['tmp_name']));
         }
         $em->persist($tier);
-
-
+        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_ADMINECOLE'))
+        {
+            $tier->addTier1($this->get('security.token_storage')->getToken()->getUser()->getTier());
+            $this->get('security.token_storage')->getToken()->getUser()->getTier()->addTier1($tier);
+            $em->flush();
+        }
 
         for($i = 0; $i< count($request->get('_SIRET'));$i++) {
             $etablissement = new Etablissement();
@@ -94,8 +98,89 @@ class EcoleController extends Controller
 
         $em->flush();
 
-        return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$this->get('security.token_storage')->getToken()->getUser()->getTier()->getRaisonsoc())));
+        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_SUPER_ADMIN'))
+        {
+            return $this->redirect($this->generateUrl('metier_user_admin'));
+        }
+        elseif($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_ADMINECOLE'))
+        {
+            return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$this->get('security.token_storage')->getToken()->getUser()->getTier()->getRaisonsoc())));
+        }
 
+
+    }
+
+    public function affichageAction($id)
+    {
+        // Utilisateur actuellement connecté.
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        // LicenceDef pour peupler le select de l'instanciation de la licence
+        $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
+        // Recuperation des differents QCM
+        $qcmstest = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findBy(array('affinite'=>false));
+        $qcmsaffinite = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findBy(array('affinite'=>true));
+        // Etablissement à afficher
+        $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
+
+        // séparer les QCMs affinité deja associer à l'etablissement des autres
+        $QcmNotEtab = array();
+        foreach($qcmsaffinite as $item)
+        {
+            if(!in_array ($item,$etablissement->getQcmdef()->toArray()))
+            {
+                array_push($QcmNotEtab,$item);
+            }
+        }
+
+        // Tout les tuteurs existant
+        $userMiss = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_TUTEUR');
+        //Suppression de la notification de l'utilisateur connecté concernant l'etablissement affiché
+        if($etablissement->getTier()->getEcole())
+        {
+            $type = 'Ecole';
+        }
+        else{
+            $type = 'Societe';
+        }
+        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('user'=>$user,'entite'=>$etablissement->getId(),'type'=>$type));
+        if($notifications)
+        {
+            $this->getDoctrine()->getEntityManager()->remove($notifications);
+            $this->getDoctrine()->getEntityManager()->flush();
+        }
+
+        // chargement des images
+        if($etablissement->getTier()->getLogo())
+        {
+            $etablissement->getTier()->setLogo(base64_encode(stream_get_contents($etablissement->getTier()->getLogo())));
+        }
+        if($etablissement->getTier()->getFondecran())
+        {
+            $etablissement->getTier()->setFondecran(base64_encode(stream_get_contents($etablissement->getTier()->getFondecran())));
+        }
+
+        // Recup des licences associer au tier de l'etablissement.
+        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier() ));
+
+
+        // les formation de l'etablissement
+        $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$etablissement ));
+
+        // Les utilisateurs de l'etablissement et du tier auquel il est lié
+        $users = array();
+        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
+        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
+
+        // les tiers pour peuplé l'association d'ecole
+        $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
+
+        //$licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier(),'suspendu'=>false ));
+
+        // missions non suspendu
+        $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date' => 'DESC'));
+
+        return $this->render('TierBundle::iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,'tiers'=>$tiers,'users'=>$users,'formations'=>$formation,
+            'libs'=>$licences, 'missions'=>$missions ,'usermis'=>$userMiss,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab));
     }
 
     public function supprimeretabAction($id)
@@ -135,7 +220,7 @@ class EcoleController extends Controller
             $em->flush();
         }
 
-        return $this->forward('AdminBundle:Default:affichage',array('id'=>$id));
+        return $this->forward('TierBundle:Default:affichage',array('id'=>$id));
     }
 
     public function modifierAction($id)
@@ -181,7 +266,7 @@ class EcoleController extends Controller
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
         $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
-        return $this->render('EcoleBundle:Adminecole:modifierEtablissement.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,
+        return $this->render('TierBundle::modifierEtablissement.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,
             'libs'=>$licences,'tiers'=>$tiers,'users'=>$users,'modeles'=>$modeles,'formations'=>$formation));
     }
 
@@ -216,7 +301,7 @@ class EcoleController extends Controller
 
         $em->flush();
 
-        return $this->render('EcoleBundle:Adminecole:iFrameContent.html.twig');
+        return $this->forward('TierBundle:Default:affichage',array('id'=>$etablissement->getId()));
     }
 
     public function activateAction($id){
@@ -285,15 +370,13 @@ class EcoleController extends Controller
         return $reponse->setData(array('succes'=>'0'));
     }
 
-
-
     public function ExistEtabAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $tier = $em->getRepository('GenericBundle:Tier')->findOneBy(array('siren'=>$request->get('_SIREN')));
 
         $etablissements = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$tier));
-        return $this->render('EcoleBundle:Adminecole:SocietExist.html.twig',array('etablissements'=>$etablissements,
+        return $this->render('TierBundle::SocietExist.html.twig',array('etablissements'=>$etablissements,
             'sirets'=>$request->get('_SIRET'),
             'adresses'=>$request->get('_Adresse'),
             'codeps'=>$request->get('_CodeP'),
@@ -305,5 +388,28 @@ class EcoleController extends Controller
             'mailresps'=>$request->get('_MailResp'),
             'sites'=>$request->get('_Site')));
     }
-}
 
+    public function suppLicenceAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $lic = $em->getRepository('GenericBundle:Licence')->find($id);
+        $lic->setSuspendu(true);
+        $em->flush();
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('Status'=>'Licence correctement supprimer'));
+    }
+
+    public function suppEcoleAssocAction($id_ecole,$id_liee)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tier = $em->getRepository('GenericBundle:Tier')->find($id_ecole);
+        $tierliee = $em->getRepository('GenericBundle:Tier')->find($id_liee);
+        $tier->removeTier1($tierliee);
+        $tierliee->removeTier1($tier);
+        $em->flush();
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('Status'=>'Licence correctement supprimer'));
+    }
+
+
+}

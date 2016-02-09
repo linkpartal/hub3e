@@ -2,43 +2,17 @@ metier_user_admin:
     path : /
     defaults: { _controller: AdminBundle:Default:load}
 
-checkExist:
-    path : /checkExist
-    defaults: { _controller: AdminBundle:Ecole:checkExist}
-
-tieradded:
-    path : /added
-    defaults: { _controller: AdminBundle:Ecole:tieradded}
-
 metier_user_licenceadded:
     path : /licenceadded
     defaults: { _controller: AdminBundle:LicenceDef:licenceadded}
-
-metier_user_affiche:
-    path: /affichage/id={id}
-    defaults: { _controller: AdminBundle:Default:affichage}
-
-
 
 admin_afficheLicence:
     path: /affichageLicence/id={id}
     defaults: { _controller: AdminBundle:LicenceDef:affichageLicence}
 
-admin_afficheMission:
-        path: /affichageMission/id={id}
-        defaults: { _controller: AdminBundle:MissionDef:affichageMission}
-
 metier_user_associated:
     path:  /associated
     defaults: { _controller: AdminBundle:LicenceDef:associated}
-
-supprimer_Licence:
-    path:  /suppLicence/{id}
-    defaults: {_controller: AdminBundle:Ecole:suppLicence}
-
-supprimer_Mission:
-        path:  /suppMission/{id}
-        defaults: {_controller: AdminBundle:MissionDef:suppMission}
 
 loadgestionQCM:
     path:     /gestionQCM/{id}
@@ -51,18 +25,6 @@ Add_QCM:
 supprimer_QCM:
     path: /supprimerQCM/rep={rep}&qst={qst}&qcm={qcm}
     defaults: { _controller: AdminBundle:QCM:supprimer }
-
-ecoles_assiciated:
-    path: /ecolesassociated/id={id}
-    defaults: { _controller: AdminBundle:Ecole:ecolesassociated}
-
-modifieretab:
-    path: /modifieretablissement/{id}
-    defaults: { _controller: AdminBundle:Ecole:modifier}
-
-etabmodif:
-    path: /etabmodif
-    defaults: { _controller: AdminBundle:Ecole:etabModif}
 
 userModif:
     path: /userModif
@@ -79,19 +41,3 @@ creeNewModele:
 saveNewModele:
     path: /saveNewModele
     defaults: { _controller: AdminBundle:Default:saveNewModele}
-
-supprimerAssociationEcole:
-    path: /suppressionAssociationEcole/{id_ecole}/{id_liee}
-    defaults: { _controller: AdminBundle:Ecole:suppEcoleAssoc}
-
-mission_added:
-    path: /mission_added
-    defaults: { _controller: AdminBundle:MissionDef:addMission}
-
-modifierMission:
-    path: /modifierMiss/{id}
-    defaults: { _controller: AdminBundle:MissionDef:modifier}
-
-missionModif:
-        path: /missionModif
-        defaults: { _controller: AdminBundle:MissionDef:missionModif}

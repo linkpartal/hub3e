@@ -1,17 +1,14 @@
 <?php
 
-namespace AdminBundle\Controller;
-
+namespace MissionBundle\Controller;
 
 use GenericBundle\Entity\Mission;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class MissionDefController extends Controller
+class DefaultController extends Controller
 {
-
-
     public function addMissionAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -72,8 +69,8 @@ class MissionDefController extends Controller
     public function affichageMissionAction($id)
     {
 
-       $mission = $this->getDoctrine()->getRepository('GenericBundle:Mission')->find($id);
-       // var_dump($mission);die;
+        $mission = $this->getDoctrine()->getRepository('GenericBundle:Mission')->find($id);
+        // var_dump($mission);die;
         return $this->render('AdminBundle:Admin:afficheMission.html.twig',array('mission'=>$mission));
 
 

@@ -2,94 +2,10 @@ ecole_admin:
     path:     /admin/Home/{ecole}
     defaults: { _controller: EcoleBundle:Default:loadAdmin }
 
-admin_iframeload:
-    path: /iframe
-    defaults: { _controller: AdminBundle:Default:loadiframe}
-
-ecole_admin_affiche:
-    path: /affichage/id={id}
-    defaults: { _controller: EcoleBundle:Default:affichage}
-
-ecole_admin_afficheUser:
-    path: /affichageUser/id={id}
-    defaults: { _controller: UserBundle:Default:affichageUser}
-
 ecole_admin_afficheLicence:
     path: /affichageLicence/id={id}
     defaults: { _controller: EcoleBundle:Default:affichageLicence}
 
-supprimeretablissement:
-    path : /admin/supprimeretab/id={id}
-    defaults: { _controller: EcoleBundle:Ecole:supprimeretab}
-
-ecole_modifieretab:
-    path: /modifieretablissement/{id}
-    defaults: { _controller: EcoleBundle:Ecole:modifier}
-
-ecole_etabmodif:
-    path: /admin/etabmodif
-    defaults: { _controller: EcoleBundle:Ecole:etabModif}
-
-activate:
-    path: /admin/activate/id={id}
-    defaults: { _controller: EcoleBundle:Ecole:activate}
-
-expired:
-    path: /admin/expired/id={id}
-    defaults: { _controller: EcoleBundle:User:expired}
-
-addFormation:
-    path: /ajouterFormation
-    defaults: { _controller: EcoleBundle:Formation:ajouterFormation}
-
-afficherDoc:
-    path: /afficherDocument/{id}
-    defaults: { _controller: EcoleBundle:Formation:afficherDocument}
-
-adresses_tier:
-    path: /admin/adresse/id={id}
-    defaults: { _controller: EcoleBundle:Default:adresses}
-
-ecole_checkExist:
-    path : /checkExist/{siren}
-    defaults: { _controller: EcoleBundle:Ecole:checkExist}
-
-ecole_tieradded:
-    path : /added
-    defaults: { _controller: EcoleBundle:Ecole:tieradded}
-
-supprimerFormation:
-    path: /supprimerFormation/id={id}
-    defaults: { _controller: EcoleBundle:Formation:deleteFormation}
-
-formation_qcm:
-    path: /Formation_qcm/id={id}
-    defaults: { _controller: EcoleBundle:Formation:formationQcm}
-
-add_formation_qcm:
-    path: /add_formation_qcm/id_formation={idformation}/id_qcm={idqcm}
-    defaults: { _controller: EcoleBundle:Formation:formationAddQcm}
-
-remove_formation_qcm:
-    path: /remove_formation_qcm/id_formation={idformation}/id_qcm={idqcm}
-    defaults: { _controller: EcoleBundle:Formation:formationRemoveQcm}
-
-etablissement_qcm:
-    path: /Etablissement_qcm/id={id}
-    defaults: { _controller: EcoleBundle:Etablissement:etablissementQcm}
-
-add_etablissement_qcm:
-    path: /add_etablissement_qcm/id_etablissement={idetablissement}/id_qcmaff={idqcmaff}
-    defaults: { _controller: EcoleBundle:Ecole:etablissementAddQcm}
-
-remove_etablissement_qcm:
-    path: /remove_etablissement_qcm/id_etablissement={idetablissement}/id_qcmaff={idqcmaff}
-    defaults: { _controller: EcoleBundle:Ecole:etablissementRemoveQcm}
-
 loadconsulterQCM:
     path:     /consulterQCM/{id}
     defaults: { _controller: EcoleBundle:Default:loadQCM }
-
-etablissement_exist:
-    path: /existEtablissement/
-    defaults: { _controller: EcoleBundle:Ecole:ExistEtab}

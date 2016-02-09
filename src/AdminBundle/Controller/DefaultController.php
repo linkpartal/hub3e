@@ -44,52 +44,6 @@ class DefaultController extends Controller
         return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
     }
 
-    public function affichageAction($id)
-    {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->find($id);
-
-        $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
-        $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
-      //  $formaEtab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findBy(array('etablissement'=>$etablissement));
-        $userMiss = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_TUTEUR');
-
-        if($etablissement->getTier()->getEcole())
-        {
-            $type = 'Ecole';
-        }
-        else{
-            $type = 'Societe';
-        }
-        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('user'=>$user,'entite'=>$etablissement->getId(),'type'=>$type));
-        if($notifications)
-        {
-            $this->getDoctrine()->getEntityManager()->remove($notifications);
-            $this->getDoctrine()->getEntityManager()->flush();
-        }
-
-        if($etablissement->getTier()->getLogo())
-        {
-            $etablissement->getTier()->setLogo(base64_encode(stream_get_contents($etablissement->getTier()->getLogo())));
-        }
-        if($etablissement->getTier()->getFondecran())
-        {
-            $etablissement->getTier()->setFondecran(base64_encode(stream_get_contents($etablissement->getTier()->getFondecran())));
-        }
-        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier(),'suspendu'=>false ));
-        $users = array();
-        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
-        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
-        $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
-        $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date' => 'DESC'));
-       //$mission = $this->getDoctrine()->getRepository('GenericBundle:Mission')->find($id);
-        // var_dump($mission);die;
-
-
-        return $this->render('AdminBundle:Admin:iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,
-            'libs'=>$licences,'tiers'=>$tiers,'users'=>$users,'formations'=>$formation, 'missions'=>$missions ,'usermis'=>$userMiss));
-    }
-
     public function creeNewModeleAction($id)
     {
         /*

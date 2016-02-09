@@ -43,7 +43,7 @@
                 </div>
             </div>
         </div>
-        <form id="form" action="{{ path('tieradded') }}" onsubmit="document.getElementById('submitTier').disabled = true;alert('submited');" method="post" enctype="multipart/form-data">
+        <form id="form" action="{{ path('tieradded') }}" onsubmit="document.getElementById('submittier').disabled = true;alert('submited');" method="post" enctype="multipart/form-data">
             <div class="div_form">
 
                 <div class="col-xs-6 input-colonne">
@@ -69,7 +69,7 @@
             <div class="div_button">
                 <input type="submit" style="display: none">
 
-                <button id="submitTier" class="blue" type="button" onclick="envoyeradresses()">Envoyer</button>
+                <button id="submittier" class="blue" type="button" onclick="envoyeradresses()">Envoyer</button>
 
             </div>
         </form>
@@ -95,9 +95,8 @@
                 </div>
                 <div class="col-xs-6">
                     <select class="input " style="width: 25%; margin-right: 10px" title="" name="civilite">
-                        <option value="Mr">Mr.</option>
-                        <option value="Mme">Mme.</option>
-                        <option value="Mlle">Mlle.</option>
+                        <option value="Monsieur">Mr.</option>
+                        <option value="Madame">Mme.</option>
                     </select>
 
                     <input type="text" class="input" style="width: calc(75% - 10px);" id="Prenom" name="_Prenom" placeholder="Prénom" maxlength="20" required>
@@ -200,7 +199,7 @@
                 <div id="ecole" class="list-group col-xs-2 leftbar">
                     {% if ecoles is defined %}
                         {% for e in ecoles %}
-                            <button onclick="postiframe('{{ path('metier_user_affiche',{'id': e.getId} ) }}',{{ e.getId }},this)" id="etablissement{{ e.getId }}" type="button" class="list-group-item butonLigne">
+                            <button onclick="postiframe('{{ path('affiche_etab',{'id': e.getId} ) }}',{{ e.getId }},this)" id="etablissement{{ e.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{e.getTier.getRaisonSoc}}">{{e.getTier.getRaisonSoc}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -219,7 +218,7 @@
                      style="visibility: hidden;">
                     {% if societes is defined %}
                         {% for s in societes %}
-                            <button onclick="postiframe('{{ path('metier_user_affiche',{'id': s.getId }) }}',{{ s.getId }},this)" id="etablissement{{ s.getId }}" type="button" class="list-group-item butonLigne">
+                            <button onclick="postiframe('{{ path('affiche_etab',{'id': s.getId }) }}',{{ s.getId }},this)" id="etablissement{{ s.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{s.getTier.getRaisonSoc}}">{{s.getTier.getRaisonSoc}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -321,7 +320,6 @@
                 </div>
             </div>
         {% endblock %}
-
 
         <div class="col-xs-10" style="height: 100%" >
 
@@ -577,32 +575,53 @@
         i++;
     };
     function submitAjaxForm(url,form){
+
+        var route;
         $.ajax({
             type: "POST",
             url: url,
-            data: $("#"+form+"").serialize(),
+            data: $("#"+form).serialize(),
             success: function(data)
             {
                 if(data['status']==='success')
                 {
                     $("#"+form+" input[type=submit]").click();
+                    document.getElementById('submittier').disabled=false;
+                }
+                else if(data['status']==='exist')
+                {
+                    route='{{ path('etablissement_exist') }}';
+                    document.getElementById(form).action = route;
+                    $("#"+form+" input[type=submit]").click();
+                    document.getElementById('submittier').disabled=false;
                 }
                 else
                 {
-                    alert(data['status']); // show response from the php script.
+                    alert('Une erreur s\'est produite sur le serveur');
+                    document.getElementById('submittier').disabled=false;
                 }
             }
         });
     };
     function envoyeradresses(){
-        document.getElementById('submittier').disabled=true;//////
-
-
+        document.getElementById('submittier').disabled=true;
         var geocodes = document.getElementsByName('_Geocode[]');
         if(geocodes.length==1)
         {
             alert('Vous devez remplir au moins une adresse');
+            document.getElementById('submittier').disabled=false;
         }
+        for(var j = 1;j<geocodes.length;j++){
+            var siret = document.getElementsByName('_SIRET[]')[j].value;
+            var test = siret.substring(0, 9);
+            if(test!=document.getElementById('SIREN').value)
+            {
+                alert('Le siret de l\'adresse '+ j + ' n\'est pas compatible avec le siren donné');
+                document.getElementById('submittier').disabled=false;
+                return;
+            }
+        }
+
         for(var i = 1; i<geocodes.length;i++)
         {
             var address = document.getElementsByName('_Adresse[]')[i].value +' ' +document.getElementsByName('_Ville[]')[i].value + ' ' + document.getElementsByName('_CodeP[]')[i].value  ;
@@ -612,9 +631,12 @@
             geocoder.geocode({'address': address}, function (results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                     result.value = results[0].geometry.location ;
-                    submitAjaxForm('{{ path('checkExist') }}','form');
+                    var check = '{{ path('tier_checkExist',{'siren': '_siren' }) }}';
+                    check = check.replace('_siren',document.getElementById('SIREN').value)
+                    submitAjaxForm(check,'form');
                 } else {
                     alert('Pas de géocodage trouver pour l\'adresse spécifiée');
+                    document.getElementById('submittier').disabled=false;
                 }
             });
         }

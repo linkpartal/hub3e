@@ -1,21 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ABDELLAH
- * Date: 21/01/2016
- * Time: 11:19
- */
-namespace EcoleBundle\Controller;
 
+namespace TierBundle\Controller;
 
 use GenericBundle\Entity\Formation;
-use GenericBundle\Entity\Qcmdef;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use \JMS\Serializer\SerializerBuilder;
-
 
 class FormationController extends Controller
 {
@@ -39,7 +30,7 @@ class FormationController extends Controller
         move_uploaded_file($_FILES['_PDF']['tmp_name'] , $emplacementFinal);
 
 
-        return $this->forward('EcoleBundle:Default:affichage',array('id'=>$request->get('_idetab')));
+        return $this->redirect($this->generateUrl('affiche_etab',array('id'=>$request->get('_idetab'))));
 
 
     }
@@ -85,8 +76,6 @@ class FormationController extends Controller
         $reponse = new JsonResponse();
         return $reponse->setData(array('adresses'=>$jsonContent));
     }
-
-
 
     public function formationAddQcmAction($idformation, $idqcm){
         $em = $this->getDoctrine()->getManager();

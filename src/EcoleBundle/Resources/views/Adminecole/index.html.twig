@@ -43,7 +43,7 @@
                 </div>
             </div>
         </div>
-        <form id="form" action="{{ path('ecole_tieradded') }}" method="post" enctype="multipart/form-data">
+        <form id="form" action="{{ path('tieradded') }}" method="post" enctype="multipart/form-data">
             <div class="div_form">
 
                 <div class="col-xs-6 input-colonne">
@@ -144,7 +144,9 @@
 
 </div>
 <div class="container">
-
+    {% if is_granted("ROLE_SUPER_ADMIN") %}
+    {{ dump(app.user) }}
+    {% endif %}
     {% block TopBar %}
         <div class="row" style="height: 32px; background: #2975cb;">
             <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="border: 0;padding: 4.5px;height: 100%;">
@@ -189,7 +191,7 @@
                 <div id="ecole" class="list-group col-xs-2 leftbar">
                     {% if ecoles is defined %}
                         {% for e in ecoles %}
-                            <button onclick="postiframe('{{ path('ecole_admin_affiche',{'id': e.getId} ) }}',{{ e.getId }},this)" id="etablissement{{ e.getId }}" type="button" class="list-group-item butonLigne">
+                            <button onclick="postiframe('{{ path('affiche_etab',{'id': e.getId} ) }}',{{ e.getId }},this)" id="etablissement{{ e.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{e.getTier.getRaisonSoc}}">{{e.getTier.getRaisonSoc}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -208,7 +210,7 @@
                      style="visibility: hidden;">
                     {% if societes is defined %}
                         {% for s in societes %}
-                            <button onclick="postiframe('{{ path('ecole_admin_affiche',{'id': s.getId }) }}',{{ s.getId }},this)" id="etablissement{{ s.getId }}" type="button" class="list-group-item butonLigne">
+                            <button onclick="postiframe('{{ path('affiche_etab',{'id': s.getId }) }}',{{ s.getId }},this)" id="etablissement{{ s.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{s.getTier.getRaisonSoc}}">{{s.getTier.getRaisonSoc}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -241,7 +243,7 @@
                 <div id="user" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if users is defined %}
                         {% for u in users %}
-                            <button onclick="postUser('{{ path('ecole_admin_afficheUser',{'id': u.getId} ) }}')" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                            <button onclick="postUser('{{ path('metier_user_afficheUser',{'id': u.getId} ) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -348,8 +350,13 @@
         }
 
     };
-    function postUser(url){
+    function postUser(url,button){
         document.getElementById("iframe").src = url;
+        var elements = button.getElementsByClassName("badge");
+        if(elements.length > 0)
+        {
+            elements[0].parentNode.removeChild(elements[0]);
+        }
     };
     function stringWith (str, prefix) {
         var ustring = str.toUpperCase();
@@ -500,16 +507,19 @@
                 if(data['status']==='success')
                 {
                     $("#"+form+" input[type=submit]").click();
+                    document.getElementById('submittier').disabled=false;
                 }
                 else if(data['status']==='exist')
                 {
                     route='{{ path('etablissement_exist') }}';
                     document.getElementById(form).action = route;
                     $("#"+form+" input[type=submit]").click();
+                    document.getElementById('submittier').disabled=false;
                 }
                 else
                 {
                     alert('Une erreur s\'est produite sur le serveur');
+                    document.getElementById('submittier').disabled=false;
                 }
             }
         });
@@ -520,6 +530,7 @@
         if(geocodes.length==1)
         {
             alert('Vous devez remplir au moins une adresse');
+            document.getElementById('submittier').disabled=false;
         }
         for(var j = 1;j<geocodes.length;j++){
             var siret = document.getElementsByName('_SIRET[]')[j].value;
@@ -527,6 +538,7 @@
             if(test!=document.getElementById('SIREN').value)
             {
                 alert('Le siret de l\'adresse '+ j + ' n\'est pas compatible avec le siren donné');
+                document.getElementById('submittier').disabled=false;
                 return;
             }
         }
@@ -540,11 +552,12 @@
             geocoder.geocode({'address': address}, function (results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                     result.value = results[0].geometry.location ;
-                    var check = '{{ path('ecole_checkExist',{'siren': '_siren' }) }}';
+                    var check = '{{ path('tier_checkExist',{'siren': '_siren' }) }}';
                     check = check.replace('_siren',document.getElementById('SIREN').value)
                     submitAjaxForm(check,'form');
                 } else {
                     alert('Pas de géocodage trouver pour l\'adresse spécifiée');
+                    document.getElementById('submittier').disabled=false;
                 }
             });
         }

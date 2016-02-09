@@ -1,0 +1,97 @@
+tier_checkExist:
+    path : /checkExist/{siren}
+    defaults: { _controller: TierBundle:Default:checkExist}
+
+tieradded:
+    path : /added
+    defaults: { _controller: TierBundle:Default:tieradded}
+
+affiche_etab:
+    path: /affichage/id={id}
+    defaults: { _controller: TierBundle:Default:affichage}
+
+supprimeretablissement:
+    path : /admin/supprimeretab/id={id}
+    defaults: { _controller: TierBundle:Default:supprimeretab}
+
+ecoles_assiciated:
+    path: /ecolesassociated/id={id}
+    defaults: { _controller: TierBundle:Default:ecolesassociated}
+
+modifieretab:
+    path: /modifieretablissement/{id}
+    defaults: { _controller: TierBundle:Default:modifier}
+
+ecole_etabmodif:
+    path: /admin/etabmodif
+    defaults: { _controller: EcoleBundle:Ecole:etabModif}
+
+activate:
+    path: /admin/activate/id={id}
+    defaults: { _controller: TierBundle:Default:activate}
+
+adresses_tier:
+    path: /admin/adresse/id={id}
+    defaults: { _controller: TierBundle:Default:adresses}
+
+etablissement_qcm:
+    path: /Etablissement_qcm/id={id}
+    defaults: { _controller: TierBundle:Default:etablissementQcm}
+
+add_etablissement_qcm:
+    path: /add_etablissement_qcm/id_etablissement={idetablissement}/id_qcmaff={idqcmaff}
+    defaults: { _controller: TierBundle:Default:etablissementAddQcm}
+
+remove_etablissement_qcm:
+    path: /remove_etablissement_qcm/id_etablissement={idetablissement}/id_qcmaff={idqcmaff}
+    defaults: { _controller: TierBundle:Default:etablissementRemoveQcm}
+
+etablissement_exist:
+    path: /existEtablissement/
+    defaults: { _controller: TierBundle:Default:ExistEtab}
+
+supprimer_Licence:
+    path:  /suppLicence/{id}
+    defaults: {_controller: TierBundle:Default:suppLicence}
+
+supprimerAssociationEcole:
+    path: /suppressionAssociationEcole/{id_ecole}/{id_liee}
+    defaults: { _controller: TierBundle:Default:suppEcoleAssoc}
+
+addFormation:
+    path: /ajouterFormation
+    defaults: { _controller: TierBundle:Formation:ajouterFormation}
+
+afficherDoc:
+    path: /afficherDocument/{id}
+    defaults: { _controller: TierBundle:Formation:afficherDocument}
+
+supprimerFormation:
+    path: /supprimerFormation/id={id}
+    defaults: { _controller: TierBundle:Formation:deleteFormation}
+
+formation_qcm:
+    path: /Formation_qcm/id={id}
+    defaults: { _controller: TierBundle:Formation:formationQcm}
+
+add_formation_qcm:
+    path: /add_formation_qcm/id_formation={idformation}/id_qcm={idqcm}
+    defaults: { _controller: TierBundle:Formation:formationAddQcm}
+
+remove_formation_qcm:
+    path: /remove_formation_qcm/id_formation={idformation}/id_qcm={idqcm}
+    defaults: { _controller: TierBundle:Formation:formationRemoveQcm}
+
+admin_iframeload:
+    path: /iframe
+    defaults: { _controller: AdminBundle:Default:loadiframe}
+
+
+
+
+
+
+
+
+
+
