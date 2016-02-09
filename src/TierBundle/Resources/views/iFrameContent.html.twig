@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/ajout.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
+
+    {% block CSS %}{% endblock %}
+
+    <title>HUB3E - {% block title %}Home{% endblock %}</title>
+
+
+</head>
+<body>
+
+<div class="container" style="padding: 0;">
+    {% block Content %}
+
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <div id="instanceLicence" class="popup">
+                <div onclick="hide(this)" class="close"></div>
+                <div class="col-xs-offset-3 col-xs-4" style="padding: 0;border:20px solid white;display: block">
+                    <!--div class="btn-group" style="width: 100%">
+                <button type="button" class="btn btn-default dropdown-toggle nav"
+                        data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                    Filtre
+                </button>
+                <ul id="filtre" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+
+                </ul>
+            </div-->
+
+
+                    <form  class="formulaire" id="formInstanceLicence" action="{{ path("metier_user_associated") }}" onsubmit="document.getElementById('submitInstanceLicence').disabled=true" method="post">
+                        <div class="div_form" >
+                            <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
+                            <select class="input" title="Licencedef" name="Licencedef" required>
+                                {% for def in licencedef %}
+                                    <option value="{{ def.getId }}">{{ def.getLibelle }}</option>
+                                {% endfor %}
+                            </select>
+
+                            <input class="date hide-spinbtns" placeholder="Date Début" type="date" id="Date" name="_Date" data-date='{"buttonOnly": true,	"calculateWidth": false}' required>
+                        </div>
+                        <div class="div_button">
+                            <input id="submitInstanceLicence" class="blue" type="submit" value="Valider">
+                        </div>
+                    </form>
+
+
+                </div>
+            </div>
+        {% endif %}
+        {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
+            <div id="adduser" class="popup">
+                <div onclick="hide(this)" class="close"></div>
+                <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block">
+
+
+
+                    <form id="formadduser" class="formulaire" action="{{ path("user_added") }}" onsubmit="document.getElementById('submitadduser').disabled=true" method="post">
+                        <input type="hidden" id="id" name="_id" value="{{ etablissement.getId }}">
+                        <div class="div_form" >
+
+                            <div class="col-xs-6 input-colonne">
+                                <input type="text" class="input" id="Username" name="_Username" placeholder="Username" required maxlength="255">
+
+                                <input type="email" class="input " id="mail" name="_mail" placeholder="Email" required maxlength="255">
+
+                                <select class="input" title="Sélectionner un role" name="_role">
+                                    {% if etablissement.getTier.getEcole %}
+                                        <option value="ROLE_ADMINECOLE">Administrateur école</option>
+                                        <option value="ROLE_RECRUTE">Recruteur Placeur</option>
+                                        <option value="ROLE_APPRENANT">Apprenant</option>
+                                    {% else %}
+                                        <option value="ROLE_ADMINSOC">Administrateur Société</option>
+                                        <option value="ROLE_TUTEUR">Tuteur</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div class="col-xs-6">
+                                <select class="input " style="width: 25%; margin-right: 10px" title="" name="civilite">
+                                    <option value="Monsieur">Mr.</option>
+                                    <option value="Madame">Mme.</option>
+                                </select>
+
+                                <input type="text" class="input" style="width: calc(75% - 10px);" id="Prenom" name="_Prenom" placeholder="Prénom" required maxlength="45">
+                                <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom" required maxlength="45">
+
+                                <input type="tel" class="input " id="Tel" name="_Tel" placeholder="Tel" required maxlength="45">
+                            </div>
+
+
+                        </div>
+                        <div class="div_button">
+                            <input id="submitadduser" class="blue" type="submit" value="envoyer">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if not etablissement.getTier.getEcole %}
+            {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
+                <div id="addmission" class="popup">
+                    <div onclick="hide(this)" class="close"></div>
+                    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block">
+                        <form id="formaddmission" class="formulaire" action= "{{ path("mission_added") }}" onsubmit="document.getElementById('submitaddmission').disabled=true" method="post">
+
+                            <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
+                            <div class="div_form">
+                                <div class="col-xs-6 input-colonne">
+
+                                    <textarea style="height: 90px" class="input" id="Profil" name="_Profil" placeholder="Profil" required maxlength="255"></textarea>
+                                    <input type="text" class="input" id="Intitule" name="_Intitule" placeholder="Intitule" required maxlength="75">
+                                    <input type="text" class="input " id="Domaine" name="_Domaine" placeholder="Domaine" required maxlength="45">
+
+                                    <input type="text" class="input " id="Etat" name="_Etat" placeholder="Etat" required maxlength="45">
+                                    <label style="float: left">Date debut :</label> <input style="display: inline-block;width: 200px" type="date" data-date='{"buttonOnly": true, "calculateWidth": false}' class="input" id="Datedebut" name="_Datedebut" title="Datedebut" >
+                                    <input type="text" class="input " id="TypeContrat" name="_TypeContrat" placeholder="TypeContrat" required maxlength="45">
+
+                                    <input type="text" class="input " id="Remuneration" name="_Remuneration" placeholder="Remuneration" required maxlength="11">
+                                    <input type="text" class="input " id="Horaire" name="_Horaire" placeholder="Horaire" required maxlength="45">
+
+
+
+                                </div>
+                                <div class="col-xs-6">
+
+                                    <input type="text" class="input " id="NomContact" name="_NomContact" placeholder="NomContact" required MAXLENGTH="45">
+                                    <input type="text" class="input " id="PrenomContact" name="_PrenomContact" placeholder="PrenomContact" required MAXLENGTH="45">
+                                    <input type="text" class="input" id="FonctionContact" name="_FonctionContact" placeholder="FonctionContact" required MAXLENGTH="45">
+                                    <input type="text" class="input" id="TelContact" name="_TelContact" placeholder="TelContact" required MAXLENGTH="45">
+                                    <input type="text" class="input" id="EmailContact" name="_EmailContact" placeholder="EmailContact" required MAXLENGTH="45">
+
+                                    <label style="float: left">Date fin :</label><input style="display: inline-block;width: 200px" type="date"  data-date='{"buttonOnly": true, "calculateWidth": false}' class="input " id="Datefin" name="_Datefin" title="Datefin" >
+                                    <input type="text" class="input " id="Emploi" name="_Emploi" placeholder="Emploi" required maxlength="1">
+
+
+                                    <select class="input"   name="userselect" title="" >
+                                        <option selected="selected">Sélectionner utilisateur</option>
+                                        {% if usermis is defined %}
+                                            {% for user in usermis %}
+                                                <option name="_iduse" value="{{ user.getId }}">{{ user.getNom }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+
+                                    </select>
+                                </div>
+                                <textarea style="height: 100px;" class="input" id="Descriptif" name="_Descriptif" placeholder="Descriptif" required MAXLENGTH="255"></textarea>
+                            </div>
+                            <div class="div_button">
+                                <input id="submitaddmission" class="blue" type="submit" value="envoyer">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+        {% else %}
+            {% if is_granted('ROLE_ADMINECOLE') %}
+                <div id="ajouterformation" class="popup">
+                    <div onclick="hideAjouterForm(this);" class="close"></div>
+                    <div class="col-xs-offset-3 col-xs-4" style="padding: 0;border:20px solid white;display: block">
+                        <form  class="formulaire" id="formAjouterformation" action="{{ path('addFormation') }}" onsubmit="document.getElementById('submitaddformation').disabled=true" method="post" enctype="multipart/form-data">
+                            <div class="div_form" >
+                                <input type="hidden" id="idetab" name="_idetab" value="{{etablissement.getId}}">
+                                <input type="text" class="input" id="Description" name="_Description" placeholder="Description" required maxlength="45">
+                                <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom" required maxlength="45">
+                                <label for="Pdf">
+                                    <img onclick="this.src='{{ asset('image/wait_x300.gif') }}'; "  id="pdf" style="height: 100px;width: 100px" src="{{ asset('image/upload-arrow.png') }}"/>
+                                </label>
+                                <br>
+                                <input onchange="readURL(this,'pdf');"  accept="application/pdf" type="file" class="input" id="Pdf" name="_PDF" style="display: none">
+                                <br>
+                                <label class="cell" id="NomPDF"></label>
+                                <br>
+                            </div>
+                            <div class="div_button">
+                                <input id="submitaddformation" class="blue" type="submit" value="Valider">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div id="addQCM" class="popup" >
+                    <div onclick="hide(this)" class="close"></div>
+                    <div class="col-xs-offset-1 col-xs-9" style=" padding: 0;border:20px solid white;display: block">
+                        <div id="formaddQCM" class="formulaire" style="text-align: center" >
+                            <label style="display:none" id="idformation"></label>
+                            <div class="div_form" style="text-align: center" >
+                                <section style="text-align: center" >
+                                    <table class="tblQCM" style="text-align: center ; align:center;" >
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <select title="Tests" onclick="ConsultationQCM('divconsQCM')" id="leftValues" size="10" multiple>
+                                                        {% if QCMS is defined %}
+                                                            {% for qcm in QCMS %}
+                                                                <option name="_idqcmleft" value="{{ qcm.getId }}">{{ qcm.getNom }}</option>
+                                                            {% endfor %}
+                                                        {% endif %}
+
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div >
+                                                    <input type="button" id="btnRight" value="&gt;&gt;" />
+                                                    <input type="button" id="btnLeft" value="&lt;&lt;" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <select title="Tests liés à cette formation" onclick="ConsultationQCM('divconsQCM')" id="rightValues" size="10" multiple>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </section>
+                                <div id="divconsQCM"></div>
+                            </div>
+                            <div class="div_button">
+                                <button onclick="document.getElementById('addQCM').style.display = 'none';" class="blue" type="button">Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="addQCMAff" class="popup" >
+                    <div onclick="hide(this)" class="close"></div>
+                    <div class="col-xs-offset-1 col-xs-9" style=" padding: 0;border:20px solid white;display: block">
+                        <div id="formaddQCMAff" class="formulaire" style="text-align: center" >
+                            <div class="div_form" style="text-align: center" >
+                                <section style="text-align: center" >
+                                    <table class="tblQCM" style="text-align: center ; align:center;" >
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <select onclick="ConsultationQCMAff('divconsQCMAFF')" id="leftValuesAff" size="10" multiple>
+                                                        {% if QCMSNOTETAB is defined %}
+                                                            {% for qcm in QCMSNOTETAB %}
+                                                                <option name="_idqcmleftaff" value="{{ qcm.getId }}">{{ qcm.getNom }}</option>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div >
+                                                    <input type="button" id="btnRightaff" value="&gt;&gt;" />
+                                                    <input type="button" id="btnLeftaff" value="&lt;&lt;" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <select onclick="ConsultationQCMAff('divconsQCMAFF')" id="rightValuesAff" size="10" multiple>
+                                                        {% for testaff in etablissement.getQcmdef %}
+                                                            <option name="_idqcmrightaff" value="{{ testaff.getId }}">{{ testaff.getNom }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div id="divconsQCMAFF"></div>
+                                </section>
+                            </div>
+                            <div class="div_button">
+                                <input class="blue" type="submit" value="Fermer" onclick="FermerPopup('addQCMAff')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <div id="associerecole" class="popup">
+                    <div onclick="hide(this)" class="close"></div>
+                    <div class="col-xs-offset-4 col-xs-4" style="padding: 0;border:20px solid white;display: block">
+                        <form class="formulaire" id="formAssiation" action="{{ path("ecoles_assiciated",{'id':etablissement.getId}) }}" onsubmit="document.getElementById('submitassocierecole').disabled=true" method="post">
+                            <div class="div_form">
+                                <select class="input" title="" style="height: 100px" name="ecoles[]" multiple>
+                                    {% for tier in tiers %}
+                                        {% if tier.getEcole %}
+                                            <option value="{{ tier.getId }}">{{ tier.getRaisonSoc }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="div_button">
+                                <input id="submitassocierecole" class="blue" type="submit" value="envoyer">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+
+
+        <div class="row" style="height: 78px; margin: 0;">
+            <img class="col-xs-1" src="data:image/jpg;base64,{{ etablissement.getTier.getLogo }}"
+                 style="padding: 10px; height: 40px;">
+            <div class="col-xs-4">
+                <div class="col-xs-12"
+                     style="height: 30px; text-align: left; padding: 10px;"><label style="font-size: large" >{{ etablissement.getTier.getRaisonSoc }}&nbsp;-&nbsp;  </label><label style="font-size: large;color:#2A76CC" > {{ etablissement.getVille }}</label></div>
+                <div class="col-xs-12" style="height: 20px; text-align: left;">{{etablissement.getAdresse }}, {{ etablissement.getCodePostal }} {{ etablissement.getVille }}</div>
+            </div>
+            <div class="col-xs-offset-5 col-xs-1">
+                <div class="col-xs-12" style="height: 30px;; padding-top: 10px;"><label style="font-size: large;color:#2A76CC" > 549</label></div>
+                <div class="col-xs-12" style="height: 20px;">Apprenant</div>
+            </div>
+            <div class=" col-xs-1">
+                <div class="col-xs-12" style="height: 30px; padding-top: 10px;"><label style="font-size: large;color:#2A76CC" > 151</label></div>
+                <div class="col-xs-12" style="height: 20px;">Missions</div>
+            </div>
+        </div>
+
+<div class="row" style="background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;height: calc(100% - 78px)">
+
+    <div class="col-xs-9" style="background: rgb(238, 241, 246); height: 100%;">
+        <div class="col-xs-12" style="height: 46px;">
+            <div style="height: 35px; width: 100%; padding: 15px 0 0 15px;">
+                <select title="" id="select_info" class="btn btn-default dropdown-toggle" style="color:white;">
+                    <option value="info_etab" style="color:black;">Information</option>
+                    <option value="info_user" style="color:black;">Utilisateurs</option>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                        <option value="info_licence" style="color:black;">Licences</option>
+                    {% endif %}
+                    {% if etablissement.getTier.getEcole %}
+                        {% if is_granted('ROLE_SUPER_ADMIN') %}
+                            <option value="info_tier_tier" style="color:black;">Ecoles liées</option>
+                            {% endif %}
+                        {% if is_granted('ROLE_ADMINECOLE') %}
+                            <option value="info_formation" style="color:black;">Formations</option>
+                        {% endif %}
+                    {% else %}
+                        <option value="info_mission" style="color:black;">Missions</option>
+                    {% endif %}
+
+                </select>
+            </div>
+        </div>
+
+        <div class="col-xs-12" style="margin-bottom: 50px">
+
+
+            <div id="info_etab" class="list-group affichage">
+
+                <label class="list-group-item info" >Raison Sociale : <label style="color:black" > {{etablissement.getTier.getRaisonSoc}}</label></label>
+                <label class="list-group-item info" >Adresse :<label style="color:black" > {{etablissement.getAdresse}}</label></label>
+                <label class="list-group-item info" >Code Postal : <label style="color:black" >{{etablissement.getCodepostal}}</label></label>
+                <label class="list-group-item info" >Ville : <label style="color:black" >{{etablissement.getVille}}</label></label>
+                <label class="list-group-item info" >Téléphone :<label style="color:black" > {{etablissement.getTelephone}}</label></label>
+                <label class="list-group-item info" >FAX : <label style="color:black" >{{etablissement.getFax}}</label></label>
+                <label class="list-group-item info" >Responsable école :<label style="color:black" > {{etablissement.getResponsable}}</label></label>
+                <label class="list-group-item info" >Téléphone responsable établissement :<label style="color:black" > {{etablissement.getTelResponsable}}</label></label>
+                <label class="list-group-item info" >Email responsable établissement :<label style="color:black" > {{etablissement.getMailResponsable}}</label></label>
+                <label class="list-group-item info" >Site web : <label style="color:black" >{{etablissement.getSite}}</label></label>
+                <img alt="Fond ecran" src="data:image/jpg;base64,{{ etablissement.getTier.getFondecran }}"/>
+            </div>
+            <div id="info_user" class="list-group affichage" style="display: none;">
+
+                {% if users is defined %}
+                    {% for user in users %}
+                        {% set iddiv = random()  %}
+                        <div class="col-xs-12 Liste">
+                            <div class="row">
+                                <label class="cell">Email : <label>{{ user.getEmail }}</label></label>
+                                <label class="cell">Username : <label>{{ user.getUsername }}</label>
+                                    <button class="button" style="float: right" type="button" data-toggle="collapse" data-target="#user{{ iddiv }}"></button>
+                                </label>
+
+                            </div>
+                            <div id="user{{ iddiv }}" class="collapse in" >
+                                <div class="row">
+                                    <label class="cell">Nom : <label>{{ user.getNom }}</label></label>
+                                    <label class="cell">Prénom  : <label>{{ user.getPrenom }}</label></label>
+                                </div>
+                                <div class="row">
+                                    <label class="cell">Téléphone : <label>{{ user.getTelephone }}</label></label>
+                                    <label class="cell">Dernière connexion : <label>
+                                            {% if user.getLastLogin %}{{ user.getLastLogin|date('d/m/Y') }}
+                                            {% else %}Jamais
+                                            {% endif %}</label></label>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+
+            </div>
+
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    <div id="info_licence" class="list-group"
+                         style="display: none;">
+
+                        {% if libs is defined %}
+                            {% for lib in libs %}
+                                {% set iddiv = random()  %}
+                                <div class="col-xs-12 Liste">
+                                    <div class="row">
+                                        <label class="cell" >Licence : <label>{{ lib.getId }}</label></label>
+                                        <label class="cell">Libelle : <label>{{ lib.getLibelle }}</label>
+                                            <button onclick="supprimerligne('{{ path('supprimer_Licence',{'id': lib.getId}) }}',this)"
+                                                    type="button" style="float: right">x</button>
+                                            <button class="button" style="float: right" type="button" data-toggle="collapse" data-target="#licence{{ iddiv }}"></button></label>
+
+                                    </div>
+                                    <div id="licence{{ iddiv }}" class="collapse in" >
+                                        <div class="row">
+                                            <label class="cell">Nombre max d'apprenants : <label>{{ lib.getMaxapp }}</label></label>
+                                            <label class="cell">Nombre max de mission  : <label>{{ lib.getMaxmission }}</label></label>
+                                        </div>
+                                        <div class="row">
+                                            <label class="cell">Date de début : <label>{{ lib.getDatedebut|date('d/m/Y') }}</label></label>
+                                            <label class="cell">Date de fin : <label>{{ lib.getDatefin|date('d/m/Y') }}</label></label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+                {% endif %}
+                {% if etablissement.getTier.getEcole %}
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                        <div id="info_tier_tier" class="list-group affichage"
+                         style="display: none;">
+
+                        <table>
+                            <tr>
+                                <td>Id</td>
+                                <td>Siren</td>
+                                <td>Raison sociale</td>
+                                <td style="border: none"><button onclick="show('associerecole')" type="button" style="border: none">+</button></td>
+                            </tr>
+
+                            {% for ecoles in etablissement.getTier.getTier1 %}
+                                <tr>
+                                    <td>{{ ecoles.getId }}</td>
+                                    <td>{{ ecoles.getSiren }}</td>
+                                    <td>{{ ecoles.getRaisonSoc }}</td>
+                                    <td style="border: none"><button onclick="supprimerPartenariat('{{ path('supprimerAssociationEcole',{'id_ecole':etablissement.getTier.getId,'id_liee':ecoles.getId }) }}',this)" type="button" style="border: none">x</button></td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+
+                    </div>
+                        {% endif %}
+                    {% if is_granted('ROLE_ADMINECOLE') %}
+                        <div id="info_formation" class="list-group affichage"
+                         style="display: none;">
+
+                        {% if formations is defined %}
+                            {% for formation in formations %}
+                                {% set iddiv = random()  %}
+                                <div class="col-xs-12 Liste">
+                                    <div class="row">
+                                        <label class="cell">Description : <label>{{ formation.getDescriptif }}</label></label>
+                                        <label class="cell">Nom : <label>{{ formation.getNom }}</label>
+                                            <button class="button" style="float: right" type="button" data-toggle="collapse" data-target="#formation{{ iddiv }}"></button>
+                                        </label>
+
+                                    </div>
+                                    <div id="formation{{ iddiv }}" class="collapse in" >
+                                        <div class="row">
+                                            <label class="cell">Document :
+                                                <a target="_blank" href="{{ asset('formation_pdf/'~ formation.getId ~'.pdf') }}" >
+                                                    <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px " alt="fichier de formation" >
+                                                </a>
+                                            </label>
+                                            <button  style="border: 0;font-size: 18px;font-family: Roboto;color: white;background-color: rgb(61, 138, 212);height: 40px; width: 150px;"  onclick="supprimerformation('{{ path('supprimerFormation',{'id':formation.getId}) }}', this)">
+                                                <div   >Supprimer</div>
+
+                                            </button>&nbsp;&nbsp;
+                                            <button  style="border: 0;font-size: 18px;font-family: Roboto;color: white;background-color: rgb(61, 138, 212);height: 40px; width: 150px;"  onclick="showqcm('addQCM',{{ formation.getId }})" >
+                                                <div   >Ajouter un test</div>
+
+                                            </button>
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <div id="info_mission" class="list-group affichage" style="display: none;">
+
+                        {% if missions is defined %}
+                            {% for mission in missions %}
+                                {% set iddiv = random()  %}
+
+                                <div class="col-xs-12 Liste">
+
+                                    <div class="row">
+                                        <label class="cell"  >CodeMission : <label style="font-size: medium">{{ mission.getCodemission }}</label></label>
+                                        <label class="cell" >Date : <label style="font-size: medium" > {{ mission.getDate|date('d/m/Y H:i')}}</label>
+                                            <button onclick="supprimerligne('{{ path('supprimer_Mission',{'id': mission.getId}) }}',this)"
+                                                    type="button" style=";float: right">x</button>
+                                            <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#mission{{ iddiv }}"></button>
+                                        </label>
+
+                                    </div>
+                                    <div id="mission{{ iddiv }}" class="collapse in" >
+                                        <div class="row">
+                                            <label class="cell">EmailContact  : <label style="font-size: medium">{{ mission.EmailContact }}</label></label>
+                                            <label class="cell">Profil : <label style="font-size: medium">{{ mission.getProfil }}</label></label>
+                                        </div>
+                                        <div class="row">
+                                            <label class="cell" >Date fin :<label style="font-size: medium" > {{mission.getDatefin|date('d/m/Y')}}</label></label>
+                                            <label class="cell" >Date Debut :<label style="font-size: medium"> {{ mission.getDatedebut|date('d/m/Y')}}</label></label>
+                                        </div>
+                                        <div class="row">
+                                            <label class="cell">Typecontart  : <label style="font-size: medium">{{ mission.getTypecontrat }}</label></label>
+                                            <label class="cell">NomContact  : <label style="font-size: medium">{{ mission.getNomContact }}</label></label>
+                                        </div>
+                                        <div class="row">
+                                            <label class="cell">Domaine  : <label style="font-size: medium">{{ mission.getDomaine }}</label></label>
+                                            <label class="cell">Tuteur  : <label style="font-size: medium">{{ mission.getTuteur }}</label></label>
+                                        </div>
+                                        <div class="row">
+                                            <label class="cell" style="height: 280px;word-wrap: break-word;width: 150px;hyphens: auto;max-width: 100px;">Descriptif : <label style="font-size: medium" >{{ mission.getDescriptif }}</label></label>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                {% endif %}
+        </div>
+
+    </div>
+    {% if is_granted('ROLE_SUPERADMIN') or (is_granted('ROLE_ADMINECOLE') and (etablissement.getTier in app.user.getTier.getTier1)) or ((is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC')) and etablissement.getTier == app.user.getTier) %}
+    <div class="col-xs-3" style="height: 100%;">
+        <div class="list-group"
+             style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
+
+
+
+                {% if etablissement.getActive %}
+                    <button onclick="active('{{ path('activate',{'id':etablissement.getId}) }}')" id="activate" type="button" class="list-group-item rightMenu" style="background-color: #94C400">
+                        <div class="col-xs-12" style="color: white;">ACTIVE</div>
+                    </button>
+                {% else %}
+                    <button onclick="active('{{ path('activate',{'id':etablissement.getId}) }}')" id="activate" type="button" class="list-group-item rightMenu" style="background-color: red">
+                        <div class="col-xs-12" style="color: white;">DÉSACTIVE</div>
+                    </button>
+                {% endif %}
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <button onclick="show('instanceLicence')" type="button" class="list-group-item rightMenu">
+                    <div class="col-xs-12">Instancier une licence</div>
+
+                </button>
+            {% endif %}
+
+            {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
+                <button onclick="show('adduser')" type="button" class="list-group-item rightMenu">
+                    <div class="col-xs-12">Ajouter un utilisateur</div>
+
+                </button>
+            {% endif %}
+
+            {% if not etablissement.getTier.getEcole %}
+                {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
+                    <button onclick="show('addmission')" type="button" class="list-group-item rightMenu">
+                        <div class="col-xs-12">Ajouter une mission</div>
+
+                    </button>
+                {% endif %}
+            {% else %}
+                {% if is_granted('ROLE_ADMINECOLE') %}
+                    <button onclick="show('ajouterformation')" type="button" class="list-group-item rightMenu">
+                        <div class="col-xs-12">Ajouter une formation</div>
+
+                    </button>
+                    <button onclick="show('addQCMAff',{{ etablissement.getId }})" type="button" class="list-group-item rightMenu">
+                        <div class="col-xs-12">Ajouter un test d'affinité</div>
+
+                    </button>
+                {% elseif is_granted('ROLE_SUPER_ADMIN') %}
+                    <div id="associerecole" class="popup">
+                        <div onclick="hide(this)" class="close"></div>
+                        <div class="col-xs-offset-4 col-xs-4" style="padding: 0;border:20px solid white;display: block">
+                            <form class="formulaire" id="formAssiation" action="{{ path("ecoles_assiciated",{'id':etablissement.getId}) }}" onsubmit="document.getElementById('submitassocierecole').disabled=true" method="post">
+                                <div class="div_form">
+                                    <select class="input" title="" style="height: 100px" name="ecoles[]" multiple>
+                                        {% for tier in tiers %}
+                                            {% if tier.getEcole %}
+                                                <option value="{{ tier.getId }}">{{ tier.getRaisonSoc }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="div_button">
+                                    <input id="submitassocierecole" class="blue" type="submit" value="envoyer">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+            <button onclick="post('{{ path('modifieretab',{'id': etablissement.getId }) }}')" type="button" class="list-group-item rightMenu">
+                <div class="col-xs-12">Modifier la fiche</div>
+            </button>
+            <button onclick="post('{{ path('supprimeretablissement',{'id': etablissement.getId }) }}')" type="button" class="list-group-item rightMenu">
+                <div class="col-xs-12">Supprimer l'établissement</div>
+            </button>
+            <button onclick="alert('Ce button n\'est pas encore fonctionel!')" type="button" class="list-group-item rightMenu">
+                <div class="col-xs-12">Gérer les droits</div>
+            </button>
+        </div>
+    </div>
+    {% endif %}
+</div>
+    {% endblock %}
+</div>
+
+{% block JS %}
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/PopUp.js') }}"></script>
+    <script language="JavaScript">
+        document.getElementById("select_info").onchange = function(){
+            var x = document.getElementById("select_info").value;
+            document.getElementById('info_etab').style.display= 'none';
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+            document.getElementById('info_licence').style.display= 'none';
+            {% endif %}
+            document.getElementById('info_user').style.display= 'none';
+
+            {% if etablissement.getTier.getEcole %}
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+            document.getElementById('info_tier_tier').style.display= 'none';
+            {% endif %}
+
+                {% if is_granted('ROLE_ADMINECOLE') %}
+                    document.getElementById('info_formation').style.display= 'none';
+                {% endif %}
+            {% else %}
+                document.getElementById('info_mission').style.display= 'none';
+            {% endif %}
+            document.getElementById(x).style.display='block';
+        };
+        function active(route) {
+            document.getElementById("activate").disabled = true;
+            $.ajax({
+                type: 'get',
+                url: route,
+                error: function (response) {
+                    console.log(response);
+                },
+                success: function (data) {
+                    console.log('etablissement{{ etablissement.getId }}');
+                    if (data['succes'] == '0') {
+                        document.getElementById("activate").style.backgroundColor = 'red';
+                        document.getElementById("activate").firstElementChild.innerHTML = 'Désactive';
+                        document.getElementById("activate").disabled = false;
+                        window.parent.document.getElementById('active{{ etablissement.getId }}').style.backgroundColor = 'red';
+                    }
+                    else {
+                        document.getElementById("activate").style.backgroundColor = '#94C400';
+                        document.getElementById("activate").firstElementChild.innerHTML = 'Active';
+                        window.parent.document.getElementById('active{{ etablissement.getId }}').style.backgroundColor = '#94C400';
+                    }
+
+                }
+            });
+
+        };
+        function post(path) {
+            window.location = path;
+        };
+        function submitform(form) {
+            document.getElementById(form).submit();
+        };
+        function FermerPopup(div){
+            var popup = document.getElementById(div);
+
+            popup.style.display = 'none';
+
+            document.getElementById("pdf").src="{{ asset('image/upload-arrow.png') }}"
+
+        }
+
+        function ConsultationQCMAff(div){
+            var div = document.getElementById(div);
+
+            while (div.firstChild) {
+
+                div.removeChild(div.firstChild);
+
+            }
+
+            $("#rightValuesAff option:selected").each(function(){
+                route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
+                route = route.replace('_id',$(this).val());
+                var a = document.createElement("a");
+                a.setAttribute("href",route);
+                a.setAttribute("target","_blank");
+                a.innerHTML = 'visualiser le QCM ' + $(this).text() + '<br>';
+                div.appendChild(a);
+
+            });
+
+
+            $("#leftValuesAff option:selected").each(function(){
+                route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
+                route = route.replace('_id',$(this).val());
+                var a = document.createElement("a");
+                a.setAttribute("href",route);
+                a.setAttribute("target","_blank");
+                a.innerHTML = 'visualiser le QCM ' + $(this).text() + '<br>';
+                div.appendChild(a);
+
+            });
+
+
+
+
+
+        }
+
+        function ConsultationQCM(div){
+            var div = document.getElementById(div);
+
+            while (div.firstChild) {
+
+                div.removeChild(div.firstChild);
+
+            }
+
+            $("#rightValues option:selected").each(function(){
+                route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
+                route = route.replace('_id',$(this).val());
+                var a = document.createElement("a");
+                a.setAttribute("href",route);
+                a.setAttribute("target","_blank");
+                a.innerHTML = 'visualiser le QCM ' + $(this).text() + '<br>';
+                div.appendChild(a);
+
+            });
+
+
+            $("#leftValues option:selected").each(function(){
+                route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
+                route = route.replace('_id',$(this).val());
+                var a = document.createElement("a");
+                a.setAttribute("href",route);
+                a.setAttribute("target","_blank");
+                a.innerHTML = 'visualiser le QCM ' + $(this).text() + '<br>';
+                div.appendChild(a);
+
+            });
+
+
+
+
+
+        }
+
+        function supprimerformation(route, champs) {
+            $.ajax({
+                type: 'get',
+                url: route,
+                error: function (response) {
+                    console.log(response);
+                },
+                success: function(data){console.log(data);}
+            });
+            champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
+
+        };
+
+        function readURL(input,baliseimg) {
+
+
+            if (input.files && input.files[0]) {
+
+
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#'+ baliseimg)
+                            .attr('src',"{{ asset('image/PDF.jpg') }}")
+                            .width(100)
+                            .height(100);
+
+
+                };
+
+                reader.readAsDataURL(input.files[0]);
+
+                document.getElementById("NomPDF").innerText=input.files[0].name;
+
+
+
+
+            }
+            else
+            {
+                document.getElementById("pdf").src="{{ asset('image/upload-arrow.png') }}";
+            }
+
+        };
+
+        $("#btnLeft").click(function () {
+            var selectedItem = $("#rightValues option:selected");
+            $("#leftValues").append(selectedItem);
+
+            var route = '{{path('remove_formation_qcm',{'idformation':"_id",'idqcm':"_idqcmright"})}}';
+            route = route.replace("_idqcmright", selectedItem.val());
+            route = route.replace("_id",document.getElementById("idformation").innerHTML);
+            $.ajax({
+                type: 'get',
+                url: route,
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                }
+            });
+
+        });
+
+        $("#btnRight").click(function () {
+            var selectedItem = $("#leftValues option:selected");
+            $("#rightValues").append(selectedItem);
+
+
+            var route = '{{path('add_formation_qcm',{'idformation':"_id",'idqcm':"_idqcmleft"})}}';
+            route = route.replace("_idqcmleft", selectedItem.val());
+            route = route.replace("_id",document.getElementById("idformation").innerHTML);
+            $.ajax({
+                type: 'get',
+                url: route,
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                }
+            });
+
+        });
+
+        function showqcm(div,id){
+            var popup = document.getElementById(div);
+            document.getElementById("idformation").innerHTML = id;
+
+            popup.style.display = 'block';
+            $("#rightValues > option").each(function(){
+                $("#leftValues").append(this);
+            });
+
+
+            var route = '{{path('formation_qcm',{'id':"_id" })}}';
+            route = route.replace("_id", id);
+
+            $.ajax({
+                type: 'get',
+                url: route,
+                dataType: 'json',
+
+                success: function(data) {
+
+
+                    var formation = JSON.parse(data.adresses);
+                    for (var i = 0; i < formation.length; i++)
+                    {
+                        var selectedItem = $('#leftValues option[value="'+formation[i].id+'"]');
+                        $("#rightValues").append(selectedItem);
+
+
+                    }
+                }
+            });
+
+
+        }
+
+        $("#btnLeftaff").click(function () {
+            var selectedItem = $("#rightValuesAff option:selected");
+            $("#leftValuesAff").append(selectedItem);
+
+
+            var route = '{{path('remove_etablissement_qcm',{'idetablissement':etablissement.getId,'idqcmaff':"_idqcmrightaff"})}}';
+            route = route.replace("_idqcmrightaff", selectedItem.val());
+            $.ajax({
+                type: 'get',
+                url: route,
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                }
+            });
+
+        });
+
+        $("#btnRightaff").click(function () {
+            var selectedItem = $("#leftValuesAff option:selected");
+            $("#rightValuesAff").append(selectedItem);
+
+
+
+            var route = '{{path('add_etablissement_qcm',{'idetablissement':etablissement.getId,'idqcmaff':"_idqcmleftaff"})}}';
+            route = route.replace("_idqcmleftaff", selectedItem.val());
+
+            $.ajax({
+                type: 'get',
+                url: route,
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                }
+            });
+
+        });
+        function hideAjouterForm(champs)
+        {
+            champs.parentNode.style.display = 'none';
+            document.getElementById("pdf").src = '{{ asset('image/upload-arrow.png') }}';
+        };
+
+
+
+
+
+    </script>
+{% endblock %}
+</body>
+</html>
+
