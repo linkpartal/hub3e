@@ -61,14 +61,14 @@
                 {% if User.hasRole('ROLE_APPRENANT') %}
 
                     <div id="info_Apprenant" class="col-xs-12 Liste" style="display:none;">
-
+                    {% if User.GetInfo  %}
                         <div class="row">
-                            <label class="cell" >Datenaissance : <label class="border:solid 1px steelblue; text-transform:uppercase; font-weight:bold; color:steelblue;" style="color:black" >{{User.getInfo.getDatenaissance|date('d/m/Y ') }}</label></label>
-                            <label class="cell" >Cp naissance  : <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" >{{User.getInfo.getCpnaissance}}</label></label>
+                            <label class="cell" >Date naissance : <label style="padding:10px; border:solid 2px #7F7F7F;text-align:center;color:#666666;width:250px;" >{{User.getInfo.getDatenaissance|date('d/m/Y ') }}</label></label>
+                            <label class="cell" >Cp naissance  : <label style="padding:10px; border:solid 2px #7F7F7F;text-align:center;color:#666666;width:250px;" >{{User.getInfo.getCpnaissance}}</label></label>
                         </div>
                         <div class="row">
-                            <label class="cell" >Lieu naissance: <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" >{{User.getInfo.getLieunaissance}}</label></label>
-                            <label class="cell" >Adresse       : <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:250px" >{{User.getInfo.getAdresse}}</label></label>
+                            <label class="cell" >Lieu naissance: <label style="padding:10px; border:solid 2px #7F7F7F;text-align:center;color:#666666;width:250px;" >{{User.getInfo.getLieunaissance}}</label></label>
+                            <label class="cell" >Adresse       : <label style="padding:10px; border:solid 2px #7F7F7F;text-align:center;color:#666666;width:250px;" >{{User.getInfo.getAdresse}}</label></label>
                         </div>
                         <div class="row">
                             <label class="cell" >Facebook      : <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" >{{User.getInfo.getFacebook}}</label></label>
@@ -79,8 +79,8 @@
                             <label class="cell" >Fratrie       : <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" >{{User.getInfo.getFratrie}}</label></label>
                         </div>
                         <div class="row">
+                            {% for sport in User.getSport %}
                             <label class="cell" >Sport :
-                                {% for sport in User.getSport %}
                                     <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" > {{ sport.getSport }},</label>
                                 {% endfor %}
                             </label>
@@ -100,9 +100,10 @@
                                 {% endif %}
                             </label>
                         </div>
-
+                    {% endif %}
 
                     </div>
+
 
                 {% endif %}
 

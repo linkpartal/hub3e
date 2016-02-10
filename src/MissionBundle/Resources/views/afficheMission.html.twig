@@ -15,6 +15,34 @@
 <body>
 
 <div class="container" style="padding: 0;">
+
+
+    <div class="row" style="height: 78px; margin: 0;">
+        <img class="col-xs-1" src="data:image/jpg;base64,{{ mission.getEtablissement.getTier.getLogo }}"
+             style="padding: 10px; height: 40px;">
+        <div class="col-xs-4">
+            <div class="col-xs-12"
+                 style="height: 30px; text-align: left; padding: 10px;"><label style="font-size: large" >{{ mission.getIntitule }}&nbsp;-&nbsp;  </label><label style="font-size: large;color:#2A76CC" > {{ mission.getEtablissement.getTier.getRaisonsoc }}</label></div>
+            <div class="col-xs-12" style="height: 20px; text-align: left;">{{mission.getEtablissement.getAdresse }}, {{ mission.getEtablissement.getCodePostal }} {{ mission.getEtablissement.getVille }}</div>
+        </div>
+        <div class="col-xs-offset-5 col-xs-1">
+            <div class="col-xs-12" style="height: 30px;; padding-top: 10px;"><label style="font-size:large;color:#2A76CC;" > 18</label></div>
+            <div class="col-xs-12" style="height: 20px;width:100px">mises en relation</div>
+        </div>
+        <div class=" col-xs-1">
+            <div class="col-xs-12" style="height: 30px; padding-top: 10px;"><label style="font-size: large;color:#2A76CC" > 5</label></div>
+            <div class="col-xs-12" style="height: 20px;">candidatures</div>
+        </div>
+    </div>
+
+
+
+<div class="row" >&nbsp;
+       <button  type="button"  > <div class="col-xs-12"  > FICHE MISSION</div></button>
+    <button  type="button" ><div class="col-xs-12" >LISTE DES APPRENANTS</div></button>
+    <button  type="button"  ><div class="col-xs-12" >CARTE DES APPRENANTS</div></button></div>
+
+
     <div class="row" style="background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;height: 100%">
         <div class="col-xs-9"
              style="background: rgb(238, 241, 246); height: 100%;">
@@ -25,16 +53,12 @@
                 <div id="info_mission" class="list-group affichage">
 
 
-                    <label class="list-group-item info" >Code Mission  : <label style="color:black" >{{mission.getCodemission}}</label></label>
-                    <label class="list-group-item info" style="height: 100px;word-wrap: break-word;hyphens: auto;max-width: 1000px ">Profil : <label style="color:black" >{{mission.getProfil}}</label></label>
-                    <label class="list-group-item info" >Date : <label style="color:black" >{{mission.getDate|date('d/m/Y à H:i')}}</label></label>
-                    <label class="list-group-item info" >Etat : <label style="color:black" >{{mission.getEtat}}</label></label>
-                    <label class="list-group-item info" >Typecontrat : <label style="color:black" >{{mission.getTypecontrat}}</label></label>
-                    <label class="list-group-item info" >Nomcontact : <label style="color:black" >{{mission.getNomcontact}}</label></label>
-                    <label class="list-group-item info" >Prenomcontact : <label style="color:black" >{{mission.getPrenomcontact}}</label></label>
-                    <label class="list-group-item info" >Domaine : <label style="color:black" >{{mission.getDomaine}}</label></label>
-                    <label class="list-group-item info" >Emailcontact : <label style="color:black" >{{mission.getEmailcontact}}</label></label>
-                    <label class="list-group-item info" style="height: 280px;word-wrap: break-word;hyphens: auto;max-width: 1000px " >Descriptif : <label   style="color:black" >{{mission.getDescriptif}}</label></label>
+                    <label class="list-group-item " style="font-family: Verdana ;color:#2975cb;height: 280px;word-wrap: break-word;hyphens: auto;max-width: 1000px " >LA MISSION : <br/><br/>
+                        <label  style="color:black; font-family:Verdana ;font-weight: lighter" >{{mission.getDescriptif}}</label></label>
+                    <label class="list-group-item " style="font-family: Verdana ;color:#2975cb;height: 200px;word-wrap: break-word;hyphens: auto;max-width: 1000px ">LE PROFIL RECHERCHE :<br/>
+                        <label style="color:black; font-family:Verdana ;font-weight: lighter" >{{mission.getProfil}}</label></label>
+                    <label class="list-group-item "  style="font-family: Verdana ;color:#2975cb;height: 200px;word-wrap: break-word;hyphens: auto;max-width: 1000px" >Domaine : <br/>
+                        <label style="color:black; font-family:Verdana ;font-weight: lighter" >{{mission.getDomaine}}</label></label>
 
                 </div>
 
@@ -52,6 +76,17 @@
              style="height: 100%;">
             <div class="list-group"
                  style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
+                <div  class="rightMenu " ><div style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp&nbsp{{mission.getDate|date('d/m/Y a H:i')}}</div></div>
+                <div class="rightMenu" ><div  style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp&nbsp{{mission.getTuteur}}</div></div>
+                <div class="rightMenu" ><div style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> &nbsp&nbsp   {{mission.getEmailcontact}} </div></div>
+                <div class="rightMenu" ><div  style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> &nbsp&nbsp   {{mission.getTypecontrat}}</div></div>
+                <div  class="rightMenu " ><div style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>&nbsp&nbsp{{mission.getDatedebut|date('d/m/Y')}}</div></div>
+                <div  class="rightMenu " ><div style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>&nbsp&nbsp{{mission.getDatefin|date('d/m/Y')}}</div></div>
+                <div class="rightMenu" ><div style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-eur" aria-hidden="true"></span>  &nbsp&nbsp  {{mission.getRemuneration}}</div></div>
+                <div class="rightMenu" ><div  style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>  &nbsp&nbsp  {{mission.getCodemission}}</div></div>
+
+
+
 
                 <button onclick="post('{{ path('modifierMission',{'id': mission.getId }) }}',false)" type="button" class="list-group-item rightMenu" >
                     <div class="col-xs-12"  >Modifier la fiche</div>

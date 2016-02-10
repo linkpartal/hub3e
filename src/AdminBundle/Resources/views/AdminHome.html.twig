@@ -275,11 +275,15 @@
                     {% if missions is defined %}
                         {% for m in missions %}
                             <button onclick="postiframeUser('{{ path('admin_afficheMission',{'id': m.getId }) }}',this)" id="mission{{ m.getId }}" type="button" class="list-group-item butonLigne">
-                                <div class="col-xs-12 part" title="{{m.getCodemission}}">{{m.getCodemission}}</div>
+                                <div class="col-xs-12 part" title="{{m.getIntitule}}">{{m.getIntitule}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
 
-                                    <div class="col-xs-9 part" title="{{m.getDomaine}}">{{ m.getDomaine }}</div>
+                                    <div class="col-xs-9 part" style="color:#2975cb" title="{{m.getEtablissement.getTier.getRaisonsoc}}">
+                                        {{ m.getEtablissement.getTier.getRaisonsoc}}
+                                        <span style="color:#7F7F7F">{{ m.getEtablissement.getVille}}</span>
+                                    </div>
+
                                     {% if not m.getSuspendu %}
                                         <div class="col-xs-1 active" id="active{{ m.getId }}"></div>
                                     {% else %}
