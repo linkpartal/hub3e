@@ -39,11 +39,11 @@ class DefaultController extends Controller
         $users = $this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($user->getTier());
 
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$user->getTier()));
-
+        $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date'=>'DESC'));
 
 
         return $this->render('EcoleBundle:Adminecole:index.html.twig', array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$users,
-            'AllLicences'=>$licences,'societes'=>$societes));
+            'AllLicences'=>$licences,'societes'=>$societes,'missions'=>$missions));
     }
 
     public function loadiframeAction()
@@ -71,7 +71,6 @@ class DefaultController extends Controller
         $reponse = new JsonResponse();
         return $reponse->setData(array('adresses'=>$adresses));
     }
-
 
     public function loadQCMAction($id)
     {

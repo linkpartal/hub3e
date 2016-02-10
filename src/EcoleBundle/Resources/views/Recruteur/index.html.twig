@@ -74,80 +74,17 @@
     </div>
 
 </div>
-<!--div-- id="adduser" class="popup col-xs-3">
-    <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block">
-
-        <form id="formadduser" action="{{ path("user_added") }}" method="post">
-
-            <div class="div_form" >
-                <div class="col-xs-6 input-colonne">
-                    <input type="text" class="input" id="Username" name="_Username" placeholder="Username">
-
-                    <input type="email" class="input " id="mail" name="_mail" placeholder="Email">
-
-                    <select class="input" title="Choisissez un role" name="_role">
-                        <option value="">Choisissez un role</option>
-                        <option value="ROLE_ADMINECOLE">Administrateur école</option>
-                        <option value="ROLE_RECRUTE">Recruteur Placeur</option>
-                    </select>
-                </div>
-                <div class="col-xs-6">
-                    <select class="input " style="width: 25%; margin-right: 10px" title="" name="civilite">
-                        <option value="Mr">Mr.</option>
-                        <option value="Mme">Mme.</option>
-                        <option value="Mlle">Mlle.</option>
-                    </select>
-
-                    <input type="text" class="input" style="width: calc(75% - 10px);" id="Prenom" name="_Prenom" placeholder="Prénom">
-                    <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom">
-
-                    <input type="tel" class="input " id="Tel" name="_Tel" placeholder="Tel">
-                </div>
-
-
-            </div>
-            <div class="div_button">
-                <input class="blue" type="submit" value="envoyer">
-            </div>
-        </form>
-    </div>
-
-</div-->
-<div id="import" class="popup col-xs-3">
-    <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
-        <form id="form" action="{{ path('import') }}" onsubmit="document.getElementById('submitimport').disabled=true" method="post" enctype="multipart/form-data">
-            <div class="div_form">
-
-                <select onchange="disabling(this)" title="Type d'import" name="Import">
-                    <option value="0">Apprenants</option>
-                    <option value="1">Sociétés</option>
-                    <option value="2">Missions</option>
-
-                </select>
-                <select title="Etablissement" name="Etablissement">
-                    {% for etab in ecoles %}
-                        <option value="{{ etab.getId }}">{{ etab.getSiret }}</option>
-                    {% endfor %}
-                </select>
-                <br>
-                <label title="CSV" for="CSV"><img id="backimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
-                <input accept="image/*" type="file" class="input" id="CSV" name="_CSV" required>
-
-            </div>
-            <div class="div_button">
-                <input id ="submitimport" class="blue" type="submit" value="envoyer">
-            </div>
-        </form>
-    </div>
-
-</div>
 <div class="container">
     {% block TopBar %}
         <div class="row" style="height: 32px; background: #2975cb;">
             <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="border: 0;padding: 4.5px;height: 100%;">
                 <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 21px;" >        </a>
+            </div>
+            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="display: inline; margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+                <button onclick="show('adduser')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+                ></button>
+
+                <button id="usertop" style="color:white ">{{ users|length }} Apprenant</button>
             </div>
             <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
                 <button onclick="show('addtier',0)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
@@ -156,19 +93,13 @@
                 <button id="societetop" style="color:white ">{{ societes|length }} Sociétés</button>
 
             </div>
-            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="display: inline; margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
-                <button onclick="show('adduser')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
-                ></button>
 
-                <button id="usertop" style="color:white ">{{ users|length }} Utilisateurs</button>
-            </div>
-
-            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+            <!--div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
                 <button onclick="show('import')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                 ></button>
 
                 <button style="color:white ">importer</button>
-            </div>
+            </div-->
         </div>
 
 
@@ -179,33 +110,12 @@
             <div class="col-xs-2">
 
                 <select title="" id="leftselect" name="myddl" class="btn btn-default dropdown-toggle">
-                    <option value="ecole">Voir Ecoles</option>
                     <option value="societe">Voir Sociétés</option>
-                    <option value="licence">Voir Licences</option>
+                    <option value="user">Voir Apprenants</option>
                     <option value="mission">Voir Missions</option>
-                    <option value="user">Voir Utilisateurs</option>
                 </select>
 
-                <div id="ecole" class="list-group col-xs-2 leftbar">
-                    {% if ecoles is defined %}
-                        {% for e in ecoles %}
-                            <button onclick="postiframe('{{ path('affiche_etab',{'id': e.getId} ) }}',{{ e.getId }},this)" id="etablissement{{ e.getId }}" type="button" class="list-group-item butonLigne">
-                                <div class="col-xs-12 part" title="{{e.getTier.getRaisonSoc}}">{{e.getTier.getRaisonSoc}}</div>
-                                <div class="col-xs-12 part"
-                                     style="height: 31px; text-align: left;">
-                                    <div class="col-xs-9 part" title="{{ e.getVille }}">{{ e.getVille }}</div>
-                                    {% if e.getActive %}
-                                        <div class="col-xs-1 active" id="active{{ e.getId }}"></div>
-                                    {% else %}
-                                        <div class="col-xs-1 inactive" id="active{{ e.getId }}"></div>
-                                    {% endif %}
-                                </div>
-                            </button>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-                <div id="societe" class="list-group col-xs-2 leftbar"
-                     style="visibility: hidden;">
+                <div id="societe" class="list-group col-xs-2 leftbar">
                     {% if societes is defined %}
                         {% for s in societes %}
                             <button onclick="postiframe('{{ path('affiche_etab',{'id': s.getId }) }}',{{ s.getId }},this)" id="etablissement{{ s.getId }}" type="button" class="list-group-item butonLigne">
@@ -218,20 +128,6 @@
                                     {% else %}
                                         <div class="col-xs-1 inactive" id="active{{ s.getId }}"></div>
                                     {% endif %}
-                                </div>
-                            </button>
-                        {% endfor %}
-                    {% endif %}
-
-                </div>
-                <div id="licence" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
-                    {% if AllLicences is defined %}
-                        {% for lic in AllLicences %}
-                            <button onclick="postiframe('{{ path('ecole_admin_afficheLicence',{'id': lic.getId} ) }}')" id="licence{{ lic.getId }}" type="button" class="list-group-item butonLigne">
-                                <div class="col-xs-12 part licence" title="{{lic.getLibelle}}">{{lic.getLibelle}}</div>
-                                <div class="col-xs-12 part"
-                                     style="height: 31px; text-align: left;">
-                                    <div class="col-xs-9 part" title="{{ lic.getDatefin|date('d-m-Y') }}">{{lic.getDatefin|date('d-m-Y') }}</div>
                                 </div>
                             </button>
                         {% endfor %}
@@ -325,10 +221,8 @@
     var i = 1;
     document.getElementById("leftselect").onchange = function(){
         var x = document.getElementById("leftselect").value;
-        document.getElementById('ecole').style.visibility= 'hidden';
-        document.getElementById('societe').style.visibility= 'hidden';
         document.getElementById('mission').style.visibility= 'hidden';
-        document.getElementById('licence').style.visibility= 'hidden';
+        document.getElementById('societe').style.visibility= 'hidden';
         document.getElementById('user').style.visibility= 'hidden';
         document.getElementById(x).style.visibility='visible';
 
