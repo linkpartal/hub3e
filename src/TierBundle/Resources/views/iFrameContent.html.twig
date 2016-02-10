@@ -543,7 +543,7 @@
         </div>
 
     </div>
-    {% if is_granted('ROLE_SUPERADMIN') or (is_granted('ROLE_ADMINECOLE') and (etablissement.getTier in app.user.getTier.getTier1)) or ((is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC')) and etablissement.getTier == app.user.getTier) %}
+    {% if is_granted('ROLE_SUPER_ADMIN') or (is_granted('ROLE_ADMINECOLE') and (etablissement.getTier in app.user.getTier.getTier1)) or ((is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC')) and etablissement.getTier == app.user.getTier) %}
     <div class="col-xs-3" style="height: 100%;">
         <div class="list-group"
              style="margin: 15px 0 0 15px;height: 100%; background-color: white;">

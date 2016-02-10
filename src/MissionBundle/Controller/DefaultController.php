@@ -65,17 +65,27 @@ class DefaultController extends Controller
 
 
 
-        return $this->redirect($this->generateUrl('affiche_etab',array('ecole'=>$etablissement->getId())));
+        return $this->redirect($this->generateUrl('affiche_etab',array('id'=>$etablissement->getId())));
 
 
     }
 
     public function affichageMissionAction($id)
     {
-
         $mission = $this->getDoctrine()->getRepository('GenericBundle:Mission')->find($id);
+
+
+        if($mission->getEtablissement()->getTier()->getLogo())
+        {
+            $mission->getEtablissement()->getTier()->setLogo(base64_encode(stream_get_contents($mission->getEtablissement()->getTier()->getLogo())));
+        }
+        if($mission->getEtablissement()->getTier()->getFondecran())
+        {
+            $mission->getEtablissement()->getTier()->setFondecran(base64_encode(stream_get_contents($mission->getEtablissement()->getTier()->getFondecran())));
+        }
+
         // var_dump($mission);die;
-        return $this->render('AdminBundle:Admin:afficheMission.html.twig',array('mission'=>$mission));
+        return $this->render('MissionBundle::afficheMission.html.twig',array('mission'=>$mission));
 
 
 
@@ -121,6 +131,6 @@ class DefaultController extends Controller
 
         $em->flush();
 
-        return $this->forward('AdminBundle:MissionDef:affichageMission',array('id'=>$request->get('_ID')));
+        return $this->redirect($this->generateUrl('admin_afficheMission',array('id'=>$request->get('_ID'))));
     }
 }
