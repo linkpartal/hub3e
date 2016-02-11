@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/adminecole.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="icon" type="image/png" href="{{ asset('image/Logo_Hub_3e.png') }}" />
     {% block CSS %}{% endblock %}
@@ -158,7 +158,7 @@
                 <div id="user" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if users is defined %}
                         {% for u in users %}
-                            <button onclick="postUser('{{ path('metier_user_afficheUser',{'id': u.getId} ) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                            <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId} ) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -264,7 +264,7 @@
         }
 
     };
-    function postUser(url,button){
+    function postiframeUser(url,button){
         document.getElementById("iframe").src = url;
         var elements = button.getElementsByClassName("badge");
         if(elements.length > 0)

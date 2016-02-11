@@ -4,8 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
-    <link rel="stylesheet" href="{{ asset('css/ajout.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/mission.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     {% block CSS %}{% endblock %}
 
@@ -37,78 +36,148 @@
 
 
 
-<div class="row" >&nbsp;
-       <button  type="button"  > <div class="col-xs-12"  > FICHE MISSION</div></button>
-    <button  type="button" ><div class="col-xs-12" >LISTE DES APPRENANTS</div></button>
-    <button  type="button"  ><div class="col-xs-12" >CARTE DES APPRENANTS</div></button></div>
+<div class="row" >
+
+    <button onclick="moveto(this,'info_mission')" class="col-xs-4 onglet"  type="button" > FICHE MISSION</button>
+    <button onclick="moveto(this)" class="col-xs-4 onglet"  type="button" >LISTE DES APPRENANTS</button>
+    <button onclick="moveto(this,'map')" class="col-xs-4 onglet"  type="button"  >CARTE DES APPRENANTS</button>
+    <div id="baronglet" class="col-xs-4" style="height: 5px;background-color: #257ef0; z-index: 60;"></div>
+</div>
 
 
-    <div class="row" style="background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;height: 100%">
-        <div class="col-xs-9"
-             style="background: rgb(238, 241, 246); height: 100%;">
-
-
+    <div id="info_mission" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;width: 100%;height: 100%;visibility: hidden;position: absolute;">
+        <div class="col-xs-9" style="background: rgb(238, 241, 246); height: 100%;">
 
             <div class="col-xs-12" style="margin-bottom: 50px">
-                <div id="info_mission" class="list-group affichage">
+                <div class="list-group affichage">
 
+                    <label class="list-group-item mission" >LA MISSION : <br/>
+                        <label  style="color:black; font-weight: lighter" >{{mission.getDescriptif}}</label>
+                    </label>
 
-                    <label class="list-group-item " style="font-family: Verdana ;color:#2975cb;height: 280px;word-wrap: break-word;hyphens: auto;max-width: 1000px " >LA MISSION : <br/><br/>
-                        <label  style="color:black; font-family:Verdana ;font-weight: lighter" >{{mission.getDescriptif}}</label></label>
-                    <label class="list-group-item " style="font-family: Verdana ;color:#2975cb;height: 200px;word-wrap: break-word;hyphens: auto;max-width: 1000px ">LE PROFIL RECHERCHE :<br/>
-                        <label style="color:black; font-family:Verdana ;font-weight: lighter" >{{mission.getProfil}}</label></label>
-                    <label class="list-group-item "  style="font-family: Verdana ;color:#2975cb;height: 200px;word-wrap: break-word;hyphens: auto;max-width: 1000px" >Domaine : <br/>
-                        <label style="color:black; font-family:Verdana ;font-weight: lighter" >{{mission.getDomaine}}</label></label>
+                    <label class="list-group-item mission" >LE PROFIL RECHERCHE :<br/>
+                        <label style="color:black; font-weight: lighter" >{{mission.getProfil}}</label>
+                    </label>
+
+                    <label class="list-group-item mission">Domaine : <br/>
+                        <label style="color:black; font-weight: lighter" >{{mission.getDomaine}}</label>
+                    </label>
 
                 </div>
-
-
             </div>
         </div>
-
-
-
-
-
-
-
         <div class="col-xs-3"
              style="height: 100%;">
             <div class="list-group"
                  style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
-                <div  class="rightMenu " ><div style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp&nbsp{{mission.getDate|date('d/m/Y a H:i')}}</div></div>
-                <div class="rightMenu" ><div  style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp&nbsp{{mission.getTuteur}}</div></div>
-                <div class="rightMenu" ><div style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> &nbsp&nbsp   {{mission.getEmailcontact}} </div></div>
-                <div class="rightMenu" ><div  style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> &nbsp&nbsp   {{mission.getTypecontrat}}</div></div>
-                <div  class="rightMenu " ><div style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>&nbsp&nbsp{{mission.getDatedebut|date('d/m/Y')}}</div></div>
-                <div  class="rightMenu " ><div style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>&nbsp&nbsp{{mission.getDatefin|date('d/m/Y')}}</div></div>
-                <div class="rightMenu" ><div style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-eur" aria-hidden="true"></span>  &nbsp&nbsp  {{mission.getRemuneration}}</div></div>
-                <div class="rightMenu" ><div  style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>  &nbsp&nbsp  {{mission.getCodemission}}</div></div>
-
-
-
+                <div  class="rightMenu " >
+                    <div style="text-align:center;line-height:50px;" >
+                        <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                        {{mission.getDate|date('d/m/Y a H:i')}}
+                    </div>
+                </div>
+                <div class="rightMenu" >
+                    <div  style="text-align:center;line-height:50px;" >
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        {{mission.getTuteur}}
+                    </div>
+                </div>
+                <div class="rightMenu" >
+                    <div style="text-align:center;line-height:50px;" >
+                        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                        {{mission.getEmailcontact}}
+                    </div>
+                </div>
+                <div class="rightMenu" >
+                    <div  style="text-align:center;line-height:50px;" >
+                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                        {{mission.getTypecontrat}}
+                    </div>
+                </div>
+                <div  class="rightMenu " >
+                    <div style="text-align:center;line-height:50px;" >
+                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        {{mission.getDatedebut|date('d/m/Y')}}
+                    </div>
+                </div>
+                <div  class="rightMenu " >
+                    <div style="text-align:center;line-height:50px;" >
+                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        {{mission.getDatefin|date('d/m/Y')}}
+                    </div>
+                </div>
+                <div class="rightMenu" >
+                    <div style="text-align:center;line-height:50px;" >
+                        <span class="glyphicon glyphicon-eur" aria-hidden="true"></span>
+                        {{mission.getRemuneration}}
+                    </div>
+                </div>
+                <div class="rightMenu" >
+                    <div  style="text-align:center;line-height:50px;" >
+                        <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>
+                        {{mission.getCodemission}}
+                    </div>
+                </div>
 
                 <button onclick="post('{{ path('modifierMission',{'id': mission.getId }) }}',false)" type="button" class="list-group-item rightMenu" >
                     <div class="col-xs-12"  >Modifier la fiche</div>
-
                 </button>
 
                 <button onclick="post('{{ path('supprimer_Mission',{'id': mission.getId }) }}',true)" type="button" class="list-group-item rightMenu" >
                     <div class="col-xs-12" >Supprimer Mission</div>
-
                 </button>
 
             </div>
         </div>
 
     </div>
+    <div id="map" style="height: 100%;width: 100%;position: absolute;">
+
+    </div>
+    <div class="infobox-wrapper">
+        <div id="infobox" style="">
+            <div id="inbox" >
+                <div src="">
+
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
 <script src="//code.jquery.com/jquery.min.js"></script>
+<!--script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script-->
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/src/infobox.js"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/PopUp.js') }}"></script>
 <script language="JavaScript">
 
+    function moveto(button,div) {
+        var elem = document.getElementById("baronglet");
+        var pos = elem.offsetLeft;
+        document.getElementById('info_mission').style.visibility= 'hidden';
+        document.getElementById('map').style.visibility= 'hidden';
+        document.getElementById(div).style.visibility= 'visible';
+        var end = false;
+        var id = setInterval(frame, 5);
 
+        function frame() {
+            if (pos == button.offsetLeft || (pos ==0 && end)) {
+                clearInterval(id);
+            } else {
+                if(elem.offsetLeft > button.offsetLeft)
+                {
+                    end = true;
+                    elem.style.left = pos-- + 'px';
+                }
+                else
+                {
+                    elem.style.left = pos++ + 'px';
+                }
+            }
+        }
+    }
     function post(path,refresh) {
         if(refresh)
         {
@@ -127,10 +196,82 @@
         {
             window.location = path;
         }
-    };
+    }
+    /*function initMap() {
+        var geoloc = '{{ mission.getEtablissement.getGeocode }}';
+        geoloc = geoloc.substring(1,geoloc.length - 1).split(',');
+        var lat = parseFloat(geoloc[0]);
+        var long = parseFloat(geoloc[1]);
+
+        var uluru = {lat: lat, lng: long};
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 18,
+            center: uluru
+        });
+
+        var contentString = '<div id="content" style="background-color: #232d37;  box-shadow: 0px 6px 4px 0px rgba(0, 0, 0, 0.25);  width: 235px;  height: 314px;  z-index: 89;">' +
+                '<div style="background-color: #202830; width: 235px;  height: 60px;  z-index: 90;">'+
+                '<div src="" style="border: 2px solid rgb(23, 29, 35);  border-radius: 50%;'+
+                'background-color: rgb(255, 255, 255); margin: 0 auto;top:30px;position: relative;  width: 70px;  height: 70px;  z-index: 97;"></div>'+
+                '</div>'+
+
+                '</div>';
+
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });
+
+        var marker = new google.maps.Marker({
+            position: uluru,
+            map: map,
+            title: 'Uluru (Ayers Rock)'
+        });
+        marker.addListener('click', function() {
+            infowindow.open(map, marker);
+        });
+    }*/
+    function initialize() {
+        var loc, map, marker, infobox;
+        var geoloc = '{{ mission.getEtablissement.getGeocode }}';
+        geoloc = geoloc.substring(1,geoloc.length - 1).split(',');
+        var lat = parseFloat(geoloc[0]);
+        var long = parseFloat(geoloc[1]);
+
+        loc = new google.maps.LatLng(lat,long);
+
+        map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 18,
+            center: loc,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+
+        marker = new google.maps.Marker({
+            map: map,
+            position: loc,
+            visible: true,
+            title: 'jdjdjd'
+        });
+
+        infobox = new InfoBox({
+            content: document.getElementById("infobox")
+            ,disableAutoPan: false
+            ,maxWidth: 0
+            ,pixelOffset: new google.maps.Size(-76, -212)
+            ,zIndex: null
+            ,closeBoxMargin: "4px 4px 4px 4px"
+            ,closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif"
+            ,infoBoxClearance: new google.maps.Size(1, 1)
+            ,isHidden: false
+            ,pane: "floatPane"
+            ,enableEventPropagation: false
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+            infobox.open(map, this);
+            map.panTo(loc);
+        });
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
 </script>
-{% block JS %}
-    <script src="http://maps.googleapis.com/maps/api/js"></script>
-{% endblock %}
 </body>
 </html>
