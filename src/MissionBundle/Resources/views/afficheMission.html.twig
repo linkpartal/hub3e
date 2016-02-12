@@ -17,96 +17,325 @@
 <div class="container" style="padding: 0;">
 
 
-    <div class="row" style="height: 78px; margin: 0;">
+    <div class="row" style=" margin: 0;">
         <img class="col-xs-1" src="data:image/jpg;base64,{{ mission.getEtablissement.getTier.getLogo }}"
              style="padding: 10px; height: 40px;">
         <div class="col-xs-4">
             <div class="col-xs-12"
-                 style="height: 30px; text-align: left; padding: 10px;"><label style="font-size: large" >{{ mission.getIntitule }}&nbsp;-&nbsp;  </label><label style="font-size: large;color:#2A76CC" > {{ mission.getEtablissement.getTier.getRaisonsoc }}</label></div>
-            <div class="col-xs-12" style="height: 20px; text-align: left;">{{mission.getEtablissement.getAdresse }}, {{ mission.getEtablissement.getCodePostal }} {{ mission.getEtablissement.getVille }}</div>
+                 style="height: 30px; text-align: left; padding: 10px;"><label style="font-family:Arial;font-style:normal;font-size: large;color:black" >{{ mission.getIntitule }}&nbsp; - &nbsp;  </label><label style="font-family:Arial;font-style:normal;font-size: large;color:#2A76CC" > {{ mission.getEtablissement.getTier.getRaisonsoc }}</label></div>
+            <div class="col-xs-12" style="height: 20px; text-align: left;font-family:Arial;font-style:normal;font-size: small">{{mission.getEtablissement.getAdresse }}, {{ mission.getEtablissement.getCodePostal }} {{ mission.getEtablissement.getVille }}</div>
         </div>
         <div class="col-xs-offset-5 col-xs-1">
             <div class="col-xs-12" style="height: 30px;; padding-top: 10px;"><label style="font-size:large;color:#2A76CC;" > 18</label></div>
-            <div class="col-xs-12" style="height: 20px;width:100px">mises en relation</div>
+            <div class="col-xs-12" style="height: 20px;width:100px;color: #666666;font-family:Arial;font-style:normal;">mises en relation</div>
         </div>
         <div class=" col-xs-1">
             <div class="col-xs-12" style="height: 30px; padding-top: 10px;"><label style="font-size: large;color:#2A76CC" > 5</label></div>
-            <div class="col-xs-12" style="height: 20px;">candidatures</div>
+            <div class="col-xs-12" style="height: 20px;color: #666666;font-family:Arial;font-style:normal;">candidatures</div>
         </div>
     </div>
 
 
 
-<div class="row" >&nbsp;
-       <button  type="button"  > <div class="col-xs-12"  > FICHE MISSION</div></button>
-    <button  type="button" ><div class="col-xs-12" >LISTE DES APPRENANTS</div></button>
-    <button  type="button"  ><div class="col-xs-12" >CARTE DES APPRENANTS</div></button></div>
+<div class="row" style="margin-left:20px;margin-top:30px">
 
 
-    <div class="row" style="background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;height: 100%">
-        <div class="col-xs-9"
-             style="background: rgb(238, 241, 246); height: 100%;">
+    <button  type="button"  style="background-color: white ;width:400px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;" >
+        <div class="col-xs-12" style="display: inline-table;color:#666666"  >FICHE MISSION</div>
+
+    </button>
+
+    <button value="info_user" type="button"  style="background-color: white ;width:400px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;" >
+        <div class="col-xs-12" style="display: inline-table;color:#666666" >LISTE DES APPRENANTS</div>
+
+    </button>
+    <button  type="button"  style="background-color: white ;width:400px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;" >
+        <div class="col-xs-12" style="display: inline-table;color: #666666;margin-bottom:30px" >CARTE DES APPRENANTS</div>
+
+    </button>
 
 
 
-            <div class="col-xs-12" style="margin-bottom: 50px">
-                <div id="info_mission" class="list-group affichage">
 
 
-                    <label class="list-group-item " style="font-family: Verdana ;color:#2975cb;height: 280px;word-wrap: break-word;hyphens: auto;max-width: 1000px " >LA MISSION : <br/><br/>
-                        <label  style="color:black; font-family:Verdana ;font-weight: lighter" >{{mission.getDescriptif}}</label></label>
-                    <label class="list-group-item " style="font-family: Verdana ;color:#2975cb;height: 200px;word-wrap: break-word;hyphens: auto;max-width: 1000px ">LE PROFIL RECHERCHE :<br/>
-                        <label style="color:black; font-family:Verdana ;font-weight: lighter" >{{mission.getProfil}}</label></label>
-                    <label class="list-group-item "  style="font-family: Verdana ;color:#2975cb;height: 200px;word-wrap: break-word;hyphens: auto;max-width: 1000px" >Domaine : <br/>
-                        <label style="color:black; font-family:Verdana ;font-weight: lighter" >{{mission.getDomaine}}</label></label>
+</div>
+
+
+    <!--***********************************-->
+
+    <div class="row" style="background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;height: 90%">
+
+
+        <div id="info_Listes" class="col-xs-10" style="width:100%;" >
+
+            <div class="row" style="margin-top:10px"  >
+                <div  >
+                    <span class="glyphicon glyphicon-search" ></span>
+                    <input type="text" class="input" placeholder="Recherche" style="padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px;height:33px;margin-right:800px" >
+
+                    <button type="button"style="font-family: Verdana; font-style:normal ;font-size:medium; height: 20px; border-radius: 0; background: none; border: 0;color: #666666 ;">
+                        Filtres <span class="glyphicon glyphicon-menu-down" aria-hidden="true" ></span>
+                    </button>
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+            <div class="row" style="height: 150px; margin:10px;background:white">
+
+
+                <label style="width:40px;height: 20px;background:yellowgreen;color:white;font-family: Arial; font-style:normal ;font-size:small;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;">100</label>
+                <label style="width:10px;height:140px;background:yellowgreen;color:white;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;"></label>
+
+                <img class="col-xs-1" src="{{ asset('image/image2.jpg') }}" style="margin: 10px 0 0 10px;height: 140px;width: 140px;">
+
+                <div class="col-xs-4" style="margin-left: 10px;margin-top:10px">
+                    <div class="col-xs-12"
+                         style="height: 30px; text-align: left; padding: 10px;margin-bottom: 15px;"><label style="font-family:Arial;font-style:normal;font-size:medium" >JULIE FAURE &nbsp;&nbsp; </label>
+                        <button style="background:yellowgreen; border-radius:50%; width:15px; height:15px; border:2px solid yellowgreen;"></button>&nbsp;&nbsp;
+                        <label style="font-family:Arial;font-style:normal;font-size:medium;" > 5.0 </label>&nbsp;&nbsp;<img src="{{ asset('image/bookmark50.png') }}"></div>
+
+                    <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font-family:Arial;font-style:normal;font-size:small">RECHERCHE : DEVELOPPEMENT INFORMATIQUE </div>
+                    <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font-family:Arial;font-style:normal;font-size:small">CONTRAT : CONTRAT PRO/STAGE/TEMPS PLEIN</div>
+                    <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font-family:Arial;font-style:normal;font-size:small">STATUT : <label style="color:#2975cb">3 MISES EN RELATION</label></div>
+
+
+                </div>
+                <div class="col-xs-offset-5 col-xs-1">
+
+
+
+                        <button  type="button"  style=" width:150px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;background:#2975cb;font:bold 13px Arial;margin-bottom:10px;margin-top: 20px">
+                            <div class="col-xs-12" style="display: inline-table;color: white;">METTRE EN RELATION</div>
+                        </button>
+
+                        <button  type="button"  style=" background:white;width:150px;height:30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;border:1px solid #ccc;margin-bottom:10px" >
+                            <div class="col-xs-12"  style="display: inline-table;color: #adadad;" >FICHE CONTACT</div>
+
+                        </button>
+
+                        <button  type="button"  style="background-color: white ;width:150px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;border:1px solid #ccc;" >
+                            <div class="col-xs-12" style="display: inline-table;color: #adadad;" >PLUS</div>
+
+                        </button>
+
+
 
                 </div>
 
+            </div>
+
+
+
+
+            <div class="row" style="height: 150px; margin:10px;background:white">
+
+
+                <label style="width:40px;height: 20px;background:yellowgreen;color:white;font-family: Arial; font-style:normal ;font-size:small;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;">100</label>
+                <label style="width:10px;height:140px;background:yellowgreen;color:white;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;"></label>
+
+                <img class="col-xs-1" src="{{ asset('image/image1.jpg') }}" style="margin: 10px 0 0 10px;height: 140px;width: 140px;">
+
+                <div class="col-xs-4" style="margin-left: 10px;margin-top:10px">
+                    <div class="col-xs-12"
+                         style="height: 30px; text-align: left; padding: 10px;margin-bottom: 15px;"><label style="font-family:Arial;font-style:normal;font-size:medium" >JULIE FAURE &nbsp;&nbsp; </label>
+                        <button style="background:yellowgreen; border-radius:50%; width:15px; height:15px; border:2px solid yellowgreen;"></button>&nbsp;&nbsp;
+                        <label style="font-family:Arial;font-style:normal;font-size:medium;" > 5.0 </label>&nbsp;&nbsp;<img src="{{ asset('image/bookmark50.png') }}"></div>
+
+                    <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font-family:Arial;font-style:normal;font-size:small">RECHERCHE : DEVELOPPEMENT INFORMATIQUE </div>
+                    <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font-family:Arial;font-style:normal;font-size:small">CONTRAT : CONTRAT PRO/STAGE/TEMPS PLEIN</div>
+                    <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font-family:Arial;font-style:normal;font-size:small">STATUT : <label style="color:#2975cb">3 MISES EN RELATION</label></div>
+
+
+                </div>
+                <div class="col-xs-offset-5 col-xs-1">
+
+
+
+                        <button  type="button"  style=" width:150px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;background:#2975cb;font:bold 13px Arial;margin-bottom:10px;margin-top: 20px">
+                            <div class="col-xs-12" style="display: inline-table;color: white;">METTRE EN RELATION</div>
+                        </button>
+
+                        <button  type="button"  style=" background:white;width:150px;height:30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;border:1px solid #ccc;margin-bottom:10px" >
+                            <div class="col-xs-12"  style="display: inline-table;color: #adadad;" >FICHE CONTACT</div>
+
+                        </button>
+
+                        <button  type="button"  style="background-color: white ;width:150px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;border:1px solid #ccc;" >
+                            <div class="col-xs-12" style="display: inline-table;color: #adadad;" >PLUS</div>
+
+                        </button>
+
+                    </div>
+
+
 
             </div>
+
+
+
+            <div class="row" style="height: 150px; margin:10px;background:white">
+
+
+                <label style="width:40px;height: 20px;background:yellowgreen;color:white;font-family: Arial; font-style:normal ;font-size:small;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;">100</label>
+                <label style="width:10px;height:140px;background:yellowgreen;color:white;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;"></label>
+
+                <img class="col-xs-1" src="{{ asset('image/image1.jpg') }}" style="margin: 10px 0 0 10px;height: 140px;width: 140px;">
+
+                <div class="col-xs-4" style="margin-left: 10px;margin-top:10px">
+                    <div class="col-xs-12"
+                         style="height: 30px; text-align: left; padding: 10px;margin-bottom: 15px;"><label style="font-family:Arial;font-style:normal;font-size:medium" >JULIE FAURE &nbsp;&nbsp; </label>
+                        <button style="background:yellowgreen; border-radius:50%; width:15px; height:15px; border:2px solid yellowgreen;"></button>&nbsp;&nbsp;
+                        <label style="font-family:Arial;font-style:normal;font-size:medium;" > 5.0 </label>&nbsp;&nbsp;<img src="{{ asset('image/bookmark50.png') }}"></div>
+
+                    <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font-family:Arial;font-style:normal;font-size:small">RECHERCHE : DEVELOPPEMENT INFORMATIQUE </div>
+                    <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font-family:Arial;font-style:normal;font-size:small">CONTRAT : CONTRAT PRO/STAGE/TEMPS PLEIN</div>
+                    <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font-family:Arial;font-style:normal;font-size:small">STATUT : <label style="color:#2975cb">3 MISES EN RELATION</label></div>
+
+
+                </div>
+                <div class="col-xs-offset-5 col-xs-1">
+
+
+
+                        <button  type="button"  style=" width:150px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;background:#2975cb;font:bold 13px Arial;margin-bottom:10px;margin-top: 20px">
+                            <div class="col-xs-12" style="display: inline-table;color: white;">METTRE EN RELATION</div>
+                        </button>
+
+                        <button  type="button"  style=" background:white;width:150px;height:30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;border:1px solid #ccc;margin-bottom:10px" >
+                            <div class="col-xs-12"  style="display: inline-table;color: #adadad;" >FICHE CONTACT</div>
+
+                        </button>
+
+                        <button  type="button"  style="background-color: white ;width:150px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;border:1px solid #ccc;" >
+                            <div class="col-xs-12" style="display: inline-table;color: #adadad;" >PLUS</div>
+
+                        </button>
+
+
+
+                </div>
+
+            </div>
+
+
+            <div class="row" style="height: 150px; margin:10px;background:white">
+
+
+                <label style="width:40px;height: 20px;background:yellowgreen;color:white;font-family: Arial; font-style:normal ;font-size:small;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;">100</label>
+                <label style="width:10px;height:140px;background:yellowgreen;color:white;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;"></label>
+
+                <img class="col-xs-1" src="{{ asset('image/image1.jpg') }}" style="margin: 10px 0 0 10px;height: 140px;width: 140px;">
+
+                <div class="col-xs-4" style="margin-left: 10px;margin-top:10px">
+                    <div class="col-xs-12"
+                         style="height: 30px; text-align: left; padding: 10px;margin-bottom: 15px;"><label style="font-family:Arial;font-style:normal;font-size:medium" >JULIE FAURE &nbsp;&nbsp; </label>
+                        <button style="background:yellowgreen; border-radius:50%; width:15px; height:15px; border:2px solid yellowgreen;"></button>&nbsp;&nbsp;
+                        <label style="font-family:Arial;font-style:normal;font-size:medium;" > 5.0 </label>&nbsp;&nbsp;<img src="{{ asset('image/bookmark50.png') }}"></div>
+
+                    <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font-family:Arial;font-style:normal;font-size:small">RECHERCHE : DEVELOPPEMENT INFORMATIQUE </div>
+                    <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font-family:Arial;font-style:normal;font-size:small">CONTRAT : CONTRAT PRO/STAGE/TEMPS PLEIN</div>
+                    <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font-family:Arial;font-style:normal;font-size:small">STATUT : <label style="color:#2975cb">3 MISES EN RELATION</label></div>
+
+
+                </div>
+                <div class="col-xs-offset-5 col-xs-1">
+
+
+
+                        <button  type="button"  style=" width:150px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;background:#2975cb;font:bold 13px Arial;margin-bottom:10px;margin-top: 20px">
+                            <div class="col-xs-12" style="display: inline-table;color: white;">METTRE EN RELATION</div>
+                        </button>
+
+                        <button  type="button"  style=" background:white;width:150px;height:30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;border:1px solid #ccc;margin-bottom:10px" >
+                            <div class="col-xs-12"  style="display: inline-table;color: #adadad;" >FICHE CONTACT</div>
+
+                        </button>
+
+                        <button  type="button"  style="background-color: white ;width:150px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;border:1px solid #ccc;" >
+                            <div class="col-xs-12" style="display: inline-table;color: #adadad;" >PLUS</div>
+
+                        </button>
+
+
+                </div>
+
+            </div>
+
+
+            <div class="row" style="height: 150px; margin:10px;background:white">
+
+
+                <label style="width:40px;height: 20px;background:yellowgreen;color:white;font-family: Arial; font-style:normal ;font-size:small;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;">100</label>
+                <label style="width:10px;height:140px;background:yellowgreen;color:white;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;"></label>
+
+                <img class="col-xs-1" src="{{ asset('image/image1.jpg') }}" style="margin: 10px 0 0 10px;height: 140px;width: 140px;">
+
+                <div class="col-xs-4" style="margin-left: 10px;margin-top:10px">
+                    <div class="col-xs-12"
+                         style="height: 30px; text-align: left; padding: 10px;margin-bottom: 15px;"><label style="font-family:Arial;font-style:normal;font-size:medium" >JULIE FAURE &nbsp;&nbsp; </label>
+                        <button style="background:yellowgreen; border-radius:50%; width:15px; height:15px; border:2px solid yellowgreen;"></button>&nbsp;&nbsp;
+                        <label style="font-family:Arial;font-style:normal;font-size:medium;" > 5.0 </label>&nbsp;&nbsp;<img src="{{ asset('image/bookmark50.png') }}"></div>
+
+                    <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font-family:Arial;font-style:normal;font-size:small">RECHERCHE : DEVELOPPEMENT INFORMATIQUE </div>
+                    <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font-family:Arial;font-style:normal;font-size:small">CONTRAT : CONTRAT PRO/STAGE/TEMPS PLEIN</div>
+                    <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font-family:Arial;font-style:normal;font-size:small">STATUT : <label style="color:#2975cb">3 MISES EN RELATION</label></div>
+
+
+                </div>
+                <div class="col-xs-offset-5 col-xs-1">
+
+                        <button  type="button"  style=" width:150px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;background:#2975cb;font:bold 13px Arial;margin-bottom:10px;margin-top: 20px">
+                            <div class="col-xs-12" style="display: inline-table;color: white;">METTRE EN RELATION</div>
+                        </button>
+
+                        <button  type="button"  style=" background:white;width:150px;height:30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;border:1px solid #ccc;margin-bottom:10px" >
+                            <div class="col-xs-12"  style="display: inline-table;color: #adadad;" >FICHE CONTACT</div>
+
+                        </button>
+
+                        <button  type="button"  style="background-color: white ;width:150px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;border:1px solid #ccc;" >
+                            <div class="col-xs-12" style="display: inline-table;color: #adadad;" >PLUS</div>
+
+                        </button>
+
+
+                </div>
+
+            </div>
+
         </div>
 
 
-
-
-
-
-
-        <div class="col-xs-3"
-             style="height: 100%;">
-            <div class="list-group"
-                 style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
-                <div  class="rightMenu " ><div style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp&nbsp{{mission.getDate|date('d/m/Y a H:i')}}</div></div>
-                <div class="rightMenu" ><div  style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp&nbsp{{mission.getTuteur}}</div></div>
-                <div class="rightMenu" ><div style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> &nbsp&nbsp   {{mission.getEmailcontact}} </div></div>
-                <div class="rightMenu" ><div  style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> &nbsp&nbsp   {{mission.getTypecontrat}}</div></div>
-                <div  class="rightMenu " ><div style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>&nbsp&nbsp{{mission.getDatedebut|date('d/m/Y')}}</div></div>
-                <div  class="rightMenu " ><div style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>&nbsp&nbsp{{mission.getDatefin|date('d/m/Y')}}</div></div>
-                <div class="rightMenu" ><div style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-eur" aria-hidden="true"></span>  &nbsp&nbsp  {{mission.getRemuneration}}</div></div>
-                <div class="rightMenu" ><div  style="text-align:center;line-height:50px;" ><span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>  &nbsp&nbsp  {{mission.getCodemission}}</div></div>
-
-
-
-
-                <button onclick="post('{{ path('modifierMission',{'id': mission.getId }) }}',false)" type="button" class="list-group-item rightMenu" >
-                    <div class="col-xs-12"  >Modifier la fiche</div>
-
-                </button>
-
-                <button onclick="post('{{ path('supprimer_Mission',{'id': mission.getId }) }}',true)" type="button" class="list-group-item rightMenu" >
-                    <div class="col-xs-12" >Supprimer Mission</div>
-
-                </button>
-
-            </div>
-        </div>
 
     </div>
+
+
+
+
 </div>
 <script src="//code.jquery.com/jquery.min.js"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/PopUp.js') }}"></script>
 <script language="JavaScript">
+
+    {% if User is defined %}
+    document.getElementById("select_info").onchange = function(){
+        var x = document.getElementById("select_info").value;
+        document.getElementById('info_user').style.display= 'none';
+
+
+        document.getElementById(x).style.display='block';
+    };
 
 
     function post(path,refresh) {
@@ -128,6 +357,7 @@
             window.location = path;
         }
     };
+    {% endif %}
 </script>
 {% block JS %}
     <script src="http://maps.googleapis.com/maps/api/js"></script>

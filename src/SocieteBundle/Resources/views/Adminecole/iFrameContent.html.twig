@@ -323,8 +323,6 @@
                                 <option value="info_etab" style="color:black;">Information</option>
                                 {% if etablissement.getTier.getEcole %}
                                 <option value="info_formation" style="color:black;">Formations</option>
-
-
                                 {% endif %}
                                 <option value="info_user" style="color:black;">Utilisateurs</option>
                             </select>
@@ -372,6 +370,14 @@
                                                             {% if user.getLastLogin %}{{ user.getLastLogin|date('d/m/Y') }}
                                                                 {% else %}Jamais
                                                             {% endif %}</label></label>
+                                                </div>
+
+                                                <div class="row">
+                                                <label class="cell" >Roles  :
+                                                    {% for role in user.getRoles %}
+                                                        <label >{{role}}, </label>
+                                                    {% endfor %}
+                                                </label>
                                                 </div>
                                             </div>
                                         </div>
@@ -454,6 +460,10 @@
                         </div>
                         {% endif %}
                     </div>
+
+
+
+
                 </div>
 
                 <div class="col-xs-3"

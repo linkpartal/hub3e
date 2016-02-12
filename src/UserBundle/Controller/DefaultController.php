@@ -129,7 +129,7 @@ class DefaultController extends Controller
 
         if($request->get('_id') and $usercon->hasRole('ROLE_SUPER_ADMIN'))
         {
-            return $this->redirect($this->generateUrl('metier_user_affiche',array('id'=>$request->get('_id'))));
+            return $this->redirect($this->generateUrl('affiche_etab',array('id'=>$request->get('_id'))));
         }
         elseif($usercon->hasRole('ROLE_SUPER_ADMIN'))
         {
@@ -137,7 +137,7 @@ class DefaultController extends Controller
         }
         elseif($request->get('_id') and $usercon->hasRole('ROLE_ADMINECOLE'))
         {
-            return $this->redirect($this->generateUrl('ecole_admin_affiche',array('id'=>$request->get('_id'))));
+            return $this->redirect($this->generateUrl('affiche_etab',array('id'=>$request->get('_id'))));
         }
         else{
             throw new Exception('ERROR');

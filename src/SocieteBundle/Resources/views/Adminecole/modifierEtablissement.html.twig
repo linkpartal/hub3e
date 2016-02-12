@@ -259,6 +259,14 @@
                                                         {% else %}Jamais
                                                         {% endif %}</label></label>
                                             </div>
+
+                                            <div class="row">
+                                                <label class="cell" >Roles  :
+                                                    {% for role in user.getRoles %}
+                                                        <label >{{role}}, </label>
+                                                    {% endfor %}
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 {% endfor %}
