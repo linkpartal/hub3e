@@ -33,7 +33,7 @@ class Qcmdef
      *
      * @ORM\Column(name="affinite", type="boolean", nullable=false)
      */
-    private $affinite;
+    private $affinite= true;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
