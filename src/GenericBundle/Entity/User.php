@@ -96,6 +96,13 @@ class User extends BaseUser
      */
     private $culturel;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Etablissement", mappedBy="users")
+     */
+    private $referenciel;
+
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -464,5 +471,39 @@ class User extends BaseUser
     public function getInfo()
     {
         return $this->info;
+    }
+
+    /**
+     * Add referenciel
+     *
+     * @param \GenericBundle\Entity\Etablissement $referenciel
+     *
+     * @return User
+     */
+    public function addReferenciel(\GenericBundle\Entity\Etablissement $referenciel)
+    {
+        $this->referenciel[] = $referenciel;
+
+        return $this;
+    }
+
+    /**
+     * Remove referenciel
+     *
+     * @param \GenericBundle\Entity\Etablissement $referenciel
+     */
+    public function removeReferenciel(\GenericBundle\Entity\Etablissement $referenciel)
+    {
+        $this->referenciel->removeElement($referenciel);
+    }
+
+    /**
+     * Get referenciel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReferenciel()
+    {
+        return $this->referenciel;
     }
 }

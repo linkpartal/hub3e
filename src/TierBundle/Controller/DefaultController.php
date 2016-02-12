@@ -13,17 +13,27 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
-    public function checkExistAction($siren)
+    public function checkExistAction(Request $request)
     {
 
         $em = $this->getDoctrine()->getManager();
         $reponse = new JsonResponse();
 
-        $tier = $em->getRepository('GenericBundle:Tier')->findOneBy(array('siren'=>$siren));
+        $tier = $em->getRepository('GenericBundle:Tier')->findOneBy(array('siren'=>$request->get('_SIREN')));
 
 
         if ($tier) {
-            return $reponse->setData(array('status'=>'exist'));
+            for($i = 0; $i< count($request->get('_SIRET'));$i++) {
+                $etablissement = $em->getRepository('GenericBundle:Etablissement')->findOneBy(array('siret'=>$request->get('_SIRET')[$i]));
+                if($etablissement)
+                {
+                    $etablissements = $em->getRepository('GenericBundle:Etablissement')->findAdressesOfSociete($tier->getId());
+                    $serializer = $this->get('jms_serializer');
+                    $jsonEtablissements = $serializer->serialize($etablissements, 'json');
+                    $jsonTier = $serializer->serialize($tier,'json');
+                    return $reponse->setData(array('status'=>'exist','Tier'=>$jsonTier,'Etablissements'=>$jsonEtablissements));
+                }
+            }
         }
 
         return $reponse->setData(array('status'=>'success'));
@@ -34,25 +44,26 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $tier = new Tier();
-        $tier->setSiren($request->get('_SIREN'));
-        $tier->setRaisonsoc($request->get('_RaisonSoc'));
-        $tier->setEcole(intval($request->get('_Ecole')));
-        if($_FILES && $_FILES['_Logo']['size'] >0)
-        {
-            $tier->setLogo(file_get_contents($_FILES['_Logo']['tmp_name']));
-        }
-        if($_FILES && $_FILES['_image']['size'] >0)
-        {
-            $tier->setFondecran(file_get_contents($_FILES['_image']['tmp_name']));
-        }
-        $em->persist($tier);
-        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_ADMINECOLE'))
-        {
-            $tier->addTier1($this->get('security.token_storage')->getToken()->getUser()->getTier());
-            $this->get('security.token_storage')->getToken()->getUser()->getTier()->addTier1($tier);
+        $tier = $em->getRepository('GenericBundle:Tier')->findOneBy(array('siren'=>$request->get('_SIREN')));
+        if(!$tier){
+            $newtier = new Tier();
+            $newtier->setSiren($request->get('_SIREN'));
+            $newtier->setRaisonsoc($request->get('_RaisonSoc'));
+            $newtier->setEcole(intval($request->get('_Ecole')));
+            if($_FILES && $_FILES['_Logo']['size'] >0)
+            {
+                $newtier->setLogo(file_get_contents($_FILES['_Logo']['tmp_name']));
+            }
+            if($_FILES && $_FILES['_image']['size'] >0)
+            {
+                $newtier->setFondecran(file_get_contents($_FILES['_image']['tmp_name']));
+            }
+            $em->persist($tier);
             $em->flush();
+            $tier = $newtier;
         }
+
+
 
         for($i = 0; $i< count($request->get('_SIRET'));$i++) {
             $etablissement = new Etablissement();
@@ -67,6 +78,7 @@ class DefaultController extends Controller
             $etablissement->setTelResponsable($request->get('_TelResp')[$i]);
             $etablissement->setMailResponsable($request->get('_MailResp')[$i]);
             $etablissement->setSite($request->get('_Site')[$i]);
+            $this->get('security.token_storage')->getToken()->getUser()->addReferenciel($etablissement);
             $etablissement->setTier($tier);
 
             $em->persist($etablissement);
@@ -373,20 +385,15 @@ class DefaultController extends Controller
     public function ExistEtabAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $tier = $em->getRepository('GenericBundle:Tier')->findOneBy(array('siren'=>$request->get('_SIREN')));
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        for( $i = 0; $i < count($request->get('etablissement')); $i++)
+        {
+            $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($request->get('etablissement')[$i]);
+            $etablissement->addUser($user);
+            $em->flush();
+        }
+        return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$user->getTier()->getRaisonsoc())));
 
-        $etablissements = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$tier));
-        return $this->render('TierBundle::SocietExist.html.twig',array('etablissements'=>$etablissements,
-            'sirets'=>$request->get('_SIRET'),
-            'adresses'=>$request->get('_Adresse'),
-            'codeps'=>$request->get('_CodeP'),
-            'tels'=>$request->get('_Tel'),
-            'faxs'=>$request->get('_Fax'),
-            'villes'=>$request->get('_Ville'),
-            'resps'=>$request->get('_Resp'),
-            'telresps'=>$request->get('_TelResp'),
-            'mailresps'=>$request->get('_MailResp'),
-            'sites'=>$request->get('_Site')));
     }
 
     public function suppLicenceAction($id)

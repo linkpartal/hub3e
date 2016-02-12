@@ -201,6 +201,7 @@
                 if(i==inputs.length)
                 {
                     document.getElementById("form").submit();
+                    window.parent.location.reload();
                     break;
                 }
                 if(!inputs[i].value)
@@ -223,11 +224,21 @@
             route = route.replace("QCMHolder", encodeURIComponent(document.getElementById('QCM').value));
             if(input.getAttribute('id')=='inputrep')
             {
+                if(input.parentNode.parentNode.getElementsByClassName('champ')[0].value == '')
+                {
+                    champs.remove('div.editfield');
+                    return;
+                }
                 route = route.replace("question", encodeURIComponent(input.parentNode.parentNode.getElementsByClassName('champ')[0].value));
                 route = route.replace("reponse", encodeURIComponent(input.value));
             }
             if(input.getAttribute('id')=='Question')
             {
+                if( encodeURIComponent(input.value) == '')
+                {
+                    champs.remove('div.editfield');
+                    return;
+                }
                 route = route.replace("question", encodeURIComponent(input.value) );
                 route = route.replace("reponse", null);
             }

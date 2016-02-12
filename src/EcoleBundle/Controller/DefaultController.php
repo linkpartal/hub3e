@@ -27,14 +27,6 @@ class DefaultController extends Controller
                 unset($ecoles[$key]);
             }
         }
-        $societes = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findSocietes();
-        foreach($societes as $key => $societe)
-        {
-            if($societe->getSuspendu())
-            {
-                unset($societes[$key]);
-            }
-        }
 
         $users = $this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($user->getTier());
 
@@ -43,7 +35,7 @@ class DefaultController extends Controller
 
 
         return $this->render('EcoleBundle:Adminecole:index.html.twig', array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$users,
-            'AllLicences'=>$licences,'societes'=>$societes,'missions'=>$missions));
+            'AllLicences'=>$licences,'societes'=>$user->getReferenciel(),'missions'=>$missions));
     }
 
     public function loadiframeAction()

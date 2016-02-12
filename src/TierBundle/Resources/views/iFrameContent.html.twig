@@ -45,7 +45,7 @@
                                 {% endfor %}
                             </select>
 
-                            <input class="date hide-spinbtns" placeholder="Date Début" type="date" id="Date" name="_Date" data-date='{"buttonOnly": true,	"calculateWidth": false}' required>
+                            <input class="date hide-spinbtns" placeholder="Date Début" type="date" id="Date" name="_Date"  data-date='{"buttonOnly": true,	"calculateWidth": true}'  required>
                         </div>
                         <div class="div_button">
                             <input id="submitInstanceLicence" class="blue" type="submit" value="Valider">
@@ -87,6 +87,7 @@
                                 <select class="input " style="width: 25%; margin-right: 10px" title="" name="civilite">
                                     <option value="Monsieur">Mr.</option>
                                     <option value="Madame">Mme.</option>
+
                                 </select>
 
                                 <input type="text" class="input" style="width: calc(75% - 10px);" id="Prenom" name="_Prenom" placeholder="Prénom" required maxlength="45">
@@ -107,39 +108,37 @@
 
         {% if not etablissement.getTier.getEcole %}
             {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
-                <div id="addmission" class="popup">
+                <div id="addmission" class="popup" >
                     <div onclick="hide(this)" class="close"></div>
-                    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block">
+                    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;position:fixed " >
                         <form id="formaddmission" class="formulaire" action= "{{ path("mission_added") }}" onsubmit="document.getElementById('submitaddmission').disabled=true" method="post">
 
                             <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
                             <div class="div_form">
                                 <div class="col-xs-6 input-colonne">
 
-                                    <textarea style="height: 90px" class="input" id="Profil" name="_Profil" placeholder="Profil" required maxlength="255"></textarea>
+                                    <textarea style="height: 140px;resize: none;" class="input" id="Profil" name="_Profil" placeholder="Profil" required maxlength="255"></textarea>
                                     <input type="text" class="input" id="Intitule" name="_Intitule" placeholder="Intitule" required maxlength="75">
                                     <input type="text" class="input " id="Domaine" name="_Domaine" placeholder="Domaine" required maxlength="45">
 
-                                    <input type="text" class="input " id="Etat" name="_Etat" placeholder="Etat" required maxlength="45">
-                                    <label style="float: left">Date debut :</label> <input style="display: inline-block;width: 200px" type="date" data-date='{"buttonOnly": true, "calculateWidth": false}' class="input" id="Datedebut" name="_Datedebut" title="Datedebut" >
+
+                                    <label style="float: left">Date debut :</label> <input type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' class="date" id="Datedebut" name="_Datedebut" title="Datedebut" required >
                                     <input type="text" class="input " id="TypeContrat" name="_TypeContrat" placeholder="TypeContrat" required maxlength="45">
 
                                     <input type="text" class="input " id="Remuneration" name="_Remuneration" placeholder="Remuneration" required maxlength="11">
                                     <input type="text" class="input " id="Horaire" name="_Horaire" placeholder="Horaire" required maxlength="45">
 
-
-
                                 </div>
                                 <div class="col-xs-6">
-
                                     <input type="text" class="input " id="NomContact" name="_NomContact" placeholder="NomContact" required MAXLENGTH="45">
                                     <input type="text" class="input " id="PrenomContact" name="_PrenomContact" placeholder="PrenomContact" required MAXLENGTH="45">
                                     <input type="text" class="input" id="FonctionContact" name="_FonctionContact" placeholder="FonctionContact" required MAXLENGTH="45">
                                     <input type="text" class="input" id="TelContact" name="_TelContact" placeholder="TelContact" required MAXLENGTH="45">
                                     <input type="text" class="input" id="EmailContact" name="_EmailContact" placeholder="EmailContact" required MAXLENGTH="45">
 
-                                    <label style="float: left">Date fin :</label><input style="display: inline-block;width: 200px" type="date"  data-date='{"buttonOnly": true, "calculateWidth": false}' class="input " id="Datefin" name="_Datefin" title="Datefin" >
+                                    <label style="float: left">Date fin :</label><input type="date" data-date='{"buttonOnly": true, "calculateWidth": true}' class="date " id="Datefin" name="_Datefin" title="Datefin" required>
                                     <input type="text" class="input " id="Emploi" name="_Emploi" placeholder="Emploi" required maxlength="1">
+                                    <input type="text" class="input " id="Etat" name="_Etat" placeholder="Etat" required maxlength="45">
 
 
                                     <select class="input"   name="userselect" title="" >
@@ -152,7 +151,7 @@
 
                                     </select>
                                 </div>
-                                <textarea style="height: 100px;" class="input" id="Descriptif" name="_Descriptif" placeholder="Descriptif" required MAXLENGTH="255"></textarea>
+                                <textarea style="height: 100px;resize: none;" class="input" id="Descriptif" name="_Descriptif" placeholder="Descriptif" required MAXLENGTH="255"></textarea>
                             </div>
                             <div class="div_button">
                                 <input id="submitaddmission" class="blue" type="submit" value="envoyer">
@@ -386,6 +385,13 @@
                                             {% else %}Jamais
                                             {% endif %}</label></label>
                                 </div>
+                                <div class="row">
+                                    <label class="cell" >Roles  :
+                                        {% for role in user.getRoles %}
+                                            <label >{{role}}, </label>
+                                        {% endfor %}
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     {% endfor %}
@@ -518,8 +524,9 @@
                                             <label class="cell">Profil : <label style="font-size: medium">{{ mission.getProfil }}</label></label>
                                         </div>
                                         <div class="row">
-                                            <label class="cell" >Date fin :<label style="font-size: medium" > {{mission.getDatefin|date('d/m/Y')}}</label></label>
                                             <label class="cell" >Date Debut :<label style="font-size: medium"> {{ mission.getDatedebut|date('d/m/Y')}}</label></label>
+                                            <label class="cell" >Date fin :<label style="font-size: medium" > {{mission.getDatefin|date('d/m/Y')}}</label></label>
+
                                         </div>
                                         <div class="row">
                                             <label class="cell">Typecontart  : <label style="font-size: medium">{{ mission.getTypecontrat }}</label></label>
@@ -633,6 +640,10 @@
     <script src="//code.jquery.com/jquery.min.js"></script>
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('js/PopUp.js') }}"></script>
+    <script src="//cdn.jsdelivr.net/webshim/1.14.5/polyfiller.js"></script>
+    <script>
+        webshims.polyfill('forms forms-ext');
+    </script>
     <script language="JavaScript">
         document.getElementById("select_info").onchange = function(){
             var x = document.getElementById("select_info").value;

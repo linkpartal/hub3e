@@ -64,12 +64,24 @@
 
 .popup .div_form .date
 {
-    width: 100%;
+    width: 300px;
     font-size: 18px;
     height: 40px;
     font-family: Roboto;
     color: rgb(75, 75, 75);
-    float: left;
+    text-align: left;
+    border: 1px solid rgb(230, 230, 230);
+    background-color: rgb(235,235,235);
+    margin-bottom: 10px;
+}
+
+#IE .popup .div_form .date
+{
+    width: 300%;
+    font-size: 18px;
+    height: 40px;
+    font-family: Roboto;
+    color: rgb(75, 75, 75);
     text-align: left;
     border: 1px solid rgb(230, 230, 230);
     background-color: rgb(235,235,235);

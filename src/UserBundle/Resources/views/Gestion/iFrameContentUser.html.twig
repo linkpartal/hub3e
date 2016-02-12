@@ -23,12 +23,12 @@
              style="background: rgb(238, 241, 246); height: 100%;">
 
             <!-- **********************************tache des apprenants************************** -->
-
             <div class="col-xs-12" style="height: 46px;">
                 <div style="height: 35px; width: 100%; padding: 15px 0 0 15px;">
-                    <select title="" id="select_info" class="btn btn-default dropdown-toggle" style="color:white;">
-                        <option value="info_user" style="color:black;">Données Utilisateur</option>
-                        {% if User.hasRole('ROLE_APPRENANT') %}
+
+                    {% if User.hasRole('ROLE_APPRENANT') %}
+                    <select title="" id="select_info"  style="color:white;">
+                            <option value="info_user" style="color:black;">Données Utilisateur</option>
                             <option value="info_Apprenant" style="color:black;">Details de l'Apprenant</option>
                             <option value="" style="color:black;">Formation de l'Apprenant </option>
                             <option value="info_parents" style="color:black;">Les Parents </option>
@@ -36,10 +36,11 @@
                             <option value="info_recom" style="color:black;">Recommandations </option>
                             <option value="info_diplome" style="color:black;">Diplomes </option>
                             <option value="info_doc" style="color:black;">Documents </option>
-                        {% endif %}
-
-
                     </select>
+
+                        {% else  %}
+                            <Label value="info_user" style="font:20px arial;width: 100%; height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;text-align: left;">Données Utilisateur</Label>
+                    {% endif %}
                 </div>
             </div>
 
@@ -55,6 +56,20 @@
                     <label class="list-group-item info" >E-mail : <label style="color:black" >{{User.getEmail}}</label></label>
                     <label class="list-group-item info" >Dernière connexion : <label style="color:black" >{{User.getLastLogin|date('d/m/Y à H:i') }}</label></label>
                     <label class="list-group-item info" >Expiré le : <label style="color:black" >{{User.getExpiredAt|date('d/m/Y à H:i') }}</label></label>
+                    <label class="list-group-item info" >Roles  :
+                    {% for role in User.getRoles %}
+                        <label style="color:black" >{{role}}, </label>
+                    {% endfor %}
+                    </label>
+
+                 {% if User.getEtablissement %}
+                     {% if User.getEtablissement.getTier.getEcole == 0 %}
+                    <label class="list-group-item info" >Société  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
+
+                      {% elseif User.getEtablissement.getTier.getEcole == 1 %}
+                    <label class="list-group-item info" >Ecole  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
+                 {% endif %}
+                 {% endif %}
 
                 </div>
 
@@ -79,8 +94,8 @@
                             <label class="cell" >Fratrie       : <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" >{{User.getInfo.getFratrie}}</label></label>
                         </div>
                         <div class="row">
-                            {% for sport in User.getSport %}
                             <label class="cell" >Sport :
+                            {% for sport in User.getSport %}
                                     <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" > {{ sport.getSport }},</label>
                                 {% endfor %}
                             </label>
