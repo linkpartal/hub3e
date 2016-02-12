@@ -58,7 +58,7 @@ class DefaultController extends Controller
             {
                 $newtier->setFondecran(file_get_contents($_FILES['_image']['tmp_name']));
             }
-            $em->persist($tier);
+            $em->persist($newtier);
             $em->flush();
             $tier = $newtier;
         }
@@ -78,34 +78,11 @@ class DefaultController extends Controller
             $etablissement->setTelResponsable($request->get('_TelResp')[$i]);
             $etablissement->setMailResponsable($request->get('_MailResp')[$i]);
             $etablissement->setSite($request->get('_Site')[$i]);
-            $this->get('security.token_storage')->getToken()->getUser()->addReferenciel($etablissement);
+            $etablissement->addUser($this->get('security.token_storage')->getToken()->getUser());
             $etablissement->setTier($tier);
 
             $em->persist($etablissement);
             $em->flush();
-
-            $admins = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRoles(array('ROLE_SUPER_ADMIN','ROLE_ADMINECOLE','ROLE_ADMINSOC'));
-
-            foreach($admins as $admin){
-                $notif = new Notification();
-                $notif->setEntite($etablissement->getId());
-                if($etablissement->getTier()->getEcole() && $admin.$this->isGranted('ROLE_ADMINSOC'))
-                {
-                    $notif->setType('Ecole');
-                    $notif->setUser($admin);
-                    $em->persist($notif);
-                    $em->flush();
-                }
-                if(!$etablissement->getTier()->getEcole() && $admin.$this->isGranted('ROLE_ADMINECOLE')){
-                    $notif->setType('Societe');
-                    $notif->setUser($admin);
-                    $em->persist($notif);
-                    $em->flush();
-                }
-
-            }
-
-
         }
 
         $em->flush();
