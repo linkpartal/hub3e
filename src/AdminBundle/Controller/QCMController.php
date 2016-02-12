@@ -46,12 +46,14 @@ class QCMController extends Controller
             $newqcm = new Qcmdef();
             $newqcm->setNom($request->get('_Nom'));
 
-            $newqcm->setAffinite(intval($request->get('_affinite')) );
+
+
             $em->persist($newqcm);
             $em->flush();
 
             $qcm= $newqcm;
         }
+        $qcm->setAffinite($request->get('_affinite'));
         $em->flush();
 
         $questions = array();

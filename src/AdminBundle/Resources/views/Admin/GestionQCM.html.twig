@@ -11,13 +11,18 @@
         <button onclick="descendre(this.parentNode)" type="button">Descendre</button>
         <button onclick="supprimer(this.parentNode)" type="button">Supprimer Question</button>
         <div id="reponse">
-            <input title="reponse" type="text" class="champ form-control" id="inputrep" required maxlength="45">
-            <button onclick="monter(this.parentNode)" type="button">Monter</button>
-            <button onclick="descendre(this.parentNode)" type="button">Descendre</button>
-            <button onclick="supprimer(this.parentNode)" type="button">Supprimer</button>
+            <input type="radio" name="reponse[$][]" value="1" style="margin:10px 5px 10px 0" id="inputrep" >
+
+
+            <img src="{{ asset('image/vide.gif') }}" width="30px" , height="0px" />
+            <img src="{{ asset('image/up_x18.png') }}" alt="Monter" title="Monter" onclick="monter(this.parentNode)"  />
+            <img src="{{ asset('image/down_x18.png') }}" alt="Descendre" title="Descendre"  onclick="descendre(this.parentNode)"   />
+            <img src="{{ asset('image/imgSupprimer.png') }}" alt="Supprimer Question" title="Supprimer Question"  onclick="supprimer(this.parentNode)" />
         </div>
         <div>
+
             <input title="reponse" type="text" class="champ form-control" id="inputrep" required maxlength="45">
+
             <button onclick="monter(this.parentNode)" type="button">Monter</button>
             <button onclick="descendre(this.parentNode)" type="button">Descendre</button>
             <button onclick="supprimer(this.parentNode)" type="button">Supprimer</button>
@@ -39,40 +44,56 @@
 
                             <div class="inputcontainer">
                                 <label class="list-group-item" style="height: 60px;" for="QCM">Nom du Questionnaire :</label>
-                                <input type="text" class="champ form-control" id="QCM" name="_Nom" value="{{ QCM.getNom }}" required maxlength="45">
-                            </div>
-                            <div class="inputcontainer">
-                                <label class="list-group-item" style="height: 60px;" for="affinite">Test d'affinité :</label>
+                                <input type="text" class="champ form-control" id="QCM" name="_Nom" value="{{ QCM.getNom }}" required maxlength="45"><br>
                                 {% if QCM.getAffinite %}
-                                <input type="text" class="champ form-control" id="affinite" name="_affinite" value="1" required maxlength="1">
+                                    <input type="radio" name="_affinite" value="1" style="margin:10px 5px 10px 0" checked> Test d'affinité
+                                    <input type="radio" name="_affinite" value="0" style="margin:10px 5px 10px 10px"> Test de formation
+
                                 {% else %}
-                                    <input type="text" class="champ form-control" id="affinite" name="_affinite" value="0" required maxlength="1">
+                                    <input type="radio" name="_affinite" value="1" style="margin:10px 5px 10px 0" > Test d'affinité
+                                    <input type="radio" name="_affinite" value="0" style="margin:10px 5px 10px 10px" checked> Test de formation
+
                                 {% endif %}
                             </div>
+
                             {% if Questions is defined %}
                                 {% set i = 0 %}
                                 {% for question in Questions %}
                                     <div id="{{ i }}" class="inputcontainer" name="question">
                                         <label class="list-group-item" style="height: 60px;" for="Question">Question :</label>
                                         <input type="text" class="champ form-control" id="Question" name="questions[]" value="{{question.getQuestion  }}" required maxlength="255">
-                                        <button onclick="dupliquer('reponse',this.parentNode.getAttribute('id'))" type="button">Ajouter Reponse</button>
-                                        <button onclick="monter(this.parentNode)" type="button">Monter</button>
-                                        <button onclick="descendre(this.parentNode)" type="button">Descendre</button>
-                                        <button onclick="supprimer(this.parentNode)" type="button">Supprimer Question</button>
+                                        <img src="{{ asset('image/add_x30.png') }}" alt="ajouter une reponse" title="ajouter une reponse" onclick="dupliquer('reponse',this.parentNode.getAttribute('id'))" style="margin-left:5px" />
+                                        <img src="{{ asset('image/up_x30.png') }}" alt="Monter" title="Monter" onclick="monter(this.parentNode)"  style="margin-left:5px"/>
+                                        <img src="{{ asset('image/down_x30.png') }}" alt="Descendre" title="Descendre" onclick="descendre(this.parentNode)"  style="margin-left:5px"/>
+                                        <img src="{{ asset('image/imgSupprimer_x48.png') }}" alt="Supprimer Question" title="Supprimer Question"  onclick="supprimer(this.parentNode)" style="margin-left:5px"/>
                                         {% if reponses is defined %}
+                                            <table style="width:auto;">
                                             {% for reponse in reponses %}
                                                 {% for rep in reponse %}
+
                                                     {%  if rep.getQuestiondef.getId == question.getId %}
-                                                        <div>
-                                                            <input title="reponse" type="text" class="champ form-control" id="inputrep" name="reponse[{{ i }}][]" value="{{ rep.getReponse }}" required maxlength="45">
-                                                            <button onclick="monter(this.parentNode)" type="button">Monter</button>
-                                                            <button onclick="descendre(this.parentNode)" type="button">Descendre</button>
-                                                            <button onclick="supprimer(this.parentNode)" type="button">Supprimer</button>
-                                                        </div>
+                                                        <tr >
+                                                            <td style="border:none">
+                                                            <input type="radio" name="reponse[{{ i }}][]" value="1" style="margin:10px 5px 10px 0" id="inputrep" > {{ rep.getReponse }}
+                                                            </td>
+                                                            <td style="border:none">
+                                                            <img src="{{ asset('image/vide.gif') }}" width="30px" , height="0px" />
+                                                            <img src="{{ asset('image/up_x18.png') }}" alt="Monter" title="Monter" onclick="monter(this.parentNode)"  />
+                                                            <img src="{{ asset('image/down_x18.png') }}" alt="Descendre" title="Descendre"  onclick="descendre(this.parentNode)"   />
+                                                            <img src="{{ asset('image/imgSupprimer.png') }}" alt="Supprimer Question" title="Supprimer Question"  onclick="supprimer(this.parentNode)" />
+                                                            </td>
+                                                        </tr>
                                                     {% endif %}
+
                                                 {% endfor %}
                                             {% endfor %}
+                                            </table>
                                         {% endif %}
+
+                                    </div>
+                                    <div class="inputcontainer" name="question2">
+                                        <label class="list-group-item" style="height: 60px;">Reponse :</label>
+                                        <input title="question" type="text" class="champ form-control" onkeypress="if(event.keyCode==13){AjouterReponse('reponse',this.parentNode.getAttribute('id'),this.value);}" id="NewReponse" required maxlength="255">
                                     </div>
                                     {% set i = i + 1 %}
                                 {% endfor %}
@@ -117,12 +138,11 @@
 
                             <div class="inputcontainer">
                                 <label class="list-group-item" style="height: 60px;">Nom du Questionnaire :</label>
-                                <input type="text" class="champ form-control" id="QCM" name="_Nom" required maxlength="45" >
+                                <input type="text" class="champ form-control" id="QCM" name="_Nom" required maxlength="45" ><br>
+                                <input type="radio" name="_affinite" value="1" style="margin:10px 5px 10px 0" checked> Test d'affinité
+                                <input type="radio" name="_affinite" value="0" style="margin:10px 5px 10px 10px"> Test de formation
                             </div>
-                            <div class="inputcontainer">
-                                <label class="list-group-item" style="height: 60px;">Affinite :</label>
-                                <input type="text" class="champ form-control" placeholder="0 pour test formation/1 pour test d'affinité" id="affinite" name="_affinite" required maxlength="1">
-                            </div>
+
 
                             <div id="button_container">
                                 <button onclick="dupliquer('question')" type="button" style="vertical-align: bottom">Ajouter Question</button>
@@ -140,6 +160,25 @@
 
     <script language="JavaScript">
         function dupliquer(div,parent) {
+            var dup = document.getElementById(div);
+            var clone = dup.cloneNode(true);
+            if(div=='question')
+            {
+                var idDiv = document.getElementsByName("question").length - 1;
+                clone.setAttribute("id",idDiv);
+                clone.style.display = 'table';
+                clone.getElementsByTagName("input")[0].setAttribute("name","questions[]");
+                clone.getElementsByTagName("input")[1].setAttribute("name","reponse["+idDiv+"][]");
+                clone.getElementsByTagName("input")[2].setAttribute("name","reponse["+idDiv+"][]");
+                document.getElementById('form').insertBefore(clone,document.getElementById('button_container'));
+            }
+            if(div=='reponse')
+            {
+                clone.getElementsByTagName("input")[0].setAttribute("name","reponse["+parent+"][]");
+                document.getElementById(parent).appendChild(clone);
+            }
+        }
+        function AjouterReponse(div,parent,stravlue) {
             var dup = document.getElementById(div);
             var clone = dup.cloneNode(true);
             if(div=='question')
@@ -201,6 +240,7 @@
                 if(i==inputs.length)
                 {
                     document.getElementById("form").submit();
+                    window.parent.location.reload();
                     break;
                 }
                 if(!inputs[i].value)
