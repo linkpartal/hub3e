@@ -141,6 +141,21 @@ class Etablissement
     private $qcmdef;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="etablissement")
+     * @ORM\JoinTable(name="referenciel",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="etablissement_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="users_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $users;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -526,5 +541,39 @@ class Etablissement
     public function getSuspendu()
     {
         return $this->suspendu;
+    }
+
+    /**
+     * Add user
+     *
+     * @param \GenericBundle\Entity\User $user
+     *
+     * @return Etablissement
+     */
+    public function addUser(\GenericBundle\Entity\User $user)
+    {
+        $this->users[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \GenericBundle\Entity\User $user
+     */
+    public function removeUser(\GenericBundle\Entity\User $user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 }

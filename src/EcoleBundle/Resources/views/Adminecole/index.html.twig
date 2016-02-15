@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/adminecole.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="icon" type="image/png" href="{{ asset('image/Logo_Hub_3e.png') }}" />
     {% block CSS %}{% endblock %}
@@ -14,6 +14,7 @@
 </head>
 <body onload="putbadged()">
 <div id="addtier" class="popup col-xs-3">
+
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
         <div id="div_adresse" name="ajouterAdresse" style="border-bottom: 10px;display:none">
@@ -43,7 +44,7 @@
                 </div>
             </div>
         </div>
-        <form id="form" action="{{ path('tieradded') }}" method="post" enctype="multipart/form-data">
+        <form id="formtier" action="{{ path('tieradded') }}" method="post" enctype="multipart/form-data">
             <div class="div_form">
 
                 <div class="col-xs-6 input-colonne">
@@ -262,7 +263,7 @@
                 <div id="user" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if users is defined %}
                         {% for u in users %}
-                            <button onclick="postUser('{{ path('metier_user_afficheUser',{'id': u.getId} ) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                            <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId} ) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -370,13 +371,14 @@
         }
 
     };
-    function postUser(url,button){
+    function postiframeUser(url,button) {
         document.getElementById("iframe").src = url;
         var elements = button.getElementsByClassName("badge");
         if(elements.length > 0)
         {
             elements[0].parentNode.removeChild(elements[0]);
         }
+
     };
     function stringWith (str, prefix) {
         var ustring = str.toUpperCase();
@@ -444,6 +446,7 @@
     };
     function putbadged() {
         var notifs = JSON.parse('{{ notifications|raw }}');
+        console.log(notifs);
         var ecole =0;
         var societe = 0;
         var user = 0;
@@ -532,9 +535,27 @@
                 else if(data['status']==='exist')
                 {
                     route='{{ path('etablissement_exist') }}';
-                    document.getElementById(form).action = route;
-                    $("#"+form+" input[type=submit]").click();
+                    var tier = JSON.parse(data['Tier']);
+                    var etablissements = JSON.parse(data['Etablissements']);
+                    var string_checkbox='';
+                    for (var i = 0; i < etablissements.length; i++) {
+                        string_checkbox += '<input type="checkbox" name="etablissement[]"  value="'+etablissements[i].id+'" > '+ etablissements[i].adresse+ ' - '+ etablissements[i].ville+' - '+etablissements[i].codepostal+'<br>';
+                    }
+
+                    document.getElementById(form).parentNode.style.display = 'none';
+                    var newdiv = document.createElement("div");
+                    innerhtml_newdiv ='<form action="'+route+'" class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block;background-color: white">'+
+                            '<label style="width: 50%">SIREN : '+tier.siren+' </label><label style="width: 50%">Raison sociale : '+tier.raisonsoc+'</label>'+
+                            '_checkbox_etablissements'+
+                            '<input type="submit" value="récupérer">'+
+                            '<button type="button" onclick="declinertier(this)">Décliner</button>'+
+                            '</form>';
+
+                    innerhtml_newdiv = innerhtml_newdiv.replace('_checkbox_etablissements',string_checkbox);
+                    newdiv.innerHTML = innerhtml_newdiv;
+                    document.getElementById(form).parentNode.parentNode.appendChild(newdiv);
                     document.getElementById('submittier').disabled=false;
+
                 }
                 else
                 {
@@ -572,9 +593,8 @@
             geocoder.geocode({'address': address}, function (results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                     result.value = results[0].geometry.location ;
-                    var check = '{{ path('tier_checkExist',{'siren': '_siren' }) }}';
-                    check = check.replace('_siren',document.getElementById('SIREN').value)
-                    submitAjaxForm(check,'form');
+                    var check = '{{ path('tier_checkExist') }}';
+                    submitAjaxForm(check,'formtier');
                 } else {
                     alert('Pas de géocodage trouver pour l\'adresse spécifiée');
                     document.getElementById('submittier').disabled=false;
@@ -602,6 +622,10 @@
         if(champ.options[champ.selectedIndex].value ==0){champ.nextElementSibling.style.display = 'inline-block';}
         else{champ.nextElementSibling.style.display = 'none';}
     };
+    function declinertier(button){
+        button.parentNode.parentNode.parentNode.removeChild(button.parentNode.parentNode);
+        document.getElementById('formtier').parentNode.style.display = 'block';
+    }
 
 </script>
 

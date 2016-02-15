@@ -48,7 +48,24 @@ body {
     box-shadow: 0px 0px 50px rgba(0,0,0,.5);
 }
 
-.login .Titre {
+
+
+
+
+
+
+
+.Changelogin {
+    overflow: hidden;
+    background: #222222;
+    border-radius: 6px;
+    margin: 10%;
+    opacity: 0.85;
+    box-shadow: 0px 0px 50px rgba(0,0,0,.5);
+}
+
+
+.Changelogin .Titre {
     height: 14px;
     padding-top: 13px;
     padding-bottom: 13px;
@@ -60,13 +77,15 @@ body {
     font-family: Arial;
 }
 
-.login form {
+.Changelogin form {
     width: 100%;
     height: auto;
     overflow: hidden;
     margin-left: auto;
     margin-right: auto;
 }
+
+
 
 .champ {
   margin: 40px 25px;
@@ -126,6 +145,16 @@ body {
     text-align: left;
 }
 
+.Changelogin .olvido {
+
+    height: auto;
+    overflow: hidden;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    font-size: 10px;
+    text-align: left;
+}
+
 
 
 	
@@ -170,11 +199,28 @@ input[type="checkbox"]:checked + label > mark:before {
 	transform: rotate(45deg); 
 	-webkit-transform: rotate(45deg);  }
 
-.login .olvido .col a {
+.Changelogin .olvido .col a {
     color: #fff;
     text-decoration: none;
     font: 12px Arial;
 }
+
+.Changelogin .olvido ._checkbox input[type="checkbox"]:checked + label > mark:after {
+    content:' ';
+    background:#009df5;
+    width:3px;
+    height:9px;
+    position:absolute;
+    top:3px; left:7.5px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);  }
+
+.Changelogin .olvido .col a {
+    color: #fff;
+    text-decoration: none;
+    font: 12px Arial;
+}
+
 
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
