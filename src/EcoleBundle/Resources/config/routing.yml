@@ -9,3 +9,7 @@ ecole_admin_afficheLicence:
 loadconsulterQCM:
     path:     /consulterQCM/{id}
     defaults: { _controller: EcoleBundle:Default:loadQCM }
+
+ecole_recruteur:
+    path:     /recruteur/Home/{ecole}
+    defaults: { _controller: EcoleBundle:Recruteur:loadRecruteur }

@@ -46,21 +46,19 @@ class DefaultController extends Controller
             }
             elseif(true === $this->get('security.authorization_checker')->isGranted('ROLE_ADMINECOLE'))
             {
-                $ecole = $em->getRepository('GenericBundle:Tier')->find($user->getTier());
-                return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$ecole->getRaisonSoc())));
+                return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$user->getTier()->getRaisonSoc())));
             }
             elseif(true === $this->get('security.authorization_checker')->isGranted('ROLE_ADMINSOC'))
             {
-                $societe = $em->getRepository('GenericBundle:Tier')->find($user->getTier());
-                return $this->redirect($this->generateUrl('societe_admin',array('societe'=>$societe->getRaisonSoc())));
+                return $this->redirect($this->generateUrl('societe_admin',array('societe'=>$user->getTier()->getRaisonSoc())));
             }
-            elseif(true === $this->get('security.authorization_checker')->isGranted('ROLE_USER'))
+            elseif(true === $this->get('security.authorization_checker')->isGranted('ROLE_RECRUTEUR'))
             {
-                return $this->redirect('http://youtube.com');
+                return $this->redirect($this->generateUrl('ecole_recruteur',array('ecole'=>$user->getEtablissement()->getTier()->getRaisonSoc())));
             }
             else{
-                var_dump($user);
-                die();
+                var_dump('Seul les roles SUPER_ADMIN et ADMINECOLE sont actuellement implemente, l\'utilisateur que vous avez donne à ' . implode(" et ",$user->getRoles()) . ' comme roles. Veuillez revenir en arriere est donne un super_admin ou adminecole');
+                die;
             }
         }
         else
