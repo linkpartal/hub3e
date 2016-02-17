@@ -44,11 +44,27 @@ class Culturel
     private $users;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\ImportCandidat", inversedBy="culturel")
+     * @ORM\JoinTable(name="culturel_has_import_candidat",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="culturel_import_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $importCandidat;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->importCandidat = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -118,5 +134,39 @@ class Culturel
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Add importCandidat
+     *
+     * @param \GenericBundle\Entity\ImportCandidat $importCandidat
+     *
+     * @return Culturel
+     */
+    public function addImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat)
+    {
+        $this->importCandidat[] = $importCandidat;
+
+        return $this;
+    }
+
+    /**
+     * Remove importCandidat
+     *
+     * @param \GenericBundle\Entity\ImportCandidat $importCandidat
+     */
+    public function removeImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat)
+    {
+        $this->importCandidat->removeElement($importCandidat);
+    }
+
+    /**
+     * Get importCandidat
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getImportCandidat()
+    {
+        return $this->importCandidat;
     }
 }

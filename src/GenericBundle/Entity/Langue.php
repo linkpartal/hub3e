@@ -29,6 +29,13 @@ class Langue
     private $langue;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="niveau", type="string", length=45, nullable=false)
+     */
+    private $niveau;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="User", inversedBy="langue")
@@ -44,11 +51,27 @@ class Langue
     private $users;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\ImportCandidat", inversedBy="langue")
+     * @ORM\JoinTable(name="langue_has_import_candidat",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="langue_import_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $importCandidat;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->importCandidat = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -118,5 +141,63 @@ class Langue
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Set niveau
+     *
+     * @param string $niveau
+     *
+     * @return Langue
+     */
+    public function setNiveau($niveau)
+    {
+        $this->niveau = $niveau;
+
+        return $this;
+    }
+
+    /**
+     * Get niveau
+     *
+     * @return string
+     */
+    public function getNiveau()
+    {
+        return $this->niveau;
+    }
+
+    /**
+     * Add importCandidat
+     *
+     * @param \GenericBundle\Entity\ImportCandidat $importCandidat
+     *
+     * @return Langue
+     */
+    public function addImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat)
+    {
+        $this->importCandidat[] = $importCandidat;
+
+        return $this;
+    }
+
+    /**
+     * Remove importCandidat
+     *
+     * @param \GenericBundle\Entity\ImportCandidat $importCandidat
+     */
+    public function removeImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat)
+    {
+        $this->importCandidat->removeElement($importCandidat);
+    }
+
+    /**
+     * Get importCandidat
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getImportCandidat()
+    {
+        return $this->importCandidat;
     }
 }

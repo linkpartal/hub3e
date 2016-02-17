@@ -44,11 +44,27 @@ class Sport
     private $users;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\ImportCandidat", inversedBy="sport")
+     * @ORM\JoinTable(name="sport_has_import_candidat",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="sport_import_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $importCandidat;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->importCandidat = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -118,5 +134,39 @@ class Sport
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Add importCandidat
+     *
+     * @param \GenericBundle\Entity\ImportCandidat $importCandidat
+     *
+     * @return Sport
+     */
+    public function addImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat)
+    {
+        $this->importCandidat[] = $importCandidat;
+
+        return $this;
+    }
+
+    /**
+     * Remove importCandidat
+     *
+     * @param \GenericBundle\Entity\ImportCandidat $importCandidat
+     */
+    public function removeImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat)
+    {
+        $this->importCandidat->removeElement($importCandidat);
+    }
+
+    /**
+     * Get importCandidat
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getImportCandidat()
+    {
+        return $this->importCandidat;
     }
 }

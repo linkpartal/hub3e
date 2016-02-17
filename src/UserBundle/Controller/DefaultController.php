@@ -4,6 +4,7 @@ namespace UserBundle\Controller;
 
 use Ddeboer\DataImport\Reader\ExcelReader;
 use GenericBundle\Entity\ImportCandidat;
+use GenericBundle\Entity\Infocomplementaire;
 use GenericBundle\Entity\Mission;
 use GenericBundle\Entity\User;
 use GenericBundle\Entity\Etablissement;
@@ -214,7 +215,7 @@ class DefaultController extends Controller
         if($request->get('Import')==0)
         {
             $this->ImportApprenant($request,$_FILES['_CSV']['tmp_name']);
-            return $this->redirect($this->generateUrl('afficher_import'));
+            return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$this->get('security.token_storage')->getToken()->getUser()->getTier()->getRaisonsoc())));
         }
         elseif($request->get('Import')==1)
         {
@@ -226,7 +227,6 @@ class DefaultController extends Controller
             $this->ImportMissions($_FILES['_CSV']['tmp_name']);
             return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$this->get('security.token_storage')->getToken()->getUser()->getTier()->getRaisonsoc())));
         }
-
     }
 
     private function ImportApprenant(Request $request,$uploadedfile)
@@ -237,6 +237,7 @@ class DefaultController extends Controller
         $jump = 0;
         $em = $this->getDoctrine()->getEntityManager();
         foreach ($reader as $row) {
+
             if ($jump++ < 2 || ('' == $row[1] and '' == $row[2] and '' == $row[3] and '' == $row[4])) {
                 continue;
             }
@@ -253,65 +254,44 @@ class DefaultController extends Controller
                     }
                 }
 
-                if (!$erreur) {
-                    $apprenant = new User();
-                    $apprenant->setCivilite(mb_convert_encoding($row[1],'UTF-8','auto'));
-                    $apprenant->setNom(mb_convert_encoding($row[2],'UTF-8','auto'));
-                    $apprenant->setPrenom(mb_convert_encoding($row[3],'UTF-8','auto'));
-                    $apprenant->setTelephone(mb_convert_encoding($row[6],'UTF-8','auto'));
-                    $apprenant->setEmail(mb_convert_encoding($row[7],'UTF-8','auto'));
-                    $apprenant->setUsername(mb_convert_encoding($row[3][0],'UTF-8','auto') . '' . mb_convert_encoding($row[2],'UTF-8','auto'));
-                    $apprenant->addRole('ROLE_APPRENANT');
-                    $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($request->get('Etablissement'));
-                    $apprenant->setEtablissement($etablissement);
-                    $apprenant->setPassword('import_passif');
-                    $em->persist($apprenant);
-                    $em->flush();
-                    array_push($rowinserted,$row);
-                    $superadmins = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_SUPER_ADMIN');
-                    $usercon = $this->get('security.token_storage')->getToken()->getUser();
-                    $superadmins = array_merge($superadmins, $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier' => $usercon->getTier())));
+                $candidat = new ImportCandidat();
+                $candidat->setCivilite(mb_convert_encoding($row[1],'UTF-8','auto'));
+                $candidat->setNom(mb_convert_encoding($row[2],'UTF-8','auto'));
+                $candidat->setPrenom(mb_convert_encoding($row[3],'UTF-8','auto'));
+                $candidat->setTelephone(mb_convert_encoding($row[6],'UTF-8','auto'));
+                $candidat->setEmail(mb_convert_encoding($row[7],'UTF-8','auto'));
+                $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($request->get('Etablissement'));
+                $candidat->setEtablissement($etablissement);
+                $candidat->setUser($this->get('security.token_storage')->getToken()->getUser());
+                $candidat->setErreur($erreur);
 
-                    foreach ($superadmins as $admin) {
-                        $notif = new Notification();
-                        $notif->setEntite($apprenant->getId());
-                        $notif->setType('Utilisateur');
-                        $notif->setUser($admin);
-                        $em->persist($notif);
-                        $em->flush();
-                    }
 
-                    $em->flush();
+                // infocomplementaire
+                $infocomp = new Infocomplementaire();
+
+
+                $datephp = ($row[4] - 25569) * 86400;
+                $infocomp->setDatenaissance(date_create(gmdate("d-m-Y H:i:s", $datephp)));
+                $infocomp->setCPNaissance(mb_convert_encoding($row[5],'UTF-8','auto'));
+                $infocomp->setAdresse(mb_convert_encoding($row[8],'UTF-8','auto'));
+                $infocomp->setCp(mb_convert_encoding($row[9],'UTF-8','auto'));
+
+                if (mb_convert_encoding($row[13],'UTF-8','auto') == 'oui') {
+                    $infocomp->setPermis(true);
+                } elseif (mb_convert_encoding($row[13],'UTF-8','auto') == 'non') {
+                    $infocomp->setPermis(false);
                 }
-                else
-                {
-                    $candidat = new ImportCandidat();
-                    $candidat->setCivilite(mb_convert_encoding($row[1],'UTF-8','auto'));
-                    $candidat->setNom(mb_convert_encoding($row[2],'UTF-8','auto'));
-                    $candidat->setPrenom(mb_convert_encoding($row[3],'UTF-8','auto'));
-                    $candidat->setDateNaissance(mb_convert_encoding($row[4],'UTF-8','auto'));
-                    $candidat->setCPNaissance(mb_convert_encoding($row[5],'UTF-8','auto'));
-                    $candidat->setTelephone(mb_convert_encoding($row[6],'UTF-8','auto'));
-                    $candidat->setEmail(mb_convert_encoding($row[7],'UTF-8','auto'));
-                    $candidat->setAdresse(mb_convert_encoding($row[8],'UTF-8','auto'));
-                    $candidat->setCp(mb_convert_encoding($row[9],'UTF-8','auto'));
-                    $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($request->get('Etablissement'));
-                    $candidat->setEtablissement($etablissement);
-                    $candidat->setUser($this->get('security.token_storage')->getToken()->getUser());
-                    if (mb_convert_encoding($row[13],'UTF-8','auto') == 'oui') {
-                        $candidat->setPermis(true);
-                    } elseif (mb_convert_encoding($row[13],'UTF-8','auto') == 'non') {
-                        $candidat->setPermis(false);
-                    }
-                    if (mb_convert_encoding($row[14],'UTF-8','auto') == 'oui') {
-                        $candidat->setVehicule(true);
-                    } elseif (mb_convert_encoding($row[14],'UTF-8','auto') == 'non') {
-                        $candidat->setVehicule(false);
-                    }
-                    $candidat->setErreur($erreur);
-                    $em->persist($candidat);
-                    $em->flush();
+                if (mb_convert_encoding($row[14],'UTF-8','auto') == 'oui') {
+                    $infocomp->setVehicule(true);
+                } elseif (mb_convert_encoding($row[14],'UTF-8','auto') == 'non') {
+                    $infocomp->setVehicule(false);
                 }
+
+                $em->persist($infocomp);
+                $em->flush();
+                $candidat->setInfo($infocomp);
+                $em->persist($candidat);
+                $em->flush();
             }
         }
     }
@@ -425,20 +405,353 @@ class DefaultController extends Controller
     public function supprimerImportsAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $import = $em->getRepository('GenericBundle:ImportCandidat')->find($id);
-        $em->remove($import);
-        $em->flush();
 
+        $import = $em->getRepository('GenericBundle:ImportCandidat')->find($id);
         $response = new JsonResponse();
-        return $response->setData(array('Succes'=>'1'));
+        if($import)
+        {
+            $info = $import->getInfo();
+            foreach($em->getRepository('GenericBundle:Experience')->findBy(array('importCandidat'=>$import)) as $experience)
+            {
+                $em->remove($experience);
+                $em->flush();
+            }
+            foreach($em->getRepository('GenericBundle:Diplome')->findBy(array('importCandidat'=>$import)) as $diplome)
+            {
+                $em->remove($diplome);
+                $em->flush();
+            }
+            foreach($em->getRepository('GenericBundle:Document')->findBy(array('importCandidat'=>$import)) as $document)
+            {
+                $em->remove($document);
+                $em->flush();
+            }
+            foreach($em->getRepository('GenericBundle:Parents')->findBy(array('importCandidat'=>$import)) as $parents)
+            {
+                $em->remove($parents);
+                $em->flush();
+            }
+            foreach($em->getRepository('GenericBundle:Recommandation')->findBy(array('importCandidat'=>$import)) as $recommandation)
+            {
+                $em->remove($recommandation);
+                $em->flush();
+            }
+            $em->remove($import);
+            $em->flush();
+            $em->remove($info);
+            $em->flush();
+
+            return $response->setData(array('Delete'=>'1'));
+        }
+        else{
+            return $response->setData(array('Delete'=>'0'));
+        }
     }
 
     public function afficherDuplicaAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $import = $em->getRepository('GenericBundle:ImportCandidat')->find($id);
-        $users = $em->getRepository('GenericBundle:User')->findBy(array('civilite' =>$import->getCivilite()  , 'nom' => $import->getNom(), 'prenom' => $import->getPrenom()));
+
+        $users = $em->getRepository('GenericBundle:User')->findApprenantDuplicata($id);
         return $this->render('UserBundle:Gestion:IframeDuplicata.html.twig', array('duplicas'=>$users));
+    }
+
+    public function ImportCandidatAction($id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $import = $em->getRepository('GenericBundle:ImportCandidat')->find($id);
+        $user = $em->getRepository('GenericBundle:User')->findApprenantDuplicata($id);
+        $response = new JsonResponse();
+
+        if($user)
+        {
+            return $response->setData(array('Ajout'=>'0'));
+        }
+        else{
+            //$userManager = $this->get('fos_user.user_manager');
+            //$newuser = $userManager->createUser();
+            $newuser = new User();
+            $newuser->setCivilite($import->getCivilite());
+            $newuser->setNom($import->getNom());
+            $newuser->setEmail($import->getEmail());
+            $newuser->setPrenom($import->getPrenom());
+            $newuser->setTelephone($import->getTelephone());
+            $newuser->setEtablissement($import->getEtablissement());
+            $newuser->addRole('ROLE_APPRENANT');
+            $newuser->setUsername($import->getPrenom().'.'.$import->getNom());
+
+            $newuser->setInfo($import->getInfo());
+
+            //generate a password
+            $tokenGenerator = $this->get('fos_user.util.token_generator');
+            $password = substr($tokenGenerator->generateToken(), 0, 8); // 8 chars
+            $hash =  $this->get('security.password_encoder')->encodePassword($newuser, $password);
+            $newuser->setPassword($hash);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($newuser);
+            $em->flush();
+
+            $date = new \DateTime();
+            $newuser->getInfo()->setDaterecup($date);
+            foreach($import->getSport() as $sport)
+            {
+                $newuser->addSport($sport);
+            }
+            foreach($import->getCulturel() as $culturel)
+            {
+                $newuser->addCulturel($culturel);
+            }
+            foreach($import->getLangue() as $langue)
+            {
+                $newuser->addCulturel($langue);
+            }
+
+            foreach($em->getRepository('GenericBundle:Experience')->findBy(array('importCandidat'=>$import)) as $experience)
+            {
+                $experience->setUser($newuser);
+                $experience->setImportCandidat(null);
+            }
+            foreach($em->getRepository('GenericBundle:Diplome')->findBy(array('importCandidat'=>$import)) as $diplome)
+            {
+                $diplome->setUser($newuser);
+                $diplome->setImportCandidat(null);
+            }
+            foreach($em->getRepository('GenericBundle:Document')->findBy(array('importCandidat'=>$import)) as $document)
+            {
+                $document->setUser($newuser);
+                $document->setImportCandidat(null);
+            }
+            foreach($em->getRepository('GenericBundle:Parents')->findBy(array('importCandidat'=>$import)) as $parents)
+            {
+                $parents->setUser($newuser);
+                $parents->setImportCandidat(null);
+            }
+            foreach($em->getRepository('GenericBundle:Recommandation')->findBy(array('importCandidat'=>$import)) as $recommandation)
+            {
+                $recommandation->setUser($newuser);
+                $recommandation->setImportCandidat(null);
+            }
+
+            $em->flush();
+
+
+            $superadmins = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_SUPER_ADMIN');
+            $usercon = $this->get('security.token_storage')->getToken()->getUser();
+            $superadmins = array_merge($superadmins, $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$usercon->getTier())));
+
+            foreach($superadmins as $admin){
+                $notif = new Notification();
+                $notif->setEntite($newuser->getId());
+                $notif->setType('Utilisateur');
+                $notif->setUser($admin);
+                $em->persist($notif);
+                $em->flush();
+            }
+
+            //send password
+            if($usercon->getTier())
+            {
+                if($this->get('templating')->exists('GenericBundle:Mail/templates:'.$usercon->getTier()->getSiren().'_NewUser.html.twig'))
+                {
+                    $modele = 'GenericBundle:Mail/templates:'.$usercon->getTier()->getSiren().'_NewUser.html.twig';
+                }
+                else{
+                    $modele = 'GenericBundle:Mail:NewUser.html.twig';
+                }
+            }
+            elseif($usercon->getEtablissement())
+            {
+                if($this->get('templating')->exists('GenericBundle:Mail/templates:'.$usercon->getEtablissement()->getTier()->getSiren().'_NewUser.html.twig'))
+                {
+                    $modele = 'GenericBundle:Mail/templates:'.$usercon->getEtablissement()->getTier()->getSiren().'_NewUser.html.twig';
+                }
+                else{
+                    $modele = 'GenericBundle:Mail:NewUser.html.twig';
+                }
+            }
+            else{
+                $modele = 'GenericBundle:Mail:NewUser.html.twig';
+            }
+
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Email')
+                ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
+                ->setTo($import->getEmail())
+                ->setBody($this->renderView($modele,array('username'=>$import->getPrenom().'.'.$import->getNom(), 'password'=>$password))
+                    ,'text/html'
+                );
+            $this->get('mailer')->send($message);
+            $em->remove($import);
+            $em->flush();
+            return $response->setData(array('Ajout'=>'1'));
+
+        }
+
+
+
+
+    }
+
+    public function FusionnerAction($sas,$user){
+        $em = $this->getDoctrine()->getEntityManager();
+        $import = $em->getRepository('GenericBundle:ImportCandidat')->find($sas);
+        $userfus = $em->getRepository('GenericBundle:User')->find($user);
+        if(!$userfus->getCivilite()){
+            $userfus->setCivilite($import->getCivilite());
+        }
+        if(!$userfus->getNom()){
+            $userfus->setNom($import->getNom());
+        }
+        if(!$userfus->getPrenom()){
+            $userfus->setPrenom($import->getPrenom());
+        }
+        if(!$userfus->getTelephone()){
+            $userfus->setTelephone($import->getTelephone());
+        }
+        if(!$userfus->getInfo()->getAdresse()){
+            $userfus->getInfo()->setAdresse($import->getInfo()->getAdresse());
+        }
+        if(!$userfus->getInfo()->getCp()){
+            $userfus->getInfo()->setCp($import->getInfo()->getCp());
+        }
+        if(!$userfus->getInfo()->getFacebook()){
+            $userfus->getInfo()->setFacebook($import->getInfo()->getFacebook());
+        }
+        if(!$userfus->getInfo()->getLinkedin()){
+            $userfus->getInfo()->setLinkedin($import->getInfo()->getLinkedin());
+        }
+        if(!$userfus->getInfo()->getViadeo()){
+            $userfus->getInfo()->setViadeo($import->getInfo()->getViadeo());
+        }
+        if(!$userfus->getInfo()->getMobilite()){
+            $userfus->getInfo()->setMobilite($import->getInfo()->getMobilite());
+        }
+        if(!$userfus->getInfo()->getFratrie()){
+            $userfus->getInfo()->setFratrie($import->getInfo()->getFratrie());
+        }
+        if(!$userfus->getInfo()->getPermis()){
+            $userfus->getInfo()->setPermis($import->getInfo()->getPermis());
+        }
+        if(!$userfus->getInfo()->getVehicule()){
+            $userfus->getInfo()->setVehicule($import->getInfo()->getVehicule());
+        }
+        $em->flush();
+        foreach($import->getLangue() as $langue)
+        {
+            if(!in_array($langue,$userfus->getLangue()->toArray()))
+            {
+                $userfus->addLangue($langue);
+                $em->flush();
+            }
+        }
+        foreach($import->getSport() as $sport)
+        {
+            if(!in_array($sport,$userfus->getSport()->toArray()))
+            {
+                $userfus->addSport($sport);
+                $em->flush();
+            }
+        }
+        foreach($import->getCulturel() as $culturel)
+        {
+            if(!in_array($culturel,$userfus->getCulturel()->toArray()))
+            {
+                $userfus->addCulturel($culturel);
+                $em->flush();
+            }
+        }
+        foreach($import->getInfo()->getVillesFranceFreeVille() as $ville)
+        {
+            if(!in_array($ville,$userfus->getInfo()->getVillesFranceFreeVille()->toArray()))
+            {
+                $userfus->getInfo()->addVillesFranceFreeVille($ville);
+                $em->flush();
+            }
+        }
+
+        foreach($em->getRepository('GenericBundle:Experience')->findBy(array('importCandidat'=>$import)) as $experience)
+        {
+            foreach($em->getRepository('GenericBundle:Experience')->findBy(array('user'=>$userfus)) as $experienceuser)
+            {
+                if($experience->isEqual($experienceuser))
+                {
+                    $em->remove($experience);
+                    $em->flush();
+                }
+                else{
+                    $experience->setUser($userfus);
+                    $experience->setImportCandidat(null);
+                }
+            }
+        }
+        foreach($em->getRepository('GenericBundle:Diplome')->findBy(array('importCandidat'=>$import)) as $diplome)
+        {
+            foreach($em->getRepository('GenericBundle:Diplome')->findBy(array('user'=>$userfus)) as $diplomeuser)
+            {
+                if($diplome->isEqual($diplomeuser))
+                {
+                    $em->remove($diplome);
+                    $em->flush();
+                }
+                else{
+                    $diplome->setUser($userfus);
+                    $diplome->setImportCandidat(null);
+                }
+            }
+        }
+        foreach($em->getRepository('GenericBundle:Document')->findBy(array('importCandidat'=>$import)) as $document)
+        {
+            foreach($em->getRepository('GenericBundle:Document')->findBy(array('user'=>$userfus)) as $documentuser)
+            {
+                if($document->isEqual($documentuser))
+                {
+                    $em->remove($document);
+                    $em->flush();
+                }
+                else{
+                    $document->setUser($userfus);
+                    $document->setImportCandidat(null);
+                }
+            }
+        }
+        foreach($em->getRepository('GenericBundle:Parents')->findBy(array('importCandidat'=>$import)) as $parents)
+        {
+            foreach($em->getRepository('GenericBundle:Parents')->findBy(array('user'=>$userfus)) as $parentsuser)
+            {
+                if($parents->isEqual($parentsuser))
+                {
+                    $em->remove($parents);
+                    $em->flush();
+                }
+                else{
+                    $parents->setUser($userfus);
+                    $parents->setImportCandidat(null);
+                }
+            }
+        }
+        foreach($em->getRepository('GenericBundle:Recommandation')->findBy(array('importCandidat'=>$import)) as $recommandation)
+        {
+            foreach($em->getRepository('GenericBundle:Recommandation')->findBy(array('user'=>$userfus)) as $recommandationuser)
+            {
+                if($recommandation->isEqual($recommandationuser))
+                {
+                    $em->remove($recommandation);
+                    $em->flush();
+                }
+                else{
+                    $recommandation->setUser($userfus);
+                    $recommandation->setImportCandidat(null);
+                }
+            }
+        }
+
+        $info = $import->getInfo();
+        $em->remove($import);
+        $em->remove($info);
+        $em->flush();
+
+        return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
     }
 
 }

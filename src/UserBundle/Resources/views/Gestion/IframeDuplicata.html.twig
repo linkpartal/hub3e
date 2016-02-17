@@ -13,6 +13,8 @@
         <td>Prénom</td>
         <td>téléphone</td>
         <td>Email</td>
+        <td>Date Naissance</td>
+        <td>Lieu Naissance</td>
     </tr>
     {% for duplica in duplicas %}
         <tr>
@@ -21,6 +23,9 @@
             <td>{{ duplica.getPrenom }}</td>
             <td>{{ duplica.getTelephone }}</td>
             <td>{{ duplica.getEmail }}</td>
+            <td>{{ duplica.getInfo.getDatenaissance|date('d/m/Y') }}</td>
+            <td>{{ duplica.getInfo.getLieunaissance }}</td>
+            <td><button type="button" onclick="window.location.href= '{{ path('fusionner_apprenant',{'sas':app.request.attributes.get('id'),'user':duplica.getId}) }}'" >Fusionner</button></td>
         </tr>
     {% endfor %}
 </table>

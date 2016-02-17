@@ -66,6 +66,16 @@ class Recommandation
      */
     private $user;
 
+    /**
+     * @var \GenericBundle\Entity\ImportCandidat
+     *
+     * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\ImportCandidat")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
+     * })
+     */
+    private $importCandidat;
+
 
 
     /**
@@ -220,5 +230,41 @@ class Recommandation
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set importCandidat
+     *
+     * @param \GenericBundle\Entity\ImportCandidat $importCandidat
+     *
+     * @return Recommandation
+     */
+    public function setImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat = null)
+    {
+        $this->importCandidat = $importCandidat;
+
+        return $this;
+    }
+
+    /**
+     * Get importCandidat
+     *
+     * @return \GenericBundle\Entity\ImportCandidat
+     */
+    public function getImportCandidat()
+    {
+        return $this->importCandidat;
+    }
+
+    public function isEqual(Recommandation $recommandation)
+    {
+        if($recommandation->getNom()==$this->getNom() and $recommandation->getEmail()==$this->getEmail()
+            and $recommandation->getTelephone()==$this->getTelephone() and $recommandation->getFonction()==$this->getFonction())
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }

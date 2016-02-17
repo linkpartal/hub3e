@@ -144,9 +144,9 @@ class Etablissement
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="User", inversedBy="etablissement")
-     * @ORM\JoinTable(name="referenciel",
+     * @ORM\JoinTable(name="referentiel",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="etablissement_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="referentiel_etablissement_id", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
      *     @ORM\JoinColumn(name="users_id", referencedColumnName="id")

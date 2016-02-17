@@ -29,6 +29,13 @@ class Infocomplementaire
     private $datenaissance;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="daterecup", type="date", nullable=true)
+     */
+    private $daterecup;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="CPNaissance", type="string", length=45, nullable=true)
@@ -48,6 +55,13 @@ class Infocomplementaire
      * @ORM\Column(name="adresse", type="string", length=45, nullable=true)
      */
     private $adresse;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="codepostal", type="string", length=45, nullable=true)
+     */
+    private $cp;
 
     /**
      * @var string
@@ -83,6 +97,20 @@ class Infocomplementaire
      * @ORM\Column(name="fratrie", type="integer", nullable=true)
      */
     private $fratrie;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="permis", type="boolean", nullable=true)
+     */
+    private $permis;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="vehicule", type="boolean", nullable=true)
+     */
+    private $vehicule;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -359,5 +387,101 @@ class Infocomplementaire
     public function getVillesFranceFreeVille()
     {
         return $this->villesFranceFreeVille;
+    }
+
+    /**
+     * Set permis
+     *
+     * @param boolean $permis
+     *
+     * @return Infocomplementaire
+     */
+    public function setPermis($permis)
+    {
+        $this->permis = $permis;
+
+        return $this;
+    }
+
+    /**
+     * Get permis
+     *
+     * @return boolean
+     */
+    public function getPermis()
+    {
+        return $this->permis;
+    }
+
+    /**
+     * Set vehicule
+     *
+     * @param boolean $vehicule
+     *
+     * @return Infocomplementaire
+     */
+    public function setVehicule($vehicule)
+    {
+        $this->vehicule = $vehicule;
+
+        return $this;
+    }
+
+    /**
+     * Get vehicule
+     *
+     * @return boolean
+     */
+    public function getVehicule()
+    {
+        return $this->vehicule;
+    }
+
+    /**
+     * Set cp
+     *
+     * @param string $cp
+     *
+     * @return Infocomplementaire
+     */
+    public function setCp($cp)
+    {
+        $this->cp = $cp;
+
+        return $this;
+    }
+
+    /**
+     * Get cp
+     *
+     * @return string
+     */
+    public function getCp()
+    {
+        return $this->cp;
+    }
+
+    /**
+     * Set daterecup
+     *
+     * @param \DateTime $daterecup
+     *
+     * @return Infocomplementaire
+     */
+    public function setDaterecup($daterecup)
+    {
+        $this->daterecup = $daterecup;
+
+        return $this;
+    }
+
+    /**
+     * Get daterecup
+     *
+     * @return \DateTime
+     */
+    public function getDaterecup()
+    {
+        return $this->daterecup;
     }
 }

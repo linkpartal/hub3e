@@ -168,7 +168,7 @@
                 <button onclick="show('import')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                 ></button>
 
-                <button style="color:white ">importer</button>
+                <button onclick="window.location.href='{{ path('afficher_import') }}'" style="color:white ">importer</button>
             </div>
         </div>
 
@@ -370,7 +370,7 @@
             elements[0].parentNode.removeChild(elements[0]);
         }
 
-    };
+    }
     function postiframeUser(url,button) {
         document.getElementById("iframe").src = url;
         var elements = button.getElementsByClassName("badge");
@@ -379,7 +379,7 @@
             elements[0].parentNode.removeChild(elements[0]);
         }
 
-    };
+    }
     function stringWith (str, prefix) {
         var ustring = str.toUpperCase();
         var uprefix = prefix.toUpperCase();
@@ -391,7 +391,7 @@
         {
             return false;
         }
-    };
+    }
     function search(mot){
 
         var buttons = document.getElementById('ecole').getElementsByClassName('butonLigne');
@@ -443,7 +443,7 @@
             }
             i++;
         }
-    };
+    }
     function putbadged() {
         var notifs = JSON.parse('{{ notifications|raw }}');
         console.log(notifs);
@@ -495,7 +495,7 @@
             buttonuser.appendChild(spanuser);
         }
 
-    };
+    }
     function dupliqueradresse() {
         var dup = document.getElementById("div_adresse");
         var clone = dup.cloneNode(true);
@@ -517,7 +517,7 @@
         }
 
         i++;
-    };
+    }
     function submitAjaxForm(url,form){
 
         var route;
@@ -564,7 +564,7 @@
                 }
             }
         });
-    };
+    }
     function envoyeradresses(){
         document.getElementById('submittier').disabled=true;
         var geocodes = document.getElementsByName('_Geocode[]');
@@ -601,7 +601,7 @@
                 }
             });
         }
-    };
+    }
     function readURL(input,baliseimg) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -614,14 +614,14 @@
 
             reader.readAsDataURL(input.files[0]);
         }
-    };
+    }
     function supprimerAdresse(div){
         div.parentNode.parentNode.removeChild(div.parentNode);
-    };
+    }
     function disabling(champ){
         if(champ.options[champ.selectedIndex].value ==0){champ.nextElementSibling.style.display = 'inline-block';}
         else{champ.nextElementSibling.style.display = 'none';}
-    };
+    }
     function declinertier(button){
         button.parentNode.parentNode.parentNode.removeChild(button.parentNode.parentNode);
         document.getElementById('formtier').parentNode.style.display = 'block';

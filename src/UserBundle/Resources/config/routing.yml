@@ -37,3 +37,11 @@ supprimer_import:
 afficher_duplica:
     path: /admin/afficherduplica/{id}
     defaults: { _controller: UserBundle:Default:afficherDuplica}
+
+importer_candidat:
+    path: /admin/importer_candidat/{id}
+    defaults: { _controller: UserBundle:Default:ImportCandidat}
+
+fusionner_apprenant:
+    path: /admin/fusion_apprenant/id_sas={sas}/id_user={user}
+    defaults: { _controller: UserBundle:Default:Fusionner}

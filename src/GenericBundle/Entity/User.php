@@ -119,11 +119,18 @@ class User extends BaseUser
     private $sport;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\Langue", mappedBy="users")
+     */
+    private $langue;
+
+    /**
      * @var \Infocomplementaire
      *
      * @ORM\ManyToOne(targetEntity="Infocomplementaire")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="info_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="info_id", referencedColumnName="id",unique=true,onDelete="CASCADE")
      * })
      */
     private $info;
@@ -184,40 +191,6 @@ class User extends BaseUser
     public function getEtablissement()
     {
         return $this->etablissement;
-    }
-
-    /**
-     * Add missionmission
-     *
-     * @param \GenericBundle\Entity\Mission $missionmission
-     *
-     * @return User
-     */
-    public function addMissionmission(\GenericBundle\Entity\Mission $missionmission)
-    {
-        $this->mission[] = $missionmission;
-
-        return $this;
-    }
-
-    /**
-     * Remove missionmission
-     *
-     * @param \GenericBundle\Entity\Mission $missionmission
-     */
-    public function removeMissionmission(\GenericBundle\Entity\Mission $missionmission)
-    {
-        $this->mission->removeElement($missionmission);
-    }
-
-    /**
-     * Get missionmission
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMissionmission()
-    {
-        return $this->mission;
     }
 
     /**
@@ -505,5 +478,39 @@ class User extends BaseUser
     public function getReferenciel()
     {
         return $this->referenciel;
+    }
+
+    /**
+     * Add langue
+     *
+     * @param \GenericBundle\Entity\Langue $langue
+     *
+     * @return User
+     */
+    public function addLangue(\GenericBundle\Entity\Langue $langue)
+    {
+        $this->langue[] = $langue;
+
+        return $this;
+    }
+
+    /**
+     * Remove langue
+     *
+     * @param \GenericBundle\Entity\Langue $langue
+     */
+    public function removeLangue(\GenericBundle\Entity\Langue $langue)
+    {
+        $this->langue->removeElement($langue);
+    }
+
+    /**
+     * Get langue
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLangue()
+    {
+        return $this->langue;
     }
 }

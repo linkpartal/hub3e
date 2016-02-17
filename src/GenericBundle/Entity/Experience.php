@@ -73,6 +73,16 @@ class Experience
      */
     private $user;
 
+    /**
+     * @var \GenericBundle\Entity\ImportCandidat
+     *
+     * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\ImportCandidat")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
+     * })
+     */
+    private $importCandidat;
+
 
 
     /**
@@ -251,5 +261,41 @@ class Experience
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set importCandidat
+     *
+     * @param \GenericBundle\Entity\ImportCandidat $importCandidat
+     *
+     * @return Experience
+     */
+    public function setImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat = null)
+    {
+        $this->importCandidat = $importCandidat;
+
+        return $this;
+    }
+
+    /**
+     * Get importCandidat
+     *
+     * @return \GenericBundle\Entity\ImportCandidat
+     */
+    public function getImportCandidat()
+    {
+        return $this->importCandidat;
+    }
+
+    public function isEqual(Experience $experience)
+    {
+        if($experience->getNomsociete()==$this->getNomsociete() and $experience->getPoste()==$this->getPoste()
+            and $experience->getActivite()==$this->getActivite() and $experience->getDescription()==$this->getDescription())
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }

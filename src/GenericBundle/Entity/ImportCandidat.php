@@ -59,56 +59,14 @@ class ImportCandidat
     /**
      * @var string
      *
-     * @ORM\Column(name="dateNaissance", type="string", length=45)
-     */
-    private $dateNaissance;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="cpNaissance", type="string", length=45)
-     */
-    private $CPNaissance;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="adresse", type="string", length=45)
-     */
-    private $adresse;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="cp", type="string", length=45)
-     */
-    private $cp;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="permis", type="boolean", nullable=true)
-     */
-    private $permis;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="vehicule", type="boolean", nullable=true)
-     */
-    private $vehicule;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="erreur", type="string", length=45, nullable=true)
      */
     private $erreur;
 
     /**
-     * @var \User
+     * @var \GenericBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })
@@ -116,14 +74,55 @@ class ImportCandidat
     private $user;
 
     /**
-     * @var \Etablissement
+     * @var \GenericBundle\Entity\Etablissement
      *
-     * @ORM\ManyToOne(targetEntity="Etablissement")
+     * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\Etablissement")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="etablissement_id", referencedColumnName="id")
      * })
      */
     private $etablissement;
+
+    /**
+     * @var \GenericBundle\Entity\Infocomplementaire
+     *
+     * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\Infocomplementaire")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="infocomplementaire_import_id", referencedColumnName="id")
+     * })
+     */
+    private $info;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\Culturel", mappedBy="importCandidat")
+     */
+    private $culturel;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\Langue", mappedBy="importCandidat")
+     */
+    private $langue;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\Sport", mappedBy="importCandidat")
+     */
+    private $sport;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->culturelImport = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->langueImport = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sportImport = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -256,150 +255,6 @@ class ImportCandidat
     }
 
     /**
-     * Set dateNaissance
-     *
-     * @param string $dateNaissance
-     *
-     * @return ImportCandidat
-     */
-    public function setDateNaissance($dateNaissance)
-    {
-        $this->dateNaissance = $dateNaissance;
-
-        return $this;
-    }
-
-    /**
-     * Get dateNaissance
-     *
-     * @return string
-     */
-    public function getDateNaissance()
-    {
-        return $this->dateNaissance;
-    }
-
-    /**
-     * Set cPNaissance
-     *
-     * @param string $cPNaissance
-     *
-     * @return ImportCandidat
-     */
-    public function setCPNaissance($cPNaissance)
-    {
-        $this->CPNaissance = $cPNaissance;
-
-        return $this;
-    }
-
-    /**
-     * Get cPNaissance
-     *
-     * @return string
-     */
-    public function getCPNaissance()
-    {
-        return $this->CPNaissance;
-    }
-
-    /**
-     * Set adresse
-     *
-     * @param string $adresse
-     *
-     * @return ImportCandidat
-     */
-    public function setAdresse($adresse)
-    {
-        $this->adresse = $adresse;
-
-        return $this;
-    }
-
-    /**
-     * Get adresse
-     *
-     * @return string
-     */
-    public function getAdresse()
-    {
-        return $this->adresse;
-    }
-
-    /**
-     * Set cp
-     *
-     * @param string $cp
-     *
-     * @return ImportCandidat
-     */
-    public function setCp($cp)
-    {
-        $this->cp = $cp;
-
-        return $this;
-    }
-
-    /**
-     * Get cp
-     *
-     * @return string
-     */
-    public function getCp()
-    {
-        return $this->cp;
-    }
-
-    /**
-     * Set permis
-     *
-     * @param boolean $permis
-     *
-     * @return ImportCandidat
-     */
-    public function setPermis($permis)
-    {
-        $this->permis = $permis;
-
-        return $this;
-    }
-
-    /**
-     * Get permis
-     *
-     * @return boolean
-     */
-    public function getPermis()
-    {
-        return $this->permis;
-    }
-
-    /**
-     * Set vehicule
-     *
-     * @param boolean $vehicule
-     *
-     * @return ImportCandidat
-     */
-    public function setVehicule($vehicule)
-    {
-        $this->vehicule = $vehicule;
-
-        return $this;
-    }
-
-    /**
-     * Get vehicule
-     *
-     * @return boolean
-     */
-    public function getVehicule()
-    {
-        return $this->vehicule;
-    }
-
-    /**
      * Set erreur
      *
      * @param string $erreur
@@ -469,5 +324,131 @@ class ImportCandidat
     public function getEtablissement()
     {
         return $this->etablissement;
+    }
+
+    /**
+     * Set infocomplementaire
+     *
+     * @param \GenericBundle\Entity\Infocomplementaire $info
+     *
+     * @return ImportCandidat
+     */
+    public function setInfo(\GenericBundle\Entity\Infocomplementaire $info = null)
+    {
+        $this->info = $info;
+
+        return $this;
+    }
+
+    /**
+     * Get infocomplementaireImport
+     *
+     * @return \GenericBundle\Entity\Infocomplementaire
+     */
+    public function getInfo()
+    {
+        return $this->info;
+    }
+
+    /**
+     * Add culturel
+     *
+     * @param \GenericBundle\Entity\Culturel $culturel
+     *
+     * @return ImportCandidat
+     */
+    public function addCulturel(\GenericBundle\Entity\Culturel $culturel)
+    {
+        $this->culturel[] = $culturel;
+
+        return $this;
+    }
+
+    /**
+     * Remove culturel
+     *
+     * @param \GenericBundle\Entity\Culturel $culturel
+     */
+    public function removeCulturel(\GenericBundle\Entity\Culturel $culturel)
+    {
+        $this->culturel->removeElement($culturel);
+    }
+
+    /**
+     * Get culturel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCulturel()
+    {
+        return $this->culturel;
+    }
+
+    /**
+     * Add langue
+     *
+     * @param \GenericBundle\Entity\Langue $langue
+     *
+     * @return ImportCandidat
+     */
+    public function addLangue(\GenericBundle\Entity\Langue $langue)
+    {
+        $this->langue[] = $langue;
+
+        return $this;
+    }
+
+    /**
+     * Remove langue
+     *
+     * @param \GenericBundle\Entity\Langue $langue
+     */
+    public function removeLangue(\GenericBundle\Entity\Langue $langue)
+    {
+        $this->langue->removeElement($langue);
+    }
+
+    /**
+     * Get langue
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLangue()
+    {
+        return $this->langue;
+    }
+
+    /**
+     * Add sport
+     *
+     * @param \GenericBundle\Entity\Sport $sport
+     *
+     * @return ImportCandidat
+     */
+    public function addSport(\GenericBundle\Entity\Sport $sport)
+    {
+        $this->sport[] = $sport;
+
+        return $this;
+    }
+
+    /**
+     * Remove sport
+     *
+     * @param \GenericBundle\Entity\Sport $sport
+     */
+    public function removeSport(\GenericBundle\Entity\Sport $sport)
+    {
+        $this->sport->removeElement($sport);
+    }
+
+    /**
+     * Get sport
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSport()
+    {
+        return $this->sport;
     }
 }

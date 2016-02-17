@@ -3,18 +3,14 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * Notification
  *
- * @ORM\Table(name="notification", indexes={@ORM\Index(name="fk_Notification_users1_idx", columns={"users_id"})})
+ * @ORM\Table(name="notification",uniqueConstraints={@UniqueConstraint(name="unique_notification", columns={"type", "entite","users_id"})}
+ *      , indexes={@ORM\Index(name="fk_Notification_users1_idx", columns={"users_id"})})
  * @ORM\Entity
- * @UniqueEntity(
- *     fields={"entite", "type","user"},
- *     errorPath="port",
- *     message="This port is already in use on that host."
- * )
  */
 class Notification
 {

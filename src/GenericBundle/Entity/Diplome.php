@@ -53,6 +53,16 @@ class Diplome
     private $user;
 
     /**
+     * @var \GenericBundle\Entity\ImportCandidat
+     *
+     * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\ImportCandidat")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
+     * })
+     */
+    private $importCandidat;
+
+    /**
      * Get id
      *
      * @return integer
@@ -156,5 +166,41 @@ class Diplome
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set importCandidat
+     *
+     * @param \GenericBundle\Entity\ImportCandidat $importCandidat
+     *
+     * @return Diplome
+     */
+    public function setImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat = null)
+    {
+        $this->importCandidat = $importCandidat;
+
+        return $this;
+    }
+
+    /**
+     * Get importCandidat
+     *
+     * @return \GenericBundle\Entity\ImportCandidat
+     */
+    public function getImportCandidat()
+    {
+        return $this->importCandidat;
+    }
+
+    public function isEqual(Diplome $diplome)
+    {
+        if($diplome->getEcole()==$this->getEcole() and $diplome->getObtention()==$this->getObtention() and $diplome->getLibelle()==$this->getLibelle())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

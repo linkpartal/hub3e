@@ -28,6 +28,11 @@
             <td>{{ import.getErreur }}</td>
             <td style="border: none">
                 <button onclick="supprimerLigne('{{ path('supprimer_import',{'id': import.getId}) }}',this)" type="button" style="border: none">x</button>
+                {% if not import.getErreur == null %}
+                    <button  type="button" style="border: none" disabled>+</button>
+                    {% else %}
+                        <button onclick="supprimerLigne('{{ path('importer_candidat',{'id': import.getId}) }}',this)" type="button" style="border: none">+</button>
+                {% endif %}
                 <button onclick="voirduplica({{ import.getId }})" type="button" style="border: none">voir</button>
             </td>
         </tr>
@@ -43,9 +48,29 @@
             error: function (response) {
                 console.log(response);
             },
-            success: function(data){console.log(data);}
+            success: function(data){
+                if(data['Delete']=='1')
+                {
+                    champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
+                    alert('Suppression correctement effectuer');
+                }
+                if(data['Delete']=='0')
+                {
+                    alert('Suppression à rencontrer une erreur en cours d\'excecution');
+                }
+                if(data['Ajout']=='1')
+                {
+                    champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
+                    alert('Ajout correctement effectuer');
+                }
+                if(data['Ajout']=='0')
+                {
+                    champs.disabled = true;
+                    alert('Ajout à rencontrer une erreur en cours d\'excecution, cet utilisateur existe déjà, Vérifiez ces duplicats puis essayez de le fusionner');
+                }
+            }
         });
-        champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
+
     };
     function voirduplica(id)
     {

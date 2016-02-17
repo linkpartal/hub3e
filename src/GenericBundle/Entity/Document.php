@@ -31,6 +31,13 @@ class Document
     /**
      * @var string
      *
+     * @ORM\Column(name="name", type="string", length=45, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="extension", type="string", length=45, nullable=false)
      */
     private $extension;
@@ -60,6 +67,16 @@ class Document
      * })
      */
     private $users;
+
+    /**
+     * @var \GenericBundle\Entity\ImportCandidat
+     *
+     * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\ImportCandidat")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
+     * })
+     */
+    private $importCandidat;
 
 
 
@@ -205,5 +222,64 @@ class Document
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Set importCandidat
+     *
+     * @param \GenericBundle\Entity\ImportCandidat $importCandidat
+     *
+     * @return Document
+     */
+    public function setImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat = null)
+    {
+        $this->importCandidat = $importCandidat;
+
+        return $this;
+    }
+
+    /**
+     * Get importCandidat
+     *
+     * @return \GenericBundle\Entity\ImportCandidat
+     */
+    public function getImportCandidat()
+    {
+        return $this->importCandidat;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Document
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function isEqual(Document $document)
+    {
+        if($document->getDocument()==$this->getDocument() and $document->getType()==$this->getType() and $document->getName()==$this->getName() and $document->getExtension()==$this->getExtension())
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }

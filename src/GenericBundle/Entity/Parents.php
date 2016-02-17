@@ -94,6 +94,16 @@ class Parents
      */
     private $user;
 
+    /**
+     * @var \GenericBundle\Entity\ImportCandidat
+     *
+     * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\ImportCandidat")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
+     * })
+     */
+    private $importCandidat;
+
 
 
     /**
@@ -344,5 +354,41 @@ class Parents
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set importCandidat
+     *
+     * @param \GenericBundle\Entity\ImportCandidat $importCandidat
+     *
+     * @return Parents
+     */
+    public function setImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat = null)
+    {
+        $this->importCandidat = $importCandidat;
+
+        return $this;
+    }
+
+    /**
+     * Get importCandidat
+     *
+     * @return \GenericBundle\Entity\ImportCandidat
+     */
+    public function getImportCandidat()
+    {
+        return $this->importCandidat;
+    }
+
+    public function isEqual(Parents $parents)
+    {
+        if($parents->getNom()==$this->getNom() and $parents->getEmail()==$this->getEmail()
+            and $parents->getTelephone()==$this->getTelephone() and $parents->getProfession()==$this->getProfession())
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }
