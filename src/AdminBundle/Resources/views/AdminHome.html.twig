@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="icon" type="image/png" href="{{ asset('image/Logo_Hub_3e.png') }}" />
+
     {% block CSS %}{% endblock %}
 
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
@@ -16,6 +17,7 @@
 <div id="addtier" class="popup col-xs-3">
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
+
         <div id="div_adresse" name="ajouterAdresse" style="border-bottom: 10px;display:none">
             <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
             <button class="toggle" type="button" onclick="supprimerAdresse(this)">-</button>
@@ -43,6 +45,7 @@
                 </div>
             </div>
         </div>
+
         <form id="form" action="{{ path('tieradded') }}" onsubmit="document.getElementById('submittier').disabled = true;" method="post" enctype="multipart/form-data">
             <div class="div_form">
 
@@ -116,7 +119,7 @@
 </div>
 <div id="addLicenceDef" class="popup col-xs-3">
     <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block;overflow-y: auto">
+    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block;overflow-y: auto;">
         <form class="formulaire" id="formLicence" action="{{ path("metier_user_licenceadded") }}" onsubmit="document.getElementById('submitlicencedef').disabled=true" method="post">
 
             <div class="div_form" >
@@ -130,7 +133,7 @@
 
                     <input class="input" type="number"  min="1" max="99999999" placeholder="Maximum de mission" id="maxmiss" name="_maxmiss" required maxlength="11">
                 </div>
-                <textarea form="formLicence" placeholder="Description" class="input" maxlength="255" id="Description" name="_Description" style="height: 100px;display: inline-flex"></textarea>
+                <textarea form="formLicence" placeholder="Description" class="input" maxlength="255" id="Description" name="_Description" style="resize: none; height: 100px;display: inline-flex"></textarea>
 
 
 
@@ -142,6 +145,7 @@
         </form>
     </div>
 </div>
+
 
 <div class="container">
 
@@ -363,7 +367,14 @@
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/PopUp.js') }}"></script>
 <script src="http://maps.googleapis.com/maps/api/js"></script>
+
 <script language="JavaScript">
+
+
+
+
+
+
     var i = 1;
     document.getElementById("leftselect").onchange = function(){
         var x = document.getElementById("leftselect").value;
@@ -578,6 +589,8 @@
 
         i++;
     };
+
+
     function submitAjaxForm(url,form){
 
         var route;
@@ -607,6 +620,8 @@
             }
         });
     };
+
+
     function envoyeradresses(){
         document.getElementById('submittier').disabled=true;
         var geocodes = document.getElementsByName('_Geocode[]');
@@ -661,6 +676,9 @@
     function supprimerAdresse(div){
         div.parentNode.parentNode.removeChild(div.parentNode);
     }
+
+
+
 </script>
 
 {% block JS %}

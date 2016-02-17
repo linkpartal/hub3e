@@ -9,6 +9,15 @@
     <link rel="stylesheet" href="{{ asset('css/ajout.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
 
+    <style>
+        .dropdown-submenu{position:relative;}
+        .dropdown-submenu>.dropdown-menu{top:0;left:100%;margin-top:-6px;margin-left:-1px;-webkit-border-radius:0 6px 6px 6px;-moz-border-radius:0 6px 6px 6px;border-radius:0 6px 6px 6px;}
+        .dropdown-submenu:hover>.dropdown-menu{display:block;}
+        .dropdown-submenu>a:after{display:block;content:" ";float:right;width:0;height:0;border-color:transparent;border-style:solid;border-width:5px 0 5px 5px;border-left-color:#cccccc;margin-top:5px;margin-right:-10px;}
+        .dropdown-submenu:hover>a:after{border-left-color:#ffffff;}
+        .dropdown-submenu.pull-left{float:none;}.dropdown-submenu.pull-left>.dropdown-menu{left:-100%;margin-left:10px;-webkit-border-radius:6px 0 6px 6px;-moz-border-radius:6px 0 6px 6px;border-radius:6px 0 6px 6px;}
+    </style>
+
     {% block CSS %}{% endblock %}
 
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
@@ -55,7 +64,9 @@
 
                 </div>
             </div>
+
         {% endif %}
+
         {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
             <div id="adduser" class="popup">
                 <div onclick="hide(this)" class="close"></div>
@@ -76,7 +87,7 @@
                                     {% if etablissement.getTier.getEcole %}
                                         <option value="ROLE_ADMINECOLE">Administrateur école</option>
                                         <option value="ROLE_RECRUTEUR">Recruteur Placeur</option>
-                                        <option value="ROLE_APPRENANT">Apprenant</option>
+
                                     {% else %}
                                         <option value="ROLE_ADMINSOC">Administrateur Société</option>
                                         <option value="ROLE_TUTEUR">Tuteur</option>
@@ -108,6 +119,7 @@
 
         {% if not etablissement.getTier.getEcole %}
             {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
+
                 <div id="addmission" class="popup" >
                     <div onclick="hide(this)" class="close"></div>
                     <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;position:fixed " >
@@ -159,6 +171,9 @@
                         </form>
                     </div>
                 </div>
+
+
+
             {% endif %}
         {% else %}
             {% if is_granted('ROLE_ADMINECOLE') %}
@@ -299,6 +314,300 @@
         {% endif %}
 
 
+    {% if is_granted('ROLE_ADMINECOLE') %}
+
+        <div id="apprenant" class="popup col-xs-3" >
+            <div onclick="hide(this)" class="close"></div>
+            <div class="col-xs-offset-3 col-xs-6" style="top:40px;border:20px solid white;display: block;margin-bottom: 20px ;background: white;width:50%">
+
+
+                <div class="col-xs-12" style="height: 50px;">
+                    <div style="height: 50px; width: 100%">
+
+                        <ul id="select_info"  class="nav navbar-nav" style="height: 50px;background: #4389c8;" >
+                            <li class="dropdown col-xs-12" >
+                                <a class="dropdown-toggle" data-toggle="dropdown"style="height: 40px;color:white;background: #4389c8;margin: 0 auto;">
+                                    <label id="65sd4f4" style="font-family: Arial;font-size: small">DETAILS DE L'APPRENANT</label>  <b class="caret"></b> </a>
+                                <ul class="dropdown-menu" style="margin-left: 100px">
+                                    <li class="dropdown-submenu" >
+                                        <a onclick="show_formapprenant('infoapprenant')" tabindex="-1" href="#" >Informations générales sur l'apprenant</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a onclick="show_formapprenant('responsable_apprenant')" href="#">Responsables de l'apprenant</a></li>
+                                            <li><a onclick="show_formapprenant('diplome_apprenant')" href="#">Diplomes</a></li>
+                                            <li><a onclick="show_formapprenant('recommendation_apprenant')" href="#">Recommandation</a></li>
+                                            <li><a href="#">Réseaux sociaux</a></li>
+                                            <li><a href="#">Epériences</a></li>
+                                            <li><a href="#">Hobbies</a></li>
+                                            <li><a href="#">Langue</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">QCM</a></li>
+                                    <li><a onclick="show_formapprenant('apprenant_formation')"  href="#">Choix formation</a></li>
+                                    <li><a href="#">Profil à 360°</a></li>
+                                    <li><a href="#">Rendez-vous</a></li>
+                                    <li><a href="#">Placement</a></li>
+                                    <li><a href="#">Documents</a></li>
+                                    <li><a href="#">Onglet tests</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+
+                <div id="div_responsable" name="ajouterResponsable" style="display:none;">
+                    <button style="float:inherit" class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+                    <button class="toggle" type="button" onclick="supprimerResponsable(this)"> - </button>
+                    <div id="demo" class="collapse in">
+
+                        <div class="col-xs-10 input-colonne">
+                            <label id="startTimeLabel" visible="false"></label>
+                        </div>
+
+                        <div class="col-xs-3 input-colonne">
+                            <input placeholder="Nom" class="input" type="text" id="Nom" name="_Nom" maxlength="45" required >
+                            <input placeholder="Civilité" class="input" type="text" id="Civilite" name="_Civilite" maxlength="45" required >
+
+                        </div>
+                        <div class="col-xs-3 input-colonne">
+                            <input placeholder="Prenom" class="input" type="text" id="Prenom" name="_Prenom" maxlength="45" required >
+                            <input placeholder="Date de naissance" class="input" type="text" id="DateNaissance" name="_DateNaissance" maxlength="45" required >
+
+                        </div>
+
+                        <div class="col-xs-6 input-colonne">
+                            <input placeholder="Adresse postale" class="input" type="text" id="Adresse" name="_Adresse" maxlength="45" required >
+                            <input placeholder="Adresse email" class="input" type="text" id="Adresseemail" name="_Adresseemail" maxlength="45" required >
+
+                        </div>
+
+                        <div class="col-xs-3 input-colonne">
+                            <input placeholder="Profession" class="input" type="text" id="Profession" name="_Profession" maxlength="45" required >
+                        </div>
+
+                        <div class="col-xs-3 input-colonne">
+                            <input placeholder="Téléphone fixe" class="input" type="text" id="Tel" name="_Tel" maxlength="45" required >
+                        </div>
+                        <div class="col-xs-3 input-colonne">
+                            <input placeholder="Ville" class="input" type="text" id="Ville" name="_Ville" maxlength="45" required >
+                        </div>
+
+                        <div class="col-xs-3 input-colonne">
+                            <input placeholder="Code postale" class="input" type="text" id="CodePostale" name="_CodePostale" maxlength="45" required >
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div id="div_recommandation" name="ajouterRecommandation" style="display:none">
+                    <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+                    <button class="toggle" type="button" onclick="supprimerRecommandation(this)">-</button>
+                    <div id="demo" class="collapse in">
+
+                        <div class="col-xs-10 input-colonne">
+                            <label id="startTimeLabel" visible="false"></label>
+                        </div>
+                        <div class="col-xs-6 input-colonne">
+                            <div class="col-xs-6 input-colonne">
+                                <input placeholder="Nom" class="input" type="text" id="Nom" name="_Nom" maxlength="45" required >
+                                <input placeholder="Fonction" class="input" type="text" id="Fonction" name="_Fonction" maxlength="45" required >
+
+                            </div>
+                            <div class="col-xs-6 input-colonne" style="border-right: 0">
+                                <input placeholder="Prenom" class="input" type="text" id="Prenom" name="_Prenom" maxlength="45" required >
+                                <input placeholder="Téléphone fixe" class="input"  type="text" id="Telephone" name="_Telephone" maxlength="45" required >
+                            </div>
+                            <input placeholder="Adresse email" class="input" type="text" id="email" name="_email" maxlength="45" required >
+                        </div>
+
+
+                        <div class="col-xs-6 input-colonne " style="height:150px">
+                            <textarea placeholder="Recommandation écrite" class="input" type="text" id="Text" name="_Text"  required style="resize:none;height:calc( 100% - 13px)"></textarea>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div id="div_diplome" name="ajouterDiplome" style="display:none">
+                    <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+                    <button class="toggle" type="button" onclick="supprimerDiplome(this)">-</button>
+                    <div id="demo" class="collapse in">
+
+
+                        <div class="col-xs-6 input-colonne">
+                            <input placeholder="Nom" class="input" type="text" id="Nom" name="_Nom" maxlength="45" required >
+                            <input placeholder="Fonction" class="input" type="text" id="Fonction" name="_Fonction" maxlength="45" required >
+
+                        </div>
+                        <div class="col-xs-6 input-colonne" style="border-right: 0">
+                            <input placeholder="Prenom" class="input" type="text" id="Prenom" name="_Prenom" maxlength="45" required >
+                            <input placeholder="Téléphone fixe" class="input"  type="text" id="Telephone" name="_Telephone" maxlength="45" required >
+                        </div>
+                        <input placeholder="Adresse email" class="input" type="text" id="email" name="_email" maxlength="45" required >
+
+
+
+                        <div class="col-xs-6 input-colonne " style="height:150px">
+                            <textarea placeholder="Recommandation écrite" class="input" type="text" id="Text" name="_Text"  required style="resize:none;height:calc( 100% - 13px)"></textarea>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div id="div_formation" name="ajouterFormation" style="display:none">
+
+                    <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+                    <button class="toggle" type="button" onclick="supprimerFormation(this)">-</button>
+                    <div id="demo" class="collapse in">
+
+                        <div class="col-xs-10 input-colonne">
+                            <label id="startTimeLabel" visible="false"></label>
+                        </div>
+
+                        <div class="col-xs-3 input-colonne">
+                            <input placeholder="Niveau" class="input" type="text" id="Niveau" name="_Niveau" maxlength="45" required >
+                            <input placeholder="Intitulé" class="input" type="text" id="Intitule" name="_Intitule" maxlength="45" required >
+
+                        </div>
+                        <div class="col-xs-3 input-colonne">
+                            <input placeholder="Ecole" class="input" type="text" id="Ecole" name="_Ecole" maxlength="45" required >
+                            <input placeholder="Spécialité" class="input" type="text" id="Specialite" name="_Specialite" maxlength="45" required >
+
+                        </div>
+
+                        <div class="col-xs-6 input-colonne">
+                            <input placeholder="Mention ou note" class="input" type="text" id="Prenom" name="_Prenom" maxlength="45" required >
+                            <input placeholder="Adresse postale de l'école" class="input" type="text" id="AdressePostale" name="_AdressePostale" maxlength="45" required >
+
+                        </div>
+
+                        <div class="col-xs-3 input-colonne">
+                            <input placeholder="Année" class="input" type="text" id="Annee" name="_Annee" maxlength="45" required >
+                        </div>
+
+                        <div class="col-xs-3 input-colonne">
+                            <input placeholder="Obtention" class="input" type="text" id="Obtention" name="_Obtention" maxlength="45" required >
+                        </div>
+                        <div class="col-xs-3 input-colonne">
+                            <input placeholder="Ville" class="input" type="text" id="Ville" name="_Ville" maxlength="45" required >
+                        </div>
+
+                        <div class="col-xs-3 input-colonne">
+                            <input placeholder="Code postale" class="input" type="text" id="CodePostale" name="_CodePostale" maxlength="45" required >
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <form class="formulaire" id="formApprenant"  onsubmit="document.getElementById('submitApprenant').disabled=true" method="post" style="margin-top: 50px"   >
+
+                    <div class="div_form" id="infoapprenant" style="border-bottom:1px solid #2b542c;" >
+
+
+                        <div class="col-xs-10 input-colonne">
+                            <label id="startTimeLabel" visible="false"></label>
+                        </div>
+                        <div >
+                            <div class="col-xs-3 input-colonne" >
+                                <input placeholder="Photos " class="input" type="text" id="Photos" name="_Photos" required style="height:90px" >
+                            </div>
+                            <div class="col-xs-3 input-colonne">
+                                <input placeholder="Placé" class="input" type="text" id="Place" name="_Place" maxlength="45" required style="background:yellowgreen">
+
+                                <input placeholder="N°INSEE" class="input" type="text" id="N°INSEE" name="_N°INSEE" maxlength="45" required>
+                            </div>
+
+                            <div class="col-xs-6 input-colonne" style="border-right: 0 ">
+                                <input placeholder="Adresse postale" class="input" type="text" id="Adresse" name="_Adresse" maxlength="45" required >
+                                <input placeholder="Adresse email" class="input" type="text" id="Ville" name="_Ville" maxlength="45" required >
+
+                            </div>
+                            <div class="col-xs-3 input-colonne">
+                                <input placeholder="Nom" class="input" type="text" id="Nom" name="_Nom" maxlength="45" required >
+                                <input placeholder="Civilité" class="input" type="text" id="Civilite" name="_Civilite" maxlength="45" required >
+
+                            </div>
+                            <div class="col-xs-3 input-colonne">
+                                <input placeholder="Prenom" class="input" type="text" id="Prenom" name="_Prenom" maxlength="45" required >
+
+                                <input placeholder="Date de Naissance" type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' class="date" id="DateNaissance" name="_DateNaissance" title="Date de Naissance" required >
+                            </div>
+
+                            <div class="col-xs-3 input-colonne">
+                                <input placeholder="Ville" class="input" type="text" id="Ville" name="_Ville" maxlength="45" required >
+                                <input placeholder="Téléphone portable" class="input" type="text" id="Telephone" name="_Telephone" maxlength="45" required >
+
+                            </div>
+
+                            <div class="col-xs-3 input-colonne" style="border-right: 0 ">
+                                <input placeholder="Code postal" class="input" type="text" id="CPNaissance	" name="_CPNaissance	" maxlength="45" required >
+                                <input placeholder="Téléphone fixe" class="input" type="text" id="telephone" name="_telephone" maxlength="45" required >
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="div_form" id="apprenant_formation" style="position: absolute;visibility: hidden;border-bottom:1px solid #2b542c;" >
+
+
+                        <div id="formationcontainer">
+
+                        </div>
+                        <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;" onclick="dupliquerFormation()">Ajouter une formation</button>
+
+                    </div>
+
+                    <div class="div_form" id="responsable_apprenant" style="position: absolute;visibility: hidden;border-bottom:1px solid #2b542c;" >
+
+                        <div id="responsablecontainer">
+
+                        </div>
+                        <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;" onclick="dupliquerResponsable()">Ajouter un responsable</button>
+                    </div>
+
+                    <div class="div_form" id="recommendation_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
+
+                        <div id="recommandationcontainer">
+
+                        </div>
+                        <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;"  onclick="dupliquerRecommandation()">Ajouter une recommandation</button>
+
+                    </div>
+
+
+                    <div class="div_form" id="diplome_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
+
+                        <div id="diplomecontainer">
+
+                        </div>
+                        <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;"  onclick="dupliquerDiplome()">Ajouter un diplome</button>
+
+                    </div>
+
+
+
+
+                    <div class="div_button" style="margin-top: 10px" >
+
+                        <input class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" name="submitApprenant" type="submit" value="Supprimer">
+                        <input class="blue" name="submitApprenant" type="submit"  style="float: right" value="Publié">
+                        <input class="blue" name="submitApprenant" type="submit"  style="float: right;margin-right: 10px" value="Enregistrer">
+                        <input class="blue" name="submitApprenant" type="submit"  style="float: right;margin-right: 10px" value="Suivant">
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    {% endif %}
+
         <div class="row" style="height: 78px; margin: 0;">
             <img class="col-xs-1" src="data:image/jpg;base64,{{ etablissement.getTier.getLogo }}"
                  style="padding: 10px; height: 40px;">
@@ -320,8 +629,9 @@
 <div class="row" style="background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;height: calc(100% - 78px)">
 
     <div class="col-xs-9" style="background: rgb(238, 241, 246); height: 100%;">
+
         <div class="col-xs-12" style="height: 46px;">
-            <div style="height: 35px; width: 100%; padding: 15px 0 0 15px;">
+                    <div style="height: 35px; width: 100%; padding: 15px 0 0 15px;">
                 <select title="" id="select_info" class="btn btn-default dropdown-toggle" style="color:white;">
                     <option value="info_etab" style="color:black;">Information</option>
                     <option value="info_user" style="color:black;">Utilisateurs</option>
@@ -580,6 +890,19 @@
                 </button>
             {% endif %}
 
+
+
+
+            {% if is_granted('ROLE_ADMINECOLE') %}
+            <button onclick="show('apprenant')" type="button" class="list-group-item rightMenu">
+                <div class="col-xs-12">Ajouter un apprenant</div>
+
+            </button>
+             {% endif %}
+
+
+
+
             {% if not etablissement.getTier.getEcole %}
                 {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
                     <button onclick="show('addmission')" type="button" class="list-group-item rightMenu">
@@ -628,6 +951,11 @@
             <button onclick="alert('Ce button n\'est pas encore fonctionel!')" type="button" class="list-group-item rightMenu">
                 <div class="col-xs-12">Gérer les droits</div>
             </button>
+
+
+
+
+
         </div>
     </div>
     {% endif %}
@@ -666,6 +994,46 @@
             {% endif %}
             document.getElementById(x).style.display='block';
         };
+
+
+
+
+
+        function show_formapprenant(div)
+        {
+            document.getElementById('infoapprenant').style.visibility= 'hidden';
+            document.getElementById('apprenant_formation').style.visibility= 'hidden';
+            document.getElementById('responsable_apprenant').style.visibility= 'hidden';
+            document.getElementById('recommendation_apprenant').style.visibility= 'hidden';
+            document.getElementById('diplome_apprenant').style.visibility= 'hidden';
+            document.getElementById('infoapprenant').style.position= 'absolute';
+            document.getElementById('apprenant_formation').style.position= 'absolute';
+            document.getElementById('responsable_apprenant').style.position= 'absolute';
+            document.getElementById('recommendation_apprenant').style.position= 'absolute';
+            document.getElementById('diplome_apprenant').style.position= 'absolute';
+
+            if (div == 'infoapprenant'){
+                document.getElementById('65sd4f4').innerHTML = "DETAILS DE L'APPRENANT"
+            }
+            if (div == 'responsable_apprenant'){
+                document.getElementById('65sd4f4').innerHTML = "RESPONSABLE DE L'APPRENANT"
+            }
+            if (div == 'recommendation_apprenant'){
+                document.getElementById('65sd4f4').innerHTML = "RECOMMANDATION"
+            }
+            if (div == 'diplome_apprenant'){
+                document.getElementById('65sd4f4').innerHTML = "RECOMMANDATION"
+            }
+            if (div == 'apprenant_formation'){
+                document.getElementById('65sd4f4').innerHTML = "FORMATION"
+            }
+            document.getElementById(div).style.visibility= 'visible';
+            document.getElementById(div).style.position= 'static';
+
+        }
+
+
+
         function active(route) {
             document.getElementById("activate").disabled = true;
             $.ajax({
@@ -964,6 +1332,87 @@
             champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
         };
 
+        var ResponsableCount = 1;
+        function dupliquerResponsable() {
+            var dup = document.getElementById("div_responsable");
+            var clone = dup.cloneNode(true);
+            var toggle = clone.children[0];
+            toggle.setAttribute("data-target","#Responsable" + ResponsableCount);
+            toggle.innerHTML="Responsable " + ResponsableCount;
+
+            var div = clone.children[2];
+            div.setAttribute("id","Responsable" + ResponsableCount);
+            clone.style.display = 'block';
+
+            document.getElementById("responsablecontainer").appendChild(clone);
+            var parentdiv = dup.parentNode;
+            var close =dup.parentNode.parentNode;
+            if(parentdiv.offsetHeight  > close.offsetHeight )
+            {
+                close.style.height = parentdiv.offsetHeight;
+                clone.children[0].style.height = parentdiv.offsetHeight;
+            }
+
+            ResponsableCount++;
+        };
+        var RecomCount = 1;
+        function dupliquerRecommandation() {
+            var dup = document.getElementById("div_recommandation");
+            var clone = dup.cloneNode(true);
+            var toggle = clone.children[0];
+            toggle.setAttribute("data-target","#Recommandation" + RecomCount);
+            toggle.innerHTML="Recommandation " + RecomCount;
+
+            var div = clone.children[2];
+            div.setAttribute("id","Recommandation" + RecomCount);
+            clone.style.display = 'block';
+
+            document.getElementById("recommandationcontainer").appendChild(clone);
+            var parentdiv = dup.parentNode;
+            var close =dup.parentNode.parentNode;
+            if(parentdiv.offsetHeight  > close.offsetHeight )
+            {
+                close.style.height = parentdiv.offsetHeight;
+                clone.children[0].style.height = parentdiv.offsetHeight;
+            }
+
+            RecomCount++;
+        };
+        var formationCount = 1;
+        function dupliquerFormation() {
+            var dup = document.getElementById("div_formation");
+            var clone = dup.cloneNode(true);
+            var toggle = clone.children[0];
+            toggle.setAttribute("data-target","#Formation" + formationCount);
+            toggle.innerHTML="Formation " + formationCount;
+
+            var div = clone.children[2];
+            div.setAttribute("id","Formation" + formationCount);
+            clone.style.display = 'block';
+
+            document.getElementById("formationcontainer").appendChild(clone);
+            var parentdiv = dup.parentNode;
+            var close =dup.parentNode.parentNode;
+            if(parentdiv.offsetHeight  > close.offsetHeight )
+            {
+                close.style.height = parentdiv.offsetHeight;
+                clone.children[0].style.height = parentdiv.offsetHeight;
+            }
+
+            formationCount++;
+        };
+
+        function supprimerResponsable(div){
+            div.parentNode.parentNode.removeChild(div.parentNode);
+        }
+
+
+        function supprimerRecommandation(div){
+            div.parentNode.parentNode.removeChild(div.parentNode);
+        }
+        function supprimerFormation(div){
+            div.parentNode.parentNode.removeChild(div.parentNode);
+        }
 
 
 

@@ -17,3 +17,8 @@ modifierMission:
 missionModif:
     path: /missionModif
     defaults: { _controller: MissionBundle:Default:missionModif}
+
+
+MettreEnRelation_added:
+    path: /MettreEnRelation_added
+    defaults: { _controller: MissionBundle:Default:addMettreEnRelation}

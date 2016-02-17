@@ -73,7 +73,7 @@ class DefaultController extends Controller
     public function affichageMissionAction($id)
     {
         $mission = $this->getDoctrine()->getRepository('GenericBundle:Mission')->find($id);
-        $Users = $this->getDoctrine()->getRepository('GenericBundle:User')->findAll();
+        $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findAll();
 
 
         if($mission->getEtablissement()->getTier()->getLogo())
@@ -88,7 +88,7 @@ class DefaultController extends Controller
 
 
         // var_dump($mission);die;
-        return $this->render('MissionBundle::afficheMission.html.twig',array('mission'=>$mission,'Users'=>$Users));
+        return $this->render('MissionBundle::afficheMission.html.twig',array('mission'=>$mission,'users'=>$users));
 
 
 
