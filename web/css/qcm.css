@@ -19,8 +19,20 @@ body
 }
 
 .inputcontainer label
+ {
+     height: 40px;
+     padding: 10px 0 10px 0 !important;
+     display: inline-block !important;
+     border: none !important;
+     color: #7F7F7F !important;
+     font : 20px arial;
+     margin: 0 !important;
+     line-height: 200%;
+ }
+
+.inputcontainer div label
 {
-    height: 60px;
+    height: 40px;
     padding: 10px 0 10px 0 !important;
     display: inline-block !important;
     border: none !important;
@@ -29,7 +41,7 @@ body
     margin: 0 !important;
     line-height: 200%;
 }
-.inputcontainer .champ
+.champ
 {
     margin: 9px;
     border: none;

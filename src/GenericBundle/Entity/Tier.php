@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Tier
  *
  * @ORM\Table(name="tier", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQ_19653DBDDB8BBA08", columns={"siren"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="GenericBundle\Repository\TierRepository")
  */
 class Tier
 {
@@ -273,4 +273,5 @@ class Tier
     {
         return $this->activite;
     }
+
 }

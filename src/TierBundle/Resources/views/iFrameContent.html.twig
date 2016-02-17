@@ -436,27 +436,45 @@
                 {% if etablissement.getTier.getEcole %}
                     {% if is_granted('ROLE_SUPER_ADMIN') %}
                         <div id="info_tier_tier" class="list-group affichage"
-                         style="display: none;">
+                             style="display: none;">
 
-                        <table>
-                            <tr>
-                                <td>Id</td>
-                                <td>Siren</td>
-                                <td>Raison sociale</td>
-                                <td style="border: none"><button onclick="show('associerecole')" type="button" style="border: none">+</button></td>
-                            </tr>
+
+                            {% set i = 0 %}
 
                             {% for ecoles in etablissement.getTier.getTier1 %}
-                                <tr>
-                                    <td>{{ ecoles.getId }}</td>
-                                    <td>{{ ecoles.getSiren }}</td>
-                                    <td>{{ ecoles.getRaisonSoc }}</td>
-                                    <td style="border: none"><button onclick="supprimerPartenariat('{{ path('supprimerAssociationEcole',{'id_ecole':etablissement.getTier.getId,'id_liee':ecoles.getId }) }}',this)" type="button" style="border: none">x</button></td>
-                                </tr>
-                            {% endfor %}
-                        </table>
 
-                    </div>
+
+
+                                {% set iddiv = random()  %}
+                                <div class="col-xs-12 Liste">
+                                    <div class="row">
+                                        <label class="cell">Siren : <label>{{ ecoles.getSiren }}</label></label>
+                                        <label class="cell">Raison sociale : <label>{{ ecoles.getRaisonSoc }}</label>
+                                            <button class="button" style="float: right" type="button" data-toggle="collapse" data-target="#user{{ iddiv }}"></button>
+                                        </label>
+                                        <img alt="supprimer" title="supprimer" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerPartenariat('{{ path('supprimerAssociationEcole',{'id_ecole':etablissement.getTier.getId,'id_liee':ecoles.getId }) }}',this)" />
+
+                                    </div>
+                                    <div id="user{{ iddiv }}" class="collapse in" >
+                                        {% for etab in etablissementslier[i] %}
+                                            <div class="row">
+                                                <label class="cell">Adresse : <label>{{ etab.getAdresse }}</label></label>
+                                                <label class="cell">Code Postal  : <label>{{ etab.getCodepostal }}</label></label>
+                                            </div>
+                                            <div class="row">
+                                                <label class="cell">Ville : <label>{{ etab.getVille }}</label></label>
+                                                <label class="cell">Téléphone : <label>{{ etab.getAdresse }}</label></label>
+
+                                            </div>
+                                        {% endfor %}
+                                        {% set i= i +1 %}
+
+
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                        </div>
                         {% endif %}
                     {% if is_granted('ROLE_ADMINECOLE') %}
                         <div id="info_formation" class="list-group affichage"
@@ -625,9 +643,13 @@
             <button onclick="post('{{ path('supprimeretablissement',{'id': etablissement.getId }) }}')" type="button" class="list-group-item rightMenu">
                 <div class="col-xs-12">Supprimer l'établissement</div>
             </button>
+            <button onclick="show('associerecole')" type="button" class="list-group-item rightMenu">
+                <div class="col-xs-12">Liéé une ecole</div>
+            </button>
             <button onclick="alert('Ce button n\'est pas encore fonctionel!')" type="button" class="list-group-item rightMenu">
                 <div class="col-xs-12">Gérer les droits</div>
             </button>
+
         </div>
     </div>
     {% endif %}
@@ -962,6 +984,11 @@
                 success: function(data){console.log(data);}
             });
             champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
+
+
+            window.parent.location.reload();
+
+
         };
 
 

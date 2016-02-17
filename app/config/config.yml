@@ -9,6 +9,7 @@ imports:
     - { resource: "@SocieteBundle/Resources/config/services.yml" }
     - { resource: "@TierBundle/Resources/config/services.yml" }
     - { resource: "@MissionBundle/Resources/config/services.yml" }
+    - { resource: "@ApprenantBundle/Resources/config/services.yml" }
 
 
 

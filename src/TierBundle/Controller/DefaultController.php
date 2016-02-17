@@ -161,15 +161,27 @@ class DefaultController extends Controller
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
 
         // les tiers pour peuplé l'association d'ecole
-        $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
+        $alltiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAllExcept($etablissement->getId());
+        $tiers = array();
+        foreach ( $alltiers as $tier)
+        {
+            if(!in_array($tier,$etablissement->getTier()->getTier1()->toArray()))
+            {
+                array_push($tiers,$tier);
+            }
+        }
 
+        $etablisementlier=array();
+        foreach ($etablissement->getTier()->getTier1() as $value ){
+            array_push($etablisementlier ,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$value)));
+        }
         //$licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier(),'suspendu'=>false ));
 
         // missions non suspendu
         $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date' => 'DESC'));
 
         return $this->render('TierBundle::iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,'tiers'=>$tiers,'users'=>$users,'formations'=>$formation,
-            'libs'=>$licences, 'missions'=>$missions ,'usermis'=>$userMiss,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab));
+            'libs'=>$licences, 'missions'=>$missions ,'usermis'=>$userMiss,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab,'etablissementslier'=>$etablisementlier));
     }
 
     public function supprimeretabAction($id)
