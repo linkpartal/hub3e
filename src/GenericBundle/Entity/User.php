@@ -92,9 +92,9 @@ class User extends BaseUser
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Culturel", mappedBy="users")
+     * @ORM\ManyToMany(targetEntity="Hobbies", mappedBy="users")
      */
-    private $culturel;
+    private $hobbies;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -110,13 +110,6 @@ class User extends BaseUser
      * @ORM\ManyToMany(targetEntity="Mission", mappedBy="users")
      */
     private $mission;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Sport", mappedBy="users")
-     */
-    private $sport;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -141,56 +134,32 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
-        $this->culturel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->hobbies = new \Doctrine\Common\Collections\ArrayCollection();
         $this->mission = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->sport = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
     /**
-     * Set tier
+     * Set civilite
      *
-     * @param \GenericBundle\Entity\Tier $tier
+     * @param string $civilite
      *
      * @return User
      */
-    public function setTier(\GenericBundle\Entity\Tier $tier = null)
+    public function setCivilite($civilite)
     {
-        $this->tier = $tier;
+        $this->civilite = $civilite;
 
         return $this;
     }
 
     /**
-     * Get tier
+     * Get civilite
      *
-     * @return \GenericBundle\Entity\Tier
+     * @return string
      */
-    public function getTier()
+    public function getCivilite()
     {
-        return $this->tier;
-    }
-
-    /**
-     * Set etablissement
-     *
-     * @param \GenericBundle\Entity\Etablissement $etablissement
-     *
-     * @return User
-     */
-    public function setEtablissement(\GenericBundle\Entity\Etablissement $etablissement = null)
-    {
-        $this->etablissement = $etablissement;
-
-        return $this;
-    }
-
-    /**
-     * Get etablissement
-     *
-     * @return \GenericBundle\Entity\Etablissement
-     */
-    public function getEtablissement()
-    {
-        return $this->etablissement;
+        return $this->civilite;
     }
 
     /**
@@ -242,30 +211,6 @@ class User extends BaseUser
     }
 
     /**
-     * Set civilite
-     *
-     * @param string $civilite
-     *
-     * @return User
-     */
-    public function setCivilite($civilite)
-    {
-        $this->civilite = $civilite;
-
-        return $this;
-    }
-
-    /**
-     * Get civilite
-     *
-     * @return string
-     */
-    public function getCivilite()
-    {
-        return $this->civilite;
-    }
-
-    /**
      * Set telephone
      *
      * @param string $telephone
@@ -287,115 +232,6 @@ class User extends BaseUser
     public function getTelephone()
     {
         return $this->telephone;
-    }
-
-    public function getExpiredAt()
-    {
-        return $this->expiresAt;
-    }
-
-
-
-    /**
-     * Add culturel
-     *
-     * @param \GenericBundle\Entity\Culturel $culturel
-     *
-     * @return User
-     */
-    public function addCulturel(\GenericBundle\Entity\Culturel $culturel)
-    {
-        $this->culturel[] = $culturel;
-
-        return $this;
-    }
-
-    /**
-     * Remove culturel
-     *
-     * @param \GenericBundle\Entity\Culturel $culturel
-     */
-    public function removeCulturel(\GenericBundle\Entity\Culturel $culturel)
-    {
-        $this->culturel->removeElement($culturel);
-    }
-
-    /**
-     * Get culturel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCulturel()
-    {
-        return $this->culturel;
-    }
-
-    /**
-     * Add mission
-     *
-     * @param \GenericBundle\Entity\Mission $mission
-     *
-     * @return User
-     */
-    public function addMission(\GenericBundle\Entity\Mission $mission)
-    {
-        $this->mission[] = $mission;
-
-        return $this;
-    }
-
-    /**
-     * Remove mission
-     *
-     * @param \GenericBundle\Entity\Mission $mission
-     */
-    public function removeMission(\GenericBundle\Entity\Mission $mission)
-    {
-        $this->mission->removeElement($mission);
-    }
-
-    /**
-     * Get mission
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMission()
-    {
-        return $this->mission;
-    }
-
-    /**
-     * Add sport
-     *
-     * @param \GenericBundle\Entity\Sport $sport
-     *
-     * @return User
-     */
-    public function addSport(\GenericBundle\Entity\Sport $sport)
-    {
-        $this->sport[] = $sport;
-
-        return $this;
-    }
-
-    /**
-     * Remove sport
-     *
-     * @param \GenericBundle\Entity\Sport $sport
-     */
-    public function removeSport(\GenericBundle\Entity\Sport $sport)
-    {
-        $this->sport->removeElement($sport);
-    }
-
-    /**
-     * Get sport
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSport()
-    {
-        return $this->sport;
     }
 
     /**
@@ -423,27 +259,85 @@ class User extends BaseUser
     }
 
     /**
-     * Set info
+     * Set tier
      *
-     * @param \GenericBundle\Entity\Infocomplementaire $info
+     * @param \GenericBundle\Entity\Tier $tier
      *
      * @return User
      */
-    public function setInfo(\GenericBundle\Entity\Infocomplementaire $info = null)
+    public function setTier(\GenericBundle\Entity\Tier $tier = null)
     {
-        $this->info = $info;
+        $this->tier = $tier;
 
         return $this;
     }
 
     /**
-     * Get info
+     * Get tier
      *
-     * @return \GenericBundle\Entity\Infocomplementaire
+     * @return \GenericBundle\Entity\Tier
      */
-    public function getInfo()
+    public function getTier()
     {
-        return $this->info;
+        return $this->tier;
+    }
+
+    /**
+     * Set etablissement
+     *
+     * @param \GenericBundle\Entity\Etablissement $etablissement
+     *
+     * @return User
+     */
+    public function setEtablissement(\GenericBundle\Entity\Etablissement $etablissement = null)
+    {
+        $this->etablissement = $etablissement;
+
+        return $this;
+    }
+
+    /**
+     * Get etablissement
+     *
+     * @return \GenericBundle\Entity\Etablissement
+     */
+    public function getEtablissement()
+    {
+        return $this->etablissement;
+    }
+
+    /**
+     * Add hobby
+     *
+     * @param \GenericBundle\Entity\Hobbies $hobby
+     *
+     * @return User
+     */
+    public function addHobby(\GenericBundle\Entity\Hobbies $hobby)
+    {
+        $this->hobbies[] = $hobby;
+
+        return $this;
+    }
+
+    /**
+     * Remove hobby
+     *
+     * @param \GenericBundle\Entity\Hobbies $hobby
+     */
+    public function removeHobby(\GenericBundle\Entity\Hobbies $hobby)
+    {
+        $this->hobbies->removeElement($hobby);
+    }
+
+    /**
+     * Get hobbies
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHobbies()
+    {
+        return $this->hobbies;
     }
 
     /**
@@ -481,6 +375,40 @@ class User extends BaseUser
     }
 
     /**
+     * Add mission
+     *
+     * @param \GenericBundle\Entity\Mission $mission
+     *
+     * @return User
+     */
+    public function addMission(\GenericBundle\Entity\Mission $mission)
+    {
+        $this->mission[] = $mission;
+
+        return $this;
+    }
+
+    /**
+     * Remove mission
+     *
+     * @param \GenericBundle\Entity\Mission $mission
+     */
+    public function removeMission(\GenericBundle\Entity\Mission $mission)
+    {
+        $this->mission->removeElement($mission);
+    }
+
+    /**
+     * Get mission
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMission()
+    {
+        return $this->mission;
+    }
+
+    /**
      * Add langue
      *
      * @param \GenericBundle\Entity\Langue $langue
@@ -512,5 +440,29 @@ class User extends BaseUser
     public function getLangue()
     {
         return $this->langue;
+    }
+
+    /**
+     * Set info
+     *
+     * @param \GenericBundle\Entity\Infocomplementaire $info
+     *
+     * @return User
+     */
+    public function setInfo(\GenericBundle\Entity\Infocomplementaire $info = null)
+    {
+        $this->info = $info;
+
+        return $this;
+    }
+
+    /**
+     * Get info
+     *
+     * @return \GenericBundle\Entity\Infocomplementaire
+     */
+    public function getInfo()
+    {
+        return $this->info;
     }
 }

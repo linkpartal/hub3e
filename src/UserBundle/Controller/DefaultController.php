@@ -494,13 +494,9 @@ class DefaultController extends Controller
 
             $date = new \DateTime();
             $newuser->getInfo()->setDaterecup($date);
-            foreach($import->getSport() as $sport)
+            foreach($import->getHobbies() as $hobby)
             {
-                $newuser->addSport($sport);
-            }
-            foreach($import->getCulturel() as $culturel)
-            {
-                $newuser->addCulturel($culturel);
+                $newuser->addHobby($hobby);
             }
             foreach($import->getLangue() as $langue)
             {
@@ -645,19 +641,11 @@ class DefaultController extends Controller
                 $em->flush();
             }
         }
-        foreach($import->getSport() as $sport)
+        foreach($import->getHobbies() as $hobbie)
         {
-            if(!in_array($sport,$userfus->getSport()->toArray()))
+            if(!in_array($hobbie,$userfus->getHobbies()->toArray()))
             {
-                $userfus->addSport($sport);
-                $em->flush();
-            }
-        }
-        foreach($import->getCulturel() as $culturel)
-        {
-            if(!in_array($culturel,$userfus->getCulturel()->toArray()))
-            {
-                $userfus->addCulturel($culturel);
+                $userfus->addHobby($hobbie);
                 $em->flush();
             }
         }

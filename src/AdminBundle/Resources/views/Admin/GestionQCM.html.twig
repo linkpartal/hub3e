@@ -13,16 +13,18 @@
         <br>
         <div name="21456dddd">
             <label class="list-group-item" style=";">Reponse :</label>
-            <textarea title="question" style="resize: none;overflow: hidden" class="champ " placeholder="Ajouter Reponse" onkeydown="if(event.keyCode==13){AjouterReponse(this);}" id="NewReponse" required maxlength="255"></textarea>
+            <textarea title="question" style="resize: none;overflow: hidden" class="champ " placeholder="Ajouter Reponse" onkeyup="if(event.keyCode==13){AjouterReponse(this);}" id="NewReponse" required maxlength="255"></textarea>
             <label class="list-group-item" style="height: 60px;">Score :</label>
-            <textarea title="score" style="resize: none;overflow: hidden" class="champ " placeholder="Ajouter Score" onkeydown="if(event.keyCode==13){AjouterReponse(this.previousElementSibling.previousElementSibling);}" id="score" required maxlength="2"></textarea>
+            <textarea title="score" style="resize: none;overflow: hidden" class="champ " placeholder="Ajouter Score" onkeyup="if(event.keyCode==13){AjouterReponse(this.previousElementSibling.previousElementSibling);}" id="score" required maxlength="2"></textarea>
         </div>
     </div>
     <div id="reponse" style="display: none;">
-        <input type="radio" value="1"   >
-        <label style="font: 14px Roboto black; "></label>
         <input type="hidden" id="inputrep" >
         <input type="hidden" id="idScore" >
+        <input type="radio" value="1"   >
+        <label style="font: 14px Roboto black; "></label>
+
+
 
 
 
@@ -73,16 +75,15 @@
 
                                                         {%  if rep.getQuestiondef.getId == question.getId %}
                                                             <div>
-
-                                                                <input type="radio" value="1"   ><label style="font: 14px Roboto black; ">{{ rep.getReponse }}</label>
                                                                 <input type="hidden" name="reponse[{{ i }}][]" value="{{ rep.getReponse }}" style="margin:10px 5px 10px 0" id="inputrep" >
                                                                 <input type="hidden" name="score[{{ i }}][]" value="{{ rep.getScore }}" style="margin:10px 5px 10px 0" id="idScore" >
+                                                                <input type="radio" value="1"   ><label style="font: 14px Roboto black; ">{{ rep.getReponse }}</label>
                                                                 <img  src="{{ asset('image/vide.gif') }}" width="30px" , height="0px" />
                                                                 <img src="{{ asset('image/up_x18.png') }}" alt="Monter" title="Monter" onclick="monter(this.parentNode)"  />
                                                                 <img src="{{ asset('image/down_x18.png') }}" alt="Descendre" title="Descendre"  onclick="descendre(this.parentNode)"   />
                                                                 <img src="{{ asset('image/imgSupprimer.png') }}" alt="Supprimer Question" title="Supprimer Question"  onclick="supprimer(this.parentNode)" />
 
-                                                                </div>
+                                                            </div>
                                                         {% endif %}
 
                                                     {% endfor %}
@@ -91,9 +92,9 @@
                                         {% endif %}
                                         <div name="21456dddd" >
                                             <label class="list-group-item" style="height: 60px;">Reponse :</label>
-                                            <textarea title="question" style="resize: none;overflow: hidden" class="champ " placeholder="Ajouter Reponse" onkeydown="if(event.keyCode==13){AjouterReponse(this);}" id="NewReponse" required maxlength="255"></textarea>
+                                            <textarea title="question" style="resize: none;overflow: hidden" class="champ " placeholder="Ajouter Reponse" onkeyup="if(event.keyCode==13){AjouterReponse(this);}" id="NewReponse" required maxlength="255"></textarea>
                                             <label class="list-group-item" style="height: 60px;">Score :</label>
-                                            <textarea title="score" style="resize: none;overflow: hidden" class="champ " placeholder="Ajouter Score" onkeydown="if(event.keyCode==13){AjouterReponse(this.previousElementSibling.previousElementSibling);}" id="score" required maxlength="2"></textarea>
+                                            <textarea title="score" style="resize: none;overflow: hidden" class="champ " placeholder="Ajouter Score" onkeyup="if(event.keyCode==13){AjouterReponse(this.previousElementSibling.previousElementSibling);}" id="score" required maxlength="2"></textarea>
                                         </div>
                                     </div>
 
@@ -103,7 +104,7 @@
                             {% endif %}
 
                             <div id="button_container" name="21456dddd">
-                                <textarea onkeydown="if(event.keyCode==13){dupliquer(this);}" style="resize: none;overflow: hidden;vertical-align: bottom" class="champ " placeholder="Ajouter Question"></textarea>
+                                <textarea onkeyup="if(event.keyCode==13){dupliquer(this);}" style="resize: none;overflow: hidden;vertical-align: bottom" class="champ " placeholder="Ajouter Question"></textarea>
                                 <button onclick="check()" type="button" style="vertical-align: bottom">Valider le QCM</button>
                             </div>
                         </form>
@@ -147,7 +148,7 @@
 
 
                             <div id="button_container" name="21456dddd">
-                                <textarea onkeydown="if(event.keyCode==13){dupliquer(this);}" style="resize: none;overflow: hidden;vertical-align: bottom" class="champ" placeholder="Ajouter Question"></textarea>
+                                <textarea onkeyup="if(event.keyCode==13){dupliquer(this);}" style="resize: none;overflow: hidden;vertical-align: bottom" class="champ" placeholder="Ajouter Question"></textarea>
                                 <button onclick="check()" type="button" style="vertical-align: bottom">Valider le QCM</button>
                             </div>
 
@@ -199,10 +200,10 @@
             //me.parentNode.getAttribute('id')
             clone.style.display = 'block';
             clone.getElementsByTagName("label")[0].innerHTML = me.value.trim();
-            clone.getElementsByTagName("input")[1].setAttribute("name","reponse["+me.parentNode.parentNode.getAttribute('id')+"][]");
-            clone.getElementsByTagName("input")[1].value = me.value.trim();
-            clone.getElementsByTagName("input")[2].setAttribute("name","score["+me.parentNode.parentNode.getAttribute('id')+"][]");
-            clone.getElementsByTagName("input")[2].value = me.nextElementSibling.nextElementSibling.value.trim();
+            clone.getElementsByTagName("input")[0].setAttribute("name","reponse["+me.parentNode.parentNode.getAttribute('id')+"][]");
+            clone.getElementsByTagName("input")[0].value = me.value.trim();
+            clone.getElementsByTagName("input")[1].setAttribute("name","score["+me.parentNode.parentNode.getAttribute('id')+"][]");
+            clone.getElementsByTagName("input")[1].value = me.nextElementSibling.nextElementSibling.value.trim();
             me.parentNode.parentNode.insertBefore(clone, me.parentNode);
             me.value='';
             me.nextElementSibling.nextElementSibling.value='';
@@ -277,7 +278,8 @@
         }
         function supprimer(champs){
             var route = '{{path('supprimer_QCM',{'rep':"reponse",'qst':"question",'qcm':"QCMHolder" })}}';
-            var input = champs.getElementsByTagName("input")[1];
+            var input = champs.getElementsByTagName("input")[0];
+
             route = route.replace("QCMHolder", encodeURIComponent(document.getElementById('QCM').value));
             if(input.getAttribute('id')=='inputrep')
             {

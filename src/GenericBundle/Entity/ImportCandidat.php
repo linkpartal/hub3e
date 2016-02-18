@@ -96,9 +96,9 @@ class ImportCandidat
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\Culturel", mappedBy="importCandidat")
+     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\Hobbies", mappedBy="importCandidat")
      */
-    private $culturel;
+    private $hobbies;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -108,26 +108,18 @@ class ImportCandidat
     private $langue;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\Sport", mappedBy="importCandidat")
-     */
-    private $sport;
-
-    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->culturelImport = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->langueImport = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->sportImport = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->hobbies = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->langue = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -327,7 +319,7 @@ class ImportCandidat
     }
 
     /**
-     * Set infocomplementaire
+     * Set info
      *
      * @param \GenericBundle\Entity\Infocomplementaire $info
      *
@@ -341,7 +333,7 @@ class ImportCandidat
     }
 
     /**
-     * Get infocomplementaireImport
+     * Get info
      *
      * @return \GenericBundle\Entity\Infocomplementaire
      */
@@ -351,37 +343,37 @@ class ImportCandidat
     }
 
     /**
-     * Add culturel
+     * Add hobby
      *
-     * @param \GenericBundle\Entity\Culturel $culturel
+     * @param \GenericBundle\Entity\Hobbies $hobby
      *
      * @return ImportCandidat
      */
-    public function addCulturel(\GenericBundle\Entity\Culturel $culturel)
+    public function addHobby(\GenericBundle\Entity\Hobbies $hobby)
     {
-        $this->culturel[] = $culturel;
+        $this->hobbies[] = $hobby;
 
         return $this;
     }
 
     /**
-     * Remove culturel
+     * Remove hobby
      *
-     * @param \GenericBundle\Entity\Culturel $culturel
+     * @param \GenericBundle\Entity\Hobbies $hobby
      */
-    public function removeCulturel(\GenericBundle\Entity\Culturel $culturel)
+    public function removeHobby(\GenericBundle\Entity\Hobbies $hobby)
     {
-        $this->culturel->removeElement($culturel);
+        $this->hobbies->removeElement($hobby);
     }
 
     /**
-     * Get culturel
+     * Get hobbies
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getCulturel()
+    public function getHobbies()
     {
-        return $this->culturel;
+        return $this->hobbies;
     }
 
     /**
@@ -416,39 +408,5 @@ class ImportCandidat
     public function getLangue()
     {
         return $this->langue;
-    }
-
-    /**
-     * Add sport
-     *
-     * @param \GenericBundle\Entity\Sport $sport
-     *
-     * @return ImportCandidat
-     */
-    public function addSport(\GenericBundle\Entity\Sport $sport)
-    {
-        $this->sport[] = $sport;
-
-        return $this;
-    }
-
-    /**
-     * Remove sport
-     *
-     * @param \GenericBundle\Entity\Sport $sport
-     */
-    public function removeSport(\GenericBundle\Entity\Sport $sport)
-    {
-        $this->sport->removeElement($sport);
-    }
-
-    /**
-     * Get sport
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSport()
-    {
-        return $this->sport;
     }
 }

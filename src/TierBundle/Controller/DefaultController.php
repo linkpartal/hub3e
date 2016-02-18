@@ -221,7 +221,7 @@ class DefaultController extends Controller
             $em->flush();
         }
 
-        return $this->forward('TierBundle:Default:affichage',array('id'=>$id));
+        return $this->redirect($this->generateUrl('affiche_etab',array('id'=>$id)) );
     }
 
     public function modifierAction($id)

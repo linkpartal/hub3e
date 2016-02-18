@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Culturel
  *
- * @ORM\Table(name="culturel", uniqueConstraints={@ORM\UniqueConstraint(name="culturel_UNIQUE", columns={"culturel"})})
+ * @ORM\Table(name="hobbies", uniqueConstraints={@ORM\UniqueConstraint(name="hobbie_UNIQUE", columns={"hobbie"})})
  * @ORM\Entity
  */
-class Culturel
+class Hobbies
 {
     /**
      * @var integer
@@ -24,9 +24,9 @@ class Culturel
     /**
      * @var string
      *
-     * @ORM\Column(name="culturel", type="string", length=45, nullable=false)
+     * @ORM\Column(name="hobbie", type="string", length=45, nullable=false)
      */
-    private $culturel;
+    private $hobbie;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -78,37 +78,6 @@ class Culturel
         return $this->id;
     }
 
-    /**
-     * Set culturel
-     *
-     * @param string $culturel
-     *
-     * @return Culturel
-     */
-    public function setCulturel($culturel)
-    {
-        $this->culturel = $culturel;
-
-        return $this;
-    }
-
-    /**
-     * Get culturel
-     *
-     * @return string
-     */
-    public function getCulturel()
-    {
-        return $this->culturel;
-    }
-
-    /**
-     * Add user
-     *
-     * @param \GenericBundle\Entity\User $user
-     *
-     * @return Culturel
-     */
     public function addUser(\GenericBundle\Entity\User $user)
     {
         $this->users[] = $user;
@@ -168,5 +137,29 @@ class Culturel
     public function getImportCandidat()
     {
         return $this->importCandidat;
+    }
+
+    /**
+     * Set hobbie
+     *
+     * @param string $hobbie
+     *
+     * @return Hobbies
+     */
+    public function setHobbie($hobbie)
+    {
+        $this->hobbie = $hobbie;
+
+        return $this;
+    }
+
+    /**
+     * Get hobbie
+     *
+     * @return string
+     */
+    public function getHobbie()
+    {
+        return $this->hobbie;
     }
 }
