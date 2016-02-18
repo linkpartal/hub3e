@@ -134,7 +134,7 @@
                 </select>
                 <br>
                 <label title="CSV" for="CSV"><img id="backimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
-                <input accept="image/*" type="file" class="input" id="CSV" name="_CSV" required>
+                <input accept=".xlsx" type="file" class="input" id="CSV" name="_CSV" required>
 
             </div>
             <div class="div_button">
@@ -144,6 +144,7 @@
     </div>
 
 </div>
+
 <div class="container">
     {% block TopBar %}
         <div class="row" style="height: 32px; background: #2975cb;">
@@ -185,6 +186,7 @@
                     <option value="licence">Voir Licences</option>
                     <option value="mission">Voir Missions</option>
                     <option value="user">Voir Utilisateurs</option>
+                    <option value="apprenants">Voir Apprenants</option>
                 </select>
 
                 <div id="ecole" class="list-group col-xs-2 leftbar">
@@ -278,6 +280,36 @@
                         {% endfor %}
                     {% endif %}
                 </div>
+                <div id="apprenants" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                    {% if apprenants is defined %}
+                        {% for u in apprenants %}
+                            <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId }) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                                <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
+                                <div class="col-xs-12 part"
+                                     style="height: 31px; text-align: left;">
+
+                                    <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
+                                    {% if not u.isExpired %}
+                                        <div class="col-xs-1 active" id="active{{ u.getId }}"></div>
+                                    {% else %}
+                                        <div class="col-xs-1 inactive" id="active{{ u.getId }}"></div>
+                                    {% endif %}
+
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
+                    {% if import_apprenants is defined %}
+                        {% for u in import_apprenants %}
+                            <button onclick="postiframeUser('{{ path('metier_user_afficheApprenant',{'id': u.getId }) }}',this)" id="import{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                                <div class="col-xs-12 part" title="{{u.getPrenom ~ '.'~u.getNom}}">{{u.getPrenom ~ '.'~u.getNom}}</div>
+                                <div class="col-xs-12 part" style="height: 31px; text-align: left;">
+                                    <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
+                </div>
             </div>
         {% endblock %}
 
@@ -326,6 +358,7 @@
     var i = 1;
     document.getElementById("leftselect").onchange = function(){
         var x = document.getElementById("leftselect").value;
+        document.getElementById('apprenants').style.visibility= 'hidden';
         document.getElementById('ecole').style.visibility= 'hidden';
         document.getElementById('societe').style.visibility= 'hidden';
         document.getElementById('mission').style.visibility= 'hidden';

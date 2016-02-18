@@ -30,7 +30,7 @@
                     <select title="" id="select_info"  style="color:white;">
                             <option value="info_user" style="color:black;">Données Utilisateur</option>
                             <option value="info_Apprenant" style="color:black;">Details de l'Apprenant</option>
-                            <option value="" style="color:black;">Formation de l'Apprenant </option>
+                            <option value="info_candidature" style="color:black;">Formation de l'Apprenant </option>
                             <option value="info_parents" style="color:black;">Les Parents </option>
                             <option value="info_Exp" style="color:black;">Expériences </option>
                             <option value="info_recom" style="color:black;">Recommandations </option>
@@ -64,17 +64,16 @@
 
                  {% if User.getEtablissement %}
                      {% if User.getEtablissement.getTier.getEcole == 0 %}
-                    <label class="list-group-item info" >Société  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
+                         <label class="list-group-item info" >Société  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
 
-                      {% elseif User.getEtablissement.getTier.getEcole == 1 %}
-                    <label class="list-group-item info" >Ecole  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
-                 {% endif %}
+                     {% elseif User.getEtablissement.getTier.getEcole == 1 %}
+                         <label class="list-group-item info" >Ecole  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
+                     {% endif %}
                  {% endif %}
 
                 </div>
 
                 {% if User.hasRole('ROLE_APPRENANT') %}
-
                     <div id="info_Apprenant" class="col-xs-12 Liste" style="display:none;">
                     {% if User.GetInfo  %}
                         <div class="row">
@@ -94,15 +93,9 @@
                             <label class="cell" >Fratrie       : <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" >{{User.getInfo.getFratrie}}</label></label>
                         </div>
                         <div class="row">
-                            <label class="cell" >Sport :
-                            {% for sport in User.getSport %}
-                                    <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" > {{ sport.getSport }},</label>
-                                {% endfor %}
-                            </label>
-
-                            <label class="cell" >Culturel :
-                                {% for culturel in User.getCulturel %}
-                                    <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" > {{ culturel.getCulturel }},</label>
+                            <label class="cell" >Hobbies :
+                                {% for hobby in User.getHobbies %}
+                                    <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" > {{ hobby.gethobby }},</label>
                                 {% endfor %}
                             </label>
                         </div>
@@ -118,11 +111,6 @@
                     {% endif %}
 
                     </div>
-
-
-                {% endif %}
-
-                {% if User.hasRole('ROLE_APPRENANT') %}
                     <div id="info_parents" class="list-group affichage" style="display:none">
                         {% if Parents is defined %}
                             {% for parent in Parents %}
@@ -151,13 +139,6 @@
                         {% endif %}
 
                     </div>
-
-
-
-                {% endif %}
-
-
-                {% if User.hasRole('ROLE_APPRENANT') %}
                     <div id="info_Exp" class="list-group affichage" style="display:none">
                         {% if Experience is defined %}
                             {% for Exp in Experience %}
@@ -185,12 +166,6 @@
                         {% endif %}
 
                     </div>
-
-
-
-                {% endif %}
-
-                {% if User.hasRole('ROLE_APPRENANT') %}
                     <div id="info_recom" class="list-group affichage" style="display:none">
                         {% if Recommandation is defined %}
                             {% for Recom in Recommandation %}
@@ -217,13 +192,6 @@
                         {% endif %}
 
                     </div>
-
-
-
-                {% endif %}
-
-
-                {% if User.hasRole('ROLE_APPRENANT') %}
                     <div id="info_diplome" class="list-group affichage" style="display:none">
                         {% if Diplome is defined %}
                             {% for Dip in Diplome %}
@@ -246,14 +214,6 @@
                         {% endif %}
 
                     </div>
-
-
-
-                {% endif %}
-
-
-
-                {% if User.hasRole('ROLE_APPRENANT') %}
                     <div id="info_doc" class="list-group affichage" style="display:none">
                         {% if Document is defined %}
                             {% for Doc in Document %}
@@ -277,9 +237,51 @@
                         {% endif %}
 
                     </div>
+                    <div id="info_candidature" class="list-group affichage" style="display:none">
+                        {% for candidature in candidatures %}
+                            {% set iddiv = random()  %}
+                            <div class="col-xs-12 Liste">
+                                <div class="row">
+                                    <label class="cell">Id : <label>{{ candidature.id }}</label></label>
+                                    <label class="cell">Statut : <label>
+                                            {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_TUTEUR') %}
+                                                {% if candidature.statut == 1 %}
+                                                    En attente compléments
+                                                {% elseif candidature.statut == 2 %}
+                                                    En attente validation
+                                                {% elseif candidature.statut == 3 %}
+                                                    Validé
+                                                {% elseif candidature.statut == 99 %}
+                                                    Refusé
+                                                {% endif %}
+                                            {% elseif is_granted('ROLE_APPRENANT') %}
+                                                {% if candidature.statut == 1 %}
+                                                    A compléter
+                                                {% elseif candidature.statut == 2 %}
+                                                    En attente école
+                                                {% elseif candidature.statut == 3 %}
+                                                    Admis
+                                                {% elseif candidature.statut == 99 %}
+                                                    Ajourné
+                                                {% endif %}
+                                            {% endif %}
+                                        </label>
+                                        <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#parent{{ iddiv }}"></button></label>
+                                </div>
+                                <div id="parent{{ iddiv }}" class="collapse in" >
+                                    <div class="row">
+                                        <label class="cell">Ecole  : <label>{{ candidature.formation.etablissement.tier.raisonsoc }}</label></label>
+                                        <label class="cell">Adresse : <label>{{ candidature.formation.etablissement.adresse }}</label></label>
+                                    </div>
+                                    <div class="row">
+                                        <label class="cell">Formation : <label>{{ candidature.formation.nom }}</label></label>
+                                        <label class="cell">Date : <label>{{ candidature.datecandidature|date('d/m/Y') }}</label></label>
+                                    </div>
+                                </div>
 
-
-
+                            </div>
+                        {% endfor %}
+                    </div>
                 {% endif %}
 
 
@@ -335,6 +337,7 @@
         document.getElementById('info_recom').style.display= 'none';
         document.getElementById('info_diplome').style.display= 'none';
         document.getElementById('info_doc').style.display= 'none';
+        document.getElementById('info_candidature').style.display= 'none';
 
 
         document.getElementById(x).style.display='block';

@@ -3,6 +3,7 @@
 namespace UserBundle\Controller;
 
 use Ddeboer\DataImport\Reader\ExcelReader;
+use GenericBundle\Entity\Candidature;
 use GenericBundle\Entity\ImportCandidat;
 use GenericBundle\Entity\Infocomplementaire;
 use GenericBundle\Entity\Mission;
@@ -22,7 +23,6 @@ class DefaultController extends Controller
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $userid = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
         $info = $this->getDoctrine()->getRepository('GenericBundle:Infocomplementaire')->find($id);
         $Parents = $this->getDoctrine()->getRepository('GenericBundle:Parents')->findAll();
@@ -40,10 +40,12 @@ class DefaultController extends Controller
             $this->getDoctrine()->getEntityManager()->remove($notifications);
             $this->getDoctrine()->getEntityManager()->flush();
         }
+        $candidatures = $this->getDoctrine()->getRepository('GenericBundle:Candidature')->findBy(array('user'=>$userid));
 
 
-        return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('licencedef'=>$licencedef,'User'=>$userid,
-            'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue));
+        return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid,
+            'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,
+            'candidatures'=>$candidatures));
     }
 
     public function UserAddedAction(Request $request)
@@ -253,7 +255,14 @@ class DefaultController extends Controller
                         $erreur = 'Duplicata dans la base de données';
                     }
                 }
-
+                if(!$erreur)
+                {
+                    $duplicaimport = $em->getRepository('GenericBundle:ImportCandidat')->findOneBy(array('civilite' =>mb_convert_encoding($row[1],'UTF-8','auto')  , 'nom' => mb_convert_encoding($row[2],'UTF-8','auto')
+                    , 'prenom' => mb_convert_encoding($row[3],'UTF-8','auto'),'user'=>$this->get('security.token_storage')->getToken()->getUser()));
+                    if ($duplicaimport) {
+                        $erreur = 'Import existant';
+                    }
+                }
                 $candidat = new ImportCandidat();
                 $candidat->setCivilite(mb_convert_encoding($row[1],'UTF-8','auto'));
                 $candidat->setNom(mb_convert_encoding($row[2],'UTF-8','auto'));
@@ -268,8 +277,6 @@ class DefaultController extends Controller
 
                 // infocomplementaire
                 $infocomp = new Infocomplementaire();
-
-
                 $datephp = ($row[4] - 25569) * 86400;
                 $infocomp->setDatenaissance(date_create(gmdate("d-m-Y H:i:s", $datephp)));
                 $infocomp->setCPNaissance(mb_convert_encoding($row[5],'UTF-8','auto'));
@@ -292,6 +299,36 @@ class DefaultController extends Controller
                 $candidat->setInfo($infocomp);
                 $em->persist($candidat);
                 $em->flush();
+                //candidature 1
+                $formation1 = $em->getRepository('GenericBundle:Formation')->findBy(array('nom'=>mb_convert_encoding($row[17],'UTF-8','auto'),'etablissement'=>$etablissement));
+                if($formation1)
+                {
+                    $candidature = new Candidature();
+                    $candidature->setFormation($formation1);
+                    $candidature->setImportcandidat($candidat);
+                    $em->persist($candidature);
+                    $em->flush();
+                }
+                //candidature 2
+                $formation2 = $em->getRepository('GenericBundle:Formation')->findBy(array('nom'=>mb_convert_encoding($row[19],'UTF-8','auto'),'etablissement'=>$etablissement));
+                if($formation2)
+                {
+                    $candidature = new Candidature();
+                    $candidature->setFormation($formation2);
+                    $candidature->setImportcandidat($candidat);
+                    $em->persist($candidature);
+                    $em->flush();
+                }
+                //candidature
+                $formation3 = $em->getRepository('GenericBundle:Formation')->findBy(array('nom'=>mb_convert_encoding($row[21],'UTF-8','auto'),'etablissement'=>$etablissement));
+                if($formation3)
+                {
+                    $candidature = new Candidature();
+                    $candidature->setFormation($formation3);
+                    $candidature->setImportcandidat($candidat);
+                    $em->persist($candidature);
+                    $em->flush();
+                }
             }
         }
     }

@@ -31,9 +31,16 @@ class Candidature
     /**
      * @var integer
      *
-     * @ORM\Column(name="statut", type="integer", nullable=false)
+     * @ORM\Column(name="statut", type="integer", nullable=true)
      */
     private $statut;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datecandidature", type="date", nullable=true)
+     */
+    private $datecandidature;
 
     /**
      * @var \Formation
@@ -54,6 +61,16 @@ class Candidature
      * })
      */
     private $user;
+
+    /**
+     * @var \ImportCandidat
+     *
+     * @ORM\ManyToOne(targetEntity="ImportCandidat")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
+     * })
+     */
+    private $importcandidat;
 
 
 
@@ -137,5 +154,53 @@ class Candidature
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set importcandidat
+     *
+     * @param \GenericBundle\Entity\ImportCandidat $importcandidat
+     *
+     * @return Candidature
+     */
+    public function setImportcandidat(\GenericBundle\Entity\ImportCandidat $importcandidat = null)
+    {
+        $this->importcandidat = $importcandidat;
+
+        return $this;
+    }
+
+    /**
+     * Get importcandidat
+     *
+     * @return \GenericBundle\Entity\ImportCandidat
+     */
+    public function getImportcandidat()
+    {
+        return $this->importcandidat;
+    }
+
+    /**
+     * Set datecandidature
+     *
+     * @param \DateTime $datecandidature
+     *
+     * @return Candidature
+     */
+    public function setDatecandidature($datecandidature)
+    {
+        $this->datecandidature = $datecandidature;
+
+        return $this;
+    }
+
+    /**
+     * Get datecandidature
+     *
+     * @return \DateTime
+     */
+    public function getDatecandidature()
+    {
+        return $this->datecandidature;
     }
 }

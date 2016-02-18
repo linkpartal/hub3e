@@ -465,4 +465,9 @@ class User extends BaseUser
     {
         return $this->info;
     }
+
+    public function getExpiredAt()
+    {
+        $this->expiresAt;
+    }
 }
