@@ -83,11 +83,12 @@ class QCMController extends Controller
             }
 
             $i = 0;
-            foreach( $request->get('reponse') as $reponses)
+
+            foreach( $request->get('reponse') as $key => $reponses)
             {
                 $reponseorder = 0;
 
-                foreach($reponses as $rep)
+                foreach($reponses as $repkey => $rep)
                 {
                     //get Reponse s'elle existe.
                     $reponse = $em->getRepository('GenericBundle:Reponsedef')->findOneBy(array('reponse'=>$rep,'questiondef'=>$questions[$i]));
@@ -97,6 +98,7 @@ class QCMController extends Controller
                         //S'elle n'existe pas la créer.
                         $newreponse = new Reponsedef();
                         $newreponse->setReponse($rep);
+                        $newreponse->setScore($request->get('score')[$key][$repkey]);
                         $newreponse->setQuestiondef($questions[$i]);
                         $em->persist($newreponse);
                         $em->flush();
@@ -104,11 +106,14 @@ class QCMController extends Controller
                     }
                     $reponse->setOrdre($reponseorder++);
 
+
                     $em->flush();
 
                 }
                 $i++;
+
             }
+
 
         }
 

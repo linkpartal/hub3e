@@ -24,7 +24,7 @@ class Reponsedef
     /**
      * @var string
      *
-     * @ORM\Column(name="Reponse", type="string", length=45, nullable=false)
+     * @ORM\Column(name="Reponse", type="string", length=255, nullable=false)
      */
     private $reponse;
 
@@ -36,6 +36,14 @@ class Reponsedef
     private $ordre;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="Score", type="string", length=45, nullable=true)
+     */
+
+    private $score;
+
+    /**
      * @var \Questiondef
      *
      * @ORM\ManyToOne(targetEntity="Questiondef")
@@ -44,6 +52,10 @@ class Reponsedef
      * })
      */
     private $questiondef;
+
+
+
+
 
 
 
@@ -104,6 +116,33 @@ class Reponsedef
     {
         return $this->ordre;
     }
+
+
+    /**
+     * Set score
+     *
+     * @param string $score
+     *
+     * @return Reponsedef
+     */
+    public function setScore($score)
+    {
+        $this->score = $score;
+
+        return $this;
+    }
+
+    /**
+     * Get score
+     *
+     * @return string
+     */
+    public function getScore()
+    {
+        return $this->score;
+    }
+
+
 
     /**
      * Set questiondef

@@ -1,0 +1,3 @@
+ecole_apprenant:
+    path:     /
+    defaults: { _controller: ApprenantBundle:Default:loadApprenant }

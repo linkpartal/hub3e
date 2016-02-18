@@ -1,3 +1,7 @@
+apprenant:
+    resource: "@ApprenantBundle/Resources/config/routing.yml"
+    prefix:   /apprenant/
+
 mission:
     resource: "@MissionBundle/Resources/config/routing.yml"
     prefix:   /Mission/

@@ -56,6 +56,12 @@ class DefaultController extends Controller
             {
                 return $this->redirect($this->generateUrl('ecole_recruteur',array('ecole'=>$user->getEtablissement()->getTier()->getRaisonSoc())));
             }
+            elseif(true === $this->get('security.authorization_checker')->isGranted('ROLE_APPRENANT'))
+            {
+               return $this->redirect($this->generateUrl('ecole_apprenant',array('apprenant'=>$user)));
+
+            }
+
             else{
                 var_dump('Seul les roles SUPER_ADMIN et ADMINECOLE sont actuellement implemente, l\'utilisateur que vous avez donne à ' . implode(" et ",$user->getRoles()) . ' comme roles. Veuillez revenir en arriere est donne un super_admin ou adminecole');
                 die;
