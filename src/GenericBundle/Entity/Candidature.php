@@ -31,7 +31,7 @@ class Candidature
     /**
      * @var integer
      *
-     * @ORM\Column(name="statut", type="integer", nullable=false)
+     * @ORM\Column(name="statut", type="integer", nullable=true)
      */
     private $statut;
 
@@ -55,6 +55,15 @@ class Candidature
      */
     private $user;
 
+    /**
+     * @var \Users
+     *
+     * @ORM\ManyToOne(targetEntity="ImportCandidat")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
+     * })
+     */
+    private $importapprenant;
 
 
     /**
@@ -137,5 +146,29 @@ class Candidature
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set importapprenant
+     *
+     * @param \GenericBundle\Entity\ImportCandidat $importapprenant
+     *
+     * @return Candidature
+     */
+    public function setImportapprenant(\GenericBundle\Entity\ImportCandidat $importapprenant = null)
+    {
+        $this->importapprenant = $importapprenant;
+
+        return $this;
+    }
+
+    /**
+     * Get importapprenant
+     *
+     * @return \GenericBundle\Entity\ImportCandidat
+     */
+    public function getImportapprenant()
+    {
+        return $this->importapprenant;
     }
 }

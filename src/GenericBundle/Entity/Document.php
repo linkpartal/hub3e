@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Document
  *
- * @ORM\Table(name="document", indexes={@ORM\Index(name="fk_Document_users1_idx", columns={"users_id"})})
+ * @ORM\Table(name="document")
  * @ORM\Entity
  */
 class Document
@@ -17,7 +17,7 @@ class Document
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
@@ -58,9 +58,6 @@ class Document
 
     /**
      * @var \User
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="users_id", referencedColumnName="id")

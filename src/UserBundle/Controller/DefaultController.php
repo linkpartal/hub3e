@@ -3,9 +3,18 @@
 namespace UserBundle\Controller;
 
 use Ddeboer\DataImport\Reader\ExcelReader;
+use GenericBundle\Entity\Candidature;
+use GenericBundle\Entity\Diplome;
+use GenericBundle\Entity\Document;
+use GenericBundle\Entity\Experience;
+use GenericBundle\Entity\Formation;
+use GenericBundle\Entity\Hobbies;
 use GenericBundle\Entity\ImportCandidat;
 use GenericBundle\Entity\Infocomplementaire;
+use GenericBundle\Entity\Langue;
 use GenericBundle\Entity\Mission;
+use GenericBundle\Entity\Parents;
+use GenericBundle\Entity\Recommandation;
 use GenericBundle\Entity\User;
 use GenericBundle\Entity\Etablissement;
 use GenericBundle\Entity\Tier;
@@ -742,4 +751,135 @@ class DefaultController extends Controller
         return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
     }
 
+
+
+    public function ajouterApprenantAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $InfoComp = new Infocomplementaire();
+        $InfoComp->setDatenaissance(date_create($request->get('_Datenaissance')) );
+        $InfoComp->setAdresse($request->get('_Adresse').' '.$request->get('_Ville'));
+        $InfoComp->setCp($request->get('_Codepostal'));
+        $em->persist($InfoComp);
+        $em->flush();
+
+        $apprenant = new ImportCandidat();
+        $apprenant->setEtablissement($this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_idEtab')));
+        $apprenant->setUser($this->get('security.token_storage')->getToken()->getUser());
+
+        // $apprenant->setPhotos($request->get('_Photos'));
+
+        $apprenant->setNom($request->get('_Nom'));
+        $apprenant->setPrenom($request->get('_Prenom'));
+        $apprenant->setCivilite($request->get('_Civilite'));
+        $apprenant->setEmail($request->get('_Email'));
+        $apprenant->setTelephone($request->get('_Telephone'));
+        $apprenant->setInfo($InfoComp);
+        $em->persist($apprenant);
+
+        $em->flush();
+
+
+        for($i = 0; $i< count($request->get('_Nomresp'));$i++) {
+        $responsable = new Parents();
+        $responsable->setNom($request->get('_Nomresp')[$i].' '.$request->get('_Civiliteresp')[$i]);
+        $responsable->setPrenom($request->get('_Prenomresp')[$i]);
+        $responsable->setAdresse($request->get('_Adresseresp')[$i].' '.$request->get('_CodePostaleresp')[$i].' '.$request->get('_Villeresp')[$i]);
+        $responsable->setMetier($request->get('_Metierresp')[$i]);
+        $responsable->setEmail($request->get('_Emailresp')[$i]);
+        $responsable->setProfession($request->get('_Profession')[$i]);
+        $responsable->setTelephone($request->get('_Telephoneresp')[$i]);
+
+            $em->persist($responsable);
+            $em->flush();
+        }
+       // var_dump($responsable);die;
+
+
+        for($i = 0; $i< count($request->get('_Libelle'));$i++) {
+        $diplome = new Diplome();
+        $diplome->setLibelle($request->get('_Libelle')[$i]);
+        $diplome->setObtention($request->get('_Obtention')[$i]);
+        $diplome->setEcole($request->get('_Ecole')[$i]);
+          $em->persist($diplome);
+          $em->flush();
+        }
+
+
+        for($i = 0; $i< count($request->get('_Nomsociete'));$i++) {
+        $experience = new Experience();
+        $experience->setNomsociete($request->get('_Nomsociete')[$i]);
+        $experience->setActivite($request->get('_Activite')[$i]);
+        $experience->setLieu($request->get('_Lieu')[$i]);
+        $experience->setPoste($request->get('_Poste')[$i]);
+        $experience->setNbreannee($request->get('_Nbreannee')[$i]);
+        $experience->setDescription($request->get('_Descriptionexp')[$i]);
+         $em->persist($experience);
+          $em->flush();
+        }
+
+
+        for($i = 0; $i< count($request->get('_Nomrec'));$i++) {
+        $recommandation = new Recommandation();
+        $recommandation->setNom($request->get('_Nomrec')[$i].' '.$request->get('_Prenomrec')[$i]);
+        $recommandation->setFonction($request->get('_Fonctionrec')[$i]);
+        $recommandation->setTelephone($request->get('_Telephonerec')[$i]);
+        $recommandation->setEmail($request->get('_Emailrec')[$i]);
+        $recommandation->setText($request->get('_Text')[$i]);
+            $em->persist($recommandation);
+            $em->flush();
+        }
+
+        for($i = 0; $i< count($request->get('_Langue'));$i++) {
+        $langue = new Langue();
+            $langue->setLangue($request->get('_Langue')[$i]);
+            $langue->setNiveau($request->get('_Niveau')[$i]);
+            $em->persist($langue);
+            $em->flush();
+        }
+
+        if($request->get('formations'))
+        {
+            foreach($request->get('formations') as $idFormation){
+                $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->find($idFormation);
+                $candidature = new Candidature();
+                $candidature->setFormation($formation);
+                $candidature->setImportapprenant($apprenant);
+                $em->persist($candidature);
+                $em->flush();
+            }
+        }
+
+        if($request->get('hobbies')) {
+            foreach ($request->get('hobbies') as $idHobbies) {
+                $hobby = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->find($idHobbies);
+                $hobby->addImportCandidat($apprenant);
+                $em->flush();
+            }
+        }
+        for($i = 0; $i < count($request->get('_Type')); $i++)
+        {
+            $document = new Document();
+            $document->setType($request->get('_Type')[$i]);
+            $document->setExtension($_FILES['_Document']['type'][$i]);
+            $document->setName($_FILES['_Document']['name'][$i]);
+            $document->setTaille($_FILES['_Document']['size'][$i]);
+            $document->setDocument(file_get_contents($_FILES['_Document']['tmp_name'][$i]));
+            $document->setImportCandidat($candidature);
+            $em->persist($document);
+            $em->flush();
+        }
+
+
+
+
+        // var_dump($apprenant);die;
+
+
+
+        return $this->redirect($this->generateUrl('affiche_etab',array('id'=>$request->get('_idEtab'))));
+
+
+    }
 }

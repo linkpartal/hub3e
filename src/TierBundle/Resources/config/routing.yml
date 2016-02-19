@@ -18,13 +18,9 @@ ecoles_assiciated:
     path: /ecolesassociated/id={id}
     defaults: { _controller: TierBundle:Default:ecolesassociated}
 
-modifieretab:
-    path: /modifieretablissement/{id}
-    defaults: { _controller: TierBundle:Default:modifier}
-
 ecole_etabmodif:
     path: /admin/etabmodif
-    defaults: { _controller: EcoleBundle:Ecole:etabModif}
+    defaults: { _controller: TierBundle:Default:etabModif}
 
 activate:
     path: /admin/activate/id={id}
@@ -85,6 +81,10 @@ remove_formation_qcm:
 admin_iframeload:
     path: /iframe
     defaults: { _controller: AdminBundle:Default:loadiframe}
+
+apprenant_added:
+    path: /ajouterApprenant
+    defaults: { _controller: UserBundle:Default:ajouterApprenant}
 
 
 
