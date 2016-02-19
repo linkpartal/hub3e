@@ -32,9 +32,9 @@ class Hobbies
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="User", inversedBy="culturel")
-     * @ORM\JoinTable(name="culturel_has_users",
+     * @ORM\JoinTable(name="hobbies_has_users",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="culturel_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="hobby_id", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
      *     @ORM\JoinColumn(name="users_id", referencedColumnName="id")
@@ -47,9 +47,9 @@ class Hobbies
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\ImportCandidat", inversedBy="culturel")
-     * @ORM\JoinTable(name="culturel_has_import_candidat",
+     * @ORM\JoinTable(name="hobbies_has_import_candidat",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="culturel_import_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="hobby_import_id", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
      *     @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")

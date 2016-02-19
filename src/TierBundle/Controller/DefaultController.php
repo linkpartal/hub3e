@@ -3,6 +3,7 @@
 namespace TierBundle\Controller;
 
 use GenericBundle\Entity\Etablissement;
+use GenericBundle\Entity\ImportCandidat;
 use GenericBundle\Entity\Qcmdef;
 use GenericBundle\Entity\Notification;
 use GenericBundle\Entity\Tier;
@@ -155,6 +156,10 @@ class DefaultController extends Controller
         // les formation de l'etablissement
         $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$etablissement ));
 
+
+
+        $hobbie = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->findAll();
+
         // Les utilisateurs de l'etablissement et du tier auquel il est lié
         $users = array();
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
@@ -180,7 +185,7 @@ class DefaultController extends Controller
         // missions non suspendu
         $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date' => 'DESC'));
 
-        return $this->render('TierBundle::iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,'tiers'=>$tiers,'users'=>$users,'formations'=>$formation,
+        return $this->render('TierBundle::iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,'tiers'=>$tiers,'users'=>$users,'formations'=>$formation,'hobbies' =>$hobbie,
             'libs'=>$licences, 'missions'=>$missions ,'usermis'=>$userMiss,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab,'etablissementslier'=>$etablisementlier));
     }
 
@@ -406,6 +411,10 @@ class DefaultController extends Controller
         $reponse = new JsonResponse();
         return $reponse->setData(array('Status'=>'Licence correctement supprimer'));
     }
+
+
+
+
 
 
 }

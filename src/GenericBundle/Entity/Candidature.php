@@ -73,7 +73,6 @@ class Candidature
     private $importcandidat;
 
 
-
     /**
      * Get id
      *
@@ -166,7 +165,6 @@ class Candidature
     public function setImportcandidat(\GenericBundle\Entity\ImportCandidat $importcandidat = null)
     {
         $this->importcandidat = $importcandidat;
-
         return $this;
     }
 
