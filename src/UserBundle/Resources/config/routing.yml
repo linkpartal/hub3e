@@ -3,7 +3,7 @@ expired:
     defaults: { _controller: UserBundle:Default:expired}
 
 userModif:
-    path: /admin/userModif
+    path: /userModif
     defaults: { _controller: UserBundle:Default:userModif}
 
 metier_user_afficheUser:
@@ -45,3 +45,7 @@ importer_candidat:
 fusionner_apprenant:
     path: /admin/fusion_apprenant/id_sas={sas}/id_user={user}
     defaults: { _controller: UserBundle:Default:Fusionner}
+
+afficher_profil:
+    path: /affichageProfil
+    defaults: { _controller: UserBundle:Default:affichageProfil}
