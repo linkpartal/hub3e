@@ -53,7 +53,26 @@ class Reponsedef
      */
     private $questiondef;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="reponsedef")
+     * @ORM\JoinTable(name="reponse_apprenant",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="reponse_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="apprenant_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $apprenant;
 
+
+    public function __construct()
+    {
+        $this->apprenant = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
 
 

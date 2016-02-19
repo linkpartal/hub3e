@@ -42,10 +42,28 @@ class DefaultController extends Controller
         }
         $candidatures = $this->getDoctrine()->getRepository('GenericBundle:Candidature')->findBy(array('user'=>$userid));
 
+        $questions =array();
+        $reponses = array();
+        foreach($userid->getEtablissement()->getQcmdef() as $key => $qcm){
 
+            $questions[$key] = $this->getDoctrine()->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef'=>$qcm));
+            usort($questions[$key],array('\GenericBundle\Entity\Questiondef','sort_questions_by_order'));
+            foreach ( $questions[$key] as $keyqst => $qst)
+            {
+                $reps = $this->getDoctrine()->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef'=>$qst));
+                usort($reps,array('\GenericBundle\Entity\Reponsedef','sort_reponses_by_order'));
+                $reponses[$key][$keyqst] = $reps;
+            }
+
+        }
         return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid,
             'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,
-            'candidatures'=>$candidatures));
+            'candidatures'=>$candidatures,'QCMs'=>$userid->getEtablissement()->getQcmdef() ,'Questions'=>$questions,'reponses'=>$reponses));
+
+    }
+
+    public function affichageSASAction($id){
+
     }
 
     public function UserAddedAction(Request $request)

@@ -14,7 +14,7 @@ user_added:
     path:  /admin/Useradded
     defaults: {_controller: UserBundle:Default:UserAdded}
 
-supprimereUtilisateur:
+supprimerUtilisateur:
     path : /admin/supprimeruser/id={id}
     defaults: { _controller: UserBundle:Default:supprimeruser}
 
@@ -45,3 +45,7 @@ importer_candidat:
 fusionner_apprenant:
     path: /admin/fusion_apprenant/id_sas={sas}/id_user={user}
     defaults: { _controller: UserBundle:Default:Fusionner}
+
+Afficher_Sas:
+    path: /admin/affichageSAS/id={id}
+    defaults: { _controller: UserBundle:Default:affichageSAS}

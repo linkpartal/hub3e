@@ -27,7 +27,7 @@
                 <div style="height: 35px; width: 100%; padding: 15px 0 0 15px;">
 
                     {% if User.hasRole('ROLE_APPRENANT') %}
-                    <select title="" id="select_info"  style="color:white;">
+                        <select title="" id="select_info"  style="color:white;">
                             <option value="info_user" style="color:black;">Données Utilisateur</option>
                             <option value="info_Apprenant" style="color:black;">Details de l'Apprenant</option>
                             <option value="info_candidature" style="color:black;">Formation de l'Apprenant </option>
@@ -36,7 +36,8 @@
                             <option value="info_recom" style="color:black;">Recommandations </option>
                             <option value="info_diplome" style="color:black;">Diplomes </option>
                             <option value="info_doc" style="color:black;">Documents </option>
-                    </select>
+                            <option value="QCM_Affinite" style="color:black;">QCM Affinite </option>
+                        </select>
 
                         {% else  %}
                             <Label value="info_user" style="font:20px arial;width: 100%; height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;text-align: left;">Données Utilisateur</Label>
@@ -282,6 +283,42 @@
                             </div>
                         {% endfor %}
                     </div>
+                    <div id="QCM_Affinite" class="list-group affichage" style="display:none">
+
+                        <div class="col-xs-12">
+                            <div class="list-group" style="background: #1B2024; margin: 30px 0 0 30px; padding: 0 0; border-left: 20px solid white; border-right: 20px solid white !important; text-align: left;">
+
+
+                                <form class="formulaire" id="form" action="{{ path('Add_QCM') }}" method="post">
+                                    {% set i = 0 %}
+                                    {% set reponsegroupe = 0 %}
+                                    {% for QCM in QCMs %}
+                                        <div class="inputcontainer" name="21456dddd">
+                                            <label class="list-group-item" style="height: 60px;" for="QCM">Nom du Questionnaire :</label>
+                                            <input type="text" class="champ " id="QCM" name="_Nom" value="{{ QCM.getNom }}" required maxlength="45" readonly><br>
+                                        </div>
+                                        {% set y = 0 %}
+                                        {% for question in Questions[i] %}
+                                            <div class="inputcontainer" name="question">
+                                                <label class="list-group-item" style="height: 60px;" for="Question">Question :</label>
+                                                <input type="text" class="champ " id="Question" name="questions[]" value="{{question.getQuestion  }}" required maxlength="255" readonly>
+                                                {% for reponse in reponses[i][y] %}
+                                                    <div>
+                                                        <input type="radio" name="reponse[{{ reponsegroupe }}]" value="{{ reponse.getId }}"  ><label style="font: 14px Roboto black; ">{{ reponse.getReponse }}</label>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                            {% set y = y + 1 %}
+                                        {% endfor %}
+                                        {% set reponsegroupe = reponsegroupe + 1 %}
+                                        {% set i = i + 1 %}
+                                    {% endfor %}
+                                    
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
                 {% endif %}
 
 
@@ -309,7 +346,7 @@
 
                 </button>
 
-                <button onclick="post('{{ path('supprimereUtilisateur',{'id': User.getId }) }}',true)" type="button" class="list-group-item rightMenu" >
+                <button onclick="post('{{ path('supprimerUtilisateur',{'id': User.getId }) }}',true)" type="button" class="list-group-item rightMenu" >
                     <div class="col-xs-12" >Supprimer l'utilisateur</div>
 
                 </button>
