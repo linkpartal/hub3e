@@ -49,29 +49,101 @@
 
             <div class="col-xs-12" style="margin-bottom: 50px">
                 <div id="info_user" class="list-group affichage">
-                    <label class="list-group-item info" >Civilité : <label style="color:black" >{{User.getCivilite}}</label></label>
-                    <label class="list-group-item info" >Nom : <label style="color:black" >{{User.getNom}}</label></label>
-                    <label class="list-group-item info" >Prénom : <label style="color:black" >{{User.getPrenom}}</label></label>
-                    <label class="list-group-item info" >Téléphone : <label style="color:black" >{{User.getTelephone}}</label></label>
-                    <label class="list-group-item info" >UserName : <label style="color:black" >{{User.getUsername}}</label></label>
-                    <label class="list-group-item info" >E-mail : <label style="color:black" >{{User.getEmail}}</label></label>
-                    <label class="list-group-item info" >Dernière connexion : <label style="color:black" >{{User.getLastLogin|date('d/m/Y à H:i') }}</label></label>
-                    <label class="list-group-item info" >Expiré le : <label style="color:black" >{{User.getExpiredAt|date('d/m/Y à H:i') }}</label></label>
-                    <label class="list-group-item info" >Roles  :
-                    {% for role in User.getRoles %}
-                        <label style="color:black" >{{role}}, </label>
-                    {% endfor %}
-                    </label>
 
-                 {% if User.getEtablissement %}
-                     {% if User.getEtablissement.getTier.getEcole == 0 %}
-                         <label class="list-group-item info" >Société  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
+                    <form class="formulaire" id="formUser" action="{{ path('userModif') }}" method="post" enctype="multipart/form-data">
 
-                     {% elseif User.getEtablissement.getTier.getEcole == 1 %}
-                         <label class="list-group-item info" >Ecole  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
-                     {% endif %}
-                 {% endif %}
+                        <input type="hidden" value="{{ User.getId }}" id="id" name="_ID">
 
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="civilite">Civilité :</label>
+
+                            <select   class="champ form-control " style="width: 25%; margin-right: 10px;background-color: white" title="" id="civilite"  name="_Civilite">
+                                {% if User.getCivilite == 'Mr' %}
+                                    <option selected="selected" value="Mr">Mr.</option>
+                                {% else %}
+                                    <option value="Mr">Mr.</option>
+                                {% endif %}
+
+                                {% if User.getCivilite == 'Mme' %}
+                                    <option selected="selected" value="Mme">Mme.</option>
+                                {% else %}
+                                    <option value="Mme">Mme.</option>
+                                {% endif %}
+
+                                {% if User.getCivilite == 'Mlle' %}
+                                    <option selected="selected" value="Mlle">Mlle.</option>
+                                {% else %}
+                                    <option value="Mlle">Mlle.</option>
+                                {% endif %}
+                            </select>
+                        </div>
+
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="Nom">Nom :</label>
+                            <input value="{{User.getNom}}" type="text" class="champ form-control" id="Nom" name="_Nom" maxlength="45" readonly>
+                        </div>
+
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="Prenom">Prénom :</label>
+                            <input value="{{User.getPrenom}}" type="text" class="champ form-control" id="Prenom" name="_Prenom" maxlength="45" readonly>
+                        </div>
+
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="Tel">Téléphone :</label>
+                            <input value="{{User.getTelephone}}" type="text" class="champ form-control"id="Telephone" name="_Tel" maxlength="45" readonly>
+                        </div>
+
+
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="UserName">UserName :</label>
+                            <input value="{{User.getUserName}}" type="text" class="champ form-control" id="UserName" name="_Username" maxlength="255" readonly>
+                        </div>
+
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" for="Mail">E-mail :</label>
+                            <input value="{{User.getEmail}}" type="text" class="champ form-control" id="Mail" name="_Mail" maxlength="255" readonly>
+                        </div>
+
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" >Dernière connexion :</label><label style="color:black" >{{User.getLastLogin|date('d/m/Y')}}</label>
+
+                        </div>
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;" >Expiré le : </label>
+                            <label style="color:black" >
+
+                                {% if User.getExpiredAt is null %}
+                                    &nbsp;
+                                {% else %}
+                                    {{ User.getExpiredAt|date('d/m/Y H:i') }}
+                                {% endif %}
+
+
+                            </label>
+
+
+                        </div>
+                        <div class="inputcontainer">
+                            <label class="list-group-item" style="height: 60px;">Roles :
+                                {% for role in User.getRoles %}
+                                    <label style="color:black">{{role}}, </label>
+                                {% endfor %}
+                            </label>
+
+
+                        </div>
+                        <div class="inputcontainer">
+                        {% if User.getEtablissement %}
+                            {% if User.getEtablissement.getTier.getEcole == 0 %}
+                                <label class="list-group-item info" >Société  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
+
+                            {% elseif User.getEtablissement.getTier.getEcole == 1 %}
+                                <label class="list-group-item info" >Ecole  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
+                            {% endif %}
+                        {% endif %}
+                        </div>
+                        <input id="formUserSubmit" type="submit" style="display: none;">
+                    </form>
                 </div>
 
                 {% if User.hasRole('ROLE_APPRENANT') %}
@@ -341,7 +413,7 @@
                         <div class="col-xs-12" style="display: inline-table;color: white;height: 46px;margin-top:10px;">Désactiver</div>
                     </button>
                 {% endif %}
-                <button onclick="post('{{ path('modifierUser',{'id': User.getId }) }}',false)" type="button" class="list-group-item rightMenu" >
+                <button onclick="modifier('formUser',this)" type="button" class="list-group-item rightMenu" >
                     <div class="col-xs-12"  >Modifier la fiche</div>
 
                 </button>
@@ -402,6 +474,7 @@
         });
 
     }
+
     function post(path,refresh) {
         if(refresh)
         {
@@ -420,6 +493,16 @@
         {
             window.location = path;
         }
+    }
+    function modifier(form,button){
+        var formulaire =document.getElementById(form);
+        for(var i=0; i< formulaire.getElementsByTagName("input").length ; i++)
+        {
+            formulaire.getElementsByTagName("input")[i].readOnly=false;
+        }
+
+        button.getElementsByTagName("div")[0].innerHTML="valider";
+        button.setAttribute('onclick','document.getElementById(\'formUserSubmit\').click()');
     }
     {% endif %}
 </script>

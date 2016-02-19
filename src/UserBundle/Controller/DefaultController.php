@@ -24,7 +24,7 @@ class DefaultController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         $userid = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
-        $info = $this->getDoctrine()->getRepository('GenericBundle:Infocomplementaire')->find($id);
+        $info = $userid->getInfo();
         $Parents = $this->getDoctrine()->getRepository('GenericBundle:Parents')->findAll();
 
         $Langue = $this->getDoctrine()->getRepository('GenericBundle:Langue')->findAll();
@@ -64,6 +64,25 @@ class DefaultController extends Controller
 
     public function affichageSASAction($id){
 
+    }
+
+    public function affichageProfilAction()
+    {
+        $userid = $this->get('security.token_storage')->getToken()->getUser();
+
+        $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
+        $info = $userid->getInfo();
+        $Parents = $this->getDoctrine()->getRepository('GenericBundle:Parents')->findAll();
+
+        $Langue = $this->getDoctrine()->getRepository('GenericBundle:Langue')->findAll();
+
+        $Experience = $this->getDoctrine()->getRepository('GenericBundle:Experience')->findAll();
+        $Recommandation = $this->getDoctrine()->getRepository('GenericBundle:Recommandation')->findAll();
+        $Diplome = $this->getDoctrine()->getRepository('GenericBundle:Diplome')->findAll();
+        $Document = $this->getDoctrine()->getRepository('GenericBundle:Document')->findAll();
+
+        return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('licencedef'=>$licencedef,'User'=>$userid,
+            'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue));
     }
 
     public function UserAddedAction(Request $request)
