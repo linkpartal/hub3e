@@ -57,21 +57,21 @@ class Reponsedef
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="User", inversedBy="reponsedef")
-     * @ORM\JoinTable(name="reponse_apprenant",
+     * @ORM\JoinTable(name="reponsedef_has_users",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="reponse_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="reponsedef_id", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="apprenant_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="users_id", referencedColumnName="id")
      *   }
      * )
      */
-    private $apprenant;
+    private $users;
 
 
     public function __construct()
     {
-        $this->apprenant = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 

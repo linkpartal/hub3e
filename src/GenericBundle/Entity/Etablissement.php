@@ -161,6 +161,7 @@ class Etablissement
     public function __construct()
     {
         $this->qcmdef = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
