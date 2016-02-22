@@ -16,7 +16,7 @@ class DefaultController extends Controller
         $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');
         $ecoles = array();
-        $ecoles = array_merge($ecoles,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($user->getTier()->getId()))  ;
+        $ecoles = array_merge($ecoles,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($user->getTier()->getId()));
         foreach($user->getTier()->getTier1() as $partenaire) {
             $ecoles = array_merge($ecoles, $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($partenaire->getId()));
         }
@@ -29,13 +29,25 @@ class DefaultController extends Controller
         }
 
         $users = $this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($user->getTier());
-
+        $apprenants =array();
+        $notapprenant = array();
+        foreach($users as $user)
+        {
+            if($user->hasRole('ROLE_APPRENANT'))
+            {
+                array_push($apprenants,$user);
+            }
+            else{
+                array_push($notapprenant,$user);
+            }
+        }
+        $import_apprenant = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser()));
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$user->getTier()));
         $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date'=>'DESC'));
 
 
-        return $this->render('EcoleBundle:Adminecole:index.html.twig', array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$users,
-            'AllLicences'=>$licences,'societes'=>$user->getReferenciel(),'missions'=>$missions));
+        return $this->render('EcoleBundle:Adminecole:index.html.twig', array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$notapprenant,
+            'AllLicences'=>$licences,'societes'=>$user->getReferenciel(),'missions'=>$missions,'apprenants'=>$apprenants,'import_apprenants'=>$import_apprenant));
     }
 
     public function loadiframeAction()

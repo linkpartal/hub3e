@@ -1,3 +1,7 @@
 ecole_apprenant:
     path:     /
     defaults: { _controller: ApprenantBundle:Default:loadApprenant }
+
+affiche_admissions:
+    path: /affichage/id={id}
+    defaults: { _controller: TierBundle:Default:affichage}

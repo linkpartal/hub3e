@@ -29,14 +29,27 @@ class DefaultController extends Controller
             }
         }
         $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findAll();
+        $apprenants =array();
+        $notapprenant = array();
+        foreach($users as $user)
+        {
+            if($user->hasRole('ROLE_APPRENANT'))
+            {
+                array_push($apprenants,$user);
+            }
+            else{
+                array_push($notapprenant,$user);
+            }
+        }
+        $import_apprenant = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$user));
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array(),array('date'=>'DESC'));
         $qcms = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findAll();
         $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');
 
-        return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$users,
-            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'missions'=>$missions));
+        return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$notapprenant,
+            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'missions'=>$missions,'apprenants'=>$apprenants,'import_apprenants'=>$import_apprenant));
     }
 
     public function loadiframeAction()

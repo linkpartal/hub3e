@@ -119,6 +119,13 @@ class User extends BaseUser
     private $langue;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\Reponsedef", mappedBy="users")
+     */
+    private $reponses;
+
+    /**
      * @var \Infocomplementaire
      *
      * @ORM\ManyToOne(targetEntity="Infocomplementaire")
@@ -134,6 +141,9 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
+        $this->langue = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->referenciel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
         $this->hobbies = new \Doctrine\Common\Collections\ArrayCollection();
         $this->mission = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -464,5 +474,10 @@ class User extends BaseUser
     public function getInfo()
     {
         return $this->info;
+    }
+
+    public function getExpiredAt()
+    {
+        $this->expiresAt;
     }
 }

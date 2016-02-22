@@ -36,6 +36,13 @@ class Candidature
     private $statut;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datecandidature", type="date", nullable=true)
+     */
+    private $datecandidature;
+
+    /**
      * @var \Formation
      *
      * @ORM\ManyToOne(targetEntity="Formation")
@@ -56,14 +63,14 @@ class Candidature
     private $user;
 
     /**
-     * @var \Users
+     * @var \ImportCandidat
      *
      * @ORM\ManyToOne(targetEntity="ImportCandidat")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
      * })
      */
-    private $importapprenant;
+    private $importcandidat;
 
 
     /**
@@ -149,26 +156,49 @@ class Candidature
     }
 
     /**
-     * Set importapprenant
+     * Set importcandidat
      *
-     * @param \GenericBundle\Entity\ImportCandidat $importapprenant
+     * @param \GenericBundle\Entity\ImportCandidat $importcandidat
      *
      * @return Candidature
      */
-    public function setImportapprenant(\GenericBundle\Entity\ImportCandidat $importapprenant = null)
+    public function setImportcandidat(\GenericBundle\Entity\ImportCandidat $importcandidat = null)
     {
-        $this->importapprenant = $importapprenant;
+        $this->importcandidat = $importcandidat;
+        return $this;
+    }
+
+    /**
+     * Get importcandidat
+     *
+     * @return \GenericBundle\Entity\ImportCandidat
+     */
+    public function getImportcandidat()
+    {
+        return $this->importcandidat;
+    }
+
+    /**
+     * Set datecandidature
+     *
+     * @param \DateTime $datecandidature
+     *
+     * @return Candidature
+     */
+    public function setDatecandidature($datecandidature)
+    {
+        $this->datecandidature = $datecandidature;
 
         return $this;
     }
 
     /**
-     * Get importapprenant
+     * Get datecandidature
      *
-     * @return \GenericBundle\Entity\ImportCandidat
+     * @return \DateTime
      */
-    public function getImportapprenant()
+    public function getDatecandidature()
     {
-        return $this->importapprenant;
+        return $this->datecandidature;
     }
 }

@@ -148,7 +148,6 @@
 
 
 <div class="container">
-
 {% block TopBar %}
     <div class="row" style="height: 32px; background: #2975cb;">
         <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="border: 0;padding: 4.5px;height: 100%;">
@@ -195,6 +194,7 @@
                     <option value="societe">Voir Sociétés</option>
                     <option value="licence">Voir Licences</option>
                     <option value="user">Voir Utilisateurs</option>
+                    <option value="apprenants">Voir Apprenants</option>
                     <option value="mission">Voir Missions</option>
                     <option value="QCM">Gestion QCM</option>
                     <option value="modele">Gestion Modèles</option>
@@ -271,9 +271,36 @@
                             </button>
                         {% endfor %}
                     {% endif %}
+                </div>
+                <div id="apprenants" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                    {% if apprenants is defined %}
+                        {% for u in apprenants %}
+                            <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId }) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                                <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
+                                <div class="col-xs-12 part"
+                                     style="height: 31px; text-align: left;">
 
+                                    <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
+                                    {% if not u.isExpired %}
+                                        <div class="col-xs-1 active" id="active{{ u.getId }}"></div>
+                                    {% else %}
+                                        <div class="col-xs-1 inactive" id="active{{ u.getId }}"></div>
+                                    {% endif %}
 
-
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
+                    {% if import_apprenants is defined %}
+                        {% for u in import_apprenants %}
+                            <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId }) }}',this)" id="import{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                                <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
+                                <div class="col-xs-12 part" style="height: 31px; text-align: left;">
+                                    <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
                 </div>
                 <div id="mission" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if missions is defined %}
@@ -369,12 +396,6 @@
 <script src="http://maps.googleapis.com/maps/api/js"></script>
 
 <script language="JavaScript">
-
-
-
-
-
-
     var i = 1;
     document.getElementById("leftselect").onchange = function(){
         var x = document.getElementById("leftselect").value;
@@ -391,6 +412,7 @@
         document.getElementById('societe').style.visibility= 'hidden';
         document.getElementById('licence').style.visibility= 'hidden';
         document.getElementById('user').style.visibility= 'hidden';
+        document.getElementById('apprenants').style.visibility= 'hidden';
         document.getElementById('QCM').style.visibility= 'hidden';
         document.getElementById('modele').style.visibility= 'hidden';
         document.getElementById(x).style.visibility='visible';
@@ -432,7 +454,7 @@
             elements[0].parentNode.removeChild(elements[0]);
         }
 
-    };
+    }
     function postiframeUser(url,button) {
         document.getElementById("iframe").src = url;
         var elements = button.getElementsByClassName("badge");
@@ -441,7 +463,7 @@
             elements[0].parentNode.removeChild(elements[0]);
         }
 
-    };
+    }
     function stringWith (str, prefix) {
         var ustring = str.toUpperCase();
         var uprefix = prefix.toUpperCase();
@@ -453,8 +475,7 @@
         {
             return false;
         }
-    };
-
+    }
     function search(mot){
 
         var buttons = document.getElementById('ecole').getElementsByClassName('butonLigne');
@@ -506,7 +527,7 @@
             }
             i++;
         }
-    };
+    }
     function putbadged() {
         var notifs = JSON.parse('{{ notifications|raw }}');
         var ecole =0;
@@ -566,7 +587,7 @@
             buttonuser.appendChild(spanuser);
         }
 
-    };
+    }
     function dupliqueradresse() {
         var dup = document.getElementById("div_adresse");
         var clone = dup.cloneNode(true);
@@ -588,9 +609,7 @@
         }
 
         i++;
-    };
-
-
+    }
     function submitAjaxForm(url,form){
 
         var route;
@@ -619,9 +638,7 @@
                 }
             }
         });
-    };
-
-
+    }
     function envoyeradresses(){
         document.getElementById('submittier').disabled=true;
         var geocodes = document.getElementsByName('_Geocode[]');
@@ -659,7 +676,7 @@
                 }
             });
         }
-    };
+    }
     function readURL(input,baliseimg) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -672,13 +689,10 @@
 
             reader.readAsDataURL(input.files[0]);
         }
-    };
+    }
     function supprimerAdresse(div){
         div.parentNode.parentNode.removeChild(div.parentNode);
     }
-
-
-
 </script>
 
 {% block JS %}
