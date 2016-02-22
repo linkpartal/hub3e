@@ -137,7 +137,7 @@
                                     <label style="float: left">Date debut :</label> <input type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' class="date" id="Datedebut" name="_Datedebut" title="Datedebut" required >
                                     <input type="text" class="input " id="TypeContrat" name="_TypeContrat" placeholder="TypeContrat" required maxlength="45">
 
-                                    <input type="text" class="input " id="Remuneration" name="_Remuneration" placeholder="Remuneration" required maxlength="11">
+                                    <input type="number" class="input " id="Remuneration" name="_Remuneration" placeholder="Remuneration" required maxlength="11">
                                     <input type="text" class="input " id="Horaire" name="_Horaire" placeholder="Horaire" required maxlength="45">
 
                                 </div>
@@ -149,7 +149,7 @@
                                     <input type="text" class="input" id="EmailContact" name="_EmailContact" placeholder="EmailContact" required MAXLENGTH="45">
 
                                     <label style="float: left">Date fin :</label><input type="date" data-date='{"buttonOnly": true, "calculateWidth": true}' class="date " id="Datefin" name="_Datefin" title="Datefin" required>
-                                    <input type="text" class="input " id="Emploi" name="_Emploi" placeholder="Emploi" required maxlength="1">
+                                    <input type="number" class="input " id="Emploi" name="_Emploi" placeholder="Emploi" required maxlength="1">
                                     <input type="text" class="input " id="Etat" name="_Etat" placeholder="Etat" required maxlength="45">
 
 
@@ -1028,7 +1028,7 @@
         </div>
 
     </div>
-    {% if is_granted('ROLE_SUPER_ADMIN') or (is_granted('ROLE_ADMINECOLE') and (etablissement.getTier in app.user.getTier.getTier1)) or ((is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC')) and etablissement.getTier == app.user.getTier) %}
+    {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMINECOLE') or (is_granted('ROLE_ADMINSOC') and etablissement.getTier == app.user.getTier) %}
     <div class="col-xs-3" style="height: 100%;">
         <div class="list-group"
              style="margin: 15px 0 0 15px;height: 100%; background-color: white;">

@@ -50,6 +50,55 @@ class DefaultController extends Controller
         }
         $candidatures = $this->getDoctrine()->getRepository('GenericBundle:Candidature')->findBy(array('user'=>$userid));
 
+        if($userid->hasRole('ROLE_APPRENANT'))
+        {
+            $questions =array();
+            $reponses = array();
+            foreach($userid->getEtablissement()->getQcmdef() as $key => $qcm){
+
+                $questions[$key] = $this->getDoctrine()->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef'=>$qcm));
+                usort($questions[$key],array('\GenericBundle\Entity\Questiondef','sort_questions_by_order'));
+                foreach ( $questions[$key] as $keyqst => $qst)
+                {
+                    $reps = $this->getDoctrine()->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef'=>$qst));
+                    usort($reps,array('\GenericBundle\Entity\Reponsedef','sort_reponses_by_order'));
+                    $reponses[$key][$keyqst] = $reps;
+                }
+
+            }
+            return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid,
+                'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,
+                'candidatures'=>$candidatures,'QCMs'=>$userid->getEtablissement()->getQcmdef() ,'Questions'=>$questions,'reponses'=>$reponses));
+        }
+        else{
+            return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid,
+                'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,
+                'candidatures'=>$candidatures));
+        }
+
+
+    }
+
+    public function affichageSASAction($id){
+
+    }
+
+    public function affichageProfilAction()
+    {
+        $userid = $this->get('security.token_storage')->getToken()->getUser();
+
+        $info = $userid->getInfo();
+        $Parents = $this->getDoctrine()->getRepository('GenericBundle:Parents')->findAll();
+
+        $Langue = $this->getDoctrine()->getRepository('GenericBundle:Langue')->findAll();
+
+        $Experience = $this->getDoctrine()->getRepository('GenericBundle:Experience')->findAll();
+        $Recommandation = $this->getDoctrine()->getRepository('GenericBundle:Recommandation')->findAll();
+        $Diplome = $this->getDoctrine()->getRepository('GenericBundle:Diplome')->findAll();
+        $Document = $this->getDoctrine()->getRepository('GenericBundle:Document')->findAll();
+
+        $candidatures = $this->getDoctrine()->getRepository('GenericBundle:Candidature')->findBy(array('user'=>$userid));
+
         $questions =array();
         $reponses = array();
         foreach($userid->getEtablissement()->getQcmdef() as $key => $qcm){
@@ -67,30 +116,6 @@ class DefaultController extends Controller
         return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid,
             'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,
             'candidatures'=>$candidatures,'QCMs'=>$userid->getEtablissement()->getQcmdef() ,'Questions'=>$questions,'reponses'=>$reponses));
-
-    }
-
-    public function affichageSASAction($id){
-
-    }
-
-    public function affichageProfilAction()
-    {
-        $userid = $this->get('security.token_storage')->getToken()->getUser();
-
-        $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
-        $info = $userid->getInfo();
-        $Parents = $this->getDoctrine()->getRepository('GenericBundle:Parents')->findAll();
-
-        $Langue = $this->getDoctrine()->getRepository('GenericBundle:Langue')->findAll();
-
-        $Experience = $this->getDoctrine()->getRepository('GenericBundle:Experience')->findAll();
-        $Recommandation = $this->getDoctrine()->getRepository('GenericBundle:Recommandation')->findAll();
-        $Diplome = $this->getDoctrine()->getRepository('GenericBundle:Diplome')->findAll();
-        $Document = $this->getDoctrine()->getRepository('GenericBundle:Document')->findAll();
-
-        return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('licencedef'=>$licencedef,'User'=>$userid,
-            'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue));
     }
 
     public function UserAddedAction(Request $request)
@@ -918,7 +943,7 @@ class DefaultController extends Controller
                 $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->find($idFormation);
                 $candidature = new Candidature();
                 $candidature->setFormation($formation);
-                $candidature->setImportapprenant($apprenant);
+                $candidature->setImportcandidat($apprenant);
                 $em->persist($candidature);
                 $em->flush();
             }
@@ -939,7 +964,7 @@ class DefaultController extends Controller
             $document->setName($_FILES['_Document']['name'][$i]);
             $document->setTaille($_FILES['_Document']['size'][$i]);
             $document->setDocument(file_get_contents($_FILES['_Document']['tmp_name'][$i]));
-            $document->setImportCandidat($candidature);
+            $document->setImportCandidat($apprenant);
             $em->persist($document);
             $em->flush();
         }
