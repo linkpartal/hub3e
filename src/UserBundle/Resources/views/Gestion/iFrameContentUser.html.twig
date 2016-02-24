@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/Apprenant.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/ajout.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     {% block CSS %}{% endblock %}
@@ -48,16 +48,16 @@
 
 
             <div class="col-xs-12" style="margin-bottom: 50px">
-                <div id="info_user" class="list-group affichage">
+
 
                     <form class="formulaire" id="formUser" action="{{ path('userModif') }}" method="post" enctype="multipart/form-data">
-
+                        <div id="info_user" class="list-group affichage">
                         <input type="hidden" value="{{ User.getId }}" id="id" name="_ID">
 
                         <div class="inputcontainer">
                             <label class="list-group-item" style="height: 60px;" for="civilite">Civilité :</label>
 
-                            <select   class="champ form-control " style="width: 25%; margin-right: 10px;background-color: white" title="" id="civilite"  name="_Civilite">
+                            <select   class="List-invisible" width="50px" title="" id="civilite"  name="_Civilite" disabled>
                                 {% if User.getCivilite == 'Mr' %}
                                     <option selected="selected" value="Mr">Mr.</option>
                                 {% else %}
@@ -143,255 +143,386 @@
                         {% endif %}
                         </div>
                         <input id="formUserSubmit" type="submit" style="display: none;">
-                    </form>
+
+
+
+
+
+
+
+
                 </div>
 
-                {% if User.hasRole('ROLE_APPRENANT') %}
-                    <div id="info_Apprenant" class="col-xs-12 Liste" style="display:none;">
-                    {% if User.GetInfo  %}
-                        <div class="row">
-                            <label class="cell" >Date naissance : <label style="padding:10px; border:solid 2px #7F7F7F;text-align:center;color:#666666;width:250px;" >{{User.getInfo.getDatenaissance|date('d/m/Y ') }}</label></label>
-                            <label class="cell" >Cp naissance  : <label style="padding:10px; border:solid 2px #7F7F7F;text-align:center;color:#666666;width:250px;" >{{User.getInfo.getCpnaissance}}</label></label>
-                        </div>
-                        <div class="row">
-                            <label class="cell" >Lieu naissance: <label style="padding:10px; border:solid 2px #7F7F7F;text-align:center;color:#666666;width:250px;" >{{User.getInfo.getLieunaissance}}</label></label>
-                            <label class="cell" >Adresse       : <label style="padding:10px; border:solid 2px #7F7F7F;text-align:center;color:#666666;width:250px;" >{{User.getInfo.getAdresse}}</label></label>
-                        </div>
-                        <div class="row">
-                            <label class="cell" >Facebook      : <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" >{{User.getInfo.getFacebook}}</label></label>
-                            <label class="cell" >Linkedin      : <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" >{{User.getInfo.getLinkedin}}</label></label>
-                        </div>
-                        <div class="row">
-                            <label class="cell" >Mobilite      : <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" >{{User.getInfo.getMobilite}}</label></label>
-                            <label class="cell" >Fratrie       : <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" >{{User.getInfo.getFratrie}}</label></label>
-                        </div>
-                        <div class="row">
-                            <label class="cell" >Hobbies :
-                                {% for hobby in User.getHobbies %}
-                                    <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" > {{ hobby.gethobby }},</label>
-                                {% endfor %}
-                            </label>
-                        </div>
-                        <div class="row">
-                            <label class="cell" >Langue :
-                                {% if Langue is defined %}
-                                    {% for lang in Langue %}
-                                        <label style="color:black;padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px" >{{ lang.getLangue }},</label>
+                        {% if User.hasRole('ROLE_APPRENANT') %}
+                            <div id="info_Apprenant" class="col-xs-12 Liste" style="display:none;">
+
+                                {% if User.GetInfo  %}
+                                    <input type="hidden" value="{{ User.GetInfo.getId }}" id="id" name="_IdInfo">
+                                    <div class="inputcontainer">
+                                        <label class="list-group-item" style="height: 60px;" for="Datenaissance">Date naissance :</label>
+                                        <input value="{{User.getInfo.getDatenaissance|date('d/m/Y ') }}" type="text" class="champ form-control" id="Datenaissance" name="_Datenaissance" maxlength="45" readonly>
+                                        <label class="list-group-item" style="height: 60px;" for="Cpnaissance">Cp naissance  :</label>
+                                        <input value="{{User.getInfo.getCpnaissance}}" type="text" class="champ form-control" id="Cpnaissance" name="_Cpnaissance" maxlength="45" readonly>
+
+                                    </div>
+
+
+
+                                    <div class="inputcontainer">
+                                        <label class="list-group-item" style="height: 60px;" for="Lieunaissance">Lieu naissance:</label>
+                                        <input value="{{User.getInfo.getLieunaissance}}" type="text" class="champ form-control" id="Lieunaissance" name="_Lieunaissance" maxlength="45" readonly>
+                                        <label class="list-group-item" style="height: 60px;" for="Adresse">Adresse       : </label>
+                                        <input value="{{User.getInfo.getAdresse}}" type="text" class="champ form-control" id="Adresse" name="_Adresse" maxlength="45" readonly>
+
+                                    </div>
+
+                                    <div class="inputcontainer">
+                                        <label class="list-group-item" style="height: 60px;" for="Datenaissance">Facebook      :</label>
+                                        <input value="{{User.getInfo.getFacebook}}" type="text" class="champ form-control" id="Facebook" name="_Facebook" maxlength="45" readonly>
+                                        <label class="list-group-item" style="height: 60px;" for="Cpnaissance">Linkedin      : </label>
+                                        <input value="{{User.getInfo.getLinkedin}}" type="text" class="champ form-control" id="Linkedin" name="_Linkedin" maxlength="45" readonly>
+
+                                    </div>
+
+                                    <div class="inputcontainer">
+                                        <label class="list-group-item" style="height: 60px;" for="Mobilite">Mobilite      :</label>
+                                        <input value="{{User.getInfo.getMobilite}}" type="text" class="champ form-control" id="Mobilite" name="_Mobilite" maxlength="45" readonly>
+                                        <label class="list-group-item" style="height: 60px;" for="Fratrie">Fratrie       : </label>
+                                        <input value="{{User.getInfo.getFratrie}}" type="text" class="champ form-control" id="Fratrie" name="_Fratrie" maxlength="45" readonly>
+
+                                    </div>
+
+                                    <div class="inputcontainer">
+
+                                        <label class="list-group-item" style="height: 60px;" for="Datenaissance">Hobbies :</label>
+
+                                        {% set i = 0 %}
+                                        {% for hobby in User.getHobbies %}
+                                            <div id="hobbie{{ i }}" >
+                                                <input type="hidden" name="hobbie[{{ i }}]" value="{{ hobby.getId }}" style="margin:10px 5px 10px 0" id="inputHobbie" >
+                                                <label class="champ form-control" style="width: 150px;" for="hobbie">{{hobby.getHobbie}}</label>
+
+                                                <img  style="width: 0px;height: 0px;" onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
+
+
+                                            </div>
+
+                                            {% set i= i +1 %}
+                                        {% endfor %}
+
+
+
+
+
+                                    </div>
+
+
+
+                                    <div class="inputcontainer" >
+                                        <div id="ajout_hobbie" style="display: none;">
+
+                                            <select style=" width:150px;height: 40px"   name="_Hobbie">
+                                                <option value="">--?-- </option>
+                                                <option value="sport ">sport </option>
+                                                <option value="lecture">lecture </option>
+                                                <option value="Musique">Musique </option>
+                                                <option value="Danse">Danse </option>
+                                                <option value="Photographie">Photographie </option>
+
+                                                <option value="Yoga">Yoga </option>
+                                                <option value="aviation">Photographie </option>
+
+                                            </select>
+
+                                            <img   src="{{ asset('image/add_x30.png') }}"/><br>
+                                        </div>
+                                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                                    <div class="inputcontainer">
+
+                                        <label class="list-group-item" style="height: 60px;" >Langues :</label><br>
+
+                                        {% if Langue is defined %}
+
+
+
+                                            {% set i = 0 %}
+                                            {% for lang in User.getLangue %}
+
+                                        <div id="langue{{ i }}" >
+                                            <input type="hidden" name="langue[{{ i }}]" value="{{ lang.getId }}" style="margin:10px 5px 10px 0" id="inputLangue" >
+                                                <label class="champ form-control" style="width: 150px;" for="langue">{{lang.getLangue}}</label>
+                                                <label class="champ form-control"  for="Niveau">{{lang.getNiveau}}</label>
+                                                <img  style="width: 0px;height: 0px;" onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
+
+
+                                        </div>
+
+                                                {% set i= i +1 %}
+
+                                            {% endfor %}
+                                        {% endif %}
+
+
+                                    </div>
+                                <div class="inputcontainer" >
+                                    <div id="ajout_langue" style="display: none;">
+
+                                        <select style=" width:150px;height: 40px"   name="_Langue">
+                                            <option value="">--?-- </option>
+                                            <option value="Francais ">Francais </option>
+                                            <option value="Anglais ">Anglais </option>
+                                            <option value="Espagnol ">Espagnol </option>
+                                            <option value="Arabe ">Arabe </option>
+                                            <option value="Allemand ">Allemand </option>
+
+                                        </select>
+
+
+                                        <select  style="height: 40px;width:250px;"   name="_Niveau">
+                                            <option value="">--?-- </option>
+                                            <option value="connaissances de base ">connaissances de base </option>
+                                            <option value="bonnes connaissances ">bonnes connaissances </option>
+                                            <option value="courant ">courant </option>
+                                            <option value="langue maternelle ">langue maternelle </option>
+
+                                        </select>
+                                    <img   src="{{ asset('image/add_x30.png') }}"/><br>
+                                    </div>
+                                </div>
+
+
+
+
+                                {% endif %}
+
+                            </div>
+                            <div id="info_parents" class="list-group affichage" style="display:none">
+                                {% if Parents is defined %}
+                                    {% for parent in Parents %}
+                                        {% set iddiv = random()  %}
+                                        <div class="col-xs-12 Liste">
+                                            <div class="row">
+                                                <label class="cell">Nom : <label>{{ parent.getNom }}</label></label>
+                                                <label class="cell">Prénom : <label>{{parent.getPrenom }}</label>
+                                                    <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#parent{{ iddiv }}"></button></label>
+                                            </div>
+                                            <div id="parent{{ iddiv }}" class="collapse in" >
+                                                <div class="row">
+                                                    <label class="cell">Telephone : <label>{{ parent.getTelephone }}</label></label>
+                                                    <label class="cell">Adresse  : <label>{{ parent.getAdresse }}</label></label>
+                                                </div>
+                                                <div class="row">
+                                                    <label class="cell">Email : <label>{{ parent.getEmail}}</label></label>
+                                                    {% if parent.getNomjeunefille  %}
+                                                        <label class="cell">Nom jeune fille  : <label>{{ parent.getNomjeunefille }}</label></label>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     {% endfor %}
                                 {% endif %}
-                            </label>
-                        </div>
-                    {% endif %}
-
-                    </div>
-                    <div id="info_parents" class="list-group affichage" style="display:none">
-                        {% if Parents is defined %}
-                            {% for parent in Parents %}
-                                {% set iddiv = random()  %}
-                                <div class="col-xs-12 Liste">
-                                    <div class="row">
-                                        <label class="cell">Nom : <label>{{ parent.getNom }}</label></label>
-                                        <label class="cell">Prénom : <label>{{parent.getPrenom }}</label>
-                                            <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#parent{{ iddiv }}"></button></label>
-                                    </div>
-                                    <div id="parent{{ iddiv }}" class="collapse in" >
-                                        <div class="row">
-                                            <label class="cell">Telephone : <label>{{ parent.getTelephone }}</label></label>
-                                            <label class="cell">Adresse  : <label>{{ parent.getAdresse }}</label></label>
-                                        </div>
-                                        <div class="row">
-                                            <label class="cell">Email : <label>{{ parent.getEmail}}</label></label>
-                                            {% if parent.getNomjeunefille  %}
-                                                <label class="cell">Nom jeune fille  : <label>{{ parent.getNomjeunefille }}</label></label>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-
-                    </div>
-                    <div id="info_Exp" class="list-group affichage" style="display:none">
-                        {% if Experience is defined %}
-                            {% for Exp in Experience %}
-                                {% set iddiv = random()  %}
-                                <div class="col-xs-12 Liste">
-                                    <div class="row">
-                                        <label class="cell">Nom societe : <label>{{ Exp.getNomsociete }}</label></label>
-                                        <label class="cell">Activite : <label>{{Exp.getActivite }}</label>
-                                            <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#exp{{ iddiv }}"></button></label>
-
-                                    </div>
-                                    <div id="exp{{ iddiv }}" class="collapse in" >
-                                        <div class="row">
-                                            <label class="cell">Lieu  : <label>{{ Exp.getLieu }}</label></label>
-                                            <label class="cell">Poste  : <label>{{ Exp.getPoste }}</label></label>
-                                        </div>
-                                        <div class="row">
-                                            <label class="cell">Nbreannee : <label>{{ Exp.getNbreannee}}</label></label>
-                                            <label class="cell">Description : <label>{{ Exp.getDescription }}</label></label>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-
-                    </div>
-                    <div id="info_recom" class="list-group affichage" style="display:none">
-                        {% if Recommandation is defined %}
-                            {% for Recom in Recommandation %}
-                                {% set iddiv = random()  %}
-                                <div class="col-xs-12 Liste">
-                                    <div class="row">
-                                        <label class="cell">Text  : <label>{{ Recom.getText }}</label></label>
-                                        <label class="cell">Nom : <label>{{Recom.getNom }}</label>
-                                            <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#recommandation{{ iddiv }}"></button></label>
-
-                                    </div>
-                                    <div id="recommandation{{ iddiv }}" class="collapse in" >
-                                        <div class="row">
-                                            <label class="cell">Fonction  : <label>{{ Recom.getFonction }}</label></label>
-                                            <label class="cell">Email  : <label>{{ Recom.getEmail }}</label></label>
-                                        </div>
-                                        <div class="row">
-                                            <label class="cell">Téléphone : <label>{{ Recom.getTelephone}}</label></label>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-
-                    </div>
-                    <div id="info_diplome" class="list-group affichage" style="display:none">
-                        {% if Diplome is defined %}
-                            {% for Dip in Diplome %}
-                                {% set iddiv = random()  %}
-                                <div class="col-xs-12 Liste">
-                                    <div class="row">
-                                        <label class="cell">Text  : <label>{{ Dip.getLibelle }}</label></label>
-                                        <label class="cell">Obtention : <label>{{Dip.getObtention }}</label>
-                                            <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#diplome{{ iddiv }}"></button></label>
-
-                                    </div>
-                                    <div id="diplome{{ iddiv }}" class="collapse in" >
-                                        <div class="row">
-                                            <label class="cell">Ecole  : <label>{{ Dip.getEcole}}</label></label>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-
-                    </div>
-                    <div id="info_doc" class="list-group affichage" style="display:none">
-                        {% if Document is defined %}
-                            {% for Doc in Document %}
-                                {% set iddiv = random()  %}
-                                <div class="col-xs-12 Liste">
-                                    <div class="row">
-                                        <label class="cell">Type   : <label>{{ Doc.getType }}</label></label>
-                                        <label class="cell">Extention : <label>{{Doc.getExtension }}</label>
-                                            <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#doc{{ iddiv }}"></button></label>
-
-                                    </div>
-                                    <div id="doc{{ iddiv }}" class="collapse in" >
-                                        <div class="row">
-                                            <label class="cell">Taille  : <label>{{ Doc.getTaille}}</label></label>
-
-
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-
-                    </div>
-                    <div id="info_candidature" class="list-group affichage" style="display:none">
-                        {% for candidature in candidatures %}
-                            {% set iddiv = random()  %}
-                            <div class="col-xs-12 Liste">
-                                <div class="row">
-                                    <label class="cell">Id : <label>{{ candidature.id }}</label></label>
-                                    <label class="cell">Statut : <label>
-                                            {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_TUTEUR') %}
-                                                {% if candidature.statut == 1 %}
-                                                    En attente compléments
-                                                {% elseif candidature.statut == 2 %}
-                                                    En attente validation
-                                                {% elseif candidature.statut == 3 %}
-                                                    Validé
-                                                {% elseif candidature.statut == 99 %}
-                                                    Refusé
-                                                {% endif %}
-                                            {% elseif is_granted('ROLE_APPRENANT') %}
-                                                {% if candidature.statut == 1 %}
-                                                    A compléter
-                                                {% elseif candidature.statut == 2 %}
-                                                    En attente école
-                                                {% elseif candidature.statut == 3 %}
-                                                    Admis
-                                                {% elseif candidature.statut == 99 %}
-                                                    Ajourné
-                                                {% endif %}
-                                            {% endif %}
-                                        </label>
-                                        <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#parent{{ iddiv }}"></button></label>
-                                </div>
-                                <div id="parent{{ iddiv }}" class="collapse in" >
-                                    <div class="row">
-                                        <label class="cell">Ecole  : <label>{{ candidature.formation.etablissement.tier.raisonsoc }}</label></label>
-                                        <label class="cell">Adresse : <label>{{ candidature.formation.etablissement.adresse }}</label></label>
-                                    </div>
-                                    <div class="row">
-                                        <label class="cell">Formation : <label>{{ candidature.formation.nom }}</label></label>
-                                        <label class="cell">Date : <label>{{ candidature.datecandidature|date('d/m/Y') }}</label></label>
-                                    </div>
-                                </div>
 
                             </div>
-                        {% endfor %}
-                    </div>
-                    <div id="QCM_Affinite" class="list-group affichage" style="display:none">
+                            <div id="info_Exp" class="list-group affichage" style="display:none">
+                                {% if Experience is defined %}
+                                    {% for Exp in Experience %}
+                                        {% set iddiv = random()  %}
+                                        <div class="col-xs-12 Liste">
+                                            <div class="row">
+                                                <label class="cell">Nom societe : <label>{{ Exp.getNomsociete }}</label></label>
+                                                <label class="cell">Activite : <label>{{Exp.getActivite }}</label>
+                                                    <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#exp{{ iddiv }}"></button></label>
 
-                        <div class="col-xs-12">
-                            <div class="list-group" style="background: #1B2024; margin: 30px 0 0 30px; padding: 0 0; border-left: 20px solid white; border-right: 20px solid white !important; text-align: left;">
-
-
-                                <form class="formulaire" id="form" action="{{ path('Add_QCM') }}" method="post">
-                                    {% set i = 0 %}
-                                    {% set reponsegroupe = 0 %}
-                                    {% for QCM in QCMs %}
-                                        <div class="inputcontainer" name="21456dddd">
-                                            <label class="list-group-item" style="height: 60px;" for="QCM">Nom du Questionnaire :</label>
-                                            <input type="text" class="champ " id="QCM" name="_Nom" value="{{ QCM.getNom }}" required maxlength="45" readonly><br>
-                                        </div>
-                                        {% set y = 0 %}
-                                        {% for question in Questions[i] %}
-                                            <div class="inputcontainer" name="question">
-                                                <label class="list-group-item" style="height: 60px;" for="Question">Question :</label>
-                                                <input type="text" class="champ " id="Question" name="questions[]" value="{{question.getQuestion  }}" required maxlength="255" readonly>
-                                                {% for reponse in reponses[i][y] %}
-                                                    <div>
-                                                        <input type="radio" name="reponse[{{ reponsegroupe }}]" value="{{ reponse.getId }}"  ><label style="font: 14px Roboto black; ">{{ reponse.getReponse }}</label>
-                                                    </div>
-                                                {% endfor %}
                                             </div>
-                                            {% set y = y + 1 %}
-                                        {% endfor %}
-                                        {% set reponsegroupe = reponsegroupe + 1 %}
-                                        {% set i = i + 1 %}
-                                    {% endfor %}
-                                    
-                                </form>
-                            </div>
-                        </div>
+                                            <div id="exp{{ iddiv }}" class="collapse in" >
+                                                <div class="row">
+                                                    <label class="cell">Lieu  : <label>{{ Exp.getLieu }}</label></label>
+                                                    <label class="cell">Poste  : <label>{{ Exp.getPoste }}</label></label>
+                                                </div>
+                                                <div class="row">
+                                                    <label class="cell">Nbreannee : <label>{{ Exp.getNbreannee}}</label></label>
+                                                    <label class="cell">Description : <label>{{ Exp.getDescription }}</label></label>
 
-                    </div>
-                {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+
+                            </div>
+                            <div id="info_recom" class="list-group affichage" style="display:none">
+                                {% if Recommandation is defined %}
+                                    {% for Recom in Recommandation %}
+                                        {% set iddiv = random()  %}
+                                        <div class="col-xs-12 Liste">
+                                            <div class="row">
+                                                <label class="cell">Text  : <label>{{ Recom.getText }}</label></label>
+                                                <label class="cell">Nom : <label>{{Recom.getNom }}</label>
+                                                    <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#recommandation{{ iddiv }}"></button></label>
+
+                                            </div>
+                                            <div id="recommandation{{ iddiv }}" class="collapse in" >
+                                                <div class="row">
+                                                    <label class="cell">Fonction  : <label>{{ Recom.getFonction }}</label></label>
+                                                    <label class="cell">Email  : <label>{{ Recom.getEmail }}</label></label>
+                                                </div>
+                                                <div class="row">
+                                                    <label class="cell">Téléphone : <label>{{ Recom.getTelephone}}</label></label>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+
+                            </div>
+                            <div id="info_diplome" class="list-group affichage" style="display:none">
+                                {% if Diplome is defined %}
+                                    {% for Dip in Diplome %}
+                                        {% set iddiv = random()  %}
+                                        <div class="col-xs-12 Liste">
+                                            <div class="row">
+                                                <label class="cell">Text  : <label>{{ Dip.getLibelle }}</label></label>
+                                                <label class="cell">Obtention : <label>{{Dip.getObtention }}</label>
+                                                    <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#diplome{{ iddiv }}"></button></label>
+
+                                            </div>
+                                            <div id="diplome{{ iddiv }}" class="collapse in" >
+                                                <div class="row">
+                                                    <label class="cell">Ecole  : <label>{{ Dip.getEcole}}</label></label>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+
+                            </div>
+                            <div id="info_doc" class="list-group affichage" style="display:none">
+                                {% if Document is defined %}
+                                    {% for Doc in Document %}
+                                        {% set iddiv = random()  %}
+                                        <div class="col-xs-12 Liste">
+                                            <div class="row">
+                                                <label class="cell">Type   : <label>{{ Doc.getType }}</label></label>
+                                                <label class="cell">Extention : <label>{{Doc.getExtension }}</label>
+                                                    <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#doc{{ iddiv }}"></button></label>
+
+                                            </div>
+                                            <div id="doc{{ iddiv }}" class="collapse in" >
+                                                <div class="row">
+                                                    <label class="cell">Taille  : <label>{{ Doc.getTaille}}</label></label>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+
+                            </div>
+                            <div id="info_candidature" class="list-group affichage" style="display:none">
+                                {% if candidatures is defined %}
+                                    {% for candidature in candidatures %}
+                                        {% set iddiv = random()  %}
+                                        <div class="col-xs-12 Liste">
+                                            <div class="row">
+                                                <label class="cell">Id : <label>{{ candidature.id }}</label></label>
+                                                <label class="cell">Statut : <label>
+                                                        {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_TUTEUR') %}
+                                                            {% if candidature.statut == 1 %}
+                                                                En attente compléments
+                                                            {% elseif candidature.statut == 2 %}
+                                                                En attente validation
+                                                            {% elseif candidature.statut == 3 %}
+                                                                Validé
+                                                            {% elseif candidature.statut == 99 %}
+                                                                Refusé
+                                                            {% endif %}
+                                                        {% elseif is_granted('ROLE_APPRENANT') %}
+                                                            {% if candidature.statut == 1 %}
+                                                                A compléter
+                                                            {% elseif candidature.statut == 2 %}
+                                                                En attente école
+                                                            {% elseif candidature.statut == 3 %}
+                                                                Admis
+                                                            {% elseif candidature.statut == 99 %}
+                                                                Ajourné
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </label>
+                                                    <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#parent{{ iddiv }}"></button></label>
+                                            </div>
+                                            <div id="parent{{ iddiv }}" class="collapse in" >
+                                                <div class="row">
+                                                    <label class="cell">Ecole  : <label>{{ candidature.formation.etablissement.tier.raisonsoc }}</label></label>
+                                                    <label class="cell">Adresse : <label>{{ candidature.formation.etablissement.adresse }}</label></label>
+                                                </div>
+                                                <div class="row">
+                                                    <label class="cell">Formation : <label>{{ candidature.formation.nom }}</label></label>
+                                                    <label class="cell">Date : <label>{{ candidature.datecandidature|date('d/m/Y') }}</label></label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div id="QCM_Affinite" class="list-group affichage" style="display:none">
+
+                                <div class="col-xs-12">
+                                    <div class="list-group" style="background: #1B2024; margin: 30px 0 0 30px; padding: 0 0; border-left: 20px solid white; border-right: 20px solid white !important; text-align: left;">
+
+
+                                        <form class="formulaire" id="form" action="{{ path('Add_QCM') }}" method="post">
+                                            {% set i = 0 %}
+                                            {% set reponsegroupe = 0 %}
+                                            {% if QCMs is defined %}
+                                                {% for QCM in QCMs %}
+                                                    <div class="inputcontainer" name="21456dddd">
+                                                        <label class="list-group-item" style="height: 60px;" for="QCM">Nom du Questionnaire :</label>
+                                                        <input type="text" class="champ " id="QCM" name="_Nom" value="{{ QCM.getNom }}" required maxlength="45" readonly><br>
+                                                    </div>
+                                                    {% set y = 0 %}
+                                                    {% for question in Questions[i] %}
+                                                        <div class="inputcontainer" name="question">
+                                                            <label class="list-group-item" style="height: 60px;" for="Question">Question :</label>
+                                                            <input type="text" class="champ " id="Question" name="questions[]" value="{{question.getQuestion  }}" required maxlength="255" readonly>
+                                                            {% for reponse in reponses[i][y] %}
+                                                                <div>
+                                                                    <input type="radio" name="reponse[{{ reponsegroupe }}]" value="{{ reponse.getId }}"  ><label style="font: 14px Roboto black; ">{{ reponse.getReponse }}</label>
+                                                                </div>
+                                                            {% endfor %}
+                                                        </div>
+                                                        {% set y = y + 1 %}
+                                                    {% endfor %}
+                                                    {% set reponsegroupe = reponsegroupe + 1 %}
+                                                    {% set i = i + 1 %}
+                                                {% endfor %}
+                                            {% endif %}
+
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                        {% endif %}
+            </form>
+
+
 
 
 
@@ -499,10 +630,70 @@
         for(var i=0; i< formulaire.getElementsByTagName("input").length ; i++)
         {
             formulaire.getElementsByTagName("input")[i].readOnly=false;
+
         }
+        for(var i=0; i< formulaire.getElementsByTagName("select").length ; i++)
+        {
+            formulaire.getElementsByTagName("select")[i].className="champ form-control";
+            formulaire.getElementsByTagName("select")[i].disabled=false;
+
+        }
+        for(var i=0; i< formulaire.getElementsByTagName("img").length ; i++)
+        {
+
+            formulaire.getElementsByTagName("img")[i].style.width="auto";
+            formulaire.getElementsByTagName("img")[i].style.height="auto";
+
+        }
+
+        document.getElementById("ajout_langue").style.display="block";
+        document.getElementById("ajout_hobbie").style.display="block";
+
 
         button.getElementsByTagName("div")[0].innerHTML="valider";
         button.setAttribute('onclick','document.getElementById(\'formUserSubmit\').click()');
+    }
+    function supprimerLangue(div){
+
+        var route = '{{path('supprimer_Langue',{'id':"_idLangue",'IdUser':"_IdUser"})}}';
+        var input = div.getElementsByTagName("input")[0];
+        div.parentNode.removeChild(div);
+        route=route.replace('_idLangue',input.value);
+        route=route.replace('_IdUser','{{ User.id}}');
+        $.ajax({
+            type: 'get',
+            url: route,
+            success: function(data) {
+                console.log(data);
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+
+
+
+    }
+    function supprimerHobbie(div){
+
+        var route = '{{path('supprimer_Hobbie',{'id':"_idHobbie",'IdUser':"_IdUser"})}}';
+        var input = div.getElementsByTagName("input")[0];
+        div.parentNode.removeChild(div);
+        route=route.replace('_idHobbie',input.value);
+        route=route.replace('_IdUser','{{ User.id}}');
+        $.ajax({
+            type: 'get',
+            url: route,
+            success: function(data) {
+                console.log(data);
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+
+
+
     }
     {% endif %}
 </script>

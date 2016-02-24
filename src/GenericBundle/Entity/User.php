@@ -106,11 +106,9 @@ class User extends BaseUser
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\Langue", mappedBy="users")
+     * @ORM\ManyToMany(targetEntity="Langue", mappedBy="users")
      */
     private $langue;
-
-
 
     /**
      * @var \Infocomplementaire

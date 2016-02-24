@@ -25,8 +25,10 @@ class DefaultController extends Controller
 
 
 
+        $image = base64_encode(stream_get_contents($user->getPhotos()));
 
         $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date'=>'DESC'));
-        return $this->render('ApprenantBundle:Default:index.html.twig', array('notifications'=>$jsonContent ,'societes'=>$societes,'missions'=>$missions));
+        return $this->render('ApprenantBundle:Default:index.html.twig', array('notifications'=>$jsonContent ,'societes'=>$societes,'missions'=>$missions,'image'=>$image));
+
     }
 }

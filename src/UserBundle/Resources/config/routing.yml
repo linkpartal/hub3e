@@ -54,3 +54,12 @@ Afficher_Sas:
 afficher_profil:
     path: /affichageProfil
     defaults: { _controller: UserBundle:Default:affichageProfil}
+
+supprimer_Langue:
+    path : /supprimerLangue/id={id}/IdUser={IdUser}
+    defaults: { _controller: UserBundle:Default:supprimerLangue}
+
+supprimer_Hobbie:
+    path : /supprimerHobbie/id={id}/IdUser={IdUser}
+    defaults: { _controller: UserBundle:Default:supprimerHobbie}
+
