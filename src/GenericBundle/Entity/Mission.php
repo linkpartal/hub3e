@@ -175,44 +175,14 @@ class Mission
     private $tuteur;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var \Users
      *
-     * @ORM\ManyToMany(targetEntity="Formation", inversedBy="mission")
-     * @ORM\JoinTable(name="mission_has_formation",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="mission_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="formation_id", referencedColumnName="id")
-     *   }
-     * )
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="apprentit_id", referencedColumnName="id")
+     * })
      */
-    private $formation;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="mission")
-     * @ORM\JoinTable(name="mission_has_users",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="mission_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="users_id", referencedColumnName="id")
-     *   }
-     * )
-     */
-    private $users;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->date = new \DateTime();
-        $this->formation = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+    private $apprentit;
 
     /**
      * Set id
@@ -356,64 +326,6 @@ class Mission
     public function getTuteur()
     {
         return $this->tuteur;
-    }
-
-    /**
-     * Set formation
-     *
-     * @param \GenericBundle\Entity\Formation $formation
-     *
-     * @return Mission
-     */
-    public function setFormation(\GenericBundle\Entity\Formation $formation = null)
-    {
-        $this->formation = $formation;
-
-        return $this;
-    }
-
-    /**
-     * Get formation
-     *
-     * @return \GenericBundle\Entity\Formation
-     */
-    public function getFormation()
-    {
-        return $this->formation;
-    }
-
-    /**
-     * Add user
-     *
-     * @param \GenericBundle\Entity\User $user
-     *
-     * @return Mission
-     */
-    public function addUser(\GenericBundle\Entity\User $user)
-    {
-        $this->users[] = $user;
-
-        return $this;
-    }
-
-    /**
-     * Remove user
-     *
-     * @param \GenericBundle\Entity\User $user
-     */
-    public function removeUser(\GenericBundle\Entity\User $user)
-    {
-        $this->users->removeElement($user);
-    }
-
-    /**
-     * Get users
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUsers()
-    {
-        return $this->users;
     }
 
     /**
@@ -847,5 +759,29 @@ class Mission
     public function getSuspendu()
     {
         return $this->suspendu;
+    }
+
+    /**
+     * Set apprentit
+     *
+     * @param \GenericBundle\Entity\User $apprentit
+     *
+     * @return Mission
+     */
+    public function setApprentit(\GenericBundle\Entity\User $apprentit = null)
+    {
+        $this->apprentit = $apprentit;
+
+        return $this;
+    }
+
+    /**
+     * Get apprentit
+     *
+     * @return \GenericBundle\Entity\User
+     */
+    public function getApprentit()
+    {
+        return $this->apprentit;
     }
 }

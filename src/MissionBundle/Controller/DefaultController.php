@@ -2,6 +2,7 @@
 
 namespace MissionBundle\Controller;
 
+use GenericBundle\Entity\Diffusion;
 use GenericBundle\Entity\Mission;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,33 +36,21 @@ class DefaultController extends Controller
         $mission->setEmailContact($request->get('_EmailContact'));
         $mission->setIntitule($request->get('_Intitule'));
         $mission->setEmploi($request->get('_Emploi'));
-        //$mission->setFormation($request->get('_idform'));
-
-        $us = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('userselect'));
-        if($us)
-        {
-            $mission->setTuteur($us);
-        }
-
-
-        // var_dump($mission);die;
-        /*  $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_iduse'));
-          $mission->setTuteur($user);*/
-        /* $qb=$em->createQueryBuilder();
-         $qb->select('mission')
-            ->from('EcoleBundle:Default:affichage','mission')
-             ->orderBy('mission.date','ASC');
-         $query = $qb->getQuery();
-         $mission = $query->getResult();*/
-
-        //$mission=$this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('date', 'DESC'));
-
 
         $em->persist($mission);
         $em->flush();
-
         $mission->genererCode();
         $em->flush();
+
+        if($request->get('formation'))
+        {
+            $diffuser = new Diffusion();
+            $diffuser->setFormation($this->getDoctrine()->getRepository('GenericBundle:Formation')->find($request->get('formation')));
+            $diffuser->setMission($mission);
+            $diffuser->setStatut(5);
+            $em->persist($diffuser);
+            $em->flush();
+        }
 
 
 
@@ -72,14 +61,15 @@ class DefaultController extends Controller
 
     public function affichageMissionAction($id)
     {
-
-
         $mission = $this->getDoctrine()->getRepository('GenericBundle:Mission')->find($id);
         $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_APPRENANT');
 
         foreach($users as $apprenant)
         {
-            $apprenant->setPhotos(base64_encode(stream_get_contents($apprenant->getPhotos())));
+            if($apprenant->getPhotos())
+            {
+                $apprenant->setPhotos(base64_encode(stream_get_contents($apprenant->getPhotos())));
+            }
         }
 
         if($mission->getEtablissement()->getTier()->getLogo())
@@ -90,15 +80,20 @@ class DefaultController extends Controller
         {
             $mission->getEtablissement()->getTier()->setFondecran(base64_encode(stream_get_contents($mission->getEtablissement()->getTier()->getFondecran())));
         }
-
+        $formations_prop = null;
+        if($this->get('security.authorization_checker')->isGranted('ROLE_ADMINSOC'))
+        {
+            $formations_prop = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll();
+        }
 
 
         // var_dump($mission);die;
-        return $this->render('MissionBundle::afficheMission.html.twig',array('mission'=>$mission,'users'=>$users));
+        return $this->render('MissionBundle::afficheMission.html.twig',array('mission'=>$mission,'users'=>$users,'formations_prop'=>$formations_prop));
 
 
 
     }
+
     public function suppMissionAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -114,6 +109,7 @@ class DefaultController extends Controller
         $missionid = $this->getDoctrine()->getRepository('GenericBundle:Mission')->find($id);
         return $this->render('AdminBundle:Admin:modifierMission.html.twig',array('mission'=>$missionid));
     }
+
     public function missionModifAction(Request $request){
         $em = $this->getDoctrine()->getManager();
 

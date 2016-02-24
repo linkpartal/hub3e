@@ -186,7 +186,8 @@ class DefaultController extends Controller
         $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date' => 'DESC'));
 
         return $this->render('TierBundle::iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,'tiers'=>$tiers,'users'=>$users,'formations'=>$formation,'hobbies' =>$hobbie,
-            'libs'=>$licences, 'missions'=>$missions ,'usermis'=>$userMiss,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab,'etablissementslier'=>$etablisementlier));
+            'libs'=>$licences, 'missions'=>$missions ,'usermis'=>$userMiss,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab,'etablissementslier'=>$etablisementlier,
+            'formation_mission'=>$this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll()));
     }
 
     public function supprimeretabAction($id)

@@ -64,13 +64,6 @@ class Formation
     private $qcmdef;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Mission", mappedBy="formation")
-     */
-    private $mission;
-
-    /**
      * Constructor
      */
     public function __construct()
@@ -240,41 +233,5 @@ class Formation
     public function getNomDoc()
     {
         return $this->nomDoc;
-    }
-
-
-
-    /**
-     * Add mission
-     *
-     * @param \GenericBundle\Entity\Mission $mission
-     *
-     * @return Formation
-     */
-    public function addMission(\GenericBundle\Entity\Mission $mission)
-    {
-        $this->mission[] = $mission;
-
-        return $this;
-    }
-
-    /**
-     * Remove mission
-     *
-     * @param \GenericBundle\Entity\Mission $mission
-     */
-    public function removeMission(\GenericBundle\Entity\Mission $mission)
-    {
-        $this->mission->removeElement($mission);
-    }
-
-    /**
-     * Get mission
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMission()
-    {
-        return $this->mission;
     }
 }

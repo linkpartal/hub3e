@@ -23,7 +23,6 @@ class DefaultController extends Controller
             }
         }
 
-
         $image = base64_encode(stream_get_contents($user->getPhotos()));
 
         $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date'=>'DESC'));

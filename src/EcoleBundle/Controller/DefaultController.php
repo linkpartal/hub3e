@@ -28,6 +28,27 @@ class DefaultController extends Controller
             }
         }
 
+        $missions_propose = array();
+        $mes_missions = array();
+        foreach($ecoles as $ecole)
+        {
+            $formations = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$ecole));
+            foreach($formations as $formation)
+            {
+                $diffusions = $this->getDoctrine()->getRepository('GenericBundle:Diffusion')->findBy(array('formation'=>$formation));
+                foreach($diffusions as $diffusion)
+                {
+                    if($diffusion->getStatut()==5)
+                    {
+                       array_push($mes_missions,$diffusion->getMission());
+                    }
+                    elseif(!$diffusion->getStatut()==0){
+                        array_push($missions_propose,$diffusion->getMission());
+                    }
+                }
+            }
+        }
+
         $users = $this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($user->getTier());
         $apprenants =array();
         $notapprenant = array();
@@ -43,11 +64,12 @@ class DefaultController extends Controller
         }
         $import_apprenant = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser()));
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$user->getTier()));
-        $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date'=>'DESC'));
+        //$missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date'=>'DESC'));
+
 
 
         return $this->render('EcoleBundle:Adminecole:index.html.twig', array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$notapprenant,
-            'AllLicences'=>$licences,'societes'=>$user->getReferenciel(),'missions'=>$missions,'apprenants'=>$apprenants,'import_apprenants'=>$import_apprenant));
+            'AllLicences'=>$licences,'societes'=>$user->getReferenciel(),'missions'=>$mes_missions,'missions_propose'=>$missions_propose,'apprenants'=>$apprenants,'import_apprenants'=>$import_apprenant));
     }
 
     public function loadiframeAction()
