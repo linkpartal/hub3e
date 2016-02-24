@@ -49,9 +49,8 @@
                         data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false"
                         style="padding:0;width: 100%; height: 20px; border-radius: 0; background: none; border: 0;color: white">
-                    {% if app.user.getPhotos %}
-
-                        <img  src="{{app.user.getPhotos}}" style="border-radius:50%; width:32px; height:32px" >
+                    {% if image %}
+                        <img  src="data:image/jpg;base64,{{image}}" style="border-radius:50%; width:32px; height:32px" >
                       {% else %}
 
                                {% if app.user.getCivilite == 'Mr' or app.user.getCivilite == 'Monsieur' %}

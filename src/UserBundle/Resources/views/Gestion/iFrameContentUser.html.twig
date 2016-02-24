@@ -311,6 +311,7 @@
 
                     </div>
                     <div id="info_candidature" class="list-group affichage" style="display:none">
+                        {% if candidatures is defined %}
                         {% for candidature in candidatures %}
                             {% set iddiv = random()  %}
                             <div class="col-xs-12 Liste">
@@ -338,6 +339,7 @@
                                                     Ajourné
                                                 {% endif %}
                                             {% endif %}
+
                                         </label>
                                         <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#parent{{ iddiv }}"></button></label>
                                 </div>
@@ -354,6 +356,7 @@
 
                             </div>
                         {% endfor %}
+                        {% endif %}
                     </div>
                     <div id="QCM_Affinite" class="list-group affichage" style="display:none">
 
@@ -364,6 +367,7 @@
                                 <form class="formulaire" id="form" action="{{ path('Add_QCM') }}" method="post">
                                     {% set i = 0 %}
                                     {% set reponsegroupe = 0 %}
+                                    {% if QCMs is defined %}
                                     {% for QCM in QCMs %}
                                         <div class="inputcontainer" name="21456dddd">
                                             <label class="list-group-item" style="height: 60px;" for="QCM">Nom du Questionnaire :</label>
@@ -385,6 +389,7 @@
                                         {% set reponsegroupe = reponsegroupe + 1 %}
                                         {% set i = i + 1 %}
                                     {% endfor %}
+                                    {% endif %}
                                     
                                 </form>
                             </div>

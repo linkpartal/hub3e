@@ -72,9 +72,15 @@ class DefaultController extends Controller
 
     public function affichageMissionAction($id)
     {
-        $mission = $this->getDoctrine()->getRepository('GenericBundle:Mission')->find($id);
-        $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findAll();
 
+
+        $mission = $this->getDoctrine()->getRepository('GenericBundle:Mission')->find($id);
+        $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_APPRENANT');
+
+        foreach($users as $apprenant)
+        {
+            $apprenant->setPhotos(base64_encode(stream_get_contents($apprenant->getPhotos())));
+        }
 
         if($mission->getEtablissement()->getTier()->getLogo())
         {

@@ -14,7 +14,7 @@
 <body>
 <div id="MettreEnRelation" class="popup">
     <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block; margin-left: 20%;margin-top:40px">
+    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block; margin-left: 20%;margin-top:100px">
 
         <form id="formMettreEnRelation" class="formulaire" action="{{ path("MettreEnRelation_added") }}" onsubmit="document.getElementById('submitMettreEnRelation').disabled=true" method="post">
 
@@ -57,39 +57,199 @@
 
     </div>
 </div>
-<div id="Reception" class="popup">
+
+
+<div id="FicheApprenant" class="popup" >
     <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block; margin-left: 20%;margin-top:40px">
+    <div class="col-xs-offset-1 col-xs-7" style="padding: 0;border:20px solid white;display: block; margin-left: 20%;margin-top:100px; ">
 
-        <form id="formReception" class="formulaire"  method="post">
+        <form id="formFicheApprenant" class="formulaire"  method="post">
+        <div class="div_form" >
+            <div>
+                <div class="col-lg-12" >
+                    <img src="" style="border-radius:50%; width:50px; height:50px" >
+                </div>
+                <div class="col-lg-12">
+                    <label id="Information_Apprenant_titre" style="color:black" ></label>
+                </div>
+                <div id="Information_Apprenant_titre_adresse" class="col-xs-12" style="height: 20px;color: #666666;font-family:Arial;font-style:normal;font-size: medium;margin-bottom: 40px"></div>
 
-            <div class="div_form" style="border-bottom:1px solid #adadad;">
 
 
+            </div>
 
+            <div  id="information_apprenant" >
+                <div class="row" style=" margin-bottom: 20px">
+
+                    <div class="col-xs-12">
+                        <label style="font-size: 40px;font-family: Rochester;color: rgb(61, 138, 212);line-height: 0.375;text-align: left;z-index: 30;transform: rotate(180deg);">,,</label>
+                        <label style="height: 20px;color: #666666;font-family:Arial;font-style:italic;font-size:small;margin-bottom: 40px;">Votre mission m'interesse,je serais heureux de vous rencontrer pour en discuter.</label>
+                    </div>
+                    <div class="row" >
+                        <button onclick="show('info_apprenant')"  class="col-xs-4 onglet"  type="button" style="margin-left: 20px;width: 50%"> FICHE APPRENANT</button>
+                        <button onclick="show('Localisation')" class="col-xs-4 onglet"  type="button" style="width: calc(50% - 50px)" >LOCALISATION</button>
+
+                    </div>
+
+                    <div id="info_apprenant" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;width: 100%;">
+                        <div class="col-xs-12 Liste" >
+
+                            <div class="col-xs-12" >
+                                <label class="cell"  style="float:left;">Civilité : <label id="Information_Apprenant_Civilite"></label></label>
+                            </div>
+                            <div class="col-xs-10 ">
+                                <label class="cell" style="float:left;">Nom : <label id="Information_Apprenant_Nom"></label> </label>
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Prenom : <label id="Information_Apprenant_Prenom"></label></label>
+
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Email  : <label id="Information_Apprenant_Email"></label></label>
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Téléphone : <label id="Information_Apprenant_Telephone"></label></label>
+
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Date naissance : <label id="Information_Apprenant_DateNaissance"  ></label></label>
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Cp naissance  : <label id="Information_Apprenant_CpNaissance" ></label></label>
+
+                            </div>
+
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Lieu naissance: <label id="Information_Apprenant_LieuNaissance" ></label></label>
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Adresse       : <label id="Information_Apprenant_Adresse" ></label></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
 
             </div>
-            <div class="div_button">
-                <input id="submitAnnuler" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Décliner">
-                <input id="submitReception" class="blue" type="submit"  style="margin-left: 390px" value="Répondre plus tard">
-                <input id="submitProposer" class="blue" type="submit"  style="margin-left: 390px" value="Proposer un rendez-vous">
+
+            <div id="proposerApprenant" style="display: none">
+                <div class="row" style=" margin-bottom: 20px;">
+
+                    <div class="col-xs-12">
+                        <textarea style="height: 200px;resize: none;" class="input" id="Descriptif" name="_Descriptif" placeholder="Votre profil nous intéresse,nous vous proposons une plage de rendez-vous en lien Doodle" required ></textarea>
+                    </div>
+                    <div class="col-xs-12">
+                        <label style="text-align:left;width:100%;font-family: Arial">Proposer un lien externe pour la prise de rendez-vous (type Doodle) : </label>
+                    </div>
+
+                    <div class="col-xs-12">
+                        <input style="text-align:left;font-family: Arial;width:100%">
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="declinerApprenant" style="display: none" >
+
+                <div class="row" style=" margin-bottom: 20px;">
+                    <textarea style="height: 200px;resize: none;" class="input"  placeholder="Nous vous remercions pour l'intérêt porter à notre mission, cependant nous n'avons pas retenu votre profil ." required ></textarea>
+                </div>
 
             </div>
+
+        </div>
+
+            <div id="information_button" class="div_button">
+                <input  onclick="show_formapprenant()" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Décliner">
+                <input id="submitReception" class="blue" type="submit" style="margin-left: 250px"  value="Répondre plus tard">
+                <input onclick="show_formapprenantproposer()"  class="blue" type="button"   value="Proposer un rendez-vous">
+            </div>
+            <div id="decliner_button" class="div_button" style="display: none">
+                <input id="submitAnnuler" onclick="FermerPopup('information_apprenant')" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Annuler">
+                <input id="submitDecliner" class="blue" type="submit"  style="margin-left: 390px" value="Décliner">
+
+            </div>
+            <div id="proposer_button" class="div_button" style="display: none">
+                <input  class="blue" onclick="FermerPopup('information_apprenant')" style="background:white;color:#666666;border:1px solid #ccc;float: left;text-align: center ;width: 120px;height:50px" type="button" value="Annuler">
+                <input id="submitReception" class="blue" type="submit" style="margin-left: 300px;text-align:center;width: 120px;height:50px"  value="Valider">
+
+            </div>
+
         </form>
 
-
-
-
-
-
-
     </div>
+
+
 </div>
 
 
+<div id="FicheMission" class="popup">
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-6" style="padding: 0;border:20px solid white;display: block; margin-left: 20%;margin-top:100px;" >
 
+        <form id="formFicheMission" class="formulaire" method="post">
+
+            <div class="div_form" style="border-bottom:1px solid #adadad;">
+
+                <div>
+                    <div class="col-xs-12" >
+                        <img  src="data:image/jpg;base64,{{ mission.getEtablissement.getTier.getLogo }}"
+                              style="padding: 10px; height: 80px;">
+                    </div>
+                    <div class="col-xs-12"  style="height: 30px;  padding: 10px;"><label style="font-family:Arial;font-style:normal;font-size: large;color:black" >{{ mission.getIntitule }}&nbsp; - &nbsp;  </label><label style="font-family:Arial;font-style:normal;font-size: large;color:#2A76CC" > {{ mission.getEtablissement.getTier.getRaisonsoc }}</label></div>
+                    <div class="col-xs-12" style="height: 20px; font-family:Arial;font-style:normal;font-size: small;margin-bottom:30px">{{mission.getEtablissement.getAdresse }}, {{ mission.getEtablissement.getCodePostal }} {{ mission.getEtablissement.getVille }}</div>
+                </div>
+
+                <div  id="information_mission" >
+                    <div class="row" style=" margin: 0;">
+
+                        <div class="col-lg-12" >
+                            <button onclick="show('info_missions')"  class="col-xs-4 onglet"  type="button" style="margin-left: 20px;width: 50%"> FICHE MISSION</button>
+                            <button onclick="show('Localisation')" class="col-xs-4 onglet"  type="button" style="width: calc(50% - 50px)" >LOCALISATION</button>
+                        </div>
+                        <div class="col-xs-9" style="background: rgb(238, 241, 246); height: 100%;width: 100%">
+
+                            <div class="col-xs-12" >
+                                <div class="list-group affichage">
+
+                                    <label class="list-group-item mission" >LA MISSION : <br/>
+                                        <label  style="color:black; font-weight: lighter" >{{mission.getDescriptif}}</label>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+               <div id="declinerMission" style="display:none">
+                    <textarea style="height: 200px;resize: none;" class="input"  placeholder="Cette mission ne m'interesse pas,elle se situe trop loin ." required ></textarea>
+               </div>
+
+
+            </div>
+
+            <div id="mission_button" class="div_button">
+                <input  onclick="show_formmission()"  class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Décliner">
+                <input id="submitReception" class="blue" type="submit" style="margin-left: 270px"  value="Répondre plus tard">
+                <input  class="blue" type="submit"   value="Postuler">
+
+            </div>
+
+            <div id="declinerMission_button" class="div_button" style="display:none">
+                <input onclick="FermerPopup('information_mission')" id="submitAnnuler" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Annuler">
+                <input id="submitDecliner" class="blue" type="submit"  style="margin-left: 390px" value="Décliner">
+
+            </div>
+
+
+
+
+        </form>
+    </div>
+
+</div>
 
 
 
@@ -248,15 +408,15 @@
 
 
                             <label style="width:40px;height: 20px;background:yellowgreen;color:white;font-family: Arial; font-style:normal ;font-size:small;position: absolute;left: 0;z-index: 6;margin: 10px 0 0 10px;">100</label>
-                            <label style="width:10px;height:140px;background:yellowgreen;color:white;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;"></label>
+                            <div style="width:10px;height:140px;background:yellowgreen;color:white;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;"></div>
 
-                            <img class="col-xs-1" src="data:image/jpg;base64,{{ user.getPhotos }}" style="margin: 10px 0 0 10px;height: 140px;width: 140px;">
+                            <img class="col-xs-1" onclick="show('FicheMission')" src="data:image/jpg;base64,{{user.getPhotos}}" style="margin: 10px 0 0 10px;height: 140px;width: 140px;">
 
                             <div class="col-xs-4" style="margin-left: 10px;margin-top:10px">
                                 <div class="col-xs-12"
                                      style="height: 30px; text-align: left; padding: 10px;margin-bottom: 15px;"><label style="color:black" >{{user.getPrenom}}  {{user.getNom}} </label> &nbsp;&nbsp; </label>
 
-                                    <button style="background:yellowgreen; border-radius:50%; width:15px; height:15px; border:2px solid yellowgreen;"></button>&nbsp;&nbsp;
+                                    <button onclick="show('Decliner')" style="background:yellowgreen; border-radius:50%; width:15px; height:15px; border:2px solid yellowgreen;"></button>&nbsp;&nbsp;
 
                                     <label style="font-family:Arial;font-style:normal;font-size:medium;" > 5.0 </label>&nbsp;&nbsp;<img src="{{ asset('image/bookmark50.png') }}"></div>
 
@@ -275,12 +435,12 @@
                                     <div class="col-xs-12" style="display: inline-table;color: white;">METTRE EN RELATION</div>
                                 </button>
 
-                                <button  type="button"  style=" background:white;width:150px;height:30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;border:1px solid #ccc;margin-bottom:10px" >
+                                <button onclick="informationApprenant('{{user.getPhotos}}','{{ user.getCivilite }}','{{ user.getNom }}','{{ user.getPrenom }}','{{ user.getEmail }}','{{ user.getTelephone }}','{{ user.getInfo.getDateNaissance|date("d/m/Y") }}','{{ user.getInfo.getCpNaissance }}','{{ user.getInfo.getLieunaissance }}','{{ user.getInfo.getAdresse }}');show('FicheApprenant');" type="button"  style=" background:white;width:150px;height:30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;border:1px solid #ccc;margin-bottom:10px" >
                                     <div class="col-xs-12"  style="display: inline-table;color: #adadad;" >FICHE CONTACT</div>
 
                                 </button>
 
-                                <button onclick="show('Reception')" type="button"  style="background-color: white ;width:150px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;border:1px solid #ccc;" >
+                                <button onclick="informationApprenantreception('{{user.getPhotos}}','{{ user.getNom }}','{{ user.getPrenom }}','{{ user.getInfo.getAdresse }}');show('Proposer');  " type="button"  style="background-color: white ;width:150px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;border:1px solid #ccc;" >
                                     <div class="col-xs-12" style="display: inline-table;color: #adadad;" >PLUS</div>
 
                                 </button>
@@ -326,7 +486,67 @@
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/PopUp.js') }}"></script>
 <script language="JavaScript">
+
+    function show_formapprenant()
+    {
+        document.getElementById('information_apprenant').style.display= 'none';
+        document.getElementById('declinerApprenant').style.display= 'block';
+        document.getElementById('information_button').style.display= 'none';
+        document.getElementById('decliner_button').style.display= 'block';
+    }
+
+    function show_formapprenantproposer()
+    {
+        document.getElementById('information_apprenant').style.display= 'none';
+        document.getElementById('proposerApprenant').style.display= 'block';
+        document.getElementById('information_button').style.display= 'none';
+        document.getElementById('proposer_button').style.display= 'block';
+    }
+
+    function show_formmission()
+    {
+        document.getElementById('information_mission').style.display= 'none';
+        document.getElementById('declinerMission').style.display= 'block';
+        document.getElementById('mission_button').style.display= 'none';
+        document.getElementById('declinerMission_button').style.display= 'block';
+    }
+
     var infoWindows = [];
+    function informationApprenantreception(image,nom,prenom,adresse){
+        document.getElementById('Proposer').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
+        document.getElementById('Information_Apprenant_titree').innerHTML= nom +' '+ prenom;
+        document.getElementById('Information_Apprenant_titre_adressee').innerHTML = adresse;
+
+    }
+    function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse)
+    {
+        document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
+        document.getElementById('Information_Apprenant_Civilite').innerHTML = civilite;
+        document.getElementById('Information_Apprenant_Nom').innerHTML = nom;
+        document.getElementById('Information_Apprenant_Prenom').innerHTML= prenom;
+        document.getElementById('Information_Apprenant_Email').innerHTML = email;
+        document.getElementById('Information_Apprenant_Telephone').innerHTML =telephone;
+        document.getElementById('Information_Apprenant_DateNaissance').innerHTML =Datenaissance;
+        document.getElementById('Information_Apprenant_CpNaissance').innerHTML =cpnaissance;
+        document.getElementById('Information_Apprenant_LieuNaissance').innerHTML =lieuNaissance;
+        document.getElementById('Information_Apprenant_Adresse').innerHTML =adresse;
+        document.getElementById('Information_Apprenant_titre').innerHTML= nom +' '+ prenom;
+        document.getElementById('Information_Apprenant_titre_adresse').innerHTML = adresse;
+    }
+
+    function FermerPopup(div){
+        document.getElementById('information_apprenant').style.display= 'block';
+        document.getElementById('information_button').style.display= 'block';
+        document.getElementById('information_mission').style.display= 'block';
+        document.getElementById('mission_button').style.display= 'block';
+        document.getElementById('proposerApprenant').style.display= 'none';
+        document.getElementById('proposer_button').style.display= 'none';
+        document.getElementById('declinerApprenant').style.display= 'none';
+        document.getElementById('decliner_button').style.display= 'none';
+        document.getElementById('declinerMission').style.display= 'none';
+        document.getElementById('declinerMission_button').style.display= 'none';
+
+    }
     function moveto(button,div) {
         var elem = document.getElementById("baronglet");
         var pos = elem.offsetLeft;
