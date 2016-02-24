@@ -119,7 +119,6 @@
 
         {% if not etablissement.getTier.getEcole %}
             {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
-
                 <div id="addmission" class="popup" >
                     <div onclick="hide(this)" class="close"></div>
                     <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;position:fixed " >
@@ -152,16 +151,23 @@
                                     <input type="number" class="input " id="Emploi" name="_Emploi" placeholder="Emploi" required maxlength="1">
                                     <input type="text" class="input " id="Etat" name="_Etat" placeholder="Etat" required maxlength="45">
 
-
-                                    <select class="input"   name="userselect" title="" >
-                                        <option selected="selected">Sélectionner utilisateur</option>
-                                        {% if usermis is defined %}
-                                            {% for user in usermis %}
-                                                <option name="_iduse" value="{{ user.getId }}">{{ user.getNom }}</option>
-                                            {% endfor %}
+                                    {% if app.user.hasRole('ROLE_ADMINECOLE') %}
+                                    <select class="input"   name="formation" title="" >
+                                        {% for formation_x in formation_mission %}
+                                        {% if formation_x.etablissement.tier == app.user.tier or formation_x.etablissement.tier in app.user.tier.tier1|keys %}
+                                        <option value="{{ formation_x.getId }}">{{ formation_x.nom }} - {{ formation_x.etablissement.adresse }}</option>
                                         {% endif %}
-
+                                        {% endfor %}
                                     </select>
+                                    {% elseif app.user.hasRole('ROLE_RECRUTEUR') %}
+                                    <select class="input"   name="formation" title="" >
+                                        {% for formation_x in formation_mission %}
+                                        {% if (formation_x.etablissement.tier == app.user.etablissement.tier) or (formation_x.etablissement.tier in app.user.etablissement.tier.tier1) %}
+                                        <option value="{{ formation_x.getId }}">{{ formation_x.nom }} - {{ formation_x.etablissement.adresse }}</option>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    {% endif %}
                                 </div>
                                 <textarea style="height: 100px;resize: none;" class="input" id="Descriptif" name="_Descriptif" placeholder="Descriptif" required MAXLENGTH="255"></textarea>
                             </div>
@@ -171,9 +177,6 @@
                         </form>
                     </div>
                 </div>
-
-
-
             {% endif %}
         {% else %}
             {% if is_granted('ROLE_ADMINECOLE') %}
@@ -289,6 +292,394 @@
                         </div>
                     </div>
                 </div>
+                <div id="apprenant" class="popup col-xs-3" >
+                    <div onclick="hide(this)" class="close"></div>
+                    <div class="col-xs-offset-3 col-xs-6" style="top:40px;border:20px solid white;display: block;margin-bottom: 20px ;background: white;width:50%">
+                        <div class="col-xs-12" style="height: 50px;">
+                            <div style="height: 50px; width: 100%">
+                                <ul id="select_info_apprenant"  class="nav navbar-nav" style="height: 50px;background: #4389c8;" >
+                                    <li class="dropdown col-xs-12" >
+                                        <a class="dropdown-toggle" data-toggle="dropdown"style="height: 40px;color:white;background: #4389c8;margin: 0 auto;">
+                                            <label id="65sd4f4" style="font-family: Arial;font-size: small">DETAILS DE L'APPRENANT</label>  <b class="caret"></b> </a>
+                                        <ul class="dropdown-menu" style="margin-left: 100px">
+                                            <li class="dropdown-submenu" >
+                                                <a onclick="show_formapprenant('infoapprenant')" tabindex="-1" href="#" >Informations générales sur l'apprenant</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a onclick="show_formapprenant('responsable_apprenant')" href="#">Responsables de l'apprenant</a></li>
+                                                    <li><a onclick="show_formapprenant('diplome_apprenant')" href="#">Diplomes</a></li>
+                                                    <li><a onclick="show_formapprenant('recommendation_apprenant')" href="#">Recommandation</a></li>
+                                                    <li><a onclick="show_formapprenant('experience_apprenant')" href="#">Expériences</a></li>
+                                                    <li><a onclick="show_formapprenant('hobbie_apprenant')" href="#">Hobbies</a></li>
+                                                    <li><a onclick="show_formapprenant('langue_apprenant')" href="#">Langue</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="#">QCM</a></li>
+                                            <li><a onclick="show_formapprenant('apprenant_formation')"  href="#">Choix formation</a></li>
+                                            <li><a href="#">Profil à 360°</a></li>
+                                            <li><a href="#">Rendez-vous</a></li>
+                                            <li><a href="#">Placement</a></li>
+                                            <li><a onclick="show_formapprenant('document_apprenant')" href="#">Documents</a></li>
+                                            <li><a href="#">Onglet tests</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+
+                        <div id="div_responsable" name="ajouterResponsable" style="display:none;">
+                            <button style="float:inherit" class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+                            <button class="toggle" type="button" onclick="supprimerResponsable(this)"> - </button>
+                            <div id="demo" class="collapse in">
+
+                                <div class="col-xs-10 input-colonne">
+                                    <label id="startTimeLabel" visible="false"></label>
+                                </div>
+
+                                <div class="col-xs-3 input-colonne">
+                                    <input placeholder="Nom" class="input" type="text" id="Nomresp" name="_Nomresp[]" maxlength="45" required >
+                                    <select class="input "  title="" name="_Civiliteresp[]">
+                                        <option value="Monsieur">Mr.</option>
+                                        <option value="Madame">Mme.</option>
+                                    </select>
+
+                                </div>
+                                <div class="col-xs-3 input-colonne">
+                                    <input placeholder="Prenom" class="input" type="text" id="Prenomresp" name="_Prenomresp[]" maxlength="45" required >
+                                    <input placeholder="Metier" class="input" type="text" id="Metierresp" name="_Metierresp[]" maxlength="45" required >
+
+
+                                </div>
+
+                                <div class="col-xs-6 input-colonne">
+                                    <input placeholder="Adresse postale" class="input" type="text" id="Adresseresp" name="_Adresseresp[]" maxlength="45" required >
+                                    <input placeholder="Adresse email" class="input" type="text" id="Emailresp" name="_Emailresp[]" maxlength="45" required >
+
+                                </div>
+
+                                <div class="col-xs-3 input-colonne">
+                                    <input placeholder="Profession" class="input" type="text" id="Profession" name="_Profession[]" maxlength="45" required >
+                                </div>
+
+                                <div class="col-xs-3 input-colonne">
+                                    <input placeholder="Téléphone " class="input" type="text" id="Telephoneresp" name="_Telephoneresp[]" maxlength="45" required >
+                                </div>
+                                <div class="col-xs-3 input-colonne">
+                                    <input placeholder="Ville" class="input" type="text" id="Villeresp" name="_Villeresp[]" maxlength="45" required >
+                                </div>
+
+                                <div class="col-xs-3 input-colonne">
+                                    <input placeholder="Code postale" class="input" type="text" id="CodePostaleresp" name="_CodePostaleresp[]" maxlength="45" required >
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div id="div_recommandation" name="ajouterRecommandation" style="display:none">
+                            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+                            <button class="toggle" type="button" onclick="supprimerRecommandation(this)">-</button>
+                            <div id="demo" class="collapse in">
+
+                                <div class="col-xs-10 input-colonne">
+                                    <label id="startTimeLabel" visible="false"></label>
+                                </div>
+                                <div class="col-xs-6 input-colonne">
+                                    <div class="col-xs-6 input-colonne">
+                                        <input placeholder="Nom" class="input" type="text" id="Nom" name="_Nomrec[]" maxlength="45" required >
+                                        <input placeholder="Fonction" class="input" type="text" id="Fonctionrec" name="_Fonctionrec[]" maxlength="45" required >
+
+                                    </div>
+                                    <div class="col-xs-6 input-colonne" style="border-right: 0">
+                                        <input placeholder="Prenom" class="input" type="text" id="Prenom" name="_Prenomrec[]" maxlength="45" required >
+                                        <input placeholder="Téléphone fixe" class="input"  type="text" id="Telephonerec" name="_Telephonerec[]" maxlength="45" required >
+                                    </div>
+                                    <input placeholder="Adresse email" class="input" type="text" id="Emailrec" name="_Emailrec[]" maxlength="45" required >
+                                </div>
+
+
+                                <div class="col-xs-6 input-colonne " style="height:150px">
+                                    <textarea placeholder="Recommandation écrite" class="input" type="text" id="Text" name="_Text[]"  required style="resize:none;height:calc( 100% - 13px)"></textarea>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div id="div_experience" name="ajouterExperience" style="display:none">
+                            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+                            <button class="toggle" type="button" onclick="supprimerExperience(this)">-</button>
+                            <div id="demo" class="collapse in">
+
+                                <div class="col-xs-10 input-colonne">
+                                    <label id="startTimeLabel" visible="false"></label>
+                                </div>
+                                <div class="col-xs-6 input-colonne">
+                                    <div class="col-xs-6 input-colonne">
+                                        <input placeholder="Nom Société" class="input" type="text" id="Nomsociete" name="_Nomsociete[]" maxlength="45" required >
+                                        <input placeholder="Activité" class="input" type="text" id="Activite" name="_Activite[]" maxlength="45" required >
+
+                                    </div>
+                                    <div class="col-xs-6 input-colonne" style="border-right: 0">
+                                        <input placeholder="Lieu" class="input" type="text" id="Lieu" name="_Lieu[]" maxlength="45" required >
+                                        <input placeholder="Poste" class="input"  type="text" id="Poste" name="_Poste[]" maxlength="45" required >
+                                    </div>
+                                    <input placeholder="Nombre d'années" class="input" type="number" id="Nbreannee" name="_Nbreannee[]" maxlength="11" required >
+                                </div>
+
+
+                                <div class="col-xs-6 input-colonne " style="height:150px">
+                                    <textarea placeholder="Description" class="input" type="text" id="Descriptionexp" name="_Descriptionexp[]"  required style="resize:none;height:calc( 100% - 13px)"></textarea>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div id="div_diplome" name="ajouterDiplome" style="display:none">
+                            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+                            <button class="toggle" type="button" onclick="supprimerDiplome(this)">-</button>
+                            <div id="demo" class="collapse in">
+
+
+                                <div class="col-xs-12 input-colonne">
+                                    <input placeholder="Libelle" class="input" type="text" id="Libelle" name="_Libelle[]" maxlength="45" required >
+
+                                </div>
+
+                                <div class="col-xs-12 input-colonne" >
+                                    <input placeholder="Obtention" class="input" type="text" id="Obtention" name="_Obtention[]" maxlength="45" required >
+                                </div>
+
+                                <div class="col-xs-12 input-colonne" >
+
+                                    <input placeholder="école" class="input"  type="text" id="Ecole" name="_Ecole[]" maxlength="45" required >
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div id="div_langue" name="ajouterLangue" style="display:none">
+                            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+                            <button class="toggle" type="button" onclick="supprimerLangue(this)">-</button>
+                            <div id="demo" class="collapse in">
+
+                                <div class="col-xs-12 input-colonne">
+                                    <label id="startTimeLabel" visible="false"></label>
+                                </div>
+                                <div class="col-xs-6 input-colonne">
+                                    <select class="input " title="" name="_Langue[]">
+                                        <option value="Francais ">Francais </option>
+                                        <option value="Anglais ">Anglais </option>
+                                        <option value="Espagnol ">Espagnol </option>
+                                        <option value="Arabe ">Arabe </option>
+                                        <option value="Allemand ">Allemand </option>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="col-xs-6 input-colonne" >
+
+                                    <select class="input " title="" name="_Niveau[]">
+                                        <option value="connaissances de base ">connaissances de base </option>
+                                        <option value="bonnes connaissances ">bonnes connaissances </option>
+                                        <option value="courant ">courant </option>
+                                        <option value="langue maternelle ">langue maternelle </option>
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div id="div_document" name="ajouterDocument" style="display:none">
+                            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+                            <button class="toggle" type="button" onclick="supprimerDocument(this)">-</button>
+                            <div id="demo" class="collapse in">
+
+
+                                <div class="col-xs-12 input-colonne">
+                                    <label id="startTimeLabel" visible="false"></label>
+
+                                </div>
+
+
+                                <div class="col-xs-12 input-colonne">
+
+                                    <select class="input "  title=""  name="_Type[]">
+                                        <option value="lettre de motivation" >lettre de motivation</option>
+                                        <option value="cv" >Cv</option>
+                                        <option value="Autre" >Autre</option>
+                                    </select>
+                                </div>
+                                <input  type="file" class="input" id="document" name="_Document[]">
+                            </div>
+                        </div>
+
+
+
+                        <form class="formulaire" id="formApprenant" action="{{ path("apprenant_added") }}" onsubmit="document.getElementById('submitaddapprenant').disabled=true" method="post" enctype="multipart/form-data" style="margin-top: 50px"   >
+                            <input type="hidden" id="idEtab" name="_idEtab" value="{{ etablissement.getId }}">
+                            <div class="div_form" id="infoapprenant" style="border-bottom:1px solid #2b542c;"  >
+
+
+                                <div class="col-xs-10 input-colonne">
+                                    <label id="startTimeLabel" visible="false"></label>
+                                </div>
+                                <div >
+                                    <div class="col-xs-3 input-colonne" >
+
+                                        <label for="Photos"><img id="Photosimg" style="height: 90px;" src="{{ asset('image/upload-arrow.png') }}"/></label><br>
+                                        <input onchange="readURLL(this,'Photosimg');"  accept="image/*" type="file" class="input" id="Photos" name="_Photos" style="display: none">
+                                    </div>
+                                    <div class="col-xs-3 input-colonne">
+                                        <input placeholder="Placé" class="input" type="text" id="Place" name="_Place" maxlength="45"  style="background:yellowgreen">
+
+                                        <input placeholder="N°INSEE" class="input" type="text" id="N°INSEE" name="_N°INSEE" maxlength="45" >
+                                    </div>
+
+                                    <div class="col-xs-6 input-colonne" style="border-right: 0 ">
+                                        <input placeholder="Adresse postale" class="input" type="text" id="Adresse" name="_Adresse" maxlength="45" required >
+                                        <input placeholder="Adresse email" class="input" type="text" id="Email" name="_Email" maxlength="45" required >
+
+                                    </div>
+                                    <div class="col-xs-3 input-colonne">
+                                        <input placeholder="Nom" class="input" type="text" id="Nom" name="_Nom" maxlength="45" required >
+                                        <input placeholder="Civilité" class="input" type="text" id="Civilite" name="_Civilite" maxlength="45" required >
+
+                                    </div>
+                                    <div class="col-xs-3 input-colonne">
+                                        <input placeholder="Prenom" class="input" type="text" id="Prenom" name="_Prenom" maxlength="45" required >
+
+                                        <input placeholder="Date de Naissance" type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' class="date" id="Datenaissance" name="_Datenaissance" title="Date de Naissance" required >
+                                    </div>
+
+                                    <div class="col-xs-3 input-colonne">
+                                        <input placeholder="Ville" class="input" type="text" id="Ville" name="_Ville" maxlength="45" required >
+                                        <input placeholder="Téléphone portable" class="input" type="text" id="Telephone" name="_Telephone" maxlength="45" required >
+
+                                    </div>
+
+                                    <div class="col-xs-3 input-colonne" style="border-right: 0 ">
+                                        <input placeholder="Code postal" class="input" type="text" id="Codepostal" name="_Codepostal" maxlength="45" required >
+                                        <input placeholder="Téléphone fixe" class="input" type="text" id="Fax" name="_Fax" maxlength="45"  >
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="div_form" id="apprenant_formation" style="position: absolute;visibility: hidden;border-bottom:1px solid #2b542c;" >
+                                <div class="col-xs-10 input-colonne">
+                                    <label id="startTimeLabel" visible="false"></label>
+                                </div>
+
+                                <div class="col-xs-12 input-colonne " >
+                                    <select class="input" title="" style="height: 100px" name="formations[]" multiple>
+                                        {% for formation in formations %}
+                                            {% if formation.getDescriptif %}
+                                                <option value="{{ formation.getId }}">{{ formation.getNom }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+                            <div class="div_form" id="responsable_apprenant" style="position: absolute;visibility: hidden;border-bottom:1px solid #2b542c;"  >
+
+                                <div id="responsablecontainer">
+
+                                </div>
+                                <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;" onclick="dupliquerResponsable()">Ajouter un responsable</button>
+                            </div>
+
+                            <div class="div_form" id="recommendation_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
+
+                                <div id="recommandationcontainer">
+
+                                </div>
+                                <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;"  onclick="dupliquerRecommandation()">Ajouter une recommandation</button>
+
+                            </div>
+
+
+                            <div class="div_form" id="diplome_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
+
+                                <div id="diplomecontainer">
+
+                                </div>
+                                <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;"  onclick="dupliquerDiplome()">Ajouter un diplome</button>
+
+                            </div>
+
+                            <div class="div_form" id="langue_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
+
+                                <div id="languecontainer">
+
+                                </div>
+                                <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;"  onclick="dupliquerLangue()">Ajouter une Langue</button>
+
+                            </div>
+
+                            <div class="div_form" id="document_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
+
+                                <div id="documentcontainer">
+
+                                </div>
+                                <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;"  onclick="dupliquerDocument()">Ajouter un Document</button>
+
+                            </div>
+
+                            <div class="div_form" id="hobbie_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
+
+                                <div class="col-xs-12 input-colonne">
+                                    <label id="startTimeLabel" visible="false"></label>
+                                </div>
+
+
+
+                                <div class="col-xs-12 input-colonne " >
+                                    <select class="input" title="" style="height: 100px" name="hobbies[]" multiple>
+                                        {% for hobbie in hobbies %}
+                                            {% if hobbie.getHobbie %}
+                                                <option value="{{ hobbie.getId }}">{{ hobbie.getHobbie }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+
+                            <div class="div_form" id="experience_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
+
+                                <div id="experiencecontainer">
+
+                                </div>
+                                <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;"  onclick="dupliquerExperience()">Ajouter une Exepérience</button>
+
+                            </div>
+
+
+                            <div class="div_button" style="margin-top: 10px" >
+
+                                <input class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" name="submitApprenant" type="button" value="Supprimer">
+                                <input class="blue" name="submitApprenant" type="button"  style="float: right" value="Publié">
+                                <input class="blue" id="submitaddapprenant" type="submit"  style="float: right;margin-right: 10px" value="Enregistrer">
+                                <input class="blue" name="submitApprenant" type="button"  style="float: right;margin-right: 10px" value="Suivant">
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
                 {% endif %}
             {% if is_granted('ROLE_SUPER_ADMIN') %}
                 <div id="associerecole" class="popup">
@@ -313,404 +704,11 @@
             {% endif %}
         {% endif %}
 
-
-    {% if etablissement.getTier.getEcole %}
-        <div id="apprenant" class="popup col-xs-3" >
-            <div onclick="hide(this)" class="close"></div>
-            <div class="col-xs-offset-3 col-xs-6" style="top:40px;border:20px solid white;display: block;margin-bottom: 20px ;background: white;width:50%">
-
-
-                <div class="col-xs-12" style="height: 50px;">
-                    <div style="height: 50px; width: 100%">
-
-                        <ul id="select_info_apprenant"  class="nav navbar-nav" style="height: 50px;background: #4389c8;" >
-                            <li class="dropdown col-xs-12" >
-                                <a class="dropdown-toggle" data-toggle="dropdown"style="height: 40px;color:white;background: #4389c8;margin: 0 auto;">
-                                    <label id="65sd4f4" style="font-family: Arial;font-size: small">DETAILS DE L'APPRENANT</label>  <b class="caret"></b> </a>
-                                <ul class="dropdown-menu" style="margin-left: 100px">
-                                    <li class="dropdown-submenu" >
-                                        <a onclick="show_formapprenant('infoapprenant')" tabindex="-1" href="#" >Informations générales sur l'apprenant</a>
-                                        <ul class="dropdown-menu">
-                                            <li><a onclick="show_formapprenant('responsable_apprenant')" href="#">Responsables de l'apprenant</a></li>
-                                            <li><a onclick="show_formapprenant('diplome_apprenant')" href="#">Diplomes</a></li>
-                                            <li><a onclick="show_formapprenant('recommendation_apprenant')" href="#">Recommandation</a></li>
-                                            <li><a onclick="show_formapprenant('experience_apprenant')" href="#">Expériences</a></li>
-                                            <li><a onclick="show_formapprenant('hobbie_apprenant')" href="#">Hobbies</a></li>
-                                            <li><a onclick="show_formapprenant('langue_apprenant')" href="#">Langue</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">QCM</a></li>
-                                    <li><a onclick="show_formapprenant('apprenant_formation')"  href="#">Choix formation</a></li>
-                                    <li><a href="#">Profil à 360°</a></li>
-                                    <li><a href="#">Rendez-vous</a></li>
-                                    <li><a href="#">Placement</a></li>
-                                    <li><a onclick="show_formapprenant('document_apprenant')" href="#">Documents</a></li>
-                                    <li><a href="#">Onglet tests</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-
-                    </div>
-                </div>
-
-                <div id="div_responsable" name="ajouterResponsable" style="display:none;">
-                    <button style="float:inherit" class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
-                    <button class="toggle" type="button" onclick="supprimerResponsable(this)"> - </button>
-                    <div id="demo" class="collapse in">
-
-                        <div class="col-xs-10 input-colonne">
-                            <label id="startTimeLabel" visible="false"></label>
-                        </div>
-
-                        <div class="col-xs-3 input-colonne">
-                            <input placeholder="Nom" class="input" type="text" id="Nomresp" name="_Nomresp[]" maxlength="45" required >
-                            <select class="input "  title="" name="_Civiliteresp[]">
-                                <option value="Monsieur">Mr.</option>
-                                <option value="Madame">Mme.</option>
-                            </select>
-
-                        </div>
-                        <div class="col-xs-3 input-colonne">
-                            <input placeholder="Prenom" class="input" type="text" id="Prenomresp" name="_Prenomresp[]" maxlength="45" required >
-                            <input placeholder="Metier" class="input" type="text" id="Metierresp" name="_Metierresp[]" maxlength="45" required >
-
-
-                        </div>
-
-                        <div class="col-xs-6 input-colonne">
-                            <input placeholder="Adresse postale" class="input" type="text" id="Adresseresp" name="_Adresseresp[]" maxlength="45" required >
-                            <input placeholder="Adresse email" class="input" type="text" id="Emailresp" name="_Emailresp[]" maxlength="45" required >
-
-                        </div>
-
-                        <div class="col-xs-3 input-colonne">
-                            <input placeholder="Profession" class="input" type="text" id="Profession" name="_Profession[]" maxlength="45" required >
-                        </div>
-
-                        <div class="col-xs-3 input-colonne">
-                            <input placeholder="Téléphone " class="input" type="text" id="Telephoneresp" name="_Telephoneresp[]" maxlength="45" required >
-                        </div>
-                        <div class="col-xs-3 input-colonne">
-                            <input placeholder="Ville" class="input" type="text" id="Villeresp" name="_Villeresp[]" maxlength="45" required >
-                        </div>
-
-                        <div class="col-xs-3 input-colonne">
-                            <input placeholder="Code postale" class="input" type="text" id="CodePostaleresp" name="_CodePostaleresp[]" maxlength="45" required >
-                        </div>
-
-
-                    </div>
-                </div>
-
-                <div id="div_recommandation" name="ajouterRecommandation" style="display:none">
-                    <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
-                    <button class="toggle" type="button" onclick="supprimerRecommandation(this)">-</button>
-                    <div id="demo" class="collapse in">
-
-                        <div class="col-xs-10 input-colonne">
-                            <label id="startTimeLabel" visible="false"></label>
-                        </div>
-                        <div class="col-xs-6 input-colonne">
-                            <div class="col-xs-6 input-colonne">
-                                <input placeholder="Nom" class="input" type="text" id="Nom" name="_Nomrec[]" maxlength="45" required >
-                                <input placeholder="Fonction" class="input" type="text" id="Fonctionrec" name="_Fonctionrec[]" maxlength="45" required >
-
-                            </div>
-                            <div class="col-xs-6 input-colonne" style="border-right: 0">
-                                <input placeholder="Prenom" class="input" type="text" id="Prenom" name="_Prenomrec[]" maxlength="45" required >
-                                <input placeholder="Téléphone fixe" class="input"  type="text" id="Telephonerec" name="_Telephonerec[]" maxlength="45" required >
-                            </div>
-                            <input placeholder="Adresse email" class="input" type="text" id="Emailrec" name="_Emailrec[]" maxlength="45" required >
-                        </div>
-
-
-                        <div class="col-xs-6 input-colonne " style="height:150px">
-                            <textarea placeholder="Recommandation écrite" class="input" type="text" id="Text" name="_Text[]"  required style="resize:none;height:calc( 100% - 13px)"></textarea>
-
-                        </div>
-
-                    </div>
-                </div>
-
-                <div id="div_experience" name="ajouterExperience" style="display:none">
-                    <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
-                    <button class="toggle" type="button" onclick="supprimerExperience(this)">-</button>
-                    <div id="demo" class="collapse in">
-
-                        <div class="col-xs-10 input-colonne">
-                            <label id="startTimeLabel" visible="false"></label>
-                        </div>
-                        <div class="col-xs-6 input-colonne">
-                            <div class="col-xs-6 input-colonne">
-                                <input placeholder="Nom Société" class="input" type="text" id="Nomsociete" name="_Nomsociete[]" maxlength="45" required >
-                                <input placeholder="Activité" class="input" type="text" id="Activite" name="_Activite[]" maxlength="45" required >
-
-                            </div>
-                            <div class="col-xs-6 input-colonne" style="border-right: 0">
-                                <input placeholder="Lieu" class="input" type="text" id="Lieu" name="_Lieu[]" maxlength="45" required >
-                                <input placeholder="Poste" class="input"  type="text" id="Poste" name="_Poste[]" maxlength="45" required >
-                            </div>
-                            <input placeholder="Nombre d'années" class="input" type="number" id="Nbreannee" name="_Nbreannee[]" maxlength="11" required >
-                        </div>
-
-
-                        <div class="col-xs-6 input-colonne " style="height:150px">
-                            <textarea placeholder="Description" class="input" type="text" id="Descriptionexp" name="_Descriptionexp[]"  required style="resize:none;height:calc( 100% - 13px)"></textarea>
-
-                        </div>
-
-                    </div>
-                </div>
-
-                <div id="div_diplome" name="ajouterDiplome" style="display:none">
-                    <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
-                    <button class="toggle" type="button" onclick="supprimerDiplome(this)">-</button>
-                    <div id="demo" class="collapse in">
-
-
-                        <div class="col-xs-12 input-colonne">
-                            <input placeholder="Libelle" class="input" type="text" id="Libelle" name="_Libelle[]" maxlength="45" required >
-
-                        </div>
-
-                        <div class="col-xs-12 input-colonne" >
-                        <input placeholder="Obtention" class="input" type="text" id="Obtention" name="_Obtention[]" maxlength="45" required >
-                            </div>
-
-                        <div class="col-xs-12 input-colonne" >
-
-                            <input placeholder="école" class="input"  type="text" id="Ecole" name="_Ecole[]" maxlength="45" required >
-                        </div>
-
-
-                    </div>
-                </div>
-
-                <div id="div_langue" name="ajouterLangue" style="display:none">
-                    <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
-                    <button class="toggle" type="button" onclick="supprimerLangue(this)">-</button>
-                    <div id="demo" class="collapse in">
-
-                        <div class="col-xs-12 input-colonne">
-                            <label id="startTimeLabel" visible="false"></label>
-                        </div>
-                        <div class="col-xs-6 input-colonne">
-                            <select class="input " title="" name="_Langue[]">
-                                <option value="Francais ">Francais </option>
-                                <option value="Anglais ">Anglais </option>
-                                <option value="Espagnol ">Espagnol </option>
-                                <option value="Arabe ">Arabe </option>
-                                <option value="Allemand ">Allemand </option>
-
-                            </select>
-
-                        </div>
-
-                        <div class="col-xs-6 input-colonne" >
-
-                            <select class="input " title="" name="_Niveau[]">
-                                <option value="connaissances de base ">connaissances de base </option>
-                                <option value="bonnes connaissances ">bonnes connaissances </option>
-                                <option value="courant ">courant </option>
-                                <option value="langue maternelle ">langue maternelle </option>
-
-                            </select>
-                        </div>
-
-
-                    </div>
-                </div>
-
-                <div id="div_document" name="ajouterDocument" style="display:none">
-                    <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
-                    <button class="toggle" type="button" onclick="supprimerDocument(this)">-</button>
-                    <div id="demo" class="collapse in">
-
-
-                        <div class="col-xs-12 input-colonne">
-                            <label id="startTimeLabel" visible="false"></label>
-
-                        </div>
-
-
-                        <div class="col-xs-12 input-colonne">
-
-                            <select class="input "  title=""  name="_Type[]">
-                                <option value="lettre de motivation" >lettre de motivation</option>
-                                <option value="cv" >Cv</option>
-                                <option value="Autre" >Autre</option>
-                            </select>
-                        </div>
-                        <input  type="file" class="input" id="document" name="_Document[]">
-                    </div>
-                </div>
-
-
-
-                <form class="formulaire" id="formApprenant" action="{{ path("apprenant_added") }}" onsubmit="document.getElementById('submitaddapprenant').disabled=true" method="post" enctype="multipart/form-data" style="margin-top: 50px"   >
-                    <input type="hidden" id="idEtab" name="_idEtab" value="{{ etablissement.getId }}">
-                    <div class="div_form" id="infoapprenant" style="border-bottom:1px solid #2b542c;"  >
-
-
-                        <div class="col-xs-10 input-colonne">
-                            <label id="startTimeLabel" visible="false"></label>
-                        </div>
-                        <div >
-                            <div class="col-xs-3 input-colonne" >
-
-                                <label for="Photos"><img id="Photosimg" style="height: 90px;" src="{{ asset('image/upload-arrow.png') }}"/></label><br>
-                                <input onchange="readURLL(this,'Photosimg');"  accept="image/*" type="file" class="input" id="Photos" name="_Photos" style="display: none">
-                            </div>
-                            <div class="col-xs-3 input-colonne">
-                                <input placeholder="Placé" class="input" type="text" id="Place" name="_Place" maxlength="45"  style="background:yellowgreen">
-
-                                <input placeholder="N°INSEE" class="input" type="text" id="N°INSEE" name="_N°INSEE" maxlength="45" >
-                            </div>
-
-                            <div class="col-xs-6 input-colonne" style="border-right: 0 ">
-                                <input placeholder="Adresse postale" class="input" type="text" id="Adresse" name="_Adresse" maxlength="45" required >
-                                <input placeholder="Adresse email" class="input" type="text" id="Email" name="_Email" maxlength="45" required >
-
-                            </div>
-                            <div class="col-xs-3 input-colonne">
-                                <input placeholder="Nom" class="input" type="text" id="Nom" name="_Nom" maxlength="45" required >
-                                <input placeholder="Civilité" class="input" type="text" id="Civilite" name="_Civilite" maxlength="45" required >
-
-                            </div>
-                            <div class="col-xs-3 input-colonne">
-                                <input placeholder="Prenom" class="input" type="text" id="Prenom" name="_Prenom" maxlength="45" required >
-
-                                <input placeholder="Date de Naissance" type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' class="date" id="Datenaissance" name="_Datenaissance" title="Date de Naissance" required >
-                            </div>
-
-                            <div class="col-xs-3 input-colonne">
-                                <input placeholder="Ville" class="input" type="text" id="Ville" name="_Ville" maxlength="45" required >
-                                <input placeholder="Téléphone portable" class="input" type="text" id="Telephone" name="_Telephone" maxlength="45" required >
-
-                            </div>
-
-                            <div class="col-xs-3 input-colonne" style="border-right: 0 ">
-                                <input placeholder="Code postal" class="input" type="text" id="Codepostal" name="_Codepostal" maxlength="45" required >
-                                <input placeholder="Téléphone fixe" class="input" type="text" id="Fax" name="_Fax" maxlength="45"  >
-
-
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="div_form" id="apprenant_formation" style="position: absolute;visibility: hidden;border-bottom:1px solid #2b542c;" >
-                        <div class="col-xs-10 input-colonne">
-                            <label id="startTimeLabel" visible="false"></label>
-                        </div>
-
-                        <div class="col-xs-12 input-colonne " >
-                            <select class="input" title="" style="height: 100px" name="formations[]" multiple>
-                                {% for formation in formations %}
-                                    {% if formation.getDescriptif %}
-                                        <option value="{{ formation.getId }}">{{ formation.getNom }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </div>
-
-
-                    </div>
-
-                    <div class="div_form" id="responsable_apprenant" style="position: absolute;visibility: hidden;border-bottom:1px solid #2b542c;"  >
-
-                        <div id="responsablecontainer">
-
-                        </div>
-                        <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;" onclick="dupliquerResponsable()">Ajouter un responsable</button>
-                    </div>
-
-                    <div class="div_form" id="recommendation_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
-
-                        <div id="recommandationcontainer">
-
-                        </div>
-                        <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;"  onclick="dupliquerRecommandation()">Ajouter une recommandation</button>
-
-                    </div>
-
-
-                    <div class="div_form" id="diplome_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
-
-                        <div id="diplomecontainer">
-
-                        </div>
-                        <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;"  onclick="dupliquerDiplome()">Ajouter un diplome</button>
-
-                    </div>
-
-                    <div class="div_form" id="langue_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
-
-                        <div id="languecontainer">
-
-                        </div>
-                        <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;"  onclick="dupliquerLangue()">Ajouter une Langue</button>
-
-                    </div>
-
-                    <div class="div_form" id="document_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
-
-                        <div id="documentcontainer">
-
-                        </div>
-                        <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;"  onclick="dupliquerDocument()">Ajouter un Document</button>
-
-                    </div>
-
-                    <div class="div_form" id="hobbie_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
-
-                        <div class="col-xs-12 input-colonne">
-                            <label id="startTimeLabel" visible="false"></label>
-                        </div>
-
-
-
-                        <div class="col-xs-12 input-colonne " >
-                            <select class="input" title="" style="height: 100px" name="hobbies[]" multiple>
-                                {% for hobbie in hobbies %}
-                                    {% if hobbie.getHobbie %}
-                                        <option value="{{ hobbie.getId }}">{{ hobbie.getHobbie }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </div>
-
-
-                        </div>
-
-
-
-                    <div class="div_form" id="experience_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
-
-                        <div id="experiencecontainer">
-
-                        </div>
-                        <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;"  onclick="dupliquerExperience()">Ajouter une Exepérience</button>
-
-                    </div>
-
-
-                    <div class="div_button" style="margin-top: 10px" >
-
-                        <input class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" name="submitApprenant" type="button" value="Supprimer">
-                        <input class="blue" name="submitApprenant" type="button"  style="float: right" value="Publié">
-                        <input class="blue" id="submitaddapprenant" type="submit"  style="float: right;margin-right: 10px" value="Enregistrer">
-                        <input class="blue" name="submitApprenant" type="button"  style="float: right;margin-right: 10px" value="Suivant">
-                    </div>
-                </form>
-
-            </div>
-        </div>
-    {% endif %}
-
         <div class="row" style="height: 78px; margin: 0;">
-            <img class="col-xs-1" src="data:image/jpg;base64,{{ etablissement.getTier.getLogo }}"
-                 style="padding: 10px; height: 40px;">
+            <div class="col-xs-1" >
+                <img  src="data:image/jpg;base64,{{ etablissement.getTier.getLogo }}" style="padding: 10px; height: 78px;">
+            </div>
+
             <div class="col-xs-4">
                 <div class="col-xs-12"
                      style="height: 30px; text-align: left; padding: 10px;"><label style="font-size: large" >{{ etablissement.getTier.getRaisonSoc }}&nbsp;-&nbsp;  </label><label style="font-size: large;color:#2A76CC" > {{ etablissement.getVille }}</label></div>

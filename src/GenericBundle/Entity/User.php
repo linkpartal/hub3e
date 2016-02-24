@@ -103,14 +103,6 @@ class User extends BaseUser
      */
     private $referenciel;
 
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Mission", mappedBy="users")
-     */
-    private $mission;
-
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
@@ -147,7 +139,6 @@ class User extends BaseUser
         $this->referenciel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->hobbies = new \Doctrine\Common\Collections\ArrayCollection();
         $this->reponsedef = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->mission = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -387,40 +378,6 @@ class User extends BaseUser
     }
 
     /**
-     * Add mission
-     *
-     * @param \GenericBundle\Entity\Mission $mission
-     *
-     * @return User
-     */
-    public function addMission(\GenericBundle\Entity\Mission $mission)
-    {
-        $this->mission[] = $mission;
-
-        return $this;
-    }
-
-    /**
-     * Remove mission
-     *
-     * @param \GenericBundle\Entity\Mission $mission
-     */
-    public function removeMission(\GenericBundle\Entity\Mission $mission)
-    {
-        $this->mission->removeElement($mission);
-    }
-
-    /**
-     * Get mission
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMission()
-    {
-        return $this->mission;
-    }
-
-    /**
      * Add langue
      *
      * @param \GenericBundle\Entity\Langue $langue
@@ -481,5 +438,39 @@ class User extends BaseUser
     public function getExpiredAt()
     {
         $this->expiresAt;
+    }
+
+    /**
+     * Add reponsedef
+     *
+     * @param \GenericBundle\Entity\Reponsedef $reponsedef
+     *
+     * @return User
+     */
+    public function addReponsedef(\GenericBundle\Entity\Reponsedef $reponsedef)
+    {
+        $this->reponsedef[] = $reponsedef;
+
+        return $this;
+    }
+
+    /**
+     * Remove reponsedef
+     *
+     * @param \GenericBundle\Entity\Reponsedef $reponsedef
+     */
+    public function removeReponsedef(\GenericBundle\Entity\Reponsedef $reponsedef)
+    {
+        $this->reponsedef->removeElement($reponsedef);
+    }
+
+    /**
+     * Get reponsedef
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReponsedef()
+    {
+        return $this->reponsedef;
     }
 }

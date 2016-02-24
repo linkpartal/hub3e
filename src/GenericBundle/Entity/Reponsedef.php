@@ -191,4 +191,38 @@ class Reponsedef
         if($a->getOrdre() == $b->getOrdre()){ return 0 ; }
         return ($a->getOrdre()< $b->getOrdre()) ? -1 : 1;
     }
+
+    /**
+     * Add user
+     *
+     * @param \GenericBundle\Entity\User $user
+     *
+     * @return Reponsedef
+     */
+    public function addUser(\GenericBundle\Entity\User $user)
+    {
+        $this->users[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \GenericBundle\Entity\User $user
+     */
+    public function removeUser(\GenericBundle\Entity\User $user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
 }

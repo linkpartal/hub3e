@@ -75,46 +75,6 @@
     </div>
 
 </div>
-<!--div-- id="adduser" class="popup col-xs-3">
-    <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block">
-
-        <form id="formadduser" action="{{ path("user_added") }}" method="post">
-
-            <div class="div_form" >
-                <div class="col-xs-6 input-colonne">
-                    <input type="text" class="input" id="Username" name="_Username" placeholder="Username">
-
-                    <input type="email" class="input " id="mail" name="_mail" placeholder="Email">
-
-                    <select class="input" title="Choisissez un role" name="_role">
-                        <option value="">Choisissez un role</option>
-                        <option value="ROLE_ADMINECOLE">Administrateur école</option>
-                        <option value="ROLE_RECRUTE">Recruteur Placeur</option>
-                    </select>
-                </div>
-                <div class="col-xs-6">
-                    <select class="input " style="width: 25%; margin-right: 10px" title="" name="civilite">
-                        <option value="Mr">Mr.</option>
-                        <option value="Mme">Mme.</option>
-                        <option value="Mlle">Mlle.</option>
-                    </select>
-
-                    <input type="text" class="input" style="width: calc(75% - 10px);" id="Prenom" name="_Prenom" placeholder="Prénom">
-                    <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom">
-
-                    <input type="tel" class="input " id="Tel" name="_Tel" placeholder="Tel">
-                </div>
-
-
-            </div>
-            <div class="div_button">
-                <input class="blue" type="submit" value="envoyer">
-            </div>
-        </form>
-    </div>
-
-</div-->
 <div id="import" class="popup col-xs-3">
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
@@ -184,7 +144,8 @@
                     <option value="ecole">Voir Ecoles</option>
                     <option value="societe">Voir Sociétés</option>
                     <option value="licence">Voir Licences</option>
-                    <option value="mission">Voir Missions</option>
+                    <option value="mission">Mes Missions</option>
+                    <option value="mission_propose">Missions proposées</option>
                     <option value="user">Voir Utilisateurs</option>
                     <option value="apprenants">Voir Apprenants</option>
                 </select>
@@ -245,6 +206,27 @@
                     {% if missions is defined %}
                         {% for m in missions %}
                             <button onclick="postiframeUser('{{ path('admin_afficheMission',{'id': m.getId }) }}',this)" id="mission{{ m.getId }}" type="button" class="list-group-item butonLigne">
+                                <div class="col-xs-12 part" title="{{m.getCodemission}}">{{m.getCodemission}}</div>
+                                <div class="col-xs-12 part"
+                                     style="height: 31px; text-align: left;">
+
+                                    <div class="col-xs-9 part" title="{{m.getDomaine}}">{{ m.getDomaine }}</div>
+                                    {% if not m.getSuspendu %}
+                                        <div class="col-xs-1 active" id="active{{ m.getId }}"></div>
+                                    {% else %}
+                                        <div class="col-xs-1 inactive" id="active{{ m.getId }}"></div>
+                                    {% endif %}
+
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
+
+                </div>
+                <div id="mission_propose" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                    {% if missions_propose is defined %}
+                        {% for m in missions_propose %}
+                            <button id="mission_propose{{ m.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{m.getCodemission}}">{{m.getCodemission}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -362,6 +344,7 @@
         document.getElementById('ecole').style.visibility= 'hidden';
         document.getElementById('societe').style.visibility= 'hidden';
         document.getElementById('mission').style.visibility= 'hidden';
+        document.getElementById('mission_propose').style.visibility= 'hidden';
         document.getElementById('licence').style.visibility= 'hidden';
         document.getElementById('user').style.visibility= 'hidden';
         document.getElementById(x).style.visibility='visible';

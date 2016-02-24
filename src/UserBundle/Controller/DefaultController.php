@@ -287,7 +287,15 @@ class DefaultController extends Controller
         if($request->get('Import')==0)
         {
             $this->ImportApprenant($request,$_FILES['_CSV']['tmp_name']);
-            return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$this->get('security.token_storage')->getToken()->getUser()->getTier()->getRaisonsoc())));
+            if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_ADMINECOLE'))
+            {
+                return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$this->get('security.token_storage')->getToken()->getUser()->getTier()->getRaisonsoc())));
+            }
+            elseif($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_SUPER_ADMIN'))
+            {
+                return $this->redirect($this->generateUrl('metier_user_admin'));
+            }
+
         }
         elseif($request->get('Import')==1)
         {
