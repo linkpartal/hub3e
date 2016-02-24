@@ -50,6 +50,55 @@ class DefaultController extends Controller
         }
         $candidatures = $this->getDoctrine()->getRepository('GenericBundle:Candidature')->findBy(array('user'=>$userid));
 
+        if($userid->hasRole('ROLE_APPRENANT'))
+        {
+            $questions =array();
+            $reponses = array();
+            foreach($userid->getEtablissement()->getQcmdef() as $key => $qcm){
+
+                $questions[$key] = $this->getDoctrine()->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef'=>$qcm));
+                usort($questions[$key],array('\GenericBundle\Entity\Questiondef','sort_questions_by_order'));
+                foreach ( $questions[$key] as $keyqst => $qst)
+                {
+                    $reps = $this->getDoctrine()->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef'=>$qst));
+                    usort($reps,array('\GenericBundle\Entity\Reponsedef','sort_reponses_by_order'));
+                    $reponses[$key][$keyqst] = $reps;
+                }
+
+            }
+            return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid,
+                'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,
+                'candidatures'=>$candidatures,'QCMs'=>$userid->getEtablissement()->getQcmdef() ,'Questions'=>$questions,'reponses'=>$reponses));
+        }
+        else{
+            return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid,
+                'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,
+                'candidatures'=>$candidatures));
+        }
+
+
+    }
+
+    public function affichageSASAction($id){
+
+    }
+
+    public function affichageProfilAction()
+    {
+        $userid = $this->get('security.token_storage')->getToken()->getUser();
+
+        $info = $userid->getInfo();
+        $Parents = $this->getDoctrine()->getRepository('GenericBundle:Parents')->findAll();
+
+        $Langue = $this->getDoctrine()->getRepository('GenericBundle:Langue')->findAll();
+
+        $Experience = $this->getDoctrine()->getRepository('GenericBundle:Experience')->findAll();
+        $Recommandation = $this->getDoctrine()->getRepository('GenericBundle:Recommandation')->findAll();
+        $Diplome = $this->getDoctrine()->getRepository('GenericBundle:Diplome')->findAll();
+        $Document = $this->getDoctrine()->getRepository('GenericBundle:Document')->findAll();
+
+        $candidatures = $this->getDoctrine()->getRepository('GenericBundle:Candidature')->findBy(array('user'=>$userid));
+
         $questions =array();
         $reponses = array();
         foreach($userid->getEtablissement()->getQcmdef() as $key => $qcm){
@@ -67,30 +116,6 @@ class DefaultController extends Controller
         return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid,
             'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,
             'candidatures'=>$candidatures,'QCMs'=>$userid->getEtablissement()->getQcmdef() ,'Questions'=>$questions,'reponses'=>$reponses));
-
-    }
-
-    public function affichageSASAction($id){
-
-    }
-
-    public function affichageProfilAction()
-    {
-        $userid = $this->get('security.token_storage')->getToken()->getUser();
-
-        $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
-        $info = $userid->getInfo();
-        $Parents = $this->getDoctrine()->getRepository('GenericBundle:Parents')->findAll();
-
-        $Langue = $this->getDoctrine()->getRepository('GenericBundle:Langue')->findAll();
-
-        $Experience = $this->getDoctrine()->getRepository('GenericBundle:Experience')->findAll();
-        $Recommandation = $this->getDoctrine()->getRepository('GenericBundle:Recommandation')->findAll();
-        $Diplome = $this->getDoctrine()->getRepository('GenericBundle:Diplome')->findAll();
-        $Document = $this->getDoctrine()->getRepository('GenericBundle:Document')->findAll();
-
-        return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('licencedef'=>$licencedef,'User'=>$userid,
-            'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue));
     }
 
     public function UserAddedAction(Request $request)
@@ -218,7 +243,25 @@ class DefaultController extends Controller
     public function userModifAction(Request $request){
         $em = $this->getDoctrine()->getManager();
 
+        $info = $em->getRepository('GenericBundle:infocomplementaire')->find(array('id'=>$request->get('_IdInfo')));
+
+       // $info->setDatenaissance(date_create($request->get('_Datenaissance')) );
+        $info->setCpnaissance($request->get('_Cpnaissance'));
+        $info->setLieunaissance($request->get('_Lieunaissance'));
+        $info->setAdresse($request->get('_Adresse'));
+        $info->setFacebook($request->get('_Facebook'));
+        $info->setLinkedin($request->get('_Linkedin'));
+        $info->setMobilite($request->get('_Mobilite'));
+        $info->setFratrie($request->get('_Fratrie'));
+
+        $em->flush();
+
+
+
+
+
         $user = $em->getRepository('GenericBundle:User')->findOneBy(array('id'=>$request->get('_ID')));
+
 
         $user->setCivilite($request->get('_Civilite'));
         $user->setNom($request->get('_Nom'));
@@ -256,6 +299,44 @@ class DefaultController extends Controller
         }
 
     }
+
+    public function supprimerLangueAction($id,$IdUser)
+    {
+
+
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $langue = $em->getRepository('GenericBundle:Langue')->find($id);
+        $user = $em->getRepository('GenericBundle:User')->find($IdUser);
+        $langue->removeUser($user);
+
+        $em->flush();
+
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('succes'=>'0'));
+
+
+    }
+
+    public function supprimerHobbieAction($id,$IdUser)
+    {
+
+
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $hobbie = $em->getRepository('GenericBundle:Hobbies')->find($id);
+        $user = $em->getRepository('GenericBundle:User')->find($IdUser);
+        $hobbie->removeUser($user);
+
+        $em->flush();
+
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('succes'=>'0'));
+
+
+    }
+
+
 
     public function importAction(Request $request)
     {
@@ -854,63 +935,82 @@ class DefaultController extends Controller
         $em->flush();
 
 
-        for($i = 0; $i< count($request->get('_Nomresp'));$i++) {
-        $responsable = new Parents();
-        $responsable->setNom($request->get('_Nomresp')[$i].' '.$request->get('_Civiliteresp')[$i]);
-        $responsable->setPrenom($request->get('_Prenomresp')[$i]);
-        $responsable->setAdresse($request->get('_Adresseresp')[$i].' '.$request->get('_CodePostaleresp')[$i].' '.$request->get('_Villeresp')[$i]);
-        $responsable->setMetier($request->get('_Metierresp')[$i]);
-        $responsable->setEmail($request->get('_Emailresp')[$i]);
-        $responsable->setProfession($request->get('_Profession')[$i]);
-        $responsable->setTelephone($request->get('_Telephoneresp')[$i]);
-
-            $em->persist($responsable);
-            $em->flush();
-        }
-       // var_dump($responsable);die;
-
-
-        for($i = 0; $i< count($request->get('_Libelle'));$i++) {
-        $diplome = new Diplome();
-        $diplome->setLibelle($request->get('_Libelle')[$i]);
-        $diplome->setObtention($request->get('_Obtention')[$i]);
-        $diplome->setEcole($request->get('_Ecole')[$i]);
-          $em->persist($diplome);
-          $em->flush();
+        if($request->get('_Nomresp'))
+        {
+            for($i = 0; $i< count($request->get('_Nomresp'));$i++) {
+                $responsable = new Parents();
+                $responsable->setNom($request->get('_Nomresp')[$i].' '.$request->get('_Civiliteresp')[$i]);
+                $responsable->setPrenom($request->get('_Prenomresp')[$i]);
+                $responsable->setAdresse($request->get('_Adresseresp')[$i].' '.$request->get('_CodePostaleresp')[$i].' '.$request->get('_Villeresp')[$i]);
+                $responsable->setMetier($request->get('_Metierresp')[$i]);
+                $responsable->setEmail($request->get('_Emailresp')[$i]);
+                $responsable->setProfession($request->get('_Profession')[$i]);
+                $responsable->setTelephone($request->get('_Telephoneresp')[$i]);
+                $responsable->setImportCandidat($apprenant);
+                $em->persist($responsable);
+                $em->flush();
+            }
         }
 
 
-        for($i = 0; $i< count($request->get('_Nomsociete'));$i++) {
-        $experience = new Experience();
-        $experience->setNomsociete($request->get('_Nomsociete')[$i]);
-        $experience->setActivite($request->get('_Activite')[$i]);
-        $experience->setLieu($request->get('_Lieu')[$i]);
-        $experience->setPoste($request->get('_Poste')[$i]);
-        $experience->setNbreannee($request->get('_Nbreannee')[$i]);
-        $experience->setDescription($request->get('_Descriptionexp')[$i]);
-         $em->persist($experience);
-          $em->flush();
+        if($request->get('_Libelle'))
+        {
+            for($i = 0; $i< count($request->get('_Libelle'));$i++) {
+                $diplome = new Diplome();
+                $diplome->setLibelle($request->get('_Libelle')[$i]);
+                $diplome->setObtention($request->get('_Obtention')[$i]);
+                $diplome->setEcole($request->get('_Ecole')[$i]);
+                $diplome->setImportCandidat($apprenant);
+                $em->persist($diplome);
+                $em->flush();
+            }
         }
 
 
-        for($i = 0; $i< count($request->get('_Nomrec'));$i++) {
-        $recommandation = new Recommandation();
-        $recommandation->setNom($request->get('_Nomrec')[$i].' '.$request->get('_Prenomrec')[$i]);
-        $recommandation->setFonction($request->get('_Fonctionrec')[$i]);
-        $recommandation->setTelephone($request->get('_Telephonerec')[$i]);
-        $recommandation->setEmail($request->get('_Emailrec')[$i]);
-        $recommandation->setText($request->get('_Text')[$i]);
-            $em->persist($recommandation);
-            $em->flush();
+
+        if($request->get('_Nomsociete'))
+        {
+            for($i = 0; $i< count($request->get('_Nomsociete'));$i++) {
+                $experience = new Experience();
+                $experience->setNomsociete($request->get('_Nomsociete')[$i]);
+                $experience->setActivite($request->get('_Activite')[$i]);
+                $experience->setLieu($request->get('_Lieu')[$i]);
+                $experience->setPoste($request->get('_Poste')[$i]);
+                $experience->setNbreannee($request->get('_Nbreannee')[$i]);
+                $experience->setDescription($request->get('_Descriptionexp')[$i]);
+                $experience->setImportCandidat($apprenant);
+                $em->persist($experience);
+                $em->flush();
+            }
         }
 
-        for($i = 0; $i< count($request->get('_Langue'));$i++) {
-        $langue = new Langue();
-            $langue->setLangue($request->get('_Langue')[$i]);
-            $langue->setNiveau($request->get('_Niveau')[$i]);
-            $em->persist($langue);
-            $em->flush();
+
+
+        if($request->get('_Nomrec'))
+        {
+            for($i = 0; $i< count($request->get('_Nomrec'));$i++) {
+                $recommandation = new Recommandation();
+                $recommandation->setNom($request->get('_Nomrec')[$i].' '.$request->get('_Prenomrec')[$i]);
+                $recommandation->setFonction($request->get('_Fonctionrec')[$i]);
+                $recommandation->setTelephone($request->get('_Telephonerec')[$i]);
+                $recommandation->setEmail($request->get('_Emailrec')[$i]);
+                $recommandation->setText($request->get('_Text')[$i]);
+                $recommandation->setImportCandidat($apprenant);
+                $em->persist($recommandation);
+                $em->flush();
+            }
         }
+
+
+        if($request->get('_Langue'))
+        {
+            for($i = 0; $i< count($request->get('_Langue'));$i++) {
+                $langue = $em->getRepository('GenericBundle:Langue')->findOneBy(array('langue'=>$request->get('_Langue')[$i],'niveau'=>$request->get('_Niveau')[$i]));
+                $langue->addImportCandidat($apprenant);
+                $em->flush();
+            }
+        }
+
 
         if($request->get('formations'))
         {
@@ -918,7 +1018,7 @@ class DefaultController extends Controller
                 $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->find($idFormation);
                 $candidature = new Candidature();
                 $candidature->setFormation($formation);
-                $candidature->setImportapprenant($apprenant);
+                $candidature->setImportcandidat($apprenant);
                 $em->persist($candidature);
                 $em->flush();
             }
@@ -931,22 +1031,21 @@ class DefaultController extends Controller
                 $em->flush();
             }
         }
-        for($i = 0; $i < count($request->get('_Type')); $i++)
+        if($request->get('_Type'))
         {
-            $document = new Document();
-            $document->setType($request->get('_Type')[$i]);
-            $document->setExtension($_FILES['_Document']['type'][$i]);
-            $document->setName($_FILES['_Document']['name'][$i]);
-            $document->setTaille($_FILES['_Document']['size'][$i]);
-            $document->setDocument(file_get_contents($_FILES['_Document']['tmp_name'][$i]));
-            $document->setImportCandidat($candidature);
-            $em->persist($document);
-            $em->flush();
+            for($i = 0; $i < count($request->get('_Type')); $i++)
+            {
+                $document = new Document();
+                $document->setType($request->get('_Type')[$i]);
+                $document->setExtension($_FILES['_Document']['type'][$i]);
+                $document->setName($_FILES['_Document']['name'][$i]);
+                $document->setTaille($_FILES['_Document']['size'][$i]);
+                $document->setDocument(file_get_contents($_FILES['_Document']['tmp_name'][$i]));
+                $document->setImportCandidat($apprenant);
+                $em->persist($document);
+                $em->flush();
+            }
         }
-
-
-
-
         // var_dump($apprenant);die;
 
 

@@ -59,7 +59,7 @@ class Formation
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Qcmdef", mappedBy="formationformation")
+     * @ORM\ManyToMany(targetEntity="Qcmdef", mappedBy="formation")
      */
     private $qcmdef;
 

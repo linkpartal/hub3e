@@ -114,7 +114,7 @@ class User extends BaseUser
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\Langue", mappedBy="users")
+     * @ORM\ManyToMany(targetEntity="Langue", mappedBy="users")
      */
     private $langue;
 
@@ -129,6 +129,13 @@ class User extends BaseUser
     private $info;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Reponsedef", mappedBy="users")
+     */
+    private $reponsedef;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -137,6 +144,7 @@ class User extends BaseUser
         $this->langue = new \Doctrine\Common\Collections\ArrayCollection();
         $this->referenciel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->hobbies = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->reponsedef = new \Doctrine\Common\Collections\ArrayCollection();
         $this->mission = new \Doctrine\Common\Collections\ArrayCollection();
     }
 

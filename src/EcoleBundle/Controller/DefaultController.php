@@ -31,14 +31,14 @@ class DefaultController extends Controller
         $users = $this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($user->getTier());
         $apprenants =array();
         $notapprenant = array();
-        foreach($users as $user)
+        foreach($users as $userd)
         {
             if($user->hasRole('ROLE_APPRENANT'))
             {
-                array_push($apprenants,$user);
+                array_push($apprenants,$userd);
             }
             else{
-                array_push($notapprenant,$user);
+                array_push($notapprenant,$userd);
             }
         }
         $import_apprenant = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser()));
