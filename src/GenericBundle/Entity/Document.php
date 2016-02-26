@@ -58,12 +58,12 @@ class Document
 
     /**
      * @var \User
-     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="users_id", referencedColumnName="id")
      * })
      */
-    private $users;
+    private $user;
 
     /**
      * @var \GenericBundle\Entity\ImportCandidat
@@ -200,25 +200,25 @@ class Document
     /**
      * Set users
      *
-     * @param \GenericBundle\Entity\User $users
+     * @param \GenericBundle\Entity\User $user
      *
      * @return Document
      */
-    public function setUsers(\GenericBundle\Entity\User $users)
+    public function setUser(\GenericBundle\Entity\User $user)
     {
-        $this->users = $users;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get users
+     * Get user
      *
      * @return \GenericBundle\Entity\User
      */
-    public function getUsers()
+    public function getUser()
     {
-        return $this->users;
+        return $this->user;
     }
 
     /**
