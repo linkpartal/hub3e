@@ -17,6 +17,25 @@
 <div class="container" style="padding: 0;">
     {% block Content %}
 
+            <div id="Hobby" style="display: none;" >
+                <input type="hidden" id="inputHobbie" >
+
+                <label class="champ form-control" style="width: 150px;" for="hobbie"></label>
+
+                <img   onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
+
+
+            </div>
+
+        <div id="DivNewLangue" style="display: none;" >
+            <input type="hidden" id="inputLangue" >
+            <input type="hidden" id="inputNiveau" >
+            <label class="champ form-control" style="width: 150px;" for="langue"></label>
+            <label class="champ form-control"  for="Niveau"></label>
+            <img   onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
+
+
+        </div>
         {% if User is defined %}
 
         <div id="addparent" class="popup" >
@@ -307,6 +326,7 @@
                                     <option value="info_diplome" style="color:black;">Diplomes </option>
                                     <option value="info_doc" style="color:black;">Documents </option>
                                     <option value="QCM_Affinite" style="color:black;">QCM Affinite </option>
+                                    <option value="QCM_Test" style="color:black;">QCM Test </option>
                                 </select>
 
                             {% else  %}
@@ -422,7 +442,6 @@
 
 
                             </div>
-
                             {% if User.hasRole('ROLE_APPRENANT') %}
                                 <div id="info_Apprenant" class="col-xs-12 Liste" style="display:none;">
 
@@ -435,8 +454,6 @@
                                             <input value="{{User.getInfo.getCpnaissance}}" type="text" class="champ form-control" id="Cpnaissance" name="_Cpnaissance" maxlength="45" readonly>
 
                                         </div>
-
-
 
                                         <div class="inputcontainer">
                                             <label class="list-group-item" style="height: 60px;" for="Lieunaissance">Lieu naissance:</label>
@@ -486,30 +503,33 @@
 
                                         </div>
 
-
-
                                         <div class="inputcontainer" >
                                             <div id="ajout_hobbie" style="display: none;">
 
-                                                <select style=" width:150px;height: 40px"   name="_Hobbie">
-                                                    <option value="">--?-- </option>
-                                                    <option value="sport ">sport </option>
-                                                    <option value="lecture">lecture </option>
-                                                    <option value="Musique">Musique </option>
-                                                    <option value="Danse">Danse </option>
-                                                    <option value="Photographie">Photographie </option>
 
-                                                    <option value="Yoga">Yoga </option>
-                                                    <option value="aviation">Photographie </option>
+                                                {% if Hobbies is defined %}
 
-                                                </select>
+                                                    <select style=" width:150px;height: 40px" id="Newhobbie"  name="_Hobbie">
+                                                        <option value="">--?-- </option>
+                                                        {% for hobbie in Hobbies %}
 
-                                                <img   src="{{ asset('image/add_x30.png') }}"/><br>
+                                                            <option value="{{ hobbie.getId }}">{{ hobbie.getHobbie }}</option>
+
+                                                        {% endfor %}
+                                                    </select>
+                                                {% endif %}
+
+
+
+
+
+
+
+
+
+                                                <img  OnClick="ajouterHobbie(this.previousElementSibling)"  src="{{ asset('image/add_x30.png') }}"/><br>
                                             </div>
                                         </div>
-
-
-
 
                                         <div class="inputcontainer">
 
@@ -538,39 +558,39 @@
 
 
                                         </div>
+
                                         <div class="inputcontainer" >
                                             <div id="ajout_langue" style="display: none;">
 
-                                                <select style=" width:150px;height: 40px"   name="_Langue">
+                                                <select style=" width:150px;height: 40px" id="NewLangue"  name="_Langue">
                                                     <option value="">--?-- </option>
-                                                    <option value="Francais ">Francais </option>
-                                                    <option value="Anglais ">Anglais </option>
-                                                    <option value="Espagnol ">Espagnol </option>
-                                                    <option value="Arabe ">Arabe </option>
-                                                    <option value="Allemand ">Allemand </option>
+                                                    <option value="Francais">Francais </option>
+                                                    <option value="Anglais">Anglais </option>
+                                                    <option value="Espagnol">Espagnol </option>
+                                                    <option value="Arabe">Arabe </option>
+                                                    <option value="Allemand">Allemand </option>
 
                                                 </select>
 
 
-                                                <select  style="height: 40px;width:250px;"   name="_Niveau">
+                                                <select  style="height: 40px;width:250px;"  id="NewNiveau"  name="_Niveau">
                                                     <option value="">--?-- </option>
-                                                    <option value="connaissances de base ">connaissances de base </option>
-                                                    <option value="bonnes connaissances ">bonnes connaissances </option>
-                                                    <option value="courant ">courant </option>
-                                                    <option value="langue maternelle ">langue maternelle </option>
+                                                    <option value="connaissances de base">connaissances de base </option>
+                                                    <option value="bonnes connaissances">bonnes connaissances </option>
+                                                    <option value="courant">courant </option>
+                                                    <option value="langue maternelle">langue maternelle </option>
 
                                                 </select>
-                                                <img   src="{{ asset('image/add_x30.png') }}"/><br>
+                                                <img onclick="ajouterLangue(this.previousElementSibling.previousElementSibling)"  src="{{ asset('image/add_x30.png') }}"/><br>
                                             </div>
                                         </div>
-
-
-
-
                                     {% endif %}
 
                                 </div>
 
+                            {% endif %}
+                        </form>
+                            {% if User.hasRole('ROLE_APPRENANT') %}
                                 <div id="info_parents" class="list-group affichage" style="display:none">
 
                                     {% if Parents is defined %}
@@ -810,13 +830,52 @@
                                                                 <input type="text" class="champ " id="Question" name="questions[]" value="{{question.getQuestion  }}" required maxlength="255" readonly>
                                                                 {% for reponse in reponses[i][y] %}
                                                                     <div>
-                                                                        <input type="radio" name="reponse[{{ reponsegroupe }}]" value="{{ reponse.getId }}"  ><label style="font: 14px Roboto black; ">{{ reponse.getReponse }}</label>
+                                                                        <input type="radio" name="reponse[{{ y }}]" value="{{ reponse.getId }}"  ><label style="font: 14px Roboto black; ">{{ reponse.getReponse }}</label>
                                                                     </div>
                                                                 {% endfor %}
                                                             </div>
                                                             {% set y = y + 1 %}
                                                         {% endfor %}
-                                                        {% set reponsegroupe = reponsegroupe + 1 %}
+                                                        {% set i = i + 1 %}
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div id="QCM_Test" class="list-group affichage" style="display:none">
+
+                                    <div class="col-xs-12">
+                                        <div class="list-group" style="background: #1B2024; margin: 30px 0 0 30px; padding: 0 0; border-left: 20px solid white; border-right: 20px solid white !important; text-align: left;">
+
+                                            {{ dump(QuestionsTest) }}
+                                            <form class="formulaire" id="form" action="{{ path('Add_QCM') }}" method="post">
+                                                {% set i = 0 %}
+                                                {% set reponsegroupe = 0 %}
+                                                {% if QCMtest is defined %}
+                                                    {% for QCM in QCMtest %}
+
+                                                        <div class="inputcontainer" name="21456dddd">
+                                                            <label class="list-group-item" style="height: 60px;" for="QCM">Nom du Questionnaire :</label>
+                                                            <input type="text" class="champ " id="QCM" name="_Nom" value="{{ QCM.getNom }}" required maxlength="45" readonly><br>
+                                                        </div>
+                                                        {% set y = 0 %}
+
+                                                        {% for questionTest in QuestionsTest[i] %}
+                                                            <div class="inputcontainer" name="question">
+                                                                <label class="list-group-item" style="height: 60px;" for="Question">Question :</label>
+                                                                <input type="text" class="champ " id="Question" name="questions[]" value="{{questionTest.getQuestion  }}" required maxlength="255" readonly>
+                                                                {% for reponseTest in reponsesTest[i][y] %}
+                                                                    <div>
+                                                                        <input type="radio" name="reponse[{{ y }}]" value="{{ reponseTest.getId }}"  ><label style="font: 14px Roboto black; ">{{ reponseTest.getReponse }}</label>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                            {% set y = y + 1 %}
+                                                        {% endfor %}
+
                                                         {% set i = i + 1 %}
                                                     {% endfor %}
                                                 {% endif %}
@@ -827,7 +886,7 @@
 
                                 </div>
                             {% endif %}
-                        </form>
+
 
 
 
@@ -885,6 +944,11 @@
         document.getElementById('info_diplome').style.display= 'none';
         document.getElementById('info_doc').style.display= 'none';
         document.getElementById('info_candidature').style.display= 'none';
+        document.getElementById('QCM_Affinite').style.display= 'none';
+        document.getElementById('QCM_Test').style.display= 'none';
+
+
+
 
 
         document.getElementById(x).style.display='block';
@@ -1049,7 +1113,7 @@
             success: function(data){console.log(data);}
         });
         champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
-    };
+    }
 
 
     function supprimerExperience(route, champs) {
@@ -1062,7 +1126,7 @@
             success:function(data){console.log(data);}
         });
         champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
-    };
+    }
 
 
    function supprimerRecommandation(route, champs){
@@ -1076,7 +1140,7 @@
        });
        champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
 
-   };
+   }
 
     function supprimerDiplome(route, champs){
         $.ajax({
@@ -1089,7 +1153,7 @@
         });
         champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
 
-    };
+    }
     function supprimerFormation(route, champs){
         $.ajax({
             type: 'get',
@@ -1101,7 +1165,7 @@
         });
         champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
 
-    };
+    }
 
 
     function supprimerDocument(route, champs){
@@ -1115,8 +1179,107 @@
         });
         champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
 
-    };
+    }
 
+    function ajouterHobbie(me){
+
+        var dup = document.getElementById('Hobby');
+        var clone = dup.cloneNode(true);
+
+        var route = '{{path('ajouter_Hobbie',{'id':"_idHobbie",'IdUser':"_IdUser"})}}';
+        var select = document.getElementById("Newhobbie");
+        var choice = select.selectedIndex  // Récupération de l'index du <option> choisi
+        var idhobbie = select.options[choice].value; // Récupération du texte du <option> d'index "choice"
+
+        if(me.value.trim() =='')
+        {
+            alert('choisissez une hobbie');
+            me.value='';
+            return;
+        }
+
+        //me.parentNode.getAttribute('id')
+        clone.style.display = 'block';
+        clone.getElementsByTagName("label")[0].innerHTML = select.options[choice].innerHTML;
+        clone.getElementsByTagName("input")[0].setAttribute("name","hobbie"+me.parentNode.parentNode.getAttribute('id'));
+        clone.getElementsByTagName("input")[0].value = me.value.trim();
+
+       // me.parentNode.parentNode.parentNode.previousSibling.appendChild(clone);
+
+        me.parentNode.parentNode.previousElementSibling.appendChild(clone);
+
+        route=route.replace('_idHobbie',idhobbie);
+        route=route.replace('_IdUser','{{ User.id}}');
+        $.ajax({
+            type: 'get',
+            url: route,
+            success: function(data) {
+                console.log(data);
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+
+
+    }
+
+    function ajouterLangue(me){
+
+        var dup = document.getElementById('DivNewLangue');
+        var clone = dup.cloneNode(true);
+
+        var route = '{{path('ajouter_Langue',{'id':"_idLangue",'IdNiveau':"_idNiveau",'IdUser': User.id})}}';
+        var select = document.getElementById("NewLangue");
+        var choice = select.selectedIndex;  // Récupération de l'index du <option> choisi
+        var idLangue = select.options[choice].value; // Récupération du texte du <option> d'index "choice"
+
+        var select2 = document.getElementById("NewNiveau");
+        var choice2 = select2.selectedIndex;  // Récupération de l'index du <option> choisi
+        var idNiveau = select2.options[choice2].value; // Récupération du texte du <option> d'index "choice"
+
+        if(me.value.trim() =='')
+        {
+            alert('choisissez une langue');
+            me.value='';
+            return;
+        }
+        console.log(me.nextElementSibling.value);
+        if(me.nextElementSibling.value.trim() =='')
+        {
+            alert('choisissez une niveau');
+            me.value='';
+            return;
+        }
+
+        //me.parentNode.getAttribute('id')
+        clone.style.display = 'block';
+
+        clone.getElementsByTagName("label")[0].innerHTML = select.options[choice].innerHTML;
+        clone.getElementsByTagName("input")[0].setAttribute("name","langue"+me.parentNode.parentNode.getAttribute('id'));
+        clone.getElementsByTagName("input")[0].value = me.value.trim();
+        clone.getElementsByTagName("label")[1].innerHTML = select2.options[choice2].innerHTML;
+        clone.getElementsByTagName("input")[1].setAttribute("name","niveau["+me.parentNode.parentNode.getAttribute('id')+"][]");
+        clone.getElementsByTagName("input")[1].value = me.nextElementSibling.value.trim();
+
+        me.parentNode.parentNode.previousElementSibling.appendChild(clone);
+
+
+        route=route.replace('_idLangue',idLangue);
+        route=route.replace('_idNiveau',idNiveau);
+        $.ajax({
+            type: 'get',
+            url: route,
+            success: function(data) {
+                console.log(data);
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+
+
+    }
     {% endif %}
 </script>
 </body>
