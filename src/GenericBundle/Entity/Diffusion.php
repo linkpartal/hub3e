@@ -3,11 +3,12 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * Diffusion
  *
- * @ORM\Table(name="diffusion")
+ * @ORM\Table(name="diffusion",uniqueConstraints={@UniqueConstraint(name="unique_formation_mission", columns={"formation_id","mission_id"})})
  * @ORM\Entity
  */
 class Diffusion

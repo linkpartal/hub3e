@@ -226,7 +226,7 @@
                 <div id="mission_propose" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if missions_propose is defined %}
                         {% for m in missions_propose %}
-                            <button id="mission_propose{{ m.getId }}" type="button" class="list-group-item butonLigne">
+                            <button id="mission_propose{{ m.getId }}" onclick="postiframeUser('{{ path('Afficher_Mission_Propose',{'id':m.id}) }}')" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{m.getCodemission}}">{{m.getCodemission}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">

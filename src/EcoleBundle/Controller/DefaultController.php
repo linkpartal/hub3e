@@ -42,7 +42,7 @@ class DefaultController extends Controller
                     {
                        array_push($mes_missions,$diffusion->getMission());
                     }
-                    elseif(!$diffusion->getStatut()==0){
+                    elseif($diffusion->getStatut()==1){
                         array_push($missions_propose,$diffusion->getMission());
                     }
                 }

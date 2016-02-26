@@ -38,13 +38,6 @@ class Mission
     /**
      * @var string
      *
-     * @ORM\Column(name="Etat", type="string", length=45, nullable=true)
-     */
-    private $etat;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="TypeContrat", type="string", length=45, nullable=true)
      */
     private $typecontrat;
@@ -254,30 +247,6 @@ class Mission
     public function getProfil()
     {
         return $this->profil;
-    }
-
-    /**
-     * Set etat
-     *
-     * @param string $etat
-     *
-     * @return Mission
-     */
-    public function setEtat($etat)
-    {
-        $this->etat = $etat;
-
-        return $this;
-    }
-
-    /**
-     * Get etat
-     *
-     * @return string
-     */
-    public function getEtat()
-    {
-        return $this->etat;
     }
 
     /**

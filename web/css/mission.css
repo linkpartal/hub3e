@@ -42,6 +42,27 @@ body {
 
 }
 
+.rightMenu input{
+    text-align: center;
+}
+
+textarea , input:read-only{
+    background-color: transparent;
+    border: none;
+
+}
+textarea
+{
+    resize: none;
+    width: 100%;
+    height: 100px;
+    overflow-y: auto;
+}
+.rightMenu input:disabled{
+    background-color: transparent;
+    border: none;
+
+}
 .info{
     height: 40px;
     padding: 10px 0 10px 0 !important;
@@ -141,4 +162,68 @@ button:focus{
     margin: 3px 0;
     width: 9px;
     float: left;
+}
+
+.Liste
+{
+    background: white;
+    margin: 15px 0 0 15px;
+    padding: 0 0;
+    text-align: left;
+    display: table;
+    border-collapse: collapse;
+    width: calc(100% - 15px);
+}
+.Liste .row
+{
+    border-bottom: 1px solid black;
+    border-left: 15px solid white;
+    border-right: 15px solid white;
+    display: table-row
+}
+.Liste .row .cell
+{
+    height: 40px;
+    padding: 10px 0 10px 0 !important;
+    width: 50%;
+    display: table-cell;
+    border: none !important;
+    border-radius: 0 !important;
+    color: #7F7F7F !important;
+    font : 20px arial;
+    margin: 0 !important;
+}
+
+.Liste .row .cell label
+{
+    color: black;
+}
+
+.Liste .row .cell .button
+{
+    background-color: white;
+    border: none;
+}
+.Liste .row .cell .button.collapsed:before
+{
+    font-family: 'Glyphicons Halflings';
+    content:" \e252";
+}
+.Liste .row .cell .button:before
+{
+    font-family: 'Glyphicons Halflings';
+    content:" \e253";
+}
+.Liste .row .cell .button:before
+{
+    font-family: 'Glyphicons Halflings';
+    content:" \e253";
+}
+.Liste .collapse.in {display: table-row-group;}
+.Liste .collapsing {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    display: table-row-group;
+.transition(height .35s ease);
 }

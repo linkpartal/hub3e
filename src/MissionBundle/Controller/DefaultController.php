@@ -19,7 +19,6 @@ class DefaultController extends Controller
 
         $mission->setDescriptif($request->get('_Descriptif'));
         $mission->setProfil($request->get('_Profil'));
-        $mission->setEtat($request->get('_Etat'));
         $mission->setTypecontrat($request->get('_TypeContrat'));
         $mission->setDomaine($request->get('_Domaine'));
         $date = new \DateTime();
@@ -104,12 +103,6 @@ class DefaultController extends Controller
         return $reponse->setData(array('Status'=>'Mission correctement supprimer'));
     }
 
-    public function modifierAction($id)
-    {
-        $missionid = $this->getDoctrine()->getRepository('GenericBundle:Mission')->find($id);
-        return $this->render('AdminBundle:Admin:modifierMission.html.twig',array('mission'=>$missionid));
-    }
-
     public function missionModifAction(Request $request){
         $em = $this->getDoctrine()->getManager();
 
@@ -117,25 +110,75 @@ class DefaultController extends Controller
         $mission->setProfil($request->get('_Profil'));
         $mission->setCodemission($request->get('_Codemission'));
         $mission->setDescriptif($request->get('_Descriptif'));
-
-        $mission->setEtat($request->get('_Etat'));
         $mission->setTypecontrat($request->get('_TypeContrat'));
-        $mission->setNomcontact($request->get('_NomContact'));
-        $mission->setPrenomContact($request->get('_PrenomContact'));
-        $mission->setFonctionContact($request->get('_FonctionContact'));
-        $mission->setTelContact($request->get('_TelContact'));
         $mission->setEmailcontact($request->get('_Emailcontact'));
-        $mission->setIntitule($request->get('_Intitule'));
         $mission->setDomaine($request->get('_Domaine'));
         $mission->setDatedebut(date_create($request->get('_Datedebut')) );
         $mission->setDatefin(date_create($request->get('_Datefin')) );
-        $mission->setEmploi($request->get('_Emploi'));
         $mission->setRemuneration($request->get('_Remuneration'));
-        $mission->setHoraire($request->get('_Horaire'));
 
 
         $em->flush();
 
         return $this->redirect($this->generateUrl('admin_afficheMission',array('id'=>$request->get('_ID'))));
     }
+
+    public function DiffuserMissionAction($id ,Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $mission = $em->getRepository('GenericBundle:Mission')->find($id);
+        foreach($request->get('formation') as $idformation)
+        {
+            if($idformation == 'Recherche')
+            {
+                continue;
+            }
+
+            $formation = $em->getRepository('GenericBundle:Formation')->find($idformation);
+            $duplicata = $em->getRepository('GenericBundle:Diffusion')->findOneBy(array('formation'=>$formation,'mission'=>$mission));
+            if(!$duplicata)
+            {
+                $diffuser = new Diffusion();
+                $diffuser->setFormation($formation);
+                $diffuser->setMission($mission);
+                $diffuser->setStatut(1);
+                $em->persist($diffuser);
+                $em->flush();
+            }
+        }
+        $response = new JsonResponse();
+        return $response->setData(array('status'=>1));
+    }
+
+    public function AfficherMissionProposeAction($id)
+    {
+        $mission = $this->getDoctrine()->getRepository('GenericBundle:Mission')->find($id);
+
+        if($mission->getEtablissement()->getTier()->getLogo())
+        {
+            $mission->getEtablissement()->getTier()->setLogo(base64_encode(stream_get_contents($mission->getEtablissement()->getTier()->getLogo())));
+        }
+        if($mission->getEtablissement()->getTier()->getFondecran())
+        {
+            $mission->getEtablissement()->getTier()->setFondecran(base64_encode(stream_get_contents($mission->getEtablissement()->getTier()->getFondecran())));
+        }
+        $diffusions = $this->getDoctrine()->getRepository('GenericBundle:Diffusion')->findBy(array('mission'=>$mission));
+
+        // var_dump($mission);die;
+        return $this->render('MissionBundle::MissionProposee.html.twig',array('mission'=>$mission,'diffusions'=>$diffusions));
+    }
+
+    public function ValiderDiffusionAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $diffusion = $em->getRepository('GenericBundle:Diffusion')->find($id);
+        if($diffusion)
+        {
+            $diffusion->setStatut(2);
+            $em->flush();
+        }
+
+        $response = new JsonResponse();
+        return $response->setData(array('status'=>1));
+    }
+
 }

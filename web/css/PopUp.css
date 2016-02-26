@@ -35,7 +35,7 @@
     background-color: white;
     padding: 10px 0 10px 0;
     border-bottom: 1px solid #4cae4c;
-    display: inline-table;
+    display: inline-block;
     width: 100%;
 }
 

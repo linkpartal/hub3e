@@ -10,15 +10,21 @@ mission_added:
     path: /mission_added
     defaults: { _controller: MissionBundle:Default:addMission}
 
-modifierMission:
-    path: /modifierMiss/{id}
-    defaults: { _controller: MissionBundle:Default:modifier}
-
 missionModif:
     path: /missionModif
     defaults: { _controller: MissionBundle:Default:missionModif}
 
 
-MettreEnRelation_added:
-    path: /MettreEnRelation_added
-    defaults: { _controller: MissionBundle:Default:addMettreEnRelation}
+Diffuser_Mission:
+    path: /DiffuserMission/id={id}
+    defaults: { _controller: MissionBundle:Default:DiffuserMission}
+
+Afficher_Mission_Propose:
+    path: /MissionPropose/id={id}
+    defaults: { _controller: MissionBundle:Default:AfficherMissionPropose}
+
+Valider_Diffusion:
+    path: /ValiderDiffusion/id={id}
+    defaults: { _controller: MissionBundle:Default:ValiderDiffusion}
+
+

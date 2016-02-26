@@ -17,3 +17,16 @@ function show(div,hiddenval){
         document.getElementById("EcoleBool").setAttribute("value",hiddenval);
     }
 }
+
+function stringWith (str, prefix) {
+    var ustring = str.toUpperCase();
+    var uprefix = prefix.toUpperCase();
+    if (ustring.indexOf(uprefix) >= 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
