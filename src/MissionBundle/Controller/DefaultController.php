@@ -85,9 +85,15 @@ class DefaultController extends Controller
             $formations_prop = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll();
         }
 
+        $informations_maps = array();
+        foreach($users as $user)
+        {
+            array_push($informations_maps,[$user->getNom() .' '. $user->getPrenom(),$user->getInfo()->getAdresse()]);
+        }
+
 
         // var_dump($mission);die;
-        return $this->render('MissionBundle::afficheMission.html.twig',array('mission'=>$mission,'users'=>$users,'formations_prop'=>$formations_prop));
+        return $this->render('MissionBundle::afficheMission.html.twig',array('mission'=>$mission,'users'=>$users,'formations_prop'=>$formations_prop,'informations_maps'=>$informations_maps));
 
 
 

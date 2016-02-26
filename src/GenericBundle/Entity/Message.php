@@ -24,7 +24,7 @@ class Message
     /**
      * @var string
      *
-     * @ORM\Column(name="Message", type="string", length=255, nullable=false)
+     * @ORM\Column(name="Message", type="text", nullable=false)
      */
     private $message;
 

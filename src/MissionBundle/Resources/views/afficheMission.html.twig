@@ -488,8 +488,10 @@
                 </div>
                 <label class="col-xs-12" style="color:white;font: 10px Roboto;text-transform: uppercase; text-align: center;top:30px;">{{ apprenant.getPrenom }} {{ apprenant.getNom }}</label>
                 <label class="col-xs-12" style="color:white;font: 10px Roboto;text-transform: uppercase; text-align: center;top:30px;">4.7<img src="{{ asset('image/bookmark50.png') }}" style="height: 10px"></label>
-                <button class="col-xs-12" style="margin-top: 30px;">Voir sa fiche</button>
-                <button class="col-xs-12" >Mettre en relation</button>
+                <button type="button" onclick="informationApprenant('{{apprenant.getPhotos}}','{{ apprenant.getCivilite }}','{{ apprenant.getNom }}','{{ apprenant.getPrenom }}','{{ apprenant.getEmail }}',
+                        '{{ apprenant.getTelephone }}','{{ apprenant.getInfo.getDateNaissance|date("d/m/Y") }}','{{ apprenant.getInfo.getCpNaissance }}','{{ apprenant.getInfo.getLieunaissance }}',
+                        '{{ apprenant.getInfo.getAdresse }}');show('FicheApprenant');" class="col-xs-12" style="margin-top: 30px;">Voir sa fiche</button>
+                <button type="button" onclick="show('MettreEnRelation')" class="col-xs-12" >Mettre en relation</button>
                 <button class="col-xs-12">plus</button>
             </div>
             {% set i = i +1 %}
@@ -582,7 +584,6 @@
         document.getElementById('mission_button').style.display= 'none';
         document.getElementById('declinerMission_button').style.display= 'block';
     }
-
     var infoWindows = [];var map_localisation;var marker_apprenant;
     function informationApprenantreception(image,nom,prenom,adresse){
         document.getElementById('Proposer').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
@@ -590,8 +591,7 @@
         document.getElementById('Information_Apprenant_titre_adressee').innerHTML = adresse;
 
     }
-    function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse)
-    {
+    function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse) {
         document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
         document.getElementById('Information_Apprenant_Civilite').innerHTML = civilite;
         document.getElementById('Information_Apprenant_Nom').innerHTML = nom;
@@ -629,7 +629,6 @@
         });
 
     }
-
     function FermerPopup(div){
         document.getElementById('information_apprenant').style.display= 'block';
         document.getElementById('information_button').style.display= 'block';
@@ -712,7 +711,6 @@
         map_localisation = new google.maps.Map(document.getElementById("Localisation"), {
             zoom: 15,
             center: loc,
-            map:draggable,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         });
         marker = new google.maps.Marker({
@@ -752,14 +750,15 @@
             }
         });
         {% endif %}
-        address = ['avenue My Abdellah 1 Agadir','Avenue Hassan 1 Agadir'];
+
+        var informations_users = JSON.parse('{{ informations_maps|json_encode }}'.replace(/&quot;/g,'"'));
         var geocoder = new google.maps.Geocoder();
         for(var i = 0; i < {{ users|length }}; i++)
         {
-            geocoder.geocode({'address': address[i]}, function (results, status) {
+            geocoder.geocode({'address': informations_users[i][1]}, function (results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                     locations.push(results[0].geometry.location);
-                    if(locations.length == address.length) {
+                    if(locations.length == informations_users.length) {
                         var markers = [];
                         for(var j = 0; j< locations.length; j++ )
                         {
@@ -768,7 +767,7 @@
                                 position: locations[j],
                                 visible: true,
                                 icon: '{{ asset('image/highscore_marker.png') }}',
-                                label: j.toString()
+                                title: informations_users[j][0]
                             });
                             markers.push(marker);
                             infobox = new InfoBox({
