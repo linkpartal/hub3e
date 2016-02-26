@@ -55,86 +55,6 @@ class DefaultController extends Controller
         }
         $candidatures = $this->getDoctrine()->getRepository('GenericBundle:Candidature')->findBy(array('user'=>$userid));
 
-        if($userid->getEtablissement())
-        {
-            $questions =array();
-            $reponses = array();
-            foreach($userid->getEtablissement()->getQcmdef() as $key => $qcm){
-
-                $questions[$key] = $this->getDoctrine()->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef'=>$qcm));
-                usort($questions[$key],array('\GenericBundle\Entity\Questiondef','sort_questions_by_order'));
-                foreach ( $questions[$key] as $keyqst => $qst)
-                {
-                    $reps = $this->getDoctrine()->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef'=>$qst));
-                    usort($reps,array('\GenericBundle\Entity\Reponsedef','sort_reponses_by_order'));
-                    $reponses[$key][$keyqst] = $reps;
-                }
-
-            }
-
-
-
-            $questionsTest =array();
-            $reponsesTest = array();
-            foreach($candidatures->getFormation()->getQcmdef() as $key => $qcm){
-
-                $questionsTest[$key] = $this->getDoctrine()->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef'=>$qcm));
-                usort($questionsTest[$key],array('\GenericBundle\Entity\Questiondef','sort_questions_by_order'));
-                foreach ( $questionsTest[$key] as $keyqst => $qst)
-                {
-                    $reps = $this->getDoctrine()->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef'=>$qst));
-                    usort($reps,array('\GenericBundle\Entity\Reponsedef','sort_reponses_by_order'));
-                    $reponsesTest[$key][$keyqst] = $reps;
-                }
-
-            }
-
-
-
-
-
-
-            return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid,
-
-                'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,'Hobbies'=>$Hobbies,
-                'candidatures'=>$candidatures,'QCMs'=>$userid->getEtablissement()->getQcmdef(),'Questions'=>$questions,'reponses'=>$reponses,'QCMtest'=>$candidatures->getFormation()->getQcmdef(),'QuestionsTest'=>$questionsTest,'reponsesTest'=>$reponsesTest,));
-        }
-        else{
-            return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid,
-                'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,'Hobbies'=>$Hobbies,
-                'candidatures'=>$candidatures));
-        }
-
-
-    }
-
-    public function affichageSASAction($id){
-
-    }
-
-    public function affichageProfilAction()
-    {
-        $userid = $this->get('security.token_storage')->getToken()->getUser();
-
-
-        $info = $userid->getInfo();
-        $Parents = $this->getDoctrine()->getRepository('GenericBundle:Parents')->findBy(array('user' => $userid));
-
-
-        $Langue = $this->getDoctrine()->getRepository('GenericBundle:Langue')->findAll();
-        $Hobbies = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->findAll();
-
-        $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll();
-
-        $Experience = $this->getDoctrine()->getRepository('GenericBundle:Experience')->findBy(array('user' => $userid));
-        $Recommandation = $this->getDoctrine()->getRepository('GenericBundle:Recommandation')->findBy(array('user' => $userid));
-        $Diplome = $this->getDoctrine()->getRepository('GenericBundle:Diplome')->findBy(array('user' => $userid));
-        $Document = $this->getDoctrine()->getRepository('GenericBundle:Document')->findBy(array('user' => $userid));
-
-        $candidatures = $this->getDoctrine()->getRepository('GenericBundle:Candidature')->findBy(array('user' => $userid));
-
-        $questions = array();
-        $reponses = array();
         if ($userid->getEtablissement()) {
             $questions = array();
             $reponses = array();
@@ -172,15 +92,93 @@ class DefaultController extends Controller
                 }
                 $index++;
             }
-
-
             return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig', array('User' => $userid,
-                'Infocomplementaire' => $info, 'Parents' => $Parents, 'Experience' => $Experience, 'Recommandation' => $Recommandation, 'Diplome' => $Diplome, 'Document' => $Document, 'Langue' => $Langue, 'Hobbies' => $Hobbies,
-                'candidatures' => $candidatures, 'QCMs' => $userid->getEtablissement()->getQcmdef(), 'Questions' => $questions, 'reponses' => $reponses, 'QCMtest' => $QCMtest, 'QuestionsTest' => $questionsTest, 'reponsesTest' => $reponsesTest));
+                'Infocomplementaire' => $info, 'Parents' => $Parents, 'Experience' => $Experience, 'Recommandation' => $Recommandation, 'Diplome' => $Diplome, 'Document' => $Document,
+                'Langue' => $Langue, 'Hobbies' => $Hobbies,'candidatures' => $candidatures, 'QCMs' => $userid->getEtablissement()->getQcmdef(), 'Questions' => $questions,
+                'reponses' => $reponses, 'QCMtest' => $QCMtest, 'QuestionsTest' => $questionsTest, 'reponsesTest' => $reponsesTest,'formations'=>$formation));
+        }
+        else{
+            return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid,'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,
+                'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,'Hobbies'=>$Hobbies,'candidatures'=>$candidatures));
+        }
 
+
+    }
+
+    public function affichageSASAction($id){
+
+    }
+
+    public function affichageProfilAction()
+    {
+        $userid = $this->get('security.token_storage')->getToken()->getUser();
+
+
+        $info = $userid->getInfo();
+        $Parents = $this->getDoctrine()->getRepository('GenericBundle:Parents')->findBy(array('user' => $userid));
+
+
+        $Langue = $this->getDoctrine()->getRepository('GenericBundle:Langue')->findAll();
+        $Hobbies = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->findAll();
+
+        $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll();
+
+        $Experience = $this->getDoctrine()->getRepository('GenericBundle:Experience')->findBy(array('user' => $userid));
+        $Recommandation = $this->getDoctrine()->getRepository('GenericBundle:Recommandation')->findBy(array('user' => $userid));
+        $Diplome = $this->getDoctrine()->getRepository('GenericBundle:Diplome')->findBy(array('user' => $userid));
+        $Document = $this->getDoctrine()->getRepository('GenericBundle:Document')->findBy(array('user' => $userid));
+
+        $candidatures = $this->getDoctrine()->getRepository('GenericBundle:Candidature')->findBy(array('user' => $userid));
+
+        if ($userid->getEtablissement()) {
+            $questions = array();
+            $reponses = array();
+            foreach ($userid->getEtablissement()->getQcmdef() as $key => $qcm) {
+
+                $questions[$key] = $this->getDoctrine()->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef' => $qcm));
+                usort($questions[$key], array('\GenericBundle\Entity\Questiondef', 'sort_questions_by_order'));
+                foreach ($questions[$key] as $keyqst => $qst) {
+                    $reps = $this->getDoctrine()->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef' => $qst));
+                    usort($reps, array('\GenericBundle\Entity\Reponsedef', 'sort_reponses_by_order'));
+                    $reponses[$key][$keyqst] = $reps;
+                }
+
+            }
+
+
+            $questionsTest = array();
+            $reponsesTest = array();
+            $QCMtest = array();
+            foreach ($candidatures as $cand) {
+                $QCMtest = array_merge($QCMtest, $cand->getFormation()->getQcmdef()->toArray());
+            }
+
+            $QCMtest = array_unique($QCMtest);
+
+
+            $index = 0;
+            foreach ($QCMtest as $qcm) {
+                $questionsTest[$index] = $this->getDoctrine()->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef' => $qcm));
+                usort($questionsTest[$index], array('\GenericBundle\Entity\Questiondef', 'sort_questions_by_order'));
+                foreach ($questionsTest[$index] as $keyqst => $qst) {
+                    $reps = $this->getDoctrine()->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef' => $qst));
+                    usort($reps, array('\GenericBundle\Entity\Reponsedef', 'sort_reponses_by_order'));
+                    $reponsesTest[$index][$keyqst] = $reps;
+                }
+                $index++;
+            }
+            return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig', array('User' => $userid,'Infocomplementaire' => $info, 'Parents' => $Parents, 'Experience' => $Experience,
+                'Recommandation' => $Recommandation, 'Diplome' => $Diplome, 'Document' => $Document, 'Langue' => $Langue, 'Hobbies' => $Hobbies, 'candidatures' => $candidatures,
+                'QCMs' => $userid->getEtablissement()->getQcmdef(), 'Questions' => $questions, 'reponses' => $reponses, 'QCMtest' => $QCMtest, 'QuestionsTest' => $questionsTest,
+                'reponsesTest' => $reponsesTest,'formations'=>$formation));
+        }
+        else{
+            return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig', array('User' => $userid,'Infocomplementaire' => $info, 'Parents' => $Parents, 'Experience' => $Experience,
+                'Recommandation' => $Recommandation, 'Diplome' => $Diplome, 'Document' => $Document, 'Langue' => $Langue, 'Hobbies' => $Hobbies,'candidatures' => $candidatures));
         }
     }
-        public function UserAddedAction(Request $request)
+
+    public function UserAddedAction(Request $request)
     {
         $userManager = $this->get('fos_user.user_manager');
         $newuser = $userManager->createUser();
@@ -302,16 +300,15 @@ class DefaultController extends Controller
         return $this->render('UserBundle:Gestion:modifierUtilisateur.html.twig',array('user'=>$userid));
     }
 
+    public function  modifierStatutCandidatureAction($id,$statut){
+        $em = $this->getDoctrine()->getManager();
+        $candi= $em->getRepository('GenericBundle:Candidature')->find($id);
 
-   public function  modifierStatutCandidatureAction($id,$statut){
-      $em = $this->getDoctrine()->getManager();
-       $candi= $em->getRepository('GenericBundle:Candidature')->find($id);
+        $candi->setStatut($statut);
+        $em->flush();
 
-       $candi->setStatut($statut);
-       $em->flush();
-
-       $reponse = new JsonResponse();
-       return $reponse->setData(array('success'=>1));
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('success'=>1));
 
     }
 
@@ -320,7 +317,7 @@ class DefaultController extends Controller
 
         $info = $em->getRepository('GenericBundle:infocomplementaire')->find(array('id'=>$request->get('_IdInfo')));
 
-       // $info->setDatenaissance(date_create($request->get('_Datenaissance')) );
+        // $info->setDatenaissance(date_create($request->get('_Datenaissance')) );
         $info->setCpnaissance($request->get('_Cpnaissance'));
         $info->setLieunaissance($request->get('_Lieunaissance'));
         $info->setAdresse($request->get('_Adresse'));
@@ -407,6 +404,7 @@ class DefaultController extends Controller
 
 
     }
+
     public function ajouterHobbieAction($id,$IdUser)
     {
 
@@ -427,21 +425,23 @@ class DefaultController extends Controller
     {
 
         $em = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository('GenericBundle:User')->find($IdUser);
+        $reponse = new JsonResponse();
+        foreach ($em->getRepository('GenericBundle:Langue')->findBy(array('langue' => $id)) as $langue_dup){
+            if (in_array($langue_dup, $user->getLangue()->toArray())) {
+                return $reponse->setData(array('success' => 0));
+            }
+        }
 
         $langue = $em->getRepository('GenericBundle:Langue')->findOneBy(array('langue'=>$id,'niveau'=>$IdNiveau));
-
-        $user = $em->getRepository('GenericBundle:User')->find($IdUser);
-
         $langue->addUser($user);
 
         $em->flush();
 
-        $reponse = new JsonResponse();
-        return $reponse->setData(array('succes'=>1));
+
+        return $reponse->setData(array('success'=>1));
 
     }
-
-
 
     public function suppParentAction($id)
     {
@@ -488,6 +488,7 @@ class DefaultController extends Controller
         $reponse = new JsonResponse();
         return $reponse->setData(array('Status' => 'diplome correctement supprimer'));
     }
+
     public function suppCandidatureAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -512,9 +513,6 @@ class DefaultController extends Controller
         $reponse = new JsonResponse();
         return $reponse->setData(array('Status' => 'document correctement supprimer'));
     }
-
-
-
 
     public function importAction(Request $request)
     {
@@ -747,8 +745,8 @@ class DefaultController extends Controller
 
     public function afficherImportsAction()
     {
-       return $this->render('UserBundle:Gestion:Import.html.twig',
-           array('imports'=>$this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser()))));
+        return $this->render('UserBundle:Gestion:Import.html.twig',
+            array('imports'=>$this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser()))));
     }
 
     public function supprimerImportsAction($id)
@@ -1121,7 +1119,6 @@ class DefaultController extends Controller
 
     }
 
-
     public function AjouterExperienceAction(Request $request){
         $em = $this->getDoctrine()->getEntityManager();
         $experience = new Experience();
@@ -1174,7 +1171,6 @@ class DefaultController extends Controller
 
     }
 
-
     public function AjouterDiplomeAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -1197,6 +1193,7 @@ class DefaultController extends Controller
             return $this->redirect($this->generateUrl('metier_user_afficheUser',array('id'=>$request->get('_idUser'))));
         }
     }
+
     public function AjouterDocumentAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -1221,6 +1218,7 @@ class DefaultController extends Controller
             return $this->redirect($this->generateUrl('metier_user_afficheUser',array('id'=>$request->get('_idUser'))));
         }
     }
+
     public function AjouterCandidatureAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -1408,5 +1406,21 @@ class DefaultController extends Controller
 
     }
 
+    public function ReponseQCMAction($iduser,$idreponse){
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('GenericBundle:User')->find($iduser);
+        $reponse = $em->getRepository('GenericBundle:Reponsedef')->find($idreponse);
 
+        foreach($em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef'=>$reponse->getQuestiondef())) as $rep)
+        {
+            if(in_array($rep,$user->getReponsedef()->toArray()))
+            {
+                $rep->removeUser($user);
+            }
+        }
+        $reponse->addUser($user);
+        $em->flush();
+        $reponsejson = new JsonResponse();
+        return $reponsejson->setData(array('success'=>1));
+    }
 }

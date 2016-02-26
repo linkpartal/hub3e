@@ -122,3 +122,7 @@ ajouter_Hobbie:
 ajouter_Langue:
     path : /ajouterLangue/id={id}/IdNiveau={IdNiveau}/IdUser={IdUser}
     defaults: { _controller: UserBundle:Default:ajouterLangue}
+
+reponseQCM:
+    path: /reponseQCM/user={iduser}/reponse={idreponse}
+    defaults: { _controller: UserBundle:Default:ReponseQCM }
