@@ -16,7 +16,277 @@
 
 <div class="container" style="padding: 0;">
     {% block Content %}
+
         {% if User is defined %}
+
+        <div id="addparent" class="popup" >
+            <div onclick="hide(this)" class="close" ></div>
+            <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display: block ;margin-top: 20px ">
+                <form id="formaddparent" class="formulaire" action="{{ path("parent_added") }}" onsubmit="document.getElementById('submitaddparent').disabled=true" method="post" enctype="multipart/form-data" method="post" >
+                    <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
+
+                    <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Ajouter responsable</Label>
+                    <div class="div_form" style="">
+
+                            <div class="col-xs-10 input-colonne">
+                                <label id="startTimeLabel" visible="false"></label>
+                            </div>
+
+                            <div class="col-xs-3 input-colonne">
+                                <input placeholder="Nom" class="input" type="text" id="Nomparent" name="_Nomparent" maxlength="45" required >
+                                <select class="input "  title="" name="_Civiliteparent">
+                                    <option value="Monsieur">Mr.</option>
+                                    <option value="Madame">Mme.</option>
+                                </select>
+
+                            </div>
+                            <div class="col-xs-3 input-colonne">
+                                <input placeholder="Prenom" class="input" type="text" id="Prenomparent" name="_Prenomparent" maxlength="45" required >
+                                <input placeholder="Metier" class="input" type="text" id="Metierparent" name="_Metierparent" maxlength="45" required >
+
+
+                            </div>
+
+                            <div class="col-xs-6 input-colonne">
+                                <input placeholder="Adresse postale" class="input" type="text" id="Adresseparent" name="_Adresseparent" maxlength="45" required >
+                                <input placeholder="Adresse email" class="input" type="text" id="Emailparent" name="_Emailparent" maxlength="45" required >
+
+                            </div>
+
+                            <div class="col-xs-3 input-colonne">
+                                <input placeholder="Profession" class="input" type="text" id="Professionparent" name="_Professionparent" maxlength="45" required >
+                            </div>
+
+                            <div class="col-xs-3 input-colonne">
+                                <input placeholder="Téléphone " class="input" type="text" id="Telephoneparent" name="_Telephoneparent" maxlength="45" required >
+                            </div>
+                            <div class="col-xs-3 input-colonne">
+                                <input placeholder="Ville" class="input" type="text" id="Villeparent" name="_Villeparent" maxlength="45" required >
+                            </div>
+
+                            <div class="col-xs-3 input-colonne">
+                                <input placeholder="Code postale" class="input" type="text" id="CodePostaleparent" name="_CodePostaleparent" maxlength="45" required >
+                            </div>
+
+
+                    </div>
+
+
+                    <div class="div_button" style="background-color: white">
+
+                        <input class="blue"  style="float: left" name="submitApprenant" type="button" value="Annuler">
+                        <input class="blue" id="submitaddparent" type="submit" style="margin-left: 550px"  value="Enregistrer" >
+
+                    </div>
+
+
+
+                </form>
+
+            </div>
+        </div>
+
+
+
+        <div id="addExperience" class="popup">
+                <div onclick="hide(this)" class="close"></div>
+                <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
+                    <form id="formaddExperience" class="formulaire" action="{{ path("experience_added") }}" onsubmit="document.getElementById('submitaddExperience').disabled=true"  method="post" enctype="multipart/form-data">
+                        <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
+
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Responsable de l'apprenant</Label>
+                        <div class="div_form" style="">
+                            <div class="col-xs-10 input-colonne">
+                                <label id="startTimeLabel" visible="false"></label>
+                            </div>
+                            <div class="col-xs-6 input-colonne">
+                                <div class="col-xs-6 input-colonne">
+                                    <input placeholder="Nom Société" class="input" type="text" id="Nomsociete" name="_Nomsociete" maxlength="45" required >
+                                    <input placeholder="Activité" class="input" type="text" id="Activite" name="_Activite" maxlength="45" required >
+
+                                </div>
+                                <div class="col-xs-6 input-colonne" style="border-right: 0">
+                                    <input placeholder="Lieu" class="input" type="text" id="Lieu" name="_Lieu" maxlength="45" required >
+                                    <input placeholder="Poste" class="input"  type="text" id="Poste" name="_Poste" maxlength="45" required >
+                                </div>
+                                <input placeholder="Nombre d'années" class="input" type="number" id="Nbreannee" name="_Nbreannee" maxlength="11" required >
+                            </div>
+
+
+                            <div class="col-xs-6 input-colonne " style="height:150px">
+                                <textarea placeholder="Description" class="input" type="text" id="Descriptionexp" name="_Descriptionexp"  required style="resize:none;height:calc( 100% - 13px)"></textarea>
+
+                            </div>
+
+                        </div>
+                        <div class="div_button" style="background-color: white">
+
+                            <input class="blue"  style="float: left" name="submitApprenant" type="button" value="Annuler">
+                            <input class="blue" id="submitaddExperience" type="submit" style="margin-left: 550px"  value="Enregistrer" >
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+
+
+        <div id="addRecommandation" class="popup">
+            <div onclick="hide(this)" class="close"></div>
+            <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
+            <form id="formaddRecommandation" class="formulaire" action="{{ path("recommandation_added") }}" onsubmit="document.getElementById('submitaddRecommandation').disabled=true" method="post" enctype="multipart/form-data">
+
+                <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
+
+                <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Recommandation</Label>
+                <div class="div_form" style="">
+
+                <div class="col-xs-6 input-colonne">
+                    <div class="col-xs-6 input-colonne">
+                        <input placeholder="Nom" class="input" type="text" id="Nom" name="_Nomrec" maxlength="45" required >
+                        <input placeholder="Fonction" class="input" type="text" id="Fonctionrec" name="_Fonctionrec" maxlength="45" required >
+
+                    </div>
+                    <div class="col-xs-6 input-colonne" style="border-right: 0">
+                        <input placeholder="Prenom" class="input" type="text" id="Prenom" name="_Prenomrec" maxlength="45" required >
+                        <input placeholder="Téléphone fixe" class="input"  type="text" id="Telephonerec" name="_Telephonerec" maxlength="45" required >
+                    </div>
+                    <input placeholder="Adresse email" class="input" type="text" id="Emailrec" name="_Emailrec" maxlength="45" required >
+                </div>
+
+
+                <div class="col-xs-6 input-colonne " style="height:150px">
+                    <textarea placeholder="Recommandation écrite" class="input" type="text" id="Text" name="_Text"  required style="resize:none;height:calc( 100% - 13px)"></textarea>
+                </div>
+                    </div>
+
+                <div class="div_button" style="background-color: white">
+
+                    <input class="blue"  style="float: left" name="submitApprenant" type="button" value="Annuler">
+                    <input class="blue" id="submitaddRecommandation" type="submit" style="margin-left: 550px"  value="Enregistrer" >
+
+                </div>
+
+
+            </form>
+                </div>
+        </div>
+
+
+            <div id="addDiplome" class="popup">
+                <div onclick="hide(this)" class="close"></div>
+                <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
+                    <form id="formaddDiplome" class="formulaire" action="{{ path("diplome_added") }}" onsubmit="document.getElementById('submitaddDiplome').disabled=true" method="post" enctype="multipart/form-data">
+
+                        <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
+
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Diplome</Label>
+                        <div class="div_form" style="">
+
+
+                            <div class="col-xs-12 input-colonne">
+                                <input placeholder="Libelle" class="input" type="text" id="Libelle" name="_Libelle" maxlength="45" required >
+
+                            </div>
+
+                            <div class="col-xs-12 input-colonne" >
+                                <input placeholder="Obtention" class="input" type="text" id="Obtention" name="_Obtention" maxlength="45" required >
+                            </div>
+
+                            <div class="col-xs-12 input-colonne" >
+
+                                <input placeholder="école" class="input"  type="text" id="Ecole" name="_Ecole" maxlength="45" required >
+                            </div>
+
+                        </div>
+
+                        <div class="div_button" style="background-color: white">
+
+                            <input class="blue"  style="float: left" name="submitApprenant" type="button" value="Annuler">
+                            <input class="blue" id="submitaddDiplome" type="submit" style="margin-left: 550px"  value="Enregistrer" >
+
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+
+
+            <div id="addDocument" class="popup">
+                <div onclick="hide(this)" class="close"></div>
+                <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
+                    <form id="formaddDocument" class="formulaire" action="{{ path("Document_added") }}" onsubmit="document.getElementById('submitaddDocument').disabled=true" method="post" enctype="multipart/form-data">
+
+                        <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
+
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Document</Label>
+                        <div class="div_form" style="">
+
+
+                            <div class="col-xs-12 input-colonne">
+
+                                <select class="input "  title=""  name="_Type">
+                                    <option value="lettre de motivation" >lettre de motivation</option>
+                                    <option value="cv" >Cv</option>
+                                    <option value="Autre" >Autre</option>
+                                </select>
+                            </div>
+                            <input  type="file" class="input" id="document" name="_Document">
+
+                        </div>
+
+                        <div class="div_button" style="background-color: white">
+
+                            <input class="blue"  style="float: left" name="submitApprenant" type="button" value="Annuler">
+                            <input class="blue" id="submitaddDocument" type="submit" style="margin-left: 550px"  value="Enregistrer" >
+
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+
+            <div id="addFormation" class="popup">
+                <div onclick="hide(this)" class="close"></div>
+                <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
+                    <form id="formaddFormation" class="formulaire" action="{{ path("Candidature_added") }}" onsubmit="document.getElementById('submitaddFormation').disabled=true" method="post" >
+
+                        <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
+
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Candidature</Label>
+                        <div class="div_form" style="">
+
+
+                            <div class="col-xs-12 input-colonne " >
+                                <select class="input" title="" style="height: 100px" name="formations[]" multiple>
+                                    {% for formation in formations %}
+
+                                            <option value="{{ formation.getId }}">{{ formation.getNom }}</option>
+
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="div_button" style="background-color: white">
+
+                            <input class="blue"  style="float: left" name="submitApprenant" type="button" value="Annuler">
+                            <input class="blue" id="submitaddFormation" type="submit" style="margin-left: 550px"  value="Enregistrer" >
+
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+
+
+
+
             <div class="row" style="background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;height: 100%">
 
                 <div class="col-xs-9"
@@ -202,7 +472,7 @@
                                                     <input type="hidden" name="hobbie[{{ i }}]" value="{{ hobby.getId }}" style="margin:10px 5px 10px 0" id="inputHobbie" >
                                                     <label class="champ form-control" style="width: 150px;" for="hobbie">{{hobby.getHobbie}}</label>
 
-                                                    <img  style="width: 0px;height: 0px;" onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
+                                                    <img name="modification" style="width: 0px;height: 0px;" onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
 
 
                                                 </div>
@@ -241,14 +511,6 @@
 
 
 
-
-
-
-
-
-
-
-
                                         <div class="inputcontainer">
 
                                             <label class="list-group-item" style="height: 60px;" >Langues :</label><br>
@@ -264,7 +526,7 @@
                                                         <input type="hidden" name="langue[{{ i }}]" value="{{ lang.getId }}" style="margin:10px 5px 10px 0" id="inputLangue" >
                                                         <label class="champ form-control" style="width: 150px;" for="langue">{{lang.getLangue}}</label>
                                                         <label class="champ form-control"  for="Niveau">{{lang.getNiveau}}</label>
-                                                        <img  style="width: 0px;height: 0px;" onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
+                                                        <img name="modification"  style="width: 0px;height: 0px;" onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
 
 
                                                     </div>
@@ -308,7 +570,9 @@
                                     {% endif %}
 
                                 </div>
+
                                 <div id="info_parents" class="list-group affichage" style="display:none">
+
                                     {% if Parents is defined %}
                                         {% for parent in Parents %}
                                             {% set iddiv = random()  %}
@@ -316,6 +580,8 @@
                                                 <div class="row">
                                                     <label class="cell">Nom : <label>{{ parent.getNom }}</label></label>
                                                     <label class="cell">Prénom : <label>{{parent.getPrenom }}</label>
+
+                                                        <img name="modification" style="display:none;float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerParent('{{ path('supprimer_Parent',{'id': parent.getId }) }}',this)" />
                                                         <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#parent{{ iddiv }}"></button></label>
                                                 </div>
                                                 <div id="parent{{ iddiv }}" class="collapse in" >
@@ -329,13 +595,18 @@
                                                             <label class="cell">Nom jeune fille  : <label>{{ parent.getNomjeunefille }}</label></label>
                                                         {% endif %}
                                                     </div>
+
                                                 </div>
 
                                             </div>
                                         {% endfor %}
                                     {% endif %}
+                                    <div name="modification" style="display: none;">
+                                    <button type="button" class="col-xs-12 blue" style="margin-top:40px;"  onclick="show('addparent')">Ajouter un parent</button>
+                                        </div>
 
                                 </div>
+
                                 <div id="info_Exp" class="list-group affichage" style="display:none">
                                     {% if Experience is defined %}
                                         {% for Exp in Experience %}
@@ -344,7 +615,8 @@
                                                 <div class="row">
                                                     <label class="cell">Nom societe : <label>{{ Exp.getNomsociete }}</label></label>
                                                     <label class="cell">Activite : <label>{{Exp.getActivite }}</label>
-                                                        <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#exp{{ iddiv }}"></button></label>
+                                                        <img name="modification" style="display:none;;float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerExperience('{{ path('supprimer_Experience',{'id':Exp.getId}) }}',this)" />
+                                                        <button class="button" style="display:none;float: right;" type="button" data-toggle="collapse" data-target="#exp{{ iddiv }}"></button></label>
 
                                                 </div>
                                                 <div id="exp{{ iddiv }}" class="collapse in" >
@@ -362,6 +634,10 @@
                                         {% endfor %}
                                     {% endif %}
 
+                                    <div name="modification" style="display: none;">
+                                    <button type="button" class="col-xs-12 blue" style="margin-top: 40px" onclick="show('addExperience')" >Ajouter une Expérience</button>
+                                        </div>
+
                                 </div>
                                 <div id="info_recom" class="list-group affichage" style="display:none">
                                     {% if Recommandation is defined %}
@@ -371,6 +647,7 @@
                                                 <div class="row">
                                                     <label class="cell">Text  : <label>{{ Recom.getText }}</label></label>
                                                     <label class="cell">Nom : <label>{{Recom.getNom }}</label>
+                                                        <img name="modification" style="display:none;float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerRecommandation('{{ path('supprimer_Recommandation',{'id':Recom.getId}) }}',this)" />
                                                         <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#recommandation{{ iddiv }}"></button></label>
 
                                                 </div>
@@ -387,6 +664,9 @@
                                             </div>
                                         {% endfor %}
                                     {% endif %}
+                                    <div name="modification" style="display: none;">
+                                    <button type="button" class="col-xs-12 blue" style="margin-top: 40px" onclick="show('addRecommandation')">Ajouter une Recommandation</button>
+                                        </div>
 
                                 </div>
                                 <div id="info_diplome" class="list-group affichage" style="display:none">
@@ -397,6 +677,7 @@
                                                 <div class="row">
                                                     <label class="cell">Text  : <label>{{ Dip.getLibelle }}</label></label>
                                                     <label class="cell">Obtention : <label>{{Dip.getObtention }}</label>
+                                                        <img name="modification" style="display:none;float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerDiplome('{{ path('supprimer_Diplome',{'id':Dip.getId}) }}',this)" />
                                                         <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#diplome{{ iddiv }}"></button></label>
 
                                                 </div>
@@ -410,6 +691,9 @@
                                         {% endfor %}
                                     {% endif %}
 
+                                    <div name="modification" style="display: none;">
+                                    <button type="button" class="col-xs-12 blue" style="margin-top:40px" onclick="show('addDiplome')">Ajouter un Diplome</button>
+                                    </div>
                                 </div>
                                 <div id="info_doc" class="list-group affichage" style="display:none">
                                     {% if Document is defined %}
@@ -419,6 +703,7 @@
                                                 <div class="row">
                                                     <label class="cell">Type   : <label>{{ Doc.getType }}</label></label>
                                                     <label class="cell">Extention : <label>{{Doc.getExtension }}</label>
+                                                        <img name="modification" style="display:none;float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerDocument('{{ path('supprimer_Document',{'id':Doc.getId}) }}',this)" />
                                                         <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#doc{{ iddiv }}"></button></label>
 
                                                 </div>
@@ -432,7 +717,9 @@
                                             </div>
                                         {% endfor %}
                                     {% endif %}
-
+                                    <div name="modification" style="display: none;">
+                                    <button type="button" class="col-xs-12 blue" style="margin-top:40px" onclick="show('addDocument')">Ajouter un Diplome</button>
+                                        </div>
                                 </div>
                                 <div id="info_candidature" class="list-group affichage" style="display:none">
                                     {% if candidatures is defined %}
@@ -441,7 +728,8 @@
                                             <div class="col-xs-12 Liste">
                                                 <div class="row">
                                                     <label class="cell">Id : <label>{{ candidature.id }}</label></label>
-                                                    <label class="cell">Statut : <label>
+
+                                                    <label class="cell"  >Statut : <label id="lblStatut" name="lblStatut">
                                                             {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_TUTEUR') %}
                                                                 {% if candidature.statut == 1 %}
                                                                     En attente compléments
@@ -454,7 +742,7 @@
                                                                 {% endif %}
                                                             {% elseif is_granted('ROLE_APPRENANT') %}
                                                                 {% if candidature.statut == 1 %}
-                                                                    A compléter
+                                                                     A compléter
                                                                 {% elseif candidature.statut == 2 %}
                                                                     En attente école
                                                                 {% elseif candidature.statut == 3 %}
@@ -464,9 +752,24 @@
                                                                 {% endif %}
                                                             {% endif %}
                                                         </label>
-                                                        <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#parent{{ iddiv }}"></button></label>
+
+                                                        {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_TUTEUR') %}
+
+                                                            {% if candidature.statut == 1 or candidature.statut == 2 %}
+
+                             <img name="modification" style="width:25px;display: none"  alt="Refusé"  title="Refusé" onclick="modifierStatut(this,99,'{{ candidature.id }}')" src="{{ asset('image/stop_x18.png') }}">
+                             <img name="modification"style="display:none" alt="Validé" title="Validé"  onclick="modifierStatut(this,3,'{{ candidature.id }}')" src="{{ asset('image/imgValide.png') }}">
+
+                                                            {% endif %}
+
+                                                        {% endif %}
+
+
+                             <img name="modification"   style="float:right;display:none" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerFormation('{{ path('supprimer_Candidature',{'id':candidature.getId}) }}',this)" />
+
+                                                        <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#cand{{ iddiv }}"></button></label>
                                                 </div>
-                                                <div id="parent{{ iddiv }}" class="collapse in" >
+                                                <div id="cand{{ iddiv }}" class="collapse in" >
                                                     <div class="row">
                                                         <label class="cell">Ecole  : <label>{{ candidature.formation.etablissement.tier.raisonsoc }}</label></label>
                                                         <label class="cell">Adresse : <label>{{ candidature.formation.etablissement.adresse }}</label></label>
@@ -475,11 +778,15 @@
                                                         <label class="cell">Formation : <label>{{ candidature.formation.nom }}</label></label>
                                                         <label class="cell">Date : <label>{{ candidature.datecandidature|date('d/m/Y') }}</label></label>
                                                     </div>
+
                                                 </div>
 
                                             </div>
                                         {% endfor %}
                                     {% endif %}
+                                    <div name="modification" style="display: none;">
+                                    <button  type="button" class="col-xs-12 blue" style="margin-top:40px" onclick="show('addFormation')">Ajouter une Formation</button>
+                                     </div>
                                 </div>
                                 <div id="QCM_Affinite" class="list-group affichage" style="display:none">
 
@@ -563,7 +870,7 @@
         {% endif %}
     {% endblock %}
 </div>
-<script src="//code.jquery.com/jquery.min.js"></script>
+<script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/PopUp.js') }}"></script>
 <script language="JavaScript">
@@ -649,9 +956,46 @@
         document.getElementById("ajout_hobbie").style.display="block";
 
 
+        console.log(document.getElementsByName('modification').length)
+        for( i = 0;i< document.getElementsByName('modification').length; i++)
+        {
+            document.getElementsByName('modification')[i].style.display = 'block';
+        }
+
         button.getElementsByTagName("div")[0].innerHTML="valider";
         button.setAttribute('onclick','document.getElementById(\'formUserSubmit\').click()');
     }
+
+    function modifierStatut(div,value,idcand){
+
+        var route = '{{path('modifierStatut',{'id':"_idCandidature",'statut':"_value"})}}';
+        route=route.replace('_idCandidature',idcand);
+        route=route.replace('_value',value);
+
+        $.ajax({
+            type: 'get',
+            url: route,
+            success: function() {
+                if(value === 3)
+                {
+                    div.parentNode.getElementsByTagName('label')[0].innerHTML = 'Validé';
+                    for(var i = 0; i < div.parentNode.getElementsByTagName('img').length - 1;i++)
+                    {
+                        div.parentNode.getElementsByTagName('img')[i].style.display = 'none';
+                    }
+                }
+                if(value === 99)
+                {
+                    div.parentNode.getElementsByTagName('label')[0].innerHTML = 'Refusé';
+                    for(var i = 0; i < div.parentNode.getElementsByTagName('img').length - 1;i++)
+                    {
+                        div.parentNode.getElementsByTagName('img')[i].style.display = 'none';
+                    }
+                }
+            }
+        });
+    }
+
     function supprimerLangue(div){
 
         var route = '{{path('supprimer_Langue',{'id':"_idLangue",'IdUser':"_IdUser"})}}';
@@ -694,6 +1038,85 @@
 
 
     }
+
+    function supprimerParent(route, champs) {
+        $.ajax({
+            type: 'get',
+            url: route,
+            error: function (response) {
+                console.log(response);
+            },
+            success: function(data){console.log(data);}
+        });
+        champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
+    };
+
+
+    function supprimerExperience(route, champs) {
+        $.ajax({
+            type: 'get',
+            url: route,
+            error: function (reponse) {
+                console.log(reponse);
+            },
+            success:function(data){console.log(data);}
+        });
+        champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
+    };
+
+
+   function supprimerRecommandation(route, champs){
+       $.ajax({
+           type: 'get',
+           url: route,
+           error: function (response) {
+               console.log(response);
+           },
+           success: function(data){console.log(data);}
+       });
+       champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
+
+   };
+
+    function supprimerDiplome(route, champs){
+        $.ajax({
+            type: 'get',
+            url: route,
+            error: function (response) {
+                console.log(response);
+            },
+            success: function(data){console.log(data);}
+        });
+        champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
+
+    };
+    function supprimerFormation(route, champs){
+        $.ajax({
+            type: 'get',
+            url: route,
+            error: function (response) {
+                console.log(response);
+            },
+            success: function(data){console.log(data);}
+        });
+        champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
+
+    };
+
+
+    function supprimerDocument(route, champs){
+        $.ajax({
+            type: 'get',
+            url: route,
+            error: function (response) {
+                console.log(response);
+            },
+            success: function(data){console.log(data);}
+        });
+        champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
+
+    };
+
     {% endif %}
 </script>
 </body>

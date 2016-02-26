@@ -63,3 +63,61 @@ supprimer_Hobbie:
     path : /supprimerHobbie/id={id}/IdUser={IdUser}
     defaults: { _controller: UserBundle:Default:supprimerHobbie}
 
+supprimer_Parent:
+    path : /suppParent/id={id}
+    defaults: { _controller: UserBundle:Default:suppParent}
+
+parent_added:
+    path: /AjouterParent
+    defaults: { _controller: UserBundle:Default:AjouterParent}
+
+supprimer_Experience:
+    path : /suppExperience/id={id}
+    defaults: { _controller: UserBundle:Default:suppExperience}
+
+experience_added:
+    path: /AjouterExperience
+    defaults: { _controller: UserBundle:Default:AjouterExperience }
+
+supprimer_Recommandation:
+    path: /suppRecommandation/id={id}
+    defaults: { _controller: UserBundle:Default:suppRecommandation}
+
+recommandation_added:
+    path: /AjouterRecommandation
+    defaults: { _controller: UserBundle:Default:AjouterRecommandation}
+
+supprimer_Diplome:
+    path: /suppDiplome/id={id}
+    defaults: { _controller: UserBundle:Default:suppDiplome}
+
+diplome_added:
+    path: /AjouterDiplome
+    defaults: { _controller: UserBundle:Default:AjouterDiplome}
+
+supprimer_Document:
+    path: /suppDocument/id={id}
+    defaults: { _controller: UserBundle:Default:suppDocument}
+
+Document_added:
+    path: /AjouterDocument
+    defaults: { _controller: UserBundle:Default:AjouterDocument}
+
+modifierStatut:
+    path: /modifierStatutCandidature/id={id}/statut={statut}
+    defaults: { _controller: UserBundle:Default:modifierStatutCandidature}
+
+supprimer_Candidature:
+    path: /suppCandidature/id={id}
+    defaults: { _controller: UserBundle:Default:suppCandidature}
+
+Candidature_added:
+    path: /AjouterCandidature
+    defaults: { _controller: UserBundle:Default:AjouterCandidature}
+
+
+
+
+
+
+
