@@ -63,3 +63,10 @@ supprimer_Hobbie:
     path : /supprimerHobbie/id={id}/IdUser={IdUser}
     defaults: { _controller: UserBundle:Default:supprimerHobbie}
 
+ajouter_Hobbie:
+    path : /ajouterHobbie/id={id}/IdUser={IdUser}
+    defaults: { _controller: UserBundle:Default:ajouterHobbie}
+
+ajouter_Langue:
+    path : /ajouterLangue/id={id}/IdNiveau={IdNiveau}/IdUser={IdUser}
+    defaults: { _controller: UserBundle:Default:ajouterLangue}

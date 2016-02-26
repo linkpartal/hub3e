@@ -3,11 +3,12 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * Langue
  *
- * @ORM\Table(name="langue")
+ * @ORM\Table(name="langue", uniqueConstraints={@UniqueConstraint(name="unique_langue_niveau", columns={"langue","niveau"})})
  * @ORM\Entity
  */
 class Langue
