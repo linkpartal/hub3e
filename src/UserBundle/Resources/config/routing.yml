@@ -115,6 +115,10 @@ Candidature_added:
     path: /AjouterCandidature
     defaults: { _controller: UserBundle:Default:AjouterCandidature}
 
+afficher_messagerie:
+    path: /afficher_messagerie
+    defaults: { _controller: UserBundle:Default:afficher_messagerie}
+
 
 
 

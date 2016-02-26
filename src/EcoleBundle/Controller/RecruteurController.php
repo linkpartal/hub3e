@@ -10,6 +10,9 @@ class RecruteurController extends Controller
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
+
+        $image = base64_encode(stream_get_contents($user->getPhotos()));
+
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
         $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');
@@ -33,6 +36,6 @@ class RecruteurController extends Controller
             }
         }
         $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date'=>'DESC'));
-        return $this->render('EcoleBundle:Recruteur:index.html.twig', array('notifications'=>$jsonContent ,'users'=>$apprenants,'societes'=>$societes,'missions'=>$missions));
+        return $this->render('EcoleBundle:Recruteur:index.html.twig', array('notifications'=>$jsonContent ,'users'=>$apprenants,'societes'=>$societes,'missions'=>$missions,'image',$image));
     }
 }

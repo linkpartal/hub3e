@@ -136,6 +136,12 @@ class DefaultController extends Controller
         }
     }
 
+
+    public function afficher_messagerieAction(){
+      return  $this->render('UserBundle:messagerie:messagerie.html.twig');
+    }
+
+
     public function UserAddedAction(Request $request)
     {
         $userManager = $this->get('fos_user.user_manager');

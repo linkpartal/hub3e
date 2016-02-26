@@ -12,6 +12,8 @@ class DefaultController extends Controller
 
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
+        $image = base64_encode(stream_get_contents($user->getPhotos()));
+
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
         $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');
@@ -69,7 +71,7 @@ class DefaultController extends Controller
 
 
         return $this->render('EcoleBundle:Adminecole:index.html.twig', array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$notapprenant,
-            'AllLicences'=>$licences,'societes'=>$user->getReferenciel(),'missions'=>$mes_missions,'missions_propose'=>$missions_propose,'apprenants'=>$apprenants,'import_apprenants'=>$import_apprenant));
+            'AllLicences'=>$licences,'societes'=>$user->getReferenciel(),'missions'=>$mes_missions,'missions_propose'=>$missions_propose,'apprenants'=>$apprenants,'import_apprenants'=>$import_apprenant,'image',$image));
     }
 
     public function loadiframeAction()
