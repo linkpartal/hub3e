@@ -13,6 +13,8 @@ class DefaultController extends Controller
     public function loadAction(){
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
+        $image = base64_encode(stream_get_contents($user->getPhotos()));
+
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
 
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAll();
@@ -49,7 +51,7 @@ class DefaultController extends Controller
         $jsonContent = $serializer->serialize($notifications, 'json');
 
         return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$notapprenant,
-            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'missions'=>$missions,'apprenants'=>$apprenants,'import_apprenants'=>$import_apprenant));
+            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'missions'=>$missions,'apprenants'=>$apprenants,'import_apprenants'=>$import_apprenant,'image'=>$image));
     }
 
     public function loadiframeAction()

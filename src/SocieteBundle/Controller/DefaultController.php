@@ -14,6 +14,8 @@ class DefaultController extends Controller
 
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
+        $image = base64_encode(stream_get_contents($user->getPhotos()));
+
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
 
         $ecoles = array();
@@ -47,7 +49,7 @@ class DefaultController extends Controller
         $jsonContent = $serializer->serialize($notifications, 'json');
 
         return $this->render('EcoleBundle:Adminecole:index.html.twig', array('ecoles'=>$ecoles , 'notifications'=>$jsonContent,'users'=>$users,
-            'AllLicences'=>$licences,'societes'=>$societes));
+            'AllLicences'=>$licences,'societes'=>$societes,'image'=>$image));
     }
 
     public function loadiframeAction()

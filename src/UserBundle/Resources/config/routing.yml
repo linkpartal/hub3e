@@ -115,9 +115,14 @@ Candidature_added:
     path: /AjouterCandidature
     defaults: { _controller: UserBundle:Default:AjouterCandidature}
 
+
 ajouter_Hobbie:
     path : /ajouterHobbie/id={id}/IdUser={IdUser}
     defaults: { _controller: UserBundle:Default:ajouterHobbie}
+
+afficher_messagerie:
+    path: /afficher_messagerie
+    defaults: { _controller: UserBundle:Default:afficher_messagerie}
 
 ajouter_Langue:
     path : /ajouterLangue/id={id}/IdNiveau={IdNiveau}/IdUser={IdUser}

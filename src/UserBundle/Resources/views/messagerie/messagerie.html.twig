@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/mission.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
+    {% block CSS %}{% endblock %}
+
+    <title>HUB3E - {% block title %}Home{% endblock %}</title>
+
+</head>
+<body>
+
+
+
+
+<div id="info_messagerie" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;width: 100%;height: 90%;position: absolute;">
+
+    <div class="row" style="margin:10px 0 0 10px"  >
+        <div>
+            <select class="input" title="messages" style="margin-left: 20px;height:40px;width:200px">
+                <option value="les messages">Tous les messages</option>
+            </select>
+
+                <label style="width:20px" id="startTimeLabel" visible="false"></label>
+
+            <span class="glyphicon glyphicon-search" ></span>
+            <input type="text" class="input" placeholder="Recherche" style="padding:5px; border:solid 1px #666666; color:#666666; border-radius:5px;width:200px;height:40px;margin-right:600px" >
+            <input  class="blue" style="background:white;color:#666666;border:1px solid #ccc;height:40px;width: 40px;color:#257ef0" type="button" value="1">
+            <input  class="blue" style="background:white;color:#666666;border:1px solid #ccc;height:40px;width: 40px;color:#257ef0" type="button" value="2">
+            <img  alt="" src="{{ asset('image/Next.jpg') }}" class="blue" style="transform:Rotate(180deg);background:white;color:#666666;border:1px solid #ccc;height:40px;width: 40px" type="button" />
+
+        </div>
+
+        <div class="row" style="height: 150px; margin:10px;background:white">
+
+            <div class="col-xs-12 Liste">
+
+                <img class="col-xs-1"  src="{{ asset('image/Logo_Hub_3e.png') }}" style="margin: 10px 0 0 10px;height: 100px;width: 100px;">
+                <label style="font:20px arial;" > Hier </label>
+
+
+
+                </div>
+            </div>
+
+
+    </div>
+
+</div>
+
+
+
+
+
+
+<script src="//code.jquery.com/jquery.min.js"></script>
+<!--script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script-->
+<script type="text/javascript" src="http://maps.google.com/maps/api/js"></script>
+<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/src/infobox.js"></script>
+<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclustererplus/2.1.2/src/markerclusterer.js"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/PopUp.js') }}"></script>
+<script language="JavaScript">
+
+
+
+
+
+</script>
+</body>
+</html>

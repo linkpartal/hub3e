@@ -8,6 +8,7 @@ INSERT INTO `hobbies` (`id`, `hobbie`) VALUES
 (7, 'aviation');
 
 
+
 INSERT INTO `Langue` (`id`, `langue`, `niveau`) VALUES
 (1,  'Francais', 'connansance de base'),
 (2,  'Francais', 'bonne connaissance'),
