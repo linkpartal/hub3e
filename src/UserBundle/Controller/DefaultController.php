@@ -1212,7 +1212,8 @@ class DefaultController extends Controller
         {
             for($i = 0; $i< count($request->get('_Nomresp'));$i++) {
                 $responsable = new Parents();
-                $responsable->setNom($request->get('_Civiliteresp')[$i].' '.$request->get('_Nomresp')[$i]);
+                $responsable->setCivilite($request->get('_Civiliteresp')[$i]);
+                $responsable->setNom($request->get('_Nomresp')[$i]);
                 $responsable->setPrenom($request->get('_Prenomresp')[$i]);
                 $responsable->setAdresse($request->get('_Adresseresp')[$i].' '.$request->get('_CodePostaleresp')[$i].' '.$request->get('_Villeresp')[$i]);
                 $responsable->setMetier($request->get('_Metierresp')[$i]);

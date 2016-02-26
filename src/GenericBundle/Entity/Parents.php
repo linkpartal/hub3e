@@ -24,6 +24,13 @@ class Parents
     /**
      * @var string
      *
+     * @ORM\Column(name="civilite", type="string", length=45, nullable=true)
+     */
+    private $civilite;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="nom", type="string", length=45, nullable=true)
      */
     private $nom;
@@ -390,5 +397,29 @@ class Parents
         else{
             return false;
         }
+    }
+
+    /**
+     * Set civilite
+     *
+     * @param string $civilite
+     *
+     * @return Parents
+     */
+    public function setCivilite($civilite)
+    {
+        $this->civilite = $civilite;
+
+        return $this;
+    }
+
+    /**
+     * Get civilite
+     *
+     * @return string
+     */
+    public function getCivilite()
+    {
+        return $this->civilite;
     }
 }
