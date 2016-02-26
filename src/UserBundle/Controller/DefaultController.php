@@ -99,7 +99,7 @@ class DefaultController extends Controller
         }
         else{
             return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid,'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,
-                'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,'Hobbies'=>$Hobbies,'candidatures'=>$candidatures));
+                'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,'Hobbies'=>$Hobbies,'candidatures'=>$candidatures,'formations'));
         }
 
 
@@ -300,12 +300,6 @@ class DefaultController extends Controller
         return $reponse;
     }
 
-    public function modifierAction($id)
-    {
-        $userid = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
-        return $this->render('UserBundle:Gestion:modifierUtilisateur.html.twig',array('user'=>$userid));
-    }
-
     public function  modifierStatutCandidatureAction($id,$statut){
         $em = $this->getDoctrine()->getManager();
         $candi= $em->getRepository('GenericBundle:Candidature')->find($id);
@@ -321,23 +315,6 @@ class DefaultController extends Controller
     public function userModifAction(Request $request){
         $em = $this->getDoctrine()->getManager();
 
-        $info = $em->getRepository('GenericBundle:infocomplementaire')->find(array('id'=>$request->get('_IdInfo')));
-
-        // $info->setDatenaissance(date_create($request->get('_Datenaissance')) );
-        $info->setCpnaissance($request->get('_Cpnaissance'));
-        $info->setLieunaissance($request->get('_Lieunaissance'));
-        $info->setAdresse($request->get('_Adresse'));
-        $info->setFacebook($request->get('_Facebook'));
-        $info->setLinkedin($request->get('_Linkedin'));
-        $info->setMobilite($request->get('_Mobilite'));
-        $info->setFratrie($request->get('_Fratrie'));
-
-        $em->flush();
-
-
-
-
-
         $user = $em->getRepository('GenericBundle:User')->findOneBy(array('id'=>$request->get('_ID')));
 
 
@@ -347,8 +324,21 @@ class DefaultController extends Controller
         $user->setTelephone($request->get('_Tel'));
         $user->setUsername($request->get('_Username'));
         $user->setEmail($request->get('_Mail'));
-
         $em->flush();
+        if($user->hasRole('ROLE_APPRENANT')){
+            $info = $em->getRepository('GenericBundle:infocomplementaire')->find(array('id'=>$request->get('_IdInfo')));
+
+            // $info->setDatenaissance(date_create($request->get('_Datenaissance')) );
+            $info->setCpnaissance($request->get('_Cpnaissance'));
+            $info->setLieunaissance($request->get('_Lieunaissance'));
+            $info->setAdresse($request->get('_Adresse'));
+            $info->setFacebook($request->get('_Facebook'));
+            $info->setLinkedin($request->get('_Linkedin'));
+            $info->setMobilite($request->get('_Mobilite'));
+            $info->setFratrie($request->get('_Fratrie'));
+
+            $em->flush();
+        }
 
         return $this->forward('UserBundle:Default:affichageUser',array('id'=>$request->get('_ID')));
     }
