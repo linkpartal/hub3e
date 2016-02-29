@@ -299,7 +299,7 @@
 
                 <div id="apprenant" class="popup col-xs-3" >
                     <div onclick="hide(this)" class="close"></div>
-                    <div class="col-xs-offset-3 col-xs-6" style="top:40px;border:20px solid white;display: block;margin-bottom: 20px ;background: white;width:50%">
+                    <div class="col-xs-offset-1 col-xs-6" style="top:40px;border:20px solid white;display: block;margin-bottom: 20px ;background: white;width:70%">
                         <div class="col-xs-12" style="height: 50px;">
                             <div style="height: 50px; width: 100%">
                                 <ul id="select_info_apprenant"  class="nav navbar-nav" style="height: 50px;background: #4389c8;" >
@@ -547,12 +547,22 @@
 
                                     <div class="col-xs-6 input-colonne" style="border-right: 0 ">
                                         <input placeholder="Adresse postale" class="input" type="text" id="Adresse" name="_Adresse" maxlength="45" required >
-                                        <input placeholder="Adresse email" class="input" type="text" id="Email" name="_Email" maxlength="45" required >
+
 
                                     </div>
                                     <div class="col-xs-3 input-colonne">
+                                    <input placeholder="Ville" class="input" type="text" id="Ville" name="_Ville" maxlength="45" required >
+                                        </div>
+                                    <div class="col-xs-3 input-colonne" style="border-right: 0 ">
+                                        <input placeholder="Code postal" class="input" type="text" id="Codepostal" name="_Codepostal" maxlength="45" required >
+                                        </div>
+
+                                    <div class="col-xs-3 input-colonne">
                                         <input placeholder="Nom" class="input" type="text" id="Nom" name="_Nom" maxlength="45" required >
-                                        <input placeholder="Civilité" class="input" type="text" id="Civilite" name="_Civilite" maxlength="45" required >
+                                        <select class="input "  title="" name="_Civilite" maxlength="45" required>
+                                            <option value="Monsieur">Mr.</option>
+                                            <option value="Madame">Mme.</option>
+                                        </select>
 
                                     </div>
                                     <div class="col-xs-3 input-colonne">
@@ -560,15 +570,16 @@
 
                                         <input placeholder="Date de Naissance" type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' class="date" id="Datenaissance" name="_Datenaissance" title="Date de Naissance" required >
                                     </div>
-
+                                    <div class="col-xs-6 input-colonne" style="border-right: 0 ">
+                                    <input placeholder="Adresse email" class="input" type="text" id="Email" name="_Email" maxlength="45" required >
+                                        </div>
                                     <div class="col-xs-3 input-colonne">
-                                        <input placeholder="Ville" class="input" type="text" id="Ville" name="_Ville" maxlength="45" required >
                                         <input placeholder="Téléphone portable" class="input" type="text" id="Telephone" name="_Telephone" maxlength="45" required >
 
                                     </div>
 
                                     <div class="col-xs-3 input-colonne" style="border-right: 0 ">
-                                        <input placeholder="Code postal" class="input" type="text" id="Codepostal" name="_Codepostal" maxlength="45" required >
+
                                         <input placeholder="Téléphone fixe" class="input" type="text" id="Fax" name="_Fax" maxlength="45"  >
 
 
@@ -672,10 +683,8 @@
 
                             <div class="div_button" style="margin-top: 10px" >
 
-                                <input class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" name="submitApprenant" type="button" value="Supprimer">
-                                <input class="blue" name="submitApprenant" type="button"  style="float: right" value="Publié">
-                                <input class="blue" id="submitaddapprenant" type="submit"  style="float: right;margin-right: 10px" value="Enregistrer">
-                                <input class="blue" name="submitApprenant" type="button"  style="float: right;margin-right: 10px" value="Suivant">
+                                <input class="blue" id="submitaddapprenant" type="submit"  style="margin-right: 10px" value="Enregistrer">
+
                             </div>
                         </form>
 
