@@ -465,7 +465,7 @@
                                                     <input type="hidden" name="hobbie[{{ i }}]" value="{{ hobby.getId }}" style="margin:10px 5px 10px 0" id="inputHobbie" >
                                                     <label class="champ form-control" style="width: 150px;" for="hobbie">{{hobby.getHobbie}}</label>
 
-                                                    <img name="modification" style="width: 0px;height: 0px;" onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
+                                                    <img  style="width: 0px;height: 0px;" onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
 
 
                                                 </div>
@@ -518,7 +518,7 @@
                                                         <input type="hidden" name="langue[{{ i }}]" value="{{ lang.getId }}" style="margin:10px 5px 10px 0" id="inputLangue" >
                                                         <label class="champ form-control" style="width: 150px;" for="langue">{{lang.getLangue}}</label>
                                                         <label class="champ form-control"  for="Niveau">{{lang.getNiveau}}</label>
-                                                        <img name="modification"  style="display: none" onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
+                                                        <img   style="display: none" onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
                                                     </div>
 
                                                     {% set i= i +1 %}

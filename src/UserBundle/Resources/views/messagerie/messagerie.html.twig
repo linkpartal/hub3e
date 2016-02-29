@@ -18,7 +18,7 @@
 
 <div id="info_messagerie" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;width: 100%;height: 90%;position: absolute;">
 
-    <div class="row" style="margin:10px 0 0 10px"  >
+    <div class="row" style="margin:10px 0 0 10px ;margin-bottom: 10px"  >
         <div>
             <select class="input" title="messages" style="margin-left: 20px;height:40px;width:200px">
                 <option value="les messages">Tous les messages</option>
@@ -27,27 +27,140 @@
                 <label style="width:20px" id="startTimeLabel" visible="false"></label>
 
             <span class="glyphicon glyphicon-search" ></span>
-            <input type="text" class="input" placeholder="Recherche" style="padding:5px; border:solid 1px #666666; color:#666666; border-radius:5px;width:200px;height:40px;margin-right:600px" >
+            <input type="text" class="input" placeholder="Recherche" style="padding:5px; border:solid 1px #666666; color:#666666; border-radius:5px;width:200px;height:40px;margin-right:607px" >
             <input  class="blue" style="background:white;color:#666666;border:1px solid #ccc;height:40px;width: 40px;color:#257ef0" type="button" value="1">
             <input  class="blue" style="background:white;color:#666666;border:1px solid #ccc;height:40px;width: 40px;color:#257ef0" type="button" value="2">
-            <img  alt="" src="{{ asset('image/Next.jpg') }}" class="blue" style="transform:Rotate(180deg);background:white;color:#666666;border:1px solid #ccc;height:40px;width: 40px" type="button" />
+            <button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
+
+        </div>
+        </div>
+
+
+
+    {% if messageies is defined %}
+    {% for msg in messageies %}
+
+        <div class="col-xs-12 Liste" style="border: 1px solid #ddd;width:90%;margin-right:5px;margin-bottom: 0;margin-top: 0;height:100px;" >
+            <div class="col-xs-2" >
+                <div style="border: 15px solid transparent">
+                    <img   src="data:image/jpg;base64,{{msg.getExpediteur.getPhotos }}" style="height:70px;width:70px;margin:0 40px;border-radius: 100%">
+                </div>
+
+
+            </div>
+
+            <div class="col-xs-1" style="margin-top:10px;text-align: left ">
+                <label style="font:18px arial;margin-top: 40px" > {{ msg.getDate|date('d M') }} </label>
+            </div>
+
+            <div class="col-xs-6" style="margin-top:10px;text-align: left">
+                <label style="font:18px arial ;margin-top: 20px;float:left;width: 100%" > {{ msg.getMessage }} </label><br>
+                <label style="font:16px arial;float:left;width: 100%" > {{ msg.getMission.getIntitule }} - <label style="font:18px arial;color:#2A76CC" > {{ msg.getMission.etablissement.tier.raisonsoc }}</label> </label>
+            </div>
+
+            <div class="col-xs-offset-1 col-xs-1" style="margin-top:10px;">
+                <label style="font:18px arial;margin-top: 30px" > Répondez </label>
+
+            </div>
+            <div class="col-xs-1" style="height: 100%">
+                <span class="glyphicon glyphicon-option-vertical" style="margin-top:40px;height:20px;color:#8c8c8c"></span>
+
+            </div>
 
         </div>
 
-        <div class="row" style="height: 150px; margin:10px;background:white">
+    {% endfor %}
+    {% endif %}
 
-            <div class="col-xs-12 Liste">
+            <div class="col-xs-12 Liste" style="border: 1px solid #ddd;width:90%;margin-right:5px;margin-bottom: 0;margin-top: 0" >
 
-                <img class="col-xs-1"  src="{{ asset('image/Logo_Hub_3e.png') }}" style="margin: 10px 0 0 10px;height: 100px;width: 100px;">
-                <label style="font:20px arial;" > Hier </label>
+                <img class="col-xs-1"  src="{{ asset('image/image2.jpg') }}" style="border-radius: 50%;margin: 20px 0 0 10px;height: 70px;width: 100px;">
 
 
+                <div class="col-xs-4" style="margin-top:10px;height:100px;width: 150px;">
+                    <label style="font:18px arial;margin-top: 40px" > 6 déc </label>
+                </div>
+
+                <div class="col-xs-4" style="margin-top:10px;height:100px;width: 500px;">
+                    <label style="font:18px arial ;margin-top: 20px;float:left" > Nouvelle mission reçue </label>
+                    <label style="font:16px arial;float:left" > DEVELOPPEUR WEB HTML/ CSS/ JS - <label style="font:18px arial;color:#2A76CC" > SQLI</label> </label>
+                </div>
+
+                <div class="col-xs-4" style="margin-top:10px;height:100px;width: 150px;">
+                    <label style="font:18px arial;margin-top: 40px" > Répondez </label>
 
                 </div>
+                <div class="col-xs-4" style="margin-top:10px;height:100px;width: 150px;">
+                    <label style="font:25px arial;margin-top: 40px;transform: rotate(90deg);float:right;color: #8c8c8c;margin-left:20px" >... </label>
+
+                </div>
+
             </div>
 
 
-    </div>
+
+            <div class="col-xs-12 Liste" style="border: 1px solid #ddd;width:90%;margin-right:5px;margin-bottom: 0;margin-top: 0" >
+
+                <img class="col-xs-1"  src="{{ asset('image/Next.png') }}" style="margin: 20px 0 0 10px;height: 70px;width: 100px;">
+
+
+                <div class="col-xs-4" style="margin-top:10px;height:100px;width: 150px;">
+                    <label style="font:18px arial;margin-top: 40px" > Hier </label>
+                </div>
+
+                <div class="col-xs-4" style="margin-top:10px;height:100px;width: 500px;">
+                    <label style="font:18px arial ;margin-top: 20px;float:left" > Nouvelle mission reçue </label>
+                    <label style="font:16px arial;float:left" > DEVELOPPEUR WEB HTML/ CSS/ JS - <label style="font:18px arial ;color:#2A76CC" > SQLI</label> </label>
+                </div>
+
+                <div class="col-xs-4" style="margin-top:10px;height:100px;width: 150px;">
+                    <label style="font:18px arial;margin-top: 40px" > Répondez </label>
+
+                </div>
+                <div class="col-xs-4" style="margin-top:10px;height:100px;width: 150px;">
+                    <label style="font:25px arial;margin-top: 40px;transform: rotate(90deg);float:right;color: #8c8c8c;margin-left:20px" >... </label>
+
+                </div>
+
+            </div>
+
+
+
+
+            <div class="col-xs-12 Liste" style="border: 1px solid #ddd;width:90%;margin-right:5px;margin-bottom: 0;margin-top: 0" >
+
+                <img class="col-xs-1"  src="{{ asset('image/Logo_Hub_3e.png') }}" style="margin: 20px 0 0 10px;height: 70px;width: 100px;">
+
+
+                <div class="col-xs-4" style="margin-top:10px;height:100px;width: 150px;">
+                    <label style="font:18px arial;margin-top: 40px" > Hier </label>
+                </div>
+
+                <div class="col-xs-4" style="margin-top:10px;height:100px;width: 500px;">
+                    <label style="font:18px arial ;margin-top: 20px;float:left" > Nouvelle mission reçue </label>
+                    <label style="font:16px arial;float:left" > DEVELOPPEUR WEB HTML/ CSS/ JS - <label style="font:18px arial ;color:#2A76CC" > SQLI</label> </label>
+                </div>
+
+                <div class="col-xs-4" style="margin-top:10px;height:100px;width: 150px;">
+                    <label style="font:18px arial;margin-top: 40px" > Répondez </label>
+
+                </div>
+                <div class="col-xs-4" style="margin-top:10px;height:100px;width: 150px;">
+                    <label style="font:25px arial;margin-top: 40px;transform: rotate(90deg);float:right;color: #8c8c8c;margin-left:20px" >... </label>
+
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+
+
+
 
 </div>
 

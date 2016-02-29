@@ -99,7 +99,7 @@ class DefaultController extends Controller
         }
         else{
             return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid,'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,
-                'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,'Hobbies'=>$Hobbies,'candidatures'=>$candidatures));
+                'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,'Hobbies'=>$Hobbies,'candidatures'=>$candidatures,'formations'=>$formation));
         }
 
 
@@ -174,13 +174,31 @@ class DefaultController extends Controller
         }
         else{
             return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig', array('User' => $userid,'Infocomplementaire' => $info, 'Parents' => $Parents, 'Experience' => $Experience,
-                'Recommandation' => $Recommandation, 'Diplome' => $Diplome, 'Document' => $Document, 'Langue' => $Langue, 'Hobbies' => $Hobbies,'candidatures' => $candidatures));
+                'Recommandation' => $Recommandation, 'Diplome' => $Diplome, 'Document' => $Document, 'Langue' => $Langue, 'Hobbies' => $Hobbies,'candidatures' => $candidatures,'formations'=>$formation));
         }
     }
 
 
     public function afficher_messagerieAction(){
-      return  $this->render('UserBundle:messagerie:messagerie.html.twig');
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+       $message = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user ));
+      // $message = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('expediteur'=>$user));
+
+        foreach($message as $msg)
+        {
+            if($msg->getExpediteur()->getPhotos() and !is_string($msg->getExpediteur()->getPhotos())   )
+            {
+           //  $msg->getDestinataire()->setPhotos(base64_encode(stream_get_contents($msg->getDestinataire()->getPhotos())));
+             $msg->getExpediteur()->setPhotos(base64_encode(stream_get_contents($msg->getExpediteur()->getPhotos())));
+
+
+            }
+        }
+
+
+
+      return  $this->render('UserBundle:messagerie:messagerie.html.twig',array('messageies'=>$message));
     }
 
 
