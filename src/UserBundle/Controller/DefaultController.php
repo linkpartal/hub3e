@@ -177,7 +177,18 @@ class DefaultController extends Controller
 
 
     public function afficher_messagerieAction(){
-      return  $this->render('UserBundle:messagerie:messagerie.html.twig');
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $message = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user ));
+        // $message = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('expediteur'=>$user));
+        foreach($message as $msg)
+        {
+            if($msg->getExpediteur()->getPhotos() and !is_string($msg->getExpediteur()->getPhotos())   )
+            {
+                //  $msg->getDestinataire()->setPhotos(base64_encode(stream_get_contents($msg->getDestinataire()->getPhotos())));
+                $msg->getExpediteur()->setPhotos(base64_encode(stream_get_contents($msg->getExpediteur()->getPhotos())));
+            }
+        }
+        return  $this->render('UserBundle:messagerie:messagerie.html.twig',array('messageies'=>$message));
     }
 
 
