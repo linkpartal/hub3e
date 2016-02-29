@@ -131,3 +131,7 @@ ajouter_Langue:
 reponseQCM:
     path: /reponseQCM/user={iduser}/reponse={idreponse}
     defaults: { _controller: UserBundle:Default:ReponseQCM }
+
+MiseEnRelation_mission:
+    path: /Miseenrelation/Mission/idDest={idDest}/idEnv={idEnv}/mission={mission}
+    defaults: { _controller: UserBundle:MiseEnRelation:envoiMessageMR }

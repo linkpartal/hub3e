@@ -190,7 +190,7 @@
              <button onclick="show('addtier',0)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                      ></button>
 
-             <button id="societetop" style="color:white ">{{ societes|length }} Société </button>
+             <button id="societetop" style="color:white ">{{ societes|length }} Sociétés </button>
 
 
          </div>
@@ -212,7 +212,7 @@
             <button onclick="show('import')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
             ></button>
 
-            <button onclick="window.location.href='{{ path('afficher_import') }}'" style="color:white ">importer</button>
+            <button onclick="document.getElementById('iframe').src='{{ path('afficher_import') }}'" style="color:white ">SAS Admissions</button>
         </div>
 
 

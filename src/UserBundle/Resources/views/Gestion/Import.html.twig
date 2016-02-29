@@ -42,6 +42,7 @@
 <script src="//code.jquery.com/jquery.min.js"></script>
 <script language="javascript">
     function supprimerLigne(route,champs) {
+        champs.disabled = true;
         $.ajax({
             type: 'get',
             url: route,
@@ -56,6 +57,7 @@
                 }
                 if(data['Delete']=='0')
                 {
+                    champs.disabled = false;
                     alert('Suppression à rencontrer une erreur en cours d\'excecution');
                 }
                 if(data['Ajout']=='1')
@@ -65,7 +67,6 @@
                 }
                 if(data['Ajout']=='0')
                 {
-                    champs.disabled = true;
                     alert('Ajout à rencontrer une erreur en cours d\'excecution, cet utilisateur existe déjà, Vérifiez ces duplicats puis essayez de le fusionner');
                 }
             }

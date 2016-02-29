@@ -14,7 +14,6 @@ use GenericBundle\Entity\Infocomplementaire;
 use GenericBundle\Entity\Langue;
 use GenericBundle\Entity\Mission;
 use GenericBundle\Entity\Parents;
-use GenericBundle\Entity\Qcmdef;
 use GenericBundle\Entity\Recommandation;
 use GenericBundle\Entity\User;
 use GenericBundle\Entity\Etablissement;
@@ -25,8 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use GenericBundle\Entity\Notification;
 use Ddeboer\DataImport\Reader\CsvReader;
-use Symfony\Component\Validator\Constraints\Date;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 class DefaultController extends Controller
 {
@@ -224,12 +221,14 @@ class DefaultController extends Controller
         $superadmins = array_merge($superadmins, $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$usercon->getTier())));
 
         foreach($superadmins as $admin){
-            $notif = new Notification();
-            $notif->setEntite($newuser->getId());
-            $notif->setType('Utilisateur');
-            $notif->setUser($admin);
-            $em->persist($notif);
-            $em->flush();
+            if(!$this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('entite'=>$newuser->getId(),'type'=>'Utilisateur','user'=>$admin))){
+                $notif = new Notification();
+                $notif->setEntite($newuser->getId());
+                $notif->setType('Utilisateur');
+                $notif->setUser($admin);
+                $em->persist($notif);
+                $em->flush();
+            }
         }
 
         //send password
@@ -728,12 +727,14 @@ class DefaultController extends Controller
                 $superadmins = array_merge($superadmins, $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$usercon->getTier())));
 
                 foreach($superadmins as $admin){
-                    $notif = new Notification();
-                    $notif->setEntite($mission->getId());
-                    $notif->setType('Mission');
-                    $notif->setUser($admin);
-                    $em->persist($notif);
-                    $em->flush();
+                    if(!$this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('entite'=>$mission->getId(),'type'=>'Mission','user'=>$admin))){
+                        $notif = new Notification();
+                        $notif->setEntite($mission->getId());
+                        $notif->setType('Mission');
+                        $notif->setUser($admin);
+                        $em->persist($notif);
+                        $em->flush();
+                    }
                 }
             }
         }
@@ -840,10 +841,12 @@ class DefaultController extends Controller
             foreach($import->getHobbies() as $hobby)
             {
                 $newuser->addHobby($hobby);
+                $em->flush();
             }
             foreach($import->getLangue() as $langue)
             {
-                $newuser->addCulturel($langue);
+                $newuser->addLangue($langue);
+                $em->flush();
             }
 
             foreach($em->getRepository('GenericBundle:Experience')->findBy(array('importCandidat'=>$import)) as $experience)
@@ -880,12 +883,15 @@ class DefaultController extends Controller
             $superadmins = array_merge($superadmins, $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$usercon->getTier())));
 
             foreach($superadmins as $admin){
-                $notif = new Notification();
-                $notif->setEntite($newuser->getId());
-                $notif->setType('Utilisateur');
-                $notif->setUser($admin);
-                $em->persist($notif);
-                $em->flush();
+                if(!$this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('entite'=>$newuser->getId(),'type'=>'Utilisateur','user'=>$admin))){
+                    $notif = new Notification();
+                    $notif->setEntite($newuser->getId());
+                    $notif->setType('Utilisateur');
+                    $notif->setUser($admin);
+                    $em->persist($notif);
+                    $em->flush();
+
+                }
             }
 
             //send password
@@ -924,12 +930,7 @@ class DefaultController extends Controller
             $em->remove($import);
             $em->flush();
             return $response->setData(array('Ajout'=>'1'));
-
         }
-
-
-
-
     }
 
     public function FusionnerAction($sas,$user){
@@ -1279,7 +1280,6 @@ class DefaultController extends Controller
 
         $em->flush();
 
-
         if($request->get('_Nomresp'))
         {
             for($i = 0; $i< count($request->get('_Nomresp'));$i++) {
@@ -1298,7 +1298,6 @@ class DefaultController extends Controller
             }
         }
 
-
         if($request->get('_Libelle'))
         {
             for($i = 0; $i< count($request->get('_Libelle'));$i++) {
@@ -1311,8 +1310,6 @@ class DefaultController extends Controller
                 $em->flush();
             }
         }
-
-
 
         if($request->get('_Nomsociete'))
         {
@@ -1330,8 +1327,6 @@ class DefaultController extends Controller
             }
         }
 
-
-
         if($request->get('_Nomrec'))
         {
             for($i = 0; $i< count($request->get('_Nomrec'));$i++) {
@@ -1347,7 +1342,6 @@ class DefaultController extends Controller
             }
         }
 
-
         if($request->get('_Langue'))
         {
             for($i = 0; $i< count($request->get('_Langue'));$i++) {
@@ -1357,7 +1351,6 @@ class DefaultController extends Controller
                 $em->flush();
             }
         }
-
 
         if($request->get('formations'))
         {
@@ -1378,6 +1371,7 @@ class DefaultController extends Controller
                 $em->flush();
             }
         }
+
         if($request->get('_Type'))
         {
             for($i = 0; $i < count($request->get('_Type')); $i++)
