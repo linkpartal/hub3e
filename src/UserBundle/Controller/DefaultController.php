@@ -96,7 +96,7 @@ class DefaultController extends Controller
         }
         else{
             return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid,'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,
-                'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,'Hobbies'=>$Hobbies,'candidatures'=>$candidatures,'formations'));
+                'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,'Hobbies'=>$Hobbies,'candidatures'=>$candidatures,'formations'=>$formation));
         }
 
 
@@ -513,7 +513,7 @@ class DefaultController extends Controller
 
     }
 
-    public function suppsuppDocumentAction($id)
+    public function suppDocumentAction($id)
     {
         $em = $this->getDoctrine()->getManager();
         $document = $em->getRepository('GenericBundle:Document')->find($id);

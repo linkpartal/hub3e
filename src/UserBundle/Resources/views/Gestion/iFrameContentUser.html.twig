@@ -93,7 +93,7 @@
 
                         <div class="div_button" style="background-color: white">
 
-                            <input class="blue"  style="float: left" name="submitApprenant" type="button" value="Annuler">
+                            <input class="blue" onclick="showFermer()" style="float: left" name="submitApprenant" type="button" value="Annuler">
                             <input class="blue" id="submitaddparent" type="submit" style="margin-left: 550px"  value="Enregistrer" >
 
                         </div>
@@ -111,7 +111,7 @@
                     <form id="formaddExperience" class="formulaire" action="{{ path("experience_added") }}" onsubmit="document.getElementById('submitaddExperience').disabled=true"  method="post" enctype="multipart/form-data">
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
 
-                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Responsable de l'apprenant</Label>
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Expérience de l'apprenant</Label>
                         <div class="div_form" style="">
                             <div class="col-xs-10 input-colonne">
                                 <label id="startTimeLabel" visible="false"></label>
@@ -138,7 +138,7 @@
                         </div>
                         <div class="div_button" style="background-color: white">
 
-                            <input class="blue"  style="float: left" name="submitApprenant" type="button" value="Annuler">
+                            <input class="blue" onclick="showFermer()" style="float: left" name="submitApprenant" type="button" value="Annuler">
                             <input class="blue" id="submitaddExperience" type="submit" style="margin-left: 550px"  value="Enregistrer" >
 
                         </div>
@@ -178,7 +178,7 @@
 
                         <div class="div_button" style="background-color: white">
 
-                            <input class="blue"  style="float: left" name="submitApprenant" type="button" value="Annuler">
+                            <input class="blue"  style="float: left" onclick="showFermer()" name="submitApprenant" type="button" value="Annuler">
                             <input class="blue" id="submitaddRecommandation" type="submit" style="margin-left: 550px"  value="Enregistrer" >
 
                         </div>
@@ -217,7 +217,7 @@
 
                         <div class="div_button" style="background-color: white">
 
-                            <input class="blue"  style="float: left" name="submitApprenant" type="button" value="Annuler">
+                            <input class="blue" onclick="showFermer()"  style="float: left" name="submitApprenant" type="button" value="Annuler">
                             <input class="blue" id="submitaddDiplome" type="submit" style="margin-left: 550px"  value="Enregistrer" >
 
                         </div>
@@ -246,13 +246,13 @@
                                     <option value="Autre" >Autre</option>
                                 </select>
                             </div>
-                            <input  type="file" class="input" id="document" name="_Document">
+                            <input type="file" class="input" id="document" name="_Document" required>
 
                         </div>
 
                         <div class="div_button" style="background-color: white">
 
-                            <input class="blue"  style="float: left" name="submitApprenant" type="button" value="Annuler">
+                            <input class="blue" onclick="showFermer()" style="float: left" name="submitApprenant" type="button" value="Annuler">
                             <input class="blue" id="submitaddDocument" type="submit" style="margin-left: 550px"  value="Enregistrer" >
 
                         </div>
@@ -269,7 +269,7 @@
 
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
 
-                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Candidature</Label>
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal;"> Formation </Label>
                         <div class="div_form" style="">
 
 
@@ -285,7 +285,7 @@
 
                         <div class="div_button" style="background-color: white">
 
-                            <input class="blue"  style="float: left" name="submitApprenant" type="button" value="Annuler">
+                            <input class="blue" onclick="showFermer()" style="float: left" name="submitApprenant" type="button" value="Annuler">
                             <input class="blue" id="submitaddFormation" type="submit" style="margin-left: 550px"  value="Enregistrer" >
 
                         </div>
@@ -520,8 +520,8 @@
                                             </select>
                                             <select  style="height: 40px;width:250px;"  id="NewNiveau"  name="_Niveau">
                                                 <option value="">--?-- </option>
-                                                <option value="connaissances de base">connaissances de base </option>
-                                                <option value="bonnes connaissances">bonnes connaissances </option>
+                                                <option value="connaissances de base">connaissance de base </option>
+                                                <option value="bonne connaissance">bonne connaissance</option>
                                                 <option value="courant">courant </option>
                                                 <option value="langue maternelle">langue maternelle </option>
 
@@ -579,10 +579,10 @@
                                             <label class="cell">Nom societe : <label>{{ Exp.getNomsociete }}</label></label>
                                             <label class="cell">Activite : <label>{{Exp.getActivite }}</label>
                                                 <img name="modification" style="display:none;;float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerExperience('{{ path('supprimer_Experience',{'id':Exp.getId}) }}',this)" />
-                                                <button class="button" style="display:none;float: right;" type="button" data-toggle="collapse" data-target="#exp{{ iddiv }}"></button></label>
+                                                <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#exper{{ iddiv }}"></button></label>
 
                                         </div>
-                                        <div id="exp{{ iddiv }}" class="collapse in" >
+                                        <div id="exper{{ iddiv }}" class="collapse in" >
                                             <div class="row">
                                                 <label class="cell">Lieu  : <label>{{ Exp.getLieu }}</label></label>
                                                 <label class="cell">Poste  : <label>{{ Exp.getPoste }}</label></label>
@@ -1195,6 +1195,15 @@
         });
 
 
+    }
+
+    function showFermer(){
+        document.getElementById('addExperience').style.display="none";
+        document.getElementById('addparent').style.display="none";
+        document.getElementById('addRecommandation').style.display="none";
+        document.getElementById('addDiplome').style.display="none";
+        document.getElementById('addDocument').style.display="none";
+        document.getElementById('addFormation').style.display="none";
     }
     function envoyerNouvelleReponse(idrep) {
         var route = '{{ path('reponseQCM',{'iduser':User.id,'idreponse':'_IDREP'}) }}';
