@@ -47,7 +47,7 @@
         </div>
 
         <form id="form" action="{{ path('tieradded') }}" onsubmit="document.getElementById('submittier').disabled = true;" method="post" enctype="multipart/form-data">
-            <div class="div_form">
+            <div class="div_form" style="display: inline-table;" >
 
                 <div class="col-xs-6 input-colonne">
                     <input placeholder="SIREN" type="text" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" required>
@@ -84,9 +84,9 @@
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block">
 
-        <form id="formadduser" action="{{ path("user_added") }}" onsubmit="document.getElementById('submituser').disabled=true" method="post">
+        <form id="formadduser" action="{{ path("user_added") }}" onsubmit="document.getElementById('submituser').disabled=true" method="post" enctype="multipart/form-data">
 
-            <div class="div_form" >
+            <div class="div_form"  style="display: inline-table;" >
                 <div class="col-xs-6 input-colonne">
                     <input type="text" class="input" id="Username" name="_Username" placeholder="Username" maxlength="45" required>
 
@@ -119,10 +119,10 @@
 </div>
 <div id="addLicenceDef" class="popup col-xs-3">
     <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block;overflow-y: auto;">
+    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:10px solid white;display: block;overflow-y: auto;">
         <form class="formulaire" id="formLicence" action="{{ path("metier_user_licenceadded") }}" onsubmit="document.getElementById('submitlicencedef').disabled=true" method="post">
 
-            <div class="div_form" >
+            <div class="div_form" style="display: inline-table;" >
                 <div class="col-xs-6 input-colonne">
                     <input placeholder="Libelle" class="input" type="text" id="Libelle" name="_Libelle" maxlength="255" required >
 
@@ -163,7 +163,7 @@
                     {% endfor %}
                 </select>
                 <br>
-                <label title="CSV" for="CSV"><img id="backimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
+                <label title="CSV" for="CSV"><img onclick="this.src='{{ asset('image/wait_x300.gif') }}'; " id="backimg" style="height: 150px;width: 150px"  src="{{ asset('image/upload-arrow.png') }}"/></label>
                 <input accept=".xlsx" type="file" class="input" id="CSV" name="_CSV" required>
 
             </div>
@@ -361,7 +361,7 @@
                     {% if import_apprenants is defined %}
                         {% for u in import_apprenants %}
                             <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId }) }}',this)" id="import{{ u.getId }}" type="button" class="list-group-item butonLigne">
-                                <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
+                                <div class="col-xs-6 part" >{{ u.getNom }}  {{ u.getPrenom }}</div>
                                 <div class="col-xs-12 part" style="height: 31px; text-align: left;">
                                     <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
                                 </div>
@@ -694,6 +694,7 @@
         });
     }
     function envoyeradresses(){
+
         document.getElementById('submittier').disabled=true;
         var geocodes = document.getElementsByName('_Geocode[]');
         if(geocodes.length==1)
@@ -711,7 +712,6 @@
                 return;
             }
         }
-
         for(var i = 1; i<geocodes.length;i++)
         {
             var address = document.getElementsByName('_Adresse[]')[i].value +' ' +document.getElementsByName('_Ville[]')[i].value + ' ' + document.getElementsByName('_CodeP[]')[i].value  ;

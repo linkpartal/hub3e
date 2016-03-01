@@ -719,10 +719,10 @@
                 <img  src="data:image/jpg;base64,{{ etablissement.getTier.getLogo }}" style="padding: 10px; height: 78px;">
             </div>
 
-            <div class="col-xs-4">
+            <div class="col-xs-4" >
                 <div class="col-xs-12"
-                     style="height: 30px; text-align: left; padding: 10px;"><label style="font-size: large" >{{ etablissement.getTier.getRaisonSoc }}&nbsp;-&nbsp;  </label><label style="font-size: large;color:#2A76CC" > {{ etablissement.getVille }}</label></div>
-                <div class="col-xs-12" style="height: 20px; text-align: left;">{{etablissement.getAdresse }}, {{ etablissement.getCodePostal }} {{ etablissement.getVille }}</div>
+                     style="margin:0px 40px;height: 40px; text-align: left; padding: 10px;"><label style="font-size: large" >{{ etablissement.getTier.getRaisonSoc }}&nbsp;-&nbsp;  </label><label style="font-size: large;color:#2A76CC" > {{ etablissement.getVille }}</label></div>
+                <div class="col-xs-12" style="margin: 0px 40px;height: 20px; text-align: left;">{{etablissement.getAdresse }}, {{ etablissement.getCodePostal }} {{ etablissement.getVille }}</div>
             </div>
             <div class="col-xs-offset-5 col-xs-1">
                 <div class="col-xs-12" style="height: 30px;; padding-top: 10px;"><label style="font-size: large;color:#2A76CC" > 549</label></div>
@@ -812,7 +812,7 @@
                         <input value="{{ etablissement.getSite }}" type="url" class="champ form-control" id="Site" name="_Site" maxlength="45" readonly>
                     </div>
                     <div class="inputcontainer">
-                        <label class="list-group-item" style="height: 60px;" for="Logo">Logo : <img alt="Logo" src="data:image/jpg;base64,{{ etablissement.getTier.getLogo }}"/> </label>
+                        <label class="list-group-item" style="height: 40px;" for="Logo">Logo : <img alt="Logo" style="height:40px" src="data:image/jpg;base64,{{ etablissement.getTier.getLogo }}"/> </label>
 
                         <input accept="image/*" type="file" class="champ form-control" id="Logo" name="_Logo" style="display: none !important;">
 
@@ -879,8 +879,7 @@
                                     <div class="row">
                                         <label class="cell" >Licence : <label>{{ lib.getId }}</label></label>
                                         <label class="cell">Libelle : <label>{{ lib.getLibelle }}</label>
-                                            <button onclick="supprimerligne('{{ path('supprimer_Licence',{'id': lib.getId}) }}',this)"
-                                                    type="button" style="float: right">x</button>
+                                            <img style="float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerligne('{{ path('supprimer_Licence',{'id': lib.getId}) }}',this)" />
                                             <button class="button" style="float: right" type="button" data-toggle="collapse" data-target="#licence{{ iddiv }}"></button></label>
 
                                     </div>
@@ -998,8 +997,9 @@
                                     <div class="row">
                                         <label class="cell"  >CodeMission : <label style="font-size: medium">{{ mission.getCodemission }}</label></label>
                                         <label class="cell" >Date : <label style="font-size: medium" > {{ mission.getDate|date('d/m/Y H:i')}}</label>
-                                            <button onclick="supprimerligne('{{ path('supprimer_Mission',{'id': mission.getId}) }}',this)"
-                                                    type="button" style=";float: right">x</button>
+
+                                            <img   style="float:right;" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerligne('{{ path('supprimer_Mission',{'id': mission.getId}) }}',this)" />
+
                                             <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#mission{{ iddiv }}"></button>
                                         </label>
 

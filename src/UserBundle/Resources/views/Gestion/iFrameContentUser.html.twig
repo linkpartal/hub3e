@@ -17,7 +17,7 @@
 <div class="container" style="padding: 0;">
     {% block Content %}
         {% if User.hasRole('ROLE_APPRENANT') %}
-        <div id="Hobby" style="display: none;" >
+            <div id="Hobby" style="display: none;" >
                 <input type="hidden" id="inputHobbie" >
 
                 <label class="champ form-control" style="width: 150px;" for="hobbie"></label>
@@ -27,25 +27,25 @@
 
             </div>
 
-        <div id="DivNewLangue" style="display: none;" >
-            <input type="hidden" id="inputLangue" >
-            <input type="hidden" id="inputNiveau" >
-            <label class="champ form-control" style="width: 150px;" for="langue"></label>
-            <label class="champ form-control"  for="Niveau"></label>
-            <img   onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
+            <div id="DivNewLangue" style="display: none;" >
+                <input type="hidden" id="inputLangue" >
+                <input type="hidden" id="inputNiveau" >
+                <label class="champ form-control" style="width: 150px;" for="langue"></label>
+                <label class="champ form-control"  for="Niveau"></label>
+                <img   onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
 
 
-        </div>
+            </div>
 
 
-        <div id="addparent" class="popup" >
-            <div onclick="hide(this)" class="close" ></div>
-            <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display: block ;margin-top: 20px ">
-                <form id="formaddparent" class="formulaire" action="{{ path("parent_added") }}" onsubmit="document.getElementById('submitaddparent').disabled=true" method="post" enctype="multipart/form-data" method="post" >
-                    <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
+            <div id="addparent" class="popup" >
+                <div onclick="hide(this)" class="close" ></div>
+                <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display: block ;margin-top: 20px ">
+                    <form id="formaddparent" class="formulaire" action="{{ path("parent_added") }}" onsubmit="document.getElementById('submitaddparent').disabled=true" method="post" enctype="multipart/form-data" method="post" >
+                        <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
 
-                    <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Ajouter responsable</Label>
-                    <div class="div_form" style="">
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Ajouter responsable</Label>
+                        <div class="div_form" style="">
 
                             <div class="col-xs-10 input-colonne">
                                 <label id="startTimeLabel" visible="false"></label>
@@ -88,24 +88,24 @@
                             </div>
 
 
-                    </div>
+                        </div>
 
 
-                    <div class="div_button" style="background-color: white">
+                        <div class="div_button" style="background-color: white">
 
-                        <input class="blue"  style="float: left" name="submitApprenant" type="button" value="Annuler">
-                        <input class="blue" id="submitaddparent" type="submit" style="margin-left: 550px"  value="Enregistrer" >
+                            <input class="blue"  style="float: left" name="submitApprenant" type="button" value="Annuler">
+                            <input class="blue" id="submitaddparent" type="submit" style="margin-left: 550px"  value="Enregistrer" >
 
-                    </div>
+                        </div>
 
 
 
-                </form>
+                    </form>
 
+                </div>
             </div>
-        </div>
 
-        <div id="addExperience" class="popup">
+            <div id="addExperience" class="popup">
                 <div onclick="hide(this)" class="close"></div>
                 <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
                     <form id="formaddExperience" class="formulaire" action="{{ path("experience_added") }}" onsubmit="document.getElementById('submitaddExperience').disabled=true"  method="post" enctype="multipart/form-data">
@@ -147,48 +147,48 @@
                 </div>
             </div>
 
-        <div id="addRecommandation" class="popup">
-            <div onclick="hide(this)" class="close"></div>
-            <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
-            <form id="formaddRecommandation" class="formulaire" action="{{ path("recommandation_added") }}" onsubmit="document.getElementById('submitaddRecommandation').disabled=true" method="post" enctype="multipart/form-data">
+            <div id="addRecommandation" class="popup">
+                <div onclick="hide(this)" class="close"></div>
+                <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
+                    <form id="formaddRecommandation" class="formulaire" action="{{ path("recommandation_added") }}" onsubmit="document.getElementById('submitaddRecommandation').disabled=true" method="post" enctype="multipart/form-data">
 
-                <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
+                        <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
 
-                <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Recommandation</Label>
-                <div class="div_form" style="">
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Recommandation</Label>
+                        <div class="div_form" style="">
 
-                <div class="col-xs-6 input-colonne">
-                    <div class="col-xs-6 input-colonne">
-                        <input placeholder="Nom" class="input" type="text" id="Nom" name="_Nomrec" maxlength="45" required >
-                        <input placeholder="Fonction" class="input" type="text" id="Fonctionrec" name="_Fonctionrec" maxlength="45" required >
+                            <div class="col-xs-6 input-colonne">
+                                <div class="col-xs-6 input-colonne">
+                                    <input placeholder="Nom" class="input" type="text" id="Nom" name="_Nomrec" maxlength="45" required >
+                                    <input placeholder="Fonction" class="input" type="text" id="Fonctionrec" name="_Fonctionrec" maxlength="45" required >
 
-                    </div>
-                    <div class="col-xs-6 input-colonne" style="border-right: 0">
-                        <input placeholder="Prenom" class="input" type="text" id="Prenom" name="_Prenomrec" maxlength="45" required >
-                        <input placeholder="Téléphone fixe" class="input"  type="text" id="Telephonerec" name="_Telephonerec" maxlength="45" required >
-                    </div>
-                    <input placeholder="Adresse email" class="input" type="text" id="Emailrec" name="_Emailrec" maxlength="45" required >
+                                </div>
+                                <div class="col-xs-6 input-colonne" style="border-right: 0">
+                                    <input placeholder="Prenom" class="input" type="text" id="Prenom" name="_Prenomrec" maxlength="45" required >
+                                    <input placeholder="Téléphone fixe" class="input"  type="text" id="Telephonerec" name="_Telephonerec" maxlength="45" required >
+                                </div>
+                                <input placeholder="Adresse email" class="input" type="text" id="Emailrec" name="_Emailrec" maxlength="45" required >
+                            </div>
+
+
+                            <div class="col-xs-6 input-colonne " style="height:150px">
+                                <textarea placeholder="Recommandation écrite" class="input" type="text" id="Text" name="_Text"  required style="resize:none;height:calc( 100% - 13px)"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="div_button" style="background-color: white">
+
+                            <input class="blue"  style="float: left" name="submitApprenant" type="button" value="Annuler">
+                            <input class="blue" id="submitaddRecommandation" type="submit" style="margin-left: 550px"  value="Enregistrer" >
+
+                        </div>
+
+
+                    </form>
                 </div>
+            </div>
 
-
-                <div class="col-xs-6 input-colonne " style="height:150px">
-                    <textarea placeholder="Recommandation écrite" class="input" type="text" id="Text" name="_Text"  required style="resize:none;height:calc( 100% - 13px)"></textarea>
-                </div>
-                    </div>
-
-                <div class="div_button" style="background-color: white">
-
-                    <input class="blue"  style="float: left" name="submitApprenant" type="button" value="Annuler">
-                    <input class="blue" id="submitaddRecommandation" type="submit" style="margin-left: 550px"  value="Enregistrer" >
-
-                </div>
-
-
-            </form>
-                </div>
-        </div>
-
-        <div id="addDiplome" class="popup">
+            <div id="addDiplome" class="popup">
                 <div onclick="hide(this)" class="close"></div>
                 <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
                     <form id="formaddDiplome" class="formulaire" action="{{ path("diplome_added") }}" onsubmit="document.getElementById('submitaddDiplome').disabled=true" method="post" enctype="multipart/form-data">
@@ -227,7 +227,7 @@
                 </div>
             </div>
 
-        <div id="addDocument" class="popup">
+            <div id="addDocument" class="popup">
                 <div onclick="hide(this)" class="close"></div>
                 <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
                     <form id="formaddDocument" class="formulaire" action="{{ path("Document_added") }}" onsubmit="document.getElementById('submitaddDocument').disabled=true" method="post" enctype="multipart/form-data">
@@ -262,7 +262,7 @@
                 </div>
             </div>
 
-        <div id="addFormation" class="popup">
+            <div id="addFormation" class="popup">
                 <div onclick="hide(this)" class="close"></div>
                 <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
                     <form id="formaddFormation" class="formulaire" action="{{ path("Candidature_added") }}" onsubmit="document.getElementById('submitaddFormation').disabled=true" method="post" >
@@ -276,7 +276,7 @@
                             <div class="col-xs-12 input-colonne " >
                                 <select class="input" title="" style="height: 100px" name="formations[]" multiple>
                                     {% for formation in formations %}
-                                            <option value="{{ formation.getId }}">{{ formation.getNom }}</option>
+                                        <option value="{{ formation.getId }}">{{ formation.getNom }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -317,7 +317,7 @@
                             </select>
 
                         {% else  %}
-                            <Label value="info_user" style="font:20px arial;width: 100%; height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;text-align: left;">Données Utilisateur</Label>
+                            <Label value="info_user" style="font:20px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;text-align:left;">Données Utilisateur</Label>
                         {% endif %}
                     </div>
                 </div>
@@ -1052,17 +1052,17 @@
         champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
     }
     function supprimerRecommandation(route, champs){
-       $.ajax({
-           type: 'get',
-           url: route,
-           error: function (response) {
-               console.log(response);
-           },
-           success: function(data){console.log(data);}
-       });
-       champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
+        $.ajax({
+            type: 'get',
+            url: route,
+            error: function (response) {
+                console.log(response);
+            },
+            success: function(data){console.log(data);}
+        });
+        champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
 
-   }
+    }
     function supprimerDiplome(route, champs){
         $.ajax({
             type: 'get',

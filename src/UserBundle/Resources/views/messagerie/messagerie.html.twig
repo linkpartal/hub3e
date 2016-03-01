@@ -232,7 +232,7 @@
                 <option value="les messages">Tous les messages</option>
             </select>
 
-                <label style="width:20px" id="startTimeLabel" visible="false"></label>
+            <label style="width:20px" id="startTimeLabel" visible="false"></label>
 
             <span class="glyphicon glyphicon-search" ></span>
             <input type="text" class="input" placeholder="Recherche" style="padding:5px; border:solid 1px #666666; color:#666666; border-radius:5px;width:200px;height:40px;margin-right:607px" >
@@ -241,48 +241,48 @@
             <button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
 
         </div>
-        </div>
+    </div>
 
 
 
     {% if messageies is defined %}
-    {% for msg in messageies %}
+        {% for msg in messageies %}
 
-        <div id="{{ msg.id }}" class="col-xs-12 Liste" style="border: 1px solid #ddd;width:90%;margin-right:5px;margin-bottom: 0;margin-top: 0;height:100px;" >
-            {% if msg.expediteur.hasRole('ROLE_APPRENANT') %}
-            <div class="col-xs-2" >
-                <div style="border: 15px solid transparent">
-                    <img   src="data:image/jpg;base64,{{msg.getExpediteur.getPhotos }}" style="height:70px;width:70px;margin:0 40px;border-radius: 100%">
-                </div>
+            <div id="{{ msg.id }}" class="col-xs-12 Liste" style="border: 1px solid #ddd;width:90%;margin-right:5px;margin-bottom: 0;margin-top: 0;height:100px;" >
+                {% if msg.expediteur.hasRole('ROLE_APPRENANT') %}
+                    <div class="col-xs-2" >
+                        <div style="border: 15px solid transparent">
+                            <img   src="data:image/jpg;base64,{{msg.getExpediteur.getPhotos }}" style="height:70px;width:70px;margin:0 40px;border-radius: 100%">
+                        </div>
 
 
-            </div>
+                    </div>
 
-            <div class="col-xs-1" style="margin-top:10px;text-align: left ">
-                <label style="font:18px arial;margin-top: 40px" > {{ msg.getDate|date('d M') }} </label>
-            </div>
+                    <div class="col-xs-1" style="margin-top:10px;text-align: left ">
+                        <label style="font:18px arial;margin-top: 40px" > {{ msg.getDate|date('d M') }} </label>
+                    </div>
 
-            <div class="col-xs-6" style="margin-top:10px;text-align: left">
-                <label style="font:18px arial ;margin-top: 20px;float:left;width: 100%" > {{ msg.getMessage }} </label><br>
-                <label style="font:16px arial;float:left;width: 100%" > {{ msg.getMission.getIntitule }} - <label style="font:18px arial;color:#2A76CC" > {{ msg.getMission.etablissement.tier.raisonsoc }}</label> </label>
-            </div>
+                    <div class="col-xs-6" style="margin-top:10px;text-align: left">
+                        <label style="font:18px arial ;margin-top: 20px;float:left;width: 100%" > {{ msg.getMessage }} </label><br>
+                        <label style="font:16px arial;float:left;width: 100%" > {{ msg.getMission.getIntitule }} - <label style="font:18px arial;color:#2A76CC" > {{ msg.getMission.etablissement.tier.raisonsoc }}</label> </label>
+                    </div>
 
-            <div class="col-xs-offset-1 col-xs-1" style="margin-top:10px;">
-                {% if msg.statut == 1 %}
-                <label id="statut{{ msg.id }}" style="font:18px arial;margin-top: 30px;color: green;" > Valider </label>
-                {% elseif msg.statut == -1 %}
-                    <label id="statut{{ msg.id }}" style="font:18px arial;margin-top: 30px;color: red;" > Décliner </label>
-                {% else %}
-                    <label id="statut{{ msg.id }}" style="font:18px arial;margin-top: 30px" > Répondez </label>
-                {% endif %}
-            </div>
-            <div onclick="informationApprenant('{{msg.getExpediteur.getPhotos}}','{{ msg.getExpediteur.getCivilite }}','{{ msg.getExpediteur.getNom }}','{{ msg.getExpediteur.getPrenom }}',
-                    '{{ msg.getExpediteur.getEmail }}','{{ msg.getExpediteur.getTelephone }}','{{ msg.getExpediteur.getInfo.getDateNaissance|date("d/m/Y") }}',
-                    '{{ msg.getExpediteur.getInfo.getCpNaissance }}','{{ msg.getExpediteur.getInfo.getLieunaissance }}','{{ msg.getExpediteur.getInfo.getAdresse }}','{{ msg.message }}');
-                    show('FicheApprenant');idMessage={{ msg.id }}" class="col-xs-1" style="height: 100%">
-                <span class="glyphicon glyphicon-option-vertical" style="margin-top:40px;height:20px;color:#8c8c8c"></span>
+                    <div class="col-xs-offset-1 col-xs-1" style="margin-top:10px;">
+                        {% if msg.statut == 1 %}
+                            <label id="statut{{ msg.id }}" style="font:18px arial;margin-top: 30px;color: green;" > Valider </label>
+                        {% elseif msg.statut == -1 %}
+                            <label id="statut{{ msg.id }}" style="font:18px arial;margin-top: 30px;color: red;" > Décliner </label>
+                        {% else %}
+                            <label id="statut{{ msg.id }}" style="font:18px arial;margin-top: 30px" > Répondez </label>
+                        {% endif %}
+                    </div>
+                    <div onclick="informationApprenant('{{msg.getExpediteur.getPhotos}}','{{ msg.getExpediteur.getCivilite }}','{{ msg.getExpediteur.getNom }}','{{ msg.getExpediteur.getPrenom }}',
+                            '{{ msg.getExpediteur.getEmail }}','{{ msg.getExpediteur.getTelephone }}','{{ msg.getExpediteur.getInfo.getDateNaissance|date("d/m/Y") }}',
+                            '{{ msg.getExpediteur.getInfo.getCpNaissance }}','{{ msg.getExpediteur.getInfo.getLieunaissance }}','{{ msg.getExpediteur.getInfo.getAdresse }}','{{ msg.message }}');
+                            show('FicheApprenant');idMessage={{ msg.id }}" class="col-xs-1" style="height: 100%">
+                        <span class="glyphicon glyphicon-option-vertical" style="margin-top:40px;height:20px;color:#8c8c8c"></span>
 
-            </div>
+                    </div>
                 {% else %}
                     <div class="col-xs-2" >
                         <div style="border: 15px solid transparent">
@@ -316,10 +316,10 @@
                         <span class="glyphicon glyphicon-option-vertical" style="margin-top:40px;height:20px;color:#8c8c8c"></span>
 
                     </div>
-            {% endif %}
-        </div>
+                {% endif %}
+            </div>
 
-    {% endfor %}
+        {% endfor %}
     {% endif %}
 </div>
 
@@ -399,7 +399,6 @@
         document.getElementById('decliner_button').style.display= 'none';
         document.getElementById('declinerMission').style.display= 'none';
         document.getElementById('declinerMission_button').style.display= 'none';
-
     }
     function informationMission(image,intitule,raisonsoc,descriptif,codemission,adresse,ville,cp,message) {
         document.getElementById('FicheMission').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
@@ -413,12 +412,9 @@
         {
             marker_societe.setMap(null);
         }
-
         var geocoder = new google.maps.Geocoder();
-
         geocoder.geocode({'address': adresse }, function (results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
-
                 marker_societe = new google.maps.Marker({
                     map: map_mission,
                     position: results[0].geometry.location,
@@ -431,7 +427,6 @@
                 alert('Nous n\'avons pas réussi à localiser l\'adresse l\'apprenant qui est : ' + adresse);
             }
         });
-
     }
     function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse,message) {
         document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
@@ -451,12 +446,9 @@
         {
             marker.setMap(null);
         }
-
         var geocoder = new google.maps.Geocoder();
-
         geocoder.geocode({'address': adresse }, function (results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
-
                 marker = new google.maps.Marker({
                     map: map_localisation,
                     position: results[0].geometry.location,
@@ -469,18 +461,15 @@
                 alert('Nous n\'avons pas réussi à localiser l\'adresse l\'apprenant qui est : ' + adresse);
             }
         });
-
     }
     function initialize() {
         var locations =[];
         var loc, map, marker;
-
         map_localisation = new google.maps.Map(document.getElementById("Localisation"), {
             zoom: 15,
             center: loc,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         });
-
         map_mission = new google.maps.Map(document.getElementById("Localisationmission"), {
             zoom: 15,
             center: loc,

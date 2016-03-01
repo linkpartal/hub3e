@@ -186,6 +186,7 @@ class DefaultController extends Controller
             {
                 //  $msg->getDestinataire()->setPhotos(base64_encode(stream_get_contents($msg->getDestinataire()->getPhotos())));
                 $msg->getExpediteur()->setPhotos(base64_encode(stream_get_contents($msg->getExpediteur()->getPhotos())));
+
             }
             if($msg->getMission()->getEtablissement()->getTier()->getLogo() and !is_string($msg->getMission()->getEtablissement()->getTier()->getLogo())){
                 $msg->getMission()->getEtablissement()->getTier()->setLogo(base64_encode(stream_get_contents($msg->getMission()->getEtablissement()->getTier()->getLogo())));
@@ -1358,12 +1359,13 @@ class DefaultController extends Controller
 
         if($request->get('_Langue'))
         {
+
             for($i = 0; $i< count($request->get('_Langue'));$i++) {
                 $langue = $em->getRepository('GenericBundle:Langue')->findOneBy(array('langue'=>$request->get('_Langue')[$i],'niveau'=>$request->get('_Niveau')[$i]));
-
                 $langue->addImportCandidat($apprenant);
                 $em->flush();
             }
+
         }
 
         if($request->get('formations'))

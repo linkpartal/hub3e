@@ -64,6 +64,9 @@
     <script type="text/javascript" src="{{ asset('js/raptor.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/jquery-ui.js') }}"></script>
     <script>
+        function submitform(form) {
+            document.getElementById(form).submit();
+        }
         raptor(function($){
             $('.raptor-editable').raptor({
                 autoEnable: true,
