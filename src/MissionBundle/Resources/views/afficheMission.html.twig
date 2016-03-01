@@ -297,10 +297,16 @@
 
 
 <div class="row" >
+    {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
     <button onclick="moveto(this,'info_mission')" class="col-xs-4 onglet"  type="button" > FICHE MISSION</button>
     <button onclick="moveto(this,'apprenants_mission')" class="col-xs-4 onglet"  type="button" >LISTE DES APPRENANTS</button>
     <button onclick="moveto(this,'map')" class="col-xs-4 onglet"  type="button"  >CARTE DES APPRENANTS</button>
     <div id="baronglet" class="col-xs-4" style="height: 5px;background-color: #257ef0; z-index: 60;"></div>
+    {% else %}
+        <button onclick="moveto(this,'info_mission')" class="col-xs-6 onglet"  type="button" > FICHE MISSION</button>
+        <button onclick="moveto(this,'map')" class="col-xs-6 onglet"  type="button"  >CARTE DES APPRENANTS</button>
+        <div id="baronglet" class="col-xs-6" style="height: 5px;background-color: #257ef0; z-index: 60;"></div>
+    {% endif %}
 </div>
 
 
@@ -379,6 +385,10 @@
                                 <div class="col-xs-12" >Diffuser</div>
                             </button>
                         {% endif %}
+                    {% elseif app.user.hasRole('ROLE_APPRENANT') %}
+                        <button onclick="postuler()" type="button" class="list-group-item rightMenu" >
+                            <div class="col-xs-12" >Postuler pour cette Mission</div>
+                        </button>
                     {% endif %}
                 </div>
 
@@ -387,7 +397,7 @@
 
 
     </div>
-
+{% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
     <div id="apprenants_mission" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;width: 100%;height: 90%;visibility: hidden;position: absolute;">
         <div class="row" style="margin:10px 0 0 10px"  >
             <div>
@@ -402,7 +412,6 @@
         </div>
 
         <div class="row" style="height: 150px; margin:10px;background:white">
-
             {% if users is defined %}
                 {% for user in users %}
                     {% if user.hasRole('ROLE_APPRENANT') %}
@@ -459,19 +468,17 @@
                     {% endif %}
                 {% endfor %}
             {% endif %}
-
-
         </div>
 
     </div>
-
+{% endif %}
 
 
 
     <div id="map" style="height: 100%;width: 100%;position: absolute;visibility: hidden;">
 
     </div>
-
+    {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
     <div id="wrapper" class="infobox-wrapper">
         {% set i =0 %}
         {% for apprenant in users %}
@@ -497,6 +504,23 @@
             {% set i = i +1 %}
         {% endfor %}
     </div>
+    {% else %}
+        <div id="wrapper" class="infobox-wrapper">
+            <div id="Societe_Info" class="infobox">
+                <label style="float: left;color:white; font:10px Roboto ;margin: 15px 0 0 5px; line-height: 9px;">98%</label><div class="col-xs-1 active" style="    margin: 15px 0 0 5px;" ></div>
+                <div class="inbox" >
+                    <div >
+                        <img src="data:image/jpg;base64,{{ mission.etablissement.tier.getLogo }}" style="height:100%;width: 100%;border-radius: 50%;">
+                    </div>
+                </div>
+                <label class="col-xs-12" style="color:white;font: 10px Roboto;text-transform: uppercase; text-align: center;top:30px;">{{ mission.intitule }} - {{ mission.etablissement.tier.raisonsoc }}</label>
+                <label class="col-xs-12" style="color:white;font: 10px Roboto;text-transform: uppercase; text-align: center;top:30px;">4.7<img src="{{ asset('image/bookmark50.png') }}" style="height: 10px"></label>
+                <button type="button" class="col-xs-12" style="margin-top: 30px;">Voir sa fiche</button>
+                <button type="button" class="col-xs-12" >Mettre en relation</button>
+                <button class="col-xs-12">plus</button>
+            </div>
+        </div>
+    {% endif %}
 
 </div>
 <script src="//code.jquery.com/jquery.min.js"></script>
@@ -512,6 +536,23 @@
 <script src="{{ asset('js/PopUp.js') }}"></script>
 <script language="JavaScript">
     var idMRDestinataire;
+    function postuler(){
+        var route = '{{ path('postuler_Mission',{'id': mission.id }) }}';
+        $.ajax({
+            type: 'POST',
+            url: route,
+            success: function(data){
+                if(data===1)
+                {
+                    alert('Vous venez de postuler pour la mission {{ mission.codemission }}' );
+                }
+                else if(data===0)
+                {
+                    alert('Vous avez déjà postuler pour la mission {{ mission.codemission }}' );
+                }
+            }
+        });
+    }
     function envoyerMRAction(){
         var route = '{{ path('MiseEnRelation_mission',{'idDest':'_IDUSER','idEnv':app.user.id,'mission':mission.id}) }}';
         route = route.replace('_IDUSER',idMRDestinataire);
@@ -664,7 +705,9 @@
         var elem = document.getElementById("baronglet");
         var pos = elem.offsetLeft;
         document.getElementById('info_mission').style.visibility= 'hidden';
+        {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
         document.getElementById('apprenants_mission').style.visibility= 'hidden';
+        {% endif %}
         document.getElementById('map').style.visibility= 'hidden';
         for (var i=0;i<infoWindows.length;i++) {
             infoWindows[i].close();
@@ -737,6 +780,27 @@
             visible: true,
             icon: '{{ asset('image/societe.png') }}'
         });
+        {% if not is_granted('ROLE_TUTEUR') and not is_granted('ROLE_RECRUTEUR') %}
+        infobox = new InfoBox({
+            content: document.getElementById("Societe_Info")
+            ,disableAutoPan: false
+            ,maxWidth: 0
+            ,pixelOffset: new google.maps.Size(-76, -212)
+            ,zIndex: null
+            ,closeBoxMargin: "4px 4px 4px 4px"
+            ,closeBoxURL: "{{ asset('image/close_infobox.png') }}"
+            ,infoBoxClearance: new google.maps.Size(1, 1)
+            ,isHidden: false
+            ,pane: "floatPane"
+            ,enableEventPropagation: false
+        });
+        infoWindows.push(infobox);
+
+        google.maps.event.addListener(marker, "click", function() {
+            infobox.open(map, this);
+            map.panTo(loc);
+        });
+        {% endif %}
         marker = new google.maps.Marker({
             map: map_localisation,
             position: loc,
@@ -760,16 +824,42 @@
                     map: map,
                     position: results[0].geometry.location,
                     visible: true,
-                    icon: '{{ asset('image/societe.png') }}',
-                    label: j.toString()
+                    icon: '{{ asset('image/societe.png') }}'
                 });
+                {% if not is_granted('ROLE_TUTEUR') and not is_granted('ROLE_RECRUTEUR') %}
+                infobox = new InfoBox({
+                    content: document.getElementById("Societe_Info")
+                    ,disableAutoPan: false
+                    ,maxWidth: 0
+                    ,pixelOffset: new google.maps.Size(-76, -212)
+                    ,zIndex: null
+                    ,closeBoxMargin: "4px 4px 4px 4px"
+                    ,closeBoxURL: "{{ asset('image/close_infobox.png') }}"
+                    ,infoBoxClearance: new google.maps.Size(1, 1)
+                    ,isHidden: false
+                    ,pane: "floatPane"
+                    ,enableEventPropagation: false
+                });
+                infoWindows.push(infobox);
 
+                google.maps.event.addListener(marker, "click", function() {
+                    infobox.open(map, this);
+                    map.panTo(loc);
+                });
+                {% endif %}
+                marker = new google.maps.Marker({
+                    map: map_localisation,
+                    position: results[0].geometry.location,
+                    visible: true,
+                    icon: '{{ asset('image/societe.png') }}'
+                });
 
             }
         });
         {% endif %}
-
+        {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
         var informations_users = JSON.parse('{{ informations_maps|json_encode }}'.replace(/&quot;/g,'"'));
+
         var geocoder = new google.maps.Geocoder();
         var adresse_manquante = 0;
         for(var i = 0; i < {{ users|length }}; i++)
@@ -853,6 +943,7 @@
                 }
             });
         }
+        {% endif %}
     }
     google.maps.event.addDomListener(window, 'load', initialize);
 </script>
