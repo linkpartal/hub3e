@@ -360,7 +360,7 @@
                     {% endif %}
                     {% if import_apprenants is defined %}
                         {% for u in import_apprenants %}
-                            <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId }) }}',this)" id="import{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                            <button onclick="postiframeUser('{{ path('Afficher_Sas',{'id': u.getId }) }}',this)" id="import{{ u.getId }}" type="button" class="list-group-item butonLigne">
                                 <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
                                 <div class="col-xs-12 part" style="height: 31px; text-align: left;">
                                     <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>

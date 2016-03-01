@@ -21,6 +21,7 @@ class DefaultController extends Controller
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
 
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAll();
+
         $ecoles = array();
         $societes = array();
         foreach($etablissement as $item)

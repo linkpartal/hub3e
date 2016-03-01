@@ -39,6 +39,8 @@ class DefaultController extends Controller
         $Langue = $this->getDoctrine()->getRepository('GenericBundle:Langue')->findAll();
         $Hobbies = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->findAll();
 
+
+
         $Experience = $this->getDoctrine()->getRepository('GenericBundle:Experience')->findBy(array('user'=>$userid));
         $Recommandation = $this->getDoctrine()->getRepository('GenericBundle:Recommandation')->findBy(array('user'=>$userid));
         $Diplome = $this->getDoctrine()->getRepository('GenericBundle:Diplome')->findBy(array('user'=>$userid));
@@ -102,9 +104,7 @@ class DefaultController extends Controller
 
     }
 
-    public function affichageSASAction($id){
 
-    }
 
     public function affichageProfilAction()
     {
@@ -338,7 +338,7 @@ class DefaultController extends Controller
         if($user->hasRole('ROLE_APPRENANT')){
             $info = $em->getRepository('GenericBundle:infocomplementaire')->find(array('id'=>$request->get('_IdInfo')));
 
-            // $info->setDatenaissance(date_create($request->get('_Datenaissance')) );
+            $info->setDatenaissance(date_create_from_format('d/m/Y', $request->get('_Datenaissance')) );
             $info->setCpnaissance($request->get('_Cpnaissance'));
             $info->setLieunaissance($request->get('_Lieunaissance'));
             $info->setAdresse($request->get('_Adresse'));
@@ -509,15 +509,15 @@ class DefaultController extends Controller
 
     }
 
-    public function suppsuppDocumentAction($id)
+    public function suppDocumentAction($id)
     {
         $em = $this->getDoctrine()->getManager();
         $document = $em->getRepository('GenericBundle:Document')->find($id);
-
         $em->remove($document);
         $em->flush();
         $reponse = new JsonResponse();
         return $reponse->setData(array('Status' => 'document correctement supprimer'));
+
     }
 
     public function importAction(Request $request)
