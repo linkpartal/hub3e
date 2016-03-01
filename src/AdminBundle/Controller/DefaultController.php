@@ -13,7 +13,10 @@ class DefaultController extends Controller
     public function loadAction(){
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $image = base64_encode(stream_get_contents($user->getPhotos()));
+        if($user->getPhotos())
+        {
+            $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
+        }
 
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
 
@@ -26,21 +29,21 @@ class DefaultController extends Controller
             {
                 array_push($ecoles,$item);
             }
-            else{
+            elseif(!$item->getTier()->getEcole() && !$item->getSuspendu()){
                 array_push($societes,$item);
             }
         }
         $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findAll();
         $apprenants =array();
         $notapprenant = array();
-        foreach($users as $user)
+        foreach($users as $userd)
         {
             if($user->hasRole('ROLE_APPRENANT'))
             {
-                array_push($apprenants,$user);
+                array_push($apprenants,$userd);
             }
             else{
-                array_push($notapprenant,$user);
+                array_push($notapprenant,$userd);
             }
         }
         $import_apprenant = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$user));
@@ -49,9 +52,8 @@ class DefaultController extends Controller
         $qcms = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findAll();
         $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');
-
         return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$notapprenant,
-            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'missions'=>$missions,'apprenants'=>$apprenants,'import_apprenants'=>$import_apprenant,'image'=>$image));
+            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'missions'=>$missions,'apprenants'=>$apprenants,'import_apprenants'=>$import_apprenant,'image'=>$user->getPhotos()));
     }
 
     public function loadiframeAction()

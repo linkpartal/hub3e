@@ -28,4 +28,9 @@ INSERT INTO `Langue` (`id`, `langue`, `niveau`) VALUES
 (13,  'Allemand', 'connansance de base'),
 (14,  'Allemand', 'bonne connaissance'),
 (15,  'Allemand', 'courant'),
-(16,  'Allemand', 'langue maternelle');
+(16,  'Allemand', 'langue maternelle'),
+
+(13,  'Arabe', 'connansance de base'),
+(14,  'Arabe', 'bonne connaissance'),
+(15,  'Arabe', 'courant'),
+(16,  'Arabe', 'langue maternelle');

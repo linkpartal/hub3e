@@ -129,9 +129,8 @@
                 <button onclick="show('import')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                 ></button>
 
-                <button onclick="window.location.href='{{ path('afficher_import') }}'" style="color:white ">importer</button>
+                <button onclick="document.getElementById('iframe').src='{{ path('afficher_import') }}'" style="color:white ">SAS Admissions</button>
             </div>
-
             <div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px; float: right; margin-right: 40px;">
                 <button type="button" class="btn btn-default dropdown-toggle"
                         data-toggle="dropdown" aria-haspopup="true"
@@ -140,7 +139,6 @@
                     {% if image %}
                         <img  src="data:image/jpg;base64,{{image}}" style="border-radius:50%; width:32px; height:32px" >
                     {% else %}
-
                         {% if app.user.getCivilite == 'Mr' or app.user.getCivilite == 'Monsieur' %}
                             <img  src="{{ asset('image/homme.jpg') }}" style="border-radius:50%; width:32px; height:32px" >
                         {%  elseif app.user.getCivilite == 'Mme' or app.user.getCivilite == 'Madame'%}
@@ -151,19 +149,12 @@
                                                  aria-hidden="true"></span>
                 </button>
                 <ul id="profil" class="dropdown-menu" aria-labelledby="dropdownMenu1" style="color:white;background: #2975cb;">
-
                     <li><button onclick="postiframeUser('{{ path('afficher_profil') }}')" style="background: transparent;border:transparent;width:100%">PROFIL</button></li>
+                    <li><button onclick="postiframeUser('{{ path('afficher_messagerie') }}')" style="background: transparent;border:transparent;width:100%">MESSAGERIE</button></li>
                     <li><a href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">LOGOUT</button> </a></li>
-
-
-
                 </ul>
-
-
             </div>
         </div>
-
-
     {% endblock %}
     <div class="row" style="height: 100%">
 

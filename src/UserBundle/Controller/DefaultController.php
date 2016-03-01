@@ -14,7 +14,6 @@ use GenericBundle\Entity\Infocomplementaire;
 use GenericBundle\Entity\Langue;
 use GenericBundle\Entity\Mission;
 use GenericBundle\Entity\Parents;
-use GenericBundle\Entity\Qcmdef;
 use GenericBundle\Entity\Recommandation;
 use GenericBundle\Entity\User;
 use GenericBundle\Entity\Etablissement;
@@ -25,8 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use GenericBundle\Entity\Notification;
 use Ddeboer\DataImport\Reader\CsvReader;
-use Symfony\Component\Validator\Constraints\Date;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 class DefaultController extends Controller
 {
@@ -99,7 +96,7 @@ class DefaultController extends Controller
         }
         else{
             return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid,'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,
-                'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,'Hobbies'=>$Hobbies,'candidatures'=>$candidatures,'formations'=>$formation));
+                'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,'Hobbies'=>$Hobbies,'candidatures'=>$candidatures,'formations'));
         }
 
 
@@ -174,31 +171,24 @@ class DefaultController extends Controller
         }
         else{
             return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig', array('User' => $userid,'Infocomplementaire' => $info, 'Parents' => $Parents, 'Experience' => $Experience,
-                'Recommandation' => $Recommandation, 'Diplome' => $Diplome, 'Document' => $Document, 'Langue' => $Langue, 'Hobbies' => $Hobbies,'candidatures' => $candidatures,'formations'=>$formation));
+                'Recommandation' => $Recommandation, 'Diplome' => $Diplome, 'Document' => $Document, 'Langue' => $Langue, 'Hobbies' => $Hobbies,'candidatures' => $candidatures));
         }
     }
 
 
     public function afficher_messagerieAction(){
         $user = $this->get('security.token_storage')->getToken()->getUser();
-
-       $message = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user ));
-      // $message = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('expediteur'=>$user));
-
+        $message = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user ));
+        // $message = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('expediteur'=>$user));
         foreach($message as $msg)
         {
             if($msg->getExpediteur()->getPhotos() and !is_string($msg->getExpediteur()->getPhotos())   )
             {
-           //  $msg->getDestinataire()->setPhotos(base64_encode(stream_get_contents($msg->getDestinataire()->getPhotos())));
-             $msg->getExpediteur()->setPhotos(base64_encode(stream_get_contents($msg->getExpediteur()->getPhotos())));
-
-
+                //  $msg->getDestinataire()->setPhotos(base64_encode(stream_get_contents($msg->getDestinataire()->getPhotos())));
+                $msg->getExpediteur()->setPhotos(base64_encode(stream_get_contents($msg->getExpediteur()->getPhotos())));
             }
         }
-
-
-
-      return  $this->render('UserBundle:messagerie:messagerie.html.twig',array('messageies'=>$message));
+        return  $this->render('UserBundle:messagerie:messagerie.html.twig',array('messageies'=>$message));
     }
 
 
@@ -242,12 +232,14 @@ class DefaultController extends Controller
         $superadmins = array_merge($superadmins, $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$usercon->getTier())));
 
         foreach($superadmins as $admin){
-            $notif = new Notification();
-            $notif->setEntite($newuser->getId());
-            $notif->setType('Utilisateur');
-            $notif->setUser($admin);
-            $em->persist($notif);
-            $em->flush();
+            if(!$this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('entite'=>$newuser->getId(),'type'=>'Utilisateur','user'=>$admin))){
+                $notif = new Notification();
+                $notif->setEntite($newuser->getId());
+                $notif->setType('Utilisateur');
+                $notif->setUser($admin);
+                $em->persist($notif);
+                $em->flush();
+            }
         }
 
         //send password
@@ -318,12 +310,6 @@ class DefaultController extends Controller
         return $reponse;
     }
 
-    public function modifierAction($id)
-    {
-        $userid = $this->getDoctrine()->getRepository('GenericBundle:User')->find($id);
-        return $this->render('UserBundle:Gestion:modifierUtilisateur.html.twig',array('user'=>$userid));
-    }
-
     public function  modifierStatutCandidatureAction($id,$statut){
         $em = $this->getDoctrine()->getManager();
         $candi= $em->getRepository('GenericBundle:Candidature')->find($id);
@@ -339,23 +325,6 @@ class DefaultController extends Controller
     public function userModifAction(Request $request){
         $em = $this->getDoctrine()->getManager();
 
-        $info = $em->getRepository('GenericBundle:infocomplementaire')->find(array('id'=>$request->get('_IdInfo')));
-
-        // $info->setDatenaissance(date_create($request->get('_Datenaissance')) );
-        $info->setCpnaissance($request->get('_Cpnaissance'));
-        $info->setLieunaissance($request->get('_Lieunaissance'));
-        $info->setAdresse($request->get('_Adresse'));
-        $info->setFacebook($request->get('_Facebook'));
-        $info->setLinkedin($request->get('_Linkedin'));
-        $info->setMobilite($request->get('_Mobilite'));
-        $info->setFratrie($request->get('_Fratrie'));
-
-        $em->flush();
-
-
-
-
-
         $user = $em->getRepository('GenericBundle:User')->findOneBy(array('id'=>$request->get('_ID')));
 
 
@@ -365,8 +334,21 @@ class DefaultController extends Controller
         $user->setTelephone($request->get('_Tel'));
         $user->setUsername($request->get('_Username'));
         $user->setEmail($request->get('_Mail'));
-
         $em->flush();
+        if($user->hasRole('ROLE_APPRENANT')){
+            $info = $em->getRepository('GenericBundle:infocomplementaire')->find(array('id'=>$request->get('_IdInfo')));
+
+            // $info->setDatenaissance(date_create($request->get('_Datenaissance')) );
+            $info->setCpnaissance($request->get('_Cpnaissance'));
+            $info->setLieunaissance($request->get('_Lieunaissance'));
+            $info->setAdresse($request->get('_Adresse'));
+            $info->setFacebook($request->get('_Facebook'));
+            $info->setLinkedin($request->get('_Linkedin'));
+            $info->setMobilite($request->get('_Mobilite'));
+            $info->setFratrie($request->get('_Fratrie'));
+
+            $em->flush();
+        }
 
         return $this->forward('UserBundle:Default:affichageUser',array('id'=>$request->get('_ID')));
     }
@@ -756,12 +738,14 @@ class DefaultController extends Controller
                 $superadmins = array_merge($superadmins, $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$usercon->getTier())));
 
                 foreach($superadmins as $admin){
-                    $notif = new Notification();
-                    $notif->setEntite($mission->getId());
-                    $notif->setType('Mission');
-                    $notif->setUser($admin);
-                    $em->persist($notif);
-                    $em->flush();
+                    if(!$this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('entite'=>$mission->getId(),'type'=>'Mission','user'=>$admin))){
+                        $notif = new Notification();
+                        $notif->setEntite($mission->getId());
+                        $notif->setType('Mission');
+                        $notif->setUser($admin);
+                        $em->persist($notif);
+                        $em->flush();
+                    }
                 }
             }
         }
@@ -868,10 +852,12 @@ class DefaultController extends Controller
             foreach($import->getHobbies() as $hobby)
             {
                 $newuser->addHobby($hobby);
+                $em->flush();
             }
             foreach($import->getLangue() as $langue)
             {
-                $newuser->addCulturel($langue);
+                $newuser->addLangue($langue);
+                $em->flush();
             }
 
             foreach($em->getRepository('GenericBundle:Experience')->findBy(array('importCandidat'=>$import)) as $experience)
@@ -908,12 +894,15 @@ class DefaultController extends Controller
             $superadmins = array_merge($superadmins, $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$usercon->getTier())));
 
             foreach($superadmins as $admin){
-                $notif = new Notification();
-                $notif->setEntite($newuser->getId());
-                $notif->setType('Utilisateur');
-                $notif->setUser($admin);
-                $em->persist($notif);
-                $em->flush();
+                if(!$this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('entite'=>$newuser->getId(),'type'=>'Utilisateur','user'=>$admin))){
+                    $notif = new Notification();
+                    $notif->setEntite($newuser->getId());
+                    $notif->setType('Utilisateur');
+                    $notif->setUser($admin);
+                    $em->persist($notif);
+                    $em->flush();
+
+                }
             }
 
             //send password
@@ -952,12 +941,7 @@ class DefaultController extends Controller
             $em->remove($import);
             $em->flush();
             return $response->setData(array('Ajout'=>'1'));
-
         }
-
-
-
-
     }
 
     public function FusionnerAction($sas,$user){
@@ -1307,7 +1291,6 @@ class DefaultController extends Controller
 
         $em->flush();
 
-
         if($request->get('_Nomresp'))
         {
             for($i = 0; $i< count($request->get('_Nomresp'));$i++) {
@@ -1326,7 +1309,6 @@ class DefaultController extends Controller
             }
         }
 
-
         if($request->get('_Libelle'))
         {
             for($i = 0; $i< count($request->get('_Libelle'));$i++) {
@@ -1339,8 +1321,6 @@ class DefaultController extends Controller
                 $em->flush();
             }
         }
-
-
 
         if($request->get('_Nomsociete'))
         {
@@ -1358,8 +1338,6 @@ class DefaultController extends Controller
             }
         }
 
-
-
         if($request->get('_Nomrec'))
         {
             for($i = 0; $i< count($request->get('_Nomrec'));$i++) {
@@ -1375,17 +1353,16 @@ class DefaultController extends Controller
             }
         }
 
-
         if($request->get('_Langue'))
         {
+
             for($i = 0; $i< count($request->get('_Langue'));$i++) {
                 $langue = $em->getRepository('GenericBundle:Langue')->findOneBy(array('langue'=>$request->get('_Langue')[$i],'niveau'=>$request->get('_Niveau')[$i]));
-
                 $langue->addImportCandidat($apprenant);
                 $em->flush();
             }
-        }
 
+        }
 
         if($request->get('formations'))
         {
@@ -1406,6 +1383,7 @@ class DefaultController extends Controller
                 $em->flush();
             }
         }
+
         if($request->get('_Type'))
         {
             for($i = 0; $i < count($request->get('_Type')); $i++)

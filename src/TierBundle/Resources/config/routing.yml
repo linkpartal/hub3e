@@ -47,7 +47,7 @@ etablissement_exist:
     defaults: { _controller: TierBundle:Default:ExistEtab}
 
 supprimer_Licence:
-    path:  /suppLicence/{id}
+    path:  /suppLicence/id={id}
     defaults: {_controller: TierBundle:Default:suppLicence}
 
 supprimerAssociationEcole:
