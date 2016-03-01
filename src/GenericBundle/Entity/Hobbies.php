@@ -46,7 +46,7 @@ class Hobbies
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\ImportCandidat", inversedBy="hobbies")
+     * @ORM\ManyToMany(targetEntity="ImportCandidat", inversedBy="hobbies")
      * @ORM\JoinTable(name="hobbies_has_import_candidat",
      *   joinColumns={
      *     @ORM\JoinColumn(name="hobby_import_id", referencedColumnName="id")
