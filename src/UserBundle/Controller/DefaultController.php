@@ -182,10 +182,13 @@ class DefaultController extends Controller
         // $message = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('expediteur'=>$user));
         foreach($message as $msg)
         {
-            if($msg->getExpediteur()->getPhotos() and !is_string($msg->getExpediteur()->getPhotos())   )
+            if($msg->getExpediteur()->getPhotos() and !is_string($msg->getExpediteur()->getPhotos()))
             {
                 //  $msg->getDestinataire()->setPhotos(base64_encode(stream_get_contents($msg->getDestinataire()->getPhotos())));
                 $msg->getExpediteur()->setPhotos(base64_encode(stream_get_contents($msg->getExpediteur()->getPhotos())));
+            }
+            if($msg->getMission()->getEtablissement()->getTier()->getLogo() and !is_string($msg->getMission()->getEtablissement()->getTier()->getLogo())){
+                $msg->getMission()->getEtablissement()->getTier()->setLogo(base64_encode(stream_get_contents($msg->getMission()->getEtablissement()->getTier()->getLogo())));
             }
         }
         return  $this->render('UserBundle:messagerie:messagerie.html.twig',array('messageies'=>$message));

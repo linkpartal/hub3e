@@ -186,12 +186,12 @@
                 <input onclick="show_formapprenantproposer()"  class="blue" type="button"   value="Proposer un rendez-vous">
             </div>
             <div id="decliner_button" class="div_button" style="display: none">
-                <input id="submitAnnuler" onclick="FermerPopup('information_apprenant')" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Annuler">
+                <input id="submitAnnuler" onclick="FermerPopup()" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Annuler">
                 <input id="submitDecliner" class="blue" type="submit"  style="margin-left: 390px" value="Décliner">
 
             </div>
             <div id="proposer_button" class="div_button" style="display: none">
-                <input  class="blue" onclick="FermerPopup('information_apprenant')" style="background:white;color:#666666;border:1px solid #ccc;float: left;text-align: center ;width: 120px;height:50px" type="button" value="Annuler">
+                <input  class="blue" onclick="FermerPopup()" style="background:white;color:#666666;border:1px solid #ccc;float: left;text-align: center ;width: 120px;height:50px" type="button" value="Annuler">
                 <input id="submitReception" class="blue" type="submit" style="margin-left: 300px;text-align:center;width: 120px;height:50px"  value="Valider">
 
             </div>
@@ -256,7 +256,7 @@
             </div>
 
             <div id="declinerMission_button" class="div_button" style="display:none">
-                <input onclick="FermerPopup('information_mission')" id="submitAnnuler" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Annuler">
+                <input onclick="FermerPopup()" id="submitAnnuler" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Annuler">
                 <input id="submitDecliner" class="blue" type="submit"  style="margin-left: 390px" value="Décliner">
 
             </div>
@@ -647,7 +647,7 @@
         });
 
     }
-    function FermerPopup(div){
+    function FermerPopup(){
         document.getElementById('information_apprenant').style.display= 'block';
         document.getElementById('information_button').style.display= 'block';
         document.getElementById('information_mission').style.display= 'block';
