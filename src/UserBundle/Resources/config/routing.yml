@@ -135,3 +135,11 @@ reponseQCM:
 MiseEnRelation_mission:
     path: /Miseenrelation/Mission/idDest={idDest}/idEnv={idEnv}/mission={mission}
     defaults: { _controller: UserBundle:MiseEnRelation:envoiMessageMR }
+
+Reponse_Messagerie:
+    path: /Messagerie/message={idmessage}
+    defaults: { _controller: UserBundle:MiseEnRelation:RepondreMessage }
+
+Postuler_Messagerie:
+    path: /Messagerie/postuler/msg={idmessage}
+    defaults: { _controller: UserBundle:MiseEnRelation:PostulerMessagerie }
