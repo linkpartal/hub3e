@@ -23,9 +23,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SASController extends Controller
 {
-
-
-
     public function affichageUserSASAction($id){
 
 
@@ -73,7 +70,6 @@ class SASController extends Controller
 
 
     }
-
 
     public function SASModifAction(Request $request){
         $em = $this->getDoctrine()->getManager();
@@ -215,6 +211,7 @@ class SASController extends Controller
 
 
     }
+
     public function AjouterCandidatureSASAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -351,7 +348,6 @@ class SASController extends Controller
         return $this->redirect($this->generateUrl('Afficher_Sas',array('id'=>$request->get('_idUser'))));
     }
 
-
     public function supprimeruserSASAction($id)
     {
 
@@ -372,10 +368,4 @@ class SASController extends Controller
 
 
     }
-
-
-
-
-
-
 }

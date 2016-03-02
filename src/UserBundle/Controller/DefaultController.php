@@ -328,7 +328,7 @@ class DefaultController extends Controller
         return $reponse;
     }
 
-    public function  modifierStatutCandidatureAction($id,$statut){
+    public function modifierStatutCandidatureAction($id,$statut){
         $em = $this->getDoctrine()->getManager();
         $candi= $em->getRepository('GenericBundle:Candidature')->find($id);
 
@@ -1443,13 +1443,10 @@ class DefaultController extends Controller
 
 
 
-        return $this->redirect($this->generateUrl('affiche_etab',array('id'=>$request->get('_idEtab'))));
+        return $this->redirect($_SERVER['HTTP_REFERER']);
 
 
     }
-
-
-
 
     public function ReponseQCMAction($iduser,$idreponse){
         $em = $this->getDoctrine()->getManager();

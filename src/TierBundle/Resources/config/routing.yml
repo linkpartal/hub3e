@@ -82,10 +82,6 @@ admin_iframeload:
     path: /iframe
     defaults: { _controller: AdminBundle:Default:loadiframe}
 
-apprenant_added:
-    path: /ajouterApprenant
-    defaults: { _controller: UserBundle:Default:ajouterApprenant}
-
 
 
 

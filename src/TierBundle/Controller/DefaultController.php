@@ -412,10 +412,4 @@ class DefaultController extends Controller
         $reponse = new JsonResponse();
         return $reponse->setData(array('Status'=>'Licence correctement supprimer'));
     }
-
-
-
-
-
-
 }
