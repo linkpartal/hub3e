@@ -27,13 +27,13 @@
             <td>{{ import.getEmail }}</td>
             <td>{{ import.getErreur }}</td>
             <td style="border: none">
-                <button onclick="supprimerLigne('{{ path('supprimer_import',{'id': import.getId}) }}',this)" type="button" style="border: none">x</button>
+                <button onclick="supprimerLigne('{{ path('supprimer_import',{'id': import.getId}) }}',this)" type="button" style="border: none"><img src="{{ asset('image/imgSupprimer.png') }}"  alt="Supprimer" title="Supprimer"></button>
                 {% if not import.getErreur == null %}
-                    <button  type="button" style="border: none" disabled>+</button>
+                    <button  type="button" style="border: none" disabled><img  src="{{ asset('image/imgAjouter.png') }}"  alt="Ajouter" title="Ajouter"></button>
                     {% else %}
-                        <button onclick="supprimerLigne('{{ path('importer_candidat',{'id': import.getId}) }}',this)" type="button" style="border: none">+</button>
+                        <button onclick="supprimerLigne('{{ path('importer_candidat',{'id': import.getId}) }}',this)" type="button" style="border: none"><img  src="{{ asset('image/imgAjouter.png') }}"  alt="Ajouter" title="Ajouter"></button>
                 {% endif %}
-                <button onclick="voirduplica({{ import.getId }})" type="button" style="border: none">voir</button>
+                <button onclick="voirduplica({{ import.getId }})" type="button" style="border: none"><img src="{{ asset('image/goToFile_x18.png') }}"  alt="Voir" title="Voir"></button>
             </td>
         </tr>
     {% endfor %}
@@ -43,6 +43,9 @@
 <script language="javascript">
     function supprimerLigne(route,champs) {
         champs.disabled = true;
+        //champs.src="{{ asset('image/waitmini.gif') }}";
+
+        champs.firstChild.src="{{ asset('image/waitmini.gif') }}";
         $.ajax({
             type: 'get',
             url: route,
@@ -75,9 +78,12 @@
     };
     function voirduplica(id)
     {
+
+
         var route = '{{ path("afficher_duplica",{'id':"_id"}) }}';
         route = route.replace('_id',id);
         document.getElementById('iframe').src = route;
+        champs.firstChild.src="{{ asset('image/goToFile_x18.png') }}";
     }
 </script>
 </body>

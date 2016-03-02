@@ -47,11 +47,11 @@
         </div>
 
         <form id="form" action="{{ path('tieradded') }}" onsubmit="document.getElementById('submittier').disabled = true;" method="post" enctype="multipart/form-data">
-            <div class="div_form">
+            <div class="div_form" style="display: inline-table;" >
 
                 <div class="col-xs-6 input-colonne">
                     <input placeholder="SIREN" type="text" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" required>
-                    <label for="Logo"><img id="Logoimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label><br>
+                    <label for="Logo"><img id="Logoimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}" onclick="this.src='{{ asset('image/wait_x300.gif') }}'" /></label><br>
                     <input onchange="readURL(this,'Logoimg');"  accept="image/*" type="file" class="input" id="Logo" name="_Logo" style="display: none">
                 </div>
 
@@ -59,7 +59,7 @@
                 <input placeholder="Raison sociale" type="text" class="input" id="RaisonSoc" name="_RaisonSoc" maxlength="45" required>
 
 
-                <label for="image"><img id="backimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
+                <label for="image"><img  id="backimg" style="height: 200px;width: 150px" onclick="this.src='{{ asset('image/wait_x300.gif') }}'" src="{{ asset('image/upload-arrow.png') }}"/></label>
                 <input onchange="readURL(this,'backimg');" accept="image/*" type="file" class="input" id="image" name="_image" style="display: none">
                 </div>
 
@@ -84,9 +84,9 @@
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block">
 
-        <form id="formadduser" action="{{ path("user_added") }}" onsubmit="document.getElementById('submituser').disabled=true" method="post">
+        <form id="formadduser" action="{{ path("user_added") }}" onsubmit="document.getElementById('submituser').disabled=true" method="post" enctype="multipart/form-data">
 
-            <div class="div_form" >
+            <div class="div_form"  style="display: inline-table;" >
                 <div class="col-xs-6 input-colonne">
                     <input type="text" class="input" id="Username" name="_Username" placeholder="Username" maxlength="45" required>
 
@@ -119,10 +119,10 @@
 </div>
 <div id="addLicenceDef" class="popup col-xs-3">
     <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block;overflow-y: auto;">
+    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:10px solid white;display: block;overflow-y: auto;">
         <form class="formulaire" id="formLicence" action="{{ path("metier_user_licenceadded") }}" onsubmit="document.getElementById('submitlicencedef').disabled=true" method="post">
 
-            <div class="div_form" >
+            <div class="div_form" style="display: inline-table;" >
                 <div class="col-xs-6 input-colonne">
                     <input placeholder="Libelle" class="input" type="text" id="Libelle" name="_Libelle" maxlength="255" required >
 
@@ -163,7 +163,7 @@
                     {% endfor %}
                 </select>
                 <br>
-                <label title="CSV" for="CSV"><img id="backimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
+                <label title="CSV" for="CSV"><img onclick="this.src='{{ asset('image/wait_x300.gif') }}'; " id="backimg" style="height: 150px;width: 150px"  src="{{ asset('image/upload-arrow.png') }}"/></label>
                 <input accept=".xlsx" type="file" class="input" id="CSV" name="_CSV" required>
 
             </div>
@@ -235,14 +235,9 @@
                                               aria-hidden="true"></span>
             </button>
             <ul id="profil" class="dropdown-menu" aria-labelledby="dropdownMenu1" style="color:white;background: #2975cb;">
-
                 <li><button onclick="postiframeUser('{{ path('afficher_profil') }}')" style="background: transparent;border:transparent;width:100%">PROFIL</button></li>
                 <li><button onclick="postiframeUser('{{ path('afficher_messagerie') }}')" style="background: transparent;border:transparent;width:100%">MESSAGERIE</button></li>
                 <li><a href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">LOGOUT</button> </a></li>
-
-
-
-
             </ul>
 
         </div>
@@ -360,8 +355,9 @@
                     {% endif %}
                     {% if import_apprenants is defined %}
                         {% for u in import_apprenants %}
-                            <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId }) }}',this)" id="import{{ u.getId }}" type="button" class="list-group-item butonLigne">
-                                <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
+
+                            <button onclick="postiframeUser('{{ path('Afficher_Sas',{'id': u.getId }) }}',this)" id="import{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                                <div class="col-xs-6 part" >{{ u.getNom }}  {{ u.getPrenom }}</div>
                                 <div class="col-xs-12 part" style="height: 31px; text-align: left;">
                                     <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
                                 </div>
@@ -694,6 +690,7 @@
         });
     }
     function envoyeradresses(){
+
         document.getElementById('submittier').disabled=true;
         var geocodes = document.getElementsByName('_Geocode[]');
         if(geocodes.length==1)
@@ -711,7 +708,6 @@
                 return;
             }
         }
-
         for(var i = 1; i<geocodes.length;i++)
         {
             var address = document.getElementsByName('_Adresse[]')[i].value +' ' +document.getElementsByName('_Ville[]')[i].value + ' ' + document.getElementsByName('_CodeP[]')[i].value  ;
@@ -732,6 +728,7 @@
         }
     }
     function readURL(input,baliseimg) {
+        document.getElementById(baliseimg).src="{{ asset('image/wait_x300.gif') }}"
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function (e) {
@@ -743,6 +740,7 @@
 
             reader.readAsDataURL(input.files[0]);
         }
+
     }
     function supprimerAdresse(div){
         div.parentNode.parentNode.removeChild(div.parentNode);

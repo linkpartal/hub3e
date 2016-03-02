@@ -39,6 +39,8 @@ class DefaultController extends Controller
         $Langue = $this->getDoctrine()->getRepository('GenericBundle:Langue')->findAll();
         $Hobbies = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->findAll();
 
+
+
         $Experience = $this->getDoctrine()->getRepository('GenericBundle:Experience')->findBy(array('user'=>$userid));
         $Recommandation = $this->getDoctrine()->getRepository('GenericBundle:Recommandation')->findBy(array('user'=>$userid));
         $Diplome = $this->getDoctrine()->getRepository('GenericBundle:Diplome')->findBy(array('user'=>$userid));
@@ -96,13 +98,9 @@ class DefaultController extends Controller
         }
         else{
             return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid,'Infocomplementaire'=>$info,'Parents'=>$Parents,'Experience'=>$Experience,'Recommandation'=>$Recommandation,
-                'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,'Hobbies'=>$Hobbies,'candidatures'=>$candidatures,'formations'));
+                'Diplome'=>$Diplome,'Document'=>$Document,'Langue'=>$Langue,'Hobbies'=>$Hobbies,'candidatures'=>$candidatures,'formations'=>$formation));
         }
 
-
-    }
-
-    public function affichageSASAction($id){
 
     }
 
@@ -175,22 +173,24 @@ class DefaultController extends Controller
         }
     }
 
-
     public function afficher_messagerieAction(){
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $message = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user ));
         // $message = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('expediteur'=>$user));
         foreach($message as $msg)
         {
-            if($msg->getExpediteur()->getPhotos() and !is_string($msg->getExpediteur()->getPhotos())   )
+            if($msg->getExpediteur()->getPhotos() and !is_string($msg->getExpediteur()->getPhotos()))
             {
                 //  $msg->getDestinataire()->setPhotos(base64_encode(stream_get_contents($msg->getDestinataire()->getPhotos())));
                 $msg->getExpediteur()->setPhotos(base64_encode(stream_get_contents($msg->getExpediteur()->getPhotos())));
+
+            }
+            if($msg->getMission()->getEtablissement()->getTier()->getLogo() and !is_string($msg->getMission()->getEtablissement()->getTier()->getLogo())){
+                $msg->getMission()->getEtablissement()->getTier()->setLogo(base64_encode(stream_get_contents($msg->getMission()->getEtablissement()->getTier()->getLogo())));
             }
         }
         return  $this->render('UserBundle:messagerie:messagerie.html.twig',array('messageies'=>$message));
     }
-
 
     public function UserAddedAction(Request $request)
     {
@@ -216,7 +216,7 @@ class DefaultController extends Controller
             $etab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_id'));
             $newuser->setTier($etab->getTier());
         }
-        if($request->get('_role')=='ROLE_RECRUTE' || $request->get('_role')=='ROLE_TUTEUR')
+        if($request->get('_role')=='ROLE_RECRUTEUR' || $request->get('_role')=='ROLE_TUTEUR')
         {
             $etab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_id'));
             $newuser->setEtablissement($etab);
@@ -338,7 +338,7 @@ class DefaultController extends Controller
         if($user->hasRole('ROLE_APPRENANT')){
             $info = $em->getRepository('GenericBundle:infocomplementaire')->find(array('id'=>$request->get('_IdInfo')));
 
-            // $info->setDatenaissance(date_create($request->get('_Datenaissance')) );
+            $info->setDatenaissance(date_create_from_format('d/m/Y', $request->get('_Datenaissance')) );
             $info->setCpnaissance($request->get('_Cpnaissance'));
             $info->setLieunaissance($request->get('_Lieunaissance'));
             $info->setAdresse($request->get('_Adresse'));
@@ -509,15 +509,15 @@ class DefaultController extends Controller
 
     }
 
-    public function suppsuppDocumentAction($id)
+    public function suppDocumentAction($id)
     {
         $em = $this->getDoctrine()->getManager();
         $document = $em->getRepository('GenericBundle:Document')->find($id);
-
         $em->remove($document);
         $em->flush();
         $reponse = new JsonResponse();
         return $reponse->setData(array('Status' => 'document correctement supprimer'));
+
     }
 
     public function importAction(Request $request)
@@ -1355,12 +1355,13 @@ class DefaultController extends Controller
 
         if($request->get('_Langue'))
         {
+
             for($i = 0; $i< count($request->get('_Langue'));$i++) {
                 $langue = $em->getRepository('GenericBundle:Langue')->findOneBy(array('langue'=>$request->get('_Langue')[$i],'niveau'=>$request->get('_Niveau')[$i]));
-
                 $langue->addImportCandidat($apprenant);
                 $em->flush();
             }
+
         }
 
         if($request->get('formations'))
