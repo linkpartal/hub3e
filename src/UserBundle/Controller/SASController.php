@@ -40,7 +40,11 @@ class SASController extends Controller
         $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll();
         $Langue = $this->getDoctrine()->getRepository('GenericBundle:Langue')->findAll();
         $Hobbies = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->findAll();
-
+        // chargement des images
+        if($importCandidatid->getPhotos() and !is_string($importCandidatid->getPhotos()))
+        {
+            $importCandidatid->setPhotos(base64_encode(stream_get_contents($importCandidatid->getPhotos())));
+        }
 
 
         $Experience = $this->getDoctrine()->getRepository('GenericBundle:Experience')->findBy(array('importCandidat'=>$importCandidatid));
@@ -79,6 +83,13 @@ class SASController extends Controller
         $ImportCandidat->setCivilite($request->get('_Civilite'));
         $ImportCandidat->setNom($request->get('_Nom'));
         $ImportCandidat->setPrenom($request->get('_Prenom'));
+
+        if($_FILES && $_FILES['_Photos']['size'] >0)
+        {
+            $ImportCandidat->setPhotos(file_get_contents($_FILES['_Photos']['tmp_name']));
+            $em->flush();
+        }
+
         $ImportCandidat->setTelephone($request->get('_Tel'));
 
         $ImportCandidat->setEmail($request->get('_Mail'));
