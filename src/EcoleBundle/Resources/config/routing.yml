@@ -13,3 +13,5 @@ loadconsulterQCM:
 ecole_recruteur:
     path:     /recruteur/Home/{ecole}
     defaults: { _controller: EcoleBundle:Recruteur:loadRecruteur }
+
+

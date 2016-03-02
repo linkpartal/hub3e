@@ -27,4 +27,8 @@ Valider_Diffusion:
     path: /ValiderDiffusion/id={id}
     defaults: { _controller: MissionBundle:Default:ValiderDiffusion}
 
+postuler_Mission:
+    path: /postuler/id={id}
+    defaults: { _controller: MissionBundle:Default:Postuler}
+
 

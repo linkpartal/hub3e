@@ -4,6 +4,7 @@ namespace MissionBundle\Controller;
 
 use GenericBundle\Entity\Diffusion;
 use GenericBundle\Entity\Mission;
+use GenericBundle\Entity\Postulation;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,7 +45,8 @@ class DefaultController extends Controller
         if($request->get('formation'))
         {
             $diffuser = new Diffusion();
-            $diffuser->setFormation($this->getDoctrine()->getRepository('GenericBundle:Formation')->find($request->get('formation')));
+            $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->find($request->get('formation'));
+            $diffuser->setFormation($formation);
             $diffuser->setMission($mission);
             $diffuser->setStatut(5);
             $em->persist($diffuser);
@@ -185,6 +187,28 @@ class DefaultController extends Controller
 
         $response = new JsonResponse();
         return $response->setData(array('status'=>1));
+    }
+
+    public function PostulerAction($id){
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $mission = $em->getRepository('GenericBundle:Mission')->find($id);
+        $postdup = $em->getRepository('GenericBundle:Postulation')->findOneBy(array('user'=>$user,'mission'=>$mission));
+        $reponse = new JsonResponse();
+        if($postdup)
+        {
+            return $reponse->setData(0);
+        }
+        else{
+            $postulation = new Postulation();
+            $postulation->setUser($this->get('security.token_storage')->getToken()->getUser());
+            $postulation->setMission($mission);
+            $postulation->setStatut(1);
+            $em->persist($postulation);
+            $em->flush();
+            return $reponse->setData(1);
+        }
+
     }
 
 }

@@ -37,6 +37,13 @@ class Message
     private $message;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="statut", type="integer", nullable=true)
+     */
+    private $statut;
+
+    /**
      * @var \User
      *
      * @ORM\ManyToOne(targetEntity="User")
@@ -194,5 +201,29 @@ class Message
     public function getMission()
     {
         return $this->mission;
+    }
+
+    /**
+     * Set statut
+     *
+     * @param integer $statut
+     *
+     * @return Message
+     */
+    public function setStatut($statut)
+    {
+        $this->statut = $statut;
+
+        return $this;
+    }
+
+    /**
+     * Get statut
+     *
+     * @return integer
+     */
+    public function getStatut()
+    {
+        return $this->statut;
     }
 }

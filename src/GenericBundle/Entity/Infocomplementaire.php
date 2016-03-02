@@ -22,6 +22,13 @@ class Infocomplementaire
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="insee", type="string", length=45, nullable=true,unique=true)
+     */
+    private $insee;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="dateNaissance", type="date", nullable=true)
@@ -483,5 +490,29 @@ class Infocomplementaire
     public function getDaterecup()
     {
         return $this->daterecup;
+    }
+
+    /**
+     * Set insee
+     *
+     * @param string $insee
+     *
+     * @return Infocomplementaire
+     */
+    public function setInsee($insee)
+    {
+        $this->insee = $insee;
+
+        return $this;
+    }
+
+    /**
+     * Get insee
+     *
+     * @return string
+     */
+    public function getInsee()
+    {
+        return $this->insee;
     }
 }

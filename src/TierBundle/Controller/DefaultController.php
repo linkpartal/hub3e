@@ -140,11 +140,11 @@ class DefaultController extends Controller
         }
 
         // chargement des images
-        if($etablissement->getTier()->getLogo())
+        if($etablissement->getTier()->getLogo() and !is_string($etablissement->getTier()->getLogo()))
         {
             $etablissement->getTier()->setLogo(base64_encode(stream_get_contents($etablissement->getTier()->getLogo())));
         }
-        if($etablissement->getTier()->getFondecran())
+        if($etablissement->getTier()->getFondecran() and !is_string($etablissement->getTier()->getFondecran()))
         {
             $etablissement->getTier()->setFondecran(base64_encode(stream_get_contents($etablissement->getTier()->getFondecran())));
         }
@@ -251,11 +251,11 @@ class DefaultController extends Controller
             $this->getDoctrine()->getEntityManager()->flush();
         }
 
-        if($etablissement->getTier()->getLogo())
+        if($etablissement->getTier()->getLogo() and !is_string($etablissement->getTier()->getLogo()))
         {
             $etablissement->getTier()->setLogo(base64_encode(stream_get_contents($etablissement->getTier()->getLogo())));
         }
-        if($etablissement->getTier()->getFondecran())
+        if($etablissement->getTier()->getFondecran() and !is_string($etablissement->getTier()->getFondecran()))
         {
             $etablissement->getTier()->setFondecran(base64_encode(stream_get_contents($etablissement->getTier()->getFondecran())));
         }
@@ -412,10 +412,4 @@ class DefaultController extends Controller
         $reponse = new JsonResponse();
         return $reponse->setData(array('Status'=>'Licence correctement supprimer'));
     }
-
-
-
-
-
-
 }

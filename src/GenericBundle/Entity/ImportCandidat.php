@@ -59,6 +59,13 @@ class ImportCandidat
     /**
      * @var string
      *
+     * @ORM\Column(name="photos", type="blob", nullable=true)
+     */
+    private $photos;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="erreur", type="string", length=45, nullable=true)
      */
     private $erreur;
@@ -408,5 +415,29 @@ class ImportCandidat
     public function getLangue()
     {
         return $this->langue;
+    }
+
+    /**
+     * Set photos
+     *
+     * @param string $photos
+     *
+     * @return ImportCandidat
+     */
+    public function setPhotos($photos)
+    {
+        $this->photos = $photos;
+
+        return $this;
+    }
+
+    /**
+     * Get photos
+     *
+     * @return string
+     */
+    public function getPhotos()
+    {
+        return $this->photos;
     }
 }

@@ -41,6 +41,7 @@ class DefaultController extends Controller
 
 
 
+
         $Experience = $this->getDoctrine()->getRepository('GenericBundle:Experience')->findBy(array('user'=>$userid));
         $Recommandation = $this->getDoctrine()->getRepository('GenericBundle:Recommandation')->findBy(array('user'=>$userid));
         $Diplome = $this->getDoctrine()->getRepository('GenericBundle:Diplome')->findBy(array('user'=>$userid));
@@ -53,6 +54,14 @@ class DefaultController extends Controller
             $this->getDoctrine()->getEntityManager()->flush();
         }
         $candidatures = $this->getDoctrine()->getRepository('GenericBundle:Candidature')->findBy(array('user'=>$userid));
+
+
+
+        // chargement des images
+        if($userid->getPhotos() and !is_string($userid->getPhotos()))
+        {
+            $userid->setPhotos(base64_encode(stream_get_contents($userid->getPhotos())));
+        }
 
         if ($userid->getEtablissement()) {
             $questions = array();
@@ -106,6 +115,8 @@ class DefaultController extends Controller
 
     public function affichageProfilAction()
     {
+
+
         $userid = $this->get('security.token_storage')->getToken()->getUser();
 
 
@@ -117,6 +128,13 @@ class DefaultController extends Controller
         $Hobbies = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->findAll();
 
         $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll();
+
+        // chargement des images
+        if($userid->getPhotos() and !is_string($userid->getPhotos()))
+        {
+            $userid->setPhotos(base64_encode(stream_get_contents($userid->getPhotos())));
+        }
+
 
         $Experience = $this->getDoctrine()->getRepository('GenericBundle:Experience')->findBy(array('user' => $userid));
         $Recommandation = $this->getDoctrine()->getRepository('GenericBundle:Recommandation')->findBy(array('user' => $userid));
@@ -169,7 +187,7 @@ class DefaultController extends Controller
         }
         else{
             return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig', array('User' => $userid,'Infocomplementaire' => $info, 'Parents' => $Parents, 'Experience' => $Experience,
-                'Recommandation' => $Recommandation, 'Diplome' => $Diplome, 'Document' => $Document, 'Langue' => $Langue, 'Hobbies' => $Hobbies,'candidatures' => $candidatures));
+                'Recommandation' => $Recommandation, 'Diplome' => $Diplome, 'Document' => $Document, 'Langue' => $Langue, 'Hobbies' => $Hobbies,'candidatures' => $candidatures,'formations'=>$formation));
         }
     }
 
@@ -310,7 +328,7 @@ class DefaultController extends Controller
         return $reponse;
     }
 
-    public function  modifierStatutCandidatureAction($id,$statut){
+    public function modifierStatutCandidatureAction($id,$statut){
         $em = $this->getDoctrine()->getManager();
         $candi= $em->getRepository('GenericBundle:Candidature')->find($id);
 
@@ -331,6 +349,13 @@ class DefaultController extends Controller
         $user->setCivilite($request->get('_Civilite'));
         $user->setNom($request->get('_Nom'));
         $user->setPrenom($request->get('_Prenom'));
+
+        if($_FILES && $_FILES['_Photos']['size'] >0)
+        {
+            $user->setPhotos(file_get_contents($_FILES['_Photos']['tmp_name']));
+            $em->flush();
+        }
+
         $user->setTelephone($request->get('_Tel'));
         $user->setUsername($request->get('_Username'));
         $user->setEmail($request->get('_Mail'));
@@ -338,19 +363,34 @@ class DefaultController extends Controller
         if($user->hasRole('ROLE_APPRENANT')){
             $info = $em->getRepository('GenericBundle:infocomplementaire')->find(array('id'=>$request->get('_IdInfo')));
 
-            $info->setDatenaissance(date_create_from_format('d/m/Y', $request->get('_Datenaissance')) );
-            $info->setCpnaissance($request->get('_Cpnaissance'));
-            $info->setLieunaissance($request->get('_Lieunaissance'));
-            $info->setAdresse($request->get('_Adresse'));
-            $info->setFacebook($request->get('_Facebook'));
-            $info->setLinkedin($request->get('_Linkedin'));
-            $info->setMobilite($request->get('_Mobilite'));
-            $info->setFratrie($request->get('_Fratrie'));
-
-            $em->flush();
+            if($info)
+            {
+                $info->setDatenaissance(date_create_from_format('d/m/Y', $request->get('_Datenaissance')) );
+                $info->setCpnaissance($request->get('_Cpnaissance'));
+                $info->setLieunaissance($request->get('_Lieunaissance'));
+                $info->setAdresse($request->get('_Adresse'));
+                $info->setFacebook($request->get('_Facebook'));
+                $info->setLinkedin($request->get('_Linkedin'));
+                $info->setMobilite($request->get('_Mobilite'));
+                $info->setFratrie($request->get('_Fratrie'));
+                $em->flush();
+            }
+            else{
+                $info = new Infocomplementaire();
+                $info->setDatenaissance(date_create_from_format('d/m/Y', $request->get('_Datenaissance')) );
+                $info->setCpnaissance($request->get('_Cpnaissance'));
+                $info->setLieunaissance($request->get('_Lieunaissance'));
+                $info->setAdresse($request->get('_Adresse'));
+                $info->setFacebook($request->get('_Facebook'));
+                $info->setLinkedin($request->get('_Linkedin'));
+                $info->setMobilite($request->get('_Mobilite'));
+                $info->setFratrie($request->get('_Fratrie'));
+                $em->persist($info);
+                $em->flush();
+            }
         }
 
-        return $this->forward('UserBundle:Default:affichageUser',array('id'=>$request->get('_ID')));
+        return $this->redirect($this->generateUrl('metier_user_afficheUser',array('id'=>$request->get('_ID'))));
     }
 
     public function supprimeruserAction($id)
@@ -1403,7 +1443,7 @@ class DefaultController extends Controller
 
 
 
-        return $this->redirect($this->generateUrl('affiche_etab',array('id'=>$request->get('_idEtab'))));
+        return $this->redirect($_SERVER['HTTP_REFERER']);
 
 
     }

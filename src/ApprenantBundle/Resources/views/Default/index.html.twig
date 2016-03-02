@@ -27,7 +27,7 @@
                 <button  type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                 ></button>
 
-                <button id="societetop" style="color:white ">{{ societes|length }} Sociétés</button>
+                <button id="societetop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ societes|length }} Sociétés</button>
 
             </div>
 
@@ -35,7 +35,7 @@
             <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
                 <button  type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"></button>
 
-                <button style="color:white ">missions</button>
+                <button style="color:white;white-space: nowrap;overflow: hidden; ">missions</button>
             </div>
            
 
@@ -60,6 +60,7 @@
                 <ul id="profil" class="dropdown-menu" aria-labelledby="dropdownMenu1" style="color:white;background: #2975cb;">
 
                     <li><button onclick="postiframeUser('{{ path('afficher_profil') }}')" style="background: transparent;border:transparent;width:100%">PROFIL</button></li>
+                    <li><button onclick="postiframeUser('{{ path('afficher_messagerie') }}')" style="background: transparent;border:transparent;width:100%">MESSAGERIE</button></li>
                     <li><a href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">LOGOUT</button> </a></li>
 
 

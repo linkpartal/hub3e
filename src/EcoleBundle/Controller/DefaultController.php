@@ -21,11 +21,14 @@ class DefaultController extends Controller
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
         $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');
+
         $ecoles = array();
         $ecoles = array_merge($ecoles,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($user->getTier()->getId()));
+
         foreach($user->getTier()->getTier1() as $partenaire) {
             $ecoles = array_merge($ecoles, $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($partenaire->getId()));
         }
+
         foreach($ecoles as $key => $ecole)
         {
             if($ecole->getSuspendu())

@@ -100,14 +100,14 @@
                 <div class="row" style=" margin-bottom: 20px;">
 
                     <div class="col-xs-12" >
-                        <textarea style="height: 200px;resize: none;" class="input" id="Descriptif" name="_Descriptif" placeholder="Votre profil nous intéresse,nous vous proposons une plage de rendez-vous en lien Doodle" required ></textarea>
+                        <textarea style="height: 200px;resize: none;" class="input" name="MessageAcceptation" placeholder="Votre profil nous intéresse,nous vous proposons une plage de rendez-vous en lien Doodle" required ></textarea>
                     </div>
                     <div class="col-xs-12">
                         <label style="text-align:left;width:100%;font-family: Arial">Proposer un lien externe pour la prise de rendez-vous (type Doodle) : </label>
                     </div>
 
                     <div class="col-xs-12">
-                        <input style="text-align:left;font-family: Arial;width:100%">
+                        <input placeholder="Proposer un lien externe pour la prise de rendez-vous (type Doodle)" type="url" name="LienDoodle" style="text-align:left;font-family: Arial;width:100%">
                     </div>
 
                 </div>
@@ -116,7 +116,7 @@
             <div class="div_form" id="declinerApprenant" style="display: none" >
 
                 <div class="row" style=" margin-bottom: 20px;">
-                    <textarea style="height: 200px;resize: none;" class="input"  placeholder="Nous vous remercions pour l'intérêt porter à notre mission, cependant nous n'avons pas retenu votre profil ." required ></textarea>
+                    <textarea name="MessageRefus" style="height: 200px;resize: none;" class="input"  placeholder="Nous vous remercions pour l'intérêt porter à notre mission, cependant nous n'avons pas retenu votre profil ." required ></textarea>
                 </div>
 
             </div>
@@ -128,20 +128,99 @@
                 <input onclick="show_formapprenantproposer()"  class="blue" type="button"   value="Proposer un rendez-vous">
             </div>
             <div id="decliner_button" class="div_button" style="display: none">
-                <input id="submitAnnuler" onclick="FermerPopup('information_apprenant')" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Annuler">
-                <input id="submitDecliner" class="blue" type="submit"  style="margin-left: 390px" value="Décliner">
-
+                <input id="submitAnnuler" onclick="FermerPopup()" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Annuler">
+                <input id="submitDecliner" class="blue" type="button" onclick="envoyerReponse('formFicheApprenant')"  style="margin-left: 390px" value="Décliner">
             </div>
             <div id="proposer_button" class="div_button" style="display: none">
                 <input  class="blue" onclick="FermerPopup('information_apprenant')" style="background:white;color:#666666;border:1px solid #ccc;float: left;text-align: center ;width: 120px;height:50px" type="button" value="Annuler">
-                <input id="submitReception" class="blue" type="submit" style="margin-left: 300px;text-align:center;width: 120px;height:50px"  value="Valider">
-
+                <input id="submitReception" class="blue" type="button" onclick="envoyerReponse('formFicheApprenant')" style="margin-left: 300px;text-align:center;width: 120px;height:50px"  value="Valider">
             </div>
 
         </form>
 
     </div>
 
+
+</div>
+
+<div id="FicheMission" class="popup">
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-6" style="padding: 0;border:20px solid white;display: block; margin-left: 20%;" >
+
+        <form id="formFicheMission" class="formulaire" method="post">
+
+            <div class="div_form" style="border-bottom:1px solid #adadad;display: block;">
+
+                <div>
+                    <div class="col-xs-12" >
+                        <img  src="" style="padding: 10px; height: 80px;">
+                    </div>
+                    <div class="col-xs-12"  style="height: 30px;  padding: 10px;">
+                        <label id="Information_Mission_Intitule" style="font-family:Arial;font-style:normal;font-size: large;color:black" ></label> -
+                        <label id="Information_Mission_titre_raisonsoc" style="font-family:Arial;font-style:normal;font-size: large;color:#2A76CC" > </label>
+                    </div>
+                    <div class="col-xs-12" style="height: 20px; font-family:Arial;font-style:normal;font-size: small;margin-bottom:30px">
+                        <label id="Information_Mission_titre_adresse"></label>
+                    </div>
+
+
+                </div>
+
+                <div  id="information_mission" >
+                    <div class="row" style=" margin: 0;">
+                        <div class="col-xs-12">
+                            <label style="font-size: 40px;font-family: Rochester;color: rgb(61, 138, 212);line-height: 0.375;text-align: left;z-index: 30;transform: rotate(180deg);">,,</label>
+                            <label id="Information_Mission_Message" style="height: 20px;color: #666666;font-family:Arial;font-style:italic;font-size:small;margin-bottom: 40px;">
+                                Votre mission m'interesse,je serais heureux de vous rencontrer pour en discuter.
+                            </label>
+                            <label style="float: right" id="Information_Mission_code"></label>
+                        </div>
+                        <div class="row" >
+                            <button onclick="document.getElementById('info_mission').style.display ='block';document.getElementById('Localisationmission').style.display ='none'"  class="col-xs-4 onglet"  type="button" style="margin-left: 20px;width: 50%"> FICHE MISSION</button>
+                            <button onclick="document.getElementById('Localisationmission').style.display ='block';document.getElementById('info_mission').style.display ='none';
+                        var center = map_mission.getCenter();
+                        google.maps.event.trigger(map_mission, 'resize');
+                        map_mission.setCenter(center);" class="col-xs-4 onglet"  type="button" style="width: calc(50% - 50px)" >LOCALISATION</button>
+                        </div>
+                        <div id="info_mission" style="border-top: 1px solid #B0B0B0;margin: 0;height: 281px;width: 100%;">
+
+                            <div class="col-xs-12" >
+                                <div class="list-group affichage">
+
+                                    <label class="list-group-item mission" >LA MISSION : <br/>
+                                        <label id="Information_Mission_Descriptif"  style="color:black; font-weight: lighter" ></label>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="Localisationmission"  style="border-top: 1px solid #B0B0B0;margin: 0;height: 281px;width: 100%;display:none;">
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="declinerMission" style="display:none;width: 100%">
+                    <textarea name="MessageRefus" style="height: 200px;resize: none;" class="input"  placeholder="Cette mission ne m'interesse pas,elle se situe trop loin ." required ></textarea>
+                </div>
+
+
+            </div>
+
+            <div id="mission_button" class="div_button">
+                <input  onclick="show_formmission()"  class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Décliner">
+                <input id="submitReception" class="blue" type="submit" style="margin-left: 270px" onclick="this.parentNode.parentNode.parentNode.parentNode.style.display='none';" value="Répondre plus tard">
+                <input  class="blue" type="button" onclick="postuler()"   value="Postuler">
+
+            </div>
+
+            <div id="declinerMission_button" class="div_button" style="display:none">
+                <input onclick="FermerPopup()" id="submitAnnuler" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Annuler">
+                <input id="submitDecliner" class="blue" type="button" onclick="envoyerReponse('formFicheMission')"  style="margin-left: 390px" value="Décliner">
+            </div>
+
+        </form>
+    </div>
 
 </div>
 
@@ -153,7 +232,7 @@
                 <option value="les messages">Tous les messages</option>
             </select>
 
-                <label style="width:20px" id="startTimeLabel" visible="false"></label>
+            <label style="width:20px" id="startTimeLabel" visible="false"></label>
 
             <span class="glyphicon glyphicon-search" ></span>
             <input type="text" class="input" placeholder="Recherche" style="padding:5px; border:solid 1px #666666; color:#666666; border-radius:5px;width:200px;height:40px;margin-right:607px" >
@@ -162,51 +241,87 @@
             <button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
 
         </div>
-        </div>
+    </div>
 
 
 
     {% if messageies is defined %}
-    {% for msg in messageies %}
+        {% for msg in messageies %}
 
-        <div class="col-xs-12 Liste" style="border: 1px solid #ddd;width:90%;margin-right:5px;margin-bottom: 0;margin-top: 0;height:100px;" >
-            <div class="col-xs-2" >
-                <div style="border: 15px solid transparent">
-                    <img   src="data:image/jpg;base64,{{msg.getExpediteur.getPhotos }}" style="height:70px;width:70px;margin:0 40px;border-radius: 100%">
-                </div>
+            <div id="{{ msg.id }}" class="col-xs-12 Liste" style="border: 1px solid #ddd;width:90%;margin-right:5px;margin-bottom: 0;margin-top: 0;height:100px;" >
+                {% if msg.expediteur.hasRole('ROLE_APPRENANT') %}
+                    <div class="col-xs-2" >
+                        <div style="border: 15px solid transparent">
+                            <img   src="data:image/jpg;base64,{{msg.getExpediteur.getPhotos }}" style="height:70px;width:70px;margin:0 40px;border-radius: 100%">
+                        </div>
 
 
+                    </div>
+
+                    <div class="col-xs-1" style="margin-top:10px;text-align: left ">
+                        <label style="font:18px arial;margin-top: 40px" > {{ msg.getDate|date('d M') }} </label>
+                    </div>
+
+                    <div class="col-xs-6" style="margin-top:10px;text-align: left">
+                        <label style="font:18px arial ;margin-top: 20px;float:left;width: 100%" > {{ msg.getMessage }} </label><br>
+                        <label style="font:16px arial;float:left;width: 100%" > {{ msg.getMission.getIntitule }} - <label style="font:18px arial;color:#2A76CC" > {{ msg.getMission.etablissement.tier.raisonsoc }}</label> </label>
+                    </div>
+
+                    <div class="col-xs-offset-1 col-xs-1" style="margin-top:10px;">
+                        {% if msg.statut == 1 %}
+                            <label id="statut{{ msg.id }}" style="font:18px arial;margin-top: 30px;color: green;" > Valider </label>
+                        {% elseif msg.statut == -1 %}
+                            <label id="statut{{ msg.id }}" style="font:18px arial;margin-top: 30px;color: red;" > Décliner </label>
+                        {% else %}
+                            <label id="statut{{ msg.id }}" style="font:18px arial;margin-top: 30px" > Répondez </label>
+                        {% endif %}
+                    </div>
+                    <div onclick="informationApprenant('{{msg.getExpediteur.getPhotos}}','{{ msg.getExpediteur.getCivilite }}','{{ msg.getExpediteur.getNom }}','{{ msg.getExpediteur.getPrenom }}',
+                            '{{ msg.getExpediteur.getEmail }}','{{ msg.getExpediteur.getTelephone }}','{{ msg.getExpediteur.getInfo.getDateNaissance|date("d/m/Y") }}',
+                            '{{ msg.getExpediteur.getInfo.getCpNaissance }}','{{ msg.getExpediteur.getInfo.getLieunaissance }}','{{ msg.getExpediteur.getInfo.getAdresse }}','{{ msg.message }}');
+                            show('FicheApprenant');idMessage={{ msg.id }}" class="col-xs-1" style="height: 100%">
+                        <span class="glyphicon glyphicon-option-vertical" style="margin-top:40px;height:20px;color:#8c8c8c"></span>
+
+                    </div>
+                {% else %}
+                    <div class="col-xs-2" >
+                        <div style="border: 15px solid transparent">
+                            <img   src="data:image/jpg;base64,{{ msg.mission.etablissement.tier.logo }}" style="height:70px;width:70px;margin:0 40px;border-radius: 100%">
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-xs-1" style="margin-top:10px;text-align: left ">
+                        <label style="font:18px arial;margin-top: 40px" > {{ msg.getDate|date('d M') }} </label>
+                    </div>
+
+                    <div class="col-xs-6" style="margin-top:10px;text-align: left">
+                        <label style="font:18px arial ;margin-top: 20px;float:left;width: 100%" > {{ msg.getMessage }} </label><br>
+                        <label style="font:16px arial;float:left;width: 100%" > {{ msg.getMission.getIntitule }} - <label style="font:18px arial;color:#2A76CC" > {{ msg.getMission.etablissement.tier.raisonsoc }}</label> </label>
+                    </div>
+
+                    <div class="col-xs-offset-1 col-xs-1" style="margin-top:10px;">
+                        {% if msg.statut == 1 %}
+                            <label id="statut{{ msg.id }}" style="font:18px arial;margin-top: 30px;color: green;" > Valider </label>
+                        {% elseif msg.statut == -1 %}
+                            <label id="statut{{ msg.id }}" style="font:18px arial;margin-top: 30px;color: red;" > Décliner </label>
+                        {% else %}
+                            <label id="statut{{ msg.id }}" style="font:18px arial;margin-top: 30px" > Répondez </label>
+                        {% endif %}
+                    </div>
+                    <div onclick="informationMission('{{ msg.mission.etablissement.tier.logo }}','{{ msg.mission.intitule }}','{{ msg.mission.etablissement.tier.raisonsoc }}','{{ msg.mission.descriptif }}',
+                            '{{ msg.mission.codemission }}','{{ msg.mission.etablissement.adresse }}','{{ msg.mission.etablissement.ville  }}','{{ msg.mission.etablissement.codepostal }}','{{ msg.message }}')
+                            show('FicheMission');idMessage={{ msg.id }}" class="col-xs-1" style="height: 100%">
+                        <span class="glyphicon glyphicon-option-vertical" style="margin-top:40px;height:20px;color:#8c8c8c"></span>
+
+                    </div>
+                {% endif %}
             </div>
 
-            <div class="col-xs-1" style="margin-top:10px;text-align: left ">
-                <label style="font:18px arial;margin-top: 40px" > {{ msg.getDate|date('d M') }} </label>
-            </div>
-
-            <div class="col-xs-6" style="margin-top:10px;text-align: left">
-                <label style="font:18px arial ;margin-top: 20px;float:left;width: 100%" > {{ msg.getMessage }} </label><br>
-                <label style="font:16px arial;float:left;width: 100%" > {{ msg.getMission.getIntitule }} - <label style="font:18px arial;color:#2A76CC" > {{ msg.getMission.etablissement.tier.raisonsoc }}</label> </label>
-            </div>
-
-            <div class="col-xs-offset-1 col-xs-1" style="margin-top:10px;">
-                <label style="font:18px arial;margin-top: 30px" > Répondez </label>
-
-            </div>
-            <div onclick="informationApprenant('{{msg.getExpediteur.getPhotos}}','{{ msg.getExpediteur.getCivilite }}','{{ msg.getExpediteur.getNom }}','{{ msg.getExpediteur.getPrenom }}','{{ msg.getExpediteur.getEmail }}',
-                    '{{ msg.getExpediteur.getTelephone }}','{{ msg.getExpediteur.getInfo.getDateNaissance|date("d/m/Y") }}','{{ msg.getExpediteur.getInfo.getCpNaissance }}','{{ msg.getExpediteur.getInfo.getLieunaissance }}',
-                    '{{ msg.getExpediteur.getInfo.getAdresse }}','{{ msg.message }}');show('FicheApprenant');" class="col-xs-1" style="height: 100%">
-                <span class="glyphicon glyphicon-option-vertical" style="margin-top:40px;height:20px;color:#8c8c8c"></span>
-
-            </div>
-
-        </div>
-
-    {% endfor %}
+        {% endfor %}
     {% endif %}
 </div>
-
-
-
-
 
 
 <script src="//code.jquery.com/jquery.min.js"></script>
@@ -215,7 +330,46 @@
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/PopUp.js') }}"></script>
 <script language="JavaScript">
-    var marker,map_localisation;
+    var marker,map_localisation,map_mission,marker_societe,idMessage;
+    function postuler(){
+        var route = '{{ path('Postuler_Messagerie',{'idmessage':'_IDMESSAGE'}) }}';
+        route = route.replace('_IDMESSAGE',idMessage);
+        $.ajax({
+            type: 'POST',
+            url: route,
+            success: function(data){
+                document.getElementById('FicheMission').style.display = 'none';
+                if(data===1)
+                {
+                    document.getElementById('statut'+idMessage).style.color = 'green';
+                    document.getElementById('statut'+idMessage).innerHTML = 'Valider';
+                }
+            }
+        });
+    }
+    function envoyerReponse(div){
+        var route = '{{ path('Reponse_Messagerie',{'idmessage':'_IDMESSAGE'}) }}';
+        route = route.replace('_IDMESSAGE',idMessage);
+        $.ajax({
+            type: 'POST',
+            url: route,
+            data: $('#'+div).serialize(),
+            success: function(data){
+                document.getElementById(div).parentNode.parentNode.style.display = 'none';
+                document.getElementById(div).reset();
+                if(data===-1)
+                {
+                    document.getElementById('statut'+idMessage).style.color = 'red';
+                    document.getElementById('statut'+idMessage).innerHTML = 'Décliner';
+                }
+                if(data===1)
+                {
+                    document.getElementById('statut'+idMessage).style.color = 'green';
+                    document.getElementById('statut'+idMessage).innerHTML = 'Valider';
+                }
+            }
+        });
+    }
     function show_formapprenant() {
         document.getElementById('information_apprenant').style.display= 'none';
         document.getElementById('declinerApprenant').style.display= 'block';
@@ -230,18 +384,49 @@
     }
     function show_formmission() {
         document.getElementById('information_mission').style.display= 'none';
-        document.getElementById('declinerMission').style.display= 'block';
+        document.getElementById('declinerMission').style.display= 'inline-block';
         document.getElementById('mission_button').style.display= 'none';
         document.getElementById('declinerMission_button').style.display= 'block';
     }
-    function FermerPopup(div){
+    function FermerPopup(){
         document.getElementById('information_apprenant').style.display= 'block';
         document.getElementById('information_button').style.display= 'block';
+        document.getElementById('information_mission').style.display= 'block';
+        document.getElementById('mission_button').style.display= 'block';
         document.getElementById('proposerApprenant').style.display= 'none';
         document.getElementById('proposer_button').style.display= 'none';
         document.getElementById('declinerApprenant').style.display= 'none';
         document.getElementById('decliner_button').style.display= 'none';
-
+        document.getElementById('declinerMission').style.display= 'none';
+        document.getElementById('declinerMission_button').style.display= 'none';
+    }
+    function informationMission(image,intitule,raisonsoc,descriptif,codemission,adresse,ville,cp,message) {
+        document.getElementById('FicheMission').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
+        document.getElementById('Information_Mission_Descriptif').innerHTML = descriptif;
+        document.getElementById('Information_Mission_Intitule').innerHTML= intitule;
+        document.getElementById('Information_Mission_titre_raisonsoc').innerHTML= raisonsoc;
+        document.getElementById('Information_Mission_code').innerHTML= codemission;
+        document.getElementById('Information_Mission_titre_adresse').innerHTML = adresse +', '+ cp +' '+ ville;
+        document.getElementById('Information_Mission_Message').innerHTML = message;
+        if(marker_societe)
+        {
+            marker_societe.setMap(null);
+        }
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({'address': adresse }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                marker_societe = new google.maps.Marker({
+                    map: map_mission,
+                    position: results[0].geometry.location,
+                    visible: true,
+                    icon: '{{ asset('image/societe.png') }}'
+                });
+                map_mission.setCenter(results[0].geometry.location);
+            }
+            else {
+                alert('Nous n\'avons pas réussi à localiser l\'adresse l\'apprenant qui est : ' + adresse);
+            }
+        });
     }
     function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse,message) {
         document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
@@ -261,12 +446,9 @@
         {
             marker.setMap(null);
         }
-
         var geocoder = new google.maps.Geocoder();
-
         geocoder.geocode({'address': adresse }, function (results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
-
                 marker = new google.maps.Marker({
                     map: map_localisation,
                     position: results[0].geometry.location,
@@ -279,23 +461,22 @@
                 alert('Nous n\'avons pas réussi à localiser l\'adresse l\'apprenant qui est : ' + adresse);
             }
         });
-
     }
     function initialize() {
         var locations =[];
         var loc, map, marker;
-
         map_localisation = new google.maps.Map(document.getElementById("Localisation"), {
+            zoom: 15,
+            center: loc,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        map_mission = new google.maps.Map(document.getElementById("Localisationmission"), {
             zoom: 15,
             center: loc,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         });
     }
     google.maps.event.addDomListener(window, 'load', initialize);
-
-
-
-
 </script>
 </body>
 </html>
