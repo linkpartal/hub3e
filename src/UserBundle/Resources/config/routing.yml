@@ -46,6 +46,11 @@ fusionner_apprenant:
     path: /admin/fusion_apprenant/id_sas={sas}/id_user={user}
     defaults: { _controller: UserBundle:Default:Fusionner}
 
+
+Afficher_Sas:
+    path: /admin/affichageSAS/id={id}
+    defaults: { _controller: UserBundle:Default:affichageSAS}
+
 afficher_profil:
     path: /affichageProfil
     defaults: { _controller: UserBundle:Default:affichageProfil}
@@ -73,11 +78,6 @@ supprimer_Experience:
 experience_added:
     path: /AjouterExperience
     defaults: { _controller: UserBundle:Default:AjouterExperience }
-
-
-Afficher_Sas:
-    path: /affichageUerSAS/id={id}
-    defaults: { _controller: UserBundle:SAS:affichageUserSAS}
 
 supprimer_Recommandation:
     path: /suppRecommandation/id={id}
@@ -135,51 +135,3 @@ reponseQCM:
 MiseEnRelation_mission:
     path: /Miseenrelation/Mission/idDest={idDest}/idEnv={idEnv}/mission={mission}
     defaults: { _controller: UserBundle:MiseEnRelation:envoiMessageMR }
-
-SASModif:
-    path: /SASModif
-    defaults: { _controller: UserBundle:SAS:SASModif}
-
-ajouter_Hobbie_SAS:
-    path : /ajouterHobbieSAS/id={id}/IdUser={IdImport}
-    defaults: { _controller: UserBundle:SAS:ajouterHobbieSAS}
-
-supprimer_HobbieSAS:
-    path : /supprimerHobbieSAS/id={id}/IdUser={IdImport}
-    defaults: { _controller: UserBundle:SAS:supprimerHobbieSAS}
-
-ajouter_LangueSAS:
-    path : /ajouterLangueSAS/id={id}/IdNiveau={IdNiveau}/IdUser={IdImport}
-    defaults: { _controller: UserBundle:SAS:ajouterLangueSAS}
-
-supprimer_LangueSAS:
-    path : /supprimerLangueSAS/id={id}/IdUser={IdImport}
-    defaults: { _controller: UserBundle:SAS:supprimerLangueSAS}
-
-Candidature_addedSAS:
-    path: /AjouterCandidatureSAS
-    defaults: { _controller: UserBundle:SAS:AjouterCandidatureSAS}
-
-parent_addedSAS:
-    path: /AjouterParentSAS
-    defaults: { _controller: UserBundle:SAS:AjouterParentSAS}
-
-experience_addedSAS:
-    path: /AjouterExperienceSAS
-    defaults: { _controller: UserBundle:SAS:AjouterExperienceSAS }
-
-recommandation_addedSAS:
-    path: /AjouterRecommandationSAS
-    defaults: { _controller: UserBundle:SAS:AjouterRecommandationSAS}
-
-diplome_addedSAS:
-    path: /AjouterDiplomeSAS
-    defaults: { _controller: UserBundle:SAS:AjouterDiplomeSAS}
-
-Document_addedSAS:
-    path: /AjouterDocumentSAS
-    defaults: { _controller: UserBundle:SAS:AjouterDocumentSAS}
-
-supprimerUtilisateurSAS:
-    path : /supprimeruserSAS/id={id}
-    defaults: { _controller: UserBundle:SAS:supprimeruserSAS}

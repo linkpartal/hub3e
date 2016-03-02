@@ -579,7 +579,7 @@
                                             <label class="cell">Nom societe : <label>{{ Exp.getNomsociete }}</label></label>
                                             <label class="cell">Activite : <label>{{Exp.getActivite }}</label>
                                                 <img name="modification" style="display:none;;float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerExperience('{{ path('supprimer_Experience',{'id':Exp.getId}) }}',this)" />
-                                                <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#exp{{ iddiv }}"></button></label>
+                                                <button class="button" style="display:none;float: right;" type="button" data-toggle="collapse" data-target="#exp{{ iddiv }}"></button></label>
 
                                         </div>
                                         <div id="exp{{ iddiv }}" class="collapse in" >
@@ -773,7 +773,7 @@
                                                         <input type="text" class="champ " id="Question" name="questions[]" value="{{question.getQuestion  }}" required maxlength="255" readonly>
                                                         {% for reponse in reponses[i][y] %}
                                                             <div>
-                                                                {% if reponse in User.reponsedef %}
+                                                                {% if reponseTest in User.reponsedef %}
                                                                     <input type="radio" onclick="envoyerNouvelleReponse({{ reponse.getId }})" name="reponse[{{ reponse.questiondef.id }}]" value="{{ reponse.getId }}" checked disabled ><label style="font: 14px Roboto black; ">{{ reponse.getReponse }}</label>
                                                                 {% else %}
                                                                     <input type="radio" onclick="envoyerNouvelleReponse({{ reponse.getId }})" name="reponse[{{ reponse.questiondef.id }}]" value="{{ reponse.getId }}" disabled ><label style="font: 14px Roboto black; ">{{ reponse.getReponse }}</label>
@@ -812,7 +812,6 @@
                                                     <div class="inputcontainer" name="question">
                                                         <label class="list-group-item" style="height: 60px;" for="Question">Question :</label>
                                                         <input type="text" class="champ " id="Question" name="questions[]" value="{{questionTest.getQuestion  }}" required maxlength="255" readonly>
-
                                                         {% for reponseTest in reponsesTest[i][y] %}
                                                             <div>
                                                                 {% if reponseTest in User.reponsedef %}
@@ -822,7 +821,6 @@
                                                                 {% endif %}
                                                             </div>
                                                         {% endfor %}
-
                                                     </div>
                                                     {% set y = y + 1 %}
                                                 {% endfor %}
@@ -1198,8 +1196,6 @@
 
 
     }
-
-
     function envoyerNouvelleReponse(idrep) {
         var route = '{{ path('reponseQCM',{'iduser':User.id,'idreponse':'_IDREP'}) }}';
         route = route.replace('_IDREP',idrep);
