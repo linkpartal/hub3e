@@ -516,6 +516,7 @@
         {
             elements[0].parentNode.removeChild(elements[0]);
         }
+        sessionStorage.setItem('_Iframe',url);
 
     }
     function postiframeUser(url,button) {
@@ -580,6 +581,11 @@
         }
     }
     function putbadged() {
+        var iframe = sessionStorage.getItem('_Iframe');
+        if(iframe)
+        {
+            document.getElementById("iframe").src = iframe;
+        }
         var notifs = JSON.parse('{{ notifications|raw }}');
         var ecole =0;
         var societe = 0;

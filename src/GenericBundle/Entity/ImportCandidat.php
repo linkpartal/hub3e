@@ -93,9 +93,9 @@ class ImportCandidat
     /**
      * @var \GenericBundle\Entity\Infocomplementaire
      *
-     * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\Infocomplementaire")
+     * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\Infocomplementaire",cascade={"persist","remove"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="infocomplementaire_import_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="infocomplementaire_import_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $info;

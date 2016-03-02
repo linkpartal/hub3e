@@ -314,8 +314,8 @@
 
 
         <form class="formulaire" id="formApprenant" action="{{ path("apprenant_added") }}" onsubmit="document.getElementById('submitaddapprenant').disabled=true" method="post" enctype="multipart/form-data" style="margin-top: 50px"   >
-            <input type="hidden" id="idEtab" name="_idEtab" value="{{ etablissement.getId }}">
-            <input type="hidden" id="idEtab" name="_idUser" value="{{ user.getId }}">
+            <input type="hidden" id="idEtab" name="_idEtab" value="{{ app.user.etablissement.getId }}">
+            <input type="hidden" id="idEtab" name="_idUser" value="{{ app.user.getId }}">
             <div class="div_form" id="infoapprenant" style="border-bottom:1px solid #2b542c;"  >
 
 
@@ -324,13 +324,13 @@
                 </div>
                 <div >
                     <div class="col-xs-3 input-colonne" >
-                        <label for="Photos"><img id="Photosimg" style="height: 90px;" src="{{ asset('image/upload-arrow.png') }}"/></label><br>
+                        <label for="Photos"><img onclick="this.src='{{ asset('image/wait_x300.gif') }}'" id="Photosimg" style="height: 90px;" src="{{ asset('image/upload-arrow.png') }}"/></label><br>
                         <input onchange="readURLL(this,'Photosimg');"  accept="image/*" type="file" class="input" id="Photos" name="_Photos" style="display: none">
                     </div>
                     <div class="col-xs-3 input-colonne">
                         <input placeholder="Placé" class="input" type="text" id="Place" name="_Place" maxlength="45"  style="background:yellowgreen">
 
-                        <input placeholder="N°INSEE" class="input" type="text" id="N°INSEE" name="_N°INSEE" maxlength="45" >
+                        <input placeholder="N°INSEE" class="input" type="text" id="N°INSEE" name="_N°INSEE" maxlength="45" required>
                     </div>
 
                     <div class="col-xs-6 input-colonne" style="border-right: 0 ">
