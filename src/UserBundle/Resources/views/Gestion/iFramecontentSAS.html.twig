@@ -358,6 +358,11 @@
                                 <label class="list-group-item" style="height: 60px;" for="Prenom">Prénom :</label>
                                 <input value="{{ImportCandidat.getPrenom}}" type="text" class="champ form-control" id="Prenom" name="_Prenom" maxlength="45" readonly>
                             </div>
+                            <div class="inputcontainer">
+                                <label class="list-group-item" style="height: 40px;" for="Photos">Photo : <img alt="Photos" style="height:40px" src="data:image/jpg;base64,{{ ImportCandidat.getPhotos }}"/> </label>
+                                <input accept="image/*" type="file" class="champ form-control" id="Photos" name="_Photos" style="display: none !important;">
+
+                            </div>
 
                             <div class="inputcontainer">
                                 <label class="list-group-item" style="height: 60px;" for="Tel">Téléphone :</label>
