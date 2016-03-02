@@ -104,8 +104,6 @@ class DefaultController extends Controller
 
     }
 
-
-
     public function affichageProfilAction()
     {
         $userid = $this->get('security.token_storage')->getToken()->getUser();
@@ -175,7 +173,6 @@ class DefaultController extends Controller
         }
     }
 
-
     public function afficher_messagerieAction(){
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $message = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user ));
@@ -194,7 +191,6 @@ class DefaultController extends Controller
         }
         return  $this->render('UserBundle:messagerie:messagerie.html.twig',array('messageies'=>$message));
     }
-
 
     public function UserAddedAction(Request $request)
     {
@@ -220,7 +216,7 @@ class DefaultController extends Controller
             $etab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_id'));
             $newuser->setTier($etab->getTier());
         }
-        if($request->get('_role')=='ROLE_RECRUTE' || $request->get('_role')=='ROLE_TUTEUR')
+        if($request->get('_role')=='ROLE_RECRUTEUR' || $request->get('_role')=='ROLE_TUTEUR')
         {
             $etab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_id'));
             $newuser->setEtablissement($etab);
