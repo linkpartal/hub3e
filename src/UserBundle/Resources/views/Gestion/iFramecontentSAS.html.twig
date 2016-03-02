@@ -396,7 +396,7 @@
                                     <input type="hidden" value="{{ ImportCandidat.GetInfo.getId }}" id="id" name="_IdInfo">
                                     <div class="inputcontainer">
                                         <label class="list-group-item" style="height: 60px;" for="Datenaissance">Date naissance :</label>
-                                        <input value="{{ImportCandidat.getInfo.getDatenaissance|date('d/m/Y ') }}" type="text" class="champ form-control" id="Datenaissance" name="_Datenaissance" maxlength="45" readonly>
+                                        <input value="{{ ImportCandidat.getInfo.getDatenaissance|date('Y-m-d') }}" type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' class="champ form-control" id="Datenaissance" name="_Datenaissance" readonly>
                                         <label class="list-group-item" style="height: 60px;" for="Cpnaissance">Cp naissance  :</label>
                                         <input value="{{ImportCandidat.getInfo.getCpnaissance}}" type="text" class="champ form-control" id="Cpnaissance" name="_Cpnaissance" maxlength="45" readonly>
 
@@ -751,6 +751,10 @@
 <script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/PopUp.js') }}"></script>
+<script src="//cdn.jsdelivr.net/webshim/1.14.5/polyfiller.js"></script>
+<script>
+    webshims.polyfill('forms forms-ext');
+</script>
 <script language="JavaScript">
     document.getElementById("select_info").onchange = function(){
         var x = document.getElementById("select_info").value;

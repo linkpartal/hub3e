@@ -73,7 +73,6 @@ class SASController extends Controller
 
     public function SASModifAction(Request $request){
         $em = $this->getDoctrine()->getManager();
-
         $ImportCandidat = $em->getRepository('GenericBundle:ImportCandidat')->findOneBy(array('id'=>$request->get('_ID')));
 
 
@@ -85,19 +84,52 @@ class SASController extends Controller
         $ImportCandidat->setEmail($request->get('_Mail'));
         $em->flush();
 
-            $info = $em->getRepository('GenericBundle:infocomplementaire')->find(array('id'=>$request->get('_IdInfo')));
+        $info = $em->getRepository('GenericBundle:infocomplementaire')->find(array('id'=>$request->get('_IdInfo')));
 
-            $info->setDatenaissance(date_create_from_format('d/m/Y', $request->get('_Datenaissance')) );
+        if($info)
+        {
+            if($request->get('_Datenaissance'))
+            {
+                $info->setDatenaissance(date_create($request->get('_Datenaissance')) );
+            }
             $info->setCpnaissance($request->get('_Cpnaissance'));
             $info->setLieunaissance($request->get('_Lieunaissance'));
             $info->setAdresse($request->get('_Adresse'));
             $info->setFacebook($request->get('_Facebook'));
             $info->setLinkedin($request->get('_Linkedin'));
-            $info->setMobilite($request->get('_Mobilite'));
-            $info->setFratrie($request->get('_Fratrie'));
-
+            if($request->get('_Mobilite'))
+            {
+                $info->setMobilite($request->get('_Mobilite'));
+            }
+            if($request->get('_Fratrie'))
+            {
+                $info->setFratrie($request->get('_Fratrie'));
+            }
             $em->flush();
+        }
+        else{
+            $info = new Infocomplementaire();
 
+            if($request->get('_Datenaissance'))
+            {
+                $info->setDatenaissance(date_create_from_format('d/m/Y', $request->get('_Datenaissance')) );
+            }
+            $info->setCpnaissance($request->get('_Cpnaissance'));
+            $info->setLieunaissance($request->get('_Lieunaissance'));
+            $info->setAdresse($request->get('_Adresse'));
+            $info->setFacebook($request->get('_Facebook'));
+            $info->setLinkedin($request->get('_Linkedin'));
+            if($request->get('_Mobilite'))
+            {
+                $info->setMobilite($request->get('_Mobilite'));
+            }
+            if($request->get('_Fratrie'))
+            {
+                $info->setFratrie($request->get('_Fratrie'));
+            }
+            $em->persist($info);
+            $em->flush();
+        }
 
         return $this->forward('UserBundle:SAS:affichageUserSAS',array('id'=>$request->get('_ID')));
     }

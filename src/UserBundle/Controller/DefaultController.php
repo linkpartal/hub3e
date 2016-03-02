@@ -338,16 +338,31 @@ class DefaultController extends Controller
         if($user->hasRole('ROLE_APPRENANT')){
             $info = $em->getRepository('GenericBundle:infocomplementaire')->find(array('id'=>$request->get('_IdInfo')));
 
-            $info->setDatenaissance(date_create_from_format('d/m/Y', $request->get('_Datenaissance')) );
-            $info->setCpnaissance($request->get('_Cpnaissance'));
-            $info->setLieunaissance($request->get('_Lieunaissance'));
-            $info->setAdresse($request->get('_Adresse'));
-            $info->setFacebook($request->get('_Facebook'));
-            $info->setLinkedin($request->get('_Linkedin'));
-            $info->setMobilite($request->get('_Mobilite'));
-            $info->setFratrie($request->get('_Fratrie'));
-
-            $em->flush();
+            if($info)
+            {
+                $info->setDatenaissance(date_create_from_format('d/m/Y', $request->get('_Datenaissance')) );
+                $info->setCpnaissance($request->get('_Cpnaissance'));
+                $info->setLieunaissance($request->get('_Lieunaissance'));
+                $info->setAdresse($request->get('_Adresse'));
+                $info->setFacebook($request->get('_Facebook'));
+                $info->setLinkedin($request->get('_Linkedin'));
+                $info->setMobilite($request->get('_Mobilite'));
+                $info->setFratrie($request->get('_Fratrie'));
+                $em->flush();
+            }
+            else{
+                $info = new Infocomplementaire();
+                $info->setDatenaissance(date_create_from_format('d/m/Y', $request->get('_Datenaissance')) );
+                $info->setCpnaissance($request->get('_Cpnaissance'));
+                $info->setLieunaissance($request->get('_Lieunaissance'));
+                $info->setAdresse($request->get('_Adresse'));
+                $info->setFacebook($request->get('_Facebook'));
+                $info->setLinkedin($request->get('_Linkedin'));
+                $info->setMobilite($request->get('_Mobilite'));
+                $info->setFratrie($request->get('_Fratrie'));
+                $em->persist($info);
+                $em->flush();
+            }
         }
 
         return $this->forward('UserBundle:Default:affichageUser',array('id'=>$request->get('_ID')));
