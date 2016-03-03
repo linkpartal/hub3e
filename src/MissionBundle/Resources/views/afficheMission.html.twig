@@ -271,7 +271,7 @@
 
 <div class="container" style="padding: 0;">
 
-    <div class="row">
+    <div class="row" style="margin: 0;">
        
         <img class="col-xs-1" src="data:image/jpg;base64,{{ mission.getEtablissement.getTier.getLogo }}"
              style="padding: 10px; height: 70px;">
@@ -292,7 +292,7 @@
 
 
 
-<div class="row" >
+<div class="row" style="margin: 0;">
     {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
     <button onclick="moveto(this,'info_mission')" class="col-xs-4 onglet"  type="button" > FICHE MISSION</button>
     <button onclick="moveto(this,'apprenants_mission')" class="col-xs-4 onglet"  type="button" >LISTE DES APPRENANTS</button>
@@ -615,7 +615,6 @@
             for(var j = 0; j< mots.length;j++)
             {
                 if (!stringWith(select.options[i].innerHTML, mots[j])) {
-                    console.log(mots[j]);
                     select.options[i-1].style.display="none";
                 }
             }
