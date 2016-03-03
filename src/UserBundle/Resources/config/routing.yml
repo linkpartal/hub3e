@@ -192,3 +192,7 @@ Document_addedSAS:
 supprimerUtilisateurSAS:
     path : /supprimeruserSAS/id={id}
     defaults: { _controller: UserBundle:SAS:supprimeruserSAS}
+
+apprenant_added:
+    path: /ajouterApprenant
+    defaults: { _controller: UserBundle:Default:ajouterApprenant}

@@ -429,7 +429,9 @@
                                     <input type="hidden" value="{{ User.GetInfo.getId }}" id="id" name="_IdInfo">
                                     <div class="inputcontainer">
                                         <label class="list-group-item" style="height: 60px;" for="Datenaissance">Date naissance :</label>
-                                        <input value="{{User.getInfo.getDatenaissance|date('d/m/Y') }}" type="text" class="champ form-control" id="Datenaissance" name="_Datenaissance" maxlength="45" readonly>
+
+                                        <input value="{{User.getInfo.getDatenaissance|date('Y-m-d') }}" type="date" class="champ form-control" id="Datenaissance" name="_Datenaissance" maxlength="45" readonly>
+
                                         <label class="list-group-item" style="height: 60px;" for="Cpnaissance">Cp naissance  :</label>
                                         <input value="{{User.getInfo.getCpnaissance}}" type="text" class="champ form-control" id="Cpnaissance" name="_Cpnaissance" maxlength="45" readonly>
 

@@ -47,13 +47,42 @@ class DefaultController extends Controller
                 array_push($notapprenant,$userd);
             }
         }
+
         $import_apprenant = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$user));
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array(),array('date'=>'DESC'));
         $qcms = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findAll();
         $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');
-        return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$notapprenant,
+
+        //modele
+        $modeles = array();
+        if ($handle = opendir('../src/GenericBundle/Resources/views/Mail')) {
+
+            while (false !== ($entry = readdir($handle))) {
+
+                if ($entry != "." && $entry != ".." && $entry != "templates" ) {
+
+                    array_push($modeles,$entry);
+                }
+            }
+
+            closedir($handle);
+        }
+        if ($handle = opendir('../src/GenericBundle/Resources/views/Mail/templates')) {
+
+            while (false !== ($entry = readdir($handle))) {
+
+                if ($entry != "." && $entry != "..") {
+
+                    array_push($modeles,$entry);
+                }
+            }
+
+            closedir($handle);
+        }
+
+        return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$notapprenant,'modeles'=>$modeles,
             'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'missions'=>$missions,'apprenants'=>$apprenants,'import_apprenants'=>$import_apprenant,'image'=>$user->getPhotos()));
     }
 
@@ -84,7 +113,13 @@ class DefaultController extends Controller
         }
         else{
             $d = new \DOMDocument;
-            @$d->loadHTML(file_get_contents('../src/GenericBundle/Resources/views/Mail/templates/'. $id));
+            if(file_get_contents('../src/GenericBundle/Resources/views/Mail/'. $id))
+            {
+                @$d->loadHTML(file_get_contents('../src/GenericBundle/Resources/views/Mail/'. $id));
+            }
+            elseif(file_get_contents('../src/GenericBundle/Resources/views/Mail/templates/'. $id)){
+                @$d->loadHTML(file_get_contents('../src/GenericBundle/Resources/views/Mail/templates/'. $id));
+            }
             $body = "";
             foreach($d->getElementsByTagName("body")->item(0)->childNodes as $child) {
                 $body .= $d->saveHTML($child);
