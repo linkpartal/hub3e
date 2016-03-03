@@ -47,7 +47,8 @@ class RecruteurController extends Controller
             }
         }
         $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date'=>'DESC'));
-        return $this->render('EcoleBundle:Recruteur:index.html.twig', array('notifications'=>$jsonContent ,'users'=>$apprenants,'import_apprenants'=>$import_apprenant,'societes'=>$societes,'user'=>$user,'missions'=>$missions,'image'=>$user->getPhotos(),'etablissement'=>$etablissement,'formations'=>$formation,'hobbies' =>$hobbie,
+        return $this->render('EcoleBundle:Recruteur:index.html.twig', array('notifications'=>$jsonContent ,'users'=>$apprenants,'import_apprenants'=>$import_apprenant,
+            'societes'=>$societes,'missions'=>$missions,'image'=>$user->getPhotos(),'formations'=>$formation,'hobbies' =>$hobbie,
             ));
     }
 

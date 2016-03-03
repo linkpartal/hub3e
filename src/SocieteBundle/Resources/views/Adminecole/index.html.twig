@@ -117,7 +117,7 @@
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
         <form id="form" action="{{ path('import') }}" onsubmit="document.getElementById('submitimport').disabled=true" method="post" enctype="multipart/form-data">
-            <div class="div_form">
+            <div class="div_form" style="display:inline-table">
 
                     <label title="CSV" for="CSV"><img id="backimg" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
                     <input accept="image/*" type="file" class="input" id="CSV" name="_CSV" >
@@ -364,6 +364,8 @@
             elements[0].parentNode.removeChild(elements[0]);
         }
 
+        sessionStorage.setItem('_Iframe',url);
+
     };
     function postUser(url){
         document.getElementById("iframe").src = url;
@@ -433,6 +435,18 @@
         }
     };
     function putbadged() {
+
+        var iframe = sessionStorage.getItem('_Iframe');
+        if(iframe)
+        {
+            document.getElementById("iframe").src = iframe;
+        }
+        else
+        {
+            document.getElementById("iframe").src = '';
+        }
+        document.getElementById("iframe").style.visibility = 'visible';
+
         var notifs = JSON.parse('{{ notifications|raw }}');
         var ecole =0;
         var societe = 0;

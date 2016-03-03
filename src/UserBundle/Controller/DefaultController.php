@@ -1312,21 +1312,35 @@ class DefaultController extends Controller
         $InfoComp->setDatenaissance(date_create($request->get('_Datenaissance')) );
         $InfoComp->setAdresse($request->get('_Adresse').' '.$request->get('_Ville'));
         $InfoComp->setCp($request->get('_Codepostal'));
-        $em->persist($InfoComp);
+        $InfoComp->setInsee($request->get('_NINSEE'));
+
         $em->flush();
+
+
+
 
         $apprenant = new ImportCandidat();
         $apprenant->setEtablissement($this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_idEtab')));
         $apprenant->setUser($this->get('security.token_storage')->getToken()->getUser());
 
-        // $apprenant->setPhotos($request->get('_Photos'));
+        //
+       // _Photos
+        //$apprenant->setPhotos($request->get('_Photos'));
+        if($_FILES && $_FILES['_Photos']['size'] >0)
+        {
+        $apprenant->setPhotos(file_get_contents($_FILES['_Photos']['tmp_name']));
 
+        }
         $apprenant->setNom($request->get('_Nom'));
         $apprenant->setPrenom($request->get('_Prenom'));
         $apprenant->setCivilite($request->get('_Civilite'));
         $apprenant->setEmail($request->get('_Email'));
         $apprenant->setTelephone($request->get('_Telephone'));
         $apprenant->setInfo($InfoComp);
+       // var_dump($apprenant);die();
+
+
+
         $em->persist($apprenant);
 
         $em->flush();

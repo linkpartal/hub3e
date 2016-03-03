@@ -362,8 +362,8 @@
                             </div>
 
                             <div class="inputcontainer">
-                                <label class="list-group-item" style="height: 40px;" for="Photos">Photo : <img alt="Photos" style="height:40px" src="data:image/jpg;base64,{{ User.getPhotos }}"/> </label>
-                                <input accept="image/*" type="file" class="champ form-control" id="Photos" name="_Photos" style="display: none !important;">
+                                <label class="list-group-item" style="height: 40px;" for="Photos">Photo : <img id="Photosimg" alt="Photos" style="height:40px" src="data:image/jpg;base64,{{ User.getPhotos }}"/> </label>
+                                <input onchange="readURL(this,'Photosimg');" accept="image/*" type="file" class="champ form-control" id="Photos" name="_Photos" style="display: none !important;">
 
                             </div>
 
@@ -870,7 +870,7 @@
 
                     </button>
 
-                    <button onclick="post('{{ path('supprimerUtilisateur',{'id': User.getId }) }}',true)" type="button" class="list-group-item rightMenu" >
+                    <button onclick="if(confirm('Voulez-vous Supprimer cette utilisateur ?')){post('{{ path('supprimerUtilisateur',{'id': User.getId }) }}',true)}" type="button" class="list-group-item rightMenu" >
                         <div class="col-xs-12" >Supprimer l'utilisateur</div>
 
                     </button>
@@ -971,6 +971,17 @@
         button.getElementsByTagName("div")[0].innerHTML="valider";
         button.setAttribute('onclick','document.getElementById(\'formUserSubmit\').click()');
     }
+    function readURL(input,baliseimg) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#'+ baliseimg)
+                        .attr('src', e.target.result)
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    };
     {% if User.hasRole('ROLE_APPRENANT') %}
     function modifierStatut(div,value,idcand){
 

@@ -45,7 +45,7 @@
             </div>
         </div>
         <form id="formtier" action="{{ path('tieradded') }}" method="post" enctype="multipart/form-data">
-            <div class="div_form">
+            <div class="div_form" style="display: inline-table">
 
                 <div class="col-xs-6 input-colonne">
                     <input placeholder="SIREN" type="text" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" required>
@@ -344,7 +344,7 @@
 
             {% block Content%}
 
-                <iframe id="iframe" src=""></iframe>
+                <iframe id="iframe" style="visibility: hidden;" src=""></iframe>
 
             {% endblock %}
         </div>
@@ -372,6 +372,7 @@
 
     };
     function postiframe(url,id,button) {
+
         document.getElementById("iframe").src = url;
         var route = '{{path('adresses_tier',{'id':"_id" })}}';
         route = route.replace("_id", id);
@@ -406,6 +407,8 @@
         {
             elements[0].parentNode.removeChild(elements[0]);
         }
+
+        sessionStorage.setItem('_Iframe',url);
 
     }
     function postiframeUser(url,button) {
@@ -482,6 +485,18 @@
         }
     }
     function putbadged() {
+
+        var iframe = sessionStorage.getItem('_Iframe');
+        if(iframe)
+        {
+            document.getElementById("iframe").src = iframe;
+        }
+        else
+        {
+            document.getElementById("iframe").src = '';
+        }
+        document.getElementById("iframe").style.visibility = 'visible';
+
         var notifs = JSON.parse('{{ notifications|raw }}');
         console.log(notifs);
         var ecole =0;

@@ -359,8 +359,8 @@
                                 <input value="{{ImportCandidat.getPrenom}}" type="text" class="champ form-control" id="Prenom" name="_Prenom" maxlength="45" readonly>
                             </div>
                             <div class="inputcontainer">
-                                <label class="list-group-item" style="height: 40px;" for="Photos">Photo : <img alt="Photos" style="height:40px" src="data:image/jpg;base64,{{ ImportCandidat.getPhotos }}"/> </label>
-                                <input accept="image/*" type="file" class="champ form-control" id="Photos" name="_Photos" style="display: none !important;">
+                                <label class="list-group-item" style="height: 40px;" for="Photos">Photo : <img id="Photosimg" alt="Photos" style="height:40px" src="data:image/jpg;base64,{{ ImportCandidat.getPhotos }}"/> </label>
+                                <input onchange="readURL(this,'Photosimg');"  accept="image/*" type="file" class="champ form-control" id="Photos" name="_Photos" style="display: none !important;">
 
                             </div>
 
@@ -742,7 +742,7 @@
 
                     </button>
 
-                    <button onclick="post('{{ path('supprimerUtilisateurSAS',{'id': ImportCandidat.getId }) }}',true)" type="button" class="list-group-item rightMenu" >
+                    <button onclick="if(confirm('Voulez-vous vraimment supprimer apprenant ?')){post('{{ path('supprimerUtilisateurSAS',{'id': ImportCandidat.getId }) }}',true);}" type="button" class="list-group-item rightMenu" >
                         <div class="col-xs-12" >Supprimer de la table SAS </div>
 
                     </button>
@@ -1104,6 +1104,18 @@
             url: route
         });
     }
+
+    function readURL(input,baliseimg) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#'+ baliseimg)
+                        .attr('src', e.target.result)
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    };
 
 </script>
 </body>
