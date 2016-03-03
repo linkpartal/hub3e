@@ -118,7 +118,7 @@
                     <button type="button" class="list-group-item rightMenu" style="background-color: limegreen">
                         <div class="col-xs-12" style="display: inline-table;color: white;">Active</div>
                     </button>
-                    <button onclick="window.location.assign('{{ path('supprimerQCM',{'nom':QCM.getNom }) }}')" type="button" class="list-group-item rightMenu" style="background-color: #2A76CC">
+                    <button onclick="if(confirm('Voulez-vous supprimer le QCM ?')){window.location.assign('{{ path('supprimerQCM',{'nom':QCM.getNom }) }}')}" type="button" class="list-group-item rightMenu" style="background-color: #2A76CC">
                         <div class="col-xs-12"  style="display: inline-table;color: white;">Supprimer le QCM</div>
 
                     </button>

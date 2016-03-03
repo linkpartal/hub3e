@@ -209,7 +209,7 @@
 
             {% block Content%}
 
-                <iframe id="iframe" src="{{ path('afficher_profil') }}"></iframe>
+                <iframe id="iframe" style="visibility: hidden;" src=""></iframe>
 
             {% endblock %}
         </div>
@@ -268,6 +268,8 @@
         {
             elements[0].parentNode.removeChild(elements[0]);
         }
+
+        sessionStorage.setItem('_Iframe',url);
 
     };
     function postiframeUser(url,button) {
@@ -344,6 +346,19 @@
         }
     };
     function putbadged() {
+
+        var iframe = sessionStorage.getItem('_Iframe');
+        if(iframe)
+        {
+            document.getElementById("iframe").src = iframe;
+        }
+        else
+        {
+            document.getElementById("iframe").src = '{{ path('afficher_profil') }}';
+        }
+        document.getElementById("iframe").style.visibility = 'visible';
+
+
         var notifs = JSON.parse('{{ notifications|raw }}');
         console.log(notifs);
         var ecole =0;

@@ -1097,7 +1097,7 @@
                         <button onclick="modifier('formEtab',this)"type="button" class="list-group-item rightMenu">
                             <div class="col-xs-12">Modifier la fiche</div>
                         </button>
-                        <button onclick="post('{{ path('supprimeretablissement',{'id': etablissement.getId }) }}')" type="button" class="list-group-item rightMenu">
+                        <button onclick="if(confirm('Voulez-vous Supprimer cet établissement?')){post('{{ path('supprimeretablissement',{'id': etablissement.getId }) }}');}" type="button" class="list-group-item rightMenu">
                             <div class="col-xs-12">Supprimer l'établissement</div>
                         </button>
 

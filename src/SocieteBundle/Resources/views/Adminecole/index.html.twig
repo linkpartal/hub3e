@@ -364,6 +364,8 @@
             elements[0].parentNode.removeChild(elements[0]);
         }
 
+        sessionStorage.setItem('_Iframe',url);
+
     };
     function postUser(url){
         document.getElementById("iframe").src = url;
@@ -433,6 +435,18 @@
         }
     };
     function putbadged() {
+
+        var iframe = sessionStorage.getItem('_Iframe');
+        if(iframe)
+        {
+            document.getElementById("iframe").src = iframe;
+        }
+        else
+        {
+            document.getElementById("iframe").src = '';
+        }
+        document.getElementById("iframe").style.visibility = 'visible';
+
         var notifs = JSON.parse('{{ notifications|raw }}');
         var ecole =0;
         var societe = 0;

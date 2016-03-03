@@ -445,7 +445,7 @@
             </div>
 
             {% block Content%}
-                <iframe id="iframe" src="{{ path('admin_iframeload') }}"></iframe>
+                <iframe id="iframe" style="visibility: hidden;" src=""></iframe>
             {% endblock %}
         </div>
 
@@ -519,6 +519,8 @@
         sessionStorage.setItem('_Iframe',url);
 
     }
+
+
     function postiframeUser(url,button) {
         document.getElementById("iframe").src = url;
         var elements = button.getElementsByClassName("badge");
@@ -580,12 +582,19 @@
             i++;
         }
     }
+
+
     function putbadged() {
         var iframe = sessionStorage.getItem('_Iframe');
         if(iframe)
         {
             document.getElementById("iframe").src = iframe;
         }
+        else
+        {
+            document.getElementById("iframe").src = '{{ path('admin_iframeload') }}';
+        }
+        document.getElementById("iframe").style.visibility = 'visible';
         var notifs = JSON.parse('{{ notifications|raw }}');
         var ecole =0;
         var societe = 0;
@@ -645,6 +654,10 @@
         }
 
     }
+
+
+
+
     function dupliqueradresse() {
         var dup = document.getElementById("div_adresse");
         var clone = dup.cloneNode(true);
