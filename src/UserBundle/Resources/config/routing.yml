@@ -104,7 +104,7 @@ Document_added:
     defaults: { _controller: UserBundle:Default:AjouterDocument}
 
 modifierStatut:
-    path: /modifierStatutCandidature/id={id}/statut={statut}
+    path: /modifierStatutCandidature/id={id}/statut={statut}/mail={mail}/formation={formation}
     defaults: { _controller: UserBundle:Default:modifierStatutCandidature}
 
 supprimer_Candidature:
