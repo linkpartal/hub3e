@@ -328,12 +328,39 @@ class DefaultController extends Controller
         return $reponse;
     }
 
-    public function modifierStatutCandidatureAction($id,$statut){
+    public function modifierStatutCandidatureAction($id,$statut,$mail,$formation){
         $em = $this->getDoctrine()->getManager();
         $candi= $em->getRepository('GenericBundle:Candidature')->find($id);
 
         $candi->setStatut($statut);
         $em->flush();
+
+        //send password
+        if($statut==3)
+        {
+            $Statutmessage ='validé';
+
+        }
+        elseif($statut==99)
+        {
+            $Statutmessage ='refusé';
+
+        }
+
+        $modele = 'GenericBundle:Mail:ConfCandidature.html.twig';
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject('confirmation de condidature')
+            ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
+            ->setTo($mail)
+            ->setBody($this->renderView($modele,array('statut'=>$Statutmessage,'formation'=>$formation))
+                ,'text/html'
+            );
+        $this->get('mailer')->send($message);
+
+
+
+
 
         $reponse = new JsonResponse();
         return $reponse->setData(array('success'=>1));

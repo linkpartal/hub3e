@@ -696,8 +696,8 @@
 
                                                     {% if candidature.statut == 1 or candidature.statut == 2 %}
 
-                                                        <img name="modification" style="width:25px;display: none"  alt="Refusé"  title="Refusé" onclick="modifierStatut(this,99,'{{ candidature.id }}')" src="{{ asset('image/stop_x18.png') }}">
-                                                        <img name="modification"style="display:none" alt="Validé" title="Validé"  onclick="modifierStatut(this,3,'{{ candidature.id }}')" src="{{ asset('image/imgValide.png') }}">
+                                                        <img name="modification" style="width:25px;display: none"  alt="Refusé"  title="Refusé" onclick="modifierStatut(this,99,'{{ candidature.id }}','{{ ImportCandidat.getEmail }}','{{ candidature.formation.nom }}')" src="{{ asset('image/stop_x18.png') }}">
+                                                        <img name="modification"style="display:none" alt="Validé" title="Validé"  onclick="modifierStatut(this,3,'{{ candidature.id }}','{{ ImportCandidat.getEmail }}','{{ candidature.formation.nom }}')" src="{{ asset('image/imgValide.png') }}">
 
                                                     {% endif %}
 
@@ -708,6 +708,7 @@
 
                                                 <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#cand{{ iddiv }}"></button></label>
                                         </div>
+
                                         <div id="cand{{ iddiv }}" class="collapse in" >
                                             <div class="row">
                                                 <label class="cell">Ecole  : <label>{{ candidature.formation.etablissement.tier.raisonsoc }}</label></label>
@@ -847,11 +848,14 @@
         button.setAttribute('onclick','document.getElementById(\'formUserSubmit\').click()');
     }
 
-    function modifierStatut(div,value,idcand){
+    function modifierStatut(div,value,idcand,email,formation){
 
-        var route = '{{path('modifierStatut',{'id':"_idCandidature",'statut':"_value"})}}';
+        var route = '{{path('modifierStatut',{'id':"_idCandidature",'statut':"_value",'mail':"_mail",'formation':"_formation"})}}';
         route=route.replace('_idCandidature',idcand);
         route=route.replace('_value',value);
+        route=route.replace('_mail',email);
+        route=route.replace('_formation',formation);
+
 
         $.ajax({
             type: 'get',
