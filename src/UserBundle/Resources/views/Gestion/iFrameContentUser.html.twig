@@ -12,7 +12,7 @@
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
 
 </head>
-<body>
+<body onload="loading()" >
 
 <div class="container" style="padding: 0;">
     {% block Content %}
@@ -899,10 +899,9 @@
         document.getElementById('QCM_Test').style.display= 'none';
 
 
-
-
-
         document.getElementById(x).style.display='block';
+
+        sessionStorage.setItem('onglet_tier',x);
     };
     function expire(route) {
         $.ajax({
@@ -971,6 +970,13 @@
         button.getElementsByTagName("div")[0].innerHTML="valider";
         button.setAttribute('onclick','document.getElementById(\'formUserSubmit\').click()');
     }
+    function loading(){
+        var onglet = sessionStorage.getItem('onglet_tier');
+        if(onglet)
+        {
+            $('#select_info option[value="' + onglet + '"]').prop('selected', true).change();
+        }
+    }
     function readURL(input,baliseimg) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -985,7 +991,7 @@
     {% if User.hasRole('ROLE_APPRENANT') %}
     function modifierStatut(div,value,idcand){
 
-        var route = '{{path('modifierStatut',{'id':"_idCandidature",'statut':"_value"})}}';
+        var route = '{{path('modifierStatut',{'id':"_idCandidature",'statut':"_value",'mail':"_mail",'formation':"_formation"})}}';
         route=route.replace('_idCandidature',idcand);
         route=route.replace('_value',value);
 
