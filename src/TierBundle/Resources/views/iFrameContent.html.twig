@@ -504,7 +504,6 @@
 
                             </div>
                         </div>
-
                         <div id="div_document" name="ajouterDocument" style="display:none">
                             <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
                             <button class="toggle" type="button" onclick="supprimerDocument(this)">-</button>
@@ -528,8 +527,6 @@
                                 <input  type="file" class="input" id="document" name="_Document[]">
                             </div>
                         </div>
-
-
 
                         <form class="formulaire" id="formApprenant" action="{{ path("apprenant_added") }}" onsubmit="document.getElementById('submitaddapprenant').disabled=true" method="post" enctype="multipart/form-data" style="margin-top: 50px"   >
                             <input type="hidden" id="idEtab" name="_idEtab" value="{{ etablissement.getId }}">

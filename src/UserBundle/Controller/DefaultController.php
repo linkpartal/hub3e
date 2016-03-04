@@ -358,7 +358,7 @@ class DefaultController extends Controller
 
         if($mail and $Statutmessage){
             $message = \Swift_Message::newInstance()
-                ->setSubject('confirmation de condidature')
+                ->setSubject('confirmation de candidature')
                 ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
                 ->setTo($mail)
                 ->setBody($this->renderView($modele,array('statut'=>$Statutmessage,'formation'=>$candi->getFormation()->getNom()))

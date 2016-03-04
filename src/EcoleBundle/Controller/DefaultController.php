@@ -63,7 +63,7 @@ class DefaultController extends Controller
         $notapprenant = array();
         foreach($users as $userd)
         {
-            if($user->hasRole('ROLE_APPRENANT'))
+            if($userd->hasRole('ROLE_APPRENANT'))
             {
                 array_push($apprenants,$userd);
             }
