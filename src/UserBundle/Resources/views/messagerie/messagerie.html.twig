@@ -263,7 +263,7 @@
                     </div>
 
                     <div class="col-xs-6" style="margin-top:10px;text-align: left">
-                        <label style="font:18px arial ;margin-top: 20px;float:left;width: 100%" > {{ msg.getMessage }} </label><br>
+                        <label style="font:18px arial ;margin-top: 20px;float:left;width: 100%" > {{ msg.getMessage|raw }} </label><br>
                         <label style="font:16px arial;float:left;width: 100%" > {{ msg.getMission.getIntitule }} - <label style="font:18px arial;color:#2A76CC" > {{ msg.getMission.etablissement.tier.raisonsoc }}</label> </label>
                     </div>
 

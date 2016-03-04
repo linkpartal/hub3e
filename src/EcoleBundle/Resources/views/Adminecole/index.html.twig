@@ -425,13 +425,16 @@
     }
     function postiframeUser(url,button) {
         document.getElementById("iframe").src = url;
-        var elements = button.getElementsByClassName("badge");
-        if(elements.length > 0)
-        {
-            elements[0].parentNode.removeChild(elements[0]);
-        }
         sessionStorage.setItem('_Iframe',url);
-    }
+        if(button)
+        {
+            var elements = button.getElementsByClassName("badge");
+            if(elements.length > 0)
+            {
+                elements[0].parentNode.removeChild(elements[0]);
+            }
+        }
+    };
     function search(mot){
         var mots = mot.toUpperCase().trim().split(/ +/g);
         var Recherches = document.getElementsByName('Recherche');
@@ -603,6 +606,11 @@
                     document.getElementById(form).parentNode.parentNode.appendChild(newdiv);
                     document.getElementById('submittier').disabled=false;
 
+                }
+                else if(data['status']==='is_ecole')
+                {
+                    alert('Le siren indiquée appartient à une école!');
+                    document.getElementById('submittier').disabled=false;
                 }
                 else
                 {
