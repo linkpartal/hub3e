@@ -328,7 +328,7 @@ class DefaultController extends Controller
         return $reponse;
     }
 
-    public function modifierStatutCandidatureAction($id,$statut,$mail,$formation){
+    public function modifierStatutCandidatureAction($id,$statut){
         $em = $this->getDoctrine()->getManager();
         $candi= $em->getRepository('GenericBundle:Candidature')->find($id);
 
@@ -346,21 +346,26 @@ class DefaultController extends Controller
             $Statutmessage ='refusé';
 
         }
-
+        if($candi->getUser())
+        {
+            $mail = $candi->getUser()->getEmail();
+        }
+        elseif($candi->getImportcandidat())
+        {
+            $mail = $candi->getImportcandidat()->getEmail();
+        }
         $modele = 'GenericBundle:Mail:ConfCandidature.html.twig';
 
-        $message = \Swift_Message::newInstance()
-            ->setSubject('confirmation de condidature')
-            ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
-            ->setTo($mail)
-            ->setBody($this->renderView($modele,array('statut'=>$Statutmessage,'formation'=>$formation))
-                ,'text/html'
-            );
-        $this->get('mailer')->send($message);
-
-
-
-
+        if($mail and $Statutmessage){
+            $message = \Swift_Message::newInstance()
+                ->setSubject('confirmation de condidature')
+                ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
+                ->setTo($mail)
+                ->setBody($this->renderView($modele,array('statut'=>$Statutmessage,'formation'=>$candi->getFormation()->getNom()))
+                    ,'text/html'
+                );
+            $this->get('mailer')->send($message);
+        }
 
         $reponse = new JsonResponse();
         return $reponse->setData(array('success'=>1));

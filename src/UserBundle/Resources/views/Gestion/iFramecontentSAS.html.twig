@@ -844,13 +844,11 @@
         button.setAttribute('onclick','document.getElementById(\'formUserSubmit\').click()');
     }
 
-    function modifierStatut(div,value,idcand,email,formation){
+    function modifierStatut(div,value,idcand){
 
         var route = '{{path('modifierStatut',{'id':"_idCandidature",'statut':"_value",'mail':"_mail",'formation':"_formation"})}}';
         route=route.replace('_idCandidature',idcand);
         route=route.replace('_value',value);
-        route=route.replace('_mail',email);
-        route=route.replace('_formation',formation);
 
 
         $.ajax({
