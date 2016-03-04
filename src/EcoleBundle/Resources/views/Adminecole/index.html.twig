@@ -175,6 +175,8 @@
                     {% if ecoles is defined %}
                         {% for e in ecoles %}
                             <button onclick="postiframe('{{ path('affiche_etab',{'id': e.getId} ) }}',{{ e.getId }},this)" id="etablissement{{ e.getId }}" type="button" class="list-group-item butonLigne">
+                                <div name="Recherche" style="display: none;">{{ e.getTier.getRaisonSoc }},{{ e.siret }},{{ e.adresse }},{{ e.codepostal }},{{ e.ville }}</div>
+                                <div style="display: none;"></div>
                                 <div class="col-xs-12 part" title="{{e.getTier.getRaisonSoc}}">{{e.getTier.getRaisonSoc}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -194,6 +196,8 @@
                     {% if societes is defined %}
                         {% for s in societes %}
                             <button onclick="postiframe('{{ path('affiche_etab',{'id': s.getId }) }}',{{ s.getId }},this)" id="etablissement{{ s.getId }}" type="button" class="list-group-item butonLigne">
+                                <div name="Recherche" style="display: none;">{{ s.getTier.getRaisonSoc }},{{ s.siret }},{{ s.adresse }},{{ s.codepostal }},{{ s.ville }}</div>
+                                <div style="display: none;"></div>
                                 <div class="col-xs-12 part" title="{{s.getTier.getRaisonSoc}}">{{s.getTier.getRaisonSoc}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -227,6 +231,8 @@
                     {% if missions is defined %}
                         {% for m in missions %}
                             <button onclick="postiframeUser('{{ path('admin_afficheMission',{'id': m.getId }) }}',this)" id="mission{{ m.getId }}" type="button" class="list-group-item butonLigne">
+                                <div name="Recherche" style="display: none;">{{ m.intitule }},{{ m.profil }},{{ m.typecontrat }},{{ m.codemission }},{{ m.domaine }},{{ m.etablissement.tier.raisonsoc }},{{ m.etablissement.siret }},{{ m.etablissement.adresse }},{{ m.etablissement.codepostal }},{{ m.etablissement.ville }}</div>
+                                <div style="display: none;"></div>
                                 <div class="col-xs-12 part" title="{{m.getCodemission}}">{{m.getCodemission}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -269,6 +275,8 @@
                     {% if users is defined %}
                         {% for u in users %}
                             <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId} ) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.getUsername }},{{ u.prenom }},{{ u.email }},{% if u.tier %}{{ u.tier.siren }}{% elseif u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
+                                <div style="display: none;"></div>
                                 <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -287,6 +295,8 @@
                     {% if apprenants is defined %}
                         {% for u in apprenants %}
                             <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId }) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.getUsername }},{{ u.prenom }},{{ u.email }},{{ u.info.adresse }},{{ u.info.cp }},{{ u.info.insee }},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
+                                <div style="display: none;"></div>
                                 <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
@@ -305,6 +315,8 @@
                     {% if import_apprenants is defined %}
                         {% for u in import_apprenants %}
                             <button onclick="postiframeUser('{{ path('Afficher_Sas',{'id': u.getId }) }}',this)" id="import{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.prenom }},{{ u.email }},{{ u.info.adresse }},{{ u.info.cp }},{{ u.info.insee }},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
+                                <div style="display: none;"></div>
                                 <div class="col-xs-12 part" title="{{u.getPrenom ~ '.'~u.getNom}}">{{u.getPrenom ~ '.'~u.getNom}}</div>
                                 <div class="col-xs-12 part" style="height: 31px; text-align: left;">
                                     <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
@@ -421,55 +433,51 @@
         sessionStorage.setItem('_Iframe',url);
     }
     function search(mot){
-
-        var buttons = document.getElementById('ecole').getElementsByClassName('butonLigne');
-
-        var i=0;
-        while(i<buttons.length)
+        var mots = mot.toUpperCase().trim().split(/ +/g);
+        var Recherches = document.getElementsByName('Recherche');
+        for(var i = 0; i < Recherches.length; i++)
         {
-            buttons[i].style.display="block";
-            var c = buttons[i].children;
-            if (!stringWith(c[0].getAttribute('title'), mot) && !stringWith(c[1].children[0].title, mot)) {
-                buttons[i].style.display="none";
+            var score = 0;
+            Recherches[i].parentNode.style.display="block";
+            var recherchermot = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g);
+            for(var k = 0; k< recherchermot.length; k++)
+            {
+                for(var j = 0; j< mots.length;j++)
+                {
+                    if (stringWith(recherchermot[k], mots[j])) {
+                        score++;
+                    }
+                }
             }
-            i++;
+            if(score === 0 ){
+                Recherches[i].parentNode.style.display="none";
+                Recherches[i].nextElementSibling.innerHTML = score;
+            }
+            else {
+                Recherches[i].nextElementSibling.innerHTML = score;
+            }
         }
+        SortDiv('ecole');
+        SortDiv('societe');
+        SortDiv('user');
+        SortDiv('apprenants');
+        SortDiv('mission');
+    }
+    function SortDiv(divId){
+        var toSort = document.getElementById(divId).children;
+        toSort = Array.prototype.slice.call(toSort, 0);
 
-        var buttons = document.getElementById('societe').getElementsByClassName('butonLigne');
+        toSort.sort(function(a, b) {
+            var aord = +a.children[1].innerHTML;
+            var bord = +b.children[1].innerHTML;
+            // two elements never have the same ID hence this is sufficient:
+            return (aord > bord) ? -1 : 1;
+        });
+        var parent = document.getElementById(divId);
+        parent.innerHTML = "";
 
-        var i=0;
-        while(i<buttons.length)
-        {
-            buttons[i].style.display="block";
-            var c = buttons[i].children;
-            if (!stringWith(c[0].getAttribute('title'), mot) && !stringWith(c[1].children[0].title, mot)) {
-                buttons[i].style.display="none";
-            }
-            i++;
-        }
-        var buttons = document.getElementById('licence').getElementsByClassName('butonLigne');
-
-        var i=0;
-        while(i<buttons.length)
-        {
-            buttons[i].style.display="block";
-            var c = buttons[i].children;
-            if (!stringWith(c[0].getAttribute('title'), mot) && !stringWith(c[1].children[0].title, mot)) {
-                buttons[i].style.display="none";
-            }
-            i++;
-        }
-        var buttons = document.getElementById('user').getElementsByClassName('butonLigne');
-
-        var i=0;
-        while(i<buttons.length)
-        {
-            buttons[i].style.display="block";
-            var c = buttons[i].children;
-            if (!stringWith(c[0].getAttribute('title'), mot) && !stringWith(c[1].children[0].title, mot)) {
-                buttons[i].style.display="none";
-            }
-            i++;
+        for(var t = 0, l = toSort.length; t < l; t++) {
+            parent.appendChild(toSort[t]);
         }
     }
     function putbadged() {

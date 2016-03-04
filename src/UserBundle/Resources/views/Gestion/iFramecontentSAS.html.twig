@@ -12,7 +12,7 @@
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
 
 </head>
-<body>
+<body onload="loading()">
 
 <div class="container" style="padding: 0;">
     {% block Content %}
@@ -769,12 +769,8 @@
         document.getElementById('info_doc').style.display= 'none';
         document.getElementById('info_candidature').style.display= 'none';
 
-
-
-
-
-
         document.getElementById(x).style.display='block';
+        sessionStorage.setItem('onglet_tier',x);
     };
     function expire(route) {
         $.ajax({
@@ -913,8 +909,13 @@
             }
         });
 
-
-
+    }
+    function loading(){
+        var onglet = sessionStorage.getItem('onglet_tier');
+        if(onglet)
+        {
+            $('#select_info option[value="' + onglet + '"]').prop('selected', true).change();
+        }
     }
     function supprimerParent(route, champs) {
         $.ajax({
