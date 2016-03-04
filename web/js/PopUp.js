@@ -21,12 +21,5 @@ function show(div,hiddenval){
 function stringWith (str, prefix) {
     var ustring = str.toUpperCase();
     var uprefix = prefix.toUpperCase();
-    if (ustring.indexOf(uprefix) >= 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return ustring.indexOf(uprefix) >= 0;
 }

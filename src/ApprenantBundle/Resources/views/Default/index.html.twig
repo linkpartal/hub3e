@@ -287,19 +287,7 @@
         {
             elements[0].parentNode.removeChild(elements[0]);
         }
-
-    };
-    function stringWith (str, prefix) {
-        var ustring = str.toUpperCase();
-        var uprefix = prefix.toUpperCase();
-        if (ustring.indexOf(uprefix) >= 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        sessionStorage.setItem('_Iframe',url);
     };
     function search(mot){
         var mots = mot.toUpperCase().trim().split(/ +/g);

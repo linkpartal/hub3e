@@ -430,19 +430,7 @@
         {
             elements[0].parentNode.removeChild(elements[0]);
         }
-
-    }
-    function stringWith (str, prefix) {
-        var ustring = str.toUpperCase();
-        var uprefix = prefix.toUpperCase();
-        if (ustring.indexOf(uprefix) >= 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        sessionStorage.setItem('_Iframe',url);
     }
     function search(mot){
         var mots = mot.toUpperCase().trim().split(/ +/g);
@@ -603,7 +591,7 @@
 
                     document.getElementById(form).parentNode.style.display = 'none';
                     var newdiv = document.createElement("div");
-                    innerhtml_newdiv ='<form action="'+route+'" class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block;background-color: white">'+
+                    var innerhtml_newdiv ='<form action="'+route+'" class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block;background-color: white">'+
                             '<label style="width: 50%">SIREN : '+tier.siren+' </label><label style="width: 50%">Raison sociale : '+tier.raisonsoc+'</label>'+
                             '_checkbox_etablissements'+
                             '<input type="submit" value="récupérer">'+
@@ -625,6 +613,7 @@
         });
     }
     function envoyeradresses(){
+
         document.getElementById('submittier').disabled=true;
         var geocodes = document.getElementsByName('_Geocode[]');
         if(geocodes.length==1)
@@ -642,18 +631,23 @@
                 return;
             }
         }
-
+        var result_input= [];
         for(var i = 1; i<geocodes.length;i++)
         {
             var address = document.getElementsByName('_Adresse[]')[i].value +' ' +document.getElementsByName('_Ville[]')[i].value + ' ' + document.getElementsByName('_CodeP[]')[i].value  ;
             var geocoder = new google.maps.Geocoder();
-
-            var result = geocodes[i];
             geocoder.geocode({'address': address}, function (results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
-                    result.value = results[0].geometry.location ;
-                    var check = '{{ path('tier_checkExist') }}';
-                    submitAjaxForm(check,'formtier');
+                    result_input.push(results[0].geometry.location);
+                    if(result_input.length == geocodes.length - 1)
+                    {
+                        for(var y = 1; y< geocodes.length; y++)
+                        {
+                            geocodes[y].value = result_input[y - 1] ;
+                        }
+                        var check = '{{ path('tier_checkExist') }}';
+                        submitAjaxForm(check,'formtier');
+                    }
                 } else {
                     alert('Pas de géocodage trouver pour l\'adresse spécifiée');
                     document.getElementById('submittier').disabled=false;

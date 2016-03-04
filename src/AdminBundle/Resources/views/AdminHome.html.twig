@@ -46,7 +46,7 @@
             </div>
         </div>
 
-        <form id="form" action="{{ path('tieradded') }}" onsubmit="document.getElementById('submittier').disabled = true;" method="post" enctype="multipart/form-data">
+        <form id="formTier" action="{{ path('tieradded') }}" onsubmit="document.getElementById('submittier').disabled = true;" method="post" enctype="multipart/form-data">
             <div class="div_form" style="display: inline-table;" >
 
                 <div class="col-xs-6 input-colonne">
@@ -148,7 +148,7 @@
 <div id="import" class="popup col-xs-3">
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
-        <form id="form" action="{{ path('import') }}" onsubmit="document.getElementById('submitimport').disabled=true" method="post" enctype="multipart/form-data">
+        <form id="formImport" action="{{ path('import') }}" onsubmit="document.getElementById('submitimport').disabled=true" method="post" enctype="multipart/form-data">
             <div class="div_form">
 
                 <select onchange="disabling(this)" title="Type d'import" name="Import">
@@ -544,7 +544,7 @@
         {
             elements[0].parentNode.removeChild(elements[0]);
         }
-
+        sessionStorage.setItem('_Iframe',url);
     }
     function search(mot){
         var mots = mot.toUpperCase().trim().split(/ +/g);
@@ -707,9 +707,7 @@
                 }
                 else if(data['status']==='exist')
                 {
-                    route='{{ path('etablissement_exist') }}';
-                    document.getElementById(form).action = route;
-                    $("#"+form+" input[type=submit]").click();
+                    alert('un des sirets existe deja');
                     document.getElementById('submittier').disabled=false;
                 }
                 else
@@ -739,18 +737,23 @@
                 return;
             }
         }
+        var result_input= [];
         for(var i = 1; i<geocodes.length;i++)
         {
             var address = document.getElementsByName('_Adresse[]')[i].value +' ' +document.getElementsByName('_Ville[]')[i].value + ' ' + document.getElementsByName('_CodeP[]')[i].value  ;
             var geocoder = new google.maps.Geocoder();
-
-            var result = geocodes[i];
             geocoder.geocode({'address': address}, function (results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
-                    result.value = results[0].geometry.location ;
-                    var check = '{{ path('tier_checkExist',{'siren': '_siren' }) }}';
-                    check = check.replace('_siren',document.getElementById('SIREN').value)
-                    submitAjaxForm(check,'form');
+                    result_input.push(results[0].geometry.location);
+                    if(result_input.length == geocodes.length - 1)
+                    {
+                        for(var y = 1; y< geocodes.length; y++)
+                        {
+                            geocodes[y].value = result_input[y - 1] ;
+                        }
+                        var check = '{{ path('tier_checkExist') }}';
+                        submitAjaxForm(check,'formTier');
+                    }
                 } else {
                     alert('Pas de géocodage trouver pour l\'adresse spécifiée');
                     document.getElementById('submittier').disabled=false;

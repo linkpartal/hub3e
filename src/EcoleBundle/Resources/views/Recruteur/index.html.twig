@@ -52,7 +52,7 @@
                 </div>
             </div>
         </div>
-        <form id="form" action="{{ path('tieradded') }}" method="post" enctype="multipart/form-data">
+        <form id="formTier" action="{{ path('tieradded') }}" method="post" enctype="multipart/form-data">
             <div class="div_form" style="display: inline-table">
 
                 <div class="col-xs-6 input-colonne">
@@ -681,10 +681,7 @@
         document.getElementById(x).style.visibility='visible';
 
     };
-
-
-    function show_formapprenant(div)
-    {
+    function show_formapprenant(div) {
         document.getElementById('infoapprenant').style.visibility= 'hidden';
         document.getElementById('apprenant_formation').style.visibility= 'hidden';
         document.getElementById('responsable_apprenant').style.visibility= 'hidden';
@@ -784,7 +781,7 @@
 
         sessionStorage.setItem('_Iframe',url);
 
-    };
+    }
     function postiframeUser(url,button){
         document.getElementById("iframe").src = url;
         var elements = button.getElementsByClassName("badge");
@@ -792,19 +789,8 @@
         {
             elements[0].parentNode.removeChild(elements[0]);
         }
-    };
-    function stringWith (str, prefix) {
-        var ustring = str.toUpperCase();
-        var uprefix = prefix.toUpperCase();
-        if (ustring.indexOf(uprefix) >= 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    };
+        sessionStorage.setItem('_Iframe',url);
+    }
     function search(mot){
         var mots = mot.toUpperCase().trim().split(/ +/g);
         var Recherches = document.getElementsByName('Recherche');
@@ -950,14 +936,31 @@
                 if(data['status']==='success')
                 {
                     $("#"+form+" input[type=submit]").click();
-                    document.getElementById('submittier').disabled=false;
                 }
                 else if(data['status']==='exist')
                 {
                     route='{{ path('etablissement_exist') }}';
-                    document.getElementById(form).action = route;
-                    $("#"+form+" input[type=submit]").click();
+                    var tier = JSON.parse(data['Tier']);
+                    var etablissements = JSON.parse(data['Etablissements']);
+                    var string_checkbox='';
+                    for (var i = 0; i < etablissements.length; i++) {
+                        string_checkbox += '<input type="checkbox" name="etablissement[]"  value="'+etablissements[i].id+'" > '+ etablissements[i].adresse+ ' - '+ etablissements[i].ville+' - '+etablissements[i].codepostal+'<br>';
+                    }
+
+                    document.getElementById(form).parentNode.style.display = 'none';
+                    var newdiv = document.createElement("div");
+                    var innerhtml_newdiv ='<form action="'+route+'" class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block;background-color: white">'+
+                            '<label style="width: 50%">SIREN : '+tier.siren+' </label><label style="width: 50%">Raison sociale : '+tier.raisonsoc+'</label>'+
+                            '_checkbox_etablissements'+
+                            '<input type="submit" value="récupérer">'+
+                            '<button type="button" onclick="declinertier(this)">Décliner</button>'+
+                            '</form>';
+
+                    innerhtml_newdiv = innerhtml_newdiv.replace('_checkbox_etablissements',string_checkbox);
+                    newdiv.innerHTML = innerhtml_newdiv;
+                    document.getElementById(form).parentNode.parentNode.appendChild(newdiv);
                     document.getElementById('submittier').disabled=false;
+
                 }
                 else
                 {
@@ -966,8 +969,9 @@
                 }
             }
         });
-    };
+    }
     function envoyeradresses(){
+
         document.getElementById('submittier').disabled=true;
         var geocodes = document.getElementsByName('_Geocode[]');
         if(geocodes.length==1)
@@ -985,26 +989,30 @@
                 return;
             }
         }
-
+        var result_input= [];
         for(var i = 1; i<geocodes.length;i++)
         {
             var address = document.getElementsByName('_Adresse[]')[i].value +' ' +document.getElementsByName('_Ville[]')[i].value + ' ' + document.getElementsByName('_CodeP[]')[i].value  ;
             var geocoder = new google.maps.Geocoder();
-
-            var result = geocodes[i];
             geocoder.geocode({'address': address}, function (results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
-                    result.value = results[0].geometry.location ;
-                    var check = '{{ path('tier_checkExist',{'siren': '_siren' }) }}';
-                    check = check.replace('_siren',document.getElementById('SIREN').value)
-                    submitAjaxForm(check,'form');
+                    result_input.push(results[0].geometry.location);
+                    if(result_input.length == geocodes.length - 1)
+                    {
+                        for(var y = 1; y< geocodes.length; y++)
+                        {
+                            geocodes[y].value = result_input[y - 1] ;
+                        }
+                        var check = '{{ path('tier_checkExist') }}';
+                        submitAjaxForm(check,'formTier');
+                    }
                 } else {
                     alert('Pas de géocodage trouver pour l\'adresse spécifiée');
                     document.getElementById('submittier').disabled=false;
                 }
             });
         }
-    };
+    }
     function readURL(input,baliseimg) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -1025,7 +1033,10 @@
         if(champ.options[champ.selectedIndex].value ==0){champ.nextElementSibling.style.display = 'inline-block';}
         else{champ.nextElementSibling.style.display = 'none';}
     };
-
+    function declinertier(button){
+        button.parentNode.parentNode.parentNode.removeChild(button.parentNode.parentNode);
+        document.getElementById('formtier').parentNode.style.display = 'block';
+    }
 
 
     var ResponsableCount = 1;
