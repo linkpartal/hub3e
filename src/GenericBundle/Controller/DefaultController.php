@@ -46,16 +46,25 @@ class DefaultController extends Controller
             }
             elseif(true === $this->get('security.authorization_checker')->isGranted('ROLE_ADMINECOLE'))
             {
-                $ecole = $em->getRepository('GenericBundle:Tier')->find($user->getTier());
-                return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$ecole->getRaisonSoc())));
+                return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$user->getTier()->getRaisonSoc())));
             }
-            elseif(true === $this->get('security.authorization_checker')->isGranted('ROLE_USER'))
+            elseif(true === $this->get('security.authorization_checker')->isGranted('ROLE_ADMINSOC'))
             {
-                return $this->redirect('http://youtube.com');
+                return $this->redirect($this->generateUrl('societe_admin',array('societe'=>$user->getTier()->getRaisonSoc())));
             }
+            elseif(true === $this->get('security.authorization_checker')->isGranted('ROLE_RECRUTEUR'))
+            {
+                return $this->redirect($this->generateUrl('ecole_recruteur',array('ecole'=>$user->getEtablissement()->getTier()->getRaisonSoc())));
+            }
+            elseif(true === $this->get('security.authorization_checker')->isGranted('ROLE_APPRENANT'))
+            {
+               return $this->redirect($this->generateUrl('ecole_apprenant',array('apprenant'=>$user)));
+
+            }
+
             else{
-                var_dump($user);
-                die();
+                var_dump('Seul les roles SUPER_ADMIN et ADMINECOLE sont actuellement implemente, l\'utilisateur que vous avez donne à ' . implode(" et ",$user->getRoles()) . ' comme roles. Veuillez revenir en arriere est donne un super_admin ou adminecole');
+                die;
             }
         }
         else
@@ -69,6 +78,29 @@ class DefaultController extends Controller
     }
 
     public function loadloginAction(){
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN'))
+        {
+            return $this->redirect('admin');
+        }
+        elseif($this->get('security.authorization_checker')->isGranted('ROLE_ADMINECOLE'))
+        {
+            return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$user->getTier()->getRaisonSoc())));
+        }
+        elseif($this->get('security.authorization_checker')->isGranted('ROLE_ADMINSOC'))
+        {
+            return $this->redirect($this->generateUrl('societe_admin',array('societe'=>$user->getTier()->getRaisonSoc())));
+        }
+        elseif($this->get('security.authorization_checker')->isGranted('ROLE_RECRUTEUR'))
+        {
+            return $this->redirect($this->generateUrl('ecole_recruteur',array('ecole'=>$user->getEtablissement()->getTier()->getRaisonSoc())));
+        }
+        elseif($this->get('security.authorization_checker')->isGranted('ROLE_APPRENANT'))
+        {
+            return $this->redirect($this->generateUrl('ecole_apprenant',array('apprenant'=>$user)));
+
+        }
         return $this->redirect('login');
     }
 
@@ -84,6 +116,7 @@ class DefaultController extends Controller
         $user = $userManager->findUserByUsername( $request->get('_username'));
 
         $hash =  $this->get('security.password_encoder')->encodePassword($user, $request->get('_password'));
+        //$user->setPlainPassword($request->get('_password'));
         $user->setPassword($hash);
 
         //Change Last Login to Now
@@ -100,4 +133,6 @@ class DefaultController extends Controller
         return $this->redirect('login');
 
     }
+
+
 }

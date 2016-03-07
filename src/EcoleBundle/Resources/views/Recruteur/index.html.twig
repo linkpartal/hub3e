@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('image/Logo_Hub_3e.png') }}" />
+
+    <style>
+        .dropdown-submenu{position:relative;}
+        .dropdown-submenu>.dropdown-menu{top:0;left:100%;margin-top:-6px;margin-left:-1px;-webkit-border-radius:0 6px 6px 6px;-moz-border-radius:0 6px 6px 6px;border-radius:0 6px 6px 6px;}
+        .dropdown-submenu:hover>.dropdown-menu{display:block;}
+        .dropdown-submenu>a:after{display:block;content:" ";float:right;width:0;height:0;border-color:transparent;border-style:solid;border-width:5px 0 5px 5px;border-left-color:#cccccc;margin-top:5px;margin-right:-10px;}
+        .dropdown-submenu:hover>a:after{border-left-color:#ffffff;}
+        .dropdown-submenu.pull-left{float:none;}.dropdown-submenu.pull-left>.dropdown-menu{left:-100%;margin-left:10px;-webkit-border-radius:6px 0 6px 6px;-moz-border-radius:6px 0 6px 6px;border-radius:6px 0 6px 6px;}
+    </style>
+    {% block CSS %}{% endblock %}
+
+    <title>HUB3E - {% block title %}Ecole{% endblock %}</title>
+
+</head>
+<body onload="loading();putbadged()">
+<div id="addtier" class="popup col-xs-3">
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
+        <div id="div_adresse" name="ajouterAdresse" style="border-bottom: 10px;display:none">
+            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+            <button class="toggle" type="button" onclick="supprimerAdresse(this)">-</button>
+            <div id="demo" class="collapse in">
+                <div class="col-xs-4 input-colonne">
+                    <input placeholder="Siret" class="input" type="text" id="SIRET" name="_SIRET[]" pattern=".{14}" maxlength="14" required>
+
+
+                    <input placeholder="Responsable" class="input" type="text" id="Resp" name="_Resp[]" maxlength="45" required>
+                    <input placeholder="Téléphone responsable" class="input" type="tel" id="TelResp" name="_TelResp[]" maxlength="45" required>
+
+                    <input placeholder="Adresse email responsable" class="input" type="email" id="MailResp" name="_MailResp[]" maxlength="45" required>
+                    <input type="hidden" class="form-control" id="Geocode" name="_Geocode[]" required>
+
+
+                </div>
+                <div class="col-xs-8">
+                    <input  placeholder="Adresse postale" class="input" type="text" id="Adresse" name="_Adresse[]" maxlength="45" required>
+                    <input  placeholder="Ville" class="input" type="text" id="Ville" name="_Ville[]" style="width: 50%; margin-right: 10px" maxlength="20" required>
+                    <input  placeholder="Code postal" class="input" type="text" id="CodeP" name="_CodeP[]" style="width: calc(50% - 10px)" maxlength="10" required>
+                    <input placeholder="Téléphone" class="input" type="tel" id="Tel" name="_Tel[]" style="width: 50%;margin-right: 10px" maxlength="10" required>
+                    <input placeholder="Fax" class="input" type="tel" id="Fax" name="_Fax[]" style="width: calc(50% - 10px)" maxlength="10" required>
+                    <input placeholder="Adresse du Site" class="input" type="url" id="Site" name="_Site[]" maxlength="45" required>
+
+                </div>
+            </div>
+        </div>
+        <form id="formTier" action="{{ path('tieradded') }}" method="post" enctype="multipart/form-data">
+            <div class="div_form" style="display: inline-table">
+
+                <div class="col-xs-6 input-colonne">
+                    <input placeholder="SIREN" type="text" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" required>
+                    <label for="Logo"><img id="Logoimg" style="height: 200px;width: 150px" onclick="this.src='{{ asset('image/wait_x300.gif') }}'" src="{{ asset('image/upload-arrow.png') }}"/></label><br>
+                    <input onchange="readURL(this,'Logoimg');"  accept="image/*" type="file" class="input" id="Logo" name="_Logo" style="display: none">
+                </div>
+
+                <div class="col-xs-6 input-colonne">
+                    <input placeholder="Raison sociale" type="text" class="input" id="RaisonSoc" name="_RaisonSoc" maxlength="45" required>
+
+
+                    <label for="image"><img id="backimg" onclick="this.src='{{ asset('image/wait_x300.gif') }}'" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
+                    <input onchange="readURL(this,'backimg');" accept="image/*" type="file" class="input" id="image" name="_image" style="display: none">
+                </div>
+
+                <input  type="hidden" id="EcoleBool" name="_Ecole">
+                <div id="adressecontainer">
+
+                </div>
+                <button type="button" class="col-xs-12 blue" onclick="dupliqueradresse()">Ajouter une adresse</button>
+            </div>
+            <div class="div_button">
+                <input type="submit" style="display: none">
+                <button id="submittier" class="blue" type="button" onclick="envoyeradresses()">Envoyer</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+<div id="apprenant" class="popup col-xs-3" >
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-6" style="top:40px;border:20px solid white;display: block;margin-bottom: 20px ;background: white;width:70%">
+        <div class="col-xs-12" style="height: 50px;">
+            <div style="height: 50px; width: 100%">
+                <ul id="select_info_apprenant"  class="nav navbar-nav" style="height: 50px;background: #4389c8;" >
+                    <li class="dropdown col-xs-12" >
+                        <a class="dropdown-toggle" data-toggle="dropdown"style="height: 40px;color:white;background: #4389c8;margin: 0 auto;">
+                            <label id="65sd4f4" style="font-family: Arial;font-size: small">DETAILS DE L'APPRENANT</label>  <b class="caret"></b> </a>
+                        <ul class="dropdown-menu" style="margin-left: 100px">
+                            <li class="dropdown-submenu" >
+                                <a onclick="show_formapprenant('infoapprenant')" tabindex="-1" href="#" >Informations générales sur l'apprenant</a>
+                                <ul class="dropdown-menu">
+                                    <li><a onclick="show_formapprenant('responsable_apprenant')" href="#">Responsables de l'apprenant</a></li>
+                                    <li><a onclick="show_formapprenant('diplome_apprenant')" href="#">Diplomes</a></li>
+                                    <li><a onclick="show_formapprenant('recommendation_apprenant')" href="#">Recommandation</a></li>
+                                    <li><a onclick="show_formapprenant('experience_apprenant')" href="#">Expériences</a></li>
+                                    <li><a onclick="show_formapprenant('hobbie_apprenant')" href="#">Hobbies</a></li>
+                                    <li><a onclick="show_formapprenant('langue_apprenant')" href="#">Langue</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">QCM</a></li>
+                            <li><a onclick="show_formapprenant('apprenant_formation')"  href="#">Choix formation</a></li>
+                            <li><a href="#">Profil à 360°</a></li>
+                            <li><a href="#">Rendez-vous</a></li>
+                            <li><a href="#">Placement</a></li>
+                            <li><a onclick="show_formapprenant('document_apprenant')" href="#">Documents</a></li>
+                            <li><a href="#">Onglet tests</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+        <div id="div_responsable" name="ajouterResponsable" style="display:none;">
+            <button style="float:inherit" class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+            <button class="toggle" type="button" onclick="supprimerResponsable(this)"> - </button>
+            <div id="demo" class="collapse in">
+
+                <div class="col-xs-10 input-colonne">
+                    <label id="startTimeLabel" visible="false"></label>
+                </div>
+
+                <div class="col-xs-3 input-colonne">
+                    <input placeholder="Nom" class="input" type="text" id="Nomresp" name="_Nomresp[]" maxlength="45" required >
+                    <select class="input "  title="" name="_Civiliteresp[]">
+                        <option value="Monsieur">Mr.</option>
+                        <option value="Madame">Mme.</option>
+                    </select>
+
+                </div>
+                <div class="col-xs-3 input-colonne">
+                    <input placeholder="Prenom" class="input" type="text" id="Prenomresp" name="_Prenomresp[]" maxlength="45" required >
+                    <input placeholder="Metier" class="input" type="text" id="Metierresp" name="_Metierresp[]" maxlength="45" required >
+
+
+                </div>
+
+                <div class="col-xs-6 input-colonne">
+                    <input placeholder="Adresse postale" class="input" type="text" id="Adresseresp" name="_Adresseresp[]" maxlength="45" required >
+                    <input placeholder="Adresse email" class="input" type="text" id="Emailresp" name="_Emailresp[]" maxlength="45" required >
+
+                </div>
+
+                <div class="col-xs-3 input-colonne">
+                    <input placeholder="Profession" class="input" type="text" id="Profession" name="_Profession[]" maxlength="45" required >
+                </div>
+
+                <div class="col-xs-3 input-colonne">
+                    <input placeholder="Téléphone " class="input" type="text" id="Telephoneresp" name="_Telephoneresp[]" maxlength="45" required >
+                </div>
+                <div class="col-xs-3 input-colonne">
+                    <input placeholder="Ville" class="input" type="text" id="Villeresp" name="_Villeresp[]" maxlength="45" required >
+                </div>
+
+                <div class="col-xs-3 input-colonne">
+                    <input placeholder="Code postale" class="input" type="text" id="CodePostaleresp" name="_CodePostaleresp[]" maxlength="45" required >
+                </div>
+
+
+            </div>
+        </div>
+
+        <div id="div_recommandation" name="ajouterRecommandation" style="display:none">
+            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+            <button class="toggle" type="button" onclick="supprimerRecommandation(this)">-</button>
+            <div id="demo" class="collapse in">
+
+                <div class="col-xs-10 input-colonne">
+                    <label id="startTimeLabel" visible="false"></label>
+                </div>
+                <div class="col-xs-6 input-colonne">
+                    <div class="col-xs-6 input-colonne">
+                        <input placeholder="Nom" class="input" type="text" id="Nom" name="_Nomrec[]" maxlength="45" required >
+                        <input placeholder="Fonction" class="input" type="text" id="Fonctionrec" name="_Fonctionrec[]" maxlength="45" required >
+
+                    </div>
+                    <div class="col-xs-6 input-colonne" style="border-right: 0">
+                        <input placeholder="Prenom" class="input" type="text" id="Prenom" name="_Prenomrec[]" maxlength="45" required >
+                        <input placeholder="Téléphone fixe" class="input"  type="text" id="Telephonerec" name="_Telephonerec[]" maxlength="45" required >
+                    </div>
+                    <input placeholder="Adresse email" class="input" type="text" id="Emailrec" name="_Emailrec[]" maxlength="45" required >
+                </div>
+
+
+                <div class="col-xs-6 input-colonne " style="height:150px">
+                    <textarea placeholder="Recommandation écrite" class="input" type="text" id="Text" name="_Text[]"  required style="resize:none;height:calc( 100% - 13px)"></textarea>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div id="div_experience" name="ajouterExperience" style="display:none">
+            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+            <button class="toggle" type="button" onclick="supprimerExperience(this)">-</button>
+            <div id="demo" class="collapse in">
+
+                <div class="col-xs-10 input-colonne">
+                    <label id="startTimeLabel" visible="false"></label>
+                </div>
+                <div class="col-xs-6 input-colonne">
+                    <div class="col-xs-6 input-colonne">
+                        <input placeholder="Nom Société" class="input" type="text" id="Nomsociete" name="_Nomsociete[]" maxlength="45" required >
+                        <input placeholder="Activité" class="input" type="text" id="Activite" name="_Activite[]" maxlength="45" required >
+
+                    </div>
+                    <div class="col-xs-6 input-colonne" style="border-right: 0">
+                        <input placeholder="Lieu" class="input" type="text" id="Lieu" name="_Lieu[]" maxlength="45" required >
+                        <input placeholder="Poste" class="input"  type="text" id="Poste" name="_Poste[]" maxlength="45" required >
+                    </div>
+                    <input placeholder="Nombre d'années" class="input" type="number" id="Nbreannee" name="_Nbreannee[]" maxlength="11" required >
+                </div>
+
+
+                <div class="col-xs-6 input-colonne " style="height:150px">
+                    <textarea placeholder="Description" class="input" type="text" id="Descriptionexp" name="_Descriptionexp[]"  required style="resize:none;height:calc( 100% - 13px)"></textarea>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div id="div_diplome" name="ajouterDiplome" style="display:none">
+            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+            <button class="toggle" type="button" onclick="supprimerDiplome(this)">-</button>
+            <div id="demo" class="collapse in">
+
+
+                <div class="col-xs-12 input-colonne">
+                    <input placeholder="Libelle" class="input" type="text" id="Libelle" name="_Libelle[]" maxlength="45" required >
+
+                </div>
+
+                <div class="col-xs-12 input-colonne" >
+                    <input placeholder="Obtention" class="input" type="text" id="Obtention" name="_Obtention[]" maxlength="45" required >
+                </div>
+
+                <div class="col-xs-12 input-colonne" >
+
+                    <input placeholder="école" class="input"  type="text" id="Ecole" name="_Ecole[]" maxlength="45" required >
+                </div>
+
+
+            </div>
+        </div>
+
+        <div id="div_langue" name="ajouterLangue" style="display:none">
+            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+            <button class="toggle" type="button" onclick="supprimerLangue(this)">-</button>
+            <div id="demo" class="collapse in">
+
+                <div class="col-xs-12 input-colonne">
+                    <label id="startTimeLabel" visible="false"></label>
+                </div>
+                <div class="col-xs-6 input-colonne">
+                    <select class="input " title="" name="_Langue[]">
+                        <option value="Francais">Francais </option>
+                        <option value="Anglais">Anglais </option>
+                        <option value="Espagnol">Espagnol </option>
+                        <option value="Arabe">Arabe </option>
+                        <option value="Allemand">Allemand </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-xs-6 input-colonne" >
+
+                    <select class="input " title="" name="_Niveau[]">
+                        <option value="connaissance de base">connaissance de base</option>
+                        <option value="bonne connaissance">bonne connaissance</option>
+                        <option value="courant">courant</option>
+                        <option value="langue maternelle">langue maternelle</option>
+
+                    </select>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div id="div_document" name="ajouterDocument" style="display:none">
+            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+            <button class="toggle" type="button" onclick="supprimerDocument(this)">-</button>
+            <div id="demo" class="collapse in">
+
+
+                <div class="col-xs-12 input-colonne">
+                    <label id="startTimeLabel" visible="false"></label>
+
+                </div>
+
+
+                <div class="col-xs-12 input-colonne">
+
+                    <select class="input "  title=""  name="_Type[]">
+                        <option value="lettre de motivation" >lettre de motivation</option>
+                        <option value="cv" >Cv</option>
+                        <option value="Autre" >Autre</option>
+                    </select>
+                </div>
+                <input  type="file" class="input" id="document" name="_Document[]">
+            </div>
+        </div>
+
+
+
+        <form class="formulaire" id="formApprenant" action="{{ path("apprenant_added") }}" onsubmit="document.getElementById('submitaddapprenant').disabled=true" method="post" enctype="multipart/form-data" style="margin-top: 50px"   >
+            <input type="hidden" id="idEtab" name="_idEtab" value="{{ app.user.etablissement.getId }}">
+            <input type="hidden" id="idEtab" name="_idUser" value="{{ app.user.getId }}">
+            <div class="div_form" id="infoapprenant" style="border-bottom:1px solid #2b542c;"  >
+
+
+                <div class="col-xs-10 input-colonne">
+                    <label id="startTimeLabel" visible="false"></label>
+                </div>
+                <div >
+                    <div class="col-xs-3 input-colonne" >
+                        <label for="Photos"><img onclick="this.src='{{ asset('image/wait_x300.gif') }}'" id="Photosimg" style="height: 90px;" src="{{ asset('image/upload-arrow.png') }}"/></label><br>
+                        <input onchange="readURLL(this,'Photosimg');"  accept="image/*" type="file" class="input" id="Photos" name="_Photos" style="display: none">
+                    </div>
+                    <div class="col-xs-3 input-colonne">
+                        <input placeholder="Placé" class="input" type="text" id="Place" name="_Place" maxlength="45"  style="background:yellowgreen">
+
+                        <input placeholder="N°INSEE" class="input" type="text" id="N°INSEE" name="_N°INSEE" maxlength="45" required>
+                    </div>
+
+                    <div class="col-xs-6 input-colonne" style="border-right: 0 ">
+                        <input placeholder="Adresse postale" class="input" type="text" id="Adresse" name="_Adresse" maxlength="45" required >
+
+
+                    </div>
+                    <div class="col-xs-3 input-colonne">
+                        <input placeholder="Ville" class="input" type="text" id="Ville" name="_Ville" maxlength="45" required >
+                    </div>
+                    <div class="col-xs-3 input-colonne" style="border-right: 0 ">
+                        <input placeholder="Code postal" class="input" type="text" id="Codepostal" name="_Codepostal" maxlength="45" required >
+                    </div>
+
+                    <div class="col-xs-3 input-colonne">
+                        <input placeholder="Nom" class="input" type="text" id="Nom" name="_Nom" maxlength="45" required >
+                        <select class="input "  title="" name="_Civilite" maxlength="45" required>
+                            <option value="Monsieur">Mr.</option>
+                            <option value="Madame">Mme.</option>
+                        </select>
+
+                    </div>
+                    <div class="col-xs-3 input-colonne">
+                        <input placeholder="Prenom" class="input" type="text" id="Prenom" name="_Prenom" maxlength="45" required >
+
+                        <input placeholder="Date de Naissance" type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' class="date" id="Datenaissance" name="_Datenaissance" title="Date de Naissance" required >
+                    </div>
+                    <div class="col-xs-6 input-colonne" style="border-right: 0 ">
+                        <input placeholder="Adresse email" class="input" type="text" id="Email" name="_Email" maxlength="45" required >
+                    </div>
+                    <div class="col-xs-3 input-colonne">
+                        <input placeholder="Téléphone portable" class="input" type="text" id="Telephone" name="_Telephone" maxlength="45" required >
+
+                    </div>
+
+                    <div class="col-xs-3 input-colonne" style="border-right: 0 ">
+
+                        <input placeholder="Téléphone fixe" class="input" type="text" id="Fax" name="_Fax" maxlength="45"  >
+
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="div_form" id="apprenant_formation" style="position: absolute;visibility: hidden;border-bottom:1px solid #2b542c;" >
+                <div class="col-xs-10 input-colonne">
+                    <label id="startTimeLabel" visible="false"></label>
+                </div>
+
+                <div class="col-xs-12 input-colonne " >
+                    <select class="input" title="" style="height: 100px" name="formations[]" multiple>
+                        {% for formation in formations %}
+                            {% if formation.getDescriptif %}
+                                <option value="{{ formation.getId }}">{{ formation.getNom }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+            </div>
+
+            <div class="div_form" id="responsable_apprenant" style="position: absolute;visibility: hidden;border-bottom:1px solid #2b542c;"  >
+
+                <div id="responsablecontainer">
+
+                </div>
+                <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;" onclick="dupliquerResponsable()">Ajouter un responsable</button>
+            </div>
+
+            <div class="div_form" id="recommendation_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
+
+                <div id="recommandationcontainer">
+
+                </div>
+                <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;"  onclick="dupliquerRecommandation()">Ajouter une recommandation</button>
+
+            </div>
+
+
+            <div class="div_form" id="diplome_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
+
+                <div id="diplomecontainer">
+
+                </div>
+                <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;"  onclick="dupliquerDiplome()">Ajouter un diplome</button>
+
+            </div>
+
+            <div class="div_form" id="langue_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
+
+                <div id="languecontainer">
+
+                </div>
+                <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;"  onclick="dupliquerLangue()">Ajouter une Langue</button>
+
+            </div>
+
+            <div class="div_form" id="document_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
+
+                <div id="documentcontainer">
+
+                </div>
+                <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;"  onclick="dupliquerDocument()">Ajouter un Document</button>
+
+            </div>
+
+            <div class="div_form" id="hobbie_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
+
+                <div class="col-xs-12 input-colonne">
+                    <label id="startTimeLabel" visible="false"></label>
+                </div>
+
+
+
+                <div class="col-xs-12 input-colonne " >
+                    <select class="input" title="" style="height: 100px" name="hobbies[]" multiple>
+                        {% for hobbie in hobbies %}
+                            {% if hobbie.getHobbie %}
+                                <option value="{{ hobbie.getId }}">{{ hobbie.getHobbie }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+            </div>
+            <div class="div_form" id="experience_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
+
+                <div id="experiencecontainer">
+
+                </div>
+                <button type="button" class="col-xs-12 blue" style="margin-bottom:20px;"  onclick="dupliquerExperience()">Ajouter une Exepérience</button>
+
+            </div>
+
+
+            <div class="div_button" style="margin-top: 10px" >
+
+                <input class="blue" id="submitaddapprenant" type="submit"  style="margin-right: 10px" value="Enregistrer">
+
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<div class="container">
+    {% block TopBar %}
+        <div class="row" style="height: 32px; background: #2975cb;">
+            <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="border: 0;padding: 4.5px;height: 100%;">
+                <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 21px;" >        </a>
+            </div>
+            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="display: inline; margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+                <button onclick="show('apprenant')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+                ></button>
+
+                <button id="usertop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ users|length }} Apprenant</button>
+            </div>
+            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+                <button onclick="show('addtier',0)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+                ></button>
+
+                <button id="societetop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ societes|length }} Sociétés</button>
+
+            </div>
+
+            <!--div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+                <button onclick="show('import')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+                ></button>
+
+                <button style="color:white ">importer</button>
+            </div-->
+
+
+            <div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px; float: right; margin-right: 40px;">
+                <button type="button" class="btn btn-default dropdown-toggle"
+                        data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false"
+                        style="padding:0;width: 100%; height: 20px; border-radius: 0; background: none; border: 0;color: white">
+                    {% if image %}
+                        <img  src="data:image/jpg;base64,{{image}}" style="border-radius:50%; width:32px; height:32px" >
+                    {% elseif app.user.getCivilite == 'Mme' or app.user.getCivilite == 'Madame' %}
+                        <img  src="{{ asset('image/femme.jpg') }}" style="border-radius:50%; width:32px; height:32px" >
+                    {% else %}
+                        <img  src="{{ asset('image/homme.jpg') }}" style="border-radius:50%; width:32px; height:32px" >
+                    {% endif %}
+                    {{ app.user.username }}<span class="glyphicon glyphicon-triangle-bottom"
+                                                 aria-hidden="true"></span>
+                </button>
+                <ul id="profil" class="dropdown-menu" aria-labelledby="dropdownMenu1" style="color:white;background: #2975cb;">
+
+                    <li><button onclick="postiframeUser('{{ path('afficher_profil') }}')" style="background: transparent;border:transparent;width:100%">PROFIL</button></li>
+                    <li><button onclick="postiframeUser('{{ path('afficher_messagerie') }}')" style="background: transparent;border:transparent;width:100%">MESSAGERIE</button></li>
+                    <li><a onclick="sessionStorage.clear()" href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">LOGOUT</button> </a></li>
+
+
+
+                </ul>
+            </div>
+
+        </div>
+
+
+    {% endblock %}
+    <div class="row" style="height: 100%">
+
+        {% block LeftBar %}
+            <div class="col-xs-2">
+
+                <select title="" id="leftselect" name="myddl" class="btn btn-default dropdown-toggle">
+                    <option value="societe">Voir Sociétés</option>
+                    <option value="user">Voir Apprenants</option>
+                    <option value="mission">Voir Missions</option>
+                </select>
+
+                <div id="societe" class="list-group col-xs-2 leftbar">
+                    {% if societes is defined %}
+                        {% for s in societes %}
+                            <button onclick="postiframe('{{ path('affiche_etab',{'id': s.getId }) }}',{{ s.getId }},this)" id="etablissement{{ s.getId }}" type="button" class="list-group-item butonLigne">
+                                <div name="Recherche" style="display: none;">{{ s.getTier.getRaisonSoc }},{{ s.siret }},{{ s.adresse }},{{ s.codepostal }},{{ s.ville }}</div>
+                                <div style="display: none;"></div>
+                                <div class="col-xs-12 part" title="{{s.getTier.getRaisonSoc}}">{{s.getTier.getRaisonSoc}}</div>
+                                <div class="col-xs-12 part"
+                                     style="height: 31px; text-align: left;">
+                                    <div class="col-xs-9 part" title="{{ s.getVille }}">{{ s.getVille }}</div>
+                                    {% if s.getActive %}
+                                        <div class="col-xs-1 active" id="active{{ s.getId }}"></div>
+                                    {% else %}
+                                        <div class="col-xs-1 inactive" id="active{{ s.getId }}"></div>
+                                    {% endif %}
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
+
+                </div>
+                <div id="mission" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                    {% if missions is defined %}
+                        {% for m in missions %}
+                            <button onclick="postiframeUser('{{ path('admin_afficheMission',{'id': m.getId }) }}',this)" id="mission{{ m.getId }}" type="button" class="list-group-item butonLigne">
+                                <div name="Recherche" style="display: none;">{{ m.intitule }},{{ m.profil }},{{ m.typecontrat }},{{ m.codemission }},{{ m.domaine }},{{ m.etablissement.tier.raisonsoc }},{{ m.etablissement.siret }},{{ m.etablissement.adresse }},{{ m.etablissement.codepostal }},{{ m.etablissement.ville }}</div>
+                                <div style="display: none;"></div>
+                                <div class="col-xs-12 part" title="{{m.getCodemission}}">{{m.getCodemission}}</div>
+                                <div class="col-xs-12 part"
+                                     style="height: 31px; text-align: left;">
+
+                                    <div class="col-xs-9 part" title="{{m.getDomaine}}">{{ m.getDomaine }}</div>
+                                    {% if not m.getSuspendu %}
+                                        <div class="col-xs-1 active" id="active{{ m.getId }}"></div>
+                                    {% else %}
+                                        <div class="col-xs-1 inactive" id="active{{ m.getId }}"></div>
+                                    {% endif %}
+
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
+
+                </div>
+                <div id="user" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                    {% if users is defined %}
+                        {% for u in users %}
+                            <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId} ) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.getUsername }},{{ u.prenom }},{{ u.email }},{% if u.tier %}{{ u.tier.siren }}{% elseif u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
+                                <div style="display: none;"></div>
+                                <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
+                                <div class="col-xs-12 part"
+                                     style="height: 31px; text-align: left;">
+                                    <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
+                                    {% if not u.isExpired %}
+                                        <div class="col-xs-1 active" id="active{{ u.getId }}"></div>
+                                    {% else %}
+                                        <div class="col-xs-1 inactive" id="active{{ u.getId }}"></div>
+                                    {% endif %}
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
+                    {% if import_apprenants is defined %}
+                        {% for u in import_apprenants %}
+                            <button onclick="postiframeUser('{{ path('Afficher_Sas',{'id': u.getId }) }}',this)" id="import{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.prenom }},{{ u.email }},{{ u.info.adresse }},{{ u.info.cp }},{{ u.info.insee }},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
+                                <div style="display: none;"></div>
+                                <div class="col-xs-12 part" title="{{u.getPrenom ~ '.'~u.getNom}}">{{u.getPrenom ~ '.'~u.getNom}}</div>
+                                <div class="col-xs-12 part" style="height: 31px; text-align: left;">
+                                    <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endblock %}
+
+
+        <div class="col-xs-10" style="height: 100%" >
+
+            <div class="row" style="height: 40px; margin: 0; background: #3988d7;">
+
+                <div class="input-group col-xs-offset-1 col-xs-6" style="margin-top: 5px; float: left;">
+                    <span class="glyphicon glyphicon-search input-group-addon topbaradd"
+                          id="basic-addon1" style="width: 27px;height: 27px;padding: 7px"></span>
+                    <input onkeyup="search(this.value)" type="text" class="recherche" aria-describedby="basic-addon1"
+                           style="height: 27px;">
+                </div>
+
+                <div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px;">
+                    <button type="button" class="btn btn-default dropdown-toggle"
+                            data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"
+                            style="width: 100%; height: 20px; border-radius: 0; background: none; border: 0;color: white">
+                        Filtres <span class="glyphicon glyphicon-menu-down"
+                                      aria-hidden="true"></span>
+                    </button>
+                    <ul id="filtre" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+
+                    </ul>
+                </div>
+            </div>
+
+            {% block Content%}
+
+                <iframe id="iframe"  style="visibility: hidden;"  src=""></iframe>
+
+            {% endblock %}
+        </div>
+
+    </div>
+
+</div>
+
+<script src="//code.jquery.com/jquery.min.js"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/PopUp.js') }}"></script>
+<script src="http://maps.googleapis.com/maps/api/js"></script>
+<script language="JavaScript">
+    var i = 1;
+    document.getElementById("leftselect").onchange = function(){
+        var x = document.getElementById("leftselect").value;
+        document.getElementById('mission').style.visibility= 'hidden';
+        document.getElementById('societe').style.visibility= 'hidden';
+        document.getElementById('user').style.visibility= 'hidden';
+        document.getElementById(x).style.visibility='visible';
+        sessionStorage.setItem('leftonglet',x);
+    };
+    function loading(){
+        var onglet = sessionStorage.getItem('leftonglet');
+        if(onglet)
+        {
+            $('#leftselect option[value="' + onglet + '"]').prop('selected', true).change();
+        }
+    }
+    function show_formapprenant(div) {
+        document.getElementById('infoapprenant').style.visibility= 'hidden';
+        document.getElementById('apprenant_formation').style.visibility= 'hidden';
+        document.getElementById('responsable_apprenant').style.visibility= 'hidden';
+        document.getElementById('recommendation_apprenant').style.visibility= 'hidden';
+        document.getElementById('diplome_apprenant').style.visibility= 'hidden';
+        document.getElementById('langue_apprenant').style.visibility= 'hidden';
+        document.getElementById('document_apprenant').style.visibility= 'hidden';
+        document.getElementById('experience_apprenant').style.visibility= 'hidden';
+        document.getElementById('hobbie_apprenant').style.visibility= 'hidden';
+
+
+
+
+        document.getElementById('infoapprenant').style.position= 'absolute';
+        document.getElementById('apprenant_formation').style.position= 'absolute';
+        document.getElementById('responsable_apprenant').style.position= 'absolute';
+        document.getElementById('recommendation_apprenant').style.position= 'absolute';
+        document.getElementById('diplome_apprenant').style.position= 'absolute';
+        document.getElementById('langue_apprenant').style.position= 'absolute';
+        document.getElementById('document_apprenant').style.position= 'absolute';
+        document.getElementById('experience_apprenant').style.position= 'absolute';
+        document.getElementById('hobbie_apprenant').style.position= 'absolute';
+
+        if (div == 'infoapprenant'){
+            document.getElementById('65sd4f4').innerHTML = "DETAILS DE L'APPRENANT"
+        }
+        if (div == 'responsable_apprenant'){
+            document.getElementById('65sd4f4').innerHTML = "RESPONSABLE DE L'APPRENANT"
+        }
+        if (div == 'recommendation_apprenant'){
+            document.getElementById('65sd4f4').innerHTML = "RECOMMANDATION"
+        }
+        if (div == 'diplome_apprenant'){
+            document.getElementById('65sd4f4').innerHTML = "DIPLOMES"
+        }
+        if (div == 'langue_apprenant'){
+            document.getElementById('65sd4f4').innerHTML = "LANGUES"
+        }
+
+        if (div == 'document_apprenant'){
+            document.getElementById('65sd4f4').innerHTML = "DOCUMENTS"
+        }
+
+        if (div == 'experience_apprenant'){
+            document.getElementById('65sd4f4').innerHTML = "Expériences"
+        }
+
+        if (div == 'hobbie_apprenant'){
+            document.getElementById('65sd4f4').innerHTML = "HOBBIES"
+        }
+
+        if (div == 'apprenant_formation'){
+            document.getElementById('65sd4f4').innerHTML = "FORMATION"
+        }
+
+
+
+        document.getElementById(div).style.visibility= 'visible';
+        document.getElementById(div).style.position= 'static';
+
+    }
+    function postiframe(url,id,button) {
+        document.getElementById("iframe").src = url;
+        var route = '{{path('adresses_tier',{'id':"_id" })}}';
+        route = route.replace("_id", id);
+        $.ajax({
+            type: 'get',
+            url: route,
+            dataType: 'json',
+            success: function(data){
+                var filtre = document.getElementById("filtre");
+                while (filtre.firstChild) {
+                    filtre.removeChild(filtre.firstChild);
+                }
+                for (var i = 0; i < data.adresses.length; i++)
+                {
+                    var obj = JSON.parse(data.adresses[i]);
+
+                    var li = document.createElement("li");
+
+                    var a = document.createElement("a");
+                    a.setAttribute('href',obj.id);
+                    a.innerHTML = obj.adresse;
+
+                    li.appendChild(a);
+
+                    filtre.appendChild(li);
+                }
+
+            }
+        });
+        var elements = button.getElementsByClassName("badge");
+        if(elements.length > 0)
+        {
+            elements[0].parentNode.removeChild(elements[0]);
+        }
+
+        sessionStorage.setItem('_Iframe',url);
+
+    }
+    function postiframeUser(url,button) {
+        document.getElementById("iframe").src = url;
+        sessionStorage.setItem('_Iframe',url);
+        if(button)
+        {
+            var elements = button.getElementsByClassName("badge");
+            if(elements.length > 0)
+            {
+                elements[0].parentNode.removeChild(elements[0]);
+            }
+        }
+    };
+    function search(mot){
+        var mots = mot.toUpperCase().trim().split(/ +/g);
+        var Recherches = document.getElementsByName('Recherche');
+        for(var i = 0; i < Recherches.length; i++)
+        {
+            var score = 0;
+            Recherches[i].parentNode.style.display="block";
+            var recherchermot = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g);
+            for(var k = 0; k< recherchermot.length; k++)
+            {
+                for(var j = 0; j< mots.length;j++)
+                {
+                    if (stringWith(recherchermot[k], mots[j])) {
+                        score++;
+                    }
+                }
+            }
+            if(score === 0 ){
+                Recherches[i].parentNode.style.display="none";
+                Recherches[i].nextElementSibling.innerHTML = score;
+            }
+            else {
+                Recherches[i].nextElementSibling.innerHTML = score;
+            }
+        }
+
+        SortDiv('societe');
+        SortDiv('user');
+
+        SortDiv('mission');
+    }
+    function SortDiv(divId){
+        var toSort = document.getElementById(divId).children;
+        toSort = Array.prototype.slice.call(toSort, 0);
+
+        toSort.sort(function(a, b) {
+            var aord = +a.children[1].innerHTML;
+            var bord = +b.children[1].innerHTML;
+            // two elements never have the same ID hence this is sufficient:
+            return (aord > bord) ? -1 : 1;
+        });
+        var parent = document.getElementById(divId);
+        parent.innerHTML = "";
+
+        for(var t = 0, l = toSort.length; t < l; t++) {
+            parent.appendChild(toSort[t]);
+        }
+    }
+    function putbadged() {
+
+        var iframe = sessionStorage.getItem('_Iframe');
+        if(iframe)
+        {
+            document.getElementById("iframe").src = iframe;
+        }
+        else
+        {
+            document.getElementById("iframe").src = '';
+        }
+        document.getElementById("iframe").style.visibility = 'visible';
+
+        var notifs = JSON.parse('{{ notifications }}');
+        var ecole =0;
+        var societe = 0;
+        var user = 0;
+        for(var i = 0; i< notifs.length;i++)
+        {
+            var span = document.createElement("span");
+            span.className = 'badge';
+            span.innerHTML = 'New';
+            if(notifs[i].type == 'Ecole')
+            {
+                ecole++;
+                var active = document.getElementById("active"+ notifs[i].entite);
+                if(active != null){active.parentNode.insertBefore(span,active);}
+
+            }
+            if(notifs[i].type == 'Societe')
+            {
+                societe++;
+                var active = document.getElementById("active"+ notifs[i].entite);
+                if(active != null){active.parentNode.insertBefore(span,active);}
+
+            }
+            if(notifs[i].type == 'Utilisateur')
+            {
+                user++;
+                var active = document.getElementById("active"+ notifs[i].entite);
+                if(active != null){active.parentNode.insertBefore(span,active);}
+
+            }
+        }
+
+        if(societe >0)
+        {var spansociete = document.createElement("span");
+            spansociete.className = 'badge';
+            spansociete.className = spansociete.className + ' notifTopbar';
+            spansociete.innerHTML = societe;
+            var buttonsociete = document.getElementById("societetop");
+            buttonsociete.appendChild(spansociete);
+        }
+        if(user >0)
+        {var spanuser = document.createElement("span");
+            spanuser.className = 'badge';
+            spanuser.className = spanuser.className + ' notifTopbar';
+            spanuser.innerHTML = user;
+            var buttonuser = document.getElementById("usertop");
+            buttonuser.appendChild(spanuser);
+        }
+
+    };
+    function dupliqueradresse() {
+        var dup = document.getElementById("div_adresse");
+        var clone = dup.cloneNode(true);
+        var toggle = clone.children[0];
+        toggle.setAttribute("data-target","#Adresse" + i);
+        toggle.innerHTML="Adresse " + i;
+
+        var div = clone.children[2];
+        div.setAttribute("id","Adresse" + i);
+        clone.style.display = 'block';
+
+        document.getElementById("adressecontainer").appendChild(clone);
+        var parentdiv = dup.parentNode;
+        var close =dup.parentNode.parentNode;
+        if(parentdiv.offsetHeight  > close.offsetHeight )
+        {
+            close.style.height = parentdiv.offsetHeight;
+            clone.children[0].style.height = parentdiv.offsetHeight;
+        }
+
+        i++;
+    };
+    function submitAjaxForm(url,form){
+
+        var route;
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $("#"+form).serialize(),
+            success: function(data)
+            {
+                if(data['status']==='success')
+                {
+                    $("#"+form+" input[type=submit]").click();
+                }
+                else if(data['status']==='exist')
+                {
+                    route='{{ path('etablissement_exist') }}';
+                    var tier = JSON.parse(data['Tier']);
+                    var etablissements = JSON.parse(data['Etablissements']);
+                    var string_checkbox='';
+                    for (var i = 0; i < etablissements.length; i++) {
+                        string_checkbox += '<input type="checkbox" name="etablissement[]"  value="'+etablissements[i].id+'" > '+ etablissements[i].adresse+ ' - '+ etablissements[i].ville+' - '+etablissements[i].codepostal+'<br>';
+                    }
+
+                    document.getElementById(form).parentNode.style.display = 'none';
+                    var newdiv = document.createElement("div");
+                    var innerhtml_newdiv ='<form action="'+route+'" class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block;background-color: white">'+
+                            '<label style="width: 50%">SIREN : '+tier.siren+' </label><label style="width: 50%">Raison sociale : '+tier.raisonsoc+'</label>'+
+                            '_checkbox_etablissements'+
+                            '<input type="submit" value="récupérer">'+
+                            '<button type="button" onclick="declinertier(this)">Décliner</button>'+
+                            '</form>';
+
+                    innerhtml_newdiv = innerhtml_newdiv.replace('_checkbox_etablissements',string_checkbox);
+                    newdiv.innerHTML = innerhtml_newdiv;
+                    document.getElementById(form).parentNode.parentNode.appendChild(newdiv);
+                    document.getElementById('submittier').disabled=false;
+
+                }
+                else if(data['status']==='is_ecole')
+                {
+                    alert('Le siren indiquée appartient à une école!');
+                    document.getElementById('submittier').disabled=false;
+                }
+                else
+                {
+                    alert('Une erreur s\'est produite sur le serveur');
+                    document.getElementById('submittier').disabled=false;
+                }
+            }
+        });
+    }
+    function envoyeradresses(){
+
+        document.getElementById('submittier').disabled=true;
+        var geocodes = document.getElementsByName('_Geocode[]');
+        if(geocodes.length==1)
+        {
+            alert('Vous devez remplir au moins une adresse');
+            document.getElementById('submittier').disabled=false;
+        }
+        for(var j = 1;j<geocodes.length;j++){
+            var siret = document.getElementsByName('_SIRET[]')[j].value;
+            var test = siret.substring(0, 9);
+            if(test!=document.getElementById('SIREN').value)
+            {
+                alert('Le siret de l\'adresse '+ j + ' n\'est pas compatible avec le siren donné');
+                document.getElementById('submittier').disabled=false;
+                return;
+            }
+        }
+        var result_input= [];
+        for(var i = 1; i<geocodes.length;i++)
+        {
+            var address = document.getElementsByName('_Adresse[]')[i].value +' ' +document.getElementsByName('_Ville[]')[i].value + ' ' + document.getElementsByName('_CodeP[]')[i].value  ;
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({'address': address}, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    result_input.push(results[0].geometry.location);
+                    if(result_input.length == geocodes.length - 1)
+                    {
+                        for(var y = 1; y< geocodes.length; y++)
+                        {
+                            geocodes[y].value = result_input[y - 1] ;
+                        }
+                        var check = '{{ path('tier_checkExist') }}';
+                        submitAjaxForm(check,'formTier');
+                    }
+                } else {
+                    alert('Pas de géocodage trouver pour l\'adresse spécifiée');
+                    document.getElementById('submittier').disabled=false;
+                }
+            });
+        }
+    }
+    function readURL(input,baliseimg) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#'+ baliseimg)
+                        .attr('src', e.target.result)
+                        .width(150)
+                        .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    };
+    function supprimerAdresse(div){
+        div.parentNode.parentNode.removeChild(div.parentNode);
+    };
+    function disabling(champ){
+        if(champ.options[champ.selectedIndex].value ==0){champ.nextElementSibling.style.display = 'inline-block';}
+        else{champ.nextElementSibling.style.display = 'none';}
+    };
+    function declinertier(button){
+        button.parentNode.parentNode.parentNode.removeChild(button.parentNode.parentNode);
+        document.getElementById('formtier').parentNode.style.display = 'block';
+    }
+
+
+    var ResponsableCount = 1;
+    function dupliquerResponsable() {
+        var dup = document.getElementById("div_responsable");
+        var clone = dup.cloneNode(true);
+        var toggle = clone.children[0];
+        toggle.setAttribute("data-target","#Responsable" + ResponsableCount);
+        toggle.innerHTML="Responsable " + ResponsableCount;
+
+        var div = clone.children[2];
+        div.setAttribute("id","Responsable" + ResponsableCount);
+        clone.style.display = 'block';
+
+        document.getElementById("responsablecontainer").appendChild(clone);
+        var parentdiv = dup.parentNode;
+        var close =dup.parentNode.parentNode;
+        if(parentdiv.offsetHeight  > close.offsetHeight )
+        {
+            close.style.height = parentdiv.offsetHeight;
+            clone.children[0].style.height = parentdiv.offsetHeight;
+        }
+
+        ResponsableCount++;
+    };
+
+
+
+    var RecomCount = 1;
+    function dupliquerRecommandation() {
+        var dup = document.getElementById("div_recommandation");
+        var clone = dup.cloneNode(true);
+        var toggle = clone.children[0];
+        toggle.setAttribute("data-target","#Recommandation" + RecomCount);
+        toggle.innerHTML="Recommandation " + RecomCount;
+
+        var div = clone.children[2];
+        div.setAttribute("id","Recommandation" + RecomCount);
+        clone.style.display = 'block';
+
+        document.getElementById("recommandationcontainer").appendChild(clone);
+        var parentdiv = dup.parentNode;
+        var close =dup.parentNode.parentNode;
+        if(parentdiv.offsetHeight  > close.offsetHeight )
+        {
+            close.style.height = parentdiv.offsetHeight;
+            clone.children[0].style.height = parentdiv.offsetHeight;
+        }
+
+        RecomCount++;
+    };
+    var DiplomeCount = 1;
+    function dupliquerDiplome() {
+        var dup = document.getElementById("div_diplome");
+        var clone = dup.cloneNode(true);
+        var toggle = clone.children[0];
+        toggle.setAttribute("data-target","#diplome" + DiplomeCount);
+        toggle.innerHTML="diplome " + DiplomeCount;
+
+        var div = clone.children[2];
+        div.setAttribute("id","Diplome" + DiplomeCount);
+        clone.style.display = 'block';
+
+        document.getElementById("diplomecontainer").appendChild(clone);
+        var parentdiv = dup.parentNode;
+        var close =dup.parentNode.parentNode;
+        if(parentdiv.offsetHeight  > close.offsetHeight )
+        {
+            close.style.height = parentdiv.offsetHeight;
+            clone.children[0].style.height = parentdiv.offsetHeight;
+        }
+
+        DiplomeCount++;
+    };
+
+    var LangueCount = 1;
+    function dupliquerLangue() {
+        var dup = document.getElementById("div_langue");
+        var clone = dup.cloneNode(true);
+        var toggle = clone.children[0];
+        toggle.setAttribute("data-target","#langue" + LangueCount);
+        toggle.innerHTML="langue " + LangueCount;
+
+        var div = clone.children[2];
+        div.setAttribute("id","Langue" + LangueCount);
+        clone.style.display = 'block';
+
+        document.getElementById("languecontainer").appendChild(clone);
+        var parentdiv = dup.parentNode;
+        var close =dup.parentNode.parentNode;
+        if(parentdiv.offsetHeight  > close.offsetHeight )
+        {
+            close.style.height = parentdiv.offsetHeight;
+            clone.children[0].style.height = parentdiv.offsetHeight;
+        }
+
+        LangueCount++;
+    };
+
+
+    var DocumentCount = 1;
+    function dupliquerDocument() {
+        var dup = document.getElementById("div_document");
+        var clone = dup.cloneNode(true);
+        var toggle = clone.children[0];
+        toggle.setAttribute("data-target","#document" + DocumentCount);
+        toggle.innerHTML="document " + DocumentCount;
+
+        var div = clone.children[2];
+        div.setAttribute("id","Document" + DocumentCount);
+        clone.style.display = 'block';
+
+        document.getElementById("documentcontainer").appendChild(clone);
+        var parentdiv = dup.parentNode;
+        var close =dup.parentNode.parentNode;
+        if(parentdiv.offsetHeight  > close.offsetHeight )
+        {
+            close.style.height = parentdiv.offsetHeight;
+            clone.children[0].style.height = parentdiv.offsetHeight;
+        }
+
+        DocumentCount++;
+    };
+
+
+    var ExpCount = 1;
+    function dupliquerExperience() {
+        var dup = document.getElementById("div_experience");
+        var clone = dup.cloneNode(true);
+        var toggle = clone.children[0];
+        toggle.setAttribute("data-target","#experience" + ExpCount);
+        toggle.innerHTML="experience " + ExpCount;
+
+        var div = clone.children[2];
+        div.setAttribute("id","Experience" + ExpCount);
+        clone.style.display = 'block';
+
+        document.getElementById("experiencecontainer").appendChild(clone);
+        var parentdiv = dup.parentNode;
+        var close =dup.parentNode.parentNode;
+        if(parentdiv.offsetHeight  > close.offsetHeight )
+        {
+            close.style.height = parentdiv.offsetHeight;
+            clone.children[0].style.height = parentdiv.offsetHeight;
+        }
+
+        ExpCount++;
+    };
+
+
+
+    function supprimerResponsable(div){
+        div.parentNode.parentNode.removeChild(div.parentNode);
+    }
+
+
+    function supprimerLangue(div){
+        div.parentNode.parentNode.removeChild(div.parentNode);
+    }
+
+
+    function supprimerRecommandation(div){
+        div.parentNode.parentNode.removeChild(div.parentNode);
+    }
+
+    function supprimerDiplome(div){
+        div.parentNode.parentNode.removeChild(div.parentNode);
+    }
+
+    function supprimerDocument(div){
+        div.parentNode.parentNode.removeChild(div.parentNode);
+    }
+
+    function supprimerExperience(div){
+        div.parentNode.parentNode.removeChild(div.parentNode);
+    }
+
+
+</script>
+
+{% block JS %}
+
+{% endblock %}
+</body>
+</html>

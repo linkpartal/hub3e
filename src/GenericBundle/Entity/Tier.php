@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Tier
  *
  * @ORM\Table(name="tier", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQ_19653DBDDB8BBA08", columns={"siren"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="GenericBundle\Repository\TierRepository")
  */
 class Tier
 {
@@ -38,14 +38,21 @@ class Tier
     /**
      * @var string
      *
-     * @ORM\Column(name="logo", type="blob", length=45, nullable=true)
+     * @ORM\Column(name="activite", type="string", length=45, nullable=true)
+     */
+    private $activite;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="logo", type="blob", nullable=true)
      */
     private $logo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="fondEcran", type="blob", length=45, nullable=true)
+     * @ORM\Column(name="fondEcran", type="blob", nullable=true)
      */
     private $fondecran;
 
@@ -242,4 +249,29 @@ class Tier
     {
         return $this->tier1;
     }
+
+    /**
+     * Set activite
+     *
+     * @param string $activite
+     *
+     * @return Tier
+     */
+    public function setActivite($activite)
+    {
+        $this->activite = $activite;
+
+        return $this;
+    }
+
+    /**
+     * Get activite
+     *
+     * @return string
+     */
+    public function getActivite()
+    {
+        return $this->activite;
+    }
+
 }

@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/mission.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
+    {% block CSS %}{% endblock %}
+
+    <title>HUB3E - {% block title %}Home{% endblock %}</title>
+
+</head>
+<body>
+<div id="MettreEnRelation" class="popup">
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block; margin-left: 20%;margin-top:100px">
+
+        <form id="formMettreEnRelation" class="formulaire" action="" onsubmit="document.getElementById('submitMettreEnRelation').disabled=true;" method="post">
+
+            <div class="div_form" style="border-bottom:1px solid #adadad;display: inline-table;">
+
+                <div class="row" style=" margin: 0;">
+                    <img class="col-xs-1" src="data:image/jpg;base64,{{ mission.getEtablissement.getTier.getLogo }}"
+                         style="padding: 10px; height: 40px;">
+                    <div class="col-xs-4">
+                        <div class="col-xs-12"
+                             style="height: 30px; text-align: left; padding: 10px;"><label style="margin-left:10px;font-family:Arial;font-style:normal;font-size: large;color:black" >
+                                {{ mission.getIntitule }}&nbsp; - &nbsp; </label><label style="font-family:Arial;font-style:normal;font-size: large;color:#2A76CC" > {{ mission.getEtablissement.getTier.getRaisonsoc }}</label></div>
+                        <div class="col-xs-12" style="height: 20px;width:300px; text-align: left;font-family:Arial;font-style:normal;font-size: large">{{mission.getEtablissement.getAdresse }}, {{ mission.getEtablissement.getCodePostal }} {{ mission.getEtablissement.getVille }}</div>
+                    </div>
+
+                    <div class=" col-xs-12">
+                        <div class="col-xs-12" style="height: 20px;color: #666666;font-family:Arial;font-style:normal;font-size:large;margin-left: 250px">{{mission.getCodemission }}</div>
+                    </div>
+                </div>
+                <div class="col-xs-10 input-colonne">
+                    <label id="startTimeLabel" visible="false"></label>
+                </div>
+
+                <textarea style="height: 200px;resize: none;" class="input" id="Descriptif" name="_Descriptif" placeholder="Cette mission peut vous intéresser,postuler si vous le souhaitez ..." required ></textarea>
+
+
+            </div>
+            <div class="div_button">
+                <input id="submitAnnuler" onclick="this.parentNode.parentNode.parentNode.parentNode.style.display='none';" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Annuler">
+                <input id="submitMettreEnRelation" onclick="envoyerMRAction()" class="blue" type="button"  style="margin-left: 390px" value="Mettre en relation">
+
+            </div>
+        </form>
+    </div>
+</div>
+{% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
+<div id="Diffusion_formation" class="popup">
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-5 col-xs-2" style="padding: 0;border:20px solid white;display: block;top:150px">
+        <input class="row" style="width: 100%" type="text" placeholder="Recherche" onkeyup="rechercheformation(this.value)">
+        <form id="formDiffusion" class="formulaire" method="post">
+            <div class="div_form" style="display: block">
+                <select id="SelectMultipleFormation" style="width: 100%; overflow-x: auto" title="" class="row" name="formation[]" multiple>
+                    {% for formation in formations_prop %}
+                        <option value="{{ formation.id }}">{{ formation.nom }} - {{ formation.etablissement.tier.raisonsoc }} - {{ formation.etablissement.adresse }}</option>
+                        <option value="Recherche" style="display: none">{{ formation.nom }} {{ formation.etablissement.tier.raisonsoc }} {{ formation.etablissement.adresse }},
+                            {{ formation.etablissement.siret }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="div_button">
+                <input class="blue" type="button" onclick="this.disabled = true;diffuserMission()" value="envoyer">
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+
+<div id="FicheApprenant" class="popup" >
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-7" style="background-color: white;padding: 0;border:20px solid white;display: block; margin-left: 20%; ">
+
+        <form id="formFicheApprenant" class="formulaire"   method="post">
+            <div>
+                <div class="col-lg-12" >
+                    <img src="" style="border-radius:50%; width:50px; height:50px" >
+                </div>
+                <div class="col-lg-12">
+                    <label id="Information_Apprenant_titre" style="color:black" ></label>
+                </div>
+                <div id="Information_Apprenant_titre_adresse" class="col-xs-12" style="height: 20px;color: #666666;font-family:Arial;font-style:normal;font-size: medium;margin-bottom: 40px"></div>
+            </div>
+
+
+
+            <div class="div_form"  id="information_apprenant" >
+                <div class="row" style=" margin-bottom: 20px">
+
+                    <div class="col-xs-12">
+                        <label style="font-size: 40px;font-family: Rochester;color: rgb(61, 138, 212);line-height: 0.375;text-align: left;z-index: 30;transform: rotate(180deg);">,,</label>
+                        <label style="height: 20px;color: #666666;font-family:Arial;font-style:italic;font-size:small;margin-bottom: 40px;">Votre mission m'interesse,je serais heureux de vous rencontrer pour en discuter.</label>
+                    </div>
+                    <div class="row" >
+                        <button onclick="document.getElementById('info_apprenant').style.display ='block';document.getElementById('Localisation').style.display ='none';"
+                                class="col-xs-4 onglet"  type="button" style="margin-left: 20px;width: 50%"> FICHE APPRENANT</button>
+                        <button onclick="document.getElementById('Localisation').style.display ='block';document.getElementById('info_apprenant').style.display ='none';
+                        var center = map_localisation.getCenter();
+                        google.maps.event.trigger(map_localisation, 'resize');
+                        map_localisation.setCenter(center);"
+                                class="col-xs-4 onglet"  type="button" style="width: calc(50% - 50px)" >LOCALISATION</button>
+
+                    </div>
+
+                    <div id="info_apprenant" style="height: 281px;border-top: 1px solid #B0B0B0;margin: 0;overflow-y: auto;width: 100%;">
+                        <div class="col-xs-12 Liste" >
+
+                            <div class="col-xs-12" >
+                                <label class="cell"  style="float:left;">Civilité : <label id="Information_Apprenant_Civilite"></label></label>
+                            </div>
+                            <div class="col-xs-10 ">
+                                <label class="cell" style="float:left;">Nom : <label id="Information_Apprenant_Nom"></label> </label>
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Prenom : <label id="Information_Apprenant_Prenom"></label></label>
+
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Email  : <label id="Information_Apprenant_Email"></label></label>
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Téléphone : <label id="Information_Apprenant_Telephone"></label></label>
+
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Date naissance : <label id="Information_Apprenant_DateNaissance"  ></label></label>
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Cp naissance  : <label id="Information_Apprenant_CpNaissance" ></label></label>
+
+                            </div>
+
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Lieu naissance: <label id="Information_Apprenant_LieuNaissance" ></label></label>
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Adresse       : <label id="Information_Apprenant_Adresse" ></label></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="Localisation"  style="border-top: 1px solid #B0B0B0;margin: 0;height: 281px;width: 100%;display:none;">
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div class="div_form" id="proposerApprenant" style="display: none">
+                <div class="row" style=" margin-bottom: 20px;">
+
+                    <div class="col-xs-12" >
+                        <textarea style="height: 200px;resize: none;" class="input" id="Descriptif" name="_Descriptif" placeholder="Votre profil nous intéresse,nous vous proposons une plage de rendez-vous en lien Doodle" required ></textarea>
+                    </div>
+                    <div class="col-xs-12">
+                        <label style="text-align:left;width:100%;font-family: Arial">Proposer un lien externe pour la prise de rendez-vous (type Doodle) : </label>
+                    </div>
+
+                    <div class="col-xs-12">
+                        <input style="text-align:left;font-family: Arial;width:100%">
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="div_form" id="declinerApprenant" style="display: none" >
+
+                <div class="row" style=" margin-bottom: 20px;">
+                    <textarea style="height: 200px;resize: none;" class="input"  placeholder="Nous vous remercions pour l'intérêt porter à notre mission, cependant nous n'avons pas retenu votre profil ." required ></textarea>
+                </div>
+
+            </div>
+
+
+            <div id="information_button" class="div_button">
+                <input  onclick="show_formapprenant()" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Décliner">
+                <input id="submitReception" class="blue" type="submit" style="margin-left: 250px"  value="Répondre plus tard">
+                <input onclick="show_formapprenantproposer()"  class="blue" type="button"   value="Proposer un rendez-vous">
+            </div>
+            <div id="decliner_button" class="div_button" style="display: none">
+                <input id="submitAnnuler" onclick="FermerPopup()" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Annuler">
+                <input id="submitDecliner" class="blue" type="submit"  style="margin-left: 390px" value="Décliner">
+
+            </div>
+            <div id="proposer_button" class="div_button" style="display: none">
+                <input  class="blue" onclick="FermerPopup()" style="background:white;color:#666666;border:1px solid #ccc;float: left;text-align: center ;width: 120px;height:50px" type="button" value="Annuler">
+                <input id="submitReception" class="blue" type="submit" style="margin-left: 300px;text-align:center;width: 120px;height:50px"  value="Valider">
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+</div>
+<div id="FicheMission" class="popup">
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-6" style="padding: 0;border:20px solid white;display: block; margin-left: 20%;margin-top:100px;" >
+
+        <form id="formFicheMission" class="formulaire" method="post">
+
+            <div class="div_form" style="border-bottom:1px solid #adadad;">
+
+                <div>
+                    <div class="col-xs-12" >
+                        <img  src="data:image/jpg;base64,{{ mission.getEtablissement.getTier.getLogo }}"
+                              style="padding: 10px; height: 80px;">
+                    </div>
+                    <div class="col-xs-12"  style="height: 30px;  padding: 10px;"><label style="font-family:Arial;font-style:normal;font-size: large;color:black" >{{ mission.getIntitule }}&nbsp; - &nbsp;  </label><label style="font-family:Arial;font-style:normal;font-size: large;color:#2A76CC" > {{ mission.getEtablissement.getTier.getRaisonsoc }}</label></div>
+                    <div class="col-xs-12" style="height: 20px; font-family:Arial;font-style:normal;font-size: small;margin-bottom:30px">{{mission.getEtablissement.getAdresse }}, {{ mission.getEtablissement.getCodePostal }} {{ mission.getEtablissement.getVille }}</div>
+                </div>
+
+                <div  id="information_mission" >
+                    <div class="row" style=" margin: 0; display: inline-table">
+
+                        <div class="col-lg-12" >
+                            <button onclick="show('info_missions')"  class="col-xs-4 onglet"  type="button" style="margin-left: 20px;width: 50%"> FICHE MISSION</button>
+                            <button onclick="show('Localisation')" class="col-xs-4 onglet"  type="button" style="width: calc(50% - 50px)" >LOCALISATION</button>
+                        </div>
+                        <div class="col-xs-9" style="background: rgb(238, 241, 246); height: 100%;width: 100%">
+
+                            <div class="col-xs-12" >
+                                <div class="list-group affichage">
+
+                                    <label class="list-group-item mission" >LA MISSION : <br/>
+                                        <label  style="color:black; font-weight: lighter" >{{mission.getDescriptif}}</label>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+               <div id="declinerMission" style="display:none">
+                    <textarea style="height: 200px;resize: none;" class="input"  placeholder="Cette mission ne m'interesse pas,elle se situe trop loin ." required ></textarea>
+               </div>
+
+
+            </div>
+
+            <div id="mission_button" class="div_button">
+                <input  onclick="show_formmission()"  class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Décliner">
+                <input id="submitReception" class="blue" type="submit" style="margin-left: 270px"  value="Répondre plus tard">
+                <input  class="blue" type="submit"   value="Postuler">
+
+            </div>
+
+            <div id="declinerMission_button" class="div_button" style="display:none">
+                <input onclick="FermerPopup()" id="submitAnnuler" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Annuler">
+                <input id="submitDecliner" class="blue" type="submit"  style="margin-left: 390px" value="Décliner">
+
+            </div>
+
+
+
+
+        </form>
+    </div>
+
+</div>
+
+<div class="container" style="padding: 0;">
+
+
+    <div class="row" style="margin: 0;">
+       
+        <img class="col-xs-1" src="data:image/jpg;base64,{{ mission.getEtablissement.getTier.getLogo }}"
+             style="padding: 10px; height: 70px;">
+        <div class="col-xs-4">
+            <div class="col-xs-12"
+                 style="height: 30px; text-align: left; padding: 10px;"><label style="font-family:Arial;font-style:normal;font-size: large;color:black" >{{ mission.getIntitule }}&nbsp; - &nbsp;  </label><label style="font-family:Arial;font-style:normal;font-size: large;color:#2A76CC" > {{ mission.getEtablissement.getTier.getRaisonsoc }}</label></div>
+            <div class="col-xs-12" style="height: 20px; text-align: left;font-family:Arial;font-style:normal;font-size: small">{{mission.getEtablissement.getAdresse }}, {{ mission.getEtablissement.getCodePostal }} {{ mission.getEtablissement.getVille }}</div>
+        </div>
+        <div class="col-xs-offset-5 col-xs-1">
+            <div class="col-xs-12" style="height: 30px;; padding-top: 10px;"><label style="font-size:large;color:#2A76CC;" > 18</label></div>
+            <div class="col-xs-12" style="height: 20px;width:100px;color: #666666;font-family:Arial;font-style:normal;">mises en relation</div>
+        </div>
+        <div class=" col-xs-1">
+            <div class="col-xs-12" style="height: 30px; padding-top: 10px;"><label style="font-size: large;color:#2A76CC" > 5</label></div>
+            <div class="col-xs-12" style="height: 20px;color: #666666;font-family:Arial;font-style:normal;">candidatures</div>
+        </div>
+    </div>
+
+
+
+
+<div class="row" style="margin: 0;">
+    {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
+    <button onclick="moveto(this,'info_mission')" class="col-xs-4 onglet"  type="button" > FICHE MISSION</button>
+    <button onclick="moveto(this,'apprenants_mission')" class="col-xs-4 onglet"  type="button" >LISTE DES APPRENANTS</button>
+    <button onclick="moveto(this,'map')" class="col-xs-4 onglet"  type="button"  >CARTE DES APPRENANTS</button>
+    <div id="baronglet" class="col-xs-4" style="height: 5px;background-color: #257ef0; z-index: 60;"></div>
+    {% else %}
+        <button onclick="moveto(this,'info_mission')" class="col-xs-6 onglet"  type="button" > FICHE MISSION</button>
+        <button onclick="moveto(this,'map')" class="col-xs-6 onglet"  type="button"  >CARTE DES APPRENANTS</button>
+        <div id="baronglet" class="col-xs-6" style="height: 5px;background-color: #257ef0; z-index: 60;"></div>
+    {% endif %}
+</div>
+
+
+
+    <div id="info_mission" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;width: 100%;height: 100%;position: absolute;">
+        <form id="formMission" action="{{ path('missionModif') }}" method="post" enctype="multipart/form-data">
+            <input type="hidden" value="{{ mission.getId }}" id="id" name="_ID">
+            <div class="col-xs-9" style="background: rgb(238, 241, 246); height: 100%;">
+
+                <div class="col-xs-12" style="margin-bottom: 50px">
+                    <div class="list-group affichage">
+
+                        <label class="list-group-item mission" >LA MISSION : <br/>
+                            <textarea id="Descriptif" name="_Descriptif" maxlength="255"  style="color:black; font-weight: lighter" readonly >{{mission.getDescriptif}}</textarea>
+                        </label>
+
+                        <label class="list-group-item mission" >LE PROFIL RECHERCHE :<br/>
+                            <textarea style="color:black; font-weight: lighter" id="Profil" name="_Profil" required maxlength="255" readonly >{{mission.getProfil}}</textarea>
+                        </label>
+
+
+                        <label class="list-group-item mission">Domaine : <br/>
+                            <input style="color:black; font-weight: lighter" value="{{mission.getDomaine}}" type="text" id="Domaine" name="_Domaine" maxlength="45" readonly>
+                        </label>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-3"
+                 style="height: 100%;">
+                <div class="list-group"
+                     style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
+                    <div  class="rightMenu" style="padding: 8px !important;" >
+                        <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                        <input value="{{mission.getDate|date('d/m/Y')}}" disabled>
+                    </div>
+                    <div class="rightMenu" style="padding: 8px !important;" >
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        <input value="{{ mission.nomcontact }} {{ mission.prenomcontact }}" disabled>
+                    </div>
+                    <div class="rightMenu" style="padding: 8px !important;">
+                        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                        <input value="{{mission.getEmailcontact}}" type="email" name="_Emailcontact" maxlength="45" readonly>
+                    </div>
+                    <div class="rightMenu" style="padding: 8px !important;">
+                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                        <input value="{{mission.getTypecontrat}}" type="text" id="TypeContrat" name="_TypeContrat" maxlength="45" readonly>
+                    </div>
+                    <div  class="rightMenu " style="padding: 8px !important;">
+                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        <input value="{{mission.getDatedebut|date('Y-m-d')}}" type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' id="Datedebut" name="_Datedebut" readonly>
+                    </div>
+                    <div  class="rightMenu " style="padding: 8px !important;">
+                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        <input value="{{mission.getDatefin|date('Y-m-d')}}" type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' id="Datefin" name="_Datefin" readonly>
+                    </div>
+                    <div class="rightMenu" style="padding: 8px !important;" >
+                        <span class="glyphicon glyphicon-eur" aria-hidden="true"></span>
+                        <input value="{{mission.getRemuneration}}" type="number" id="Remuneration" name="_Remuneration" maxlength="5" readonly>
+                    </div>
+                    <div class="rightMenu" style="padding: 8px !important;">
+                        <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>
+                        <input placeholder="Code mission"  value="{{mission.getCodemission}}" name="_Codemission" required maxlength="9" type="text" readonly>
+                    </div>
+                    {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
+                        <button onclick="modifier('formMission',this)" type="button" class="list-group-item rightMenu" >
+                            <div class="col-xs-12"  >Modifier la fiche</div>
+                        </button>
+
+                        <button onclick="post('{{ path('supprimer_Mission',{'id': mission.getId }) }}',true)" type="button" class="list-group-item rightMenu" >
+                            <div class="col-xs-12" >Supprimer Mission</div>
+                        </button>
+                        {% if is_granted('ROLE_ADMINSOC') %}
+                            <button type="button" class="list-group-item rightMenu" onclick="show('Diffusion_formation')" >
+                                <div class="col-xs-12" >Diffuser</div>
+                            </button>
+                        {% endif %}
+                    {% elseif app.user.hasRole('ROLE_APPRENANT') %}
+                        <button onclick="postuler()" type="button" class="list-group-item rightMenu" >
+                            <div class="col-xs-12" >Postuler pour cette Mission</div>
+                        </button>
+                    {% endif %}
+                </div>
+
+            </div>
+        </form>
+
+
+    </div>
+{% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
+    <div id="apprenants_mission" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;width: 100%;height: 90%;visibility: hidden;position: absolute;">
+        <div class="row" style="margin:10px 0 0 10px"  >
+            <div>
+                <span class="glyphicon glyphicon-search" ></span>
+                <input type="text" class="input" placeholder="Recherche" style="padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px;height:33px;margin-right:800px" >
+
+                <button type="button"style="font-family: Verdana; font-style:normal ;font-size:medium; height: 20px; border-radius: 0; background: none; border: 0;color: #666666 ;">
+                    Filtres <span class="glyphicon glyphicon-menu-down" aria-hidden="true" ></span>
+                </button>
+            </div>
+
+        </div>
+
+        <div class="row" style="height: 150px; margin:10px;background:white">
+            {% if users is defined %}
+                {% for user in users %}
+                    {% if user.hasRole('ROLE_APPRENANT') %}
+                        <div class="col-xs-12 Liste">
+
+
+                            <label style="width:40px;height: 20px;background:yellowgreen;color:white;font-family: Arial; font-style:normal ;font-size:small;position: absolute;left: 0;z-index: 6;margin: 10px 0 0 10px;">100</label>
+                            <div style="width:10px;height:140px;background:yellowgreen;color:white;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;"></div>
+
+                            <img class="col-xs-1" onclick="show('FicheMission')" src="data:image/jpg;base64,{{user.getPhotos}}" style="margin: 10px 0 0 10px;height: 140px;width: 140px;">
+
+                            <div class="col-xs-4" style="margin-left: 10px;margin-top:10px">
+                                <div class="col-xs-12"
+                                     style="height: 30px; text-align: left; padding: 10px;margin-bottom: 15px;"><label style="color:black" >{{user.getPrenom}}  {{user.getNom}} </label> &nbsp;&nbsp; </label>
+
+                                    <button onclick="show('Decliner')" style="background:yellowgreen; border-radius:50%; width:15px; height:15px; border:2px solid yellowgreen;"></button>&nbsp;&nbsp;
+
+                                    <label style="font-family:Arial;font-style:normal;font-size:medium;" > 5.0 </label>&nbsp;&nbsp;<img src="{{ asset('image/bookmark50.png') }}"></div>
+
+                                <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font-family:Arial;font-style:normal;font-size:small">RECHERCHE : DEVELOPPEMENT INFORMATIQUE </div>
+                                <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font-family:Arial;font-style:normal;font-size:small">CONTRAT : CONTRAT PRO/STAGE/TEMPS PLEIN</div>
+
+
+                                <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font-family:Arial;font-style:normal;font-size:small">STATUT : <label style="color:#2975cb">3 MISES EN RELATION</label></div>
+
+
+                            </div>
+                            <div class="col-xs-offset-5 col-xs-1">
+
+
+                                <button  onclick="show('MettreEnRelation'); idMRDestinataire = {{ user.id }};" type="button"  style=" width:150px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;background:#2975cb;font:bold 13px Arial;margin-bottom:10px;margin-top: 20px">
+                                    <div class="col-xs-12" style="display: inline-table;color: white;">METTRE EN RELATION</div>
+                                </button>
+
+                                <button onclick="
+                                        informationApprenant('{{user.getPhotos}}','{{ user.getCivilite }}','{{ user.getNom }}','{{ user.getPrenom }}','{{ user.getEmail }}',
+                                        '{{ user.getTelephone }}','{{ user.getInfo.getDateNaissance|date("d/m/Y") }}','{{ user.getInfo.getCpNaissance }}','{{ user.getInfo.getLieunaissance }}',
+                                        '{{ user.getInfo.getAdresse }}');show('FicheApprenant');" type="button"  style=" background:white;width:150px;height:30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;border:1px solid #ccc;margin-bottom:10px" >
+                                    <div class="col-xs-12"  style="display: inline-table;color: #adadad;" >FICHE CONTACT</div>
+
+                                </button>
+
+                                <button onclick="informationApprenantreception('{{user.getPhotos}}','{{ user.getNom }}','{{ user.getPrenom }}','{{ user.getInfo.getAdresse }}');show('Proposer');  " type="button"  style="background-color: white ;width:150px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Arial;border:1px solid #ccc;" >
+                                    <div class="col-xs-12" style="display: inline-table;color: #adadad;" >PLUS</div>
+
+                                </button>
+
+
+
+                            </div>
+
+
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+
+    </div>
+{% endif %}
+
+
+
+    <div id="map" style="height: 100%;width: 100%;position: absolute;visibility: hidden;">
+
+    </div>
+    {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
+    <div id="wrapper" class="infobox-wrapper">
+        {% set i =0 %}
+        {% for apprenant in users %}
+            <div id="apprenant{{ i }}" class="infobox">
+                <label style="float: left;color:white; font:10px Roboto ;margin: 15px 0 0 5px; line-height: 9px;">98%</label><div class="col-xs-1 active" style="    margin: 15px 0 0 5px;" ></div>
+                <div class="inbox" >
+                    <div >
+                        {% if apprenant.getPhotos %}
+                        <img src="data:image/jpg;base64,{{ apprenant.getPhotos }}" style="height:100%;width: 100%;border-radius: 50%;">
+                        {% else %}
+                            <img src="{{ asset('image/homme.jpg') }}" style="height:100%;width: 100%;border-radius: 50%;">
+                        {% endif %}
+                    </div>
+                </div>
+                <label class="col-xs-12" style="color:white;font: 10px Roboto;text-transform: uppercase; text-align: center;top:30px;">{{ apprenant.getPrenom }} {{ apprenant.getNom }}</label>
+                <label class="col-xs-12" style="color:white;font: 10px Roboto;text-transform: uppercase; text-align: center;top:30px;">4.7<img src="{{ asset('image/bookmark50.png') }}" style="height: 10px"></label>
+                <button type="button" onclick="informationApprenant('{{apprenant.getPhotos}}','{{ apprenant.getCivilite }}','{{ apprenant.getNom }}','{{ apprenant.getPrenom }}','{{ apprenant.getEmail }}',
+                        '{{ apprenant.getTelephone }}','{{ apprenant.getInfo.getDateNaissance|date("d/m/Y") }}','{{ apprenant.getInfo.getCpNaissance }}','{{ apprenant.getInfo.getLieunaissance }}',
+                        '{{ apprenant.getInfo.getAdresse }}');show('FicheApprenant');" class="col-xs-12" style="margin-top: 30px;">Voir sa fiche</button>
+                <button type="button" onclick="show('MettreEnRelation')" class="col-xs-12" >Mettre en relation</button>
+                <button class="col-xs-12">plus</button>
+            </div>
+            {% set i = i +1 %}
+        {% endfor %}
+    </div>
+    {% else %}
+        <div id="wrapper" class="infobox-wrapper">
+            <div id="Societe_Info" class="infobox">
+                <label style="float: left;color:white; font:10px Roboto ;margin: 15px 0 0 5px; line-height: 9px;">98%</label><div class="col-xs-1 active" style="    margin: 15px 0 0 5px;" ></div>
+                <div class="inbox" >
+                    <div >
+                        <img src="data:image/jpg;base64,{{ mission.etablissement.tier.getLogo }}" style="height:100%;width: 100%;border-radius: 50%;">
+                    </div>
+                </div>
+                <label class="col-xs-12" style="color:white;font: 10px Roboto;text-transform: uppercase; text-align: center;top:30px;">{{ mission.intitule }} - {{ mission.etablissement.tier.raisonsoc }}</label>
+                <label class="col-xs-12" style="color:white;font: 10px Roboto;text-transform: uppercase; text-align: center;top:30px;">4.7<img src="{{ asset('image/bookmark50.png') }}" style="height: 10px"></label>
+                <button type="button" class="col-xs-12" style="margin-top: 30px;">Voir sa fiche</button>
+                <button type="button" class="col-xs-12" >Mettre en relation</button>
+                <button class="col-xs-12">plus</button>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+<script src="//code.jquery.com/jquery.min.js"></script>
+<!--script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script-->
+<script type="text/javascript" src="http://maps.google.com/maps/api/js"></script>
+<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/src/infobox.js"></script>
+<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclustererplus/2.1.2/src/markerclusterer.js"></script>
+<script src="//cdn.jsdelivr.net/webshim/1.14.5/polyfiller.js"></script>
+<script>
+    webshims.polyfill('forms forms-ext');
+</script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/PopUp.js') }}"></script>
+<script language="JavaScript">
+    var idMRDestinataire;
+    function postuler(){
+        var route = '{{ path('postuler_Mission',{'id': mission.id }) }}';
+        $.ajax({
+            type: 'POST',
+            url: route,
+            success: function(data){
+                if(data===1)
+                {
+                    alert('Vous venez de postuler pour la mission {{ mission.codemission }}' );
+                }
+                else if(data===0)
+                {
+                    alert('Vous avez déjà postuler pour la mission {{ mission.codemission }}' );
+                }
+            }
+        });
+    }
+    function envoyerMRAction(){
+        var route = '{{ path('MiseEnRelation_mission',{'idDest':'_IDUSER','idEnv':app.user.id,'mission':mission.id}) }}';
+        route = route.replace('_IDUSER',idMRDestinataire);
+        $.ajax({
+            type: 'POST',
+            url: route,
+            data: $('#formMettreEnRelation').serialize(),
+            success: function(data){
+                if(data===1)
+                {
+                    document.getElementById('MettreEnRelation').style.display = 'none';
+                    document.getElementById('formMettreEnRelation').reset();
+                }
+            }
+        });
+
+    }
+    function modifier(formid,button) {
+        var inputs = document.getElementById(formid).getElementsByTagName('input');
+        for(var i = 0; i< inputs.length; i++)
+        {
+            inputs[i].readOnly = false;
+        }
+        var textareas = document.getElementById(formid).getElementsByTagName('textarea');
+        for( i = 0; i< textareas.length; i++)
+        {
+            textareas[i].readOnly = false;
+        }
+        button.getElementsByTagName("div")[0].innerHTML="valider";
+        button.setAttribute('onclick','document.getElementById(\'formMission\').submit()');
+
+    }
+    $(function(){
+        $('[type="date"].min-today').prop('min', function(){
+            return new Date().toJSON().split('T')[0];
+        });
+    });
+    function diffuserMission() {
+        var route = '{{ path('Diffuser_Mission',{id:mission.id}) }}';
+        $.ajax({
+            type: "POST",
+            url: route,
+            data: $("#formDiffusion").serialize(),
+            success: function(data)
+            {
+                if(data['status']===1)
+                {
+                    document.getElementById('formDiffusion').parentNode.parentNode.style.display ='none';
+                    document.getElementById('formDiffusion').reset();
+                    var inputs = document.getElementById('formDiffusion').getElementsByTagName("input");
+                    inputs[inputs.length - 1].disabled = false;
+                }
+            }
+        });
+
+    }
+    function rechercheformation(mot) {
+        var mots = mot.toUpperCase().trim().split(/ +/g);
+        var select = document.getElementById('SelectMultipleFormation');
+        for(var i = 1; i < select.childElementCount; i=i+2)
+        {
+            select.options[i-1].style.display="block";
+
+            for(var j = 0; j< mots.length;j++)
+            {
+                if (!stringWith(select.options[i].innerHTML, mots[j])) {
+                    select.options[i-1].style.display="none";
+                }
+            }
+        }
+    }
+    function show_formapprenant() {
+        document.getElementById('information_apprenant').style.display= 'none';
+        document.getElementById('declinerApprenant').style.display= 'block';
+        document.getElementById('information_button').style.display= 'none';
+        document.getElementById('decliner_button').style.display= 'block';
+    }
+    function show_formapprenantproposer() {
+        document.getElementById('information_apprenant').style.display= 'none';
+        document.getElementById('proposerApprenant').style.display= 'block';
+        document.getElementById('information_button').style.display= 'none';
+        document.getElementById('proposer_button').style.display= 'block';
+    }
+    function show_formmission() {
+        document.getElementById('information_mission').style.display= 'none';
+        document.getElementById('declinerMission').style.display= 'block';
+        document.getElementById('mission_button').style.display= 'none';
+        document.getElementById('declinerMission_button').style.display= 'block';
+    }
+    var infoWindows = [];var map_localisation;var marker_apprenant;
+    function informationApprenantreception(image,nom,prenom,adresse){
+        document.getElementById('Proposer').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
+        document.getElementById('Information_Apprenant_titree').innerHTML= nom +' '+ prenom;
+        document.getElementById('Information_Apprenant_titre_adressee').innerHTML = adresse;
+
+    }
+    function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse) {
+        document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
+        document.getElementById('Information_Apprenant_Civilite').innerHTML = civilite;
+        document.getElementById('Information_Apprenant_Nom').innerHTML = nom;
+        document.getElementById('Information_Apprenant_Prenom').innerHTML= prenom;
+        document.getElementById('Information_Apprenant_Email').innerHTML = email;
+        document.getElementById('Information_Apprenant_Telephone').innerHTML =telephone;
+        document.getElementById('Information_Apprenant_DateNaissance').innerHTML =Datenaissance;
+        document.getElementById('Information_Apprenant_CpNaissance').innerHTML =cpnaissance;
+        document.getElementById('Information_Apprenant_LieuNaissance').innerHTML =lieuNaissance;
+        document.getElementById('Information_Apprenant_Adresse').innerHTML =adresse;
+        document.getElementById('Information_Apprenant_titre').innerHTML= nom +' '+ prenom;
+        document.getElementById('Information_Apprenant_titre_adresse').innerHTML = adresse;
+
+        if(marker_apprenant)
+        {
+            marker_apprenant.setMap(null);
+        }
+
+        var geocoder = new google.maps.Geocoder();
+
+        geocoder.geocode({'address': adresse }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+
+                marker_apprenant = new google.maps.Marker({
+                    map: map_localisation,
+                    position: results[0].geometry.location,
+                    visible: true,
+                    icon: '{{ asset('image/highscore_marker.png') }}'
+                });
+
+            }
+            else {
+                alert('Nous n\'avons pas réussi à localiser l\'adresse l\'apprenant qui est : ' + adresse);
+            }
+        });
+
+    }
+    function FermerPopup(){
+        document.getElementById('information_apprenant').style.display= 'block';
+        document.getElementById('information_button').style.display= 'block';
+        document.getElementById('information_mission').style.display= 'block';
+        document.getElementById('mission_button').style.display= 'block';
+        document.getElementById('proposerApprenant').style.display= 'none';
+        document.getElementById('proposer_button').style.display= 'none';
+        document.getElementById('declinerApprenant').style.display= 'none';
+        document.getElementById('decliner_button').style.display= 'none';
+        document.getElementById('declinerMission').style.display= 'none';
+        document.getElementById('declinerMission_button').style.display= 'none';
+
+    }
+    function moveto(button,div) {
+        var elem = document.getElementById("baronglet");
+        var pos = elem.offsetLeft;
+        document.getElementById('info_mission').style.visibility= 'hidden';
+        {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
+        document.getElementById('apprenants_mission').style.visibility= 'hidden';
+        {% endif %}
+        document.getElementById('map').style.visibility= 'hidden';
+        for (var i=0;i<infoWindows.length;i++) {
+            infoWindows[i].close();
+        }
+        document.getElementById(div).style.visibility= 'visible';
+        var end = false;
+        var id = setInterval(frame, 5);
+
+        function frame() {
+            if (pos == button.offsetLeft || (pos ==0 && end)) {
+                clearInterval(id);
+            } else {
+                if(elem.offsetLeft > button.offsetLeft)
+                {
+                    end = true;
+                    elem.style.left = pos-- + 'px';
+                }
+                else
+                {
+                    elem.style.left = pos++ + 'px';
+                }
+            }
+        }
+    }
+    function post(path,refresh) {
+        if(refresh)
+        {
+            $.ajax({
+                type: 'get',
+                url: path,
+                error: function () {
+                    alert('Une erreur s\'est produite');
+                },
+                success: function () {
+                    window.parent.location.reload();
+                }
+            });
+        }
+        else
+        {
+            window.location = path;
+        }
+    }
+    function submitform(form) {
+        document.getElementById(form).submit();
+    }
+    function initialize() {
+        var locations =[];
+        var loc, map, marker, infobox;
+        {% if not mission.getEtablissement == null %}
+        var geoloc = '{{ mission.getEtablissement.getGeocode }}';
+        geoloc = geoloc.substring(1,geoloc.length - 1).split(',');
+        var lat = parseFloat(geoloc[0]);
+        var long = parseFloat(geoloc[1]);
+
+        loc = new google.maps.LatLng(lat,long);
+        map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 10,
+            center: loc,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        map_localisation = new google.maps.Map(document.getElementById("Localisation"), {
+            zoom: 15,
+            center: loc,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        marker = new google.maps.Marker({
+            map: map,
+            position: loc,
+            visible: true,
+            icon: '{{ asset('image/societe.png') }}'
+        });
+        {% if not is_granted('ROLE_TUTEUR') and not is_granted('ROLE_RECRUTEUR') %}
+        infobox = new InfoBox({
+            content: document.getElementById("Societe_Info")
+            ,disableAutoPan: false
+            ,maxWidth: 0
+            ,pixelOffset: new google.maps.Size(-76, -212)
+            ,zIndex: null
+            ,closeBoxMargin: "4px 4px 4px 4px"
+            ,closeBoxURL: "{{ asset('image/close_infobox.png') }}"
+            ,infoBoxClearance: new google.maps.Size(1, 1)
+            ,isHidden: false
+            ,pane: "floatPane"
+            ,enableEventPropagation: false
+        });
+        infoWindows.push(infobox);
+
+        google.maps.event.addListener(marker, "click", function() {
+            infobox.open(map, this);
+            map.panTo(loc);
+        });
+        {% endif %}
+        marker = new google.maps.Marker({
+            map: map_localisation,
+            position: loc,
+            visible: true,
+            icon: '{{ asset('image/societe.png') }}'
+        });
+        {% else %}
+        geocoder.geocode({'address': '{{ mission.getEtablissement.getAdresse ~ mission.getEtablissement.getVille ~ mission.getEtablissement.getCp}}'}, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                map = new google.maps.Map(document.getElementById("map"), {
+                    zoom: 10,
+                    center: results[0].geometry.location,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+                map_localisation = new google.maps.Map(document.getElementById("Localisation"), {
+                    zoom: 10,
+                    center: results[0].geometry.location,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location,
+                    visible: true,
+                    icon: '{{ asset('image/societe.png') }}'
+                });
+                {% if not is_granted('ROLE_TUTEUR') and not is_granted('ROLE_RECRUTEUR') %}
+                infobox = new InfoBox({
+                    content: document.getElementById("Societe_Info")
+                    ,disableAutoPan: false
+                    ,maxWidth: 0
+                    ,pixelOffset: new google.maps.Size(-76, -212)
+                    ,zIndex: null
+                    ,closeBoxMargin: "4px 4px 4px 4px"
+                    ,closeBoxURL: "{{ asset('image/close_infobox.png') }}"
+                    ,infoBoxClearance: new google.maps.Size(1, 1)
+                    ,isHidden: false
+                    ,pane: "floatPane"
+                    ,enableEventPropagation: false
+                });
+                infoWindows.push(infobox);
+
+                google.maps.event.addListener(marker, "click", function() {
+                    infobox.open(map, this);
+                    map.panTo(loc);
+                });
+                {% endif %}
+                marker = new google.maps.Marker({
+                    map: map_localisation,
+                    position: results[0].geometry.location,
+                    visible: true,
+                    icon: '{{ asset('image/societe.png') }}'
+                });
+
+            }
+        });
+        {% endif %}
+        {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
+        var informations_users = JSON.parse('{{ informations_maps|json_encode }}'.replace(/&quot;/g,'"'));
+
+        var geocoder = new google.maps.Geocoder();
+        var adresse_manquante = 0;
+        for(var i = 0; i < {{ users|length }}; i++)
+        {
+            geocoder.geocode({'address': informations_users[i][1]}, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    locations.push(results[0].geometry.location);
+                    if((locations.length + adresse_manquante) == informations_users.length) {
+                        var markers = [];
+                        for(var j = 0; j< locations.length; j++ )
+                        {
+                            var marker = new google.maps.Marker({
+                                map: map,
+                                position: locations[j],
+                                visible: true,
+                                icon: '{{ asset('image/highscore_marker.png') }}',
+                                title: informations_users[j][0]
+                            });
+                            markers.push(marker);
+                            infobox = new InfoBox({
+                                content: document.getElementById("apprenant"+j)
+                                ,disableAutoPan: false
+                                ,maxWidth: 0
+                                ,pixelOffset: new google.maps.Size(-76, -212)
+                                ,zIndex: null
+                                ,closeBoxMargin: "4px 4px 4px 4px"
+                                ,closeBoxURL: "{{ asset('image/close_infobox.png') }}"
+                                ,infoBoxClearance: new google.maps.Size(1, 1)
+                                ,isHidden: false
+                                ,pane: "floatPane"
+                                ,enableEventPropagation: false
+                            });
+                            infoWindows.push(infobox);
+                            (function(z){
+                                google.maps.event.addListener(marker, "click", function() {
+                                    infoWindows[z].open(map, this);
+                                    map.panTo(locations[z]);
+                                });
+                            })(j);
+                        }
+                        var markerClusterer = new MarkerClusterer(map, markers);
+                    }
+                }
+                else {
+                    adresse_manquante++;
+                    if((locations.length + adresse_manquante) == informations_users.length) {
+                        var markers = [];
+                        for(var j = 0; j< locations.length; j++ )
+                        {
+                            var marker = new google.maps.Marker({
+                                map: map,
+                                position: locations[j],
+                                visible: true,
+                                icon: '{{ asset('image/highscore_marker.png') }}',
+                                title: informations_users[j][0]
+                            });
+                            markers.push(marker);
+                            infobox = new InfoBox({
+                                content: document.getElementById("apprenant"+j)
+                                ,disableAutoPan: false
+                                ,maxWidth: 0
+                                ,pixelOffset: new google.maps.Size(-76, -212)
+                                ,zIndex: null
+                                ,closeBoxMargin: "4px 4px 4px 4px"
+                                ,closeBoxURL: "{{ asset('image/close_infobox.png') }}"
+                                ,infoBoxClearance: new google.maps.Size(1, 1)
+                                ,isHidden: false
+                                ,pane: "floatPane"
+                                ,enableEventPropagation: false
+                            });
+                            infoWindows.push(infobox);
+                            (function(z){
+                                google.maps.event.addListener(marker, "click", function() {
+                                    infoWindows[z].open(map, this);
+                                    map.panTo(locations[z]);
+                                });
+                            })(j);
+                        }
+                        var markerClusterer = new MarkerClusterer(map, markers);
+                    }
+                }
+            });
+        }
+        {% endif %}
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+</body>
+</html>

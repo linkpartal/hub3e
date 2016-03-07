@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/mission.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
+    {% block CSS %}{% endblock %}
+
+    <title>HUB3E - {% block title %}Home{% endblock %}</title>
+
+</head>
+<body>
+
+<div class="container" style="padding: 0;">
+
+    <div class="row" style=" margin: 0;">
+        <img class="col-xs-1" src="data:image/jpg;base64,{{ mission.getEtablissement.getTier.getLogo }}"
+             style="padding: 10px; height: 40px;">
+        <div class="col-xs-4">
+            <div class="col-xs-12"
+                 style="height: 30px; text-align: left; padding: 10px;"><label style="font-family:Arial;font-style:normal;font-size: large;color:black" >{{ mission.getIntitule }}&nbsp; - &nbsp;  </label><label style="font-family:Arial;font-style:normal;font-size: large;color:#2A76CC" > {{ mission.getEtablissement.getTier.getRaisonsoc }}</label></div>
+            <div class="col-xs-12" style="height: 20px; text-align: left;font-family:Arial;font-style:normal;font-size: small">{{mission.getEtablissement.getAdresse }}, {{ mission.getEtablissement.getCodePostal }} {{ mission.getEtablissement.getVille }}</div>
+        </div>
+        <div class="col-xs-offset-5 col-xs-1">
+            <div class="col-xs-12" style="height: 30px;; padding-top: 10px;"><label style="font-size:large;color:#2A76CC;" > 18</label></div>
+            <div class="col-xs-12" style="height: 20px;width:100px;color: #666666;font-family:Arial;font-style:normal;">mises en relation</div>
+        </div>
+        <div class=" col-xs-1">
+            <div class="col-xs-12" style="height: 30px; padding-top: 10px;"><label style="font-size: large;color:#2A76CC" > 5</label></div>
+            <div class="col-xs-12" style="height: 20px;color: #666666;font-family:Arial;font-style:normal;">candidatures</div>
+        </div>
+    </div>
+
+
+
+    <div class="row" >
+        <button onclick="moveto(this,'info_mission')" class="col-xs-6 onglet" type="button" > FICHE MISSION</button>
+        <button onclick="moveto(this,'formation_mission')" class="col-xs-6 onglet"  type="button" >LISTE DES APPRENANTS</button>
+        <div id="baronglet" class="col-xs-6" style="height: 5px;background-color: #257ef0; z-index: 60;"></div>
+    </div>
+
+
+
+    <div id="info_mission" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;width: 100%;height: 100%;position: absolute;">
+        <form id="formMission" action="{{ path('missionModif') }}" method="post" enctype="multipart/form-data">
+            <input type="hidden" value="{{ mission.getId }}" id="id" name="_ID">
+            <div class="col-xs-9" style="background: rgb(238, 241, 246); height: 100%;">
+
+                <div class="col-xs-12" style="margin-bottom: 50px">
+                    <div class="list-group affichage">
+
+                        <label class="list-group-item mission" >LA MISSION : <br/>
+                            <textarea id="Descriptif" name="_Descriptif" maxlength="255"  style="color:black; font-weight: lighter" readonly >{{mission.getDescriptif}}</textarea>
+                        </label>
+
+                        <label class="list-group-item mission" >LE PROFIL RECHERCHE :<br/>
+                            <textarea style="color:black; font-weight: lighter" id="Profil" name="_Profil" required maxlength="255" readonly >{{mission.getProfil}}</textarea>
+                        </label>
+
+
+                        <label class="list-group-item mission">Domaine : <br/>
+                            <input style="color:black; font-weight: lighter" value="{{mission.getDomaine}}" type="text" id="Domaine" name="_Domaine" maxlength="45" readonly>
+                        </label>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-3"
+                 style="height: 100%;">
+                <div class="list-group"
+                     style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
+                    <div  class="rightMenu" style="padding: 8px !important;" >
+                        <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                        <input value="{{mission.getDate|date('d/m/Y')}}" disabled>
+                    </div>
+                    <div class="rightMenu" style="padding: 8px !important;" >
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        <input value="{{ mission.nomcontact }} {{ mission.prenomcontact }}" disabled>
+                    </div>
+                    <div class="rightMenu" style="padding: 8px !important;">
+                        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                        <input value="{{mission.getEmailcontact}}" type="email" name="_Emailcontact" maxlength="45" readonly>
+                    </div>
+                    <div class="rightMenu" style="padding: 8px !important;">
+                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                        <input value="{{mission.getTypecontrat}}" type="text" id="TypeContrat" name="_TypeContrat" maxlength="45" readonly>
+                    </div>
+                    <div  class="rightMenu " style="padding: 8px !important;">
+                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        <input value="{{mission.getDatedebut|date('Y-m-d')}}" type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' id="Datedebut" name="_Datedebut" readonly>
+                    </div>
+                    <div  class="rightMenu " style="padding: 8px !important;">
+                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        <input value="{{mission.getDatefin|date('Y-m-d')}}" type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' id="Datefin" name="_Datefin" readonly>
+                    </div>
+                    <div class="rightMenu" style="padding: 8px !important;" >
+                        <span class="glyphicon glyphicon-eur" aria-hidden="true"></span>
+                        <input value="{{mission.getRemuneration}}" type="number" id="Remuneration" name="_Remuneration" maxlength="5" readonly>
+                    </div>
+                    <div class="rightMenu" style="padding: 8px !important;">
+                        <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>
+                        <input placeholder="Code mission"  value="{{mission.getCodemission}}" name="_Codemission" required maxlength="9" type="text" readonly>
+                    </div>
+                    {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
+                        <button onclick="modifier('formMission',this)" type="button" class="list-group-item rightMenu" >
+                            <div class="col-xs-12"  >Modifier la fiche</div>
+                        </button>
+
+                        <button onclick="post('{{ path('supprimer_Mission',{'id': mission.getId }) }}',true)" type="button" class="list-group-item rightMenu" >
+                            <div class="col-xs-12" >Supprimer Mission</div>
+                        </button>
+                        {% if is_granted('ROLE_ADMINSOC') %}
+                            <button type="button" class="list-group-item rightMenu" onclick="show('Diffusion_formation')" >
+                                <div class="col-xs-12" >Diffuser</div>
+                            </button>
+                        {% endif %}
+                    {% endif %}
+                </div>
+
+            </div>
+        </form>
+
+
+    </div>
+
+    <div id="formation_mission" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;width: 100%;height: 90%;visibility: hidden;position: absolute;">
+        <div class="row" style="margin:10px 0 0 10px"  >
+            <div>
+                <span class="glyphicon glyphicon-search" ></span>
+                <input type="text" class="input" placeholder="Recherche" style="padding:5px; border:solid 1px black; color:steelblue; border-radius:5px;width:200px;height:33px;margin-right:800px" >
+
+                <button type="button"style="font-family: Verdana; font-style:normal ;font-size:medium; height: 20px; border-radius: 0; background: none; border: 0;color: #666666 ;">
+                    Filtres <span class="glyphicon glyphicon-menu-down" aria-hidden="true" ></span>
+                </button>
+            </div>
+
+        </div>
+
+        <div class="row" style="height: 150px; margin:10px;background:white">
+
+            {% if diffusions is defined %}
+                {% for diff in diffusions %}
+                    {% if app.user.hasRole('ROLE_ADMINECOLE') %}
+                        {% if diff.statut==1 and (diff.formation.etablissement.tier == app.user.tier or diff.formation.etablissement.tier in app.user.tier.tier1|keys )%}
+                                {% set iddiv = random()  %}
+                                <div class="col-xs-12 Liste">
+                                    <div class="row">
+                                        <label class="cell">Description : <label>{{ diff.formation.getDescriptif }}</label></label>
+                                        <label class="cell">Nom : <label>{{ diff.formation.getNom }}</label>
+                                            <button class="button" style="float: right" type="button" data-toggle="collapse" data-target="#formation{{ iddiv }}"></button>
+                                        </label>
+
+                                    </div>
+                                    <div id="formation{{ iddiv }}" class="collapse in" >
+                                        <div class="row">
+                                            <label class="cell">Document :
+                                                <a target="_blank" href="{{ asset('formation_pdf/'~ diff.formation.getId ~'.pdf') }}" >
+                                                    <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px " alt="fichier de formation" >
+                                                </a>
+                                            </label>
+                                            <button style="border: 0;font: 18px Roboto white;background-color: rgb(102, 212, 105);height: 40px; width: 150px;"
+                                                    onclick="valider('{{ path('Valider_Diffusion',{id:diff.id}) }}',this)" >
+                                                Valider
+                                            </button>
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+
+        </div>
+
+
+
+
+
+
+
+    </div>
+</div>
+<script src="//code.jquery.com/jquery.min.js"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script language="JavaScript">
+    function moveto(button,div) {
+        var elem = document.getElementById("baronglet");
+        var pos = elem.offsetLeft;
+        document.getElementById('info_mission').style.visibility= 'hidden';
+        document.getElementById('formation_mission').style.visibility= 'hidden';
+        document.getElementById(div).style.visibility= 'visible';
+        var end = false;
+        var id = setInterval(frame, 5);
+
+        function frame() {
+            if (pos == button.offsetLeft || (pos ==0 && end)) {
+                clearInterval(id);
+            } else {
+                if(elem.offsetLeft > button.offsetLeft)
+                {
+                    end = true;
+                    elem.style.left = pos-- + 'px';
+                }
+                else
+                {
+                    elem.style.left = pos++ + 'px';
+                }
+            }
+        }
+    }
+    function valider(route,button) {
+        $.ajax({
+            type: "POST",
+            url: route,
+            success: function(data)
+            {
+                if(data['status']===1)
+                {
+                    button.parentNode.parentNode.parentNode.parentNode.removeChild(button.parentNode.parentNode.parentNode);
+                }
+            }
+        });
+
+    }
+</script>
+</body>
+</html>

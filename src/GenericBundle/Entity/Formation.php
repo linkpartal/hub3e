@@ -3,11 +3,13 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * Formation
  *
- * @ORM\Table(name="formation", indexes={@ORM\Index(name="fk_Formation_ecole1_idx", columns={"etablissement_id"})})
+ * @ORM\Table(name="formation",uniqueConstraints={@UniqueConstraint(name="unique_formation_etablissement", columns={"nom","etablissement_id"})},
+ *      indexes={@ORM\Index(name="fk_Formation_ecole1_idx", columns={"etablissement_id"})})
  * @ORM\Entity
  */
 class Formation
@@ -57,7 +59,7 @@ class Formation
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Qcmdef", mappedBy="formationformation")
+     * @ORM\ManyToMany(targetEntity="Qcmdef", mappedBy="formation")
      */
     private $qcmdef;
 
@@ -232,6 +234,4 @@ class Formation
     {
         return $this->nomDoc;
     }
-
-
 }

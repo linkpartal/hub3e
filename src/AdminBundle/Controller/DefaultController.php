@@ -4,16 +4,24 @@ namespace AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use GenericBundle\Entity\Mission;
 use \JMS\Serializer\SerializerBuilder;
+
 
 class DefaultController extends Controller
 {
     public function loadAction(){
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
+        if($user->getPhotos())
+        {
+            $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
+        }
+
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
-        $modeles = $this->getDoctrine()->getRepository('GenericBundle:Modele')->findBy(array('user'=>$user));
+
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAll();
+
         $ecoles = array();
         $societes = array();
         foreach($etablissement as $item)
@@ -22,18 +30,60 @@ class DefaultController extends Controller
             {
                 array_push($ecoles,$item);
             }
-            else{
+            elseif(!$item->getTier()->getEcole() && !$item->getSuspendu()){
                 array_push($societes,$item);
             }
         }
         $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findAll();
+        $apprenants =array();
+        $notapprenant = array();
+        foreach($users as $userd)
+        {
+            if($userd->hasRole('ROLE_APPRENANT'))
+            {
+                array_push($apprenants,$userd);
+            }
+            else{
+                array_push($notapprenant,$userd);
+            }
+        }
+
+        $import_apprenant = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$user));
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
+        $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array(),array('date'=>'DESC'));
         $qcms = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findAll();
-        $serializer = SerializerBuilder::create()->build();
+        $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');
 
-        return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$users,
-            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'modeles'=>$modeles));
+        //modele
+        $modeles = array();
+        if ($handle = opendir('../src/GenericBundle/Resources/views/Mail')) {
+
+            while (false !== ($entry = readdir($handle))) {
+
+                if ($entry != "." && $entry != ".." && $entry != "templates" ) {
+
+                    array_push($modeles,$entry);
+                }
+            }
+
+            closedir($handle);
+        }
+        if ($handle = opendir('../src/GenericBundle/Resources/views/Mail/templates')) {
+
+            while (false !== ($entry = readdir($handle))) {
+
+                if ($entry != "." && $entry != "..") {
+
+                    array_push($modeles,$entry);
+                }
+            }
+
+            closedir($handle);
+        }
+
+        return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$notapprenant,'modeles'=>$modeles,
+            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'missions'=>$missions,'apprenants'=>$apprenants,'import_apprenants'=>$import_apprenant,'image'=>$user->getPhotos()));
     }
 
     public function loadiframeAction()
@@ -41,42 +91,60 @@ class DefaultController extends Controller
         return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
     }
 
-    public function affichageAction($id)
+    public function creeNewModeleAction($id)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->find($id);
+        /*
+        $modeles = array();
+        if ($handle = opendir('../src/GenericBundle/Resources/views/Mail')) {
 
-        $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
-        $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
-        $modeles = $this->getDoctrine()->getRepository('GenericBundle:Modele')->findBy(array('user'=>$user));
-        if($etablissement->getTier()->getEcole())
+            while (false !== ($entry = readdir($handle))) {
+
+                if ($entry != "." && $entry != "..") {
+
+                    array_push($modeles,$entry);
+                }
+            }
+
+            closedir($handle);
+        }*/
+        if($id == 'ajouter')
         {
-            $type = 'Ecole';
+            return $this->render("AdminBundle:Admin:creeNewModele.html.twig");
         }
         else{
-            $type = 'Societe';
-        }
-        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('user'=>$user,'entite'=>$etablissement->getId(),'type'=>$type));
-        if($notifications)
-        {
-            $this->getDoctrine()->getEntityManager()->remove($notifications);
-            $this->getDoctrine()->getEntityManager()->flush();
+            $d = new \DOMDocument;
+            if(file_get_contents('../src/GenericBundle/Resources/views/Mail/'. $id))
+            {
+                @$d->loadHTML(file_get_contents('../src/GenericBundle/Resources/views/Mail/'. $id));
+            }
+            elseif(file_get_contents('../src/GenericBundle/Resources/views/Mail/templates/'. $id)){
+                @$d->loadHTML(file_get_contents('../src/GenericBundle/Resources/views/Mail/templates/'. $id));
+            }
+            $body = "";
+            foreach($d->getElementsByTagName("body")->item(0)->childNodes as $child) {
+                $body .= $d->saveHTML($child);
+            }
+
+            return $this->render("AdminBundle:Admin:creeNewModele.html.twig",array('modele'=>$id,'body'=>$body));
         }
 
-        if($etablissement->getTier()->getLogo())
-        {
-            $etablissement->getTier()->setLogo(base64_encode(stream_get_contents($etablissement->getTier()->getLogo())));
-        }
-        if($etablissement->getTier()->getFondecran())
-        {
-            $etablissement->getTier()->setFondecran(base64_encode(stream_get_contents($etablissement->getTier()->getFondecran())));
-        }
-        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier() ));
-        $users = array();
-        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
-        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
-        $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
-        return $this->render('AdminBundle:Admin:iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,
-            'libs'=>$licences,'tiers'=>$tiers,'users'=>$users,'formations'=>$formation));
     }
+
+    public function saveNewModeleAction(Request $request)
+    {
+        if(".html.twig" === "" || (($temp = strlen($request->get('_filename')) - strlen('.html.twig')) >= 0 && strpos($request->get('_filename'), '.html.twig', $temp) !== FALSE))
+        {
+            $myfile = fopen("../src/GenericBundle/Resources/views/Mail/templates/". $request->get('_filename'),"w");
+        }
+        else{
+            $myfile = fopen("../src/GenericBundle/Resources/views/Mail/templates/". $request->get('_filename') .".html.twig","w");
+        }
+
+
+        fwrite($myfile,$this->render('GenericBundle:Mail:Modele.html.twig',array('Textarea'=>$request->get('_newtext')))->getContent());
+        fclose($myfile);
+        return $this->redirect($this->generateUrl('admin_iframeload'));
+    }
+
+
 }

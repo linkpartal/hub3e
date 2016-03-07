@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
+    <title>Title</title>
+</head>
+<body>
+<table style="border-collapse: collapse;max-height: 100%">
+    <tr>
+        <td>Civilite</td>
+        <td>Nom</td>
+        <td>Prénom</td>
+        <td>téléphone</td>
+        <td>Email</td>
+        <td>Date Naissance</td>
+        <td>Lieu Naissance</td>
+    </tr>
+    {% for duplica in duplicas %}
+        <tr>
+            <td>{{ duplica.getCivilite }}</td>
+            <td>{{ duplica.getNom }}</td>
+            <td>{{ duplica.getPrenom }}</td>
+            <td>{{ duplica.getTelephone }}</td>
+            <td>{{ duplica.getEmail }}</td>
+            <td>{{ duplica.getInfo.getDatenaissance|date('d/m/Y') }}</td>
+            <td>{{ duplica.getInfo.getLieunaissance }}</td>
+            <td><button type="button" onclick="window.location.href= '{{ path('fusionner_apprenant',{'sas':app.request.attributes.get('id'),'user':duplica.getId}) }}'" >Fusionner</button></td>
+        </tr>
+    {% endfor %}
+</table>
+<script src="//code.jquery.com/jquery.min.js"></script>
+</body>
+</html>

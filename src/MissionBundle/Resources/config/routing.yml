@@ -1,0 +1,34 @@
+admin_afficheMission:
+    path: /affichageMission/id={id}
+    defaults: { _controller: MissionBundle:Default:affichageMission}
+
+supprimer_Mission:
+    path:  /suppMission/{id}
+    defaults: {_controller: MissionBundle:Default:suppMission}
+
+mission_added:
+    path: /mission_added
+    defaults: { _controller: MissionBundle:Default:addMission}
+
+missionModif:
+    path: /missionModif
+    defaults: { _controller: MissionBundle:Default:missionModif}
+
+
+Diffuser_Mission:
+    path: /DiffuserMission/id={id}
+    defaults: { _controller: MissionBundle:Default:DiffuserMission}
+
+Afficher_Mission_Propose:
+    path: /MissionPropose/id={id}
+    defaults: { _controller: MissionBundle:Default:AfficherMissionPropose}
+
+Valider_Diffusion:
+    path: /ValiderDiffusion/id={id}
+    defaults: { _controller: MissionBundle:Default:ValiderDiffusion}
+
+postuler_Mission:
+    path: /postuler/id={id}
+    defaults: { _controller: MissionBundle:Default:Postuler}
+
+

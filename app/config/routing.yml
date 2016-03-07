@@ -1,3 +1,19 @@
+apprenant:
+    resource: "@ApprenantBundle/Resources/config/routing.yml"
+    prefix:   /apprenant/
+
+mission:
+    resource: "@MissionBundle/Resources/config/routing.yml"
+    prefix:   /Mission/
+
+tier:
+    resource: "@TierBundle/Resources/config/routing.yml"
+    prefix:   /tier/
+
+societe:
+    resource: "@SocieteBundle/Resources/config/routing.yml"
+    prefix:   /societe/
+
 ecole:
     resource: "@EcoleBundle/Resources/config/routing.yml"
     prefix:   /ecole/

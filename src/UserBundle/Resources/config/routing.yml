@@ -3,7 +3,7 @@ expired:
     defaults: { _controller: UserBundle:Default:expired}
 
 userModif:
-    path: /admin/userModif
+    path: /userModif
     defaults: { _controller: UserBundle:Default:userModif}
 
 metier_user_afficheUser:
@@ -14,7 +14,7 @@ user_added:
     path:  /admin/Useradded
     defaults: {_controller: UserBundle:Default:UserAdded}
 
-supprimereUtilisateur:
+supprimerUtilisateur:
     path : /admin/supprimeruser/id={id}
     defaults: { _controller: UserBundle:Default:supprimeruser}
 
@@ -22,10 +22,177 @@ modifierUser:
     path: /admin/modifierUtilisateur/{id}
     defaults: { _controller: UserBundle:Default:modifier}
 
-creeNewModele:
-    path: /admin/creeNewModele/id={id}
-    defaults: { _controller: UserBundle:Default:creeNewModele, id :ajouter}
+import:
+    path: /admin/import
+    defaults: { _controller: UserBundle:Default:import}
 
-saveNewModele:
-    path: /admin/saveNewModele
-    defaults: { _controller: UserBundle:Default:saveNewModele}
+afficher_import:
+    path: /admin/afficherimport
+    defaults: { _controller: UserBundle:Default:afficherImports}
+
+supprimer_import:
+    path: /admin/supprimerimport/{id}
+    defaults: { _controller: UserBundle:Default:supprimerImports}
+
+afficher_duplica:
+    path: /admin/afficherduplica/{id}
+    defaults: { _controller: UserBundle:Default:afficherDuplica}
+
+importer_candidat:
+    path: /admin/importer_candidat/{id}
+    defaults: { _controller: UserBundle:Default:ImportCandidat}
+
+fusionner_apprenant:
+    path: /admin/fusion_apprenant/id_sas={sas}/id_user={user}
+    defaults: { _controller: UserBundle:Default:Fusionner}
+
+afficher_profil:
+    path: /affichageProfil
+    defaults: { _controller: UserBundle:Default:affichageProfil}
+
+supprimer_Langue:
+    path : /supprimerLangue/id={id}/IdUser={IdUser}
+    defaults: { _controller: UserBundle:Default:supprimerLangue}
+
+supprimer_Hobbie:
+    path : /supprimerHobbie/id={id}/IdUser={IdUser}
+    defaults: { _controller: UserBundle:Default:supprimerHobbie}
+
+supprimer_Parent:
+    path : /suppParent/id={id}
+    defaults: { _controller: UserBundle:Default:suppParent}
+
+parent_added:
+    path: /AjouterParent
+    defaults: { _controller: UserBundle:Default:AjouterParent}
+
+supprimer_Experience:
+    path : /suppExperience/id={id}
+    defaults: { _controller: UserBundle:Default:suppExperience}
+
+experience_added:
+    path: /AjouterExperience
+    defaults: { _controller: UserBundle:Default:AjouterExperience }
+
+
+Afficher_Sas:
+    path: /affichageUerSAS/id={id}
+    defaults: { _controller: UserBundle:SAS:affichageUserSAS}
+
+supprimer_Recommandation:
+    path: /suppRecommandation/id={id}
+    defaults: { _controller: UserBundle:Default:suppRecommandation}
+
+recommandation_added:
+    path: /AjouterRecommandation
+    defaults: { _controller: UserBundle:Default:AjouterRecommandation}
+
+supprimer_Diplome:
+    path: /suppDiplome/id={id}
+    defaults: { _controller: UserBundle:Default:suppDiplome}
+
+diplome_added:
+    path: /AjouterDiplome
+    defaults: { _controller: UserBundle:Default:AjouterDiplome}
+
+supprimer_Document:
+    path: /suppDocument/id={id}
+    defaults: { _controller: UserBundle:Default:suppDocument}
+
+Document_added:
+    path: /AjouterDocument
+    defaults: { _controller: UserBundle:Default:AjouterDocument}
+
+modifierStatut:
+    path: /modifierStatutCandidature/id={id}/statut={statut}
+    defaults: { _controller: UserBundle:Default:modifierStatutCandidature}
+
+supprimer_Candidature:
+    path: /suppCandidature/id={id}
+    defaults: { _controller: UserBundle:Default:suppCandidature}
+
+Candidature_added:
+    path: /AjouterCandidature
+    defaults: { _controller: UserBundle:Default:AjouterCandidature}
+
+
+ajouter_Hobbie:
+    path : /ajouterHobbie/id={id}/IdUser={IdUser}
+    defaults: { _controller: UserBundle:Default:ajouterHobbie}
+
+afficher_messagerie:
+    path: /afficher_messagerie
+    defaults: { _controller: UserBundle:Default:afficher_messagerie}
+
+ajouter_Langue:
+    path : /ajouterLangue/id={id}/IdNiveau={IdNiveau}/IdUser={IdUser}
+    defaults: { _controller: UserBundle:Default:ajouterLangue}
+
+reponseQCM:
+    path: /reponseQCM/user={iduser}/reponse={idreponse}
+    defaults: { _controller: UserBundle:Default:ReponseQCM }
+
+MiseEnRelation_mission:
+    path: /Miseenrelation/Mission/idDest={idDest}/idEnv={idEnv}/mission={mission}
+    defaults: { _controller: UserBundle:MiseEnRelation:envoiMessageMR }
+
+
+Reponse_Messagerie:
+    path: /Messagerie/message={idmessage}
+    defaults: { _controller: UserBundle:MiseEnRelation:RepondreMessage }
+
+Postuler_Messagerie:
+    path: /Messagerie/postuler/msg={idmessage}
+    defaults: { _controller: UserBundle:MiseEnRelation:PostulerMessagerie }
+
+SASModif:
+    path: /SASModif
+    defaults: { _controller: UserBundle:SAS:SASModif}
+
+ajouter_Hobbie_SAS:
+    path : /ajouterHobbieSAS/id={id}/IdUser={IdImport}
+    defaults: { _controller: UserBundle:SAS:ajouterHobbieSAS}
+
+supprimer_HobbieSAS:
+    path : /supprimerHobbieSAS/id={id}/IdUser={IdImport}
+    defaults: { _controller: UserBundle:SAS:supprimerHobbieSAS}
+
+ajouter_LangueSAS:
+    path : /ajouterLangueSAS/id={id}/IdNiveau={IdNiveau}/IdUser={IdImport}
+    defaults: { _controller: UserBundle:SAS:ajouterLangueSAS}
+
+supprimer_LangueSAS:
+    path : /supprimerLangueSAS/id={id}/IdUser={IdImport}
+    defaults: { _controller: UserBundle:SAS:supprimerLangueSAS}
+
+Candidature_addedSAS:
+    path: /AjouterCandidatureSAS
+    defaults: { _controller: UserBundle:SAS:AjouterCandidatureSAS}
+
+parent_addedSAS:
+    path: /AjouterParentSAS
+    defaults: { _controller: UserBundle:SAS:AjouterParentSAS}
+
+experience_addedSAS:
+    path: /AjouterExperienceSAS
+    defaults: { _controller: UserBundle:SAS:AjouterExperienceSAS }
+
+recommandation_addedSAS:
+    path: /AjouterRecommandationSAS
+    defaults: { _controller: UserBundle:SAS:AjouterRecommandationSAS}
+
+diplome_addedSAS:
+    path: /AjouterDiplomeSAS
+    defaults: { _controller: UserBundle:SAS:AjouterDiplomeSAS}
+
+Document_addedSAS:
+    path: /AjouterDocumentSAS
+    defaults: { _controller: UserBundle:SAS:AjouterDocumentSAS}
+
+supprimerUtilisateurSAS:
+    path : /supprimeruserSAS/id={id}
+    defaults: { _controller: UserBundle:SAS:supprimeruserSAS}
+
+apprenant_added:
+    path: /ajouterApprenant
+    defaults: { _controller: UserBundle:Default:ajouterApprenant}

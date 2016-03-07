@@ -3,11 +3,13 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * Notification
  *
- * @ORM\Table(name="notification", indexes={@ORM\Index(name="fk_Notification_users1_idx", columns={"users_id"})})
+ * @ORM\Table(name="notification",uniqueConstraints={@UniqueConstraint(name="unique_notification", columns={"type", "entite","users_id"})}
+ *      , indexes={@ORM\Index(name="fk_Notification_users1_idx", columns={"users_id"})})
  * @ORM\Entity
  */
 class Notification

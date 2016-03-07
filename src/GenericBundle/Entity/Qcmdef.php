@@ -24,7 +24,7 @@ class Qcmdef
     /**
      * @var string
      *
-     * @ORM\Column(name="Nom", type="string", length=45, nullable=false)
+     * @ORM\Column(name="Nom", type="string", length=45, nullable=false, unique=true)
      */
     private $nom;
 
@@ -33,7 +33,7 @@ class Qcmdef
      *
      * @ORM\Column(name="affinite", type="boolean", nullable=false)
      */
-    private $affinite;
+    private $affinite= true;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -55,7 +55,9 @@ class Qcmdef
      *   }
      * )
      */
-    private $formationformation;
+    private $formation;
+
+
 
     /**
      * Constructor
@@ -63,7 +65,7 @@ class Qcmdef
     public function __construct()
     {
         $this->etablissement = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->formationformation = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formation = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -135,40 +137,6 @@ class Qcmdef
     }
 
     /**
-     * Add formationformation
-     *
-     * @param \GenericBundle\Entity\Formation $formationformation
-     *
-     * @return Qcmdef
-     */
-    public function addFormationformation(\GenericBundle\Entity\Formation $formationformation)
-    {
-        $this->formationformation[] = $formationformation;
-
-        return $this;
-    }
-
-    /**
-     * Remove formationformation
-     *
-     * @param \GenericBundle\Entity\Formation $formationformation
-     */
-    public function removeFormationformation(\GenericBundle\Entity\Formation $formationformation)
-    {
-        $this->formationformation->removeElement($formationformation);
-    }
-
-    /**
-     * Get formationformation
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFormationformation()
-    {
-        return $this->formationformation;
-    }
-
-    /**
      * Set affinite
      *
      * @param boolean $affinite
@@ -190,5 +158,44 @@ class Qcmdef
     public function getAffinite()
     {
         return $this->affinite;
+    }
+
+    /**
+     * Add formation
+     *
+     * @param \GenericBundle\Entity\Formation $formation
+     *
+     * @return Qcmdef
+     */
+    public function addFormation(\GenericBundle\Entity\Formation $formation)
+    {
+        $this->formation[] = $formation;
+
+        return $this;
+    }
+
+    /**
+     * Remove formation
+     *
+     * @param \GenericBundle\Entity\Formation $formation
+     */
+    public function removeFormation(\GenericBundle\Entity\Formation $formation)
+    {
+        $this->formation->removeElement($formation);
+    }
+
+    /**
+     * Get formation
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormation()
+    {
+        return $this->formation;
+    }
+
+
+    public function __toString() {
+        return $this->nom;
     }
 }

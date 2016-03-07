@@ -5,6 +5,12 @@ imports:
     - { resource: "@GenericBundle/Resources/config/services.yml" }
     - { resource: "@AdminBundle/Resources/config/services.yml" }
     - { resource: "@EcoleBundle/Resources/config/services.yml" }
+    - { resource: "@UserBundle/Resources/config/services.yml" }
+    - { resource: "@SocieteBundle/Resources/config/services.yml" }
+    - { resource: "@TierBundle/Resources/config/services.yml" }
+    - { resource: "@MissionBundle/Resources/config/services.yml" }
+    - { resource: "@ApprenantBundle/Resources/config/services.yml" }
+
 
 
 # Put parameters here that don't need to change on each machine where the app is deployed

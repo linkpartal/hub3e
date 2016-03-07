@@ -53,4 +53,28 @@ class UserRepository extends EntityRepository
         }
         return $users;
     }
+
+    public function findApprenantDuplicata($id)
+    {
+        $users = array();
+        $em = $this->getEntityManager();
+        $import = $em->getRepository('GenericBundle:ImportCandidat')->find($id);
+
+        if($import)
+        {
+            $usersdup = $em->getRepository('GenericBundle:User')->findBy(array('civilite' =>$import->getCivilite()  , 'nom' => $import->getNom(), 'prenom' => $import->getPrenom()));
+
+            foreach($usersdup as $userdup)
+            {
+                if($userdup->getInfo()->getDatenaissance() == $userdup->getInfo()->getDatenaissance() and $userdup->getInfo()->getLieunaissance()==$userdup->getInfo()->getLieunaissance())
+                {
+                    array_push($users,$userdup);
+                }
+            }
+        }
+
+
+
+        return $users;
+    }
 }

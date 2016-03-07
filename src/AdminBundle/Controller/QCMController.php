@@ -33,6 +33,8 @@ class QCMController extends Controller
 
     }
 
+
+
     public function addAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -44,12 +46,14 @@ class QCMController extends Controller
             $newqcm = new Qcmdef();
             $newqcm->setNom($request->get('_Nom'));
 
-            $newqcm->setAffinite(intval($request->get('_affinite')) );
+
+
             $em->persist($newqcm);
             $em->flush();
 
             $qcm= $newqcm;
         }
+        $qcm->setAffinite($request->get('_affinite'));
         $em->flush();
 
         $questions = array();
@@ -79,11 +83,12 @@ class QCMController extends Controller
             }
 
             $i = 0;
-            foreach( $request->get('reponse') as $reponses)
+
+            foreach( $request->get('reponse') as $key => $reponses)
             {
                 $reponseorder = 0;
 
-                foreach($reponses as $rep)
+                foreach($reponses as $repkey => $rep)
                 {
                     //get Reponse s'elle existe.
                     $reponse = $em->getRepository('GenericBundle:Reponsedef')->findOneBy(array('reponse'=>$rep,'questiondef'=>$questions[$i]));
@@ -93,6 +98,7 @@ class QCMController extends Controller
                         //S'elle n'existe pas la créer.
                         $newreponse = new Reponsedef();
                         $newreponse->setReponse($rep);
+                        $newreponse->setScore($request->get('score')[$key][$repkey]);
                         $newreponse->setQuestiondef($questions[$i]);
                         $em->persist($newreponse);
                         $em->flush();
@@ -100,15 +106,18 @@ class QCMController extends Controller
                     }
                     $reponse->setOrdre($reponseorder++);
 
+
                     $em->flush();
 
                 }
                 $i++;
+
             }
+
 
         }
 
-        return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
+        return $this->render('GenericBundle::ReloadParent.html.twig');
     }
 
     public function supprimerAction($rep,$qst,$qcm)

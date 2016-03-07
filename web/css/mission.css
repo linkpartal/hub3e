@@ -1,0 +1,226 @@
+@CHARSET "utf-8";
+@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css");
+
+[class*="col-"] {
+    text-align: center;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+html {
+    min-height: 100%; /* make sure it is at least as tall as the viewport */
+    position: relative;
+}
+
+body {
+    height: 100%;
+    font-family: Roboto;
+    /* force the BODY element to match the height of the HTML element */
+}
+
+.container {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+.rightMenu{
+    height: 46px;
+    padding: 0 !important;
+    display: block !important;
+    border:solid 1px #d2d2d2 !important;
+    border-radius: 0  !important;
+    background-color: #E4E4E4;
+    color: #868686;
+    font : 10px arial;
+    margin: 0 !important;
+    line-height: 250%;
+
+}
+
+.rightMenu input{
+    text-align: center;
+}
+
+textarea , input:read-only{
+    background-color: transparent;
+    border: none;
+
+}
+
+textarea{
+    resize: none;
+    width: 100%;
+    height: 100px;
+    overflow-y: auto;
+}
+.rightMenu input:disabled{
+    background-color: transparent;
+    border: none;
+
+}
+
+.info{
+    height: 40px;
+    padding: 10px 0 10px 0 !important;
+    display: block !important;
+    border: none !important;
+    border-radius: 0 !important;
+    border-bottom: 1px solid #7F7F7F !important;
+    color: #7F7F7F !important;
+    font : 20px arial;
+    margin: 0 !important;
+    line-height: 200%;
+}
+
+.affichage{
+    margin: 15px 0 0 15px;
+    padding: 0;
+    text-align: left;
+}
+
+.onglet{
+    height: 40px;
+    background-color: white;
+    border: 0;
+    color: #868686;
+}
+
+button:focus{
+    outline: none;
+}
+
+.mission{
+    color:#2975cb;
+    min-height: 80px;
+    word-wrap: break-word;
+    hyphens: auto;
+    margin-bottom: 20px;
+}
+
+.infobox-wrapper {
+    display:none;
+}
+
+.infobox {
+    background-color: #232d37;
+    box-shadow: 0px 6px 4px 0px rgba(0, 0, 0, 0.25);
+    width: 152px;
+    height: 204px;
+    margin-bottom: 8px;
+
+}
+
+.infobox:after{
+    font-family: 'Glyphicons Halflings';
+    content:"\e252";
+    font-size: 2em;
+    position: relative;
+    top:40px;
+    left:64px;
+    color:#232d37;
+    z-index: 5;
+}
+
+.infobox button{
+    border: none;
+    background-color: transparent;
+    color:white;
+    font: 10px Roboto;
+    text-transform: uppercase;
+    text-align: center;
+    top:23px;
+}
+
+.infobox .inbox{
+    margin: auto 0;
+    background-color: #202830;
+    width: 152px;
+    height: 40px;
+}
+
+.inbox div{
+    border: 2px solid rgb(23, 29, 35);
+    border-radius: 100%;
+    margin: 0 auto;
+    top:17px;
+    position: relative;
+    width: 50px;
+    height: 50px;
+}
+
+.active {
+    background-color: rgb(150, 195, 32);
+    height:9px;
+    border-radius: 100%;
+    margin: 3px 0;
+    width: 9px;
+    float: left;
+}
+
+.Liste{
+    background: white;
+    margin: 15px 0 0 15px;
+    padding: 0 0;
+    text-align: left;
+    display: table;
+    border-collapse: collapse;
+    width: calc(100% - 15px);
+}
+
+.Liste .row {
+    border-bottom: 1px solid black;
+    border-left: 15px solid white;
+    border-right: 15px solid white;
+    display: table-row
+}
+
+.Liste .row .cell{
+    height: 40px;
+    padding: 10px 0 10px 0 !important;
+    width: 50%;
+    display: table-cell;
+    border: none !important;
+    border-radius: 0 !important;
+    color: #7F7F7F !important;
+    font : 20px arial;
+    margin: 0 !important;
+}
+
+.Liste .row .cell label{
+    color: black;
+}
+
+.Liste .row .cell .button {
+    background-color: white;
+    border: none;
+}
+
+.Liste .row .cell .button.collapsed:before{
+    font-family: 'Glyphicons Halflings';
+    content:" \e252";
+}
+
+.Liste .row .cell .button:before{
+    font-family: 'Glyphicons Halflings';
+    content:" \e253";
+}
+
+.Liste .row .cell .button:before{
+    font-family: 'Glyphicons Halflings';
+    content:" \e253";
+}
+
+.Liste .collapse.in {display: table-row-group;}
+
+.Liste .collapsing {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    display: table-row-group;
+.transition(height .35s ease);
+}

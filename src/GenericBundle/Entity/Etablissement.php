@@ -69,7 +69,7 @@ class Etablissement
     /**
      * @var string
      *
-     * @ORM\Column(name="geocode", type="string", length=45, nullable=false)
+     * @ORM\Column(name="geocode", type="string", length=45, nullable=true)
      */
     private $geocode;
 
@@ -141,11 +141,27 @@ class Etablissement
     private $qcmdef;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="etablissement")
+     * @ORM\JoinTable(name="referentiel",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="referentiel_etablissement_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="users_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $users;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->qcmdef = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -526,5 +542,39 @@ class Etablissement
     public function getSuspendu()
     {
         return $this->suspendu;
+    }
+
+    /**
+     * Add user
+     *
+     * @param \GenericBundle\Entity\User $user
+     *
+     * @return Etablissement
+     */
+    public function addUser(\GenericBundle\Entity\User $user)
+    {
+        $this->users[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \GenericBundle\Entity\User $user
+     */
+    public function removeUser(\GenericBundle\Entity\User $user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 }

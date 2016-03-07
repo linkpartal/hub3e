@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/adminecole.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     {% block CSS %}{% endblock %}
 
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
@@ -18,7 +18,9 @@
         <div class="col-xs-12 Liste">
             <div class="row">
                 <label class="cell" >Licence : <label>{{ licence.getId }}</label></label>
-                <label class="cell">Libelle : <label>{{ licence.getLibelle }}</label> <button style="float: right" type="button" data-toggle="collapse" data-target="#licence"></button></label>
+                <label class="cell">Libelle : <label>{{ licence.getLibelle }}</label>
+                    <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#licence"></button></label>
+
 
             </div>
             <div id="licence" class="collapse in" >

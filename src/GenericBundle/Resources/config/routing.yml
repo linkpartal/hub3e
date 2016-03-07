@@ -13,3 +13,6 @@ change_password:
 password_changed:
     path: /passwordchanged
     defaults: {_controller: GenericBundle:Default:passwordChanged }
+
+logout:
+    path:   /logout

@@ -5,10 +5,25 @@ namespace GenericBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\AttributeOverrides;
+use Doctrine\ORM\Mapping\AttributeOverride;
+use Doctrine\ORM\Mapping\Column;
 
 /**
  * @ORM\Entity(repositoryClass="GenericBundle\Repository\UserRepository")
  * @ORM\Table(name="users")
+ *@AttributeOverrides({
+ *      @AttributeOverride(name="email",
+ *          column=@Column(
+ *              unique   = false
+ *          )
+ *      ),
+ *      @AttributeOverride(name="emailCanonical",
+ *          column=@Column(
+ *              unique   = false
+ *          )
+ *      )
+ * })
  */
 class User extends BaseUser
 {
@@ -48,6 +63,13 @@ class User extends BaseUser
     private $telephone;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="photos", type="blob", nullable=true)
+     */
+    private $photos;
+
+    /**
      * @var \Tier
      *
      * @ORM\ManyToOne(targetEntity="Tier")
@@ -70,9 +92,40 @@ class User extends BaseUser
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Mission", mappedBy="users")
+     * @ORM\ManyToMany(targetEntity="Hobbies", mappedBy="users")
      */
-    private $missionmission;
+    private $hobbies;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Etablissement", mappedBy="users")
+     */
+    private $referenciel;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Langue", mappedBy="users")
+     */
+    private $langue;
+
+    /**
+     * @var \Infocomplementaire
+     *
+     * @ORM\ManyToOne(targetEntity="Infocomplementaire")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="info_id", referencedColumnName="id",unique=true,onDelete="CASCADE")
+     * })
+     */
+    private $info;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Reponsedef", mappedBy="users")
+     */
+    private $reponsedef;
 
     /**
      * Constructor
@@ -80,89 +133,34 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
-        $this->missionmission = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->langue = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->referenciel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->hobbies = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->reponsedef = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Set tier
+     * Set civilite
      *
-     * @param \GenericBundle\Entity\Tier $tier
+     * @param string $civilite
      *
      * @return User
      */
-    public function setTier(\GenericBundle\Entity\Tier $tier = null)
+    public function setCivilite($civilite)
     {
-        $this->tier = $tier;
+        $this->civilite = $civilite;
 
         return $this;
     }
 
     /**
-     * Get tier
+     * Get civilite
      *
-     * @return \GenericBundle\Entity\Tier
+     * @return string
      */
-    public function getTier()
+    public function getCivilite()
     {
-        return $this->tier;
-    }
-
-    /**
-     * Set etablissement
-     *
-     * @param \GenericBundle\Entity\Etablissement $etablissement
-     *
-     * @return User
-     */
-    public function setEtablissement(\GenericBundle\Entity\Etablissement $etablissement = null)
-    {
-        $this->etablissement = $etablissement;
-
-        return $this;
-    }
-
-    /**
-     * Get etablissement
-     *
-     * @return \GenericBundle\Entity\Etablissement
-     */
-    public function getEtablissement()
-    {
-        return $this->etablissement;
-    }
-
-    /**
-     * Add missionmission
-     *
-     * @param \GenericBundle\Entity\Mission $missionmission
-     *
-     * @return User
-     */
-    public function addMissionmission(\GenericBundle\Entity\Mission $missionmission)
-    {
-        $this->missionmission[] = $missionmission;
-
-        return $this;
-    }
-
-    /**
-     * Remove missionmission
-     *
-     * @param \GenericBundle\Entity\Mission $missionmission
-     */
-    public function removeMissionmission(\GenericBundle\Entity\Mission $missionmission)
-    {
-        $this->missionmission->removeElement($missionmission);
-    }
-
-    /**
-     * Get missionmission
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMissionmission()
-    {
-        return $this->missionmission;
+        return $this->civilite;
     }
 
     /**
@@ -214,30 +212,6 @@ class User extends BaseUser
     }
 
     /**
-     * Set civilite
-     *
-     * @param string $civilite
-     *
-     * @return User
-     */
-    public function setCivilite($civilite)
-    {
-        $this->civilite = $civilite;
-
-        return $this;
-    }
-
-    /**
-     * Get civilite
-     *
-     * @return string
-     */
-    public function getCivilite()
-    {
-        return $this->civilite;
-    }
-
-    /**
      * Set telephone
      *
      * @param string $telephone
@@ -261,10 +235,240 @@ class User extends BaseUser
         return $this->telephone;
     }
 
-    public function getExpiredAt()
+    /**
+     * Set photos
+     *
+     * @param string $photos
+     *
+     * @return User
+     */
+    public function setPhotos($photos)
     {
-        return $this->expiresAt;
+        $this->photos = $photos;
+
+        return $this;
     }
 
+    /**
+     * Get photos
+     *
+     * @return string
+     */
+    public function getPhotos()
+    {
+        return $this->photos;
+    }
 
+    /**
+     * Set tier
+     *
+     * @param \GenericBundle\Entity\Tier $tier
+     *
+     * @return User
+     */
+    public function setTier(\GenericBundle\Entity\Tier $tier = null)
+    {
+        $this->tier = $tier;
+
+        return $this;
+    }
+
+    /**
+     * Get tier
+     *
+     * @return \GenericBundle\Entity\Tier
+     */
+    public function getTier()
+    {
+        return $this->tier;
+    }
+
+    /**
+     * Set etablissement
+     *
+     * @param \GenericBundle\Entity\Etablissement $etablissement
+     *
+     * @return User
+     */
+    public function setEtablissement(\GenericBundle\Entity\Etablissement $etablissement = null)
+    {
+        $this->etablissement = $etablissement;
+
+        return $this;
+    }
+
+    /**
+     * Get etablissement
+     *
+     * @return \GenericBundle\Entity\Etablissement
+     */
+    public function getEtablissement()
+    {
+        return $this->etablissement;
+    }
+
+    /**
+     * Add hobby
+     *
+     * @param \GenericBundle\Entity\Hobbies $hobby
+     *
+     * @return User
+     */
+    public function addHobby(\GenericBundle\Entity\Hobbies $hobby)
+    {
+        $this->hobbies[] = $hobby;
+
+        return $this;
+    }
+
+    /**
+     * Remove hobby
+     *
+     * @param \GenericBundle\Entity\Hobbies $hobby
+     */
+    public function removeHobby(\GenericBundle\Entity\Hobbies $hobby)
+    {
+        $this->hobbies->removeElement($hobby);
+    }
+
+    /**
+     * Get hobbies
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHobbies()
+    {
+        return $this->hobbies;
+    }
+
+    /**
+     * Add referenciel
+     *
+     * @param \GenericBundle\Entity\Etablissement $referenciel
+     *
+     * @return User
+     */
+    public function addReferenciel(\GenericBundle\Entity\Etablissement $referenciel)
+    {
+        $this->referenciel[] = $referenciel;
+
+        return $this;
+    }
+
+    /**
+     * Remove referenciel
+     *
+     * @param \GenericBundle\Entity\Etablissement $referenciel
+     */
+    public function removeReferenciel(\GenericBundle\Entity\Etablissement $referenciel)
+    {
+        $this->referenciel->removeElement($referenciel);
+    }
+
+    /**
+     * Get referenciel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReferenciel()
+    {
+        return $this->referenciel;
+    }
+
+    /**
+     * Add langue
+     *
+     * @param \GenericBundle\Entity\Langue $langue
+     *
+     * @return User
+     */
+    public function addLangue(\GenericBundle\Entity\Langue $langue)
+    {
+        $this->langue[] = $langue;
+
+        return $this;
+    }
+
+    /**
+     * Remove langue
+     *
+     * @param \GenericBundle\Entity\Langue $langue
+     */
+    public function removeLangue(\GenericBundle\Entity\Langue $langue)
+    {
+        $this->langue->removeElement($langue);
+    }
+
+    /**
+     * Get langue
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLangue()
+    {
+        return $this->langue;
+    }
+
+    /**
+     * Set info
+     *
+     * @param \GenericBundle\Entity\Infocomplementaire $info
+     *
+     * @return User
+     */
+    public function setInfo(\GenericBundle\Entity\Infocomplementaire $info = null)
+    {
+        $this->info = $info;
+
+        return $this;
+    }
+
+    /**
+     * Get info
+     *
+     * @return \GenericBundle\Entity\Infocomplementaire
+     */
+    public function getInfo()
+    {
+        return $this->info;
+    }
+
+    public function getExpiredAt()
+    {
+        $this->expiresAt;
+    }
+
+    /**
+     * Add reponsedef
+     *
+     * @param \GenericBundle\Entity\Reponsedef $reponsedef
+     *
+     * @return User
+     */
+    public function addReponsedef(\GenericBundle\Entity\Reponsedef $reponsedef)
+    {
+        $this->reponsedef[] = $reponsedef;
+
+        return $this;
+    }
+
+    /**
+     * Remove reponsedef
+     *
+     * @param \GenericBundle\Entity\Reponsedef $reponsedef
+     */
+    public function removeReponsedef(\GenericBundle\Entity\Reponsedef $reponsedef)
+    {
+        $this->reponsedef->removeElement($reponsedef);
+    }
+
+    /**
+     * Get reponsedef
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReponsedef()
+    {
+        return $this->reponsedef;
+    }
 }

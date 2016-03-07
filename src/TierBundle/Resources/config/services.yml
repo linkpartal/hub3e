@@ -1,0 +1,4 @@
+services:
+#    tier.example:
+#        class: TierBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]

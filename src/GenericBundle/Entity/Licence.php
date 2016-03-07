@@ -31,14 +31,14 @@ class Licence
     /**
      * @var string
      *
-     * @ORM\Column(name="DateDebut", type="string", length=45, nullable=true)
+     * @ORM\Column(name="DateDebut", type="date")
      */
     private $datedebut;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="DateFin", type="string", length=45, nullable=true)
+     * @ORM\Column(name="DateFin", type="date")
      */
     private $datefin;
 
@@ -62,6 +62,13 @@ class Licence
      * @ORM\Column(name="max_mission", type="integer", nullable=false)
      */
     private $maxmission;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="suspendu", type="boolean", nullable=false)
+     */
+    private $suspendu= false;
 
     /**
      * @var \Tier
@@ -251,5 +258,29 @@ class Licence
     public function getMaxmission()
     {
         return $this->maxmission;
+    }
+
+    /**
+     * Set suspendu
+     *
+     * @param boolean $suspendu
+     *
+     * @return Licence
+     */
+    public function setSuspendu($suspendu)
+    {
+        $this->suspendu = $suspendu;
+
+        return $this;
+    }
+
+    /**
+     * Get suspendu
+     *
+     * @return boolean
+     */
+    public function getSuspendu()
+    {
+        return $this->suspendu;
     }
 }

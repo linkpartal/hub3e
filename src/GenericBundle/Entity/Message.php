@@ -3,56 +3,75 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * Message
  *
- * @ORM\Table(name="message", indexes={@ORM\Index(name="fk_user_has_user_user2_idx", columns={"user_id1"}), @ORM\Index(name="fk_user_has_user_user1_idx", columns={"user_id"})})
+ * @ORM\Table(name="message", uniqueConstraints={@UniqueConstraint(name="unique_Message", columns={"date","expediteur","destinataire"})})
  * @ORM\Entity
  */
 class Message
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date", type="date", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(name="date", type="datetime", nullable=false)
      */
     private $date;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Message", type="string", length=255, nullable=false)
+     * @ORM\Column(name="Message", type="text", nullable=false)
      */
     private $message;
 
     /**
-     * @var \User
+     * @var integer
      *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="User")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id1", referencedColumnName="id")
-     * })
+     * @ORM\Column(name="statut", type="integer", nullable=true)
      */
-    private $user1;
+    private $statut;
 
     /**
      * @var \User
      *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="expediteur", referencedColumnName="id")
      * })
      */
-    private $user;
+    private $expediteur;
 
+    /**
+     * @var \User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="destinataire", referencedColumnName="id")
+     * })
+     */
+    private $destinataire;
 
+    /**
+     * @var \Mission
+     *
+     * @ORM\ManyToOne(targetEntity="Mission")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="mission", referencedColumnName="id")
+     * })
+     */
+    private $mission;
 
     /**
      * Set date
@@ -103,50 +122,108 @@ class Message
     }
 
     /**
-     * Set user1
+     * Set expediteur
      *
-     * @param \GenericBundle\Entity\User $user1
+     * @param \GenericBundle\Entity\User $expediteur
      *
      * @return Message
      */
-    public function setUser1(\GenericBundle\Entity\User $user1)
+    public function setExpediteur(\GenericBundle\Entity\User $expediteur)
     {
-        $this->user1 = $user1;
+        $this->expediteur = $expediteur;
 
         return $this;
     }
 
     /**
-     * Get user1
+     * Get expediteur
      *
      * @return \GenericBundle\Entity\User
      */
-    public function getUser1()
+    public function getExpediteur()
     {
-        return $this->user1;
+        return $this->expediteur;
     }
 
     /**
-     * Set user
+     * Set destinataire
      *
-     * @param \GenericBundle\Entity\User $user
+     * @param \GenericBundle\Entity\User $destinataire
      *
      * @return Message
      */
-    public function setUser(\GenericBundle\Entity\User $user)
+    public function setDestinataire(\GenericBundle\Entity\User $destinataire)
     {
-        $this->user = $user;
+        $this->destinataire = $destinataire;
 
         return $this;
     }
 
     /**
-     * Get user
+     * Get destinataire
      *
      * @return \GenericBundle\Entity\User
      */
-    public function getUser()
+    public function getDestinataire()
     {
-        return $this->user;
+        return $this->destinataire;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set mission
+     *
+     * @param \GenericBundle\Entity\Mission $mission
+     *
+     * @return Message
+     */
+    public function setMission(\GenericBundle\Entity\Mission $mission = null)
+    {
+        $this->mission = $mission;
+
+        return $this;
+    }
+
+    /**
+     * Get mission
+     *
+     * @return \GenericBundle\Entity\Mission
+     */
+    public function getMission()
+    {
+        return $this->mission;
+    }
+
+    /**
+     * Set statut
+     *
+     * @param integer $statut
+     *
+     * @return Message
+     */
+    public function setStatut($statut)
+    {
+        $this->statut = $statut;
+
+        return $this;
+    }
+
+    /**
+     * Get statut
+     *
+     * @return integer
+     */
+    public function getStatut()
+    {
+        return $this->statut;
     }
 }
