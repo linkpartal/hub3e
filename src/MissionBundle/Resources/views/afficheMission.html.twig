@@ -53,7 +53,7 @@
 {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
 <div id="Diffusion_formation" class="popup">
     <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-5 col-xs-2" style="padding: 0;border:20px solid white;display: block;top:150px">
+    <div class="col-xs-offset-3 col-xs-4" style="padding: 0;border:20px solid white;display: block;top:150px">
         <input class="row" style="width: 100%" type="text" placeholder="Recherche" onkeyup="rechercheformation(this.value)">
         <form id="formDiffusion" class="formulaire" method="post">
             <div class="div_form" style="display: block">
@@ -375,7 +375,7 @@
                             <div class="col-xs-12"  >Modifier la fiche</div>
                         </button>
 
-                        <button onclick="post('{{ path('supprimer_Mission',{'id': mission.getId }) }}',true)" type="button" class="list-group-item rightMenu" >
+                        <button onclick="if(confirm('Voulez-vous supprimer la mission ?')){post('{{ path('supprimer_Mission',{'id': mission.getId }) }}',true)}" type="button" class="list-group-item rightMenu" >
                             <div class="col-xs-12" >Supprimer Mission</div>
                         </button>
                         {% if is_granted('ROLE_ADMINSOC') %}
@@ -396,7 +396,7 @@
 
     </div>
 {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
-    <div id="apprenants_mission" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;width: 100%;height: 90%;visibility: hidden;position: absolute;">
+    <div id="apprenants_mission" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;width: 100%;height: 82%;visibility: hidden;position: absolute;">
         <div class="row" style="margin:10px 0 0 10px"  >
             <div>
                 <span class="glyphicon glyphicon-search" ></span>
