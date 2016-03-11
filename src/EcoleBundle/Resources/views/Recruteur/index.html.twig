@@ -592,8 +592,8 @@
 
                 </div>
                 <div id="user" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
-                    {% if users is defined %}
-                        {% for u in users %}
+                    {% if apprenants is defined %}
+                        {% for u in apprenants %}
                             <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId} ) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
                                 <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.getUsername }},{{ u.prenom }},{{ u.email }},{% if u.tier %}{{ u.tier.siren }}{% elseif u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
                                 <div style="display: none;"></div>
@@ -613,7 +613,7 @@
                     {% if import_apprenants is defined %}
                         {% for u in import_apprenants %}
                             <button onclick="postiframeUser('{{ path('Afficher_Sas',{'id': u.getId }) }}',this)" id="import{{ u.getId }}" type="button" class="list-group-item butonLigne">
-                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.prenom }},{{ u.email }},{{ u.info.adresse }},{{ u.info.cp }},{{ u.info.insee }},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
+                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.prenom }},{{ u.email }},{% if u.info %}{{ u.info.adresse }},{{ u.info.cp }},{{ u.info.insee }}{% endif %},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
                                 <div style="display: none;"></div>
                                 <div class="col-xs-12 part" title="{{u.getPrenom ~ '.'~u.getNom}}">{{u.getPrenom ~ '.'~u.getNom}}</div>
                                 <div class="col-xs-12 part" style="height: 31px; text-align: left;">

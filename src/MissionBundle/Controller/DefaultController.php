@@ -53,12 +53,7 @@ class DefaultController extends Controller
             $em->persist($diffuser);
             $em->flush();
         }
-
-
-
-        return $this->redirect($this->generateUrl('affiche_etab',array('id'=>$etablissement->getId())));
-
-
+        return $this->render('GenericBundle::ReloadParent.html.twig');
     }
 
     public function affichageMissionAction($id)

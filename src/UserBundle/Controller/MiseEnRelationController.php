@@ -251,6 +251,7 @@ class MiseEnRelationController extends Controller
             }
             //return $rep->setData(array($request->get('CompteRendu'),$request->get('CompteRenduAbsent')));
             $em->persist($compterendu);
+            $rdv->setStatut(2);
             $em->flush();
             return $rep->setData(1);
         }

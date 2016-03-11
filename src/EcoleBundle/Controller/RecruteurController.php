@@ -23,7 +23,7 @@ class RecruteurController extends Controller
         $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');
 
-        $apprenants = $this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($user->getEtablissement()->getTier());
+        $apprenants = $this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($user->getEtablissement());
         $import_apprenant = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$user));
 
         foreach($apprenants as $key => $value)
@@ -53,7 +53,7 @@ class RecruteurController extends Controller
             }
         }
 
-        return $this->render('EcoleBundle:Recruteur:index.html.twig', array('notifications'=>$jsonContent ,'users'=>$apprenants,'import_apprenants'=>$import_apprenant,
+        return $this->render('EcoleBundle:Recruteur:index.html.twig', array('notifications'=>$jsonContent ,'apprenants'=>$apprenants,'import_apprenants'=>$import_apprenant,
             'societes'=>$user->getReferenciel(),'missions'=>$mes_missions,'image'=>$user->getPhotos(),'formations'=>$formation));
     }
 

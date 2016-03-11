@@ -43,7 +43,7 @@ importer_candidat:
     defaults: { _controller: UserBundle:Default:SAStoUser}
 
 fusionner_apprenant:
-    path: /admin/fusion_apprenant/id_sas={sas}/id_user={user}
+    path: /admin/fusion_apprenant/id_sas={sas}
     defaults: { _controller: UserBundle:Default:Fusionner}
 
 afficher_profil:

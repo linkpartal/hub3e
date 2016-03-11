@@ -236,13 +236,22 @@ class DefaultController extends Controller
     {
         $userManager = $this->get('fos_user.user_manager');
         $newuser = $userManager->createUser();
-        $newuser->setUsername($request->get('_Username'));
-        $newuser->setEmail($request->get('_mail'));
-        $newuser->addRole($request->get('_role'));
-        $newuser->setCivilite($request->get('civilite'));
-        $newuser->setTelephone($request->get('_Tel'));
-        $newuser->setPrenom($request->get('_Prenom'));
-        $newuser->setNom($request->get('_Nom'));
+        if($request->get('_Username')){
+            $usernameexist = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('username'=>$request->get('_Username')));
+            if($usernameexist){
+                $newuser->setUsername($request->get('_Username').''.count($usernameexist));
+            }
+            else{
+                $newuser->setUsername($request->get('_Username'));
+            }
+            $newuser->setEmail($request->get('_mail'));
+            $newuser->addRole($request->get('_role'));
+            $newuser->setCivilite($request->get('civilite'));
+            $newuser->setTelephone($request->get('_Tel'));
+            $newuser->setPrenom($request->get('_Prenom'));
+            $newuser->setNom($request->get('_Nom'));
+        }
+
 
         //generate a password
         $tokenGenerator = $this->get('fos_user.util.token_generator');
@@ -311,7 +320,7 @@ class DefaultController extends Controller
             ->setSubject('Email')
             ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
             ->setTo($request->get('_mail'))
-            ->setBody($this->renderView($modele,array('username'=>$request->get('_Username'), 'password'=>$password))
+            ->setBody($this->renderView($modele,array('username'=>$newuser->getUsername(), 'password'=>$password))
                 ,'text/html'
             );
         $this->get('mailer')->send($message);
@@ -1008,8 +1017,15 @@ class DefaultController extends Controller
 
     public function afficherImportsAction()
     {
+        $imports =$this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser()));
+        foreach($imports as $import){
+            if($import->getPhotos())
+            {
+                $import->setPhotos(base64_encode(stream_get_contents($import->getPhotos())));
+            }
+        }
         return $this->render('UserBundle:Gestion:Import.html.twig',
-            array('imports'=>$this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser()))));
+            array('imports'=>$imports));
     }
 
     public function supprimerImportsAction($id)
@@ -1061,9 +1077,25 @@ class DefaultController extends Controller
     public function afficherDuplicaAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $rep = new JsonResponse();
         $users = $em->getRepository('GenericBundle:User')->findApprenantDuplicata($id);
-        return $this->render('UserBundle:Gestion:IframeDuplicata.html.twig', array('duplicas'=>$users));
+        $results = array();
+        foreach($users as $user){
+            if($user->getPhotos())
+            {
+                $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
+            }
+            if($user->getInfo())
+            {
+                array_push($results,array($user->getId(),$user->getPhotos(),$user->getNom(),$user->getPrenom(),$user->getTelephone(),
+                    $user->getEmail(),$user->getInfo()->getLieunaissance(),date_format($user->getInfo()->getDatenaissance(),'d/m/Y') ));
+            }
+            else{
+                array_push($results,array($user->getId(),$user->getPhotos(),$user->getNom(),$user->getPrenom(),$user->getTelephone(),$user->getEmail()));
+            }
+
+        }
+        return $rep->setData($results);
     }
 
     public function SAStoUserAction($id)
@@ -1078,9 +1110,9 @@ class DefaultController extends Controller
             return $response->setData(array('Ajout'=>'0'));
         }
         else{
-            //$userManager = $this->get('fos_user.user_manager');
-            //$newuser = $userManager->createUser();
-            $newuser = new User();
+            $userManager = $this->get('fos_user.user_manager');
+            $newuser = $userManager->createUser();
+            //$newuser = new User();
             $newuser->setCivilite($import->getCivilite());
             $newuser->setNom($import->getNom());
             $newuser->setEmail($import->getEmail());
@@ -1089,9 +1121,16 @@ class DefaultController extends Controller
             $newuser->setEtablissement($import->getEtablissement());
             $newuser->setPhotos($import->getPhotos());
             $newuser->addRole('ROLE_APPRENANT');
-            $newuser->setUsername($import->getPrenom().'.'.$import->getNom());
+            $usernameexist = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('username'=>$import->getPrenom().'.'.$import->getNom()));
+            if($usernameexist){
+                $newuser->setUsername($import->getPrenom().'.'.$import->getNom().''.count($usernameexist));
+            }
+            else{
+                $newuser->setUsername($import->getPrenom().'.'.$import->getNom());
+            }
 
             $newuser->setInfo($import->getInfo());
+            $import->setInfo(null);
 
             //generate a password
             $tokenGenerator = $this->get('fos_user.util.token_generator');
@@ -1102,7 +1141,6 @@ class DefaultController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($newuser);
             $em->flush();
-
             $date = new \DateTime();
             $newuser->getInfo()->setDaterecup($date);
             foreach($import->getHobbies() as $hobby)
@@ -1120,29 +1158,32 @@ class DefaultController extends Controller
             {
                 $experience->setUser($newuser);
                 $experience->setImportCandidat(null);
+                $em->flush();
             }
             foreach($em->getRepository('GenericBundle:Diplome')->findBy(array('importCandidat'=>$import)) as $diplome)
             {
                 $diplome->setUser($newuser);
                 $diplome->setImportCandidat(null);
+                $em->flush();
             }
             foreach($em->getRepository('GenericBundle:Document')->findBy(array('importCandidat'=>$import)) as $document)
             {
                 $document->setUser($newuser);
                 $document->setImportCandidat(null);
+                $em->flush();
             }
             foreach($em->getRepository('GenericBundle:Parents')->findBy(array('importCandidat'=>$import)) as $parents)
             {
                 $parents->setUser($newuser);
                 $parents->setImportCandidat(null);
+                $em->flush();
             }
             foreach($em->getRepository('GenericBundle:Recommandation')->findBy(array('importCandidat'=>$import)) as $recommandation)
             {
                 $recommandation->setUser($newuser);
                 $recommandation->setImportCandidat(null);
+                $em->flush();
             }
-
-            $em->flush();
 
 
             $superadmins = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_SUPER_ADMIN');
@@ -1190,20 +1231,21 @@ class DefaultController extends Controller
                 ->setSubject('Email')
                 ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
                 ->setTo($import->getEmail())
-                ->setBody($this->renderView($modele,array('username'=>$import->getPrenom().'.'.$import->getNom(), 'password'=>$password))
+                ->setBody($this->renderView($modele,array('username'=>$newuser->getUsername(), 'password'=>$password))
                     ,'text/html'
                 );
             $this->get('mailer')->send($message);
+
             $em->remove($import);
             $em->flush();
             return $response->setData(array('Ajout'=>'1'));
         }
     }
 
-    public function FusionnerAction($sas,$user){
+    public function FusionnerAction($sas,Request $request){
         $em = $this->getDoctrine()->getEntityManager();
         $import = $em->getRepository('GenericBundle:ImportCandidat')->find($sas);
-        $userfus = $em->getRepository('GenericBundle:User')->find($user);
+        $userfus = $em->getRepository('GenericBundle:User')->find($request->get('DuplicaPopUpRadioUSer'));
         if(!$userfus->getCivilite()){
             $userfus->setCivilite($import->getCivilite());
         }
@@ -1351,9 +1393,7 @@ class DefaultController extends Controller
             }
         }
 
-        $info = $import->getInfo();
         $em->remove($import);
-        $em->remove($info);
         $em->flush();
 
         return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
