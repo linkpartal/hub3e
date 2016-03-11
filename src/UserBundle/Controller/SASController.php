@@ -104,6 +104,7 @@ class SASController extends Controller
             $info->setAdresse($request->get('_Adresse'));
             $info->setFacebook($request->get('_Facebook'));
             $info->setLinkedin($request->get('_Linkedin'));
+            $info->setDatemodification(date_create());
             if($request->get('_Mobilite'))
             {
                 $info->setMobilite($request->get('_Mobilite'));
@@ -126,6 +127,7 @@ class SASController extends Controller
             $info->setAdresse($request->get('_Adresse'));
             $info->setFacebook($request->get('_Facebook'));
             $info->setLinkedin($request->get('_Linkedin'));
+            $info->setDatecreation(date_create());
             if($request->get('_Mobilite'))
             {
                 $info->setMobilite($request->get('_Mobilite'));

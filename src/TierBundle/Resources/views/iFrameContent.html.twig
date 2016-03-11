@@ -999,7 +999,7 @@
 
                                         <div class="row">
                                             <label class="cell"  >CodeMission : <label style="font-size: medium">{{ mission.getCodemission }}</label></label>
-                                            <label class="cell" >Date : <label style="font-size: medium" > {{ mission.getDate|date('d/m/Y H:i')}}</label>
+                                            <label class="cell" >Date : <label style="font-size: medium" > {{ mission.getDatecreation|date('d/m/Y H:i')}}</label>
 
                                                 <img   style="float:right;" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerligne('{{ path('supprimer_Mission',{'id': mission.getId}) }}',this)" />
 

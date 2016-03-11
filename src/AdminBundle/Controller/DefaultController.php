@@ -50,7 +50,7 @@ class DefaultController extends Controller
 
         $import_apprenant = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$user));
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
-        $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array(),array('date'=>'DESC'));
+        $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array(),array('datecreation'=>'DESC'));
         $qcms = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findAll();
         $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');

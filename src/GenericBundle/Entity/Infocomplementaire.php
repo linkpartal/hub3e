@@ -43,6 +43,20 @@ class Infocomplementaire
     private $daterecup;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datecreation", type="datetime", nullable=true)
+     */
+    private $datecreation;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datemodification", type="datetime", nullable=true)
+     */
+    private $datemodification;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="CPNaissance", type="string", length=45, nullable=true)
@@ -125,6 +139,8 @@ class Infocomplementaire
      * @ORM\ManyToMany(targetEntity="VillesFranceFree", mappedBy="infocomplementaire")
      */
     private $villesFranceFreeVille;
+
+
 
     /**
      * Constructor
@@ -514,5 +530,53 @@ class Infocomplementaire
     public function getInsee()
     {
         return $this->insee;
+    }
+
+    /**
+     * Set datecreation
+     *
+     * @param \DateTime $datecreation
+     *
+     * @return Infocomplementaire
+     */
+    public function setDatecreation($datecreation)
+    {
+        $this->datecreation = $datecreation;
+
+        return $this;
+    }
+
+    /**
+     * Get datecreation
+     *
+     * @return \DateTime
+     */
+    public function getDatecreation()
+    {
+        return $this->datecreation;
+    }
+
+    /**
+     * Set datemodification
+     *
+     * @param \DateTime $datemodification
+     *
+     * @return Infocomplementaire
+     */
+    public function setDatemodification($datemodification)
+    {
+        $this->datemodification = $datemodification;
+
+        return $this;
+    }
+
+    /**
+     * Get datemodification
+     *
+     * @return \DateTime
+     */
+    public function getDatemodification()
+    {
+        return $this->datemodification;
     }
 }

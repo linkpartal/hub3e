@@ -18,7 +18,6 @@ class RecruteurController extends Controller
 
         // les formation de l'etablissement
         $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$user->getEtablissement() ));
-        $hobbie = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->findAll();
 
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
         $serializer = $this->get('jms_serializer');
@@ -34,10 +33,28 @@ class RecruteurController extends Controller
                 unset($apprenants[$key]);
             }
         }
-        $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date'=>'DESC'));
+
+
+        $mes_missions = array();
+
+        $formations = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$user->getEtablissement()));
+        foreach($formations as $formation)
+        {
+            $diffusions = $this->getDoctrine()->getRepository('GenericBundle:Diffusion')->findBy(array('formation'=>$formation));
+            foreach($diffusions as $diffusion)
+            {
+                if($diffusion->getStatut()==5)
+                {
+                    array_push($mes_missions,$diffusion->getMission());
+                }
+                elseif($diffusion->getStatut()==1){
+                    array_push($missions_propose,$diffusion->getMission());
+                }
+            }
+        }
+
         return $this->render('EcoleBundle:Recruteur:index.html.twig', array('notifications'=>$jsonContent ,'users'=>$apprenants,'import_apprenants'=>$import_apprenant,
-            'societes'=>$user->getReferenciel(),'missions'=>$missions,'image'=>$user->getPhotos(),'formations'=>$formation,'hobbies' =>$hobbie,
-            ));
+            'societes'=>$user->getReferenciel(),'missions'=>$mes_missions,'image'=>$user->getPhotos(),'formations'=>$formation));
     }
 
 

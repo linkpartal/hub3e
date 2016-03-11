@@ -103,6 +103,13 @@
                         <textarea style="height: 200px;resize: none;" class="input" name="MessageAcceptation" placeholder="Votre profil nous intéresse,nous vous proposons une plage de rendez-vous en lien Doodle" required ></textarea>
                     </div>
                     <div class="col-xs-12">
+                        <button type="button" onclick="if(this.parentElement.children.length < 4){var clone = this.nextElementSibling.cloneNode(true);this.parentNode.appendChild(clone);}">+</button>
+                        <section>
+                            <input name="dateRDV[]" type="date" required><input name="timeRDV[]" type="time" required>
+                            <button type="button" onclick="if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}">-</button>
+                        </section>
+                    </div>
+                    <div class="col-xs-12">
                         <label style="text-align:left;width:100%;font-family: Arial">Proposer un lien externe pour la prise de rendez-vous (type Doodle) : </label>
                     </div>
 
@@ -276,12 +283,14 @@
                             <label id="statut{{ msg.id }}" style="font:18px arial;margin-top: 30px" > Répondez </label>
                         {% endif %}
                     </div>
-                    <div onclick="informationApprenant('{{msg.getExpediteur.getPhotos}}','{{ msg.getExpediteur.getCivilite }}','{{ msg.getExpediteur.getNom }}','{{ msg.getExpediteur.getPrenom }}',
-                            '{{ msg.getExpediteur.getEmail }}','{{ msg.getExpediteur.getTelephone }}','{{ msg.getExpediteur.getInfo.getDateNaissance|date("d/m/Y") }}',
-                            '{{ msg.getExpediteur.getInfo.getCpNaissance }}','{{ msg.getExpediteur.getInfo.getLieunaissance }}','{{ msg.getExpediteur.getInfo.getAdresse }}','{{ msg.message }}');
-                            show('FicheApprenant');idMessage={{ msg.id }}" class="col-xs-1" style="height: 100%">
+                    <div {% if not msg.statut == -1 and not msg.statut == 1 %}
+                            onclick="informationApprenant('{{msg.getExpediteur.getPhotos|escape('js')}}','{{ msg.getExpediteur.getCivilite|escape('js') }}','{{ msg.getExpediteur.getNom|escape('js') }}','{{ msg.getExpediteur.getPrenom|escape('js') }}',
+                            '{{ msg.getExpediteur.getEmail|escape('js') }}','{{ msg.getExpediteur.getTelephone|escape('js') }}','{{ msg.getExpediteur.getInfo.getDateNaissance|date("d/m/Y") }}',
+                            '{{ msg.getExpediteur.getInfo.getCpNaissance|escape('js') }}','{{ msg.getExpediteur.getInfo.getLieunaissance|escape('js') }}','{{ msg.getExpediteur.getInfo.getAdresse|escape('js') }}','{{ msg.message|escape('js') }}');
+                            show('FicheApprenant');idMessage={{ msg.id }}"
+                            {% endif %}
+                            class="col-xs-1" style="height: 100%">
                         <span class="glyphicon glyphicon-option-vertical" style="margin-top:40px;height:20px;color:#8c8c8c"></span>
-
                     </div>
                 {% else %}
                     <div class="col-xs-2" >
@@ -310,9 +319,12 @@
                             <label id="statut{{ msg.id }}" style="font:18px arial;margin-top: 30px" > Répondez </label>
                         {% endif %}
                     </div>
-                    <div onclick="informationMission('{{ msg.mission.etablissement.tier.logo }}','{{ msg.mission.intitule }}','{{ msg.mission.etablissement.tier.raisonsoc }}','{{ msg.mission.descriptif }}',
-                            '{{ msg.mission.codemission }}','{{ msg.mission.etablissement.adresse }}','{{ msg.mission.etablissement.ville  }}','{{ msg.mission.etablissement.codepostal }}','{{ msg.message }}')
-                            show('FicheMission');idMessage={{ msg.id }}" class="col-xs-1" style="height: 100%">
+                    <div {% if not msg.statut == -1 and not msg.statut == 1 %}
+                            onclick="informationMission('{{ msg.mission.etablissement.tier.logo|escape('js') }}','{{ msg.mission.intitule|escape('js') }}','{{ msg.mission.etablissement.tier.raisonsoc|escape('js') }}','{{ msg.mission.descriptif|escape('js') }}',
+                            '{{ msg.mission.codemission|escape('js') }}','{{ msg.mission.etablissement.adresse|escape('js') }}','{{ msg.mission.etablissement.ville|escape('js')  }}','{{ msg.mission.etablissement.codepostal|escape('js') }}','{{ msg.message|escape('js') }}');
+                            show('FicheMission');idMessage={{ msg.id }}"
+                            {% endif %}
+                            class="col-xs-1" style="height: 100%">
                         <span class="glyphicon glyphicon-option-vertical" style="margin-top:40px;height:20px;color:#8c8c8c"></span>
 
                     </div>
@@ -355,18 +367,29 @@
             url: route,
             data: $('#'+div).serialize(),
             success: function(data){
-                document.getElementById(div).parentNode.parentNode.style.display = 'none';
-                document.getElementById(div).reset();
-                if(data===-1)
+                if(data===99)
                 {
-                    document.getElementById('statut'+idMessage).style.color = 'red';
-                    document.getElementById('statut'+idMessage).innerHTML = 'Décliner';
+                    alert('Verifier que vous avez bien rempli votre message');
                 }
-                if(data===1)
-                {
-                    document.getElementById('statut'+idMessage).style.color = 'green';
-                    document.getElementById('statut'+idMessage).innerHTML = 'Valider';
+                else{
+                    document.getElementById(div).parentNode.parentNode.style.display = 'none';
+                    document.getElementById(div).reset();
+                    if(data===-1)
+                    {
+                        document.getElementById('statut'+idMessage).style.color = 'red';
+                        document.getElementById('statut'+idMessage).innerHTML = 'Décliner';
+                        document.getElementById('statut'+idMessage).parentNode.nextElementSibling.setAttribute('onclick','');
+                    }
+                    if(data===1)
+                    {
+                        document.getElementById('statut'+idMessage).style.color = 'green';
+                        document.getElementById('statut'+idMessage).innerHTML = 'Valider';
+                        document.getElementById('statut'+idMessage).parentNode.nextElementSibling.setAttribute('onclick','');
+                    }
                 }
+
+
+
             }
         });
     }

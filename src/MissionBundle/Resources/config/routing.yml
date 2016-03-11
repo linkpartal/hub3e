@@ -31,4 +31,8 @@ postuler_Mission:
     path: /postuler/id={id}
     defaults: { _controller: MissionBundle:Default:Postuler}
 
+Assigner_tuteur:
+    path: /assignertuteur/id={id}
+    defaults: { _controller: MissionBundle:Default:AssignerTuteur}
+
 

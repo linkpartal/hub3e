@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>
+    {{ message }}<br>
+    {% if mission is defined and apprenant is defined %}
+        Apprenant : {{ apprenant.civilite }} {{ apprenant.nom }} {{ apprenant.prenom }}.
+        Mission : adresse {{ mission.etablissement.adresse }} - {{ mission.etablissement.ville }} {{ mission.etablissement.codepostal }}, intulutée {{ mission.intitule }} dans le domaine de {{ mission.domaine }}<br>
+        chez la société {{ mission.etablissement.tier.raisonsoc }}
+    {% elseif mission is defined %}
+        La mission se situe à l'adresse {{ mission.etablissement.adresse }} - {{ mission.etablissement.ville }} {{ mission.etablissement.codepostal }}, intulutée {{ mission.intitule }} dans le domaine de {{ mission.domaine }}<br>
+        chez la société {{ mission.etablissement.tier.raisonsoc }}
+    {% endif %}
+<p>
+    Vous en souhaitant bonne réception, <br/> Cordialement.
+</p>
+</body>
+</html>
