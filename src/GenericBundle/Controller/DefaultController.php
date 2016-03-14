@@ -78,6 +78,29 @@ class DefaultController extends Controller
     }
 
     public function loadloginAction(){
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN'))
+        {
+            return $this->redirect('admin');
+        }
+        elseif($this->get('security.authorization_checker')->isGranted('ROLE_ADMINECOLE'))
+        {
+            return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$user->getTier()->getRaisonSoc())));
+        }
+        elseif($this->get('security.authorization_checker')->isGranted('ROLE_ADMINSOC'))
+        {
+            return $this->redirect($this->generateUrl('societe_admin',array('societe'=>$user->getTier()->getRaisonSoc())));
+        }
+        elseif($this->get('security.authorization_checker')->isGranted('ROLE_RECRUTEUR'))
+        {
+            return $this->redirect($this->generateUrl('ecole_recruteur',array('ecole'=>$user->getEtablissement()->getTier()->getRaisonSoc())));
+        }
+        elseif($this->get('security.authorization_checker')->isGranted('ROLE_APPRENANT'))
+        {
+            return $this->redirect($this->generateUrl('ecole_apprenant',array('apprenant'=>$user)));
+
+        }
         return $this->redirect('login');
     }
 

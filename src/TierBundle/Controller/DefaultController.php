@@ -24,6 +24,9 @@ class DefaultController extends Controller
 
 
         if ($tier) {
+            if($tier->getEcole()){
+                return $reponse->setData(array('status'=>'is_ecole'));
+            }
             for($i = 0; $i< count($request->get('_SIRET'));$i++) {
                 $etablissement = $em->getRepository('GenericBundle:Etablissement')->findOneBy(array('siret'=>$request->get('_SIRET')[$i]));
                 if($etablissement)
@@ -88,16 +91,7 @@ class DefaultController extends Controller
 
         $em->flush();
 
-        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_SUPER_ADMIN'))
-        {
-            return $this->redirect($this->generateUrl('metier_user_admin'));
-        }
-        elseif($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_ADMINECOLE'))
-        {
-            return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$this->get('security.token_storage')->getToken()->getUser()->getTier()->getRaisonsoc())));
-        }
-
-
+        return $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function affichageAction($id)
@@ -150,7 +144,7 @@ class DefaultController extends Controller
         }
 
         // Recup des licences associer au tier de l'etablissement.
-        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier() ));
+        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier(),'suspendu'=>false ));
 
 
         // les formation de l'etablissement
@@ -387,7 +381,7 @@ class DefaultController extends Controller
             $etablissement->addUser($user);
             $em->flush();
         }
-        return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$user->getTier()->getRaisonsoc())));
+        return $this->redirect($_SERVER['HTTP_REFERER']);
 
     }
 

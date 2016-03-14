@@ -7,14 +7,11 @@
     <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="icon" type="image/png" href="{{ asset('image/Logo_Hub_3e.png') }}" />
-    {% block CSS %}{% endblock %}
 
-    <title>HUB3E - {% block title %}Ecole{% endblock %}</title>
+    <title>HUB3E - {% block title %}Apprenant{% endblock %}</title>
 
 </head>
-<body onload="putbadged()">
-
-
+<body onload="loading();putbadged();getMyGeocode();">
 
 <div class="container">
     {% block TopBar %}
@@ -46,13 +43,10 @@
                         style="padding:0;width: 100%; height: 20px; border-radius: 0; background: none; border: 0;color: white">
                     {% if image %}
                         <img  src="data:image/jpg;base64,{{image}}" style="border-radius:50%; width:32px; height:32px" >
+                    {% elseif app.user.getCivilite == 'Mme' or app.user.getCivilite == 'Madame' %}
+                        <img  src="{{ asset('image/femme.jpg') }}" style="border-radius:50%; width:32px; height:32px" >
                     {% else %}
-
-                        {% if app.user.getCivilite == 'Mr' or app.user.getCivilite == 'Monsieur' %}
-                            <img  src="{{ asset('image/homme.jpg') }}" style="border-radius:50%; width:32px; height:32px" >
-                        {%  elseif app.user.getCivilite == 'Mme' or app.user.getCivilite == 'Madame'%}
-                            <img  src="{{ asset('image/femme.jpg') }}" style="border-radius:50%; width:32px; height:32px" >
-                        {% endif %}
+                        <img  src="{{ asset('image/homme.jpg') }}" style="border-radius:50%; width:32px; height:32px" >
                     {% endif %}
                     {{ app.user.username }} <span class="glyphicon glyphicon-triangle-bottom"
                                                   aria-hidden="true"></span>
@@ -61,7 +55,7 @@
 
                     <li><button onclick="postiframeUser('{{ path('afficher_profil') }}')" style="background: transparent;border:transparent;width:100%">PROFIL</button></li>
                     <li><button onclick="postiframeUser('{{ path('afficher_messagerie') }}')" style="background: transparent;border:transparent;width:100%">MESSAGERIE</button></li>
-                    <li><a href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">LOGOUT</button> </a></li>
+                    <li><a onclick="sessionStorage.clear()" href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">LOGOUT</button> </a></li>
 
 
 
@@ -112,7 +106,7 @@
                     {% if societes is defined %}
                         {% for s in societes %}
                             <button onclick="postiframe('{{ path('affiche_etab',{'id': s.getId }) }}',{{ s.getId }},this)" id="etablissement{{ s.getId }}" type="button" class="list-group-item butonLigne">
-                                <div name="Recherche" style="display: none;">{{ s.getTier.getRaisonSoc }},{{ s.siret }},{{ s.adresse }},{{ s.codepostal }},{{ s.ville }}</div>
+                                <div name="Recherche" style="display: none;">{{ s.getTier.getRaisonSoc }};{{ s.siret }};{{ s.adresse }};{{ s.codepostal }};{{ s.ville }};{{ s.geocode }}</div>
                                 <div style="display: none;"></div>
                                 <div class="col-xs-12 part" title="{{s.getTier.getRaisonSoc}}">{{s.getTier.getRaisonSoc}}</div>
                                 <div class="col-xs-12 part"
@@ -129,25 +123,11 @@
                     {% endif %}
 
                 </div>
-                <div id="licence" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
-                    {% if AllLicences is defined %}
-                        {% for lic in AllLicences %}
-                            <button onclick="postiframe('{{ path('ecole_admin_afficheLicence',{'id': lic.getId} ) }}')" id="licence{{ lic.getId }}" type="button" class="list-group-item butonLigne">
-                                <div class="col-xs-12 part licence" title="{{lic.getLibelle}}">{{lic.getLibelle}}</div>
-                                <div class="col-xs-12 part"
-                                     style="height: 31px; text-align: left;">
-                                    <div class="col-xs-9 part" title="{{ lic.getDatefin|date('d-m-Y') }}">{{lic.getDatefin|date('d-m-Y') }}</div>
-                                </div>
-                            </button>
-                        {% endfor %}
-                    {% endif %}
-
-                </div>
                 <div id="mission" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if missions is defined %}
                         {% for m in missions %}
                             <button onclick="postiframeUser('{{ path('admin_afficheMission',{'id': m.getId }) }}',this)" id="mission{{ m.getId }}" type="button" class="list-group-item butonLigne">
-                                <div name="Recherche" style="display: none;">{{ m.intitule }},{{ m.profil }},{{ m.typecontrat }},{{ m.codemission }},{{ m.domaine }},{{ m.etablissement.tier.raisonsoc }},{{ m.etablissement.siret }},{{ m.etablissement.adresse }},{{ m.etablissement.codepostal }},{{ m.etablissement.ville }}</div>
+                                <div name="Recherche" style="display: none;">{{ m.intitule }};{{ m.profil }};{{ m.typecontrat }};{{ m.codemission }};{{ m.domaine }};{{ m.etablissement.tier.raisonsoc }};{{ m.etablissement.siret }};{{ m.etablissement.adresse }};{{ m.etablissement.codepostal }};{{ m.etablissement.ville }};{{ m.etablissement.geocode }}</div>
                                 <div style="display: none;"></div>
                                 <div class="col-xs-12 part" title="{{m.getCodemission}}">{{m.getCodemission}}</div>
                                 <div class="col-xs-12 part"
@@ -165,26 +145,6 @@
                         {% endfor %}
                     {% endif %}
 
-                </div>
-                <div id="user" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
-                    {% if users is defined %}
-                        {% for u in users %}
-                            <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId} ) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
-                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.getUsername }},{{ u.prenom }},{{ u.email }},{% if u.tier %}{{ u.tier.siren }}{% elseif u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
-                                <div style="display: none;"></div>
-                                <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
-                                <div class="col-xs-12 part"
-                                     style="height: 31px; text-align: left;">
-                                    <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
-                                    {% if not u.isExpired %}
-                                        <div class="col-xs-1 active" id="active{{ u.getId }}"></div>
-                                    {% else %}
-                                        <div class="col-xs-1 inactive" id="active{{ u.getId }}"></div>
-                                    {% endif %}
-                                </div>
-                            </button>
-                        {% endfor %}
-                    {% endif %}
                 </div>
             </div>
         {% endblock %}
@@ -223,7 +183,6 @@
         </div>
 
     </div>
-
 </div>
 
 <script src="//code.jquery.com/jquery.min.js"></script>
@@ -231,7 +190,19 @@
 <script src="{{ asset('js/PopUp.js') }}"></script>
 <script src="http://maps.googleapis.com/maps/api/js"></script>
 <script language="JavaScript">
-    var i = 1;
+    var i = 1;var geocode_me;
+    function getMyGeocode(){
+        var adresse_me = '{{ app.user.info.adresse }} {{ app.user.info.cp }}';
+        var geocoder = new google.maps.Geocoder();
+
+        geocoder.geocode({'address': adresse_me}, function (results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                geocode_me = results[0].geometry.location ;
+            } else {
+                geocode_me = null;
+            }
+        });
+    };
     document.getElementById("leftselect").onchange = function(){
         var x = document.getElementById("leftselect").value;
 
@@ -239,8 +210,15 @@
         document.getElementById('mission').style.visibility= 'hidden';
 
         document.getElementById(x).style.visibility='visible';
-
+        sessionStorage.setItem('leftonglet',x);
     };
+    function loading(){
+        var onglet = sessionStorage.getItem('leftonglet');
+        if(onglet)
+        {
+            $('#leftselect option[value="' + onglet + '"]').prop('selected', true).change();
+        }
+    }
     function postiframe(url,id,button) {
         document.getElementById("iframe").src = url;
         var route = '{{path('adresses_tier',{'id':"_id" })}}';
@@ -282,13 +260,18 @@
     };
     function postiframeUser(url,button) {
         document.getElementById("iframe").src = url;
-        var elements = button.getElementsByClassName("badge");
-        if(elements.length > 0)
-        {
-            elements[0].parentNode.removeChild(elements[0]);
-        }
         sessionStorage.setItem('_Iframe',url);
+        if(button)
+        {
+            var elements = button.getElementsByClassName("badge");
+            if(elements.length > 0)
+            {
+                elements[0].parentNode.removeChild(elements[0]);
+            }
+        }
     };
+
+
     function search(mot){
         var mots = mot.toUpperCase().trim().split(/ +/g);
         var Recherches = document.getElementsByName('Recherche');
@@ -296,8 +279,8 @@
         {
             var score = 0;
             Recherches[i].parentNode.style.display="block";
-            var recherchermot = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g);
-            for(var k = 0; k< recherchermot.length; k++)
+            var recherchermot = Recherches[i].innerHTML.toUpperCase().trim().split(/;+/g);
+            for(var k = 0; k< recherchermot.length - 1; k++)
             {
                 for(var j = 0; j< mots.length;j++)
                 {
@@ -311,13 +294,21 @@
                 Recherches[i].nextElementSibling.innerHTML = score;
             }
             else {
-                Recherches[i].nextElementSibling.innerHTML = score;
+                if(geocode_me && recherchermot[recherchermot.length - 1]!=''){
+                    var distance = caldis(recherchermot[recherchermot.length - 1],geocode_me.toString());
+                    if(distance !=0){
+                        score = score * 5/distance;
+                    }
+                    else{
+                        score = score *5;
+                    }
+
+                }
+                Recherches[i].nextElementSibling.innerHTML = score.toString();
+
             }
         }
-        SortDiv('ecole');
         SortDiv('societe');
-        SortDiv('user');
-
         SortDiv('mission');
     }
     function SortDiv(divId){
@@ -337,9 +328,27 @@
             parent.appendChild(toSort[t]);
         }
     }
+    function round(number,X) {
+        X = (!X ? 3 : X);
+        return Math.round(number*Math.pow(10,X))/Math.pow(10,X);
+    }
+    function caldis(location1,location2) {
+        var lat1 = eval(location1.split(',')[0].substr(1));
+        var long1 = eval(location1.split(',')[1].substr(0,location1.split(',')[1].length - 1));
+        var lat2 = eval(location2.split(',')[0].substr(1));
+        var long2 = eval(location2.split(',')[1].substr(0,location2.split(',')[1].length - 1));
+
+        var e=(3.14159265358979*lat1/180);
+        var f=(3.14159265358979*long1/180);
+        var g=(3.14159265358979*lat2/180);
+        var h=(3.14159265358979*long2/180);
+        i=(Math.cos(e)*Math.cos(g)*Math.cos(f)*Math.cos(h)+Math.cos(e)*Math.sin(f)*Math.cos(g)*Math.sin(h)+Math.sin(e)*Math.sin(g));
+        j=(Math.acos(i));
+        k=round(6371*j);
+        return k;
+    }
 
     function putbadged() {
-
         var iframe = sessionStorage.getItem('_Iframe');
         if(iframe)
         {
@@ -352,8 +361,7 @@
         document.getElementById("iframe").style.visibility = 'visible';
 
 
-        var notifs = JSON.parse('{{ notifications|raw }}');
-        console.log(notifs);
+        var notifs = JSON.parse('{{ notifications }}');
         var ecole =0;
         var societe = 0;
         var user = 0;
@@ -402,113 +410,7 @@
             buttonuser.appendChild(spanuser);
         }
 
-    };
-    function dupliqueradresse() {
-        var dup = document.getElementById("div_adresse");
-        var clone = dup.cloneNode(true);
-        var toggle = clone.children[0];
-        toggle.setAttribute("data-target","#Adresse" + i);
-        toggle.innerHTML="Adresse " + i;
-
-        var div = clone.children[2];
-        div.setAttribute("id","Adresse" + i);
-        clone.style.display = 'block';
-
-        document.getElementById("adressecontainer").appendChild(clone);
-        var parentdiv = dup.parentNode;
-        var close =dup.parentNode.parentNode;
-        if(parentdiv.offsetHeight  > close.offsetHeight )
-        {
-            close.style.height = parentdiv.offsetHeight;
-            clone.children[0].style.height = parentdiv.offsetHeight;
-        }
-
-        i++;
-    };
-    function submitAjaxForm(url,form){
-
-        var route;
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: $("#"+form).serialize(),
-            success: function(data)
-            {
-                if(data['status']==='success')
-                {
-                    $("#"+form+" input[type=submit]").click();
-                    document.getElementById('submittier').disabled=false;
-                }
-                else if(data['status']==='exist')
-                {
-                    route='{{ path('etablissement_exist') }}';
-                    var tier = JSON.parse(data['Tier']);
-                    var etablissements = JSON.parse(data['Etablissements']);
-                    var string_checkbox='';
-                    for (var i = 0; i < etablissements.length; i++) {
-                        string_checkbox += '<input type="checkbox" name="etablissement[]"  value="'+etablissements[i].id+'" > '+ etablissements[i].adresse+ ' - '+ etablissements[i].ville+' - '+etablissements[i].codepostal+'<br>';
-                    }
-
-                    document.getElementById(form).parentNode.style.display = 'none';
-                    var newdiv = document.createElement("div");
-                    innerhtml_newdiv ='<form action="'+route+'" class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block;background-color: white">'+
-                            '<label style="width: 50%">SIREN : '+tier.siren+' </label><label style="width: 50%">Raison sociale : '+tier.raisonsoc+'</label>'+
-                            '_checkbox_etablissements'+
-                            '<input type="submit" value="récupérer">'+
-                            '<button type="button" onclick="declinertier(this)">Décliner</button>'+
-                            '</form>';
-
-                    innerhtml_newdiv = innerhtml_newdiv.replace('_checkbox_etablissements',string_checkbox);
-                    newdiv.innerHTML = innerhtml_newdiv;
-                    document.getElementById(form).parentNode.parentNode.appendChild(newdiv);
-                    document.getElementById('submittier').disabled=false;
-
-                }
-                else
-                {
-                    alert('Une erreur s\'est produite sur le serveur');
-                    document.getElementById('submittier').disabled=false;
-                }
-            }
-        });
-    };
-    function envoyeradresses(){
-        document.getElementById('submittier').disabled=true;
-        var geocodes = document.getElementsByName('_Geocode[]');
-        if(geocodes.length==1)
-        {
-            alert('Vous devez remplir au moins une adresse');
-            document.getElementById('submittier').disabled=false;
-        }
-        for(var j = 1;j<geocodes.length;j++){
-            var siret = document.getElementsByName('_SIRET[]')[j].value;
-            var test = siret.substring(0, 9);
-            if(test!=document.getElementById('SIREN').value)
-            {
-                alert('Le siret de l\'adresse '+ j + ' n\'est pas compatible avec le siren donné');
-                document.getElementById('submittier').disabled=false;
-                return;
-            }
-        }
-
-        for(var i = 1; i<geocodes.length;i++)
-        {
-            var address = document.getElementsByName('_Adresse[]')[i].value +' ' +document.getElementsByName('_Ville[]')[i].value + ' ' + document.getElementsByName('_CodeP[]')[i].value  ;
-            var geocoder = new google.maps.Geocoder();
-
-            var result = geocodes[i];
-            geocoder.geocode({'address': address}, function (results, status) {
-                if (status === google.maps.GeocoderStatus.OK) {
-                    result.value = results[0].geometry.location ;
-                    var check = '{{ path('tier_checkExist') }}';
-                    submitAjaxForm(check,'formtier');
-                } else {
-                    alert('Pas de géocodage trouver pour l\'adresse spécifiée');
-                    document.getElementById('submittier').disabled=false;
-                }
-            });
-        }
-    };
+    }
     function readURL(input,baliseimg) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -521,23 +423,8 @@
 
             reader.readAsDataURL(input.files[0]);
         }
-    };
-    function supprimerAdresse(div){
-        div.parentNode.parentNode.removeChild(div.parentNode);
-    };
-    function disabling(champ){
-        if(champ.options[champ.selectedIndex].value ==0){champ.nextElementSibling.style.display = 'inline-block';}
-        else{champ.nextElementSibling.style.display = 'none';}
-    };
-    function declinertier(button){
-        button.parentNode.parentNode.parentNode.removeChild(button.parentNode.parentNode);
-        document.getElementById('formtier').parentNode.style.display = 'block';
     }
 
 </script>
-
-{% block JS %}
-
-{% endblock %}
 </body>
 </html>

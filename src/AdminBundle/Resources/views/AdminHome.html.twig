@@ -13,7 +13,7 @@
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
 
 </head>
-<body onload="putbadged()">
+<body onload="loading();putbadged()">
 <div id="addtier" class="popup col-xs-3">
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
@@ -223,13 +223,10 @@
                     style="padding:0;width: 100%; height: 20px; border-radius: 0; background: none; border: 0;color: white">
                 {% if image %}
                     <img  src="data:image/jpg;base64,{{image}}" style="border-radius:50%; width:32px; height:32px" >
-                {% else %}
-
-                    {% if app.user.getCivilite == 'Mr' or app.user.getCivilite == 'Monsieur' %}
-                        <img  src="{{ asset('image/homme.jpg') }}" style="border-radius:50%; width:32px; height:32px" >
-                    {%  elseif app.user.getCivilite == 'Mme' or app.user.getCivilite == 'Madame'%}
+                {% elseif app.user.getCivilite == 'Mme' or app.user.getCivilite == 'Madame' %}
                         <img  src="{{ asset('image/femme.jpg') }}" style="border-radius:50%; width:32px; height:32px" >
-                    {% endif %}
+                {% else %}
+                    <img  src="{{ asset('image/homme.jpg') }}" style="border-radius:50%; width:32px; height:32px" >
                 {% endif %}
                 {{ app.user.username }} <span class="glyphicon glyphicon-triangle-bottom"
                                               aria-hidden="true"></span>
@@ -237,7 +234,7 @@
             <ul id="profil" class="dropdown-menu" aria-labelledby="dropdownMenu1" style="color:white;background: #2975cb;">
                 <li><button onclick="postiframeUser('{{ path('afficher_profil') }}')" style="background: transparent;border:transparent;width:100%">PROFIL</button></li>
                 <li><button onclick="postiframeUser('{{ path('afficher_messagerie') }}')" style="background: transparent;border:transparent;width:100%">MESSAGERIE</button></li>
-                <li><a href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">LOGOUT</button> </a></li>
+                <li><a onclick="sessionStorage.clear()" href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">LOGOUT</button> </a></li>
             </ul>
 
         </div>
@@ -481,10 +478,12 @@
         if(x=='QCM')
         {
             document.getElementById("iframe").src = '{{ path('loadgestionQCM') }}';
+            sessionStorage.setItem('_Iframe','{{ path('loadgestionQCM') }}');
         }
         if(x=='modele')
         {
             document.getElementById("iframe").src = '{{ path('creeNewModele') }}';
+            sessionStorage.setItem('_Iframe','{{ path('creeNewModele') }}');
         }
         document.getElementById('mission').style.visibility= 'hidden';
         document.getElementById('ecole').style.visibility= 'hidden';
@@ -495,8 +494,15 @@
         document.getElementById('QCM').style.visibility= 'hidden';
         document.getElementById('modele').style.visibility= 'hidden';
         document.getElementById(x).style.visibility='visible';
-
+        sessionStorage.setItem('leftonglet',x);
     };
+    function loading(){
+        var onglet = sessionStorage.getItem('leftonglet');
+        if(onglet)
+        {
+            $('#leftselect option[value="' + onglet + '"]').prop('selected', true).change();
+        }
+    }
     function postiframe(url,id,button) {
         document.getElementById("iframe").src = url;
         var route = '{{path('adresses_tier',{'id':"_id" })}}';
@@ -535,16 +541,17 @@
         sessionStorage.setItem('_Iframe',url);
 
     }
-
-
     function postiframeUser(url,button) {
         document.getElementById("iframe").src = url;
-        var elements = button.getElementsByClassName("badge");
-        if(elements.length > 0)
-        {
-            elements[0].parentNode.removeChild(elements[0]);
-        }
         sessionStorage.setItem('_Iframe',url);
+        if(button)
+        {
+            var elements = button.getElementsByClassName("badge");
+            if(elements.length > 0)
+            {
+                elements[0].parentNode.removeChild(elements[0]);
+            }
+        }
     }
     function search(mot){
         var mots = mot.toUpperCase().trim().split(/ +/g);
@@ -594,8 +601,6 @@
             parent.appendChild(toSort[t]);
         }
     }
-
-
     function putbadged() {
         var iframe = sessionStorage.getItem('_Iframe');
         if(iframe)
@@ -607,7 +612,7 @@
             document.getElementById("iframe").src = '{{ path('admin_iframeload') }}';
         }
         document.getElementById("iframe").style.visibility = 'visible';
-        var notifs = JSON.parse('{{ notifications|raw }}');
+        var notifs = JSON.parse('{{ notifications }}');
         var ecole =0;
         var societe = 0;
         var user = 0;
@@ -666,10 +671,6 @@
         }
 
     }
-
-
-
-
     function dupliqueradresse() {
         var dup = document.getElementById("div_adresse");
         var clone = dup.cloneNode(true);
@@ -708,6 +709,11 @@
                 else if(data['status']==='exist')
                 {
                     alert('un des sirets existe deja');
+                    document.getElementById('submittier').disabled=false;
+                }
+                else if(data['status']==='is_ecole')
+                {
+                    alert('Le siren indiquée appartient à une école!');
                     document.getElementById('submittier').disabled=false;
                 }
                 else

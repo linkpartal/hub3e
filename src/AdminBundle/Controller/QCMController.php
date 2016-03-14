@@ -117,7 +117,7 @@ class QCMController extends Controller
 
         }
 
-        return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
+        return $this->render('GenericBundle::ReloadParent.html.twig');
     }
 
     public function supprimerAction($rep,$qst,$qcm)

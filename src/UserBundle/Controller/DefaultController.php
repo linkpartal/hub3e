@@ -358,7 +358,7 @@ class DefaultController extends Controller
 
         if($mail and $Statutmessage){
             $message = \Swift_Message::newInstance()
-                ->setSubject('confirmation de condidature')
+                ->setSubject('confirmation de candidature')
                 ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
                 ->setTo($mail)
                 ->setBody($this->renderView($modele,array('statut'=>$Statutmessage,'formation'=>$candi->getFormation()->getNom()))
@@ -392,12 +392,13 @@ class DefaultController extends Controller
         $user->setUsername($request->get('_Username'));
         $user->setEmail($request->get('_Mail'));
         $em->flush();
+
         if($user->hasRole('ROLE_APPRENANT')){
             $info = $em->getRepository('GenericBundle:infocomplementaire')->find(array('id'=>$request->get('_IdInfo')));
 
             if($info)
             {
-                $info->setDatenaissance(date_create_from_format('d/m/Y', $request->get('_Datenaissance')) );
+                $info->setDatenaissance(date_create($request->get('_Datenaissance')) );
                 $info->setCpnaissance($request->get('_Cpnaissance'));
                 $info->setLieunaissance($request->get('_Lieunaissance'));
                 $info->setAdresse($request->get('_Adresse'));
@@ -409,7 +410,7 @@ class DefaultController extends Controller
             }
             else{
                 $info = new Infocomplementaire();
-                $info->setDatenaissance(date_create_from_format('d/m/Y', $request->get('_Datenaissance')) );
+                $info->setDatenaissance(date_create( $request->get('_Datenaissance')) );
                 $info->setCpnaissance($request->get('_Cpnaissance'));
                 $info->setLieunaissance($request->get('_Lieunaissance'));
                 $info->setAdresse($request->get('_Adresse'));

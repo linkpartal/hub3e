@@ -21,7 +21,7 @@
     <title>HUB3E - {% block title %}Ecole{% endblock %}</title>
 
 </head>
-<body onload="putbadged()">
+<body onload="loading();putbadged()">
 <div id="addtier" class="popup col-xs-3">
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
@@ -83,7 +83,6 @@
     </div>
 
 </div>
-
 <div id="apprenant" class="popup col-xs-3" >
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-6" style="top:40px;border:20px solid white;display: block;margin-bottom: 20px ;background: white;width:70%">
@@ -275,7 +274,7 @@
                 <div class="col-xs-6 input-colonne" >
 
                     <select class="input " title="" name="_Niveau[]">
-                        <option value="connaissances de base">connaissances de base</option>
+                        <option value="connaissance de base">connaissance de base</option>
                         <option value="bonne connaissance">bonne connaissance</option>
                         <option value="courant">courant</option>
                         <option value="langue maternelle">langue maternelle</option>
@@ -514,13 +513,10 @@
                         style="padding:0;width: 100%; height: 20px; border-radius: 0; background: none; border: 0;color: white">
                     {% if image %}
                         <img  src="data:image/jpg;base64,{{image}}" style="border-radius:50%; width:32px; height:32px" >
+                    {% elseif app.user.getCivilite == 'Mme' or app.user.getCivilite == 'Madame' %}
+                        <img  src="{{ asset('image/femme.jpg') }}" style="border-radius:50%; width:32px; height:32px" >
                     {% else %}
-
-                        {% if app.user.getCivilite == 'Mr' or app.user.getCivilite == 'Monsieur' %}
-                            <img  src="{{ asset('image/homme.jpg') }}" style="border-radius:50%; width:32px; height:32px" >
-                        {%  elseif app.user.getCivilite == 'Mme' or app.user.getCivilite == 'Madame'%}
-                            <img  src="{{ asset('image/femme.jpg') }}" style="border-radius:50%; width:32px; height:32px" >
-                        {% endif %}
+                        <img  src="{{ asset('image/homme.jpg') }}" style="border-radius:50%; width:32px; height:32px" >
                     {% endif %}
                     {{ app.user.username }}<span class="glyphicon glyphicon-triangle-bottom"
                                                  aria-hidden="true"></span>
@@ -529,7 +525,7 @@
 
                     <li><button onclick="postiframeUser('{{ path('afficher_profil') }}')" style="background: transparent;border:transparent;width:100%">PROFIL</button></li>
                     <li><button onclick="postiframeUser('{{ path('afficher_messagerie') }}')" style="background: transparent;border:transparent;width:100%">MESSAGERIE</button></li>
-                    <li><a href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">LOGOUT</button> </a></li>
+                    <li><a onclick="sessionStorage.clear()" href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">LOGOUT</button> </a></li>
 
 
 
@@ -679,8 +675,15 @@
         document.getElementById('societe').style.visibility= 'hidden';
         document.getElementById('user').style.visibility= 'hidden';
         document.getElementById(x).style.visibility='visible';
-
+        sessionStorage.setItem('leftonglet',x);
     };
+    function loading(){
+        var onglet = sessionStorage.getItem('leftonglet');
+        if(onglet)
+        {
+            $('#leftselect option[value="' + onglet + '"]').prop('selected', true).change();
+        }
+    }
     function show_formapprenant(div) {
         document.getElementById('infoapprenant').style.visibility= 'hidden';
         document.getElementById('apprenant_formation').style.visibility= 'hidden';
@@ -782,15 +785,18 @@
         sessionStorage.setItem('_Iframe',url);
 
     }
-    function postiframeUser(url,button){
+    function postiframeUser(url,button) {
         document.getElementById("iframe").src = url;
-        var elements = button.getElementsByClassName("badge");
-        if(elements.length > 0)
-        {
-            elements[0].parentNode.removeChild(elements[0]);
-        }
         sessionStorage.setItem('_Iframe',url);
-    }
+        if(button)
+        {
+            var elements = button.getElementsByClassName("badge");
+            if(elements.length > 0)
+            {
+                elements[0].parentNode.removeChild(elements[0]);
+            }
+        }
+    };
     function search(mot){
         var mots = mot.toUpperCase().trim().split(/ +/g);
         var Recherches = document.getElementsByName('Recherche');
@@ -852,7 +858,7 @@
         }
         document.getElementById("iframe").style.visibility = 'visible';
 
-        var notifs = JSON.parse('{{ notifications|raw }}');
+        var notifs = JSON.parse('{{ notifications }}');
         var ecole =0;
         var societe = 0;
         var user = 0;
@@ -961,6 +967,11 @@
                     document.getElementById(form).parentNode.parentNode.appendChild(newdiv);
                     document.getElementById('submittier').disabled=false;
 
+                }
+                else if(data['status']==='is_ecole')
+                {
+                    alert('Le siren indiquée appartient à une école!');
+                    document.getElementById('submittier').disabled=false;
                 }
                 else
                 {

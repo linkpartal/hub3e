@@ -209,48 +209,18 @@
             me.nextElementSibling.nextElementSibling.value='';
         }
         function descendre(champs){
-            if(champs === champs.parentNode.lastChild)
+            if(champs.nextElementSibling.getAttribute('name')=='21456dddd')
             {
-                alert('le champs ne peut plus decsendre d avantage');
+                return;
             }
-            else
-            {
-                if(champs.nextSibling.hasChildNodes())
-                {
-                    if(champs.nextSibling.getAttribute('name')=='21456dddd')
-                    {return;}
-                    champs.parentNode.insertBefore(champs.nextSibling, champs);
-                }
-                else
-                {
-                    if(champs.nextSibling.nextSibling.getAttribute('name')=='21456dddd')
-                    {return;}
-                    champs.parentNode.insertBefore(champs.nextSibling.nextSibling, champs);
-                }
-            }
-
+            champs.parentNode.insertBefore(champs.nextElementSibling, champs);
         }
         function monter(champs){
-            if( champs === champs.parentNode.getElementsByTagName('div')[0] )
+            if(champs.previousElementSibling.getAttribute('name')=='21456dddd')
             {
-                alert('le champs ne peut plus montrer d avantage');
+                return;
             }
-            else
-            {
-                if(champs.previousSibling.hasChildNodes())
-                {
-                    if(champs.previousSibling.getAttribute('name')=='21456dddd')
-                    {return;}
-                    champs.parentNode.insertBefore(champs, champs.previousSibling);
-                }
-                else
-                {
-                    if(champs.previousSibling.previousSibling.getAttribute('name')=='21456dddd')
-                    {return;}
-                    champs.parentNode.insertBefore(champs, champs.previousSibling.previousSibling);
-                }
-            }
-
+            champs.parentNode.insertBefore(champs, champs.previousElementSibling);
         }
         function check(){
             var inputs = document.getElementById("form").getElementsByTagName("input");
@@ -259,7 +229,6 @@
                 if(i==inputs.length)
                 {
                     document.getElementById("form").submit();
-                    window.parent.location.reload();
                     break;
                 }
                 if(!inputs[i].value)
