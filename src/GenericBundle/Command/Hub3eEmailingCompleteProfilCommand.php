@@ -26,60 +26,65 @@ class Hub3eEmailingCompleteProfilCommand extends ContainerAwareCommand
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $apprenants = $em->getRepository('GenericBundle:User')->findByRole('ROLE_APPRENANT');
         foreach($apprenants as $apprenant){
-            if($apprenant->getEtablissement())
-            {
-                foreach($apprenant->getEtablissement()->getQcmdef() as $qcmdef){
-                    $questions = $em->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef'=>$qcmdef));
-                    foreach($questions as $question){
-                        $reponses = $em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef'=>$question));
+            if(!$apprenant->getInfo()->getProfilcomplet()){
+                if($apprenant->getEtablissement())
+                {
+                    foreach($apprenant->getEtablissement()->getQcmdef() as $qcmdef){
+                        $questions = $em->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef'=>$qcmdef));
+                        foreach($questions as $question){
+                            $reponses = $em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef'=>$question));
 
-                        if($reponses )
-                        {
-                            if(count(array_intersect($reponses,$apprenant->getReponsedef()->toArray())) ==0){
-                                //$output->writeln($apprenant->getEmail());
-                                $message = \Swift_Message::newInstance()
-                                    ->setSubject('Email')
-                                    ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
-                                    ->setTo($apprenant->getEmail())
-                                    ->setBody($this->getContainer()->get('templating')->render('GenericBundle:Mail:EmailCompleterProfil.html.twig',array('apprenant'=>$apprenant))
-                                        ,'text/html'
-                                    );
-                                $this->getContainer()->get('mailer')->send($message);
-                                goto a;
+                            if($reponses )
+                            {
+                                if(count(array_intersect($reponses,$apprenant->getReponsedef()->toArray())) ==0){
+                                    //$output->writeln($apprenant->getEmail());
+                                    $message = \Swift_Message::newInstance()
+                                        ->setSubject('Email')
+                                        ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
+                                        ->setTo($apprenant->getEmail())
+                                        ->setBody($this->getContainer()->get('templating')->render('GenericBundle:Mail:EmailCompleterProfil.html.twig',array('apprenant'=>$apprenant))
+                                            ,'text/html'
+                                        );
+                                    $this->getContainer()->get('mailer')->send($message);
+                                    goto a;
+                                }
                             }
-                        }
 
+                        }
                     }
                 }
-            }
 
-            $candidatures = $em->getRepository('GenericBundle:Candidature')->findBy(array('user'=>$apprenant));
-            foreach($candidatures as $candidature){
-                foreach($candidature->getFormation()->getQcmdef() as $qcmdef){
-                    $questions = $em->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef'=>$qcmdef));
-                    foreach($questions as $question){
-                        $reponses = $em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef'=>$question));
+                $candidatures = $em->getRepository('GenericBundle:Candidature')->findBy(array('user'=>$apprenant));
+                foreach($candidatures as $candidature){
+                    foreach($candidature->getFormation()->getQcmdef() as $qcmdef){
+                        $questions = $em->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef'=>$qcmdef));
+                        foreach($questions as $question){
+                            $reponses = $em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef'=>$question));
 
-                        if($reponses )
-                        {
-                            if(count(array_intersect($reponses,$apprenant->getReponsedef()->toArray())) ==0){
-                                //$output->writeln($apprenant->getEmail());
-                                $message = \Swift_Message::newInstance()
-                                    ->setSubject('Email')
-                                    ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
-                                    ->setTo($apprenant->getEmail())
-                                    ->setBody($this->getContainer()->get('templating')->render('GenericBundle:Mail:EmailCompleterProfil.html.twig',array('apprenant'=>$apprenant))
-                                        ,'text/html'
-                                    );
-                                $this->getContainer()->get('mailer')->send($message);
-                                goto a;
+                            if($reponses )
+                            {
+                                if(count(array_intersect($reponses,$apprenant->getReponsedef()->toArray())) ==0){
+                                    //$output->writeln($apprenant->getEmail());
+                                    $message = \Swift_Message::newInstance()
+                                        ->setSubject('Email')
+                                        ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
+                                        ->setTo($apprenant->getEmail())
+                                        ->setBody($this->getContainer()->get('templating')->render('GenericBundle:Mail:EmailCompleterProfil.html.twig',array('apprenant'=>$apprenant))
+                                            ,'text/html'
+                                        );
+                                    $this->getContainer()->get('mailer')->send($message);
+                                    goto a;
+                                }
                             }
-                        }
 
+                        }
                     }
                 }
+                $apprenant->getInfo()->setProfilcomplet(true);
+                $em->flush();
+                a:
             }
-            a:
+
         }
         if ($input->getOption('option')) {
             // ...

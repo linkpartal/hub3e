@@ -728,12 +728,12 @@
                                                     {% endif %}
                                                 </label>
 
-                                                {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_TUTEUR') %}
+                                                {% if is_granted('ROLE_RECRUTEUR') %}
 
                                                     {% if candidature.statut == 1 or candidature.statut == 2 %}
 
                                                         <img name="modification" style="width:25px;display: none"  alt="Refusé"  title="Refusé" onclick="modifierStatut(this,99,'{{ candidature.id }}')" src="{{ asset('image/stop_x18.png') }}">
-                                                        <img name="modification"style="display:none" alt="Validé" title="Validé"  onclick="modifierStatut(this,3,'{{ candidature.id }}')" src="{{ asset('image/imgValide.png') }}">
+                                                        <img name="modification" style="display:none" alt="Validé" title="Validé"  onclick="modifierStatut(this,3,'{{ candidature.id }}')" src="{{ asset('image/imgValide.png') }}">
 
                                                     {% endif %}
 
@@ -742,7 +742,7 @@
 
                                                 <img name="modification"   style="float:right;display:none" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerFormation('{{ path('supprimer_Candidature',{'id':candidature.getId}) }}',this)" />
 
-                                                <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#cand{{ iddiv }}"></button></label>
+                                                <div class="button" style="float: right;" data-toggle="collapse" data-target="#cand{{ iddiv }}"></div></label>
                                         </div>
                                         <div id="cand{{ iddiv }}" class="collapse in" >
                                             <div class="row">

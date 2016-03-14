@@ -9,7 +9,9 @@
 </head>
 <body>
 <div id="DuplicaPopUp" class="popup">
-    <div onclick="hide(this)" class="close"></div>
+    <div onclick="hide(this)" class="close">
+
+    </div>
     <div class="col-xs-offset-1 col-xs-10" style="background-color: white;padding: 0;display: block;
                 border-top: 4px solid white;border-bottom: 4px solid white;border-radius: 4px;box-shadow: 0 1px 40px 0 rgb(0, 0, 0);">
 
@@ -44,13 +46,12 @@
 
 
 </div>
-<div class="input-group col-xs-offset-1 col-xs-6" style="float: left;height: 40px;">
-    <span class="glyphicon glyphicon-search input-group-addon" id="basic-addon1" style="width: 27px;height: 27px;padding: 7px;"></span>
-    <input type="text" aria-describedby="basic-addon1" style="height: 27px;border: none;border-bottom: 1px solid #CCCCCC;">
+<div class="col-xs-offset-1 col-xs-6" style="float: left;height: 60px;color:#757575;font: 14px Roboto;display: flex;">
+    <span class="glyphicon glyphicon-search " id="basic-addon1" style="width: 30px;height: 30px;padding: 7px;float: left;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;"></span>
+    <input type="text" aria-describedby="basic-addon1" style="height: 31px;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;" placeholder="Recherche ...">
 </div>
 {% for import in imports %}
 <div class="col-xs-12" style="border: 1px solid rgba(148, 148, 148,0.2);height:94px;display: inline-flex;background-color: rgba(230, 230, 230,0.2);font: 14px Roboto;color: rgb(77, 83, 90);" >
-
     <div class="col-xs-1" style="margin: auto;">
         {{ import.getId }}
     </div>
@@ -61,7 +62,6 @@
 
 
     </div>
-
     <div id="Nom{{ import.id }}" class="col-xs-1" style="margin: auto; ">
         {{ import.getNom }}
     </div>
@@ -74,7 +74,6 @@
     <div id="Email{{ import.id }}" class="col-xs-3" style="margin: auto;color: #1C5AA5;text-decoration: underline; ">
         {{ import.getEmail }}
     </div>
-
     <div class="col-xs-3" style="height: 100%">
         <button class="col-xs-3" type="button" onclick="voirduplica({{ import.getId }}{% if import.info %}{% if import.info.lieunaissance %},'{{ import.info.lieunaissance }}'{% else %},'undefined'{% endif %}{% if import.info.datenaissance %},'{{ import.info.datenaissance|date('d/m/Y') }}'{% else %},'undefined'{% endif %}{% endif %})"
                 style="height: 100%;background-color: transparent;border: none">
@@ -98,8 +97,6 @@
             </button>
         {% endif %}
     </div>
-
-
 </div>
 {% endfor %}
 <script src="//code.jquery.com/jquery.min.js"></script>

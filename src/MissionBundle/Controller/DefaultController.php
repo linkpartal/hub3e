@@ -75,7 +75,10 @@ class DefaultController extends Controller
             {
                 foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
                 {
-                    array_push($users,$candidature->getUser());
+                    if($candidature->getUser()->getInfo()->getProfilcomplet()){
+                        array_push($users,$candidature->getUser());
+                    }
+
                 }
             }
             else{
@@ -83,14 +86,18 @@ class DefaultController extends Controller
                 if($ecoleconnecte->hasRole('ROLE_ADMINECOLE') and $ecoleconnecte->getTier() == $diffusion->getFormation()->getEtablissement()->getTier()){
                     foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
                     {
-                        array_push($users,$candidature->getUser());
+                        if($candidature->getUser()->getInfo()->getProfilcomplet()){
+                            array_push($users,$candidature->getUser());
+                        }
                     }
                 }
                 elseif($ecoleconnecte->hasRole('ROLE_RECRUTEUR') and $ecoleconnecte->getEtablissement() == $diffusion->getFormation()->getEtablissement())
                 {
                     foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
                     {
-                        array_push($users,$candidature->getUser());
+                        if($candidature->getUser()->getInfo()->getProfilcomplet()){
+                            array_push($users,$candidature->getUser());
+                        }
                     }
                 }
             }

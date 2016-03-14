@@ -113,6 +113,13 @@ class Infocomplementaire
     private $mobilite;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="profilcomplet", type="boolean", nullable=true)
+     */
+    private $profilcomplet = false;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="fratrie", type="integer", nullable=true)
@@ -578,5 +585,29 @@ class Infocomplementaire
     public function getDatemodification()
     {
         return $this->datemodification;
+    }
+
+    /**
+     * Set profilcomplet
+     *
+     * @param boolean $profilcomplet
+     *
+     * @return Infocomplementaire
+     */
+    public function setProfilcomplet($profilcomplet)
+    {
+        $this->profilcomplet = $profilcomplet;
+
+        return $this;
+    }
+
+    /**
+     * Get profilcomplet
+     *
+     * @return boolean
+     */
+    public function getProfilcomplet()
+    {
+        return $this->profilcomplet;
     }
 }

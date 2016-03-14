@@ -1244,8 +1244,11 @@ class DefaultController extends Controller
 
     public function FusionnerAction($sas,Request $request){
         $em = $this->getDoctrine()->getEntityManager();
+        $reponse = new JsonResponse();
+
         $import = $em->getRepository('GenericBundle:ImportCandidat')->find($sas);
         $userfus = $em->getRepository('GenericBundle:User')->find($request->get('DuplicaPopUpRadioUSer'));
+
         if(!$userfus->getCivilite()){
             $userfus->setCivilite($import->getCivilite());
         }
@@ -1258,8 +1261,9 @@ class DefaultController extends Controller
         if(!$userfus->getTelephone()){
             $userfus->setTelephone($import->getTelephone());
         }
+
         if(!$userfus->getPhotos()){
-            $userfus->setTelephone($import->getPhotos());
+            $userfus->setPhotos($import->getPhotos());
         }
         if(!$userfus->getInfo()->getAdresse()){
             $userfus->getInfo()->setAdresse($import->getInfo()->getAdresse());
@@ -1289,9 +1293,10 @@ class DefaultController extends Controller
             $userfus->getInfo()->setVehicule($import->getInfo()->getVehicule());
         }
         if(!$userfus->getInfo()->getInsee()){
-            $userfus->getInfo()->setVehicule($import->getInfo()->getInsee());
+            $userfus->getInfo()->setInsee($import->getInfo()->getInsee());
         }
         $em->flush();
+
         foreach($import->getLangue() as $langue)
         {
             if(!in_array($langue,$userfus->getLangue()->toArray()))
@@ -1319,84 +1324,101 @@ class DefaultController extends Controller
 
         foreach($em->getRepository('GenericBundle:Experience')->findBy(array('importCandidat'=>$import)) as $experience)
         {
+            $delete = false;
             foreach($em->getRepository('GenericBundle:Experience')->findBy(array('user'=>$userfus)) as $experienceuser)
             {
                 if($experience->isEqual($experienceuser))
                 {
                     $em->remove($experience);
                     $em->flush();
+                    $delete = true;
                 }
-                else{
-                    $experience->setUser($userfus);
-                    $experience->setImportCandidat(null);
-                }
+            }
+            if(!$delete){
+                $experience->setUser($userfus);
+                $experience->setImportCandidat(null);
+                $em->flush();
             }
         }
         foreach($em->getRepository('GenericBundle:Diplome')->findBy(array('importCandidat'=>$import)) as $diplome)
         {
+            $delete = false;
             foreach($em->getRepository('GenericBundle:Diplome')->findBy(array('user'=>$userfus)) as $diplomeuser)
             {
                 if($diplome->isEqual($diplomeuser))
                 {
                     $em->remove($diplome);
                     $em->flush();
+                    $delete = true;
                 }
                 else{
-                    $diplome->setUser($userfus);
-                    $diplome->setImportCandidat(null);
+
                 }
+            }
+            if(!$delete){
+                $diplome->setUser($userfus);
+                $diplome->setImportCandidat(null);
+                $em->flush();
             }
         }
         foreach($em->getRepository('GenericBundle:Document')->findBy(array('importCandidat'=>$import)) as $document)
         {
+            $delete = false;
             foreach($em->getRepository('GenericBundle:Document')->findBy(array('user'=>$userfus)) as $documentuser)
             {
                 if($document->isEqual($documentuser))
                 {
                     $em->remove($document);
                     $em->flush();
+                    $delete = true;
                 }
-                else{
-                    $document->setUser($userfus);
-                    $document->setImportCandidat(null);
-                }
+            }
+            if(!$delete){
+                $document->setUser($userfus);
+                $document->setImportCandidat(null);
+                $em->flush();
             }
         }
         foreach($em->getRepository('GenericBundle:Parents')->findBy(array('importCandidat'=>$import)) as $parents)
         {
+            $delete = false;
             foreach($em->getRepository('GenericBundle:Parents')->findBy(array('user'=>$userfus)) as $parentsuser)
             {
                 if($parents->isEqual($parentsuser))
                 {
                     $em->remove($parents);
                     $em->flush();
+                    $delete = true;
                 }
-                else{
-                    $parents->setUser($userfus);
-                    $parents->setImportCandidat(null);
-                }
+            }
+            if(!$delete){
+                $parents->setUser($userfus);
+                $parents->setImportCandidat(null);
+                $em->flush();
             }
         }
         foreach($em->getRepository('GenericBundle:Recommandation')->findBy(array('importCandidat'=>$import)) as $recommandation)
         {
+            $delete = false;
             foreach($em->getRepository('GenericBundle:Recommandation')->findBy(array('user'=>$userfus)) as $recommandationuser)
             {
                 if($recommandation->isEqual($recommandationuser))
                 {
                     $em->remove($recommandation);
                     $em->flush();
+                    $delete = true;
                 }
-                else{
-                    $recommandation->setUser($userfus);
-                    $recommandation->setImportCandidat(null);
-                }
+            }
+            if(!$delete){
+                $recommandation->setUser($userfus);
+                $recommandation->setImportCandidat(null);
+                $em->flush();
             }
         }
 
         $em->remove($import);
         $em->flush();
-
-        return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
+        return $reponse->setData(1);
     }
 
     public function AjouterParentAction(Request $request){
