@@ -82,7 +82,28 @@
 
                 </select>
 
-                <div id="societe" class="list-group col-xs-2 leftbar">
+                <div id="ecole" class="list-group col-xs-2 leftbar">
+                    {% if societes is defined %}
+                        {% for s in societes %}
+                            <button onclick="postiframe('{{ path('affiche_etab',{'id': s.getId }) }}',{{ s.getId }},this)" id="etablissement{{ s.getId }}" type="button" class="list-group-item butonLigne">
+                                <div name="Recherche" style="display: none;">{{ s.getTier.getRaisonSoc }},{{ s.siret }},{{ s.adresse }},{{ s.codepostal }},{{ s.ville }}</div>
+                                <div style="display: none;"></div>
+                                <div class="col-xs-12 part" title="{{s.getTier.getRaisonSoc}}">{{s.getTier.getRaisonSoc}}</div>
+                                <div class="col-xs-12 part"
+                                     style="height: 31px; text-align: left;">
+                                    <div class="col-xs-9 part" title="{{ s.getVille }}">{{ s.getVille }}</div>
+                                    {% if s.getActive %}
+                                        <div class="col-xs-1 active" id="active{{ s.getId }}"></div>
+                                    {% else %}
+                                        <div class="col-xs-1 inactive" id="active{{ s.getId }}"></div>
+                                    {% endif %}
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div id="societe" class="list-group col-xs-2 leftbar"
+                     style="visibility: hidden;">
                     {% if societes is defined %}
                         {% for s in societes %}
                             <button onclick="postiframe('{{ path('affiche_etab',{'id': s.getId }) }}',{{ s.getId }},this)" id="etablissement{{ s.getId }}" type="button" class="list-group-item butonLigne">
@@ -250,6 +271,8 @@
             }
         }
     };
+
+
     function search(mot){
         var mots = mot.toUpperCase().trim().split(/ +/g);
         var Recherches = document.getElementsByName('Recherche');

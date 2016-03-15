@@ -337,6 +337,10 @@ class DefaultController extends Controller
         {
             return $this->redirect($this->generateUrl('affiche_etab',array('id'=>$request->get('_id'))));
         }
+        elseif($request->get('_id') and $usercon->hasRole('ROLE_ADMINSOC'))
+        {
+            return $this->redirect($this->generateUrl('affiche_etab',array('id'=>$request->get('_id'))));
+        }
         else{
             throw new Exception('ERROR');
         }
@@ -582,6 +586,7 @@ class DefaultController extends Controller
         $user->setUsername($request->get('_Username'));
         $user->setEmail($request->get('_Mail'));
         $em->flush();
+
         if($user->hasRole('ROLE_APPRENANT')){
             $info = $em->getRepository('GenericBundle:infocomplementaire')->find(array('id'=>$request->get('_IdInfo')));
 

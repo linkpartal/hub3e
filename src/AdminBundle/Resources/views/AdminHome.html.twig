@@ -15,8 +15,10 @@
 </head>
 <body onload="loading();putbadged()">
 <div id="addtier" class="popup col-xs-3">
-    <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
+    <div onclick="document.getElementById('submittier').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;background-color: white;">
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
 
         <div id="div_adresse" name="ajouterAdresse" style="border-bottom: 10px;display:none">
             <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
@@ -81,9 +83,10 @@
 </div>
 
 <div id="addsuperuser" class="popup col-xs-3">
-    <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block">
-
+    <div onclick="document.getElementById('submituser').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block;background-color: white;">
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
         <form id="formadduser" action="{{ path("user_added") }}" onsubmit="document.getElementById('submituser').disabled=true" method="post" enctype="multipart/form-data">
 
             <div class="div_form"  style="display: inline-table;" >
@@ -118,8 +121,10 @@
 
 </div>
 <div id="addLicenceDef" class="popup col-xs-3">
-    <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:10px solid white;display: block;overflow-y: auto;">
+    <div onclick="document.getElementById('submitLicence').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:10px solid white;display: block;overflow-y: auto;background-color: white;">
+        <button style="width: 40px;height: 40px;float:right;background: white" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
         <form class="formulaire" id="formLicence" action="{{ path("metier_user_licenceadded") }}" onsubmit="document.getElementById('submitlicencedef').disabled=true" method="post">
 
             <div class="div_form" style="display: inline-table;" >
@@ -139,15 +144,17 @@
 
             </div>
             <div class="div_button">
-                <input class="blue" name="submitLicenceDef" type="submit" value="envoyer">
+                <input class="blue" id="submitLicence" name="submitLicenceDef" type="submit" value="envoyer">
 
             </div>
         </form>
     </div>
 </div>
 <div id="import" class="popup col-xs-3">
-    <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
+    <div onclick="document.getElementById('submitimport').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;background-color: white;">
+        <button style="width: 40px;height: 40px;float:right;background: white" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
         <form id="formImport" action="{{ path('import') }}" onsubmit="document.getElementById('submitimport').disabled=true" method="post" enctype="multipart/form-data">
             <div class="div_form">
 
