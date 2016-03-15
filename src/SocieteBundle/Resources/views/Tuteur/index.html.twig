@@ -22,69 +22,7 @@
 
 </head>
 <body onload="loading();putbadged()">
-<div id="addtier" class="popup col-xs-3">
-    <div onclick="document.getElementById('submittier').click();hide(this)" class="close"></div>
-    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;background-color: white;">
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-        <div id="div_adresse" name="ajouterAdresse" style="border-bottom: 10px;display:none">
-            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
-            <button class="toggle" type="button" onclick="supprimerAdresse(this)">-</button>
-            <div id="demo" class="collapse in">
-                <div class="col-xs-4 input-colonne">
-                    <input placeholder="Siret" class="input" type="text" id="SIRET" name="_SIRET[]" pattern=".{14}" maxlength="14" required>
 
-
-                    <input placeholder="Responsable" class="input" type="text" id="Resp" name="_Resp[]" maxlength="45" required>
-                    <input placeholder="Téléphone responsable" class="input" type="tel" id="TelResp" name="_TelResp[]" maxlength="45" required>
-
-                    <input placeholder="Adresse email responsable" class="input" type="email" id="MailResp" name="_MailResp[]" maxlength="45" required>
-                    <input type="hidden" class="form-control" id="Geocode" name="_Geocode[]" required>
-
-
-                </div>
-                <div class="col-xs-8">
-                    <input  placeholder="Adresse postale" class="input" type="text" id="Adresse" name="_Adresse[]" maxlength="45" required>
-                    <input  placeholder="Ville" class="input" type="text" id="Ville" name="_Ville[]" style="width: 50%; margin-right: 10px" maxlength="20" required>
-                    <input  placeholder="Code postal" class="input" type="text" id="CodeP" name="_CodeP[]" style="width: calc(50% - 10px)" maxlength="10" required>
-                    <input placeholder="Téléphone" class="input" type="tel" id="Tel" name="_Tel[]" style="width: 50%;margin-right: 10px" maxlength="10" required>
-                    <input placeholder="Fax" class="input" type="tel" id="Fax" name="_Fax[]" style="width: calc(50% - 10px)" maxlength="10" required>
-                    <input placeholder="Adresse du Site" class="input" type="url" id="Site" name="_Site[]" maxlength="45" required>
-
-                </div>
-            </div>
-        </div>
-        <form id="formTier" action="{{ path('tieradded') }}" method="post" enctype="multipart/form-data">
-            <div class="div_form" style="display: inline-table">
-
-                <div class="col-xs-6 input-colonne">
-                    <input placeholder="SIREN" type="text" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" required>
-                    <label for="Logo"><img id="Logoimg" style="height: 200px;width: 150px" onclick="this.src='{{ asset('image/wait_x300.gif') }}'" src="{{ asset('image/upload-arrow.png') }}"/></label><br>
-                    <input onchange="readURL(this,'Logoimg');"  accept="image/*" type="file" class="input" id="Logo" name="_Logo" style="display: none">
-                </div>
-
-                <div class="col-xs-6 input-colonne">
-                    <input placeholder="Raison sociale" type="text" class="input" id="RaisonSoc" name="_RaisonSoc" maxlength="45" required>
-
-
-                    <label for="image"><img id="backimg" onclick="this.src='{{ asset('image/wait_x300.gif') }}'" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
-                    <input onchange="readURL(this,'backimg');" accept="image/*" type="file" class="input" id="image" name="_image" style="display: none">
-                </div>
-
-                <input  type="hidden" id="EcoleBool" name="_Ecole">
-                <div id="adressecontainer">
-
-                </div>
-                <button type="button" class="col-xs-12 blue" onclick="dupliqueradresse()">Ajouter une adresse</button>
-            </div>
-            <div class="div_button">
-                <input type="submit" style="display: none">
-                <button id="submittier" class="blue" type="button" onclick="envoyeradresses()">Envoyer</button>
-            </div>
-        </form>
-    </div>
-
-</div>
 <div id="apprenant" class="popup col-xs-3" >
     <div onclick="document.getElementById('submitaddapprenant').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-6" style="top:40px;border:20px solid white;display: block;margin-bottom: 20px ;background: white;width:70%">
@@ -490,7 +428,14 @@
             <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="border: 0;padding: 4.5px;height: 100%;">
                 <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 21px;" >        </a>
             </div>
+            <div class="input-group col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+                <button  type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+                ></button>
 
+                <button onclick="document.getElementById('iframe').src='{{ path('affiche_etab',{'id':app.user.etablissement.id }) }}'" style="color:white;white-space: nowrap;overflow: hidden; "> Sociétés </button>
+
+
+            </div>
 
             <!--div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
                 <button onclick="show('import')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"

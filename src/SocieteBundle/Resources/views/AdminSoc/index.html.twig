@@ -98,32 +98,11 @@
                     <option value="societe">Voir Sociétés</option>
                     <option value="licence">Voir Licences</option>
                     <option value="mission">Mes Missions</option>
-                    <option value="mission_propose">Missions proposées</option>
                     <option value="user">Voir Utilisateurs</option>
                 </select>
 
-                <div id="ecole" class="list-group col-xs-2 leftbar">
-                    {% if ecoles is defined %}
-                        {% for e in ecoles %}
-                            <button onclick="postiframe('{{ path('affiche_etab',{'id': e.getId} ) }}',{{ e.getId }},this)" id="etablissement{{ e.getId }}" type="button" class="list-group-item butonLigne">
-                                <div name="Recherche" style="display: none;">{{ e.getTier.getRaisonSoc }},{{ e.siret }},{{ e.adresse }},{{ e.codepostal }},{{ e.ville }}</div>
-                                <div style="display: none;"></div>
-                                <div class="col-xs-12 part" title="{{e.getTier.getRaisonSoc}}">{{e.getTier.getRaisonSoc}}</div>
-                                <div class="col-xs-12 part"
-                                     style="height: 31px; text-align: left;">
-                                    <div class="col-xs-9 part" title="{{ e.getVille }}">{{ e.getVille }}</div>
-                                    {% if e.getActive %}
-                                        <div class="col-xs-1 active" id="active{{ e.getId }}"></div>
-                                    {% else %}
-                                        <div class="col-xs-1 inactive" id="active{{ e.getId }}"></div>
-                                    {% endif %}
-                                </div>
-                            </button>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-                <div id="societe" class="list-group col-xs-2 leftbar"
-                     style="visibility: hidden;">
+
+                <div id="societe" class="list-group col-xs-2 leftbar">
                     {% if societes is defined %}
                         {% for s in societes %}
                             <button onclick="postiframe('{{ path('affiche_etab',{'id': s.getId }) }}',{{ s.getId }},this)" id="etablissement{{ s.getId }}" type="button" class="list-group-item butonLigne">
@@ -181,27 +160,7 @@
                     {% endif %}
 
                 </div>
-                <div id="mission_propose" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
-                    {% if missions_propose is defined %}
-                        {% for m in missions_propose %}
-                            <button id="mission_propose{{ m.getId }}" onclick="postiframeUser('{{ path('Afficher_Mission_Propose',{'id':m.id}) }}')" type="button" class="list-group-item butonLigne">
-                                <div class="col-xs-12 part" title="{{m.getCodemission}}">{{m.getCodemission}}</div>
-                                <div class="col-xs-12 part"
-                                     style="height: 31px; text-align: left;">
 
-                                    <div class="col-xs-9 part" title="{{m.getDomaine}}">{{ m.getDomaine }}</div>
-                                    {% if not m.getSuspendu %}
-                                        <div class="col-xs-1 active" id="active{{ m.getId }}"></div>
-                                    {% else %}
-                                        <div class="col-xs-1 inactive" id="active{{ m.getId }}"></div>
-                                    {% endif %}
-
-                                </div>
-                            </button>
-                        {% endfor %}
-                    {% endif %}
-
-                </div>
                 <div id="user" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if users is defined %}
                         {% for u in users %}
@@ -222,40 +181,7 @@
                         {% endfor %}
                     {% endif %}
                 </div>
-                <div id="apprenants" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
-                    {% if apprenants is defined %}
-                        {% for u in apprenants %}
-                            <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId }) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
-                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.getUsername }},{{ u.prenom }},{{ u.email }},{% if u.info %}{{ u.info.adresse }},{{ u.info.cp }},{{ u.info.insee }}{% endif %},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
-                                <div style="display: none;"></div>
-                                <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
-                                <div class="col-xs-12 part"
-                                     style="height: 31px; text-align: left;">
 
-                                    <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
-                                    {% if not u.isExpired %}
-                                        <div class="col-xs-1 active" id="active{{ u.getId }}"></div>
-                                    {% else %}
-                                        <div class="col-xs-1 inactive" id="active{{ u.getId }}"></div>
-                                    {% endif %}
-
-                                </div>
-                            </button>
-                        {% endfor %}
-                    {% endif %}
-                    {% if import_apprenants is defined %}
-                        {% for u in import_apprenants %}
-                            <button onclick="postiframeUser('{{ path('Afficher_Sas',{'id': u.getId }) }}',this)" id="import{{ u.getId }}" type="button" class="list-group-item butonLigne">
-                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.prenom }},{{ u.email }},{% if u.info %}{{ u.info.adresse }},{{ u.info.cp }},{{ u.info.insee }}{% endif %},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
-                                <div style="display: none;"></div>
-                                <div class="col-xs-12 part" title="{{u.getPrenom ~ '.'~u.getNom}}">{{u.getPrenom ~ '.'~u.getNom}}</div>
-                                <div class="col-xs-12 part" style="height: 31px; text-align: left;">
-                                    <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
-                                </div>
-                            </button>
-                        {% endfor %}
-                    {% endif %}
-                </div>
             </div>
         {% endblock %}
 
@@ -304,11 +230,8 @@
     var i = 1;
     document.getElementById("leftselect").onchange = function(){
         var x = document.getElementById("leftselect").value;
-        document.getElementById('apprenants').style.visibility= 'hidden';
-        document.getElementById('ecole').style.visibility= 'hidden';
         document.getElementById('societe').style.visibility= 'hidden';
         document.getElementById('mission').style.visibility= 'hidden';
-        document.getElementById('mission_propose').style.visibility= 'hidden';
         document.getElementById('licence').style.visibility= 'hidden';
         document.getElementById('user').style.visibility= 'hidden';
         document.getElementById(x).style.visibility='visible';

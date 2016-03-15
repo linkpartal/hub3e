@@ -124,7 +124,7 @@
         {% endif %}
 
         {% if not etablissement.getTier.getEcole %}
-            {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
+            {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_ADMINSOC') %}
                 <div id="addmission" class="popup" >
                     <div onclick="document.getElementById('submitaddmission').click();hide(this)" class="close"></div>
                     <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;position:fixed " >
@@ -1055,13 +1055,13 @@
                 </div>
 
             </div>
-            {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMINECOLE') or (is_granted('ROLE_ADMINSOC') and etablissement.getTier == app.user.getTier) %}
+            {% if is_granted('ROLE_RECRUTEUR') or (is_granted('ROLE_ADMINSOC') and etablissement.getTier == app.user.getTier) %}
                 <div class="col-xs-3" style="height: 100%;">
                     <div class="list-group"
                          style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
 
 
-
+                        {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
                         {% if etablissement.getActive %}
                             <button onclick="active('{{ path('activate',{'id':etablissement.getId}) }}')" id="activate" type="button" class="list-group-item rightMenu" style="background-color: #94C400">
                                 <div class="col-xs-12" style="color: white;">ACTIVE</div>
@@ -1070,6 +1070,7 @@
                             <button onclick="active('{{ path('activate',{'id':etablissement.getId}) }}')" id="activate" type="button" class="list-group-item rightMenu" style="background-color: red">
                                 <div class="col-xs-12" style="color: white;">DÉSACTIVE</div>
                             </button>
+                        {% endif %}
                         {% endif %}
                         {% if is_granted('ROLE_SUPER_ADMIN') %}
                             <button onclick="show('instanceLicence')" type="button" class="list-group-item rightMenu">
@@ -1086,7 +1087,7 @@
                         {% endif %}
 
                         {% if not etablissement.getTier.getEcole %}
-                            {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
+                            {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_ADMINSOC') %}
                                 <button onclick="show('addmission')" type="button" class="list-group-item rightMenu">
                                     <div class="col-xs-12">Ajouter une mission</div>
 
@@ -1113,6 +1114,7 @@
                                 </button>
                             {% endif %}
                         {% endif %}
+                        {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
                         <button onclick="modifier('formEtab',this)"type="button" class="list-group-item rightMenu">
                             <div class="col-xs-12">Modifier la fiche</div>
                         </button>
@@ -1123,6 +1125,7 @@
                         <button onclick="alert('Ce button n\'est pas encore fonctionel!')" type="button" class="list-group-item rightMenu">
                             <div class="col-xs-12">Gérer les droits</div>
                         </button>
+                        {% endif %}
                     </div>
                 </div>
             {% endif %}
