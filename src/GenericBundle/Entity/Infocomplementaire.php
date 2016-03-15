@@ -43,6 +43,20 @@ class Infocomplementaire
     private $daterecup;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datecreation", type="datetime", nullable=true)
+     */
+    private $datecreation;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datemodification", type="datetime", nullable=true)
+     */
+    private $datemodification;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="CPNaissance", type="string", length=45, nullable=true)
@@ -99,6 +113,13 @@ class Infocomplementaire
     private $mobilite;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="profilcomplet", type="boolean", nullable=true)
+     */
+    private $profilcomplet = false;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="fratrie", type="integer", nullable=true)
@@ -125,6 +146,8 @@ class Infocomplementaire
      * @ORM\ManyToMany(targetEntity="VillesFranceFree", mappedBy="infocomplementaire")
      */
     private $villesFranceFreeVille;
+
+
 
     /**
      * Constructor
@@ -514,5 +537,77 @@ class Infocomplementaire
     public function getInsee()
     {
         return $this->insee;
+    }
+
+    /**
+     * Set datecreation
+     *
+     * @param \DateTime $datecreation
+     *
+     * @return Infocomplementaire
+     */
+    public function setDatecreation($datecreation)
+    {
+        $this->datecreation = $datecreation;
+
+        return $this;
+    }
+
+    /**
+     * Get datecreation
+     *
+     * @return \DateTime
+     */
+    public function getDatecreation()
+    {
+        return $this->datecreation;
+    }
+
+    /**
+     * Set datemodification
+     *
+     * @param \DateTime $datemodification
+     *
+     * @return Infocomplementaire
+     */
+    public function setDatemodification($datemodification)
+    {
+        $this->datemodification = $datemodification;
+
+        return $this;
+    }
+
+    /**
+     * Get datemodification
+     *
+     * @return \DateTime
+     */
+    public function getDatemodification()
+    {
+        return $this->datemodification;
+    }
+
+    /**
+     * Set profilcomplet
+     *
+     * @param boolean $profilcomplet
+     *
+     * @return Infocomplementaire
+     */
+    public function setProfilcomplet($profilcomplet)
+    {
+        $this->profilcomplet = $profilcomplet;
+
+        return $this;
+    }
+
+    /**
+     * Get profilcomplet
+     *
+     * @return boolean
+     */
+    public function getProfilcomplet()
+    {
+        return $this->profilcomplet;
     }
 }

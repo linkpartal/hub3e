@@ -101,9 +101,16 @@ class Mission
     /**
      * @var string
      *
-     * @ORM\Column(name="Date", type="datetime", nullable=true)
+     * @ORM\Column(name="Datecreation", type="datetime", nullable=true)
      */
-    private $date;
+    private $datecreation;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="Datemodification", type="datetime", nullable=true)
+     */
+    private $datemodification;
 
     /**
      * @var string
@@ -177,19 +184,7 @@ class Mission
      */
     private $apprentit;
 
-    /**
-     * Set id
-     *
-     * @param integer $id
-     *
-     * @return Mission
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
 
-        return $this;
-    }
 
     /**
      * Get id
@@ -271,270 +266,6 @@ class Mission
     public function getTypecontrat()
     {
         return $this->typecontrat;
-    }
-
-    /**
-     * Set tuteur
-     *
-     * @param \GenericBundle\Entity\User $tuteur
-     *
-     * @return Mission
-     */
-    public function setTuteur(\GenericBundle\Entity\User $tuteur)
-    {
-        $this->tuteur = $tuteur;
-
-        return $this;
-    }
-
-    /**
-     * Get tuteur
-     *
-     * @return \GenericBundle\Entity\User
-     */
-    public function getTuteur()
-    {
-        return $this->tuteur;
-    }
-
-    /**
-     * Set intitule
-     *
-     * @param string $intitule
-     *
-     * @return Mission
-     */
-    public function setIntitule($intitule)
-    {
-        $this->intitule = $intitule;
-
-        return $this;
-    }
-
-    /**
-     * Get intitule
-     *
-     * @return string
-     */
-    public function getIntitule()
-    {
-        return $this->intitule;
-    }
-
-    /**
-     * Set codemission
-     *
-     * @param string $codemission
-     *
-     * @return Mission
-     */
-    public function setCodemission($codemission)
-    {
-        $this->codemission = $codemission;
-
-        return $this;
-    }
-
-    /**
-     * Get codemission
-     *
-     * @return string
-     */
-    public function getCodemission()
-    {
-        return $this->codemission;
-    }
-
-    /**
-     * Set domaine
-     *
-     * @param string $domaine
-     *
-     * @return Mission
-     */
-    public function setDomaine($domaine)
-    {
-        $this->domaine = $domaine;
-
-        return $this;
-    }
-
-    /**
-     * Get domaine
-     *
-     * @return string
-     */
-    public function getDomaine()
-    {
-        return $this->domaine;
-    }
-
-    /**
-     * Add formation
-     *
-     * @param \GenericBundle\Entity\Formation $formation
-     *
-     * @return Mission
-     */
-    public function addFormation(\GenericBundle\Entity\Formation $formation)
-    {
-        $this->formation[] = $formation;
-
-        return $this;
-    }
-
-    /**
-     * Remove formation
-     *
-     * @param \GenericBundle\Entity\Formation $formation
-     */
-    public function removeFormation(\GenericBundle\Entity\Formation $formation)
-    {
-        $this->formation->removeElement($formation);
-    }
-
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Date", type="date")
-     */
-    public function setDate(\DateTime $date)
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    /**
-     * Get date
-     *
-     * @return \DateTime
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    /**
-     * Set remuneration
-     *
-     * @param integer $remuneration
-     *
-     * @return Mission
-     */
-    public function setRemuneration($remuneration)
-    {
-        $this->remuneration = $remuneration;
-
-        return $this;
-    }
-
-    /**
-     * Get remuneration
-     *
-     * @return integer
-     */
-    public function getRemuneration()
-    {
-        return $this->remuneration;
-    }
-
-    /**
-     * Set horaire
-     *
-     * @param string $horaire
-     *
-     * @return Mission
-     */
-    public function setHoraire($horaire)
-    {
-        $this->horaire = $horaire;
-
-        return $this;
-    }
-
-    /**
-     * Get horaire
-     *
-     * @return string
-     */
-    public function getHoraire()
-    {
-        return $this->horaire;
-    }
-
-    /**
-     * Set datedebut
-     *
-     * @param \DateTime $datedebut
-     *
-     * @return Mission
-     */
-    public function setDatedebut($datedebut)
-    {
-        $this->datedebut = $datedebut;
-
-        return $this;
-    }
-
-    /**
-     * Get datedebut
-     *
-     * @return \DateTime
-     */
-    public function getDatedebut()
-    {
-        return $this->datedebut;
-    }
-
-    /**
-     * Set datefin
-     *
-     * @param \DateTime $datefin
-     *
-     * @return Mission
-     */
-    public function setDatefin($datefin)
-    {
-        $this->datefin = $datefin;
-
-        return $this;
-    }
-
-    /**
-     * Get datefin
-     *
-     * @return \DateTime
-     */
-    public function getDatefin()
-    {
-        return $this->datefin;
-    }
-
-    /**
-     * Set emploi
-     *
-     * @param boolean $emploi
-     *
-     * @return Mission
-     */
-    public function setEmploi($emploi)
-    {
-        $this->emploi = $emploi;
-
-        return $this;
-    }
-
-    /**
-     * Get emploi
-     *
-     * @return boolean
-     */
-    public function getEmploi()
-    {
-        return $this->emploi;
     }
 
     /**
@@ -658,52 +389,243 @@ class Mission
     }
 
     /**
-     * Set etablissement
+     * Set intitule
      *
-     * @param \GenericBundle\Entity\Etablissement $etablissement
+     * @param string $intitule
      *
      * @return Mission
      */
-    public function setEtablissement(\GenericBundle\Entity\Etablissement $etablissement = null)
+    public function setIntitule($intitule)
     {
-        $this->etablissement = $etablissement;
+        $this->intitule = $intitule;
 
         return $this;
     }
 
     /**
-     * Get etablissement
+     * Get intitule
      *
-     * @return \GenericBundle\Entity\Etablissement
+     * @return string
      */
-    public function getEtablissement()
+    public function getIntitule()
     {
-        return $this->etablissement;
+        return $this->intitule;
     }
 
-    /*
-     * Utiliser aprés l'insert(persist) dans la base de données.
+    /**
+     * Set codemission
+     *
+     * @param string $codemission
+     *
+     * @return Mission
      */
-    public function genererCode()
+    public function setCodemission($codemission)
     {
-        if($this->getCodemission()=='' or !$this->getCodemission())
-        {
-            $code =strval($this->getId());
-            $i = count($code);
-            while($i<5)
-            {
-                $code.= '0';
-                $i++;
-            }
-            $characters = range('A','Z');
-            $max = count($characters) - 1;
-            for ($i = 0; $i < 4; $i++) {
-                $rand = mt_rand(0, $max);
-                $code .= $characters[$rand];
-            }
-            $this->setCodemission($code);
-        }
+        $this->codemission = $codemission;
 
+        return $this;
+    }
+
+    /**
+     * Get codemission
+     *
+     * @return string
+     */
+    public function getCodemission()
+    {
+        return $this->codemission;
+    }
+
+    /**
+     * Set domaine
+     *
+     * @param string $domaine
+     *
+     * @return Mission
+     */
+    public function setDomaine($domaine)
+    {
+        $this->domaine = $domaine;
+
+        return $this;
+    }
+
+    /**
+     * Get domaine
+     *
+     * @return string
+     */
+    public function getDomaine()
+    {
+        return $this->domaine;
+    }
+
+    /**
+     * Set datecreation
+     *
+     * @param \DateTime $datecreation
+     *
+     * @return Mission
+     */
+    public function setDatecreation($datecreation)
+    {
+        $this->datecreation = $datecreation;
+
+        return $this;
+    }
+
+    /**
+     * Get datecreation
+     *
+     * @return \DateTime
+     */
+    public function getDatecreation()
+    {
+        return $this->datecreation;
+    }
+
+    /**
+     * Set datemodification
+     *
+     * @param \DateTime $datemodification
+     *
+     * @return Mission
+     */
+    public function setDatemodification($datemodification)
+    {
+        $this->datemodification = $datemodification;
+
+        return $this;
+    }
+
+    /**
+     * Get datemodification
+     *
+     * @return \DateTime
+     */
+    public function getDatemodification()
+    {
+        return $this->datemodification;
+    }
+
+    /**
+     * Set datedebut
+     *
+     * @param \DateTime $datedebut
+     *
+     * @return Mission
+     */
+    public function setDatedebut($datedebut)
+    {
+        $this->datedebut = $datedebut;
+
+        return $this;
+    }
+
+    /**
+     * Get datedebut
+     *
+     * @return \DateTime
+     */
+    public function getDatedebut()
+    {
+        return $this->datedebut;
+    }
+
+    /**
+     * Set datefin
+     *
+     * @param \DateTime $datefin
+     *
+     * @return Mission
+     */
+    public function setDatefin($datefin)
+    {
+        $this->datefin = $datefin;
+
+        return $this;
+    }
+
+    /**
+     * Get datefin
+     *
+     * @return \DateTime
+     */
+    public function getDatefin()
+    {
+        return $this->datefin;
+    }
+
+    /**
+     * Set emploi
+     *
+     * @param boolean $emploi
+     *
+     * @return Mission
+     */
+    public function setEmploi($emploi)
+    {
+        $this->emploi = $emploi;
+
+        return $this;
+    }
+
+    /**
+     * Get emploi
+     *
+     * @return boolean
+     */
+    public function getEmploi()
+    {
+        return $this->emploi;
+    }
+
+    /**
+     * Set remuneration
+     *
+     * @param integer $remuneration
+     *
+     * @return Mission
+     */
+    public function setRemuneration($remuneration)
+    {
+        $this->remuneration = $remuneration;
+
+        return $this;
+    }
+
+    /**
+     * Get remuneration
+     *
+     * @return integer
+     */
+    public function getRemuneration()
+    {
+        return $this->remuneration;
+    }
+
+    /**
+     * Set horaire
+     *
+     * @param string $horaire
+     *
+     * @return Mission
+     */
+    public function setHoraire($horaire)
+    {
+        $this->horaire = $horaire;
+
+        return $this;
+    }
+
+    /**
+     * Get horaire
+     *
+     * @return string
+     */
+    public function getHoraire()
+    {
+        return $this->horaire;
     }
 
     /**
@@ -731,6 +653,54 @@ class Mission
     }
 
     /**
+     * Set etablissement
+     *
+     * @param \GenericBundle\Entity\Etablissement $etablissement
+     *
+     * @return Mission
+     */
+    public function setEtablissement(\GenericBundle\Entity\Etablissement $etablissement = null)
+    {
+        $this->etablissement = $etablissement;
+
+        return $this;
+    }
+
+    /**
+     * Get etablissement
+     *
+     * @return \GenericBundle\Entity\Etablissement
+     */
+    public function getEtablissement()
+    {
+        return $this->etablissement;
+    }
+
+    /**
+     * Set tuteur
+     *
+     * @param \GenericBundle\Entity\User $tuteur
+     *
+     * @return Mission
+     */
+    public function setTuteur(\GenericBundle\Entity\User $tuteur = null)
+    {
+        $this->tuteur = $tuteur;
+
+        return $this;
+    }
+
+    /**
+     * Get tuteur
+     *
+     * @return \GenericBundle\Entity\User
+     */
+    public function getTuteur()
+    {
+        return $this->tuteur;
+    }
+
+    /**
      * Set apprentit
      *
      * @param \GenericBundle\Entity\User $apprentit
@@ -752,5 +722,30 @@ class Mission
     public function getApprentit()
     {
         return $this->apprentit;
+    }
+
+    /*
+     * Utiliser aprés l'insert(persist) dans la base de données.
+     */
+    public function genererCode()
+    {
+        if($this->getCodemission()=='' or !$this->getCodemission())
+        {
+            $code =strval($this->getId());
+            $i = count($code);
+            while($i<5)
+            {
+                $code.= '0';
+                $i++;
+            }
+            $characters = range('A','Z');
+            $max = count($characters) - 1;
+            for ($i = 0; $i < 4; $i++) {
+                $rand = mt_rand(0, $max);
+                $code .= $characters[$rand];
+            }
+            $this->setCodemission($code);
+        }
+
     }
 }

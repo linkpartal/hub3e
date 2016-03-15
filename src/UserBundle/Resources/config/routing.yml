@@ -39,11 +39,11 @@ afficher_duplica:
     defaults: { _controller: UserBundle:Default:afficherDuplica}
 
 importer_candidat:
-    path: /admin/importer_candidat/{id}
-    defaults: { _controller: UserBundle:Default:ImportCandidat}
+    path: /admin/importer_SAStoUser/{id}
+    defaults: { _controller: UserBundle:Default:SAStoUser}
 
 fusionner_apprenant:
-    path: /admin/fusion_apprenant/id_sas={sas}/id_user={user}
+    path: /admin/fusion_apprenant/id_sas={sas}
     defaults: { _controller: UserBundle:Default:Fusionner}
 
 afficher_profil:
@@ -196,3 +196,7 @@ supprimerUtilisateurSAS:
 apprenant_added:
     path: /ajouterApprenant
     defaults: { _controller: UserBundle:Default:ajouterApprenant}
+
+Mise_En_Relation:
+    resource: "@UserBundle/Resources/config/MiseEnRelationRouting.yml"
+    prefix:   /MiseEnRelation

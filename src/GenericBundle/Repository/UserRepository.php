@@ -66,7 +66,8 @@ class UserRepository extends EntityRepository
 
             foreach($usersdup as $userdup)
             {
-                if($userdup->getInfo()->getDatenaissance() == $userdup->getInfo()->getDatenaissance() and $userdup->getInfo()->getLieunaissance()==$userdup->getInfo()->getLieunaissance())
+                if($userdup->getInfo()->getDatenaissance() == $import->getInfo()->getDatenaissance() and $userdup->getInfo()->getLieunaissance()==$import->getInfo()->getLieunaissance()
+                and $userdup->hasRole('ROLE_APPRENANT'))
                 {
                     array_push($users,$userdup);
                 }

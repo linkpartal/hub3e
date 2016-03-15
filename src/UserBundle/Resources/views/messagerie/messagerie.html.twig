@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/mission.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
     {% block CSS %}{% endblock %}
 
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
@@ -52,7 +53,7 @@
                     </div>
 
                     <div id="info_apprenant" style="height: 281px;border-top: 1px solid #B0B0B0;margin: 0;overflow-y: auto;width: 100%;">
-                        <div class="col-xs-12 Liste" >
+                        <div class="col-xs-12" >
 
                             <div class="col-xs-12" >
                                 <label class="cell"  style="float:left;">Civilité : <label id="Information_Apprenant_Civilite"></label></label>
@@ -101,6 +102,13 @@
 
                     <div class="col-xs-12" >
                         <textarea style="height: 200px;resize: none;" class="input" name="MessageAcceptation" placeholder="Votre profil nous intéresse,nous vous proposons une plage de rendez-vous en lien Doodle" required ></textarea>
+                    </div>
+                    <div class="col-xs-12">
+                        <button type="button" onclick="if(this.parentElement.children.length < 4){var clone = this.nextElementSibling.cloneNode(true);this.parentNode.appendChild(clone);}">+</button>
+                        <section>
+                            <input name="dateRDV[]" type="date" required><input name="timeRDV[]" type="time" required>
+                            <button type="button" onclick="if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}">-</button>
+                        </section>
                     </div>
                     <div class="col-xs-12">
                         <label style="text-align:left;width:100%;font-family: Arial">Proposer un lien externe pour la prise de rendez-vous (type Doodle) : </label>
@@ -226,25 +234,22 @@
 
 <div id="info_messagerie" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;width: 100%;height: 90%;position: absolute;">
 
-    <div class="row" style="margin:10px 0 0 10px ;margin-bottom: 10px"  >
-        <div>
-            <select class="input" title="messages" style="margin-left: 20px;height:40px;width:200px">
-                <option value="les messages">Tous les messages</option>
-            </select>
-
-            <label style="width:20px" id="startTimeLabel" visible="false"></label>
-
-            <span class="glyphicon glyphicon-search" ></span>
-            <input type="text" class="input" placeholder="Recherche" style="padding:5px; border:solid 1px #666666; color:#666666; border-radius:5px;width:200px;height:40px;margin-right:607px" >
-            <input  class="blue" style="background:white;color:#666666;border:1px solid #ccc;height:40px;width: 40px;color:#257ef0" type="button" value="1">
-            <input  class="blue" style="background:white;color:#666666;border:1px solid #ccc;height:40px;width: 40px;color:#257ef0" type="button" value="2">
-            <button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
-
+    <div class="row" style="margin:10px;"  >
+        <select class="input col-xs-2" title="messages" style="margin-left: 20px;height:40px;">
+            <option value="les messages">Tous les messages</option>
+        </select>
+        <div class="col-xs-2" style="margin-left: 20px;height:40px;display: flex;">
+            <span class="glyphicon glyphicon-search col-xs-2" id="basic-addon1" style="height: 30px;padding: 7px;float: left;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;background-color: white;"></span>
+            <input class="col-xs-10" type="text" aria-describedby="basic-addon1" style="height: 31px;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;background-color: white;" placeholder="Recherche ...">
         </div>
+        <div id="paginationContainer" class="customepaginate" style="max-width: 200px;float: right;display: flex;">
+            <button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px;float: right;" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
+        </div>
+        
     </div>
 
 
-
+<div id="List-Message">
     {% if messageies is defined %}
         {% for msg in messageies %}
 
@@ -276,12 +281,14 @@
                             <label id="statut{{ msg.id }}" style="font:18px arial;margin-top: 30px" > Répondez </label>
                         {% endif %}
                     </div>
-                    <div onclick="informationApprenant('{{msg.getExpediteur.getPhotos}}','{{ msg.getExpediteur.getCivilite }}','{{ msg.getExpediteur.getNom }}','{{ msg.getExpediteur.getPrenom }}',
-                            '{{ msg.getExpediteur.getEmail }}','{{ msg.getExpediteur.getTelephone }}','{{ msg.getExpediteur.getInfo.getDateNaissance|date("d/m/Y") }}',
-                            '{{ msg.getExpediteur.getInfo.getCpNaissance }}','{{ msg.getExpediteur.getInfo.getLieunaissance }}','{{ msg.getExpediteur.getInfo.getAdresse }}','{{ msg.message }}');
-                            show('FicheApprenant');idMessage={{ msg.id }}" class="col-xs-1" style="height: 100%">
+                    <div {% if not msg.statut == -1 and not msg.statut == 1 %}
+                            onclick="informationApprenant('{{msg.getExpediteur.getPhotos|escape('js')}}','{{ msg.getExpediteur.getCivilite|escape('js') }}','{{ msg.getExpediteur.getNom|escape('js') }}','{{ msg.getExpediteur.getPrenom|escape('js') }}',
+                            '{{ msg.getExpediteur.getEmail|escape('js') }}','{{ msg.getExpediteur.getTelephone|escape('js') }}','{{ msg.getExpediteur.getInfo.getDateNaissance|date("d/m/Y") }}',
+                            '{{ msg.getExpediteur.getInfo.getCpNaissance|escape('js') }}','{{ msg.getExpediteur.getInfo.getLieunaissance|escape('js') }}','{{ msg.getExpediteur.getInfo.getAdresse|escape('js') }}','{{ msg.message|escape('js') }}');
+                            show('FicheApprenant');idMessage={{ msg.id }}"
+                            {% endif %}
+                            class="col-xs-1" style="height: 100%">
                         <span class="glyphicon glyphicon-option-vertical" style="margin-top:40px;height:20px;color:#8c8c8c"></span>
-
                     </div>
                 {% else %}
                     <div class="col-xs-2" >
@@ -310,9 +317,12 @@
                             <label id="statut{{ msg.id }}" style="font:18px arial;margin-top: 30px" > Répondez </label>
                         {% endif %}
                     </div>
-                    <div onclick="informationMission('{{ msg.mission.etablissement.tier.logo }}','{{ msg.mission.intitule }}','{{ msg.mission.etablissement.tier.raisonsoc }}','{{ msg.mission.descriptif }}',
-                            '{{ msg.mission.codemission }}','{{ msg.mission.etablissement.adresse }}','{{ msg.mission.etablissement.ville  }}','{{ msg.mission.etablissement.codepostal }}','{{ msg.message }}')
-                            show('FicheMission');idMessage={{ msg.id }}" class="col-xs-1" style="height: 100%">
+                    <div {% if not msg.statut == -1 and not msg.statut == 1 %}
+                            onclick="informationMission('{{ msg.mission.etablissement.tier.logo|escape('js') }}','{{ msg.mission.intitule|escape('js') }}','{{ msg.mission.etablissement.tier.raisonsoc|escape('js') }}','{{ msg.mission.descriptif|escape('js') }}',
+                            '{{ msg.mission.codemission|escape('js') }}','{{ msg.mission.etablissement.adresse|escape('js') }}','{{ msg.mission.etablissement.ville|escape('js')  }}','{{ msg.mission.etablissement.codepostal|escape('js') }}','{{ msg.message|escape('js') }}');
+                            show('FicheMission');idMessage={{ msg.id }}"
+                            {% endif %}
+                            class="col-xs-1" style="height: 100%">
                         <span class="glyphicon glyphicon-option-vertical" style="margin-top:40px;height:20px;color:#8c8c8c"></span>
 
                     </div>
@@ -322,15 +332,25 @@
         {% endfor %}
     {% endif %}
 </div>
+</div>
 
 
 <script src="//code.jquery.com/jquery.min.js"></script>
+<script src="{{ asset('js/paginate.js') }}"></script>
 <!--script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script-->
 <script type="text/javascript" src="http://maps.google.com/maps/api/js"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/PopUp.js') }}"></script>
 <script language="JavaScript">
     var marker,map_localisation,map_mission,marker_societe,idMessage;
+    $(document).ready(function(){
+
+        $("#paginationContainer").customPaginate({
+            itemsToPaginate : ".Liste",
+            activeClass : "active-class"
+        });
+
+    });
     function postuler(){
         var route = '{{ path('Postuler_Messagerie',{'idmessage':'_IDMESSAGE'}) }}';
         route = route.replace('_IDMESSAGE',idMessage);
@@ -355,18 +375,29 @@
             url: route,
             data: $('#'+div).serialize(),
             success: function(data){
-                document.getElementById(div).parentNode.parentNode.style.display = 'none';
-                document.getElementById(div).reset();
-                if(data===-1)
+                if(data===99)
                 {
-                    document.getElementById('statut'+idMessage).style.color = 'red';
-                    document.getElementById('statut'+idMessage).innerHTML = 'Décliner';
+                    alert('Verifier que vous avez bien rempli votre message');
                 }
-                if(data===1)
-                {
-                    document.getElementById('statut'+idMessage).style.color = 'green';
-                    document.getElementById('statut'+idMessage).innerHTML = 'Valider';
+                else{
+                    document.getElementById(div).parentNode.parentNode.style.display = 'none';
+                    document.getElementById(div).reset();
+                    if(data===-1)
+                    {
+                        document.getElementById('statut'+idMessage).style.color = 'red';
+                        document.getElementById('statut'+idMessage).innerHTML = 'Décliner';
+                        document.getElementById('statut'+idMessage).parentNode.nextElementSibling.setAttribute('onclick','');
+                    }
+                    if(data===1)
+                    {
+                        document.getElementById('statut'+idMessage).style.color = 'green';
+                        document.getElementById('statut'+idMessage).innerHTML = 'Valider';
+                        document.getElementById('statut'+idMessage).parentNode.nextElementSibling.setAttribute('onclick','');
+                    }
                 }
+
+
+
             }
         });
     }

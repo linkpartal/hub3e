@@ -14,21 +14,26 @@ class DefaultController extends Controller
         $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');
 
-        $societes = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findSocietes();
-        foreach($societes as $key => $societe)
-        {
-            if($societe->getSuspendu())
-            {
-                unset($societes[$key]);
-            }
-        }
+
 
         if($user->getPhotos())
         {
             $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
         }
 
-        $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date'=>'DESC'));
+        $societes = array();
+        $missions = array();
+        foreach($this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user)) as $message){
+
+            if(!$message->getMission()->getEtablissement()->getSuspendu())
+            {
+                array_push($missions,$message->getMission());
+                array_push($societes,$message->getMission()->getEtablissement());
+
+            }
+
+        }
+
 
         return $this->render('ApprenantBundle:Default:index.html.twig', array('notifications'=>$jsonContent ,'societes'=>$societes,'missions'=>$missions,'image'=>$user->getPhotos()));
     }

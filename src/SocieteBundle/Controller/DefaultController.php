@@ -13,10 +13,12 @@ class DefaultController extends Controller
     {
 
         $user = $this->get('security.token_storage')->getToken()->getUser();
-
-        $image = base64_encode(stream_get_contents($user->getPhotos()));
-
+        if($user->getPhotos())
+        {
+            $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
+        }
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
+
 
         $ecoles = array();
         $ecoles = array_merge($ecoles,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($user->getTier()->getId()))  ;
@@ -40,21 +42,39 @@ class DefaultController extends Controller
         }
 
         $users = $this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($user->getTier());
+        $apprenants =array();
+        $notapprenant = array();
+        foreach($users as $userd)
+        {
+            if($userd->hasRole('ROLE_APPRENANT'))
+            {
+                array_push($apprenants,$userd);
+            }
+            else{
+                array_push($notapprenant,$userd);
+            }
+        }
 
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$user->getTier()));
 
         $serializer = $this->get('jms_serializer');
 
 
+        $missions = array();
+        foreach($societes as $s){
+            $missions =  array_merge($missions,$this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('etablissement'=>$s)));
+
+        }
+
         $jsonContent = $serializer->serialize($notifications, 'json');
 
-        return $this->render('EcoleBundle:Adminecole:index.html.twig', array('ecoles'=>$ecoles , 'notifications'=>$jsonContent,'users'=>$users,
-            'AllLicences'=>$licences,'societes'=>$societes,'image'=>$image));
+        return $this->render('SocieteBundle:AdminSoc:index.html.twig', array('ecoles'=>$ecoles , 'notifications'=>$jsonContent,'users'=>$users,'users'=>$notapprenant,
+            'AllLicences'=>$licences,'societes'=>$societes,'image'=>$user->getPhotos(),'missions'=>$missions));
     }
 
     public function loadiframeAction()
     {
-        return $this->render('EcoleBundle:Adminecole:index.html.twig');
+        return $this->render('SocieteBundle:AdminSoc:index.html.twig');
     }
 
     public function affichageAction($id)
@@ -125,7 +145,7 @@ class DefaultController extends Controller
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
 
         $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
-        return $this->render('EcoleBundle:Adminecole:iFrameContent.html.twig',array('etablissement'=>$etablissement,
+        return $this->render('SocieteBundle:AdminSoc:iFrameContent.html.twig',array('etablissement'=>$etablissement,
             'tiers'=>$tiers,'users'=>$users,'formations'=>$formation,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab));
 
     }
@@ -150,7 +170,7 @@ class DefaultController extends Controller
     {
         $licence = $this->getDoctrine()->getRepository('GenericBundle:Licence')->find($id);
 
-        return $this->render('EcoleBundle:Adminecole:afficheLicence.html.twig',array('licence'=>$licence));
+        return $this->render('SocieteBundle:AdminSoc:afficheLicence.html.twig',array('licence'=>$licence));
     }
 
     public function adressesAction($id){
@@ -181,7 +201,7 @@ class DefaultController extends Controller
                 usort($reps,array('\GenericBundle\Entity\Reponsedef','sort_reponses_by_order'));
                 $reponses[] = $reps;
             }
-            return $this->render('EcoleBundle:Adminecole:LoadQCM.html.twig', array('QCM'=>$qcm ,'Questions'=>$questions,'reponses'=>$reponses));
+            return $this->render('SocieteBundle:AdminSoc:LoadQCM.html.twig', array('QCM'=>$qcm ,'Questions'=>$questions,'reponses'=>$reponses));
         }
 
 

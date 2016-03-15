@@ -263,11 +263,7 @@ iframe
     font-family: 'Glyphicons Halflings';
     content:" \e253";
 }
-.Liste .row .cell .button:before
-{
-    font-family: 'Glyphicons Halflings';
-    content:" \e253";
-}
+
 .Liste .collapse.in {display: table-row-group;}
 .Liste .collapsing {
     position: relative;

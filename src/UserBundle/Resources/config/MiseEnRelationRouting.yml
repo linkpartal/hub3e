@@ -1,0 +1,19 @@
+afficher_rendezvous:
+    path: /afficher_rendezvous
+    defaults: { _controller: UserBundle:Default:afficher_rendezvous }
+
+DateRDV:
+    path: /choix_Date_RDV/idrdv={id}/{numero}
+    defaults: { _controller: UserBundle:MiseEnRelation:choixDate }
+
+AnnulerRDV:
+    path: /AnnulerRDV/idrdv={id}
+    defaults: { _controller: UserBundle:MiseEnRelation:annulerRDV }
+
+CompteRenduSaisie:
+    path: /CompteRendu/idrdv={id}
+    defaults: { _controller: UserBundle:MiseEnRelation:CompteRenduSaisie }
+
+AjournementRDV:
+    path: /Ajournement/idrdv={id}
+    defaults: { _controller: UserBundle:MiseEnRelation:Ajournement }

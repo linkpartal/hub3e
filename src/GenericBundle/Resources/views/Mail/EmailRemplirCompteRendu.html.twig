@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>
+    {% if tuteur %}
+        Bonjour {{ rdv.tuteur.civilite }} {{ rdv.tuteur.nom }} {{ rdv.tuteur.prenom }},
+        Vous avez rencontré {{ rdv.apprenant.civilite }} {{ rdv.apprenant.nom }} {{ rdv.apprenant.prenom }}, pour la mission intitulé {{ rdv.mission.intitule }}.
+    {% else %}
+        Bonjour {{ rdv.apprenant.civilite }} {{ rdv.apprenant.nom }} {{ rdv.apprenant.prenom }},
+        Vous avez rencontré la societe {{ rdv.mission.etablissement.tier.raisonsoc }}, pour la mission intitulé {{ rdv.mission.intitule }}.
+    {% endif %}
+    Veuillez remplir votre compte rendu sur <a href="http://hub3e.atpmg.com" target="_blank">HUB3E</a>.
+
+<p>
+    Vous en souhaitant bonne réception, <br/> Cordialement.
+</p>
+</body>
+</html>

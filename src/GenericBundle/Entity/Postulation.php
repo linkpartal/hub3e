@@ -3,11 +3,12 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * Postulation
  *
- * @ORM\Table(name="postulation")
+ * @ORM\Table(name="postulation",uniqueConstraints={@UniqueConstraint(name="unique_Postulation", columns={"mission_id","users_id"})})
  * @ORM\Entity
  */
 class Postulation

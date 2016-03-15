@@ -225,4 +225,8 @@ class Reponsedef
     {
         return $this->users;
     }
+
+    public function __toString() {
+        return $this->id.' '. $this->reponse;
+    }
 }

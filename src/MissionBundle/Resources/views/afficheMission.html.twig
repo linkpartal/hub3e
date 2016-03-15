@@ -13,9 +13,10 @@
 </head>
 <body>
 <div id="MettreEnRelation" class="popup">
-    <div onclick="hide(this)" class="close"></div>
+    <div onclick="document.getElementById('submitMettreEnRelation').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block; margin-left: 20%;margin-top:100px">
-
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
         <form id="formMettreEnRelation" class="formulaire" action="" onsubmit="document.getElementById('submitMettreEnRelation').disabled=true;" method="post">
 
             <div class="div_form" style="border-bottom:1px solid #adadad;display: inline-table;">
@@ -50,14 +51,35 @@
         </form>
     </div>
 </div>
+<div id="Assigner_Tuteur" class="popup">
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-5 col-xs-2" style="padding: 0;border:20px solid white;display: block;top:150px">
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+        <form id="formAssignTuteur" action="{{ path('Assigner_tuteur',{'id':mission.id}) }}" onsubmit="this.disabled = true;" class="formulaire" method="post">
+            <div class="div_form" style="display: block">
+                <select id="SelectTuteur" style="width: 100%; overflow-x: auto" title="" class="row" name="tuteur">
+                    {% for tuteur in tuteur_etablissement %}
+                        <option value="{{ tuteur.id }}">{{ tuteur.nom }} {{ tuteur.prenom }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="div_button">
+                <input  class="blue" type="submit" value="envoyer">
+            </div>
+        </form>
+    </div>
+</div>
 {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
 <div id="Diffusion_formation" class="popup">
-    <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-3 col-xs-4" style="padding: 0;border:20px solid white;display: block;top:150px">
+    <div onclick="document.getElementById('submiAssigner_Tuteur8598').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-3 col-xs-4" style="padding: 0;border:20px solid white;display: block;top:150px;background-color: white;">
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
         <input class="row" style="width: 100%" type="text" placeholder="Recherche" onkeyup="rechercheformation(this.value)">
         <form id="formDiffusion" class="formulaire" method="post">
             <div class="div_form" style="display: block">
-                <select id="SelectMultipleFormation" style="width: 100%; overflow-x: auto" title="" class="row" name="formation[]" multiple>
+                <select id="SelectMultipleFormation" style="width: 100%; overflow-x: auto" title="" class="row" name="formation[]" multiple required>
                     {% for formation in formations_prop %}
                         <option value="{{ formation.id }}">{{ formation.nom }} - {{ formation.etablissement.tier.raisonsoc }} - {{ formation.etablissement.adresse }}</option>
                         <option value="Recherche" style="display: none">{{ formation.nom }} {{ formation.etablissement.tier.raisonsoc }} {{ formation.etablissement.adresse }},
@@ -66,7 +88,7 @@
                 </select>
             </div>
             <div class="div_button">
-                <input class="blue" type="button" onclick="this.disabled = true;diffuserMission()" value="envoyer">
+                <input class="blue" id="submiAssigner_Tuteur8598" type="button" onclick="this.disabled = true;diffuserMission()" value="envoyer">
             </div>
         </form>
     </div>
@@ -75,9 +97,10 @@
 
 
 <div id="FicheApprenant" class="popup" >
-    <div onclick="hide(this)" class="close"></div>
+    <div onclick="document.getElementById('submitReception2345').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-7" style="background-color: white;padding: 0;border:20px solid white;display: block; margin-left: 20%; ">
-
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
         <form id="formFicheApprenant" class="formulaire"   method="post">
             <div>
                 <div class="col-lg-12" >
@@ -93,11 +116,6 @@
 
             <div class="div_form"  id="information_apprenant" >
                 <div class="row" style=" margin-bottom: 20px">
-
-                    <div class="col-xs-12">
-                        <label style="font-size: 40px;font-family: Rochester;color: rgb(61, 138, 212);line-height: 0.375;text-align: left;z-index: 30;transform: rotate(180deg);">,,</label>
-                        <label style="height: 20px;color: #666666;font-family:Arial;font-style:italic;font-size:small;margin-bottom: 40px;">Votre mission m'interesse,je serais heureux de vous rencontrer pour en discuter.</label>
-                    </div>
                     <div class="row" >
                         <button onclick="document.getElementById('info_apprenant').style.display ='block';document.getElementById('Localisation').style.display ='none';"
                                 class="col-xs-4 onglet"  type="button" style="margin-left: 20px;width: 50%"> FICHE APPRENANT</button>
@@ -171,28 +189,13 @@
                 </div>
             </div>
 
-            <div class="div_form" id="declinerApprenant" style="display: none" >
-
-                <div class="row" style=" margin-bottom: 20px;">
-                    <textarea style="height: 200px;resize: none;" class="input"  placeholder="Nous vous remercions pour l'intérêt porter à notre mission, cependant nous n'avons pas retenu votre profil ." required ></textarea>
-                </div>
-
-            </div>
-
-
             <div id="information_button" class="div_button">
-                <input  onclick="show_formapprenant()" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Décliner">
                 <input id="submitReception" class="blue" type="submit" style="margin-left: 250px"  value="Répondre plus tard">
                 <input onclick="show_formapprenantproposer()"  class="blue" type="button"   value="Proposer un rendez-vous">
             </div>
-            <div id="decliner_button" class="div_button" style="display: none">
-                <input id="submitAnnuler" onclick="FermerPopup()" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Annuler">
-                <input id="submitDecliner" class="blue" type="submit"  style="margin-left: 390px" value="Décliner">
-
-            </div>
             <div id="proposer_button" class="div_button" style="display: none">
                 <input  class="blue" onclick="FermerPopup()" style="background:white;color:#666666;border:1px solid #ccc;float: left;text-align: center ;width: 120px;height:50px" type="button" value="Annuler">
-                <input id="submitReception" class="blue" type="submit" style="margin-left: 300px;text-align:center;width: 120px;height:50px"  value="Valider">
+                <input id="submitReception2345" class="blue" type="submit" style="margin-left: 300px;text-align:center;width: 120px;height:50px"  value="Valider">
 
             </div>
 
@@ -200,72 +203,6 @@
 
     </div>
 
-
-</div>
-<div id="FicheMission" class="popup">
-    <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-1 col-xs-6" style="padding: 0;border:20px solid white;display: block; margin-left: 20%;margin-top:100px;" >
-
-        <form id="formFicheMission" class="formulaire" method="post">
-
-            <div class="div_form" style="border-bottom:1px solid #adadad;">
-
-                <div>
-                    <div class="col-xs-12" >
-                        <img  src="data:image/jpg;base64,{{ mission.getEtablissement.getTier.getLogo }}"
-                              style="padding: 10px; height: 80px;">
-                    </div>
-                    <div class="col-xs-12"  style="height: 30px;  padding: 10px;"><label style="font-family:Arial;font-style:normal;font-size: large;color:black" >{{ mission.getIntitule }}&nbsp; - &nbsp;  </label><label style="font-family:Arial;font-style:normal;font-size: large;color:#2A76CC" > {{ mission.getEtablissement.getTier.getRaisonsoc }}</label></div>
-                    <div class="col-xs-12" style="height: 20px; font-family:Arial;font-style:normal;font-size: small;margin-bottom:30px">{{mission.getEtablissement.getAdresse }}, {{ mission.getEtablissement.getCodePostal }} {{ mission.getEtablissement.getVille }}</div>
-                </div>
-
-                <div  id="information_mission" >
-                    <div class="row" style=" margin: 0; display: inline-table">
-
-                        <div class="col-lg-12" >
-                            <button onclick="show('info_missions')"  class="col-xs-4 onglet"  type="button" style="margin-left: 20px;width: 50%"> FICHE MISSION</button>
-                            <button onclick="show('Localisation')" class="col-xs-4 onglet"  type="button" style="width: calc(50% - 50px)" >LOCALISATION</button>
-                        </div>
-                        <div class="col-xs-9" style="background: rgb(238, 241, 246); height: 100%;width: 100%">
-
-                            <div class="col-xs-12" >
-                                <div class="list-group affichage">
-
-                                    <label class="list-group-item mission" >LA MISSION : <br/>
-                                        <label  style="color:black; font-weight: lighter" >{{mission.getDescriptif}}</label>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-               <div id="declinerMission" style="display:none">
-                    <textarea style="height: 200px;resize: none;" class="input"  placeholder="Cette mission ne m'interesse pas,elle se situe trop loin ." required ></textarea>
-               </div>
-
-
-            </div>
-
-            <div id="mission_button" class="div_button">
-                <input  onclick="show_formmission()"  class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Décliner">
-                <input id="submitReception" class="blue" type="submit" style="margin-left: 270px"  value="Répondre plus tard">
-                <input  class="blue" type="submit"   value="Postuler">
-
-            </div>
-
-            <div id="declinerMission_button" class="div_button" style="display:none">
-                <input onclick="FermerPopup()" id="submitAnnuler" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Annuler">
-                <input id="submitDecliner" class="blue" type="submit"  style="margin-left: 390px" value="Décliner">
-
-            </div>
-
-
-
-
-        </form>
-    </div>
 
 </div>
 
@@ -340,7 +277,7 @@
                      style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
                     <div  class="rightMenu" style="padding: 8px !important;" >
                         <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-                        <input value="{{mission.getDate|date('d/m/Y')}}" disabled>
+                        <input value="{{mission.getDatecreation|date('d/m/Y')}}" disabled>
                     </div>
                     <div class="rightMenu" style="padding: 8px !important;" >
                         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
@@ -375,8 +312,12 @@
                             <div class="col-xs-12"  >Modifier la fiche</div>
                         </button>
 
+
                         <button onclick="if(confirm('Voulez-vous supprimer la mission ?')){post('{{ path('supprimer_Mission',{'id': mission.getId }) }}',true)}" type="button" class="list-group-item rightMenu" >
                             <div class="col-xs-12" >Supprimer Mission</div>
+                        </button>
+                        <button onclick="show('Assigner_Tuteur')" type="button" class="list-group-item rightMenu" >
+                            <div class="col-xs-12"  >Assigner un Tuteur</div>
                         </button>
                         {% if is_granted('ROLE_ADMINSOC') %}
                             <button type="button" class="list-group-item rightMenu" onclick="show('Diffusion_formation')" >
@@ -440,7 +381,13 @@
                             <div class="col-xs-offset-5 col-xs-1">
 
 
-                                <button  onclick="show('MettreEnRelation'); idMRDestinataire = {{ user.id }};" type="button"  style=" width:150px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;background:#2975cb;font:bold 13px Arial;margin-bottom:10px;margin-top: 20px">
+                                <button
+                                        {% if mission.tuteur %}
+                                            onclick="show('MettreEnRelation'); idMRDestinataire = {{ user.id }};"
+                                        {% else %}
+                                            onclick="alert('Aucun Tuteur n\'est affecté à cette mission. Vous devez affecter un tuteur avant de pouvoir mettre en relation.')"
+                                        {% endif %}
+                                        type="button"  style=" width:150px;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;background:#2975cb;font:bold 13px Arial;margin-bottom:10px;margin-top: 20px">
                                     <div class="col-xs-12" style="display: inline-table;color: white;">METTRE EN RELATION</div>
                                 </button>
 
@@ -622,23 +569,11 @@
             }
         }
     }
-    function show_formapprenant() {
-        document.getElementById('information_apprenant').style.display= 'none';
-        document.getElementById('declinerApprenant').style.display= 'block';
-        document.getElementById('information_button').style.display= 'none';
-        document.getElementById('decliner_button').style.display= 'block';
-    }
     function show_formapprenantproposer() {
         document.getElementById('information_apprenant').style.display= 'none';
         document.getElementById('proposerApprenant').style.display= 'block';
         document.getElementById('information_button').style.display= 'none';
         document.getElementById('proposer_button').style.display= 'block';
-    }
-    function show_formmission() {
-        document.getElementById('information_mission').style.display= 'none';
-        document.getElementById('declinerMission').style.display= 'block';
-        document.getElementById('mission_button').style.display= 'none';
-        document.getElementById('declinerMission_button').style.display= 'block';
     }
     var infoWindows = [];var map_localisation;var marker_apprenant;
     function informationApprenantreception(image,nom,prenom,adresse){
@@ -688,15 +623,8 @@
     function FermerPopup(){
         document.getElementById('information_apprenant').style.display= 'block';
         document.getElementById('information_button').style.display= 'block';
-        document.getElementById('information_mission').style.display= 'block';
-        document.getElementById('mission_button').style.display= 'block';
         document.getElementById('proposerApprenant').style.display= 'none';
         document.getElementById('proposer_button').style.display= 'none';
-        document.getElementById('declinerApprenant').style.display= 'none';
-        document.getElementById('decliner_button').style.display= 'none';
-        document.getElementById('declinerMission').style.display= 'none';
-        document.getElementById('declinerMission_button').style.display= 'none';
-
     }
     function moveto(button,div) {
         var elem = document.getElementById("baronglet");

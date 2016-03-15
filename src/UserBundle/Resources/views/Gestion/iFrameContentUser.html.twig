@@ -39,8 +39,10 @@
 
 
             <div id="addparent" class="popup" >
-                <div onclick="hide(this)" class="close" ></div>
+                <div onclick="document.getElementById('submitaddparent').click();hide(this)" class="close" ></div>
                 <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display: block ;margin-top: 20px ">
+                    <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
                     <form id="formaddparent" class="formulaire" action="{{ path("parent_added") }}" onsubmit="document.getElementById('submitaddparent').disabled=true" method="post" enctype="multipart/form-data" method="post" >
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
 
@@ -106,8 +108,10 @@
             </div>
 
             <div id="addExperience" class="popup">
-                <div onclick="hide(this)" class="close"></div>
+                <div onclick="document.getElementById('submitaddExperience').click();hide(this)" class="close"></div>
                 <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
+                    <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
                     <form id="formaddExperience" class="formulaire" action="{{ path("experience_added") }}" onsubmit="document.getElementById('submitaddExperience').disabled=true"  method="post" enctype="multipart/form-data">
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
 
@@ -148,8 +152,10 @@
             </div>
 
             <div id="addRecommandation" class="popup">
-                <div onclick="hide(this)" class="close"></div>
+                <div onclick="document.getElementById('submitaddRecommandation').click();hide(this)" class="close"></div>
                 <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
+                    <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
                     <form id="formaddRecommandation" class="formulaire" action="{{ path("recommandation_added") }}" onsubmit="document.getElementById('submitaddRecommandation').disabled=true" method="post" enctype="multipart/form-data">
 
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
@@ -189,8 +195,10 @@
             </div>
 
             <div id="addDiplome" class="popup">
-                <div onclick="hide(this)" class="close"></div>
+                <div onclick="document.getElementById('submitaddDiplome').click();hide(this)" class="close"></div>
                 <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
+                    <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
                     <form id="formaddDiplome" class="formulaire" action="{{ path("diplome_added") }}" onsubmit="document.getElementById('submitaddDiplome').disabled=true" method="post" enctype="multipart/form-data">
 
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
@@ -228,8 +236,10 @@
             </div>
 
             <div id="addDocument" class="popup">
-                <div onclick="hide(this)" class="close"></div>
+                <div onclick="document.getElementById('submitaddDocument').click();hide(this)" class="close"></div>
                 <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
+                    <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
                     <form id="formaddDocument" class="formulaire" action="{{ path("Document_added") }}" onsubmit="document.getElementById('submitaddDocument').disabled=true" method="post" enctype="multipart/form-data">
 
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
@@ -263,8 +273,10 @@
             </div>
 
             <div id="addFormation" class="popup">
-                <div onclick="hide(this)" class="close"></div>
+                <div onclick="document.getElementById('submitaddFormation').click();hide(this)" class="close"></div>
                 <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
+                    <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
                     <form id="formaddFormation" class="formulaire" action="{{ path("Candidature_added") }}" onsubmit="document.getElementById('submitaddFormation').disabled=true" method="post" >
 
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
@@ -307,7 +319,7 @@
                                 <option value="info_user" style="color:black;">Données Utilisateur</option>
                                 <option value="info_Apprenant" style="color:black;">Details de l'Apprenant</option>
                                 <option value="info_candidature" style="color:black;">Formation de l'Apprenant </option>
-                                <option value="info_parents" style="color:black;">Les Parents </option>
+                                <option value="info_parents" style="color:black;">Responsables </option>
                                 <option value="info_Exp" style="color:black;">Expériences </option>
                                 <option value="info_recom" style="color:black;">Recommandations </option>
                                 <option value="info_diplome" style="color:black;">Diplomes </option>
@@ -728,12 +740,12 @@
                                                     {% endif %}
                                                 </label>
 
-                                                {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_TUTEUR') %}
+                                                {% if is_granted('ROLE_RECRUTEUR') %}
 
                                                     {% if candidature.statut == 1 or candidature.statut == 2 %}
 
                                                         <img name="modification" style="width:25px;display: none"  alt="Refusé"  title="Refusé" onclick="modifierStatut(this,99,'{{ candidature.id }}')" src="{{ asset('image/stop_x18.png') }}">
-                                                        <img name="modification"style="display:none" alt="Validé" title="Validé"  onclick="modifierStatut(this,3,'{{ candidature.id }}')" src="{{ asset('image/imgValide.png') }}">
+                                                        <img name="modification" style="display:none" alt="Validé" title="Validé"  onclick="modifierStatut(this,3,'{{ candidature.id }}')" src="{{ asset('image/imgValide.png') }}">
 
                                                     {% endif %}
 
@@ -742,7 +754,7 @@
 
                                                 <img name="modification"   style="float:right;display:none" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerFormation('{{ path('supprimer_Candidature',{'id':candidature.getId}) }}',this)" />
 
-                                                <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#cand{{ iddiv }}"></button></label>
+                                                <div class="button" style="float: right;" data-toggle="collapse" data-target="#cand{{ iddiv }}"></div></label>
                                         </div>
                                         <div id="cand{{ iddiv }}" class="collapse in" >
                                             <div class="row">

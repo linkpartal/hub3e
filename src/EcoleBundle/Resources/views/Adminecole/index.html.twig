@@ -15,8 +15,10 @@
 <body onload="loading();putbadged()">
 <div id="addtier" class="popup col-xs-3">
 
-    <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
+    <div onclick="document.getElementById('submittier').onclick();hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;background-color: white;">
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
         <div id="div_adresse" name="ajouterAdresse" style="border-bottom: 10px;display:none">
             <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
             <button class="toggle" type="button" onclick="supprimerAdresse(this)">-</button>
@@ -76,8 +78,10 @@
 
 </div>
 <div id="import" class="popup col-xs-3">
-    <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;">
+    <div onclick="document.getElementById('submitimport').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;background-color: white;">
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
         <form id="form" action="{{ path('import') }}" onsubmit="document.getElementById('submitimport').disabled=true" method="post" enctype="multipart/form-data">
             <div class="div_form">
 
@@ -293,7 +297,7 @@
                     {% if apprenants is defined %}
                         {% for u in apprenants %}
                             <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId }) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
-                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.getUsername }},{{ u.prenom }},{{ u.email }},{{ u.info.adresse }},{{ u.info.cp }},{{ u.info.insee }},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
+                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.getUsername }},{{ u.prenom }},{{ u.email }},{% if u.info %}{{ u.info.adresse }},{{ u.info.cp }},{{ u.info.insee }}{% endif %},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
                                 <div style="display: none;"></div>
                                 <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
                                 <div class="col-xs-12 part"
@@ -313,7 +317,7 @@
                     {% if import_apprenants is defined %}
                         {% for u in import_apprenants %}
                             <button onclick="postiframeUser('{{ path('Afficher_Sas',{'id': u.getId }) }}',this)" id="import{{ u.getId }}" type="button" class="list-group-item butonLigne">
-                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.prenom }},{{ u.email }},{{ u.info.adresse }},{{ u.info.cp }},{{ u.info.insee }},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
+                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.prenom }},{{ u.email }},{% if u.info %}{{ u.info.adresse }},{{ u.info.cp }},{{ u.info.insee }}{% endif %},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
                                 <div style="display: none;"></div>
                                 <div class="col-xs-12 part" title="{{u.getPrenom ~ '.'~u.getNom}}">{{u.getPrenom ~ '.'~u.getNom}}</div>
                                 <div class="col-xs-12 part" style="height: 31px; text-align: left;">

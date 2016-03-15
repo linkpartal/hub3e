@@ -490,25 +490,7 @@
             <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="border: 0;padding: 4.5px;height: 100%;">
                 <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 21px;" >        </a>
             </div>
-            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="display: inline; margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
-                <button onclick="show('apprenant')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
-                ></button>
 
-                <button id="usertop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ apprenants|length }} Apprenant</button>
-            </div>
-            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
-                <button onclick="show('addtier',0)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
-                ></button>
-
-                <button id="societetop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ societes|length }} Sociétés</button>
-
-            </div>
-            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
-                <button onclick="show('import')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
-                ></button>
-
-                <button onclick="document.getElementById('iframe').src='{{ path('afficher_import') }}'" style="color:white;white-space: nowrap;overflow: hidden; ">SAS Admissions</button>
-            </div>
 
             <!--div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
                 <button onclick="show('import')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
@@ -537,6 +519,7 @@
 
                     <li><button onclick="postiframeUser('{{ path('afficher_profil') }}')" style="background: transparent;border:transparent;width:100%">PROFIL</button></li>
                     <li><button onclick="postiframeUser('{{ path('afficher_messagerie') }}')" style="background: transparent;border:transparent;width:100%">MESSAGERIE</button></li>
+                    <li><button onclick="postiframeUser('{{ path('afficher_rendezvous') }}')" style="background: transparent;border:transparent;width:100%">Rendez-vous</button></li>
                     <li><a onclick="sessionStorage.clear()" href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">LOGOUT</button> </a></li>
 
 
@@ -555,8 +538,8 @@
 
                 <select title="" id="leftselect" name="myddl" class="btn btn-default dropdown-toggle">
                     <option value="societe">Voir Sociétés</option>
-                    <option value="user">Voir Apprenants</option>
-                    <option value="mission">Voir Missions</option>
+                    <!--<option value="user">Voir Apprenants</option>
+                    <option value="mission">Voir Missions</option> -->
                 </select>
 
                 <div id="societe" class="list-group col-xs-2 leftbar">
