@@ -38,7 +38,7 @@ class RecruteurController extends Controller
 
 
         $mes_missions = array();
-
+        $missions_propose = array();
 
         $formations = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$user->getEtablissement()));
         foreach($formations as $formation)

@@ -984,7 +984,7 @@
                                                             <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px " alt="fichier de formation" >
                                                         </a>
                                                     </label>
-                                                    <button  style="border: 0;font: 18px Roboto white;background-color: rgb(61, 138, 212);height: 40px; width: 150px;"  onclick="supprimerformation('{{ path('supprimerFormation',{'id':formation.getId}) }}', this)">
+                                                    <button  style="border: 0;font: 18px Roboto white;background-color: rgb(61, 138, 212);height: 40px; width: 150px;"  onclick="if(confirm('Voulez-vous supprimer cette formation ?')){supprimerformation('{{ path('supprimerFormation',{'id':formation.getId}) }}', this)}">
                                                         <div   >Supprimer</div>
 
                                                     </button>&nbsp;&nbsp;
