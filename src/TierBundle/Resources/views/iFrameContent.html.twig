@@ -900,7 +900,7 @@
                                         <div class="row">
                                             <label class="cell" >Licence : <label>{{ lib.getId }}</label></label>
                                             <label class="cell">Libelle : <label>{{ lib.getLibelle }}</label>
-                                                <img style="float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerligne('{{ path('supprimer_Licence',{'id': lib.getId}) }}',this)" />
+                                                <img style="float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="if(confirm('Voulez-vous Supprimer cete licence?')){supprimerligne('{{ path('supprimer_Licence',{'id': lib.getId}) }}',this)}" />
                                                 <button class="button" style="float: right" type="button" data-toggle="collapse" data-target="#licence{{ iddiv }}"></button></label>
 
                                         </div>
@@ -938,7 +938,7 @@
                                             <label class="cell">Raison sociale : <label>{{ ecoles.getRaisonSoc }}</label>
                                                 <button class="button" style="float: right" type="button" data-toggle="collapse" data-target="#user{{ iddiv }}"></button>
                                             </label>
-                                            <img alt="supprimer" title="supprimer" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerPartenariat('{{ path('supprimerAssociationEcole',{'id_ecole':etablissement.getTier.getId,'id_liee':ecoles.getId }) }}',this)" />
+                                            <img alt="supprimer" title="supprimer" src="{{ asset('image/imgSupprimer.png') }}" onclick="if(confirm('Voulez-vous Supprimer cette licence?')){supprimerPartenariat('{{ path('supprimerAssociationEcole',{'id_ecole':etablissement.getTier.getId,'id_liee':ecoles.getId }) }}',this)}" />
 
                                         </div>
                                         <div id="user{{ iddiv }}" class="collapse in" >
@@ -1017,7 +1017,7 @@
                                             <label class="cell"  >CodeMission : <label style="font-size: medium">{{ mission.getCodemission }}</label></label>
                                             <label class="cell" >Date : <label style="font-size: medium" > {{ mission.getDatecreation|date('d/m/Y H:i')}}</label>
 
-                                                <img   style="float:right;" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerligne('{{ path('supprimer_Mission',{'id': mission.getId}) }}',this)" />
+                                                <img   style="float:right;" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="if(confirm('Voulez-vous Supprimer cette mission?')){supprimerligne('{{ path('supprimer_Mission',{'id': mission.getId}) }}',this)}" />
 
                                                 <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#mission{{ iddiv }}"></button>
                                             </label>

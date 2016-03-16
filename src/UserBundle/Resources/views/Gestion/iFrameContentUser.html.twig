@@ -882,7 +882,7 @@
 
                     </button>
                     {% if is_granted('ROLE_ADMINSOC') or is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_SUPER_ADMIN') %}
-                    <button onclick="if(confirm('Voulez-vous Supprimer cette utilisateur ?')){post('{{ path('supprimerUtilisateur',{'id': User.getId }) }}',true)}" type="button" class="list-group-item rightMenu" >
+                    <button onclick="if(confirm('Voulez-vous Supprimer cet utilisateur ?')){post('{{ path('supprimerUtilisateur',{'id': User.getId }) }}',true)}" type="button" class="list-group-item rightMenu" >
                         <div class="col-xs-12" >Supprimer l'utilisateur</div>
 
                     </button>
