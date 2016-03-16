@@ -781,7 +781,6 @@
 
         SortDiv('societe');
         SortDiv('user');
-
         SortDiv('mission');
     }
     function SortDiv(divId){
@@ -898,6 +897,7 @@
                 if(data['status']==='success')
                 {
                     $("#"+form+" input[type=submit]").click();
+                    document.getElementById('submittier').disabled=false;
                 }
                 else if(data['status']==='exist')
                 {

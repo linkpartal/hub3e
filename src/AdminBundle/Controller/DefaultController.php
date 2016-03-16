@@ -73,7 +73,7 @@ class DefaultController extends Controller
 
             while (false !== ($entry = readdir($handle))) {
 
-                if ($entry != "." && $entry != "..") {
+                if ($entry != "." && $entry != ".." && $entry!="README.txt") {
 
                     array_push($modeles,$entry);
                 }

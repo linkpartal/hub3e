@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use GenericBundle\Entity\Notification;
 use Ddeboer\DataImport\Reader\CsvReader;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -1444,14 +1445,7 @@ class DefaultController extends Controller
 
         $em->persist($parent);
         $em->flush();
-        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT'))
-        {
-            return $this->redirect($this->generateUrl('afficher_profil'));
-        }
-        else
-        {
-            return $this->redirect($this->generateUrl('metier_user_afficheUser',array('id'=>$request->get('_idUser'))));
-        }
+        return $this->redirect($_SERVER['HTTP_REFERER']);
 
 
     }
@@ -1471,14 +1465,7 @@ class DefaultController extends Controller
         $em->persist($experience);
         $em->flush();
 
-        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT'))
-        {
-            return $this->redirect($this->generateUrl('afficher_profil'));
-        }
-        else
-        {
-            return $this->redirect($this->generateUrl('metier_user_afficheUser',array('id'=>$request->get('_idUser'))));
-        }
+        return $this->redirect($_SERVER['HTTP_REFERER']);
 
     }
 
@@ -1496,14 +1483,7 @@ class DefaultController extends Controller
         $em->persist($recommandation);
         $em->flush();
 
-        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT'))
-        {
-            return $this->redirect($this->generateUrl('afficher_profil'));
-        }
-        else
-        {
-            return $this->redirect($this->generateUrl('metier_user_afficheUser',array('id'=>$request->get('_idUser'))));
-        }
+        return $this->redirect($_SERVER['HTTP_REFERER']);
 
 
     }
@@ -1521,39 +1501,30 @@ class DefaultController extends Controller
         $em->persist($diplome);
         $em->flush();
 
-        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT'))
-        {
-            return $this->redirect($this->generateUrl('afficher_profil'));
-        }
-        else
-        {
-            return $this->redirect($this->generateUrl('metier_user_afficheUser',array('id'=>$request->get('_idUser'))));
-        }
+        return $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function AjouterDocumentAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-        $document = new Document();
-        $document->setUser($this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser')));
-
-        $document->setType($request->get('_Type'));
-        $document->setExtension($_FILES['_Document']['type']);
-        $document->setName($_FILES['_Document']['name']);
-        $document->setTaille($_FILES['_Document']['size']);
-        $document->setDocument(file_get_contents($_FILES['_Document']['tmp_name']));
-
-        $em->persist($document);
-        $em->flush();
-
-        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT'))
-        {
-            return $this->redirect($this->generateUrl('afficher_profil'));
+        $em = $this->getDoctrine()->getManager();
+        if($_FILES['_Document'] and $_FILES['_Document']['size'] > 1000000){
+            return new Response('<script language="JavaScript">window.onload = function(){alert("la taille du fichier est trop grande!");window.location.href = "'.$_SERVER['HTTP_REFERER'].'"}</script>');
         }
-        else
-        {
-            return $this->redirect($this->generateUrl('metier_user_afficheUser',array('id'=>$request->get('_idUser'))));
+        if($_FILES['_Document'] and $_FILES['_Document']['size'] > 0){
+            $document = new Document();
+            $document->setUser($this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser')));
+            $document->setType($request->get('_Type'));
+            $document->setExtension($_FILES['_Document']['type']);
+            $document->setName($_FILES['_Document']['name']);
+            $document->setTaille($_FILES['_Document']['size']);
+            $document->setDocument(file_get_contents($_FILES['_Document']['tmp_name']));
+            $em->persist($document);
+            $em->flush();
+
         }
+
+
+        return $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function AjouterCandidatureAction(Request $request)
@@ -1583,14 +1554,7 @@ class DefaultController extends Controller
         }
 
 
-        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT'))
-        {
-            return $this->redirect($this->generateUrl('afficher_profil'));
-        }
-        else
-        {
-            return $this->redirect($this->generateUrl('metier_user_afficheUser',array('id'=>$request->get('_idUser'))));
-        }
+        return $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function ReponseQCMAction($iduser,$idreponse){
@@ -1609,5 +1573,24 @@ class DefaultController extends Controller
         $em->flush();
         $reponsejson = new JsonResponse();
         return $reponsejson->setData(array('success'=>1));
+    }
+
+    public function DownloadDocAction($id){
+        $em = $this->getDoctrine()->getManager();
+        $document = $em->getRepository('GenericBundle:Document')->find($id);
+
+        // Generate response
+        $response = new Response();
+
+        // Set headers
+        $response->headers->set('Cache-Control', 'private');
+        $response->headers->set('Content-type', $document->getType());
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $document->getName() . '";');
+        $response->headers->set('Content-length', $document->getTaille());
+
+        // Send headers before outputting anything
+        //$response->sendHeaders();
+        $response->setContent(stream_get_contents( $document->getDocument()));
+        return $response;
     }
 }

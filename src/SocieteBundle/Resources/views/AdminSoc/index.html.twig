@@ -22,16 +22,8 @@
         <form id="form" action="{{ path('import') }}" onsubmit="document.getElementById('submitimport').disabled=true" method="post" enctype="multipart/form-data">
             <div class="div_form">
 
-                <select onchange="disabling(this)" title="Type d'import" name="Import">
-                    <option value="0">Apprenants</option>
-                    <option value="1">Sociétés</option>
+                <select title="Type d'import" name="Import">
                     <option value="2">Missions</option>
-
-                </select>
-                <select title="Etablissement" name="Etablissement">
-                    {% for etab in ecoles %}
-                        <option value="{{ etab.getId }}">{{ etab.getSiret }}</option>
-                    {% endfor %}
                 </select>
                 <br>
                 <label title="CSV" for="CSV"><img id="backimg" onclick="this.src='{{ asset('image/wait_x300.gif') }}'" style="height: 200px;width: 150px" src="{{ asset('image/upload-arrow.png') }}"/></label>
@@ -539,10 +531,6 @@
     }
     function supprimerAdresse(div){
         div.parentNode.parentNode.removeChild(div.parentNode);
-    }
-    function disabling(champ){
-        if(champ.options[champ.selectedIndex].value ==0){champ.nextElementSibling.style.display = 'inline-block';}
-        else{champ.nextElementSibling.style.display = 'none';}
     }
     function declinertier(button){
         button.parentNode.parentNode.parentNode.removeChild(button.parentNode.parentNode);

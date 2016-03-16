@@ -37,7 +37,7 @@
 
     <div class="row" >
         <button onclick="moveto(this,'info_mission')" class="col-xs-6 onglet" type="button" > FICHE MISSION</button>
-        <button onclick="moveto(this,'formation_mission')" class="col-xs-6 onglet"  type="button" >LISTE DES APPRENANTS</button>
+        <button onclick="moveto(this,'formation_mission')" class="col-xs-6 onglet"  type="button" >LISTE DES FORMATIONS</button>
         <div id="baronglet" class="col-xs-6" style="height: 5px;background-color: #257ef0; z-index: 60;"></div>
     </div>
 
@@ -104,20 +104,7 @@
                         <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>
                         <input placeholder="Code mission"  value="{{mission.getCodemission}}" name="_Codemission" required maxlength="9" type="text" readonly>
                     </div>
-                    {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
-                        <button onclick="modifier('formMission',this)" type="button" class="list-group-item rightMenu" >
-                            <div class="col-xs-12"  >Modifier la fiche</div>
-                        </button>
 
-                        <button onclick="post('{{ path('supprimer_Mission',{'id': mission.getId }) }}',true)" type="button" class="list-group-item rightMenu" >
-                            <div class="col-xs-12" >Supprimer Mission</div>
-                        </button>
-                        {% if is_granted('ROLE_ADMINSOC') %}
-                            <button type="button" class="list-group-item rightMenu" onclick="show('Diffusion_formation')" >
-                                <div class="col-xs-12" >Diffuser</div>
-                            </button>
-                        {% endif %}
-                    {% endif %}
                 </div>
 
             </div>

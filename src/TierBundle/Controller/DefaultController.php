@@ -160,7 +160,7 @@ class DefaultController extends Controller
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
 
         // les tiers pour peuplé l'association d'ecole
-        $alltiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAllExcept($etablissement->getId());
+        $alltiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAllExcept($etablissement->getTier()->getId());
         $tiers = array();
         foreach ( $alltiers as $tier)
         {

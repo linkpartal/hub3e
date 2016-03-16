@@ -197,6 +197,10 @@ apprenant_added:
     path: /ajouterApprenant
     defaults: { _controller: UserBundle:Default:ajouterApprenant}
 
+show_Document:
+    path: /DownloadDoc/iddoc={id}
+    defaults: { _controller: UserBundle:Default:DownloadDoc}
+
 Mise_En_Relation:
     resource: "@UserBundle/Resources/config/MiseEnRelationRouting.yml"
     prefix:   /MiseEnRelation

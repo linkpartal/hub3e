@@ -25,7 +25,7 @@ class RecruteurController extends Controller
         $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');
 
-        $apprenants = $this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($user->getEtablissement());
+        $apprenants = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$user->getEtablissement()));
         $import_apprenant = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$user));
 
         foreach($apprenants as $key => $value)
@@ -38,7 +38,7 @@ class RecruteurController extends Controller
 
 
         $mes_missions = array();
-
+        $missions_propose = array();
 
         $formations = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$user->getEtablissement()));
         foreach($formations as $formation)
