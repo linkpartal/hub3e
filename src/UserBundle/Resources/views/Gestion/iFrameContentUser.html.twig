@@ -256,7 +256,7 @@
                                     <option value="Autre" >Autre</option>
                                 </select>
                             </div>
-                            <input type="file" class="input" id="document" name="_Document" required>
+                            <input type="file" class="input" id="document" name="_Document" size="800000" required>
 
                         </div>
 
@@ -709,15 +709,25 @@
                                         <div id="doc{{ iddiv }}" class="collapse in" >
                                             <div class="row">
                                                 <label class="cell">Taille  : <label>{{ Doc.getTaille}}</label></label>
+                                                <label class="cell">Document  :
+                                                    {% if Doc.extension == 'application/pdf' %}
+                                                    <a target="_blank" href="{{ path('show_Document',{'id':Doc.id}) }}" >
+                                                        <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px;" title="{{ Doc.name }}" alt="{{ Doc.name }}" >
+                                                    </a>
 
-
+                                                    {% else %}
+                                                        <a target="_blank" href="{{ path('show_Document',{'id':Doc.id}) }}" >
+                                                            <img src="{{ asset('image/file.png') }}"  style="width:40px; height:40px;" title="{{ Doc.name }}" alt="{{ Doc.name }}" >
+                                                        </a>
+                                                {% endif %}
+                                                    </label>
                                             </div>
                                         </div>
                                     </div>
                                 {% endfor %}
                             {% endif %}
                             <div name="modification" style="display: none;">
-                                <button type="button" class="col-xs-12 blue" style="margin-top:40px" onclick="show('addDocument')">Ajouter un Diplome</button>
+                                <button type="button" class="col-xs-12 blue" style="margin-top:40px" onclick="show('addDocument')">Ajouter un document</button>
                             </div>
                         </div>
                         <div id="info_candidature" class="list-group affichage" style="display:none">
@@ -893,9 +903,11 @@
                         <div class="col-xs-12"  >Modifier la fiche</div>
 
                     </button>
-                    {% if is_granted('ROLE_ADMINSOC') or is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_SUPER_ADMIN') %}
+
+                    {% if is_granted('ROLE_ADMINSOC') or is_granted('ROLE_ADMINECOLE') %}
                     <button onclick="if(confirm('Voulez-vous Supprimer cet utilisateur ?')){post('{{ path('supprimerUtilisateur',{'id': User.getId }) }}',true)}" type="button" class="list-group-item rightMenu" >
                         <div class="col-xs-12" >Supprimer l'utilisateur</div>
+
                     </button>
                     <button  onclick="CompleterProfil()" type="button" class="list-group-item rightMenu" >
                         <div class="col-xs-12" >Ordre enrichit par étudiant</div>
@@ -905,6 +917,7 @@
                     </button>
                     <button type="button" class="list-group-item rightMenu">
                         <div class="col-xs-12">Historique</div>
+
                     </button>
                     {% endif %}
                 </div>
@@ -917,9 +930,16 @@
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/PopUp.js') }}"></script>
 <script language="JavaScript">
+    $('#document').bind('change', function() {
 
+        if(this.files[0].size > 1000000){
+            document.getElementById('submitaddDocument').disabled = true;
+        }
+        else{
+            document.getElementById('submitaddDocument').disabled = false;
+        }
 
-
+    });
     function show_Information(div,buttonID){
         document.getElementById('info_user').style.display = 'none';
         document.getElementById('info_Apprenant').style.display = 'none';
