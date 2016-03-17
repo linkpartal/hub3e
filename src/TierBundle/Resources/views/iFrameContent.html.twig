@@ -1136,13 +1136,15 @@
                         <button onclick="modifier('formEtab',this)"type="button" class="list-group-item rightMenu">
                             <div class="col-xs-12">Modifier la fiche</div>
                         </button>
-                        <button onclick="if(confirm('Voulez-vous Supprimer cet établissement?')){post('{{ path('supprimeretablissement',{'id': etablissement.getId }) }}');}" type="button" class="list-group-item rightMenu">
-                            <div class="col-xs-12">Supprimer l'établissement</div>
-                        </button>
 
                         <button onclick="alert('Ce button n\'est pas encore fonctionel!')" type="button" class="list-group-item rightMenu">
                             <div class="col-xs-12">Gérer les droits</div>
                         </button>
+                        {% endif %}
+                        {% if is_granted('ROLE_SUPER_ADMIN') or (is_granted('ROLE_RECRUTEUR') and not etablissement.tier.ecole ) %}
+                            <button onclick="if(confirm('Voulez-vous Supprimer cet établissement?')){post('{{ path('supprimeretablissement',{'id': etablissement.getId }) }}');}" type="button" class="list-group-item rightMenu">
+                                <div class="col-xs-12">Supprimer l'établissement</div>
+                            </button>
                         {% endif %}
                     </div>
                 </div>

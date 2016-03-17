@@ -113,7 +113,7 @@
     {% block TopBar %}
         <div class="row" style="height: 32px; background: #2975cb;">
             <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="border: 0;padding: 4.5px;height: 100%;">
-                <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 21px;" >        </a>
+                <a href="{{ path('metier_user_login') }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 21px;" >        </a>
             </div>
             <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
                 <button onclick="show('addtier',0)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
@@ -133,7 +133,7 @@
                 <button onclick="show('import')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                 ></button>
 
-                <button onclick="document.getElementById('iframe').src='{{ path('afficher_import') }}'" style="color:white;white-space: nowrap;overflow: hidden; ">SAS Admissions</button>
+                <button onclick="window.location.href='{{ path('afficher_import') }}'" style="color:white;white-space: nowrap;overflow: hidden; ">SAS Admissions</button>
             </div>
             <div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px; float: right; margin-right: 40px;">
                 <button type="button" class="btn btn-default dropdown-toggle"
@@ -159,14 +159,14 @@
         </div>
     {% endblock %}
     <div class="row" style="height: 100%">
-
+        {% block underTopBar %}
         {% block LeftBar %}
             <div class="col-xs-2">
 
                 <select title="" id="leftselect" name="myddl" class="btn btn-default dropdown-toggle">
                     <option value="ecole">Voir Ecoles</option>
                     <option value="societe">Voir Sociétés</option>
-                    <option value="licence">Voir Licences</option>
+                    <!--<option value="licence">Voir Licences</option>-->
                     <option value="mission">Mes Missions</option>
                     <option value="mission_propose">Missions proposées</option>
                     <option value="user">Voir Utilisateurs</option>
@@ -314,18 +314,6 @@
                             </button>
                         {% endfor %}
                     {% endif %}
-                    {% if import_apprenants is defined %}
-                        {% for u in import_apprenants %}
-                            <button onclick="postiframeUser('{{ path('Afficher_Sas',{'id': u.getId }) }}',this)" id="import{{ u.getId }}" type="button" class="list-group-item butonLigne">
-                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.prenom }},{{ u.email }},{% if u.info %}{{ u.info.adresse }},{{ u.info.cp }},{{ u.info.insee }}{% endif %},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
-                                <div style="display: none;"></div>
-                                <div class="col-xs-12 part" title="{{u.getPrenom ~ '.'~u.getNom}}">{{u.getPrenom ~ '.'~u.getNom}}</div>
-                                <div class="col-xs-12 part" style="height: 31px; text-align: left;">
-                                    <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
-                                </div>
-                            </button>
-                        {% endfor %}
-                    {% endif %}
                 </div>
             </div>
         {% endblock %}
@@ -362,7 +350,7 @@
 
             {% endblock %}
         </div>
-
+        {% endblock %}
     </div>
 
 </div>
@@ -504,7 +492,7 @@
             document.getElementById("iframe").src = '';
         }
         document.getElementById("iframe").style.visibility = 'visible';
-
+        {% if notifications is defined %}
         var notifs = JSON.parse('{{ notifications }}');
         console.log(notifs);
         var ecole =0;
@@ -554,7 +542,7 @@
             var buttonuser = document.getElementById("usertop");
             buttonuser.appendChild(spanuser);
         }
-
+        {% endif %}
     }
     function dupliqueradresse() {
         var dup = document.getElementById("div_adresse");

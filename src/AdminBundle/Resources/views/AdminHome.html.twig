@@ -150,6 +150,7 @@
         </form>
     </div>
 </div>
+
 <div id="import" class="popup col-xs-3">
     <div onclick="document.getElementById('submitimport').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;background-color: white;">
@@ -165,9 +166,11 @@
 
                 </select>
                 <select title="Etablissement" name="Etablissement">
+                    {% if ecoles is defined %}
                     {% for etab in ecoles %}
                         <option value="{{ etab.getId }}">{{ etab.getSiret }}</option>
                     {% endfor %}
+                    {% endif %}
                 </select>
                 <br>
                 <label title="CSV" for="CSV"><img onclick="this.src='{{ asset('image/wait_x300.gif') }}'; " id="backimg" style="height: 150px;width: 150px"  src="{{ asset('image/upload-arrow.png') }}"/></label>
@@ -186,18 +189,18 @@
 {% block TopBar %}
     <div class="row" style="height: 32px; background: #2975cb;">
         <div class="col-xs-1" style="border: 0;padding: 4.5px;height: 100%;">
-            <a href="{{ path('metier_user_admin') }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 21px;" >        </a>
+            <a href="{{ path('metier_user_login') }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 21px;" >        </a>
         </div>
         <div class="input-group col-xs-1" style="margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
             <button onclick="show('addtier',1)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                     ></button>
-            <button id="ecoletop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ ecoles|length }} Ecoles</button>
+            <button id="ecoletop" style="color:white;white-space: nowrap;overflow: hidden; ">{% if ecoles is defined %}{{ ecoles|length }} {% endif %}Ecoles</button>
         </div>
          <div class="input-group col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
              <button onclick="show('addtier',0)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                      ></button>
 
-             <button id="societetop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ societes|length }} Sociétés </button>
+             <button id="societetop" style="color:white;white-space: nowrap;overflow: hidden; ">{% if societes is defined %}{{ societes|length }} {% endif %}Sociétés </button>
 
 
          </div>
@@ -206,20 +209,20 @@
                     ></button>
 
 
-             <button id="licencetop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ AllLicences|length }} Licences</button>
+             <button id="licencetop" style="color:white;white-space: nowrap;overflow: hidden; ">{% if AllLicences is defined %}{{ AllLicences|length }}{% endif %} Licences</button>
          </div>
          <div class="input-group col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
              <button onclick="show('addsuperuser')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                      ></button>
 
 
-             <button id="usertop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ users|length }} Utilisateurs</button>
+             <button id="usertop" style="color:white;white-space: nowrap;overflow: hidden; ">{% if users is defined %}{{ users|length }}{% endif %} Utilisateurs</button>
          </div>
         <div class="input-group col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
             <button onclick="show('import')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
             ></button>
 
-            <button onclick="document.getElementById('iframe').src='{{ path('afficher_import') }}'" style="color:white;white-space: nowrap;overflow: hidden; ">SAS Admissions</button>
+            <button onclick="window.location.href ='{{ path('afficher_import') }}'" style="color:white;white-space: nowrap;overflow: hidden; ">SAS Admissions</button>
         </div>
 
 
@@ -251,7 +254,7 @@
 
 {% endblock %}
     <div class="row" style="height: 100%">
-
+        {% block underTopBar %}
         {% block LeftBar %}
             <div class="col-xs-2">
 
@@ -365,19 +368,6 @@
                             </button>
                         {% endfor %}
                     {% endif %}
-                    {% if import_apprenants is defined %}
-                        {% for u in import_apprenants %}
-
-                            <button onclick="postiframeUser('{{ path('Afficher_Sas',{'id': u.getId }) }}',this)" id="import{{ u.getId }}" type="button" class="list-group-item butonLigne">
-                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.prenom }},{{ u.email }},{% if u.info %}{{ u.info.adresse }},{{ u.info.cp }},{{ u.info.insee }}{% endif %},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
-                                <div style="display: none;"></div>
-                                <div class="col-xs-6 part" >{{ u.getNom }}  {{ u.getPrenom }}</div>
-                                <div class="col-xs-12 part" style="height: 31px; text-align: left;">
-                                    <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
-                                </div>
-                            </button>
-                        {% endfor %}
-                    {% endif %}
                 </div>
                 <div id="mission" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if missions is defined %}
@@ -468,7 +458,7 @@
                 <iframe id="iframe" style="visibility: hidden;" src=""></iframe>
             {% endblock %}
         </div>
-
+        {% endblock %}
     </div>
 
 </div>
@@ -480,6 +470,200 @@
 
 <script language="JavaScript">
     var i = 1;
+    function putbadged() {
+        var iframe = sessionStorage.getItem('_Iframe');
+        if(iframe)
+        {
+            document.getElementById("iframe").src = iframe;
+        }
+        else
+        {
+            document.getElementById("iframe").src = '{{ path('admin_iframeload') }}';
+        }
+        document.getElementById("iframe").style.visibility = 'visible';
+        {% if notifications is defined %}
+        var notifs = JSON.parse('{{ notifications }}');
+        var ecole =0;
+        var societe = 0;
+        var user = 0;
+        for(var i = 0; i< notifs.length;i++)
+        {
+            var span = document.createElement("span");
+            span.className = 'badge';
+            span.innerHTML = 'New';
+            if(notifs[i].type == 'Ecole')
+            {
+                ecole++;
+                var active = document.getElementById("activeEcole"+ notifs[i].entite);
+                if(active != null){active.parentNode.insertBefore(span,active);}
+
+            }
+            else if(notifs[i].type == 'Societe')
+            {
+                societe++;
+                var active = document.getElementById("activeSociete"+ notifs[i].entite);
+                if(active != null){active.parentNode.insertBefore(span,active);}
+
+            }
+            else if(notifs[i].type == 'Utilisateur')
+            {
+                user++;
+                var active = document.getElementById("activeUser"+ notifs[i].entite);
+                if(active != null){active.parentNode.insertBefore(span,active);}
+
+            }
+        }
+
+        if(ecole > 0)
+        {
+            var spanecole = document.createElement("span");
+            spanecole.className = 'badge';
+            spanecole.className = spanecole.className + ' notifTopbar';
+            spanecole.innerHTML = ecole;
+            var buttonecole = document.getElementById("ecoletop");
+            buttonecole.appendChild(spanecole);
+        }
+        if(societe >0)
+        {var spansociete = document.createElement("span");
+            spansociete.className = 'badge';
+            spansociete.className = spansociete.className + ' notifTopbar';
+            spansociete.innerHTML = societe;
+            var buttonsociete = document.getElementById("societetop");
+            buttonsociete.appendChild(spansociete);
+        }
+        if(user >0)
+        {var spanuser = document.createElement("span");
+            spanuser.className = 'badge';
+            spanuser.className = spanuser.className + ' notifTopbar';
+            spanuser.innerHTML = user;
+            var buttonuser = document.getElementById("usertop");
+            buttonuser.appendChild(spanuser);
+        }
+        {% endif %}
+    }
+    function dupliqueradresse() {
+        var dup = document.getElementById("div_adresse");
+        var clone = dup.cloneNode(true);
+        var toggle = clone.children[0];
+        toggle.setAttribute("data-target","#Adresse" + i);
+        toggle.innerHTML="Adresse " + i;
+
+        var div = clone.children[2];
+        div.setAttribute("id","Adresse" + i);
+        clone.style.display = 'block';
+
+        document.getElementById("adressecontainer").appendChild(clone);
+        var parentdiv = dup.parentNode;
+        var close =dup.parentNode.parentNode;
+        if(parentdiv.offsetHeight  > close.offsetHeight )
+        {
+            close.style.height = parentdiv.offsetHeight;
+            clone.children[0].style.height = parentdiv.offsetHeight;
+        }
+
+        i++;
+    }
+    function submitAjaxForm(url,form){
+
+        var route;
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $("#"+form).serialize(),
+            success: function(data)
+            {
+                if(data['status']==='success')
+                {
+                    $("#"+form+" input[type=submit]").click();
+                    document.getElementById('submittier').disabled=false;
+                }
+                else if(data['status']==='exist')
+                {
+                    alert('un des sirets existe deja');
+                    document.getElementById('submittier').disabled=false;
+                }
+                else if(data['status']==='is_ecole')
+                {
+                    alert('Le siren indiquée appartient à une école!');
+                    document.getElementById('submittier').disabled=false;
+                }
+                else
+                {
+                    alert('Une erreur s\'est produite sur le serveur');
+                    document.getElementById('submittier').disabled=false;
+                }
+            }
+        });
+    }
+    function envoyeradresses(){
+
+        document.getElementById('submittier').disabled=true;
+        var geocodes = document.getElementsByName('_Geocode[]');
+        if(geocodes.length==1)
+        {
+            alert('Vous devez remplir au moins une adresse');
+            document.getElementById('submittier').disabled=false;
+        }
+        for(var j = 1;j<geocodes.length;j++){
+            var siret = document.getElementsByName('_SIRET[]')[j].value;
+            var test = siret.substring(0, 9);
+            if(test!=document.getElementById('SIREN').value)
+            {
+                alert('Le siret de l\'adresse '+ j + ' n\'est pas compatible avec le siren donné');
+                document.getElementById('submittier').disabled=false;
+                return;
+            }
+        }
+        var result_input= [];
+        for(var i = 1; i<geocodes.length;i++)
+        {
+            var address = document.getElementsByName('_Adresse[]')[i].value +' ' +document.getElementsByName('_Ville[]')[i].value + ' ' + document.getElementsByName('_CodeP[]')[i].value  ;
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({'address': address}, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    result_input.push(results[0].geometry.location);
+                    if(result_input.length == geocodes.length - 1)
+                    {
+                        for(var y = 1; y< geocodes.length; y++)
+                        {
+                            geocodes[y].value = result_input[y - 1] ;
+                        }
+                        var check = '{{ path('tier_checkExist') }}';
+                        submitAjaxForm(check,'formTier');
+                    }
+                } else {
+                    alert('Pas de géocodage trouver pour l\'adresse spécifiée');
+                    document.getElementById('submittier').disabled=false;
+                }
+            });
+        }
+    }
+    function readURL(input,baliseimg) {
+        document.getElementById(baliseimg).src="{{ asset('image/wait_x300.gif') }}"
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#'+ baliseimg)
+                        .attr('src', e.target.result)
+                        .width(150)
+                        .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+
+    }
+    function supprimerAdresse(div){
+        div.parentNode.parentNode.removeChild(div.parentNode);
+    }
+    function disabling(champ){
+        if(champ.options[champ.selectedIndex].value ==0){champ.nextElementSibling.style.display = 'inline-block';}
+        else{champ.nextElementSibling.style.display = 'none';}
+    }
+</script>
+
+{% block JS %}
+<script language="JavaScript">
     document.getElementById("leftselect").onchange = function(){
         var x = document.getElementById("leftselect").value;
         if(x=='QCM')
@@ -608,199 +792,7 @@
             parent.appendChild(toSort[t]);
         }
     }
-    function putbadged() {
-        var iframe = sessionStorage.getItem('_Iframe');
-        if(iframe)
-        {
-            document.getElementById("iframe").src = iframe;
-        }
-        else
-        {
-            document.getElementById("iframe").src = '{{ path('admin_iframeload') }}';
-        }
-        document.getElementById("iframe").style.visibility = 'visible';
-        var notifs = JSON.parse('{{ notifications }}');
-        var ecole =0;
-        var societe = 0;
-        var user = 0;
-        for(var i = 0; i< notifs.length;i++)
-        {
-            var span = document.createElement("span");
-            span.className = 'badge';
-            span.innerHTML = 'New';
-            if(notifs[i].type == 'Ecole')
-            {
-                ecole++;
-                var active = document.getElementById("activeEcole"+ notifs[i].entite);
-                if(active != null){active.parentNode.insertBefore(span,active);}
-
-            }
-            else if(notifs[i].type == 'Societe')
-            {
-                societe++;
-                var active = document.getElementById("activeSociete"+ notifs[i].entite);
-                if(active != null){active.parentNode.insertBefore(span,active);}
-
-            }
-            else if(notifs[i].type == 'Utilisateur')
-            {
-                user++;
-                var active = document.getElementById("activeUser"+ notifs[i].entite);
-                if(active != null){active.parentNode.insertBefore(span,active);}
-
-            }
-        }
-
-        if(ecole > 0)
-        {
-            var spanecole = document.createElement("span");
-            spanecole.className = 'badge';
-            spanecole.className = spanecole.className + ' notifTopbar';
-            spanecole.innerHTML = ecole;
-            var buttonecole = document.getElementById("ecoletop");
-            buttonecole.appendChild(spanecole);
-        }
-        if(societe >0)
-        {var spansociete = document.createElement("span");
-            spansociete.className = 'badge';
-            spansociete.className = spansociete.className + ' notifTopbar';
-            spansociete.innerHTML = societe;
-            var buttonsociete = document.getElementById("societetop");
-            buttonsociete.appendChild(spansociete);
-        }
-        if(user >0)
-        {var spanuser = document.createElement("span");
-            spanuser.className = 'badge';
-            spanuser.className = spanuser.className + ' notifTopbar';
-            spanuser.innerHTML = user;
-            var buttonuser = document.getElementById("usertop");
-            buttonuser.appendChild(spanuser);
-        }
-
-    }
-    function dupliqueradresse() {
-        var dup = document.getElementById("div_adresse");
-        var clone = dup.cloneNode(true);
-        var toggle = clone.children[0];
-        toggle.setAttribute("data-target","#Adresse" + i);
-        toggle.innerHTML="Adresse " + i;
-
-        var div = clone.children[2];
-        div.setAttribute("id","Adresse" + i);
-        clone.style.display = 'block';
-
-        document.getElementById("adressecontainer").appendChild(clone);
-        var parentdiv = dup.parentNode;
-        var close =dup.parentNode.parentNode;
-        if(parentdiv.offsetHeight  > close.offsetHeight )
-        {
-            close.style.height = parentdiv.offsetHeight;
-            clone.children[0].style.height = parentdiv.offsetHeight;
-        }
-
-        i++;
-    }
-    function submitAjaxForm(url,form){
-
-        var route;
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: $("#"+form).serialize(),
-            success: function(data)
-            {
-                if(data['status']==='success')
-                {
-                    $("#"+form+" input[type=submit]").click();
-                    document.getElementById('submittier').disabled=false;
-                }
-                else if(data['status']==='exist')
-                {
-                    alert('un des sirets existe deja');
-                    document.getElementById('submittier').disabled=false;
-                }
-                else if(data['status']==='is_ecole')
-                {
-                    alert('Le siren indiquée appartient à une école!');
-                    document.getElementById('submittier').disabled=false;
-                }
-                else
-                {
-                    alert('Une erreur s\'est produite sur le serveur');
-                    document.getElementById('submittier').disabled=false;
-                }
-            }
-        });
-    }
-    function envoyeradresses(){
-
-        document.getElementById('submittier').disabled=true;
-        var geocodes = document.getElementsByName('_Geocode[]');
-        if(geocodes.length==1)
-        {
-            alert('Vous devez remplir au moins une adresse');
-            document.getElementById('submittier').disabled=false;
-        }
-        for(var j = 1;j<geocodes.length;j++){
-            var siret = document.getElementsByName('_SIRET[]')[j].value;
-            var test = siret.substring(0, 9);
-            if(test!=document.getElementById('SIREN').value)
-            {
-                alert('Le siret de l\'adresse '+ j + ' n\'est pas compatible avec le siren donné');
-                document.getElementById('submittier').disabled=false;
-                return;
-            }
-        }
-        var result_input= [];
-        for(var i = 1; i<geocodes.length;i++)
-        {
-            var address = document.getElementsByName('_Adresse[]')[i].value +' ' +document.getElementsByName('_Ville[]')[i].value + ' ' + document.getElementsByName('_CodeP[]')[i].value  ;
-            var geocoder = new google.maps.Geocoder();
-            geocoder.geocode({'address': address}, function (results, status) {
-                if (status === google.maps.GeocoderStatus.OK) {
-                    result_input.push(results[0].geometry.location);
-                    if(result_input.length == geocodes.length - 1)
-                    {
-                        for(var y = 1; y< geocodes.length; y++)
-                        {
-                            geocodes[y].value = result_input[y - 1] ;
-                        }
-                        var check = '{{ path('tier_checkExist') }}';
-                        submitAjaxForm(check,'formTier');
-                    }
-                } else {
-                    alert('Pas de géocodage trouver pour l\'adresse spécifiée');
-                    document.getElementById('submittier').disabled=false;
-                }
-            });
-        }
-    }
-    function readURL(input,baliseimg) {
-        document.getElementById(baliseimg).src="{{ asset('image/wait_x300.gif') }}"
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#'+ baliseimg)
-                        .attr('src', e.target.result)
-                        .width(150)
-                        .height(200);
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-
-    }
-    function supprimerAdresse(div){
-        div.parentNode.parentNode.removeChild(div.parentNode);
-    }
-    function disabling(champ){
-        if(champ.options[champ.selectedIndex].value ==0){champ.nextElementSibling.style.display = 'inline-block';}
-        else{champ.nextElementSibling.style.display = 'none';}
-    }
 </script>
-
-{% block JS %}
-
 {% endblock %}
 </body>
 </html>

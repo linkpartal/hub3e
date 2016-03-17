@@ -1024,14 +1024,91 @@ class DefaultController extends Controller
     public function afficherImportsAction()
     {
         $imports =$this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser()));
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if($user->getPhotos())
+        {
+            $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
+        }
         foreach($imports as $import){
             if($import->getPhotos())
             {
                 $import->setPhotos(base64_encode(stream_get_contents($import->getPhotos())));
             }
         }
-        return $this->render('UserBundle:Gestion:Import.html.twig',
-            array('imports'=>$imports));
+        if($user->hasRole('ROLE_SUPER_ADMIN')){
+            $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAll();
+
+            $ecoles = array();
+            $societes = array();
+            foreach($etablissement as $item)
+            {
+                if($item->getTier()->getEcole() && !$item->getSuspendu())
+                {
+                    array_push($ecoles,$item);
+                }
+                elseif(!$item->getTier()->getEcole() && !$item->getSuspendu()){
+                    array_push($societes,$item);
+                }
+            }
+            $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findAll();
+            $apprenants =array();
+            $notapprenant = array();
+            foreach($users as $userd)
+            {
+                if($userd->hasRole('ROLE_APPRENANT'))
+                {
+                    array_push($apprenants,$userd);
+                }
+                else{
+                    array_push($notapprenant,$userd);
+                }
+            }
+
+            $licences = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
+            return $this->render('UserBundle:Gestion:Import.html.twig',array('imports'=>$imports,'image'=>$user->getPhotos(),'AllLicences'=>$licences,'ecoles'=>$ecoles,'societes'=>$societes,
+                'users'=>$notapprenant));
+        }
+        elseif($user->hasRole('ROLE_ADMINECOLE')){
+            $ecoles = array();
+            $ecoles = array_merge($ecoles,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($user->getTier()->getId()));
+
+            foreach($user->getTier()->getTier1() as $partenaire) {
+                $ecoles = array_merge($ecoles, $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($partenaire->getId()));
+            }
+
+            foreach($ecoles as $key => $ecole)
+            {
+                if($ecole->getSuspendu())
+                {
+                    unset($ecoles[$key]);
+                }
+            }
+            $users = $this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($user->getTier());
+            $apprenants =array();
+            $notapprenant = array();
+            foreach($users as $userd)
+            {
+                if($userd->hasRole('ROLE_APPRENANT'))
+                {
+                    array_push($apprenants,$userd);
+                }
+                else{
+                    array_push($notapprenant,$userd);
+                }
+            }
+            $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$user->getTier(),'suspendu'=>false));
+            return $this->render('UserBundle:Gestion:Import.html.twig',array('ecoles'=>$ecoles,'imports'=>$imports,'image'=>$user->getPhotos(),'users'=>$notapprenant,'AllLicences'=>$licences,
+                'societes'=>$user->getReferenciel()));
+        }
+        elseif($user->hasRole('ROLE_RECRUTEUR')){
+            $apprenants = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$user->getEtablissement()));
+            $Hobbies = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->findAll();
+            $formations = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$user->getEtablissement()));
+
+            return $this->render('UserBundle:Gestion:Import.html.twig',array('imports'=>$imports,'image'=>$user->getPhotos(),'apprenants'=>$apprenants,'societes'=>$user->getReferenciel(),
+                'formations'=>$formations,'hobbies'=>$Hobbies));
+        }
+
     }
 
     public function supprimerImportsAction($id)
