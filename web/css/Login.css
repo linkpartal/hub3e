@@ -37,6 +37,7 @@ body {
     background-position : center;
     background-attachment: fixed;
     background-size: cover;
+    font: 14px Roboto !important;
 }
 
 .login {
@@ -74,7 +75,7 @@ body {
     color: #ffffff;
     font-weight: bold;
     margin-bottom: 30px;
-    font-family: Arial;
+    font-family: Roboto;
 }
 
 .Changelogin form {
@@ -165,7 +166,7 @@ input[type="checkbox"] {
 input[type="checkbox"] + label {
 	color: #fff;
 	text-decoration: none;
-	font: 12px Arial;
+	font: 12px Roboto;
 	 }
 	
 input[type="checkbox"] + label > mark {
@@ -202,7 +203,7 @@ input[type="checkbox"]:checked + label > mark:before {
 .Changelogin .olvido .col a {
     color: #fff;
     text-decoration: none;
-    font: 12px Arial;
+    font: 12px Roboto;
 }
 
 .Changelogin .olvido ._checkbox input[type="checkbox"]:checked + label > mark:after {
@@ -218,7 +219,7 @@ input[type="checkbox"]:checked + label > mark:before {
 .Changelogin .olvido .col a {
     color: #fff;
     text-decoration: none;
-    font: 12px Arial;
+    font: 12px Roboto;
 }
 
 

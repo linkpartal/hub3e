@@ -1,5 +1,9 @@
 @CHARSET "utf-8";
 
+body{
+    font: 14px Roboto !important;
+}
+
 .popup{
     position: absolute;
     display: none;

@@ -153,11 +153,12 @@ class DefaultController extends Controller
     public function missionModifAction(Request $request){
         $em = $this->getDoctrine()->getManager();
 
-        $mission = $em->getRepository('GenericBundle:Mission')->findOneBy(array('id'=>$request->get('_ID')));
-        $mission->setProfil($request->get('_Profil'));
-        $mission->setCodemission($request->get('_Codemission'));
+        $mission = $em->getRepository('GenericBundle:Mission')->find($request->get('_ID'));
         $mission->setDescriptif($request->get('_Descriptif'));
+        $mission->setProfil($request->get('_Profil'));
         $mission->setTypecontrat($request->get('_TypeContrat'));
+        $mission->setNomcontact($request->get('_NomContact'));
+        $mission->setCodemission($request->get('_Codemission'));
         $mission->setEmailcontact($request->get('_Emailcontact'));
         $mission->setDomaine($request->get('_Domaine'));
         $mission->setDatedebut(date_create($request->get('_Datedebut')) );
@@ -165,10 +166,9 @@ class DefaultController extends Controller
         $mission->setRemuneration($request->get('_Remuneration'));
         $mission->setDatemodification(date_create());
 
-
         $em->flush();
 
-        return $this->redirect($this->generateUrl('admin_afficheMission',array('id'=>$request->get('_ID'))));
+        return $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function DiffuserMissionAction($id ,Request $request){
