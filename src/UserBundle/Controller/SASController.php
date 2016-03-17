@@ -20,6 +20,7 @@ use GenericBundle\Entity\Message;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class SASController extends Controller
 {
@@ -335,18 +336,22 @@ class SASController extends Controller
     public function AjouterDocumentSASAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $document = new Document();
-        $document->setImportCandidat($this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->find($request->get('_idUser')));
+        if($_FILES['_Document'] and $_FILES['_Document']['size'] > 1000000){
+            return new Response('<script language="JavaScript">window.onload = function(){alert("la taille du fichier est trop grande!");window.location.href = "'.$_SERVER['HTTP_REFERER'].'"}</script>');
+        }
+        if($_FILES['_Document'] and $_FILES['_Document']['size'] > 0) {
+            $document = new Document();
+            $document->setImportCandidat($this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->find($request->get('_idUser')));
 
-        $document->setType($request->get('_Type'));
-        $document->setExtension($_FILES['_Document']['type']);
-        $document->setName($_FILES['_Document']['name']);
-        $document->setTaille($_FILES['_Document']['size']);
-        $document->setDocument(file_get_contents($_FILES['_Document']['tmp_name']));
+            $document->setType($request->get('_Type'));
+            $document->setExtension($_FILES['_Document']['type']);
+            $document->setName($_FILES['_Document']['name']);
+            $document->setTaille($_FILES['_Document']['size']);
+            $document->setDocument(file_get_contents($_FILES['_Document']['tmp_name']));
 
-        $em->persist($document);
-        $em->flush();
-
+            $em->persist($document);
+            $em->flush();
+        }
         return $this->redirect($this->generateUrl('Afficher_Sas',array('id'=>$request->get('_idUser'))));
     }
 

@@ -189,14 +189,17 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $etab = $em->getRepository('GenericBundle:Etablissement')->find($id);
 
-        if(!$etab)
-        {
-            throw new Exception('Aucune école ne posséde l\'id ' . $id);
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if($user->hasRole('ROLE_SUPER_ADMIN')){
+            $etab->setSuspendu(true);
+            $em->flush();
+        }
+        elseif($user->hasRole('ROLE_ADMINECOLE') or $user->hasRole('ROLE_RECRUTEUR')){
+            $etab->removeUser($user);
+            $em->flush();
         }
 
-        $etab->setSuspendu(true);
-        $em->flush();
-        return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
+        return $this->render('GenericBundle::ReloadParent.html.twig');
     }
 
     public function ecolesassociatedAction($id, Request $request)

@@ -18,15 +18,13 @@ class RecruteurController extends Controller
 
         $Hobbies = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->findAll();
 
-        // les formation de l'etablissement
-        $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$user->getEtablissement() ));
+
 
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
         $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');
 
-        $apprenants = $this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($user->getEtablissement());
-        $import_apprenant = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$user));
+        $apprenants = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$user->getEtablissement()));
 
         foreach($apprenants as $key => $value)
         {
@@ -39,7 +37,7 @@ class RecruteurController extends Controller
 
         $mes_missions = array();
         $missions_propose = array();
-
+        $societes =array();
         $formations = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$user->getEtablissement()));
         foreach($formations as $formation)
         {
@@ -53,11 +51,12 @@ class RecruteurController extends Controller
                 elseif($diffusion->getStatut()==1){
                     array_push($missions_propose,$diffusion->getMission());
                 }
+                array_push($societes,$diffusion->getMission()->getEtablissement());
             }
         }
-
-        return $this->render('EcoleBundle:Recruteur:index.html.twig', array('notifications'=>$jsonContent ,'apprenants'=>$apprenants,'import_apprenants'=>$import_apprenant,
-            'societes'=>$user->getReferenciel(),'missions'=>$mes_missions,'image'=>$user->getPhotos(),'formations'=>$formation,'hobbies'=>$Hobbies));
+        $uniquesocietes = array_unique($societes);
+        return $this->render('EcoleBundle:Recruteur:index.html.twig', array('notifications'=>$jsonContent ,'apprenants'=>$apprenants,'societes'=>$uniquesocietes,'missions'=>$mes_missions,
+            'image'=>$user->getPhotos(),'formations'=>$formations,'hobbies'=>$Hobbies));
     }
 
 

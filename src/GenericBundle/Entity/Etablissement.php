@@ -577,4 +577,8 @@ class Etablissement
     {
         return $this->users;
     }
+
+    public function __toString() {
+        return $this->siret;
+    }
 }

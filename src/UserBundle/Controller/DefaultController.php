@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use GenericBundle\Entity\Notification;
 use Ddeboer\DataImport\Reader\CsvReader;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -1044,14 +1045,91 @@ class DefaultController extends Controller
     public function afficherImportsAction()
     {
         $imports =$this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser()));
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if($user->getPhotos())
+        {
+            $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
+        }
         foreach($imports as $import){
             if($import->getPhotos())
             {
                 $import->setPhotos(base64_encode(stream_get_contents($import->getPhotos())));
             }
         }
-        return $this->render('UserBundle:Gestion:Import.html.twig',
-            array('imports'=>$imports));
+        if($user->hasRole('ROLE_SUPER_ADMIN')){
+            $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAll();
+
+            $ecoles = array();
+            $societes = array();
+            foreach($etablissement as $item)
+            {
+                if($item->getTier()->getEcole() && !$item->getSuspendu())
+                {
+                    array_push($ecoles,$item);
+                }
+                elseif(!$item->getTier()->getEcole() && !$item->getSuspendu()){
+                    array_push($societes,$item);
+                }
+            }
+            $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findAll();
+            $apprenants =array();
+            $notapprenant = array();
+            foreach($users as $userd)
+            {
+                if($userd->hasRole('ROLE_APPRENANT'))
+                {
+                    array_push($apprenants,$userd);
+                }
+                else{
+                    array_push($notapprenant,$userd);
+                }
+            }
+
+            $licences = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
+            return $this->render('UserBundle:Gestion:Import.html.twig',array('imports'=>$imports,'image'=>$user->getPhotos(),'AllLicences'=>$licences,'ecoles'=>$ecoles,'societes'=>$societes,
+                'users'=>$notapprenant));
+        }
+        elseif($user->hasRole('ROLE_ADMINECOLE')){
+            $ecoles = array();
+            $ecoles = array_merge($ecoles,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($user->getTier()->getId()));
+
+            foreach($user->getTier()->getTier1() as $partenaire) {
+                $ecoles = array_merge($ecoles, $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($partenaire->getId()));
+            }
+
+            foreach($ecoles as $key => $ecole)
+            {
+                if($ecole->getSuspendu())
+                {
+                    unset($ecoles[$key]);
+                }
+            }
+            $users = $this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($user->getTier());
+            $apprenants =array();
+            $notapprenant = array();
+            foreach($users as $userd)
+            {
+                if($userd->hasRole('ROLE_APPRENANT'))
+                {
+                    array_push($apprenants,$userd);
+                }
+                else{
+                    array_push($notapprenant,$userd);
+                }
+            }
+            $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$user->getTier(),'suspendu'=>false));
+            return $this->render('UserBundle:Gestion:Import.html.twig',array('ecoles'=>$ecoles,'imports'=>$imports,'image'=>$user->getPhotos(),'users'=>$notapprenant,'AllLicences'=>$licences,
+                'societes'=>$user->getReferenciel()));
+        }
+        elseif($user->hasRole('ROLE_RECRUTEUR')){
+            $apprenants = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$user->getEtablissement()));
+            $Hobbies = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->findAll();
+            $formations = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$user->getEtablissement()));
+
+            return $this->render('UserBundle:Gestion:Import.html.twig',array('imports'=>$imports,'image'=>$user->getPhotos(),'apprenants'=>$apprenants,'societes'=>$user->getReferenciel(),
+                'formations'=>$formations,'hobbies'=>$Hobbies));
+        }
+
     }
 
     public function supprimerImportsAction($id)
@@ -1465,14 +1543,7 @@ class DefaultController extends Controller
 
         $em->persist($parent);
         $em->flush();
-        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT'))
-        {
-            return $this->redirect($this->generateUrl('afficher_profil'));
-        }
-        else
-        {
-            return $this->redirect($this->generateUrl('metier_user_afficheUser',array('id'=>$request->get('_idUser'))));
-        }
+        return $this->redirect($_SERVER['HTTP_REFERER']);
 
 
     }
@@ -1492,14 +1563,7 @@ class DefaultController extends Controller
         $em->persist($experience);
         $em->flush();
 
-        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT'))
-        {
-            return $this->redirect($this->generateUrl('afficher_profil'));
-        }
-        else
-        {
-            return $this->redirect($this->generateUrl('metier_user_afficheUser',array('id'=>$request->get('_idUser'))));
-        }
+        return $this->redirect($_SERVER['HTTP_REFERER']);
 
     }
 
@@ -1517,14 +1581,7 @@ class DefaultController extends Controller
         $em->persist($recommandation);
         $em->flush();
 
-        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT'))
-        {
-            return $this->redirect($this->generateUrl('afficher_profil'));
-        }
-        else
-        {
-            return $this->redirect($this->generateUrl('metier_user_afficheUser',array('id'=>$request->get('_idUser'))));
-        }
+        return $this->redirect($_SERVER['HTTP_REFERER']);
 
 
     }
@@ -1542,39 +1599,30 @@ class DefaultController extends Controller
         $em->persist($diplome);
         $em->flush();
 
-        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT'))
-        {
-            return $this->redirect($this->generateUrl('afficher_profil'));
-        }
-        else
-        {
-            return $this->redirect($this->generateUrl('metier_user_afficheUser',array('id'=>$request->get('_idUser'))));
-        }
+        return $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function AjouterDocumentAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-        $document = new Document();
-        $document->setUser($this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser')));
-
-        $document->setType($request->get('_Type'));
-        $document->setExtension($_FILES['_Document']['type']);
-        $document->setName($_FILES['_Document']['name']);
-        $document->setTaille($_FILES['_Document']['size']);
-        $document->setDocument(file_get_contents($_FILES['_Document']['tmp_name']));
-
-        $em->persist($document);
-        $em->flush();
-
-        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT'))
-        {
-            return $this->redirect($this->generateUrl('afficher_profil'));
+        $em = $this->getDoctrine()->getManager();
+        if($_FILES['_Document'] and $_FILES['_Document']['size'] > 1000000){
+            return new Response('<script language="JavaScript">window.onload = function(){alert("la taille du fichier est trop grande!");window.location.href = "'.$_SERVER['HTTP_REFERER'].'"}</script>');
         }
-        else
-        {
-            return $this->redirect($this->generateUrl('metier_user_afficheUser',array('id'=>$request->get('_idUser'))));
+        if($_FILES['_Document'] and $_FILES['_Document']['size'] > 0){
+            $document = new Document();
+            $document->setUser($this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser')));
+            $document->setType($request->get('_Type'));
+            $document->setExtension($_FILES['_Document']['type']);
+            $document->setName($_FILES['_Document']['name']);
+            $document->setTaille($_FILES['_Document']['size']);
+            $document->setDocument(file_get_contents($_FILES['_Document']['tmp_name']));
+            $em->persist($document);
+            $em->flush();
+
         }
+
+
+        return $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function AjouterCandidatureAction(Request $request)
@@ -1604,14 +1652,7 @@ class DefaultController extends Controller
         }
 
 
-        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT'))
-        {
-            return $this->redirect($this->generateUrl('afficher_profil'));
-        }
-        else
-        {
-            return $this->redirect($this->generateUrl('metier_user_afficheUser',array('id'=>$request->get('_idUser'))));
-        }
+        return $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function ReponseQCMAction($iduser,$idreponse){
@@ -1630,5 +1671,24 @@ class DefaultController extends Controller
         $em->flush();
         $reponsejson = new JsonResponse();
         return $reponsejson->setData(array('success'=>1));
+    }
+
+    public function DownloadDocAction($id){
+        $em = $this->getDoctrine()->getManager();
+        $document = $em->getRepository('GenericBundle:Document')->find($id);
+
+        // Generate response
+        $response = new Response();
+
+        // Set headers
+        $response->headers->set('Cache-Control', 'private');
+        $response->headers->set('Content-type', $document->getType());
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $document->getName() . '";');
+        $response->headers->set('Content-length', $document->getTaille());
+
+        // Send headers before outputting anything
+        //$response->sendHeaders();
+        $response->setContent(stream_get_contents( $document->getDocument()));
+        return $response;
     }
 }

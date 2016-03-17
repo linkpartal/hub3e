@@ -665,7 +665,18 @@
                                         <div id="doc{{ iddiv }}" class="collapse in" >
                                             <div class="row">
                                                 <label class="cell">Taille  : <label>{{ Doc.getTaille}}</label></label>
+                                                <label class="cell">Document  :
+                                                    {% if Doc.extension == 'application/pdf' %}
+                                                        <a target="_blank" href="{{ path('show_Document',{'id':Doc.id}) }}" >
+                                                            <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px;" title="{{ Doc.name }}" alt="{{ Doc.name }}" >
+                                                        </a>
 
+                                                    {% else %}
+                                                        <a target="_blank" href="{{ path('show_Document',{'id':Doc.id}) }}" >
+                                                            <img src="{{ asset('image/file.png') }}"  style="width:40px; height:40px;" title="{{ Doc.name }}" alt="{{ Doc.name }}" >
+                                                        </a>
+                                                    {% endif %}
+                                                </label>
 
                                             </div>
                                         </div>
