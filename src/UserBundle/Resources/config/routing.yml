@@ -200,3 +200,7 @@ apprenant_added:
 Mise_En_Relation:
     resource: "@UserBundle/Resources/config/MiseEnRelationRouting.yml"
     prefix:   /MiseEnRelation
+
+CompleterProfil:
+    path: /CompleterProfil/IdUser={IdUser}
+    defaults: {_controller: UserBundle:Default:CompleterProfil}

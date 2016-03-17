@@ -529,7 +529,7 @@ class DefaultController extends Controller
         $candi->setStatut($statut);
         $em->flush();
 
-        //send password
+
         if($statut==3)
         {
             $Statutmessage ='validé';
@@ -563,6 +563,27 @@ class DefaultController extends Controller
 
         $reponse = new JsonResponse();
         return $reponse->setData(array('success'=>1));
+
+    }
+    public function CompleterProfilAction($IdUser){
+        $em = $this->getDoctrine()->getManager();
+        $user= $em->getRepository('GenericBundle:User')->find($IdUser);
+        $mail = $user->getEmail();
+
+
+        if($mail){
+            $message = \Swift_Message::newInstance()
+                ->setSubject('completez votre profil')
+                ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
+                ->setTo($mail)
+                ->setBody($this->renderView('GenericBundle:Mail:EmailCompleterProfil.html.twig',array('apprenant'=>$user))
+                    ,'text/html'
+                );
+            $this->get('mailer')->send($message);
+        }
+
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('success'=>$mail));
 
     }
 

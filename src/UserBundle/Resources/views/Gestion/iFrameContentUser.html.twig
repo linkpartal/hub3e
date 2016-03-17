@@ -896,10 +896,17 @@
                     {% if is_granted('ROLE_ADMINSOC') or is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_SUPER_ADMIN') %}
                     <button onclick="if(confirm('Voulez-vous Supprimer cet utilisateur ?')){post('{{ path('supprimerUtilisateur',{'id': User.getId }) }}',true)}" type="button" class="list-group-item rightMenu" >
                         <div class="col-xs-12" >Supprimer l'utilisateur</div>
-
+                    </button>
+                    <button  onclick="CompleterProfil()" type="button" class="list-group-item rightMenu" >
+                        <div class="col-xs-12" >Ordre enrichit par étudiant</div>
+                    </button>
+                    <button type="button" class="list-group-item rightMenu ">
+                        <div class="col-xs-12">Statut en cours</div>
+                    </button>
+                    <button type="button" class="list-group-item rightMenu">
+                        <div class="col-xs-12">Historique</div>
                     </button>
                     {% endif %}
-
                 </div>
             </div>
 
@@ -1041,6 +1048,24 @@
                 }
             }
         });
+    }
+    function CompleterProfil(){
+     var id = document.getElementById('id').value;
+     var route= '{{ path('CompleterProfil',{'IdUser':'_idUser'}) }}';
+
+
+        route=route.replace('_idUser',id);
+
+        $.ajax({
+            type: 'get',
+            url: route,
+            error: function (response) {
+                console.log(response);
+            },
+            success: function(data){console.log(data);}
+        });
+
+
     }
     function supprimerLangue(div){
 
