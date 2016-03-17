@@ -1025,49 +1025,50 @@
                     {% else %}
                         <div id="info_mission" class="list-group affichage" style="display: none;">
 
-                            {% if missions is defined %}
-                                {% for mission in missions %}
-                                    {% set iddiv = random()  %}
-
-                                    <div class="col-xs-12 Liste">
-
-                                        <div class="row">
-                                            <label class="cell"  >CodeMission : <label style="font-size: medium">{{ mission.getCodemission }}</label></label>
-                                            <label class="cell" >Date : <label style="font-size: medium" > {{ mission.getDatecreation|date('d/m/Y H:i')}}</label>
-
-                                                <img   style="float:right;" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="if(confirm('Voulez-vous Supprimer cette mission?')){supprimerligne('{{ path('supprimer_Mission',{'id': mission.getId}) }}',this)}" />
-
-                                                <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#mission{{ iddiv }}"></button>
-                                            </label>
-
-                                        </div>
-                                        <div id="mission{{ iddiv }}" class="collapse in" >
+                                {% if missions is defined %}
+                                    {% for mission in missions %}
+                                        {% set iddiv = random()  %}
+                            <form class="formulaire" id="formMissionModifier" action="{{ path('missionModif') }}" method="post" enctype="multipart/form-data">
+                                <input type="hidden" value="{{ mission.getId }}" id="id" name="_ID">
+                                        <div class="col-xs-12 Liste">
                                             <div class="row">
-                                                <label class="cell">EmailContact  : <label style="font-size: medium">{{ mission.EmailContact }}</label></label>
-                                                <label class="cell">Profil : <label style="font-size: medium">{{ mission.getProfil }}</label></label>
-                                            </div>
-                                            <div class="row">
-                                                <label class="cell" >Date Debut :<label style="font-size: medium"> {{ mission.getDatedebut|date('d/m/Y')}}</label></label>
-                                                <label class="cell" >Date fin :<label style="font-size: medium" > {{mission.getDatefin|date('d/m/Y')}}</label></label>
+                                                <label class="cell"  >CodeMission : <label type="text"  id="CodeMission" name="_Codemission" >{{ mission.getCodemission }}</label></label>
+                                                <label class="cell" >Date : <label style="font-size: medium"   >{{ mission.getDatecreation|date('d/m/Y H:i')}}</label>
+                                                    <button onclick="modifierMission('formMissionModifier',this)" type="button" style="background: #1C5AA5;color:white;height:40px;width:120px;" >modifier</button>
+                                                    <img   style="float:right;" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="if(confirm('Voulez-vous Supprimer cette mission?')){supprimerligne('{{ path('supprimer_Mission',{'id': mission.getId}) }}',this)}" />
+
+                                                    <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#mission{{ iddiv }}"></button>
+                                                </label>
 
                                             </div>
-                                            <div class="row">
-                                                <label class="cell">Typecontart  : <label style="font-size: medium">{{ mission.getTypecontrat }}</label></label>
-                                                <label class="cell">NomContact  : <label style="font-size: medium">{{ mission.getNomContact }}</label></label>
+                                            <div id="mission{{ iddiv }}" class="collapse in" >
+                                                <div class="row">
+                                                    <label class="cell">EmailContact  : <input type="text"  value="{{ mission.EmailContact }}" id="Emailcontact" name="_Emailcontact" readonly></label>
+                                                    <label class="cell">Profil : <input type="text"  value="{{ mission.getProfil }}" id="Profil" name="_Profil" readonly></label>
+                                                </div>
+                                                <div class="row">
+                                                    <label class="cell" >Date Debut :<input type="date"  value="{{ mission.getDatedebut|date('Y-m-d')}}" id="Datedebut" name="_Datedebut" readonly> </label>
+                                                    <label class="cell" >Date fin :<input type="date"  value="{{mission.getDatefin|date('Y-m-d')}}" id="Datefin" name="_Datefin" readonly > </label>
+
                                             </div>
                                             <div class="row">
-                                                <label class="cell">Domaine  : <label style="font-size: medium">{{ mission.getDomaine }}</label></label>
-                                                <label class="cell">Tuteur  : <label style="font-size: medium">{{ mission.getTuteur }}</label></label>
+                                                <label class="cell">Typecontart  : <input type="text"  value="{{ mission.getTypecontrat }}" id="TypeContrat" name="_TypeContrat" readonly></label>
+                                                <label class="cell">NomContact  : <input type="text"  value="{{ mission.getNomContact }}"  id="NomContact" name="_NomContact" readonly></label>
                                             </div>
                                             <div class="row">
-                                                <label class="cell" style="height: 280px;word-wrap: break-word;width: 150px;hyphens: auto;max-width: 100px;">Descriptif : <label style="font-size: medium" >{{ mission.getDescriptif }}</label></label>
+                                                <label class="cell">Domaine  : <input type="text"  value="{{ mission.getDomaine }}" id="Domaine" name="_Domaine" readonly></label>
+                                                <label class="cell">Tuteur  : <label type="text"  id="Tuteur" name="_Tuteur" >{{ mission.getTuteur }}</label></label>
+                                            </div>
+                                            <div class="row">
+                                                <label class="cell" style="height: 280px;word-wrap: break-word;width: 150px;hyphens: auto;max-width: 100px;">Descriptif : <textarea style="resize: none;width:900px;height:90%" id="Descriptif" name="_Descriptif" maxlength="255" readonly >{{ mission.getDescriptif }}</textarea></label>
                                             </div>
 
                                         </div>
                                     </div>
-
+                            </form>
                                 {% endfor %}
                             {% endif %}
+
                         </div>
                     {% endif %}
                 </div>
@@ -1202,6 +1203,22 @@
 
             button.getElementsByTagName("div")[0].innerHTML="valider";
             button.setAttribute('onclick','envoyer()');
+        }
+        function modifierMission(formid,button) {
+            var inputs = document.getElementById(formid).getElementsByTagName('input');
+            for(var i = 0; i< inputs.length; i++)
+            {
+                inputs[i].readOnly = false;
+            }
+            var textareas = document.getElementById(formid).getElementsByTagName('textarea');
+            for( i = 0; i< textareas.length; i++)
+            {
+                textareas[i].readOnly = false;
+            }
+
+            button.innerHTML="valider";
+            button.setAttribute('onclick','document.getElementById(\'formMissionModifier\').submit()');
+
         }
 
         function show_formapprenant(div) {

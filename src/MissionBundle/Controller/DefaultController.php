@@ -153,22 +153,42 @@ class DefaultController extends Controller
     public function missionModifAction(Request $request){
         $em = $this->getDoctrine()->getManager();
 
-        $mission = $em->getRepository('GenericBundle:Mission')->findOneBy(array('id'=>$request->get('_ID')));
-        $mission->setProfil($request->get('_Profil'));
-        $mission->setCodemission($request->get('_Codemission'));
-        $mission->setDescriptif($request->get('_Descriptif'));
-        $mission->setTypecontrat($request->get('_TypeContrat'));
-        $mission->setEmailcontact($request->get('_Emailcontact'));
-        $mission->setDomaine($request->get('_Domaine'));
-        $mission->setDatedebut(date_create($request->get('_Datedebut')) );
-        $mission->setDatefin(date_create($request->get('_Datefin')) );
-        $mission->setRemuneration($request->get('_Remuneration'));
+        $mission = $em->getRepository('GenericBundle:Mission')->find($request->get('_ID'));
+        if($request->get('_Descriptif') and !$request->get('_Descriptif')==''){
+            $mission->setDescriptif($request->get('_Descriptif'));
+        }
+        if($request->get('_Profil') and !$request->get('_Profil')==''){
+            $mission->setProfil($request->get('_Profil'));
+        }
+        if($request->get('_TypeContrat') and !$request->get('_TypeContrat')==''){
+            $mission->setTypecontrat($request->get('_TypeContrat'));
+        }
+        if($request->get('_NomContact') and !$request->get('_NomContact')==''){
+            $mission->setNomcontact($request->get('_NomContact'));
+        }
+        if($request->get('_Codemission') and !$request->get('_Codemission')==''){
+            $mission->setCodemission($request->get('_Codemission'));
+        }
+        if($request->get('_Emailcontact') and !$request->get('_Emailcontact')==''){
+            $mission->setEmailcontact($request->get('_Emailcontact'));
+        }
+        if($request->get('_Domaine') and !$request->get('_Domaine')==''){
+            $mission->setDomaine($request->get('_Domaine'));
+        }
+        if($request->get('_Datedebut') and !$request->get('_Datedebut')==''){
+            $mission->setDatedebut(date_create($request->get('_Datedebut')) );
+        }
+        if($request->get('_Datefin') and !$request->get('_Datefin')==''){
+            $mission->setDatefin(date_create($request->get('_Datefin')) );
+        }
+        if($request->get('_Remuneration') and !$request->get('_Remuneration')==''){
+            $mission->setRemuneration($request->get('_Remuneration'));
+        }
         $mission->setDatemodification(date_create());
-
 
         $em->flush();
 
-        return $this->redirect($this->generateUrl('admin_afficheMission',array('id'=>$request->get('_ID'))));
+        return $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function DiffuserMissionAction($id ,Request $request){

@@ -1,5 +1,9 @@
 @CHARSET "utf-8";
 
+body{
+    font: 14px Roboto !important;
+}
+
 .inputcontainer
 {
     height: 60px;
@@ -21,7 +25,7 @@
     display: inline-block !important;
     border: none !important;
     color: #7F7F7F !important;
-    font : 20px arial;
+    font : 20px Roboto;
     margin: 0 !important;
     line-height: 200%;
 }
@@ -31,7 +35,7 @@
     margin: 9px;
     border: none;
     color: black !important;
-    font : 20px arial;
+    font : 20px Roboto;
     height: 40px;
     padding: 10px 0;
     background-color: #D3D3D3;

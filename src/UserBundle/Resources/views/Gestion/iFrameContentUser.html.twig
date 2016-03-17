@@ -318,7 +318,7 @@
 
                   <button id="Button_donnees" title="Données Utilisateur" onclick="show_Information('info_user','Button_donnees')" type="button"  style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Données Utilisateur</button>
                   <button id="Button_Apprenant" title="Details de l'Apprenant" onclick="show_Information('info_Apprenant','Button_Apprenant')" type="button" style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Details de l'Apprenant</button>
-                  <button id="Button_Apprenant" title="Formation de l'Apprenant" onclick="show_Information('info_candidature','Button_Apprenant')" style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Formation de l'Apprenant </button>
+                  <button id="Button_candidature" title="Formation de l'Apprenant" onclick="show_Information('info_candidature','Button_Apprenant')" style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Formation de l'Apprenant </button>
                   <button id="Button_parents" title="Responsables" onclick="show_Information('info_parents','Button_parents')"  style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Responsables </button>
                   <button id="Button_Exp" title="Expériences" onclick="show_Information('info_Exp','Button_Exp')"  style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Expériences </button>
                   <button id="Button_recom" title="Recommandations" onclick="show_Information('info_recom','Button_recom')"  style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Recommandations </button>
@@ -907,9 +907,19 @@
                     {% if is_granted('ROLE_ADMINSOC') or is_granted('ROLE_ADMINECOLE') %}
                     <button onclick="if(confirm('Voulez-vous Supprimer cet utilisateur ?')){post('{{ path('supprimerUtilisateur',{'id': User.getId }) }}',true)}" type="button" class="list-group-item rightMenu" >
                         <div class="col-xs-12" >Supprimer l'utilisateur</div>
+
+                    </button>
+                    <button  onclick="CompleterProfil()" type="button" class="list-group-item rightMenu" >
+                        <div class="col-xs-12" >Ordre enrichit par étudiant</div>
+                    </button>
+                    <button type="button" class="list-group-item rightMenu ">
+                        <div class="col-xs-12">Statut en cours</div>
+                    </button>
+                    <button type="button" class="list-group-item rightMenu">
+                        <div class="col-xs-12">Historique</div>
+
                     </button>
                     {% endif %}
-
                 </div>
             </div>
 
@@ -1058,6 +1068,24 @@
                 }
             }
         });
+    }
+    function CompleterProfil(){
+     var id = document.getElementById('id').value;
+     var route= '{{ path('CompleterProfil',{'IdUser':'_idUser'}) }}';
+
+
+        route=route.replace('_idUser',id);
+
+        $.ajax({
+            type: 'get',
+            url: route,
+            error: function (response) {
+                console.log(response);
+            },
+            success: function(data){console.log(data);}
+        });
+
+
     }
     function supprimerLangue(div){
 
