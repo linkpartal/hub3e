@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/Apprenant.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/ajout.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     {% block CSS %}{% endblock %}
@@ -309,23 +309,23 @@
         {% endif %}
         <div class="row" style="background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;height: 100%">
 
-         <div class="col-xs-9" style="background: rgb(238, 241, 246); height: 100%;">
+            <div class="col-xs-9" style="background: rgb(238, 241, 246); height: 100%;">
               <!-- **********************************tache des apprenants************************** -->
            <div class="col-xs-12" style="height: 46px;">
               <div style="height: 35px; width: 100%; padding: 15px 0 0 15px;display: flex;">
 
                   {% if User.hasRole('ROLE_APPRENANT') %}
 
-                  <button id="Button_donnees" title="Données Utilisateur" onclick="show_Information('info_user','Button_donnees')" type="button"  style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Données Utilisateur</button>
-                  <button id="Button_Apprenant" title="Details de l'Apprenant" onclick="show_Information('info_Apprenant','Button_Apprenant')" type="button" style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Details de l'Apprenant</button>
-                  <button id="Button_candidature" title="Formation de l'Apprenant" onclick="show_Information('info_candidature','Button_Apprenant')" style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Formation de l'Apprenant </button>
-                  <button id="Button_parents" title="Responsables" onclick="show_Information('info_parents','Button_parents')"  style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Responsables </button>
-                  <button id="Button_Exp" title="Expériences" onclick="show_Information('info_Exp','Button_Exp')"  style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Expériences </button>
-                  <button id="Button_recom" title="Recommandations" onclick="show_Information('info_recom','Button_recom')"  style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Recommandations </button>
-                  <button id="Button_diplome" title="Diplomes" onclick="show_Information('info_diplome','Button_diplome')"   style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Diplomes </button>
-                  <button id="Button_doc" title="Documents" onclick="show_Information('info_doc','Button_doc')"  style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Documents </button>
-                  <button id="Button_Affinite" title="QCM Affinite" onclick="show_Information('QCM_Affinite','Button_Affinite')" style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">QCM Affinite </button>
-                  <button id="Button_Test" title="QCM Test" onclick="show_Information('QCM_Test','Button_Test')"  style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">QCM Test </button>
+                  <button id="Button_donnees" class="NavButtonInactive" title="Données Utilisateur" onclick="show_Information('info_user','Button_donnees')" type="button">Données Utilisateur</button>
+                  <button id="Button_Apprenant" class="NavButtonInactive" title="Details de l'Apprenant" onclick="show_Information('info_Apprenant','Button_Apprenant')" type="button">Details de l'Apprenant</button>
+                  <button id="Button_candidature" class="NavButtonInactive" title="Formation de l'Apprenant" onclick="show_Information('info_candidature','Button_Apprenant')" >Formation de l'Apprenant </button>
+                  <button id="Button_parents" class="NavButtonInactive" title="Responsables" onclick="show_Information('info_parents','Button_parents')" >Responsables </button>
+                  <button id="Button_Exp" class="NavButtonInactive" title="Expériences" onclick="show_Information('info_Exp','Button_Exp')" >Expériences </button>
+                  <button id="Button_recom" class="NavButtonInactive" title="Recommandations" onclick="show_Information('info_recom','Button_recom')" >Recommandations </button>
+                  <button id="Button_diplome" class="NavButtonInactive" title="Diplomes" onclick="show_Information('info_diplome','Button_diplome')">Diplomes </button>
+                  <button id="Button_doc" class="NavButtonInactive" title="Documents" onclick="show_Information('info_doc','Button_doc')">Documents </button>
+                  <button id="Button_Affinite" class="NavButtonInactive" title="QCM Affinite" onclick="show_Information('QCM_Affinite','Button_Affinite')">QCM Affinite </button>
+                  <button id="Button_Test" class="NavButtonInactive" title="QCM Test" onclick="show_Information('QCM_Test','Button_Test')">QCM Test </button>
 
                            <!--select title="" id="select_info"  style="color:white;">
                                <option value="info_user" style="color:black;">Données Utilisateur</option>
@@ -612,9 +612,8 @@
                                             <label class="cell">Activite : <label>{{Exp.getActivite }}</label>
                                                 <img name="modification" style="display:none;;float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerExperience('{{ path('supprimer_Experience',{'id':Exp.getId}) }}',this)" />
 
-                                                <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#exper{{ iddiv }}"></button></label>
-
-                                                <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#exp{{ iddiv }}"></button></label>
+                                                <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#exper{{ iddiv }}"></button>
+                                            </label>
 
 
                                         </div>
@@ -952,6 +951,17 @@
         document.getElementById('QCM_Affinite').style.display ='none';
         document.getElementById('QCM_Test').style.display ='none';
         document.getElementById(div).style.display ='block';
+        document.getElementById("Button_donnees").className = "NavButtonInactive";
+        document.getElementById("Button_Apprenant").className = "NavButtonInactive";
+        document.getElementById("Button_candidature").className = "NavButtonInactive";
+        document.getElementById("Button_parents").className = "NavButtonInactive";
+        document.getElementById("Button_Exp").className = "NavButtonInactive";
+        document.getElementById("Button_recom").className = "NavButtonInactive";
+        document.getElementById("Button_diplome").className = "NavButtonInactive";
+        document.getElementById("Button_doc").className = "NavButtonInactive";
+        document.getElementById("Button_Affinite").className = "NavButtonInactive";
+        document.getElementById("Button_Test").className = "NavButtonInactive";
+        document.getElementById(buttonID).className += " NavButtonClicked";
         sessionStorage.setItem('onglet_tier',buttonID);
     }
     function expire(route) {

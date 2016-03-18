@@ -12,7 +12,7 @@
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
 
 </head>
-<body>
+<body onunload="window.parent.document.getElementById('iframe').style.position ='static';window.parent.document.getElementById('iframe').style.height ='calc(100% - 72px)';">
 
 
 <div id="FicheApprenant" class="popup" >
@@ -232,15 +232,15 @@
 
 </div>
 
-<div id="info_messagerie" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;width: 100%;height: 90%;position: absolute;">
+<div id="info_messagerie" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;height: 100%;padding-bottom: 40px ;position: absolute;">
 
-    <div class="row" style="margin:10px;"  >
-        <select class="input col-xs-2" title="messages" style="margin-left: 20px;height:40px;">
+    <div class="col-xs-10 col-xs-offset-1" style="margin-top: 10px;">
+        <select class="input col-xs-2" title="messages" style="height:40px;">
             <option value="les messages">Tous les messages</option>
         </select>
         <div class="col-xs-2" style="margin-left: 20px;height:40px;display: flex;">
-            <span class="glyphicon glyphicon-search col-xs-2" id="basic-addon1" style="height: 30px;padding: 7px;float: left;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;background-color: white;"></span>
-            <input class="col-xs-10" type="text" aria-describedby="basic-addon1" style="height: 31px;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;background-color: white;" placeholder="Recherche ...">
+            <span class="glyphicon glyphicon-search col-xs-2" id="basic-addon1" style="height: 30px;padding: 7px;float: left;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;background-color: transparent;"></span>
+            <input class="col-xs-10" type="text" aria-describedby="basic-addon1" style="height: 31px;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;background-color: transparent;" placeholder="Recherche ...">
         </div>
         <div id="paginationContainer" class="customepaginate" style="max-width: 240px;float: right;display: flex;">
             <button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px;float: right;" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
@@ -249,11 +249,11 @@
     </div>
 
 
-<div id="List-Message">
+<div id="List-Message" class="col-xs-10 col-xs-offset-1">
     {% if messageies is defined %}
         {% for msg in messageies %}
 
-            <div id="{{ msg.id }}" class="col-xs-12 Liste" style="border: 1px solid #ddd;width:90%;margin-right:5px;margin-bottom: 0;margin-top: 0;height:100px;" >
+            <div id="{{ msg.id }}" class="Liste" style="border: 1px solid #ddd;float: left;;margin: 0;width: 100%;height:100px;" >
                 {% if msg.expediteur.hasRole('ROLE_APPRENANT') %}
                     <div class="col-xs-2" >
                         <div style="border: 15px solid transparent">
@@ -344,7 +344,10 @@
 <script language="JavaScript">
     var marker,map_localisation,map_mission,marker_societe,idMessage;
     $(document).ready(function(){
-
+        window.parent.document.getElementById('iframe').style.left ='0';
+        window.parent.document.getElementById('iframe').style.top ='32px';
+        window.parent.document.getElementById('iframe').style.height ='calc(100% - 32px)';
+        window.parent.document.getElementById('iframe').style.position ='fixed';
         $("#paginationContainer").customPaginate({
             itemsToPaginate : ".Liste",
             activeClass : "active-class"

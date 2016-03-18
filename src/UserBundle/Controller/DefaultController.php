@@ -566,6 +566,7 @@ class DefaultController extends Controller
         return $reponse->setData(array('success'=>1));
 
     }
+
     public function CompleterProfilAction($IdUser){
         $em = $this->getDoctrine()->getManager();
         $user= $em->getRepository('GenericBundle:User')->find($IdUser);
@@ -1211,7 +1212,7 @@ class DefaultController extends Controller
 
         if($user)
         {
-            return $response->setData(array('Ajout'=>'0'));
+            return $response->setData(array('Ajout'=>'0','Id'=>$id,'LieuNaissance'=>$import->getInfo()->getLieunaissance(),'DateNaissance'=>date_format($import->getInfo()->getDatenaissance(),'d/m/Y')));
         }
         else{
             $userManager = $this->get('fos_user.user_manager');

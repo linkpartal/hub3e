@@ -1,862 +1,329 @@
-{% if app.user.hasRole('ROLE_SUPER_ADMIN') %}
-    {% embed 'AdminBundle::AdminHome.html.twig' %}
-        {% block title %}SAS{% endblock %}
-        {% block CSS %}
-            <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
-        {% endblock %}
-        {% block JS %}
-            <script src="{{ asset('js/paginate.js') }}"></script>
-            <script language="javascript">
-                var idImportFusion;
-                function loading(){
-
-                    $("#paginationContainer").customPaginate({
-                        itemsToPaginate : ".SASPaginate",
-                        activeClass : "active-class"
-                    });
-
-                }
-                function supprimerLigne(route,champs) {
-                    champs.disabled = true;
-                    //champs.src="{{ asset('image/waitmini.gif') }}";
-
-                    champs.firstChild.src="{{ asset('image/waitmini.gif') }}";
-                    $.ajax({
-                        type: 'get',
-                        url: route,
-                        error: function (response) {
-                            console.log(response);
-                        },
-                        success: function(data){
-                            if(data['Delete']=='1')
-                            {
-                                champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
-                                alert('Suppression correctement effectuer');
-                            }
-                            if(data['Delete']=='0')
-                            {
-                                champs.disabled = false;
-                                alert('Suppression à rencontrer une erreur en cours d\'excecution');
-                            }
-                            if(data['Ajout']=='1')
-                            {
-                                champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
-                                alert('Ajout correctement effectuer');
-                            }
-                            if(data['Ajout']=='0')
-                            {
-                                alert('Ajout à rencontrer une erreur en cours d\'excecution, cet utilisateur existe déjà, Vérifiez ces duplicats puis essayez de le fusionner');
-                            }
-                        }
-                    });
-
-                };
-                function voirduplica(id, lieunaissance ,datenaissance) {
-                    var route = '{{ path("afficher_duplica",{'id':"_id"}) }}';
-                    route = route.replace('_id',id);
-                    idImportFusion = id;
-                    $.ajax({
-                        url: route,
-                        type: 'POST',
-                        success: function(data){
-                            document.getElementById('DuplicaPopUpId').innerHTML = id;
-                            document.getElementById('DuplicaPopUpNom').innerHTML = document.getElementById('Nom'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpPrenom').innerHTML = document.getElementById('Prenom'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpTelephone').innerHTML = document.getElementById('Telephone'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpEmail').innerHTML = document.getElementById('Email'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpNaissance').innerHTML = 'né à '+ lieunaissance+' le '+ datenaissance;
-                            document.getElementById('DuplicaPopUpImg').src = document.getElementById('image'+id).src;
-
-                            var innerHTMLDulplicaPopUp = '';
-                            document.getElementById('DuplicaPopUpForm').innerHTML = innerHTMLDulplicaPopUp;
-                            if(data.length !=0 ){
-                                for(var i =0 ; i < data.length; i++){
-                                    innerHTMLDulplicaPopUp += '<div class="col-xs-12" style="background-color: white;height:94px;display: inline-flex;font: 14px Roboto;color: rgb(77, 83, 90);" >'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">'+data[i][0]+'</div>'+
-                                            '<div class="col-xs-1" style="height: 100%;padding: 0;display: inline-flex" >'+
-                                            '<img src="data:image/jpg;base64,'+data[i][1]+'" style="width:100%;border-radius: 100%;margin: auto;">'+
-                                            '</div>'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">'+data[i][2]+'</div>'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">'+data[i][3]+'</div>'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">'+data[i][4]+'</div>'+
-                                            '<div class="col-xs-3" style="margin: auto;color: #1C5AA5;text-decoration: underline;text-align: center;white-space: nowrap;overflow: hidden;padding: 0;text-overflow: ellipsis; ">'+data[i][5]+'</div>'+
-                                            '<div class="col-xs-3" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">né à '+data[i][6]+' le '+data[i][7]+'</div>'+
-                                            '<div style="margin: auto;padding: 0;">'+
-                                            '<input name="DuplicaPopUpRadioUSer" type="radio" value="'+data[i][0]+'">'+
-                                            '</div>'+
-                                            '</div>';
-                                }
-                                document.getElementById('DuplicaPopUpForm').innerHTML = innerHTMLDulplicaPopUp;
-                                show('DuplicaPopUp');
-                            }
-                            else{
-                                alert('aucun duplicata trouvé');
-                            }
-
-                        }
-                    })
-                }
-                function fusionner(){
-                    var route = '{{ path('fusionner_apprenant',{'sas':'_IDFUSION'}) }}';
-                    route = route.replace('_IDFUSION',idImportFusion);
-                    $.ajax({
-                        url:route,
-                        type:'POST',
-                        data: $('#DuplicaPopUpForm').serialize(),
-                        success:function(data){
-                            if(data==1){
-                                document.getElementById('DuplicaPopUp').style.display = 'none';
-                                alert('La fusion s\'est correctement effectuée');
-                            }
-
-
-                        }
-                    })
-                }
-            </script>
-        {% endblock %}
-        {% block underTopBar %}
-            <div id="DuplicaPopUp" class="popup">
-                <div onclick="hide(this)" class="close">
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
+    <title>Title</title>
+</head>
+<body onload="loading();" onunload="window.parent.document.getElementById('iframe').style.position ='static';window.parent.document.getElementById('iframe').style.height ='calc(100% - 72px)';">
+<div id="FicheApprenant" class="popup" >
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-7" style="background-color: white;padding: 0;border:20px solid white;display: block; margin-left: 20%; ">
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+        <form id="formFicheApprenant" class="formulaire"   method="post">
+            <div>
+                <div class="col-lg-12" >
+                    <img src="" style="border-radius:50%; width:50px; height:50px" >
                 </div>
-                <div class="col-xs-offset-1 col-xs-10" style="background-color: white;padding: 0;display: block;
+                <div class="col-lg-12">
+                    <label id="Information_Apprenant_titre" style="color:black" ></label>
+                </div>
+                <div id="Information_Apprenant_titre_adresse" class="col-xs-12" style="height: 20px;color: #666666;font-family:Arial;font-style:normal;font-size: medium;margin-bottom: 40px"></div>
+            </div>
+
+
+
+            <div class="div_form"  id="information_apprenant" >
+                <div class="row" style=" margin-bottom: 20px">
+                    <div id="info_apprenant" style="height: 281px;border-top: 1px solid #B0B0B0;margin: 0;overflow-y: auto;width: 100%;">
+                        <div class="col-xs-12 Liste" >
+
+                            <div class="col-xs-12" >
+                                <label class="cell"  style="float:left;">Civilité : <label id="Information_Apprenant_Civilite"></label></label>
+                            </div>
+                            <div class="col-xs-10 ">
+                                <label class="cell" style="float:left;">Nom : <label id="Information_Apprenant_Nom"></label> </label>
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Prenom : <label id="Information_Apprenant_Prenom"></label></label>
+
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Email  : <label id="Information_Apprenant_Email"></label></label>
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Téléphone : <label id="Information_Apprenant_Telephone"></label></label>
+
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Date naissance : <label id="Information_Apprenant_DateNaissance"  ></label></label>
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Cp naissance  : <label id="Information_Apprenant_CpNaissance" ></label></label>
+
+                            </div>
+
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Lieu naissance: <label id="Information_Apprenant_LieuNaissance" ></label></label>
+                            </div>
+                            <div class="col-xs-10">
+                                <label class="cell" style="float:left;">Adresse       : <label id="Information_Apprenant_Adresse" ></label></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+</div>
+<div id="DuplicaPopUp" class="popup">
+    <div onclick="hide(this)" class="close">
+
+    </div>
+    <div class="col-xs-offset-1 col-xs-10" style="background-color: white;padding: 0;display: block;
                 border-top: 4px solid white;border-bottom: 4px solid white;border-radius: 4px;box-shadow: 0 1px 40px 0 rgb(0, 0, 0);">
 
-                    <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
 
-                    <div style="background-color: white;height: 54px;width: 100%;display: inline-flex;">
-                        <label class="col-xs-9" id="NbreDuplica" style="margin: auto 0;font: 14px Roboto;color: rgb(107, 107, 107);float: left;">3 profils correspondants ont été trouvés</label>
-                        <button onclick="fusionner()" class="col-xs-3" style="float: right;height: 33px;margin: auto 28px auto 0;background-color: rgb(61, 138, 212);border: none;font: 14px Roboto;color: white;">Fusionner les profils</button>
-                    </div>
-                    <div class="col-xs-12" style="background-color: rgb(61, 138, 212);height:94px;display: inline-flex;font: 14px Roboto;color: white;" >
+        <div style="background-color: white;height: 54px;width: 100%;display: inline-flex;">
+            <label class="col-xs-9" id="NbreDuplica" style="margin: auto 0;font: 14px Roboto;color: rgb(107, 107, 107);float: left;">3 profils correspondants ont été trouvés</label>
+            <button onclick="fusionner()" class="col-xs-3" style="float: right;height: 33px;margin: auto 28px auto 0;background-color: rgb(61, 138, 212);border: none;font: 14px Roboto;color: white;">Fusionner les profils</button>
+        </div>
+        <div class="col-xs-12" style="background-color: rgb(61, 138, 212);height:94px;display: inline-flex;font: 14px Roboto;color: white;" >
 
-                        <div id="DuplicaPopUpId" class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">1024</div>
-                        <div class="col-xs-1" style="height: 100%;padding: 0;display: inline-flex" >
-                            <img id="DuplicaPopUpImg"  src="{{ asset('image/image2.jpg') }}" style="width:100%;border-radius: 100%;margin: auto;">
-                        </div>
-
-                        <div id="DuplicaPopUpNom" class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">Elkhettari</div>
-                        <div id="DuplicaPopUpPrenom" class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">Imane</div>
-                        <div id="DuplicaPopUpTelephone" class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">0635451494</div>
-                        <div id="DuplicaPopUpEmail" class="col-xs-3" style="margin: auto;color: #1C5AA5;text-decoration: underline;text-align: center;white-space: nowrap;overflow: hidden;padding: 0;text-overflow: ellipsis; ">ielkhettari@fc-2i.com</div>
-
-                        <div id="DuplicaPopUpNaissance" class="col-xs-3" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">née à Annecy le 16/03/1990</div>
-                        <div style="margin: auto;padding: 0;visibility: hidden">
-                            <input name="DuplicaPopUpRadio" type="radio" value="1">
-                        </div>
-
-
-                    </div>
-                    <form id="DuplicaPopUpForm" class="formulaire" method="post">
-
-                    </form>
-
-                </div>
-
-
+            <div id="DuplicaPopUpId" class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">1024</div>
+            <div class="col-xs-1" style="height: 100%;padding: 0;display: inline-flex" >
+                <img id="DuplicaPopUpImg"  src="{{ asset('image/image2.jpg') }}" style="width:100%;border-radius: 100%;margin: auto;">
             </div>
-            <div class="col-xs-offset-1 col-xs-10" style="margin-top:10px;margin-bottom:10px;"  >
-                <div class="col-xs-2" style="margin-left: 20px;height:40px;display: flex;">
-                    <span class="glyphicon glyphicon-search " id="basic-addon1" style="width: 30px;height: 30px;padding: 7px;float: left;border: none;background-color: transparent;border-bottom: 1px solid #CCCCCC;margin: auto 0;"></span>
-                    <input type="text" aria-describedby="basic-addon1" style="height: 30px;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;" placeholder="Recherche ...">
-                </div>
-                <div id="paginationContainer" class="customepaginate" style="max-width: 240px;float: right;display: flex;">
-                    <button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px;float: right;" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
-                </div>
 
+            <div id="DuplicaPopUpNom" class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">Elkhettari</div>
+            <div id="DuplicaPopUpPrenom" class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">Imane</div>
+            <div id="DuplicaPopUpTelephone" class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">0635451494</div>
+            <div id="DuplicaPopUpEmail" class="col-xs-3" style="margin: auto;color: #1C5AA5;text-decoration: underline;text-align: center;white-space: nowrap;overflow: hidden;padding: 0;text-overflow: ellipsis; ">ielkhettari@fc-2i.com</div>
+
+            <div id="DuplicaPopUpNaissance" class="col-xs-3" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">née à Annecy le 16/03/1990</div>
+            <div style="margin: auto;padding: 0;visibility: hidden">
+                <input name="DuplicaPopUpRadio" type="radio" value="1">
             </div>
-            {% for import in imports %}
-                <div class="col-xs-10 col-xs-offset-1 SASPaginate" >
-                    <div class="col-xs-1" style="margin: auto;">
-                        {{ import.getId }}
-                    </div>
-                    <div class="col-xs-2" >
-                        <div style="border: 15px solid transparent">
-                            <img id="image{{ import.id }}" src="data:image/jpg;base64,{{import.getPhotos }}" style="height:70px;width:70px;border-radius: 100%">
-                        </div>
 
 
-                    </div>
-                    <div id="Nom{{ import.id }}" class="col-xs-1" style="margin: auto; ">
-                        {{ import.getNom }}
-                    </div>
-                    <div id="Prenom{{ import.id }}" class="col-xs-1" style="margin: auto; ">
-                        {{ import.getPrenom }}
-                    </div>
-                    <div id="Telephone{{ import.id }}" class="col-xs-1" style="margin: auto; ">
-                        {{ import.getTelephone }}
-                    </div>
-                    <div id="Email{{ import.id }}" class="col-xs-3" style="margin: auto;color: #1C5AA5;text-decoration: underline; ">
-                        {{ import.getEmail }}
-                    </div>
-                    <div class="col-xs-3" style="height: 100%">
-                        <button class="col-xs-3" type="button" onclick="voirduplica({{ import.getId }}{% if import.info %}{% if import.info.lieunaissance %},'{{ import.info.lieunaissance }}'{% else %},'undefined'{% endif %}{% if import.info.datenaissance %},'{{ import.info.datenaissance|date('d/m/Y') }}'{% else %},'undefined'{% endif %}{% endif %})"
-                                style="height: 100%;background-color: transparent;border: none">
-                            <span class="glyphicon glyphicon-search" style="color: #1C5AA5"></span>
-                        </button>
-                        {% if not import.erreur == null %}
-                            <button class="col-xs-3"  type="button" style="height: 100%;background-color: transparent;border: none" disabled>
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </button>
-                        {% else %}
-                            <button class="col-xs-3" onclick="supprimerLigne('{{ path('importer_candidat',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </button>
-                        {% endif %}
-                        <button class="col-xs-3" onclick="supprimerLigne('{{ path('supprimer_import',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
-                            <span class="glyphicon glyphicon-remove"></span>
-                        </button>
-                        {% if import.erreur %}
-                            <button class="col-xs-3" type="button" style="height: 100%;background-color: transparent;border: none">
-                                <span class="glyphicon glyphicon-alert" style="color: red" title="{{ import.erreur }}"></span>
-                            </button>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endfor %}
-        {% endblock %}
+        </div>
+        <form id="DuplicaPopUpForm" class="formulaire" method="post">
 
-    {% endembed %}
-{% elseif app.user.hasRole('ROLE_ADMINECOLE') %}
-    {% embed 'EcoleBundle:Adminecole:index.html.twig' %}
-        {% block title %}SAS{% endblock %}
-        {% block CSS %}
-            <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
-        {% endblock %}
-        {% block JS %}
-            <script src="{{ asset('js/paginate.js') }}"></script>
-            <script language="javascript">
-                var idImportFusion;
-                function loading(){
+        </form>
 
-                    $("#paginationContainer").customPaginate({
-                        itemsToPaginate : ".SASPaginate",
-                        activeClass : "active-class"
-                    });
-
-                }
-                function supprimerLigne(route,champs) {
-                    champs.disabled = true;
-                    //champs.src="{{ asset('image/waitmini.gif') }}";
-
-                    champs.firstChild.src="{{ asset('image/waitmini.gif') }}";
-                    $.ajax({
-                        type: 'get',
-                        url: route,
-                        error: function (response) {
-                            console.log(response);
-                        },
-                        success: function(data){
-                            if(data['Delete']=='1')
-                            {
-                                champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
-                                alert('Suppression correctement effectuer');
-                            }
-                            if(data['Delete']=='0')
-                            {
-                                champs.disabled = false;
-                                alert('Suppression à rencontrer une erreur en cours d\'excecution');
-                            }
-                            if(data['Ajout']=='1')
-                            {
-                                champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
-                                alert('Ajout correctement effectuer');
-                            }
-                            if(data['Ajout']=='0')
-                            {
-                                alert('Ajout à rencontrer une erreur en cours d\'excecution, cet utilisateur existe déjà, Vérifiez ces duplicats puis essayez de le fusionner');
-                            }
-                        }
-                    });
-
-                };
-                function voirduplica(id, lieunaissance ,datenaissance) {
-                    var route = '{{ path("afficher_duplica",{'id':"_id"}) }}';
-                    route = route.replace('_id',id);
-                    idImportFusion = id;
-                    $.ajax({
-                        url: route,
-                        type: 'POST',
-                        success: function(data){
-                            document.getElementById('DuplicaPopUpId').innerHTML = id;
-                            document.getElementById('DuplicaPopUpNom').innerHTML = document.getElementById('Nom'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpPrenom').innerHTML = document.getElementById('Prenom'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpTelephone').innerHTML = document.getElementById('Telephone'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpEmail').innerHTML = document.getElementById('Email'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpNaissance').innerHTML = 'né à '+ lieunaissance+' le '+ datenaissance;
-                            document.getElementById('DuplicaPopUpImg').src = document.getElementById('image'+id).src;
-
-                            var innerHTMLDulplicaPopUp = '';
-                            document.getElementById('DuplicaPopUpForm').innerHTML = innerHTMLDulplicaPopUp;
-                            if(data.length !=0 ){
-                                for(var i =0 ; i < data.length; i++){
-                                    innerHTMLDulplicaPopUp += '<div class="col-xs-12" style="background-color: white;height:94px;display: inline-flex;font: 14px Roboto;color: rgb(77, 83, 90);" >'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">'+data[i][0]+'</div>'+
-                                            '<div class="col-xs-1" style="height: 100%;padding: 0;display: inline-flex" >'+
-                                            '<img src="data:image/jpg;base64,'+data[i][1]+'" style="width:100%;border-radius: 100%;margin: auto;">'+
-                                            '</div>'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">'+data[i][2]+'</div>'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">'+data[i][3]+'</div>'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">'+data[i][4]+'</div>'+
-                                            '<div class="col-xs-3" style="margin: auto;color: #1C5AA5;text-decoration: underline;text-align: center;white-space: nowrap;overflow: hidden;padding: 0;text-overflow: ellipsis; ">'+data[i][5]+'</div>'+
-                                            '<div class="col-xs-3" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">né à '+data[i][6]+' le '+data[i][7]+'</div>'+
-                                            '<div style="margin: auto;padding: 0;">'+
-                                            '<input name="DuplicaPopUpRadioUSer" type="radio" value="'+data[i][0]+'">'+
-                                            '</div>'+
-                                            '</div>';
-                                }
-                                document.getElementById('DuplicaPopUpForm').innerHTML = innerHTMLDulplicaPopUp;
-                                show('DuplicaPopUp');
-                            }
-                            else{
-                                alert('aucun duplicata trouvé');
-                            }
-
-                        }
-                    })
-                }
-                function fusionner(){
-                    var route = '{{ path('fusionner_apprenant',{'sas':'_IDFUSION'}) }}';
-                    route = route.replace('_IDFUSION',idImportFusion);
-                    $.ajax({
-                        url:route,
-                        type:'POST',
-                        data: $('#DuplicaPopUpForm').serialize(),
-                        success:function(data){
-                            if(data==1){
-                                document.getElementById('DuplicaPopUp').style.display = 'none';
-                                alert('La fusion s\'est correctement effectuée');
-                            }
+    </div>
 
 
-                        }
-                    })
-                }
-            </script>
-        {% endblock %}
-        {% block underTopBar %}
-            <div id="DuplicaPopUp" class="popup">
-                <div onclick="hide(this)" class="close">
+</div>
+<div class="col-xs-offset-1 col-xs-10" style="margin-top:10px;margin-bottom:10px;"  >
+    <div class="col-xs-1" style="height: 100%;margin-right: 40px">
+        <button type="button" class="btn btn-default dropdown-toggle"
+                data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false"
+                style="padding:0;width: 100%; height: 40px;border: 1px solid rgb(187, 187, 187);">
+            Filtres
+        </button>
+        <ul id="profil" class="dropdown-menu" aria-labelledby="dropdownMenu1" style="color:white;background: #2975cb;">
+            <li><button style="background: transparent;border:transparent;width:100%">PROFIL</button></li>
+            <li><button style="background: transparent;border:transparent;width:100%">MESSAGERIE</button></li>
+            <li><a style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">LOGOUT</button> </a></li>
+        </ul>
 
-                </div>
-                <div class="col-xs-offset-1 col-xs-10" style="background-color: white;padding: 0;display: block;
-                border-top: 4px solid white;border-bottom: 4px solid white;border-radius: 4px;box-shadow: 0 1px 40px 0 rgb(0, 0, 0);">
+    </div>
+    <div class="col-xs-2" style="margin-left: 20px;height:40px;display: flex;">
+        <span class="glyphicon glyphicon-search " id="basic-addon1" style="width: 30px;height: 30px;padding: 7px;float: left;border: none;background-color: transparent;border-bottom: 1px solid #CCCCCC;margin: auto 0;"></span>
+        <input type="text" aria-describedby="basic-addon1" style="height: 31px;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;" placeholder="Recherche ...">
+    </div>
+    <div id="paginationContainer" class="customepaginate" style="max-width: 240px;float: right;display: flex;">
+        <button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px;float: right;" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
+    </div>
 
-                    <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-
-                    <div style="background-color: white;height: 54px;width: 100%;display: inline-flex;">
-                        <label class="col-xs-9" id="NbreDuplica" style="margin: auto 0;font: 14px Roboto;color: rgb(107, 107, 107);float: left;">3 profils correspondants ont été trouvés</label>
-                        <button onclick="fusionner()" class="col-xs-3" style="float: right;height: 33px;margin: auto 28px auto 0;background-color: rgb(61, 138, 212);border: none;font: 14px Roboto;color: white;">Fusionner les profils</button>
-                    </div>
-                    <div class="col-xs-12" style="background-color: rgb(61, 138, 212);height:94px;display: inline-flex;font: 14px Roboto;color: white;" >
-
-                        <div id="DuplicaPopUpId" class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">1024</div>
-                        <div class="col-xs-1" style="height: 100%;padding: 0;display: inline-flex" >
-                            <img id="DuplicaPopUpImg"  src="{{ asset('image/image2.jpg') }}" style="width:100%;border-radius: 100%;margin: auto;">
-                        </div>
-
-                        <div id="DuplicaPopUpNom" class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">Elkhettari</div>
-                        <div id="DuplicaPopUpPrenom" class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">Imane</div>
-                        <div id="DuplicaPopUpTelephone" class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">0635451494</div>
-                        <div id="DuplicaPopUpEmail" class="col-xs-3" style="margin: auto;color: #1C5AA5;text-decoration: underline;text-align: center;white-space: nowrap;overflow: hidden;padding: 0;text-overflow: ellipsis; ">ielkhettari@fc-2i.com</div>
-
-                        <div id="DuplicaPopUpNaissance" class="col-xs-3" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">née à Annecy le 16/03/1990</div>
-                        <div style="margin: auto;padding: 0;visibility: hidden">
-                            <input name="DuplicaPopUpRadio" type="radio" value="1">
-                        </div>
-
-
-                    </div>
-                    <form id="DuplicaPopUpForm" class="formulaire" method="post">
-
-                    </form>
-
-                </div>
-
-
+</div>
+<div id="SASListe" class="col-xs-12" style="margin-bottom: 40px;height: 100%;">
+{% for import in imports %}
+    <div class="col-xs-10 col-xs-offset-1 SASPaginate" >
+        <div class="col-xs-1" style="margin: auto;">
+            {{ import.getId }}
+        </div>
+        <div class="col-xs-2" >
+            <div style="border: 15px solid transparent">
+                <img id="image{{ import.id }}" src="data:image/jpg;base64,{{import.getPhotos }}" style="height:70px;width:70px;border-radius: 100%">
             </div>
-            <div class="col-xs-offset-1 col-xs-10" style="margin-top:10px;margin-bottom:10px;"  >
-                <div class="col-xs-2" style="margin-left: 20px;height:40px;display: flex;">
-                    <span class="glyphicon glyphicon-search " id="basic-addon1" style="width: 30px;height: 30px;padding: 7px;float: left;border: none;background-color: transparent;border-bottom: 1px solid #CCCCCC;margin: auto 0;"></span>
-                    <input type="text" aria-describedby="basic-addon1" style="height: 30px;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;" placeholder="Recherche ...">
-                </div>
-                <div id="paginationContainer" class="customepaginate" style="max-width: 240px;float: right;display: flex;">
-                    <button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px;float: right;" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
-                </div>
-
-            </div>
-            {% for import in imports %}
-                <div class="col-xs-10 col-xs-offset-1" style="border: 1px solid rgba(148, 148, 148,0.2);height:94px;display: inline-flex;background-color: rgba(230, 230, 230,0.2);font: 14px Roboto;color: rgb(77, 83, 90);" >
-                    <div class="col-xs-1" style="margin: auto;">
-                        {{ import.getId }}
-                    </div>
-                    <div class="col-xs-2" >
-                        <div style="border: 15px solid transparent">
-                            <img id="image{{ import.id }}" src="data:image/jpg;base64,{{import.getPhotos }}" style="height:70px;width:70px;border-radius: 100%">
-                        </div>
 
 
-                    </div>
-                    <div id="Nom{{ import.id }}" class="col-xs-1" style="margin: auto; ">
-                        {{ import.getNom }}
-                    </div>
-                    <div id="Prenom{{ import.id }}" class="col-xs-1" style="margin: auto; ">
-                        {{ import.getPrenom }}
-                    </div>
-                    <div id="Telephone{{ import.id }}" class="col-xs-1" style="margin: auto; ">
-                        {{ import.getTelephone }}
-                    </div>
-                    <div id="Email{{ import.id }}" class="col-xs-3" style="margin: auto;color: #1C5AA5;text-decoration: underline; ">
-                        {{ import.getEmail }}
-                    </div>
-                    <div class="col-xs-3" style="height: 100%">
-                        <button class="col-xs-3" type="button" onclick="voirduplica({{ import.getId }}{% if import.info %}{% if import.info.lieunaissance %},'{{ import.info.lieunaissance }}'{% else %},'undefined'{% endif %}{% if import.info.datenaissance %},'{{ import.info.datenaissance|date('d/m/Y') }}'{% else %},'undefined'{% endif %}{% endif %})"
-                                style="height: 100%;background-color: transparent;border: none">
-                            <span class="glyphicon glyphicon-search" style="color: #1C5AA5"></span>
-                        </button>
-                        {% if not import.erreur == null %}
-                            <button class="col-xs-3"  type="button" style="height: 100%;background-color: transparent;border: none" disabled>
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </button>
-                        {% else %}
-                            <button class="col-xs-3" onclick="supprimerLigne('{{ path('importer_candidat',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </button>
-                        {% endif %}
-                        <button class="col-xs-3" onclick="supprimerLigne('{{ path('supprimer_import',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
-                            <span class="glyphicon glyphicon-remove"></span>
-                        </button>
-                        {% if import.erreur %}
-                            <button class="col-xs-3" type="button" style="height: 100%;background-color: transparent;border: none">
-                                <span class="glyphicon glyphicon-alert" style="color: red" title="{{ import.erreur }}"></span>
-                            </button>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endfor %}
-            <script language="javascript">
-                var idImportFusion;
-                function supprimerLigne(route,champs) {
-                    champs.disabled = true;
-                    //champs.src="{{ asset('image/waitmini.gif') }}";
+        </div>
+        <div id="Nom{{ import.id }}" class="col-xs-1" style="margin: auto; ">
+            {{ import.getNom }}
+        </div>
+        <div id="Prenom{{ import.id }}" class="col-xs-1" style="margin: auto; ">
+            {{ import.getPrenom }}
+        </div>
+        <div id="Telephone{{ import.id }}" class="col-xs-1" style="margin: auto; ">
+            {{ import.getTelephone }}
+        </div>
+        <div id="Email{{ import.id }}" class="col-xs-3" style="margin: auto;color: #1C5AA5;text-decoration: underline; ">
+            {{ import.getEmail }}
+        </div>
+        <div class="col-xs-3" style="height: 100%">
+            <button class="col-xs-3" type="button" onclick="
+                    informationApprenant('{{import.getPhotos}}','{{ import.getCivilite }}','{{ import.getNom }}','{{ import.getPrenom }}','{{ import.getEmail }}',
+                    '{{ import.getTelephone }}','{{ import.getInfo.getDateNaissance|date("d/m/Y") }}','{{ import.getInfo.getCpNaissance }}','{{ import.getInfo.getLieunaissance }}',
+                    '{{ import.getInfo.getAdresse }}');show('FicheApprenant');" style="height: 100%;background-color: transparent;border: none">
+                <span class="glyphicon glyphicon-search" style="color: #1C5AA5"></span>
+            </button>
+            {% if not import.erreur == null %}
+                <button class="col-xs-3"  type="button" style="height: 100%;background-color: transparent;border: none" disabled>
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            {% else %}
+                <button class="col-xs-3" onclick="supprimerLigne('{{ path('importer_candidat',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            {% endif %}
+            <button class="col-xs-3" onclick="supprimerLigne('{{ path('supprimer_import',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+            {% if import.erreur %}
+                <button class="col-xs-3" type="button" style="height: 100%;background-color: transparent;border: none">
+                    <span class="glyphicon glyphicon-alert" style="color: red" title="{{ import.erreur }}"></span>
+                </button>
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}
+</div>
+<script src="//code.jquery.com/jquery.min.js"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/paginate.js') }}"></script>
+<script language="javascript">
+    var idImportFusion;
+    function loading(){
+        window.parent.document.getElementById('iframe').style.left ='0';
+        window.parent.document.getElementById('iframe').style.top ='32px';
+        window.parent.document.getElementById('iframe').style.height ='calc(100% - 32px)';
+        window.parent.document.getElementById('iframe').style.position ='fixed';
+        $("#paginationContainer").customPaginate({
+            itemsToPaginate : ".SASPaginate",
+            activeClass : "active-class"
+        });
 
-                    champs.firstChild.src="{{ asset('image/waitmini.gif') }}";
-                    $.ajax({
-                        type: 'get',
-                        url: route,
-                        error: function (response) {
-                            console.log(response);
-                        },
-                        success: function(data){
-                            if(data['Delete']=='1')
-                            {
-                                champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
-                                alert('Suppression correctement effectuer');
-                            }
-                            if(data['Delete']=='0')
-                            {
-                                champs.disabled = false;
-                                alert('Suppression à rencontrer une erreur en cours d\'excecution');
-                            }
-                            if(data['Ajout']=='1')
-                            {
-                                champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
-                                alert('Ajout correctement effectuer');
-                            }
-                            if(data['Ajout']=='0')
-                            {
-                                alert('Ajout à rencontrer une erreur en cours d\'excecution, cet utilisateur existe déjà, Vérifiez ces duplicats puis essayez de le fusionner');
-                            }
-                        }
-                    });
+    }
+    function supprimerLigne(route,champs) {
+        champs.disabled = true;
+        //champs.src="{{ asset('image/waitmini.gif') }}";
 
-                };
-                function voirduplica(id, lieunaissance ,datenaissance) {
-                    var route = '{{ path("afficher_duplica",{'id':"_id"}) }}';
-                    route = route.replace('_id',id);
-                    idImportFusion = id;
-                    $.ajax({
-                        url: route,
-                        type: 'POST',
-                        success: function(data){
-                            document.getElementById('DuplicaPopUpId').innerHTML = id;
-                            document.getElementById('DuplicaPopUpNom').innerHTML = document.getElementById('Nom'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpPrenom').innerHTML = document.getElementById('Prenom'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpTelephone').innerHTML = document.getElementById('Telephone'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpEmail').innerHTML = document.getElementById('Email'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpNaissance').innerHTML = 'né à '+ lieunaissance+' le '+ datenaissance;
-                            document.getElementById('DuplicaPopUpImg').src = document.getElementById('image'+id).src;
-
-                            var innerHTMLDulplicaPopUp = '';
-                            document.getElementById('DuplicaPopUpForm').innerHTML = innerHTMLDulplicaPopUp;
-                            if(data.length !=0 ){
-                                for(var i =0 ; i < data.length; i++){
-                                    innerHTMLDulplicaPopUp += '<div class="col-xs-12" style="background-color: white;height:94px;display: inline-flex;font: 14px Roboto;color: rgb(77, 83, 90);" >'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">'+data[i][0]+'</div>'+
-                                            '<div class="col-xs-1" style="height: 100%;padding: 0;display: inline-flex" >'+
-                                            '<img src="data:image/jpg;base64,'+data[i][1]+'" style="width:100%;border-radius: 100%;margin: auto;">'+
-                                            '</div>'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">'+data[i][2]+'</div>'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">'+data[i][3]+'</div>'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">'+data[i][4]+'</div>'+
-                                            '<div class="col-xs-3" style="margin: auto;color: #1C5AA5;text-decoration: underline;text-align: center;white-space: nowrap;overflow: hidden;padding: 0;text-overflow: ellipsis; ">'+data[i][5]+'</div>'+
-                                            '<div class="col-xs-3" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">né à '+data[i][6]+' le '+data[i][7]+'</div>'+
-                                            '<div style="margin: auto;padding: 0;">'+
-                                            '<input name="DuplicaPopUpRadioUSer" type="radio" value="'+data[i][0]+'">'+
-                                            '</div>'+
-                                            '</div>';
-                                }
-                                document.getElementById('DuplicaPopUpForm').innerHTML = innerHTMLDulplicaPopUp;
-                                show('DuplicaPopUp');
-                            }
-                            else{
-                                alert('aucun duplicata trouvé');
-                            }
-
-                        }
-                    })
+        champs.firstChild.src="{{ asset('image/waitmini.gif') }}";
+        $.ajax({
+            type: 'get',
+            url: route,
+            error: function (response) {
+                console.log(response);
+            },
+            success: function(data){
+                if(data['Delete']=='1')
+                {
+                    champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
+                    alert('Suppression correctement effectuer');
                 }
-                function fusionner(){
-                    var route = '{{ path('fusionner_apprenant',{'sas':'_IDFUSION'}) }}';
-                    route = route.replace('_IDFUSION',idImportFusion);
-                    $.ajax({
-                        url:route,
-                        type:'POST',
-                        data: $('#DuplicaPopUpForm').serialize(),
-                        success:function(data){
-                            if(data==1){
-                                document.getElementById('DuplicaPopUp').style.display = 'none';
-                                alert('La fusion s\'est correctement effectuée');
-                            }
-
-
-                        }
-                    })
+                if(data['Delete']=='0')
+                {
+                    champs.disabled = false;
+                    alert('Suppression à rencontrer une erreur en cours d\'excecution');
                 }
-            </script>
-        {% endblock %}
-    {% endembed %}
-{% elseif app.user.hasRole('ROLE_RECRUTEUR') %}
-    {% embed 'EcoleBundle:Recruteur:index.html.twig' %}
-        {% block title %}SAS{% endblock %}
-        {% block CSS %}
-            <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
-        {% endblock %}
-        {% block JS %}
-            <script src="{{ asset('js/paginate.js') }}"></script>
-            <script language="javascript">
-                var idImportFusion;
-                function loading(){
-
-                    $("#paginationContainer").customPaginate({
-                        itemsToPaginate : ".SASPaginate",
-                        activeClass : "active-class"
-                    });
-
+                if(data['Ajout']=='1')
+                {
+                    champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
+                    alert('Ajout correctement effectuer');
                 }
-                function supprimerLigne(route,champs) {
-                    champs.disabled = true;
-                    //champs.src="{{ asset('image/waitmini.gif') }}";
-
-                    champs.firstChild.src="{{ asset('image/waitmini.gif') }}";
-                    $.ajax({
-                        type: 'get',
-                        url: route,
-                        error: function (response) {
-                            console.log(response);
-                        },
-                        success: function(data){
-                            if(data['Delete']=='1')
-                            {
-                                champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
-                                alert('Suppression correctement effectuer');
-                            }
-                            if(data['Delete']=='0')
-                            {
-                                champs.disabled = false;
-                                alert('Suppression à rencontrer une erreur en cours d\'excecution');
-                            }
-                            if(data['Ajout']=='1')
-                            {
-                                champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
-                                alert('Ajout correctement effectuer');
-                            }
-                            if(data['Ajout']=='0')
-                            {
-                                alert('Ajout à rencontrer une erreur en cours d\'excecution, cet utilisateur existe déjà, Vérifiez ces duplicats puis essayez de le fusionner');
-                            }
-                        }
-                    });
-
-                };
-                function voirduplica(id, lieunaissance ,datenaissance) {
-                    var route = '{{ path("afficher_duplica",{'id':"_id"}) }}';
-                    route = route.replace('_id',id);
-                    idImportFusion = id;
-                    $.ajax({
-                        url: route,
-                        type: 'POST',
-                        success: function(data){
-                            document.getElementById('DuplicaPopUpId').innerHTML = id;
-                            document.getElementById('DuplicaPopUpNom').innerHTML = document.getElementById('Nom'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpPrenom').innerHTML = document.getElementById('Prenom'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpTelephone').innerHTML = document.getElementById('Telephone'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpEmail').innerHTML = document.getElementById('Email'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpNaissance').innerHTML = 'né à '+ lieunaissance+' le '+ datenaissance;
-                            document.getElementById('DuplicaPopUpImg').src = document.getElementById('image'+id).src;
-
-                            var innerHTMLDulplicaPopUp = '';
-                            document.getElementById('DuplicaPopUpForm').innerHTML = innerHTMLDulplicaPopUp;
-                            if(data.length !=0 ){
-                                for(var i =0 ; i < data.length; i++){
-                                    innerHTMLDulplicaPopUp += '<div class="col-xs-12" style="background-color: white;height:94px;display: inline-flex;font: 14px Roboto;color: rgb(77, 83, 90);" >'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">'+data[i][0]+'</div>'+
-                                            '<div class="col-xs-1" style="height: 100%;padding: 0;display: inline-flex" >'+
-                                            '<img src="data:image/jpg;base64,'+data[i][1]+'" style="width:100%;border-radius: 100%;margin: auto;">'+
-                                            '</div>'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">'+data[i][2]+'</div>'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">'+data[i][3]+'</div>'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">'+data[i][4]+'</div>'+
-                                            '<div class="col-xs-3" style="margin: auto;color: #1C5AA5;text-decoration: underline;text-align: center;white-space: nowrap;overflow: hidden;padding: 0;text-overflow: ellipsis; ">'+data[i][5]+'</div>'+
-                                            '<div class="col-xs-3" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">né à '+data[i][6]+' le '+data[i][7]+'</div>'+
-                                            '<div style="margin: auto;padding: 0;">'+
-                                            '<input name="DuplicaPopUpRadioUSer" type="radio" value="'+data[i][0]+'">'+
-                                            '</div>'+
-                                            '</div>';
-                                }
-                                document.getElementById('DuplicaPopUpForm').innerHTML = innerHTMLDulplicaPopUp;
-                                show('DuplicaPopUp');
-                            }
-                            else{
-                                alert('aucun duplicata trouvé');
-                            }
-
-                        }
-                    })
+                if(data['Ajout']=='0')
+                {
+                    if(confirm('Il se peut que cet personne existe déjà dans notre base de données, voulez-vous voir les duplicatas de cet apprenant?')){
+                        voirduplica(data['Id'],data['Id'],data['Id'])
+                    }
                 }
-                function fusionner(){
-                    var route = '{{ path('fusionner_apprenant',{'sas':'_IDFUSION'}) }}';
-                    route = route.replace('_IDFUSION',idImportFusion);
-                    $.ajax({
-                        url:route,
-                        type:'POST',
-                        data: $('#DuplicaPopUpForm').serialize(),
-                        success:function(data){
-                            if(data==1){
-                                document.getElementById('DuplicaPopUp').style.display = 'none';
-                                alert('La fusion s\'est correctement effectuée');
-                            }
+            }
+        });
 
+    };
+    function voirduplica(id, lieunaissance ,datenaissance) {
+        var route = '{{ path("afficher_duplica",{'id':"_id"}) }}';
+        route = route.replace('_id',id);
+        idImportFusion = id;
+        $.ajax({
+            url: route,
+            type: 'POST',
+            success: function(data){
+                document.getElementById('DuplicaPopUpId').innerHTML = id;
+                document.getElementById('DuplicaPopUpNom').innerHTML = document.getElementById('Nom'+id).innerHTML;
+                document.getElementById('DuplicaPopUpPrenom').innerHTML = document.getElementById('Prenom'+id).innerHTML;
+                document.getElementById('DuplicaPopUpTelephone').innerHTML = document.getElementById('Telephone'+id).innerHTML;
+                document.getElementById('DuplicaPopUpEmail').innerHTML = document.getElementById('Email'+id).innerHTML;
+                document.getElementById('DuplicaPopUpNaissance').innerHTML = 'né à '+ lieunaissance+' le '+ datenaissance;
+                document.getElementById('DuplicaPopUpImg').src = document.getElementById('image'+id).src;
 
-                        }
-                    })
+                var innerHTMLDulplicaPopUp = '';
+                document.getElementById('DuplicaPopUpForm').innerHTML = innerHTMLDulplicaPopUp;
+                if(data.length !=0 ){
+                    for(var i =0 ; i < data.length; i++){
+                        innerHTMLDulplicaPopUp += '<div class="col-xs-12" style="background-color: white;height:94px;display: inline-flex;font: 14px Roboto;color: rgb(77, 83, 90);" >'+
+                                '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">'+data[i][0]+'</div>'+
+                                '<div class="col-xs-1" style="height: 100%;padding: 0;display: inline-flex" >'+
+                                '<img src="data:image/jpg;base64,'+data[i][1]+'" style="width:100%;border-radius: 100%;margin: auto;">'+
+                                '</div>'+
+                                '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">'+data[i][2]+'</div>'+
+                                '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">'+data[i][3]+'</div>'+
+                                '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">'+data[i][4]+'</div>'+
+                                '<div class="col-xs-3" style="margin: auto;color: #1C5AA5;text-decoration: underline;text-align: center;white-space: nowrap;overflow: hidden;padding: 0;text-overflow: ellipsis; ">'+data[i][5]+'</div>'+
+                                '<div class="col-xs-3" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">né à '+data[i][6]+' le '+data[i][7]+'</div>'+
+                                '<div style="margin: auto;padding: 0;">'+
+                                '<input name="DuplicaPopUpRadioUSer" type="radio" value="'+data[i][0]+'">'+
+                                '</div>'+
+                                '</div>';
+                    }
+                    document.getElementById('DuplicaPopUpForm').innerHTML = innerHTMLDulplicaPopUp;
+                    show('DuplicaPopUp');
                 }
-            </script>
-        {% endblock %}
-        {% block underTopBar %}
-            <div id="DuplicaPopUp" class="popup">
-                <div onclick="hide(this)" class="close">
-
-                </div>
-                <div class="col-xs-offset-1 col-xs-10" style="background-color: white;padding: 0;display: block;
-                border-top: 4px solid white;border-bottom: 4px solid white;border-radius: 4px;box-shadow: 0 1px 40px 0 rgb(0, 0, 0);">
-
-                    <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-
-                    <div style="background-color: white;height: 54px;width: 100%;display: inline-flex;">
-                        <label class="col-xs-9" id="NbreDuplica" style="margin: auto 0;font: 14px Roboto;color: rgb(107, 107, 107);float: left;">3 profils correspondants ont été trouvés</label>
-                        <button onclick="fusionner()" class="col-xs-3" style="float: right;height: 33px;margin: auto 28px auto 0;background-color: rgb(61, 138, 212);border: none;font: 14px Roboto;color: white;">Fusionner les profils</button>
-                    </div>
-                    <div class="col-xs-12" style="background-color: rgb(61, 138, 212);height:94px;display: inline-flex;font: 14px Roboto;color: white;" >
-
-                        <div id="DuplicaPopUpId" class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">1024</div>
-                        <div class="col-xs-1" style="height: 100%;padding: 0;display: inline-flex" >
-                            <img id="DuplicaPopUpImg"  src="{{ asset('image/image2.jpg') }}" style="width:100%;border-radius: 100%;margin: auto;">
-                        </div>
-
-                        <div id="DuplicaPopUpNom" class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">Elkhettari</div>
-                        <div id="DuplicaPopUpPrenom" class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">Imane</div>
-                        <div id="DuplicaPopUpTelephone" class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">0635451494</div>
-                        <div id="DuplicaPopUpEmail" class="col-xs-3" style="margin: auto;color: #1C5AA5;text-decoration: underline;text-align: center;white-space: nowrap;overflow: hidden;padding: 0;text-overflow: ellipsis; ">ielkhettari@fc-2i.com</div>
-
-                        <div id="DuplicaPopUpNaissance" class="col-xs-3" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">née à Annecy le 16/03/1990</div>
-                        <div style="margin: auto;padding: 0;visibility: hidden">
-                            <input name="DuplicaPopUpRadio" type="radio" value="1">
-                        </div>
-
-
-                    </div>
-                    <form id="DuplicaPopUpForm" class="formulaire" method="post">
-
-                    </form>
-
-                </div>
-
-
-            </div>
-            <div class="col-xs-offset-1 col-xs-10" style="margin-top:10px;margin-bottom:10px;"  >
-                <div class="col-xs-2" style="margin-left: 20px;height:40px;display: flex;">
-                    <span class="glyphicon glyphicon-search " id="basic-addon1" style="width: 30px;height: 30px;padding: 7px;float: left;border: none;background-color: transparent;border-bottom: 1px solid #CCCCCC;margin: auto 0;"></span>
-                    <input type="text" aria-describedby="basic-addon1" style="height: 30px;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;" placeholder="Recherche ...">
-                </div>
-                <div id="paginationContainer" class="customepaginate" style="max-width: 240px;float: right;display: flex;">
-                    <button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px;float: right;" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
-                </div>
-
-            </div>
-            {% for import in imports %}
-                <div class="col-xs-10 col-xs-offset-1" style="border: 1px solid rgba(148, 148, 148,0.2);height:94px;display: inline-flex;background-color: rgba(230, 230, 230,0.2);font: 14px Roboto;color: rgb(77, 83, 90);" >
-                    <div class="col-xs-1" style="margin: auto;">
-                        {{ import.getId }}
-                    </div>
-                    <div class="col-xs-2" >
-                        <div style="border: 15px solid transparent">
-                            <img id="image{{ import.id }}" src="data:image/jpg;base64,{{import.getPhotos }}" style="height:70px;width:70px;border-radius: 100%">
-                        </div>
-
-
-                    </div>
-                    <div id="Nom{{ import.id }}" class="col-xs-1" style="margin: auto; ">
-                        {{ import.getNom }}
-                    </div>
-                    <div id="Prenom{{ import.id }}" class="col-xs-1" style="margin: auto; ">
-                        {{ import.getPrenom }}
-                    </div>
-                    <div id="Telephone{{ import.id }}" class="col-xs-1" style="margin: auto; ">
-                        {{ import.getTelephone }}
-                    </div>
-                    <div id="Email{{ import.id }}" class="col-xs-3" style="margin: auto;color: #1C5AA5;text-decoration: underline; ">
-                        {{ import.getEmail }}
-                    </div>
-                    <div class="col-xs-3" style="height: 100%">
-                        <button class="col-xs-3" type="button" onclick="voirduplica({{ import.getId }}{% if import.info %}{% if import.info.lieunaissance %},'{{ import.info.lieunaissance }}'{% else %},'undefined'{% endif %}{% if import.info.datenaissance %},'{{ import.info.datenaissance|date('d/m/Y') }}'{% else %},'undefined'{% endif %}{% endif %})"
-                                style="height: 100%;background-color: transparent;border: none">
-                            <span class="glyphicon glyphicon-search" style="color: #1C5AA5"></span>
-                        </button>
-                        {% if not import.erreur == null %}
-                            <button class="col-xs-3"  type="button" style="height: 100%;background-color: transparent;border: none" disabled>
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </button>
-                        {% else %}
-                            <button class="col-xs-3" onclick="supprimerLigne('{{ path('importer_candidat',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </button>
-                        {% endif %}
-                        <button class="col-xs-3" onclick="supprimerLigne('{{ path('supprimer_import',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
-                            <span class="glyphicon glyphicon-remove"></span>
-                        </button>
-                        {% if import.erreur %}
-                            <button class="col-xs-3" type="button" style="height: 100%;background-color: transparent;border: none">
-                                <span class="glyphicon glyphicon-alert" style="color: red" title="{{ import.erreur }}"></span>
-                            </button>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endfor %}
-            <script language="javascript">
-                var idImportFusion;
-                function supprimerLigne(route,champs) {
-                    champs.disabled = true;
-                    //champs.src="{{ asset('image/waitmini.gif') }}";
-
-                    champs.firstChild.src="{{ asset('image/waitmini.gif') }}";
-                    $.ajax({
-                        type: 'get',
-                        url: route,
-                        error: function (response) {
-                            console.log(response);
-                        },
-                        success: function(data){
-                            if(data['Delete']=='1')
-                            {
-                                champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
-                                alert('Suppression correctement effectuer');
-                            }
-                            if(data['Delete']=='0')
-                            {
-                                champs.disabled = false;
-                                alert('Suppression à rencontrer une erreur en cours d\'excecution');
-                            }
-                            if(data['Ajout']=='1')
-                            {
-                                champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
-                                alert('Ajout correctement effectuer');
-                            }
-                            if(data['Ajout']=='0')
-                            {
-                                alert('Ajout à rencontrer une erreur en cours d\'excecution, cet utilisateur existe déjà, Vérifiez ces duplicats puis essayez de le fusionner');
-                            }
-                        }
-                    });
-
-                };
-                function voirduplica(id, lieunaissance ,datenaissance) {
-                    var route = '{{ path("afficher_duplica",{'id':"_id"}) }}';
-                    route = route.replace('_id',id);
-                    idImportFusion = id;
-                    $.ajax({
-                        url: route,
-                        type: 'POST',
-                        success: function(data){
-                            document.getElementById('DuplicaPopUpId').innerHTML = id;
-                            document.getElementById('DuplicaPopUpNom').innerHTML = document.getElementById('Nom'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpPrenom').innerHTML = document.getElementById('Prenom'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpTelephone').innerHTML = document.getElementById('Telephone'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpEmail').innerHTML = document.getElementById('Email'+id).innerHTML;
-                            document.getElementById('DuplicaPopUpNaissance').innerHTML = 'né à '+ lieunaissance+' le '+ datenaissance;
-                            document.getElementById('DuplicaPopUpImg').src = document.getElementById('image'+id).src;
-
-                            var innerHTMLDulplicaPopUp = '';
-                            document.getElementById('DuplicaPopUpForm').innerHTML = innerHTMLDulplicaPopUp;
-                            if(data.length !=0 ){
-                                for(var i =0 ; i < data.length; i++){
-                                    innerHTMLDulplicaPopUp += '<div class="col-xs-12" style="background-color: white;height:94px;display: inline-flex;font: 14px Roboto;color: rgb(77, 83, 90);" >'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">'+data[i][0]+'</div>'+
-                                            '<div class="col-xs-1" style="height: 100%;padding: 0;display: inline-flex" >'+
-                                            '<img src="data:image/jpg;base64,'+data[i][1]+'" style="width:100%;border-radius: 100%;margin: auto;">'+
-                                            '</div>'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">'+data[i][2]+'</div>'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">'+data[i][3]+'</div>'+
-                                            '<div class="col-xs-1" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0; ">'+data[i][4]+'</div>'+
-                                            '<div class="col-xs-3" style="margin: auto;color: #1C5AA5;text-decoration: underline;text-align: center;white-space: nowrap;overflow: hidden;padding: 0;text-overflow: ellipsis; ">'+data[i][5]+'</div>'+
-                                            '<div class="col-xs-3" style="margin: auto;text-align: center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0;">né à '+data[i][6]+' le '+data[i][7]+'</div>'+
-                                            '<div style="margin: auto;padding: 0;">'+
-                                            '<input name="DuplicaPopUpRadioUSer" type="radio" value="'+data[i][0]+'">'+
-                                            '</div>'+
-                                            '</div>';
-                                }
-                                document.getElementById('DuplicaPopUpForm').innerHTML = innerHTMLDulplicaPopUp;
-                                show('DuplicaPopUp');
-                            }
-                            else{
-                                alert('aucun duplicata trouvé');
-                            }
-
-                        }
-                    })
+                else{
+                    alert('aucun duplicata trouvé');
                 }
-                function fusionner(){
-                    var route = '{{ path('fusionner_apprenant',{'sas':'_IDFUSION'}) }}';
-                    route = route.replace('_IDFUSION',idImportFusion);
-                    $.ajax({
-                        url:route,
-                        type:'POST',
-                        data: $('#DuplicaPopUpForm').serialize(),
-                        success:function(data){
-                            if(data==1){
-                                document.getElementById('DuplicaPopUp').style.display = 'none';
-                                alert('La fusion s\'est correctement effectuée');
-                            }
 
-
-                        }
-                    })
+            }
+        })
+    }
+    function fusionner(){
+        var route = '{{ path('fusionner_apprenant',{'sas':'_IDFUSION'}) }}';
+        route = route.replace('_IDFUSION',idImportFusion);
+        $.ajax({
+            url:route,
+            type:'POST',
+            data: $('#DuplicaPopUpForm').serialize(),
+            success:function(data){
+                if(data==1){
+                    document.getElementById('DuplicaPopUp').style.display = 'none';
+                    alert('La fusion s\'est correctement effectuée');
                 }
-            </script>
-        {% endblock %}
-    {% endembed %}
-{% endif %}
+
+
+            }
+        })
+    }
+    function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse) {
+        document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
+        document.getElementById('Information_Apprenant_Civilite').innerHTML = civilite;
+        document.getElementById('Information_Apprenant_Nom').innerHTML = nom;
+        document.getElementById('Information_Apprenant_Prenom').innerHTML= prenom;
+        document.getElementById('Information_Apprenant_Email').innerHTML = email;
+        document.getElementById('Information_Apprenant_Telephone').innerHTML =telephone;
+        document.getElementById('Information_Apprenant_DateNaissance').innerHTML =Datenaissance;
+        document.getElementById('Information_Apprenant_CpNaissance').innerHTML =cpnaissance;
+        document.getElementById('Information_Apprenant_LieuNaissance').innerHTML =lieuNaissance;
+        document.getElementById('Information_Apprenant_Adresse').innerHTML =adresse;
+        document.getElementById('Information_Apprenant_titre').innerHTML= nom +' '+ prenom;
+        document.getElementById('Information_Apprenant_titre_adresse').innerHTML = adresse;
+    }
+</script>
+</body>
+</html>

@@ -133,7 +133,7 @@
                 <button onclick="show('import')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                 ></button>
 
-                <button onclick="window.location.href='{{ path('afficher_import') }}'" style="color:white;white-space: nowrap;overflow: hidden; ">SAS Admissions</button>
+                <button onclick="document.getElementById('iframe').src='{{ path('afficher_import') }}'" style="color:white;white-space: nowrap;overflow: hidden; ">SAS Admissions</button>
             </div>
             <div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px; float: right; margin-right: 40px;">
                 <button type="button" class="btn btn-default dropdown-toggle"

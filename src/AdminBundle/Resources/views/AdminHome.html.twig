@@ -14,7 +14,7 @@
 
 </head>
 <body onload="loading();putbadged()">
-<div id="addtier" class="popup col-xs-3">
+<div id="addtier" class="popup col-xs-3" style="display: block;">
     <div onclick="document.getElementById('submittier').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;background-color: white;">
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
@@ -222,7 +222,7 @@
             <button onclick="show('import')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
             ></button>
 
-            <button onclick="window.location.href ='{{ path('afficher_import') }}'" style="color:white;white-space: nowrap;overflow: hidden; ">SAS Admissions</button>
+            <button onclick="document.getElementById('iframe').src='{{ path('afficher_import') }}'" style="color:white;white-space: nowrap;overflow: hidden; ">SAS Admissions</button>
         </div>
 
 
@@ -254,7 +254,6 @@
 
 {% endblock %}
     <div class="row" style="height: 100%">
-        {% block underTopBar %}
         {% block LeftBar %}
             <div class="col-xs-2">
 
@@ -272,7 +271,7 @@
                 <div id="ecole" class="list-group col-xs-2 leftbar">
                     {% if ecoles is defined %}
                         {% for e in ecoles %}
-                            <button onclick="postiframe('{{ path('affiche_etab',{'id': e.getId} ) }}',{{ e.getId }},this)" id="etablissement{{ e.getId }}" type="button" class="list-group-item butonLigne">
+                            <button onclick="postiframe('{{ path('affiche_etab',{'id': e.getId} ) }}',{{ e.getId }},this);" id="etablissement{{ e.getId }}" type="button" class="list-group-item butonLigne">
                                 <div name="Recherche" style="display: none;">{{ e.getTier.getRaisonSoc }},{{ e.siret }},{{ e.adresse }},{{ e.codepostal }},{{ e.ville }}</div>
                                 <div style="display: none;"></div>
                                 <div class="col-xs-12 part" title="{{e.getTier.getRaisonSoc}}">{{e.getTier.getRaisonSoc}}</div>
@@ -458,7 +457,6 @@
                 <iframe id="iframe" style="visibility: hidden;" src=""></iframe>
             {% endblock %}
         </div>
-        {% endblock %}
     </div>
 
 </div>

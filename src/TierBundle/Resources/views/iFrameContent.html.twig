@@ -1169,19 +1169,26 @@
         function show_Information(div,buttonID){
             document.getElementById('info_etab').style.display = 'none';
             document.getElementById('info_user').style.display = 'none';
+            document.getElementById("Button_ETABLISSEMENT").className = "NavButtonInactive";
+            document.getElementById("Button_User").className = "NavButtonInactive";
             {% if is_granted('ROLE_SUPER_ADMIN') %}
             document.getElementById('info_licence').style.display = 'none';
+            document.getElementById("Button_Licence").className = "NavButtonInactive";
             {% endif %}
             {% if etablissement.getTier.getEcole %}
             {% if is_granted('ROLE_SUPER_ADMIN') %}
             document.getElementById('info_tier_tier').style.display = 'none';
+            document.getElementById("Button_TIER_TIER").className = "NavButtonInactive";
             {% endif %}
             {% if is_granted('ROLE_ADMINECOLE') %}
             document.getElementById('info_formation').style.display ='none';
+            document.getElementById("Button_Formation").className = "NavButtonInactive";
             {% endif %}
             {% else %}
             document.getElementById('info_mission').style.display ='none';
+            document.getElementById("Button_Mission").className = "NavButtonInactive";
             {% endif %}
+            document.getElementById(buttonID).className += " NavButtonClicked";
             document.getElementById(div).style.display ='block';
             sessionStorage.setItem('onglet_tier',buttonID);
         }
