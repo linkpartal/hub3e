@@ -24,13 +24,13 @@
 
 
 </head>
-<body onload="loading()">
+<body onload="ShowWaiter();loading();if(confirm('qfjsdqf')){DeleteWaiter();}">
 
 <div class="container" style="padding: 0;">
     {% block Content %}
 
         {% if is_granted('ROLE_SUPER_ADMIN') %}
-            <div id="instanceLicence" class="popup">
+            <div id="instanceLicence" class="popup"     >
                 <div onclick="document.getElementById('submitInstanceLicence').click();hide(this)" class="close"></div>
                 <div class="col-xs-offset-3 col-xs-4" style="padding: 0;border:20px solid white;display: block">
 
@@ -49,7 +49,7 @@
             </div-->
 
 
-                    <form  class="formulaire" id="formInstanceLicence" action="{{ path("metier_user_associated") }}" onsubmit="document.getElementById('submitInstanceLicence').disabled=true" method="post">
+                    <form  class="formulaire" id="formInstanceLicence" action="{{ path("metier_user_associated") }}" onsubmit="document.getElementById('submitInstanceLicence').disabled=true;ShowWaiter();" method="post">
                         <div class="div_form" >
                             <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
                             <select class="input" title="Licencedef" name="Licencedef" required>
@@ -61,7 +61,8 @@
                             <input class="date hide-spinbtns" placeholder="Date Début" type="date" id="Date" name="_Date"  data-date='{"buttonOnly": true,	"calculateWidth": true}'  required>
                         </div>
                         <div class="div_button">
-                            <input id="submitInstanceLicence" class="blue" type="submit" value="Valider">
+                            <input  id="submitInstanceLicence" class="blue" type="submit" value="Valider" >
+
                         </div>
                     </form>
 
@@ -116,7 +117,8 @@
 
                         </div>
                         <div class="div_button">
-                            <input id="submitadduser" class="blue" type="submit" value="envoyer">
+                            <input id="submitadduser" onclick="show_patienter(this,'formadduser')" class="blue" type="submit" value="envoyer">
+                            <img id="patienter1564444" style="margin:auto;display:none;" src="{{ asset('image/animated.gif') }}"/>
                         </div>
                     </form>
                 </div>
@@ -520,6 +522,7 @@
 
                             </div>
                         </div>
+
                         <div id="div_document" name="ajouterDocument" style="display:none">
                             <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
                             <button class="toggle" type="button" onclick="supprimerDocument(this)">-</button>
@@ -1092,7 +1095,7 @@
                         {% endif %}
                         {% endif %}
                         {% if is_granted('ROLE_SUPER_ADMIN') %}
-                            <button onclick="show('instanceLicence')" type="button" class="list-group-item rightMenu">
+                            <button onclick="show('instanceLicence')"  type="button" class="list-group-item rightMenu">
                                 <div class="col-xs-12">Instancier une licence</div>
 
                             </button>
@@ -1281,6 +1284,23 @@
             }
             document.getElementById(div).style.visibility= 'visible';
             document.getElementById(div).style.position= 'static';
+        }
+
+        function show_patienter(button,formid){
+            var formulaire=document.getElementById(formid);
+            for( var i=0 ; i<formulaire.getElementsByTagName("input").length ; i++)
+            {
+                if(formulaire.getElementsByTagName("input") == "")
+                {
+                    alert('veuillez saisir tt les champs');
+                        button.style.visibility="hidden";
+
+                }
+            }
+
+            document.getElementById('patienter15644').style.display='block';
+            document.getElementById('patienter1564444').style.display='block';
+
         }
 
         function active(route) {
