@@ -193,19 +193,19 @@
                     </div>
                     <div class="col-xs-3" style="height: 100%">
                         <button class="col-xs-3" type="button" onclick="voirduplica({{ import.getId }}{% if import.info %}{% if import.info.lieunaissance %},'{{ import.info.lieunaissance }}'{% else %},'undefined'{% endif %}{% if import.info.datenaissance %},'{{ import.info.datenaissance|date('d/m/Y') }}'{% else %},'undefined'{% endif %}{% endif %})"
-                                style="height: 100%;background-color: transparent;border: none">
+                              title="Chercher"  style="height: 100%;background-color: transparent;border: none">
                             <span class="glyphicon glyphicon-search" style="color: #1C5AA5"></span>
                         </button>
                         {% if not import.erreur == null %}
-                            <button class="col-xs-3"  type="button" style="height: 100%;background-color: transparent;border: none" disabled>
+                            <button class="col-xs-3"  type="button" style="height: 100%;background-color: transparent;border: none" title="Ajouter" disabled>
                                 <span class="glyphicon glyphicon-plus"></span>
                             </button>
                         {% else %}
-                            <button class="col-xs-3" onclick="supprimerLigne('{{ path('importer_candidat',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
+                            <button class="col-xs-3" title="Ajouter" onclick="supprimerLigne('{{ path('importer_candidat',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
                                 <span class="glyphicon glyphicon-plus"></span>
                             </button>
                         {% endif %}
-                        <button class="col-xs-3" onclick="supprimerLigne('{{ path('supprimer_import',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
+                        <button class="col-xs-3" title="Supprimer" onclick="supprimerLigne('{{ path('supprimer_import',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
                             <span class="glyphicon glyphicon-remove"></span>
                         </button>
                         {% if import.erreur %}
@@ -413,20 +413,20 @@
                         {{ import.getEmail }}
                     </div>
                     <div class="col-xs-3" style="height: 100%">
-                        <button class="col-xs-3" type="button" onclick="voirduplica({{ import.getId }}{% if import.info %}{% if import.info.lieunaissance %},'{{ import.info.lieunaissance }}'{% else %},'undefined'{% endif %}{% if import.info.datenaissance %},'{{ import.info.datenaissance|date('d/m/Y') }}'{% else %},'undefined'{% endif %}{% endif %})"
+                        <button title="Chercher" class="col-xs-3" type="button" onclick="voirduplica({{ import.getId }}{% if import.info %}{% if import.info.lieunaissance %},'{{ import.info.lieunaissance }}'{% else %},'undefined'{% endif %}{% if import.info.datenaissance %},'{{ import.info.datenaissance|date('d/m/Y') }}'{% else %},'undefined'{% endif %}{% endif %})"
                                 style="height: 100%;background-color: transparent;border: none">
-                            <span class="glyphicon glyphicon-search" style="color: #1C5AA5"></span>
+                            <span class="glyphicon glyphicon-search"  style="color: #1C5AA5"></span>
                         </button>
                         {% if not import.erreur == null %}
-                            <button class="col-xs-3"  type="button" style="height: 100%;background-color: transparent;border: none" disabled>
+                            <button class="col-xs-3"  type="button" style="height: 100%;background-color: transparent;border: none" title="Ajouter" disabled>
                                 <span class="glyphicon glyphicon-plus"></span>
                             </button>
                         {% else %}
-                            <button class="col-xs-3" onclick="supprimerLigne('{{ path('importer_candidat',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
+                            <button class="col-xs-3"  title="Ajouter" onclick="supprimerLigne('{{ path('importer_candidat',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
                                 <span class="glyphicon glyphicon-plus"></span>
                             </button>
                         {% endif %}
-                        <button class="col-xs-3" onclick="supprimerLigne('{{ path('supprimer_import',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
+                        <button class="col-xs-3" onclick="supprimerLigne('{{ path('supprimer_import',{'id': import.getId}) }}',this)" type="button" title="Supprimer" style="height: 100%;background-color: transparent;border: none">
                             <span class="glyphicon glyphicon-remove"></span>
                         </button>
                         {% if import.erreur %}
@@ -733,20 +733,20 @@
                         {{ import.getEmail }}
                     </div>
                     <div class="col-xs-3" style="height: 100%">
-                        <button class="col-xs-3" type="button" onclick="voirduplica({{ import.getId }}{% if import.info %}{% if import.info.lieunaissance %},'{{ import.info.lieunaissance }}'{% else %},'undefined'{% endif %}{% if import.info.datenaissance %},'{{ import.info.datenaissance|date('d/m/Y') }}'{% else %},'undefined'{% endif %}{% endif %})"
+                        <button title="Chercher" class="col-xs-3" type="button" onclick="voirduplica({{ import.getId }}{% if import.info %}{% if import.info.lieunaissance %},'{{ import.info.lieunaissance }}'{% else %},'undefined'{% endif %}{% if import.info.datenaissance %},'{{ import.info.datenaissance|date('d/m/Y') }}'{% else %},'undefined'{% endif %}{% endif %})"
                                 style="height: 100%;background-color: transparent;border: none">
                             <span class="glyphicon glyphicon-search" style="color: #1C5AA5"></span>
                         </button>
                         {% if not import.erreur == null %}
-                            <button class="col-xs-3"  type="button" style="height: 100%;background-color: transparent;border: none" disabled>
-                                <span class="glyphicon glyphicon-plus"></span>
+                            <button class="col-xs-3"  type="button" style="height: 100%;background-color: transparent;border: none"  title="Ajouter" disabled>
+                                <span class="glyphicon glyphicon-plus" ></span>
                             </button>
                         {% else %}
-                            <button class="col-xs-3" onclick="supprimerLigne('{{ path('importer_candidat',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
+                            <button title="Ajouter" class="col-xs-3" onclick="supprimerLigne('{{ path('importer_candidat',{'id': import.getId}) }}',this)" title type="button" style="height: 100%;background-color: transparent;border: none">
                                 <span class="glyphicon glyphicon-plus"></span>
                             </button>
                         {% endif %}
-                        <button class="col-xs-3" onclick="supprimerLigne('{{ path('supprimer_import',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
+                        <button title="Supprimer" class="col-xs-3" onclick="supprimerLigne('{{ path('supprimer_import',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
                             <span class="glyphicon glyphicon-remove"></span>
                         </button>
                         {% if import.erreur %}

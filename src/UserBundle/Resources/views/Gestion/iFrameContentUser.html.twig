@@ -909,6 +909,7 @@
                         <div class="col-xs-12" >Supprimer l'utilisateur</div>
 
                     </button>
+                    {% if User.hasRole('ROLE_APPRENANT') %}
                     <button  onclick="CompleterProfil()" type="button" class="list-group-item rightMenu" >
                         <div class="col-xs-12" >Ordre enrichit par étudiant</div>
                     </button>
@@ -917,8 +918,8 @@
                     </button>
                     <button type="button" class="list-group-item rightMenu">
                         <div class="col-xs-12">Historique</div>
-
                     </button>
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>
@@ -1070,10 +1071,16 @@
         });
     }
     function CompleterProfil(){
+        var formulaire = document.getElementById('formUser');
+        for(var i = 0; i < formulaire.getElementsByTagName("input").length; i++)
+        {
+            if(formulaire.getElementsByTagName("input") == "")
+            {
+                alert('il ya des champs vide , il faut envoyer un message ');
+            }
+        }
      var id = document.getElementById('id').value;
      var route= '{{ path('CompleterProfil',{'IdUser':'_idUser'}) }}';
-
-
         route=route.replace('_idUser',id);
 
         $.ajax({
