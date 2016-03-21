@@ -803,20 +803,20 @@
                 <div class="col-xs-12" style="height: 46px;">
                     <div style="height: 35px; width: 100%; padding: 15px 0 0 15px;display: flex;">
 
-                        <button id="Button_ETABLISSEMENT" onclick="show_Information('info_etab','Button_ETABLISSEMENT')" type="button" style="font:20px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;">Information</button>
-                        <button id="Button_User" onclick="show_Information('info_user','Button_User')"  type="button" style="font:20px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;">Utilisateurs</button>
+                        <button id="Button_ETABLISSEMENT" onclick="NaviguerOnglet('OngletEtablissement','info_etab',this)" type="button" style="font:20px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;">Information</button>
+                        <button id="Button_User" onclick="NaviguerOnglet('OngletEtablissement','info_user',this)" type="button" style="font:20px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;">Utilisateurs</button>
                         {% if is_granted('ROLE_SUPER_ADMIN') %}
-                            <button id="Button_Licence" onclick="show_Information('info_licence','Button_Licence')" type="button" style="font:20px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;">Licences</button>
+                            <button id="Button_Licence" onclick="NaviguerOnglet('OngletEtablissement','info_licence',this)" type="button" style="font:20px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;">Licences</button>
                         {% endif %}
                         {% if etablissement.getTier.getEcole %}
                             {% if is_granted('ROLE_SUPER_ADMIN') %}
-                                <button id="Button_TIER_TIER" onclick="show_Information('info_tier_tier','Button_TIER_TIER')" value="info_tier_tier" type="button" style="font:20px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;">Ecoles liées</button>
+                                <button id="Button_TIER_TIER" onclick="NaviguerOnglet('OngletEtablissement','info_tier_tier',this)" value="info_tier_tier" type="button" style="font:20px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;">Ecoles liées</button>
                             {% endif %}
                             {% if is_granted('ROLE_ADMINECOLE') %}
-                                <button id="Button_Formation" onclick="show_Information('info_formation','Button_Formation')" type="button" style="font:20px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;">Formations</button>
+                                <button id="Button_Formation" onclick="NaviguerOnglet('OngletEtablissement','info_formation',this)" type="button" style="font:20px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;">Formations</button>
                             {% endif %}
                         {% else %}
-                            <button id="Button_Mission" onclick="show_Information('info_mission','Button_Mission')" type="button" style="font:20px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;">Missions</button>
+                            <button id="Button_Mission" onclick="NaviguerOnglet('OngletEtablissement','info_mission',this)" type="button" style="font:20px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;">Missions</button>
                         {% endif %}
 
 
@@ -841,7 +841,7 @@
                     </div>
                 </div>
 
-                <div class="col-xs-12" style="margin-bottom: 50px">
+                <div id="OngletEtablissement"  class="col-xs-12" style="margin-bottom: 50px">
 
 
                     <div id="info_etab" class="list-group affichage">

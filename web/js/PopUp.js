@@ -44,11 +44,19 @@ function DeleteWaiter(){
     document.getElementById('patienter458275245').parentNode.removeChild(document.getElementById('patienter458275245'));
 }
 
-function NaviguerOnglet(DivOnglet,OngletToShow){
+function NaviguerOnglet(DivOnglet,OngletToShow,button){
+    if(button){
+        var buttons = button.parentElement.getElementsByTagName("button");
+        for(var i = 0;i <buttons.length; i++){
+            buttons[i].setAttribute("class",'NavButtonInactive');
+        }
+        button.className += " NavButtonClicked";
+    }
+
     var divs = document.getElementById(DivOnglet).children;
     if ( $('#'+DivOnglet).parents("form").length == 1 ) {
 
-        for(var i = 0; i <divs.length ;i++){
+        for( i = 0; i <divs.length ;i++){
             divs[i].style.visibility= 'hidden';
             divs[i].style.position= 'absolute';
         }
@@ -57,8 +65,7 @@ function NaviguerOnglet(DivOnglet,OngletToShow){
 
     } else {
 
-        for(var i = 0; i <divs.length ;i++){
-            console.log(divs[i]);
+        for( i = 0; i <divs.length ;i++){
             divs[i].style.display = 'none';
         }
         document.getElementById(OngletToShow).style.display = 'block';
