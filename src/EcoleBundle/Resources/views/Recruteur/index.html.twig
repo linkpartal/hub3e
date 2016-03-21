@@ -254,7 +254,7 @@
 
 
 
-        <form class="formulaire" id="formApprenant" action="{{ path("apprenant_added") }}" onsubmit="document.getElementById('submitaddapprenant').disabled=true" method="post" enctype="multipart/form-data" style="margin-top: 50px"   >
+        <form class="formulaire" id="formApprenant" action="{{ path("apprenant_added") }}" onsubmit="document.getElementById('submitaddapprenant').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data" style="margin-top: 50px"   >
             <input type="hidden" id="idEtab" name="_idEtab" value="{{ app.user.etablissement.getId }}">
             <input type="hidden" id="idEtab" name="_idUser" value="{{ app.user.getId }}">
             <div class="div_form" id="infoapprenant" style="border-bottom:1px solid #2b542c;"  >

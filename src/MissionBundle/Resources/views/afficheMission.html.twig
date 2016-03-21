@@ -19,7 +19,7 @@
         <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block; margin-left: 20%;margin-top:100px">
             <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-            <form id="formMettreEnRelation" class="formulaire" action="" onsubmit="document.getElementById('submitMettreEnRelation').disabled=true;" method="post">
+            <form id="formMettreEnRelation" class="formulaire" action="" onsubmit="document.getElementById('submitMettreEnRelation').disabled=true;ShowWaiter();" method="post">
 
                 <div class="div_form" style="border-bottom:1px solid #adadad;display: inline-table;">
 
@@ -58,7 +58,7 @@
     <div class="col-xs-offset-5 col-xs-2" style="padding: 0;border:20px solid white;display: block;top:150px">
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-        <form id="formAssignTuteur" action="{{ path('Assigner_tuteur',{'id':mission.id}) }}" onsubmit="this.disabled = true;" class="formulaire" method="post">
+        <form id="formAssignTuteur" action="{{ path('Assigner_tuteur',{'id':mission.id}) }}" onsubmit="this.disabled = true;ShowWaiter();" class="formulaire" method="post">
             <div class="div_form" style="display: block">
                 <select id="SelectTuteur" style="width: 100%; overflow-x: auto" title="" class="row" name="tuteur">
                     {% for tuteur in tuteur_etablissement %}
@@ -80,7 +80,7 @@
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
         <input class="row" style="width: 100%" type="text" placeholder="Recherche" onkeyup="rechercheformation(this.value)">
-        <form id="formDiffusion" class="formulaire" method="post">
+        <form id="formDiffusion" class="formulaire" onsubmit="ShowWaiter();" method="post">
             <div class="div_form" style="display: block">
                 <select id="SelectMultipleFormation" style="width: 100%; overflow-x: auto" title="" class="row" name="formation[]" multiple required>
                     {% for formation in formations_prop %}
@@ -104,7 +104,7 @@
     <div class="col-xs-offset-1 col-xs-7" style="background-color: white;padding: 0;border:20px solid white;display: block; margin-left: 20%; ">
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-        <form id="formFicheApprenant" class="formulaire"   method="post">
+        <form id="formFicheApprenant" class="formulaire"  onsubmit="ShowWaiter();"  method="post">
             <div>
                 <div class="col-lg-12" >
                     <img src="" style="border-radius:50%; width:50px; height:50px" >
@@ -250,7 +250,7 @@
 
 
     <div id="info_mission" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;width: 100%;height: 100%;position: absolute;">
-        <form id="formMission" action="{{ path('missionModif') }}" method="post" enctype="multipart/form-data">
+        <form id="formMission" action="{{ path('missionModif') }}" onsubmit="ShowWaiter();" method="post" enctype="multipart/form-data">
             <input type="hidden" value="{{ mission.getId }}" id="id" name="_ID">
             <div class="col-xs-9" style="background: rgb(238, 241, 246); height: 100%;">
 
@@ -311,7 +311,7 @@
                         <input placeholder="Code mission"  value="{{mission.getCodemission}}" name="_Codemission" required maxlength="9" type="text" readonly>
                     </div>
                     {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_ADMINSOC') %}
-                        <button onclick="modifier('formMission',this)" type="button" class="list-group-item rightMenu" >
+                        <button onclick="modifier('formMission',this);" type="button" class="list-group-item rightMenu" >
                             <div class="col-xs-12"  >Modifier la fiche</div>
                         </button>
 

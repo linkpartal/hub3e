@@ -268,3 +268,23 @@ iframe{
     display: table-row-group;
 .transition(height .35s ease);
 }
+
+.NavButtonInactive {
+    font:14px Roboto;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 0;
+    background: #1C5AA5;
+    border: 0;
+    color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+}
+.NavButtonClicked {
+    background-color: #1abc9c !important;
+    color: black !important;
+
+}
