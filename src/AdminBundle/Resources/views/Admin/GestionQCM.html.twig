@@ -13,9 +13,9 @@
         <br>
         <div name="21456dddd">
             <label class="list-group-item" style=";">Reponse :</label>
-            <textarea title="question" style="resize: none;overflow: hidden" class="champ " placeholder="Ajouter Reponse" onkeyup="if(event.keyCode==13){AjouterReponse(this);}" id="NewReponse" required maxlength="255"></textarea>
+            <input type="text" title="question" class="champ " placeholder="Ajouter Reponse" onkeyup="if(event.keyCode==13){AjouterReponse(this);}" id="NewReponse" maxlength="255">
             <label class="list-group-item" style="height: 60px;">Score :</label>
-            <textarea title="score" style="resize: none;overflow: hidden" class="champ " placeholder="Ajouter Score" onkeyup="if(event.keyCode==13){AjouterReponse(this.previousElementSibling.previousElementSibling);}" id="score" required maxlength="2"></textarea>
+            <input type="text" title="score" class="champ " placeholder="Ajouter Score" onkeyup="handleChange(this);if(event.keyCode==13){AjouterReponse(this.previousElementSibling.previousElementSibling);}" id="score" maxlength="2">
         </div>
     </div>
     <div id="reponse" style="display: none;">
@@ -92,9 +92,9 @@
                                         {% endif %}
                                         <div name="21456dddd" >
                                             <label class="list-group-item" style="height: 60px;">Reponse :</label>
-                                            <textarea title="question" style="resize: none;overflow: hidden" class="champ " placeholder="Ajouter Reponse" onkeyup="if(event.keyCode==13){AjouterReponse(this);}" id="NewReponse" required maxlength="255"></textarea>
+                                            <input type="text" title="question" class="champ " placeholder="Ajouter Reponse" onkeyup="if(event.keyCode==13){AjouterReponse(this);}" id="NewReponse" maxlength="255">
                                             <label class="list-group-item" style="height: 60px;">Score :</label>
-                                            <textarea title="score" style="resize: none;overflow: hidden" class="champ " placeholder="Ajouter Score" onkeyup="if(event.keyCode==13){AjouterReponse(this.previousElementSibling.previousElementSibling);}" id="score" required maxlength="2"></textarea>
+                                            <input type="text" title="score" class="champ " placeholder="Ajouter Score" onkeyup="handleChange(this);if(event.keyCode==13){AjouterReponse(this.previousElementSibling.previousElementSibling);}" id="score" maxlength="2">
                                         </div>
                                     </div>
 
@@ -104,7 +104,7 @@
                             {% endif %}
 
                             <div id="button_container" name="21456dddd">
-                                <textarea onkeyup="if(event.keyCode==13){dupliquer(this);}" style="resize: none;overflow: hidden;vertical-align: bottom" class="champ " placeholder="Ajouter Question"></textarea>
+                                <input type="text" onkeyup="if(event.keyCode==13){dupliquer(this);}" style="vertical-align: bottom" class="champ " placeholder="Ajouter Question">
                                 <button onclick="check()" type="button" style="vertical-align: bottom">Valider le QCM</button>
                             </div>
                         </form>
@@ -148,10 +148,9 @@
 
 
                             <div id="button_container" name="21456dddd">
-                                <textarea onkeyup="if(event.keyCode==13){dupliquer(this);}" style="resize: none;overflow: hidden;vertical-align: bottom" class="champ" placeholder="Ajouter Question"></textarea>
+                                <input type="text" onkeyup="if(event.keyCode==13){dupliquer(this);}" style="resize: none;overflow: hidden;vertical-align: bottom" class="champ" placeholder="Ajouter Question">
                                 <button onclick="check()" type="button" style="vertical-align: bottom">Valider le QCM</button>
                             </div>
-
                         </form>
 
 
@@ -188,13 +187,11 @@
             if(me.value.trim() =='')
             {
                 alert('remplisser le champs reponse');
-                me.value='';
                 return;
             }
             if(me.nextElementSibling.nextElementSibling.value.trim() =='')
             {
                 alert('remplisser le champs score');
-                me.value='';
                 return;
             }
             //me.parentNode.getAttribute('id')
@@ -223,27 +220,7 @@
             champs.parentNode.insertBefore(champs, champs.previousElementSibling);
         }
         function check(){
-            var inputs = document.getElementById("form").getElementsByTagName("input");
-            for(var i = 0; i < inputs.length+1; i++)
-            {
-                if(i==inputs.length)
-                {
-                    document.getElementById("form").submit();
-                    break;
-                }
-                if(!inputs[i].value)
-                {
-                    inputs[i].style.backgroundColor = 'red';
-                    alert('Un champ est vide');
-                    break;
-                }
-                else
-                {
-                    inputs[i].style.backgroundColor = '#D3D3D3';
-                }
-
-            }
-
+            document.getElementById("form").submit();
         }
         function supprimer(champs){
             var route = '{{path('supprimer_QCM',{'rep':"reponse",'qst':"question",'qcm':"QCMHolder" })}}';
@@ -278,6 +255,12 @@
 
             champs.remove('div.editfield');
         }
+        function handleChange(input) {
+            var newval = input.value.replace(/[^0-9.]/g, "");
 
+            if (newval < 0) input.value = 0;
+            if (newval > 100) input.value = 100;
+            if (newval >= 0 && newval <=100) input.value = newval;
+        }
     </script>
 {% endblock %}

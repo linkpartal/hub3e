@@ -184,7 +184,20 @@ class Mission
      */
     private $apprentit;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Reponsedef", mappedBy="mission")
+     */
+    private $reponsedef;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reponsedef = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -747,5 +760,39 @@ class Mission
             $this->setCodemission($code);
         }
 
+    }
+
+    /**
+     * Add reponsedef
+     *
+     * @param \GenericBundle\Entity\Reponsedef $reponsedef
+     *
+     * @return Mission
+     */
+    public function addReponsedef(\GenericBundle\Entity\Reponsedef $reponsedef)
+    {
+        $this->reponsedef[] = $reponsedef;
+
+        return $this;
+    }
+
+    /**
+     * Remove reponsedef
+     *
+     * @param \GenericBundle\Entity\Reponsedef $reponsedef
+     */
+    public function removeReponsedef(\GenericBundle\Entity\Reponsedef $reponsedef)
+    {
+        $this->reponsedef->removeElement($reponsedef);
+    }
+
+    /**
+     * Get reponsedef
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReponsedef()
+    {
+        return $this->reponsedef;
     }
 }

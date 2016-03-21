@@ -24,7 +24,7 @@
 
 
 </head>
-<body onload="ShowWaiter();loading();if(confirm('qfjsdqf')){DeleteWaiter();}">
+<body onload="loading();">
 
 <div class="container" style="padding: 0;">
     {% block Content %}
@@ -135,55 +135,93 @@
                         <form id="formaddmission" class="formulaire" action= "{{ path("mission_added") }}" onsubmit="document.getElementById('submitaddmission').disabled=true" method="post">
 
                             <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
-                            <div class="div_form">
+                            <div class="col-xs-12 NavBarTier" >
+                                <button class="col-xs-3" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Information_generale')">Données</button>
+                                <button class="col-xs-3" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Onglet_Contacts')">Contact</button>
+                                <button class="col-xs-3" type="button">Candidat rêvé</button>
+                                <button class="col-xs-3" type="button">Documents</button>
+                            </div>
+                            <div id="PopUpMissionOnglet">
+                                <div id="Information_generale" style="" class="div_form">
                                 <div class="col-xs-6 input-colonne">
 
-                                    <textarea style="height: 140px;resize: none;" class="input" id="Profil" name="_Profil" placeholder="Profil" required maxlength="255"></textarea>
                                     <input type="text" class="input" id="Intitule" name="_Intitule" placeholder="Intitule" required maxlength="75">
-                                    <input type="text" class="input " id="Domaine" name="_Domaine" placeholder="Domaine" required maxlength="45">
+                                    <!--<textarea style="height: 140px;resize: none;" class="input" id="Profil" name="_Profil" placeholder="Profil" required maxlength="255"></textarea>-->
+                                    <textarea style="height: 100px;resize: none;" class="input" id="Descriptif" name="_Descriptif" placeholder="Descriptif" required MAXLENGTH="255"></textarea>
+
+                                    <div class="col-xs-6">
+                                        <label style="float: left">Date début :</label><input type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' class="date" id="Datedebut" name="_Datedebut" title="Datedebut" required >
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <label style="float: left">Date fin :</label><input  type="date" data-date='{"buttonOnly": true, "calculateWidth": true}' class="date" id="Datefin" name="_Datefin" title="Datefin" required>
+                                    </div>
 
 
-                                    <label style="float: left">Date debut :</label> <input type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' class="date" id="Datedebut" name="_Datedebut" title="Datedebut" required >
-                                    <input type="text" class="input " id="TypeContrat" name="_TypeContrat" placeholder="TypeContrat" required maxlength="45">
-                                    <input type="text" class="input " id="Horaire" name="_Horaire" placeholder="Horaire" required maxlength="45">
-
-
-
+                                    <select title="Type de Contrat" class="input" id="TypeContrat" name="_TypeContrat">
+                                        <option value="Stage">Stage</option>
+                                        <option value="Stage alterné">Stage alterné</option>
+                                        <option value="Contrat de professionalisation">Contrat de professionalisation</option>
+                                        <option value="Contrat d'apprentissage">Contrat d'apprentissage</option>
+                                    </select>
+                                    <select title="Horaire" class="input " id="Horaire" name="_Horaire">
+                                        <option value="Fixe">Fixe</option>
+                                        <option value="Flexible">Flexible</option>
+                                    </select>
+                                    <select title="Domaine" class="input " id="Domaine" name="_Domaine">
+                                        <option value="Commerce">Commerce</option>
+                                        <option value="Marketing">Marketing</option>
+                                        <option value="Informatique">Informatique</option>
+                                    </select>
                                 </div>
-                                <div class="col-xs-6">
+                                <!--<div class="col-xs-6">
                                     <input type="text" class="input " id="NomContact" name="_NomContact" placeholder="NomContact" required MAXLENGTH="45">
                                     <input type="text" class="input " id="PrenomContact" name="_PrenomContact" placeholder="PrenomContact" required MAXLENGTH="45">
                                     <input type="text" class="input" id="FonctionContact" name="_FonctionContact" placeholder="FonctionContact" required MAXLENGTH="45">
                                     <input type="text" class="input" id="TelContact" name="_TelContact" placeholder="TelContact" required MAXLENGTH="45">
                                     <input type="text" class="input" id="EmailContact" name="_EmailContact" placeholder="EmailContact" required MAXLENGTH="45">
-                                    <label style="float: left">Date fin :</label><input  type="date" data-date='{"buttonOnly": true, "calculateWidth": true}' class="date" id="Datefin" name="_Datefin" title="Datefin" required>
-                                </div>
-                                <div class="col-xs-6">
-                                    <input type="number" class="input " id="Emploi" name="_Emploi" placeholder="Emploi" required  min="0" max="9" maxlength="1" >
-                                </div>
+                                </div>-->
                                 <div class="col-xs-6">
                                     <input type="number"  class="input " id="Remuneration" name="_Remuneration" placeholder="Remuneration" required maxlength="11">
-
+                                    <input type="number" class="input " id="Emploi" name="_Emploi" placeholder="Nbre de poste à pourvoir" required  min="0" max="9" maxlength="1" >
+                                    <div class="col-xs-12">
+                                    <label class="col-xs12">Embauche à l'issue de la mission?</label>
+                                        <input type="radio" name="_Embauche" value="1">Oui
+                                        <input type="radio" name="_Embauche" value="0">Non
+                                    </div>
+                                    {% if app.user.hasRole('ROLE_ADMINECOLE') %}
+                                        <select class="input"   name="formation" title="" >
+                                            {% for formation_x in formation_mission %}
+                                                {% if formation_x.etablissement.tier == app.user.tier or formation_x.etablissement.tier in app.user.tier.tier1|keys %}
+                                                    <option value="{{ formation_x.getId }}">{{ formation_x.nom }} - {{ formation_x.etablissement.adresse }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    {% elseif app.user.hasRole('ROLE_RECRUTEUR') %}
+                                        <select class="input"   name="formation" title="" >
+                                            {% for formation_x in formation_mission %}
+                                                {% if (formation_x.etablissement.tier == app.user.etablissement.tier) or (formation_x.etablissement.tier in app.user.etablissement.tier.tier1) %}
+                                                    <option value="{{ formation_x.getId }}">{{ formation_x.nom }} - {{ formation_x.etablissement.adresse }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    {% endif %}
                                 </div>
 
-                                {% if app.user.hasRole('ROLE_ADMINECOLE') %}
-                                    <select class="input"   name="formation" title="" >
-                                        {% for formation_x in formation_mission %}
-                                            {% if formation_x.etablissement.tier == app.user.tier or formation_x.etablissement.tier in app.user.tier.tier1|keys %}
-                                                <option value="{{ formation_x.getId }}">{{ formation_x.nom }} - {{ formation_x.etablissement.adresse }}</option>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </select>
-                                {% elseif app.user.hasRole('ROLE_RECRUTEUR') %}
-                                    <select class="input"   name="formation" title="" >
-                                        {% for formation_x in formation_mission %}
-                                            {% if (formation_x.etablissement.tier == app.user.etablissement.tier) or (formation_x.etablissement.tier in app.user.etablissement.tier.tier1) %}
-                                                <option value="{{ formation_x.getId }}">{{ formation_x.nom }} - {{ formation_x.etablissement.adresse }}</option>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </select>
-                                {% endif %}
-                                <textarea style="height: 100px;resize: none;" class="input" id="Descriptif" name="_Descriptif" placeholder="Descriptif" required MAXLENGTH="255"></textarea>
+                            </div>
+                                <div id="Onglet_Contacts" class="div_form" style="visibility: hidden;position: absolute;">
+                                    <label class="col-xs-3 input-colonne">
+                                        Contact
+                                    </label>
+                                    <div class="col-xs-9">
+                                        <input type="text" class="input " id="NomContact" name="_NomContact" placeholder="NomContact" required MAXLENGTH="45">
+                                        <input type="text" class="input " id="PrenomContact" name="_PrenomContact" placeholder="PrenomContact" required MAXLENGTH="45">
+                                        <input type="text" class="input" id="FonctionContact" name="_FonctionContact" placeholder="FonctionContact" required MAXLENGTH="45">
+                                        <input type="text" class="input" id="TelContact" name="_TelContact" placeholder="TelContact" required MAXLENGTH="45">
+                                        <input type="text" class="input" id="EmailContact" name="_EmailContact" placeholder="EmailContact" required MAXLENGTH="45">
+                                    </div>
+
+
+                                </div>
                             </div>
                             <div class="div_button">
                                 <input id="submitaddmission" class="blue" type="submit" value="envoyer">
@@ -1214,6 +1252,7 @@
             button.getElementsByTagName("div")[0].innerHTML="valider";
             button.setAttribute('onclick','envoyer()');
         }
+
         function modifierMission(formid,button) {
             var inputs = document.getElementById(formid).getElementsByTagName('input');
             for(var i = 0; i< inputs.length; i++)

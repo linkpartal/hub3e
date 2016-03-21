@@ -68,8 +68,9 @@ body{
 
 .popup .div_form .date
 {
-    width: 100%;
+    width: calc(100% - 10px);
     font-size: 18px;
+    float: left;
     height: 40px;
     font-family: Roboto;
     color: rgb(75, 75, 75);
@@ -131,4 +132,21 @@ body{
     align:center;
 }
 
+form .NavBarTier
+{
+    height: 54px;
+}
 
+form .NavBarTier button
+{
+    height: 100%;
+    font: 20px Roboto;
+    color: rgb(98, 98, 98);
+    text-transform: uppercase;
+    background-color: rgb(248, 248, 248);
+    border: none;
+}
+
+{
+    height: 100%;font: 20px Roboto;color: #3d8ad4;text-transform: uppercase;background-color: white;border: none;
+}

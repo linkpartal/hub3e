@@ -68,10 +68,26 @@ class Reponsedef
      */
     private $users;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Mission", inversedBy="reponsedef")
+     * @ORM\JoinTable(name="reponsedef_Mission",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="reponsedef_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="mission_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $missions;
+
 
     public function __construct()
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->missions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -228,5 +244,39 @@ class Reponsedef
 
     public function __toString() {
         return $this->id.' '. $this->reponse;
+    }
+
+    /**
+     * Add mission
+     *
+     * @param \GenericBundle\Entity\Mission $mission
+     *
+     * @return Reponsedef
+     */
+    public function addMission(\GenericBundle\Entity\Mission $mission)
+    {
+        $this->missions[] = $mission;
+
+        return $this;
+    }
+
+    /**
+     * Remove mission
+     *
+     * @param \GenericBundle\Entity\Mission $mission
+     */
+    public function removeMission(\GenericBundle\Entity\Mission $mission)
+    {
+        $this->missions->removeElement($mission);
+    }
+
+    /**
+     * Get missions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMissions()
+    {
+        return $this->missions;
     }
 }

@@ -50,6 +50,10 @@
         </div>
 
         <form id="formTier" action="{{ path('tieradded') }}" onsubmit="document.getElementById('submittier').disabled = true;" method="post" enctype="multipart/form-data">
+            <div id="NavBarTier" class="col-xs-12" style="height: 54px;">
+                <button class="col-xs-6" type="button" style="height: 100%;font: 20px Roboto;color: #3d8ad4;text-transform: uppercase;background-color: white;border: none;">Données</button>
+                <button class="col-xs-6" type="button" style="display: none;height: 100%;font: 20px Roboto;color: rgb(98, 98, 98);text-transform: uppercase;background-color: rgb(248, 248, 248);border: none;">Documents/Infos</button>
+            </div>
             <div class="div_form" style="display: inline-table;" >
 
                 <div class="col-xs-6 input-colonne">

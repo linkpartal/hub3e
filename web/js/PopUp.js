@@ -43,3 +43,28 @@ function ShowWaiter(){
 function DeleteWaiter(){
     document.getElementById('patienter458275245').parentNode.removeChild(document.getElementById('patienter458275245'));
 }
+
+function NaviguerOnglet(DivOnglet,OngletToShow){
+    var divs = document.getElementById(DivOnglet).children;
+    if ( $('#'+DivOnglet).parents("form").length == 1 ) {
+
+        for(var i = 0; i <divs.length ;i++){
+            divs[i].style.visibility= 'hidden';
+            divs[i].style.position= 'absolute';
+        }
+        document.getElementById(OngletToShow).style.visibility= 'visible';
+        document.getElementById(OngletToShow).style.position= 'static';
+
+    } else {
+
+        for(var i = 0; i <divs.length ;i++){
+            console.log(divs[i]);
+            divs[i].style.display = 'none';
+        }
+        document.getElementById(OngletToShow).style.display = 'block';
+
+    }
+
+
+
+}
