@@ -46,7 +46,7 @@
                 </div>
             </div>
         </div>
-        <form id="formtier" action="{{ path('tieradded') }}" method="post" enctype="multipart/form-data">
+        <form id="formtier" action="{{ path('tieradded') }}" onsubmit="ShowWaiter();" method="post" enctype="multipart/form-data">
             <div class="div_form" style="display: inline-table">
 
                 <div class="col-xs-6 input-colonne">
@@ -82,7 +82,7 @@
     <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;background-color: white;">
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-        <form id="form" action="{{ path('import') }}" onsubmit="document.getElementById('submitimport').disabled=true" method="post" enctype="multipart/form-data">
+        <form id="form" action="{{ path('import') }}" onsubmit="document.getElementById('submitimport').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data">
             <div class="div_form">
 
                 <select onchange="disabling(this)" title="Type d'import" name="Import">

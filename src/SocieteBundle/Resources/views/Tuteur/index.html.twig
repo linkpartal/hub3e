@@ -427,12 +427,7 @@
                 <a href="{{ path('metier_user_login') }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 100%;" >        </a>
             </div>
             <div class="input-group col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
-                <button  type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
-                ></button>
-
-                <button onclick="document.getElementById('iframe').src='{{ path('affiche_etab',{'id':app.user.etablissement.id }) }}'" style="color:white;white-space: nowrap;overflow: hidden; "> Sociétés </button>
-
-
+                <button onclick="document.getElementById('iframe').src='{{ path('affiche_etab',{'id':app.user.etablissement.id }) }}'"  style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; "> Sociétés </button>
             </div>
 
             <div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px; float: right; margin-right: 40px;">
