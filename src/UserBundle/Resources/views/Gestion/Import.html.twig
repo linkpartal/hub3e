@@ -220,7 +220,7 @@
             type: 'get',
             url: route,
             error: function (response) {
-                console.log(response);
+                alert('Une erreur s\'est produite veuillez réessayer ulterieurement');
             },
             success: function(data){
                 if(data['Delete']=='1')
