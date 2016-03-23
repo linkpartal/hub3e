@@ -257,7 +257,13 @@
                 {% if msg.expediteur.hasRole('ROLE_APPRENANT') %}
                     <div class="col-xs-2" >
                         <div style="border: 15px solid transparent">
-                            <img   src="data:image/jpg;base64,{{msg.getExpediteur.getPhotos }}" style="height:70px;width:70px;margin:0 40px;border-radius: 100%">
+                            {% if msg.getExpediteur.getPhotos %}
+                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="data:image/jpg;base64,{{ msg.getExpediteur.getPhotos }}">
+                            {% elseif msg.getExpediteur.getCivilite == 'Mme' or msg.getExpediteur.getCivilite == 'Madame' or msg.getExpediteur.getCivilite == 'Mademoiselle' %}
+                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/femme.jpg') }}">
+                            {% else %}
+                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/homme.jpg') }}">
+                            {% endif %}
                         </div>
 
 
@@ -283,8 +289,8 @@
                     </div>
                     <div {% if not msg.statut == -1 and not msg.statut == 1 %}
                             onclick="informationApprenant('{{msg.getExpediteur.getPhotos|escape('js')}}','{{ msg.getExpediteur.getCivilite|escape('js') }}','{{ msg.getExpediteur.getNom|escape('js') }}','{{ msg.getExpediteur.getPrenom|escape('js') }}',
-                            '{{ msg.getExpediteur.getEmail|escape('js') }}','{{ msg.getExpediteur.getTelephone|escape('js') }}','{{ msg.getExpediteur.getInfo.getDateNaissance|date("d/m/Y") }}',
-                            '{{ msg.getExpediteur.getInfo.getCpNaissance|escape('js') }}','{{ msg.getExpediteur.getInfo.getLieunaissance|escape('js') }}','{{ msg.getExpediteur.getInfo.getAdresse|escape('js') }}','{{ msg.message|escape('js') }}');
+                                    '{{ msg.getExpediteur.getEmail|escape('js') }}','{{ msg.getExpediteur.getTelephone|escape('js') }}','{{ msg.getExpediteur.getInfo.getDateNaissance|date("d/m/Y") }}',
+                                    '{{ msg.getExpediteur.getInfo.getCpNaissance|escape('js') }}','{{ msg.getExpediteur.getInfo.getLieunaissance|escape('js') }}','{{ msg.getExpediteur.getInfo.getAdresse|escape('js') }}','{{ msg.message|escape('js') }}');
                             show('FicheApprenant');idMessage={{ msg.id }}"
                             {% endif %}
                             class="col-xs-1" style="height: 100%">
@@ -463,7 +469,18 @@
         });
     }
     function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse,message) {
-        document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
+
+        if(image != ''){
+            document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
+        }
+        else if( civilite == 'Mme' || civilite =='Madame' || civilite == 'Mademoiselle'){
+            document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='{{ asset('image/femme.jpg') }}';
+        }
+        else{
+            document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='{{ asset('image/homme.jpg') }}';
+        }
+
+
         document.getElementById('Information_Apprenant_Civilite').innerHTML = civilite;
         document.getElementById('Information_Apprenant_Nom').innerHTML = nom;
         document.getElementById('Information_Apprenant_Prenom').innerHTML= prenom;

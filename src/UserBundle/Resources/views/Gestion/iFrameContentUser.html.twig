@@ -395,7 +395,7 @@
 
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="Tel">Téléphone :</label>
-                                    <input value="{{User.getTelephone}}" type="text" class="champ form-control"id="Telephone" name="_Tel" maxlength="45" readonly>
+                                    <input value="{{User.getTelephone}}" type="text" class="champ form-control" id="Telephone" name="_Tel" maxlength="45" readonly>
                                 </div>
 
 
@@ -490,8 +490,16 @@
                                 </div>
 
                                 <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 40px;" for="Photos">Photo : <img id="Photosimg" alt="Photos" style="height:40px" src="data:image/jpg;base64,{{ User.getPhotos }}"/> </label>
-                                    <input onchange="readURL(this,'Photosimg');" accept="image/*" type="file" class="champ form-control" id="Photos" name="_Photos" style="display: none !important;">
+                                    <label class="list-group-item" style="height: 40px;" for="Photos">Photo :
+                                        {% if User.getPhotos %}
+                                            <img id="Photosimg" alt="Photos" style="height:40px" src="data:image/jpg;base64,{{ User.getPhotos }}">
+                                        {% elseif User.getCivilite == 'Mme' or User.getCivilite == 'Madame' or User.getCivilite == 'Mademoiselle' %}
+                                            <img id="Photosimg" alt="Photos" style="height:40px" src="{{ asset('image/femme.jpg') }}">
+                                        {% else %}
+                                            <img id="Photosimg" alt="Photos" style="height:40px" src="{{ asset('image/homme.jpg') }}">
+                                        {% endif %}
+                                    </label>
+                                    <input onchange="readURL(this,'Photosimg');" accept="image/*" type="file" class="champ form-control" id="Photos" name="_Photos" style="display: none !important;" readonly>
 
                                 </div>
 

@@ -116,7 +116,13 @@
                 {% if not app.user.hasRole('ROLE_APPRENANT') %}
                     <div class="col-xs-2" >
                         <div style="border: 15px solid transparent">
-                            <img   src="data:image/jpg;base64,{{rdv.apprenant.getPhotos }}" style="height:70px;width:70px;margin:0 40px;border-radius: 100%">
+                            {% if rdv.apprenant.getPhotos %}
+                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="data:image/jpg;base64,{{ rdv.apprenant.getPhotos }}">
+                            {% elseif rdv.apprenant.getCivilite == 'Mme' or rdv.apprenant.getCivilite == 'Madame' or User.getCivilite == 'Mademoiselle' %}
+                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/femme.jpg') }}">
+                            {% else %}
+                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/homme.jpg') }}">
+                            {% endif %}
                         </div>
 
 

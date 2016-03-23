@@ -65,7 +65,7 @@ class DefaultController extends Controller
             $em->flush();
 
         }
-        
+
         return $this->render('GenericBundle::ReloadParent.html.twig',array('clear'=>false));
     }
 

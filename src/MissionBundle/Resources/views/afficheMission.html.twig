@@ -368,7 +368,14 @@
                                 <label style="width:40px;height: 20px;background:yellowgreen;color:white;font:14px Roboto;line-height: 20px; position: absolute;text-align: center;left: 0;z-index: 6;margin: 10px 0 0 10px;">{{ scores[loop.index0] }}</label>
                                 <div style="width:10px;height:140px;background:yellowgreen;color:white;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;"></div>
                             {% endif %}
-                            <img class="col-xs-1" onclick="show('FicheMission')" src="data:image/jpg;base64,{{user.getPhotos}}" style="margin: 10px 0 0 10px;height: 140px;width: 140px;">
+                            {% if msg.getExpediteur.getPhotos %}
+                                <img class="col-xs-1" onclick="show('FicheMission')" src="data:image/jpg;base64,{{user.getPhotos}}" style="margin: 10px 0 0 10px;height: 140px;width: 140px;">
+                            {% elseif msg.getExpediteur.getCivilite == 'Mme' or msg.getExpediteur.getCivilite == 'Madame' or User.getCivilite == 'Mademoiselle' %}
+                                <img style="margin: 10px 0 0 10px;height: 140px;width: 140px;" src="{{ asset('image/femme.jpg') }}">
+                            {% else %}
+                                <img style="margin: 10px 0 0 10px;height: 140px;width: 140px;" src="{{ asset('image/homme.jpg') }}">
+                            {% endif %}
+
 
                             <div class="col-xs-4" style="margin-left: 10px;margin-top:10px">
                                 <div class="col-xs-12"
@@ -591,7 +598,15 @@
 
     }
     function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse) {
-        document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
+        if(image != ''){
+            document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
+        }
+        else if( civilite == 'Mme' || civilite =='Madame' || civilite == 'Mademoiselle'){
+            document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='{{ asset('image/femme.jpg') }}';
+        }
+        else{
+            document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='{{ asset('image/homme.jpg') }}';
+        }
         document.getElementById('Information_Apprenant_Civilite').innerHTML = civilite;
         document.getElementById('Information_Apprenant_Nom').innerHTML = nom;
         document.getElementById('Information_Apprenant_Prenom').innerHTML= prenom;
