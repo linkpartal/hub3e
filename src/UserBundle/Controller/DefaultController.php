@@ -356,7 +356,7 @@ class DefaultController extends Controller
         $InfoComp->setCpnaissance($request->get('_Cpnaissance'));
         $InfoComp->setLieunaissance($request->get('_Lieunaissance'));
         $InfoComp->setDatecreation(date_create());
-
+        $em->persist($InfoComp);
         $em->flush();
 
 
@@ -400,12 +400,11 @@ class DefaultController extends Controller
                 $candidature = new Candidature();
                 $candidature->setFormation($formation);
                 $candidature->setImportcandidat($apprenant);
+                $candidature->setDatecandidature(date_create());
                 $em->persist($candidature);
                 $em->flush();
             }
         }
-
-
 
         if($_FILES['_Document'])
         {
@@ -1155,7 +1154,7 @@ class DefaultController extends Controller
             }
 
             $newuser->setInfo($import->getInfo());
-            $import->setInfo(null);
+
 
             //generate a password
             $tokenGenerator = $this->get('fos_user.util.token_generator');
@@ -1165,20 +1164,25 @@ class DefaultController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($newuser);
+
+            $newuser->getInfo()->setDaterecup(date_create());
             $em->flush();
-            $date = new \DateTime();
-            $newuser->getInfo()->setDaterecup($date);
-            foreach($import->getHobbies() as $hobby)
+
+
+            foreach($em->getRepository('GenericBundle:Document')->findBy(array('importCandidat'=>$import)) as $document)
             {
-                $newuser->addHobby($hobby);
+                $document->setUser($newuser);
+                $document->setImportCandidat(null);
                 $em->flush();
             }
-            foreach($import->getLangue() as $langue)
+            foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('importcandidat'=>$import)) as $candidature)
             {
-                $newuser->addLangue($langue);
+                $candidature->setUser($newuser);
+                $candidature->setImportCandidat(null);
                 $em->flush();
             }
 
+            /*
             foreach($em->getRepository('GenericBundle:Experience')->findBy(array('importCandidat'=>$import)) as $experience)
             {
                 $experience->setUser($newuser);
@@ -1191,10 +1195,14 @@ class DefaultController extends Controller
                 $diplome->setImportCandidat(null);
                 $em->flush();
             }
-            foreach($em->getRepository('GenericBundle:Document')->findBy(array('importCandidat'=>$import)) as $document)
+            foreach($import->getHobbies() as $hobby)
             {
-                $document->setUser($newuser);
-                $document->setImportCandidat(null);
+                $newuser->addHobby($hobby);
+                $em->flush();
+            }
+            foreach($import->getLangue() as $langue)
+            {
+                $newuser->addLangue($langue);
                 $em->flush();
             }
             foreach($em->getRepository('GenericBundle:Parents')->findBy(array('importCandidat'=>$import)) as $parents)
@@ -1208,7 +1216,7 @@ class DefaultController extends Controller
                 $recommandation->setUser($newuser);
                 $recommandation->setImportCandidat(null);
                 $em->flush();
-            }
+            }*/
 
 
             $superadmins = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_SUPER_ADMIN');
@@ -1261,6 +1269,8 @@ class DefaultController extends Controller
                 );
             $this->get('mailer')->send($message);
 
+            $import->setInfo(null);
+            $em->flush();
             $em->remove($import);
             $em->flush();
             return $response->setData(array('Ajout'=>'1'));
