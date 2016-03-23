@@ -317,15 +317,15 @@
                   {% if User.hasRole('ROLE_APPRENANT') %}
 
                   <!--button id="Button_donnees" class="NavButtonInactive" title="Données Utilisateur" onclick="show_Information('info_user','Button_donnees')" type="button">Données Utilisateur</button>-->
-                  <button id="Button_Apprenant" class="NavButtonInactive" title="Details de l'Apprenant" onclick="show_Information('info_Apprenant','Button_Apprenant')" type="button">Données Utilisateur</button>
-                  <button id="Button_candidature" class="NavButtonInactive" title="Formation de l'Apprenant" onclick="show_Information('info_candidature','Button_candidature')" >Formation de l'Apprenant </button>
-                  <button id="Button_parents" class="NavButtonInactive" title="Responsables" onclick="show_Information('info_parents','Button_parents')" >Responsables </button>
-                  <button id="Button_Exp" class="NavButtonInactive" title="Expériences" onclick="show_Information('info_Exp','Button_Exp')" >Expériences </button>
-                  <button id="Button_recom" class="NavButtonInactive" title="Recommandations" onclick="show_Information('info_recom','Button_recom')" >Recommandations </button>
-                  <button id="Button_diplome" class="NavButtonInactive" title="Diplomes" onclick="show_Information('info_diplome','Button_diplome')">Diplomes </button>
-                  <button id="Button_doc" class="NavButtonInactive" title="Documents" onclick="show_Information('info_doc','Button_doc')">Documents </button>
-                  <button id="Button_Affinite" class="NavButtonInactive" title="QCM Affinite" onclick="show_Information('QCM_Affinite','Button_Affinite')">QCM Affinite </button>
-                  <button id="Button_Test" class="NavButtonInactive" title="QCM Test" onclick="show_Information('QCM_Test','Button_Test')">QCM Test </button>
+                  <button id="Button_Apprenant" class="NavButtonIframe" title="Details de l'Apprenant" onclick="NaviguerOnglet('OngletApprenant','info_Apprenant',this)" type="button">Données Utilisateur</button>
+                  <button id="Button_candidature" class="NavButtonIframe" title="Formation de l'Apprenant" onclick="NaviguerOnglet('OngletApprenant','info_candidature',this)" >Formation de l'Apprenant </button>
+                  <button id="Button_parents" class="NavButtonIframe" title="Responsables" onclick="NaviguerOnglet('OngletApprenant','info_parents',this)" >Responsables </button>
+                  <button id="Button_Exp" class="NavButtonIframe" title="Expériences" onclick="NaviguerOnglet('OngletApprenant','info_Exp',this)" >Expériences </button>
+                  <button id="Button_recom" class="NavButtonIframe" title="Recommandations" onclick="NaviguerOnglet('OngletApprenant','info_recom',this)" >Recommandations </button>
+                  <button id="Button_diplome" class="NavButtonIframe" title="Diplomes" onclick="NaviguerOnglet('OngletApprenant','info_diplome',this)">Diplomes </button>
+                  <button id="Button_doc" class="NavButtonIframe" title="Documents" onclick="NaviguerOnglet('OngletApprenant','info_doc',this)">Documents </button>
+                  <button id="Button_Affinite" class="NavButtonIframe" title="QCM Affinite" onclick="NaviguerOnglet('OngletApprenant','QCM_Affinite',this)">QCM Affinite </button>
+                  <button id="Button_Test" class="NavButtonIframe" title="QCM Test" onclick="NaviguerOnglet('OngletApprenant','QCM_Test',this)">QCM Test </button>
 
                            <!--select title="" id="select_info"  style="color:white;">
                                <option value="info_user" style="color:black;">Données Utilisateur</option>
@@ -346,111 +346,113 @@
                     </div>
                 </div>
 
-                <div class="col-xs-12" style="margin-bottom: 50px">
-                    <form class="formulaire" id="formUser" action="{{ path('userModif') }}" onsubmit="ShowWaiter();" method="post" enctype="multipart/form-data">
-                        {% if not User.hasRole('ROLE_APPRENANT') %}
+                <div id="OngletApprenant" class="col-xs-12" style="margin-bottom: 50px">
+
+                    {% if not User.hasRole('ROLE_APPRENANT') %}
                         <div id="info_user" class="list-group affichage">
-                            <input type="hidden" value="{{ User.getId }}" id="id" name="_ID">
+                            <form class="formulaire" id="formUser" action="{{ path('userModif') }}" onsubmit="ShowWaiter();" method="post" enctype="multipart/form-data">
+                                <input type="hidden" value="{{ User.getId }}" id="id" name="_ID">
 
-                            <div class="inputcontainer">
-                                <label class="list-group-item" style="height: 60px;" for="civilite">Civilité :</label>
+                                <div class="inputcontainer">
+                                    <label class="list-group-item" style="height: 60px;" for="civilite">Civilité :</label>
 
-                                <select   class="List-invisible" width="50px" title="" id="civilite"  name="_Civilite" disabled>
-                                    {% if User.getCivilite == 'Mr' %}
-                                        <option selected="selected" value="Mr">Mr.</option>
-                                    {% else %}
-                                        <option value="Mr">Mr.</option>
+                                    <select   class="List-invisible" width="50px" title="" id="civilite"  name="_Civilite" disabled>
+                                        {% if User.getCivilite == 'Mr' %}
+                                            <option selected="selected" value="Mr">Mr.</option>
+                                        {% else %}
+                                            <option value="Mr">Mr.</option>
+                                        {% endif %}
+
+                                        {% if User.getCivilite == 'Mme' %}
+                                            <option selected="selected" value="Mme">Mme.</option>
+                                        {% else %}
+                                            <option value="Mme">Mme.</option>
+                                        {% endif %}
+
+                                        {% if User.getCivilite == 'Mlle' %}
+                                            <option selected="selected" value="Mlle">Mlle.</option>
+                                        {% else %}
+                                            <option value="Mlle">Mlle.</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+
+                                <div class="inputcontainer">
+                                    <label class="list-group-item" style="height: 60px;" for="Nom">Nom :</label>
+                                    <input value="{{User.getNom}}" type="text" class="champ form-control" id="Nom" name="_Nom" maxlength="45" readonly>
+                                </div>
+
+                                <div class="inputcontainer">
+                                    <label class="list-group-item" style="height: 60px;" for="Prenom">Prénom :</label>
+                                    <input value="{{User.getPrenom}}" type="text" class="champ form-control" id="Prenom" name="_Prenom" maxlength="45" readonly>
+                                </div>
+
+                                <div class="inputcontainer">
+                                    <label class="list-group-item" style="height: 40px;" for="Photos">Photo : <img id="Photosimg" alt="Photos" style="height:40px" src="data:image/jpg;base64,{{ User.getPhotos }}"/> </label>
+                                    <input onchange="readURL(this,'Photosimg');" accept="image/*" type="file" class="champ form-control" id="Photos" name="_Photos" style="display: none !important;">
+
+                                </div>
+
+                                <div class="inputcontainer">
+                                    <label class="list-group-item" style="height: 60px;" for="Tel">Téléphone :</label>
+                                    <input value="{{User.getTelephone}}" type="text" class="champ form-control"id="Telephone" name="_Tel" maxlength="45" readonly>
+                                </div>
+
+
+                                <div class="inputcontainer">
+                                    <label class="list-group-item" style="height: 60px;" for="UserName">UserName :</label>
+                                    <input value="{{User.getUserName}}" type="text" class="champ form-control" id="UserName" name="_Username" maxlength="255" readonly>
+                                </div>
+
+                                <div class="inputcontainer">
+                                    <label class="list-group-item" style="height: 60px;" for="Mail">E-mail :</label>
+                                    <input value="{{User.getEmail}}" type="text" class="champ form-control" id="Mail" name="_Mail" maxlength="255" readonly>
+                                </div>
+
+                                <div class="inputcontainer">
+                                    <label class="list-group-item" style="height: 60px;" >Dernière connexion :</label><label style="color:black" >{{User.getLastLogin|date('d/m/Y')}}</label>
+
+                                </div>
+                                <div class="inputcontainer">
+                                    <label class="list-group-item" style="height: 60px;" >Expiré le : </label>
+                                    <label style="color:black" >
+
+                                        {% if User.getExpiredAt is null %}
+                                            &nbsp;
+                                        {% else %}
+                                            {{ User.getExpiredAt|date('d/m/Y H:i') }}
+                                        {% endif %}
+
+
+                                    </label>
+
+
+                                </div>
+                                <div class="inputcontainer">
+                                    <label class="list-group-item" style="height: 60px;">Roles :
+                                        {% for role in User.getRoles %}
+                                            <label style="color:black">{{role}}, </label>
+                                        {% endfor %}
+                                    </label>
+
+
+                                </div>
+                                <div class="inputcontainer">
+                                    {% if User.getEtablissement %}
+                                        {% if User.getEtablissement.getTier.getEcole == 0 %}
+                                            <label class="list-group-item info" >Société  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
+
+                                        {% elseif User.getEtablissement.getTier.getEcole == 1 %}
+                                            <label class="list-group-item info" >Ecole  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
+                                        {% endif %}
                                     {% endif %}
-
-                                    {% if User.getCivilite == 'Mme' %}
-                                        <option selected="selected" value="Mme">Mme.</option>
-                                    {% else %}
-                                        <option value="Mme">Mme.</option>
-                                    {% endif %}
-
-                                    {% if User.getCivilite == 'Mlle' %}
-                                        <option selected="selected" value="Mlle">Mlle.</option>
-                                    {% else %}
-                                        <option value="Mlle">Mlle.</option>
-                                    {% endif %}
-                                </select>
-                            </div>
-
-                            <div class="inputcontainer">
-                                <label class="list-group-item" style="height: 60px;" for="Nom">Nom :</label>
-                                <input value="{{User.getNom}}" type="text" class="champ form-control" id="Nom" name="_Nom" maxlength="45" readonly>
-                            </div>
-
-                            <div class="inputcontainer">
-                                <label class="list-group-item" style="height: 60px;" for="Prenom">Prénom :</label>
-                                <input value="{{User.getPrenom}}" type="text" class="champ form-control" id="Prenom" name="_Prenom" maxlength="45" readonly>
-                            </div>
-
-                            <div class="inputcontainer">
-                                <label class="list-group-item" style="height: 40px;" for="Photos">Photo : <img id="Photosimg" alt="Photos" style="height:40px" src="data:image/jpg;base64,{{ User.getPhotos }}"/> </label>
-                                <input onchange="readURL(this,'Photosimg');" accept="image/*" type="file" class="champ form-control" id="Photos" name="_Photos" style="display: none !important;">
-
-                            </div>
-
-                            <div class="inputcontainer">
-                                <label class="list-group-item" style="height: 60px;" for="Tel">Téléphone :</label>
-                                <input value="{{User.getTelephone}}" type="text" class="champ form-control"id="Telephone" name="_Tel" maxlength="45" readonly>
-                            </div>
-
-
-                            <div class="inputcontainer">
-                                <label class="list-group-item" style="height: 60px;" for="UserName">UserName :</label>
-                                <input value="{{User.getUserName}}" type="text" class="champ form-control" id="UserName" name="_Username" maxlength="255" readonly>
-                            </div>
-
-                            <div class="inputcontainer">
-                                <label class="list-group-item" style="height: 60px;" for="Mail">E-mail :</label>
-                                <input value="{{User.getEmail}}" type="text" class="champ form-control" id="Mail" name="_Mail" maxlength="255" readonly>
-                            </div>
-
-                            <div class="inputcontainer">
-                                <label class="list-group-item" style="height: 60px;" >Dernière connexion :</label><label style="color:black" >{{User.getLastLogin|date('d/m/Y')}}</label>
-
-                            </div>
-                            <div class="inputcontainer">
-                                <label class="list-group-item" style="height: 60px;" >Expiré le : </label>
-                                <label style="color:black" >
-
-                                    {% if User.getExpiredAt is null %}
-                                        &nbsp;
-                                    {% else %}
-                                        {{ User.getExpiredAt|date('d/m/Y H:i') }}
-                                    {% endif %}
-
-
-                                </label>
-
-
-                            </div>
-                            <div class="inputcontainer">
-                                <label class="list-group-item" style="height: 60px;">Roles :
-                                    {% for role in User.getRoles %}
-                                        <label style="color:black">{{role}}, </label>
-                                    {% endfor %}
-                                </label>
-
-
-                            </div>
-                            <div class="inputcontainer">
-                                {% if User.getEtablissement %}
-                                    {% if User.getEtablissement.getTier.getEcole == 0 %}
-                                        <label class="list-group-item info" >Société  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
-
-                                    {% elseif User.getEtablissement.getTier.getEcole == 1 %}
-                                        <label class="list-group-item info" >Ecole  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
-                                    {% endif %}
-                                {% endif %}
-                            </div>
-                            <input id="formUserSubmit" type="submit" style="display: none;">
+                                </div>
+                                <input id="formUserSubmit" type="submit" style="display: none;">
+                            </form>
                         </div>
-                        {% endif %}
-                        {% if User.hasRole('ROLE_APPRENANT') %}
-                            <div id="info_Apprenant" class="list-group affichage">
+                    {% else %}
+                        <div id="info_Apprenant" class="list-group affichage">
+                            <form class="formulaire" id="formUser" action="{{ path('userModif') }}" onsubmit="ShowWaiter();" method="post" enctype="multipart/form-data">
                                 <input type="hidden" value="{{ User.getId }}" id="id" name="_ID">
 
                                 <div class="inputcontainer">
@@ -549,123 +551,123 @@
                                 </div>
                                 <input id="formUserSubmit" type="submit" style="display: none;">
 
-                                    {% if User.GetInfo  %}
-                                        <input type="hidden" value="{{ User.GetInfo.getId }}" id="id" name="_IdInfo">
-                                        <div class="inputcontainer">
-                                            <label class="list-group-item" style="height: 60px;" for="Datenaissance">Date naissance :</label>
+                                {% if User.GetInfo  %}
+                                    <input type="hidden" value="{{ User.GetInfo.getId }}" id="id" name="_IdInfo">
+                                    <div class="inputcontainer">
+                                        <label class="list-group-item" style="height: 60px;" for="Datenaissance">Date naissance :</label>
 
-                                            <input value="{{User.getInfo.getDatenaissance|date('Y-m-d') }}" type="date" class="champ form-control" id="Datenaissance" name="_Datenaissance" maxlength="45" readonly>
+                                        <input value="{{User.getInfo.getDatenaissance|date('Y-m-d') }}" type="date" class="champ form-control" id="Datenaissance" name="_Datenaissance" maxlength="45" required readonly>
 
-                                            <label class="list-group-item" style="height: 60px;" for="Cpnaissance">Cp naissance  :</label>
-                                            <input value="{{User.getInfo.getCpnaissance}}" type="text" class="champ form-control" id="Cpnaissance" name="_Cpnaissance" maxlength="45" readonly>
+                                        <label class="list-group-item" style="height: 60px;" for="Cpnaissance">Cp naissance  :</label>
+                                        <input value="{{User.getInfo.getCpnaissance}}" type="text" class="champ form-control" id="Cpnaissance" name="_Cpnaissance" maxlength="45" required readonly>
 
+                                    </div>
+
+                                    <div class="inputcontainer">
+                                        <label class="list-group-item" style="height: 60px;" for="Lieunaissance">Lieu naissance:</label>
+                                        <input value="{{User.getInfo.getLieunaissance}}" type="text" class="champ form-control" id="Lieunaissance" name="_Lieunaissance" maxlength="45" required readonly>
+                                        <label class="list-group-item" style="height: 60px;" for="Adresse">Adresse       : </label>
+                                        <input value="{{User.getInfo.getAdresse}}" type="text" class="champ form-control" id="Adresse" name="_Adresse" maxlength="45" readonly>
+
+                                    </div>
+
+                                    <div class="inputcontainer">
+                                        <label class="list-group-item" style="height: 60px;" for="Facebook">Facebook      :</label>
+                                        <input value="{{User.getInfo.getFacebook}}" type="url" class="champ form-control" id="Facebook" name="_Facebook" maxlength="45" readonly>
+                                        <label class="list-group-item" style="height: 60px;" for="Linkedin">Linkedin      : </label>
+                                        <input value="{{User.getInfo.getLinkedin}}" type="url" class="champ form-control" id="Linkedin" name="_Linkedin" maxlength="45" readonly>
+
+                                    </div>
+
+                                    <div class="inputcontainer">
+                                        <label class="list-group-item" style="height: 60px;" for="Mobilite">Mobilite      :</label>
+                                        <input value="{{User.getInfo.getMobilite}}" type="number" class="champ form-control" id="Mobilite" name="_Mobilite" maxlength="45" readonly>
+                                        <label class="list-group-item" style="height: 60px;" for="Fratrie">Fratrie       : </label>
+                                        <input value="{{User.getInfo.getFratrie}}" type="number" class="champ form-control" id="Fratrie" name="_Fratrie" maxlength="45" readonly>
+
+                                    </div>
+
+                                    <div class="inputcontainer">
+
+                                        <label class="list-group-item" style="height: 60px;" for="Datenaissance">Hobbies :</label>
+
+                                        {% set i = 0 %}
+                                        {% for hobby in User.getHobbies %}
+                                            <div id="hobbie{{ i }}" >
+                                                <input type="hidden" name="hobbie[{{ i }}]" value="{{ hobby.getId }}" style="margin:10px 5px 10px 0" id="inputHobbie" >
+                                                <label class="champ form-control" style="width: 150px;" for="hobbie">{{hobby.getHobbie}}</label>
+
+                                                <img name="modification" style="display: none" onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
+
+
+                                            </div>
+
+                                            {% set i= i +1 %}
+                                        {% endfor %}
+
+
+
+
+
+                                    </div>
+
+                                    <div class="inputcontainer" >
+                                        <div id="ajout_hobbie" style="display: none;">
+                                            {% if Hobbies is defined %}
+                                                <select style=" width:150px;height: 40px" id="Newhobbie"  name="_Hobbie">
+                                                    <option value="">--?-- </option>
+                                                    {% for hobbie in Hobbies %}
+                                                        <option value="{{ hobbie.getId }}">{{ hobbie.getHobbie }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            {% endif %}
+                                            <img  OnClick="ajouterHobbie(this.previousElementSibling)"  src="{{ asset('image/add_x30.png') }}"/><br>
                                         </div>
+                                    </div>
 
-                                        <div class="inputcontainer">
-                                            <label class="list-group-item" style="height: 60px;" for="Lieunaissance">Lieu naissance:</label>
-                                            <input value="{{User.getInfo.getLieunaissance}}" type="text" class="champ form-control" id="Lieunaissance" name="_Lieunaissance" maxlength="45" readonly>
-                                            <label class="list-group-item" style="height: 60px;" for="Adresse">Adresse       : </label>
-                                            <input value="{{User.getInfo.getAdresse}}" type="text" class="champ form-control" id="Adresse" name="_Adresse" maxlength="45" readonly>
-
-                                        </div>
-
-                                        <div class="inputcontainer">
-                                            <label class="list-group-item" style="height: 60px;" for="Datenaissance">Facebook      :</label>
-                                            <input value="{{User.getInfo.getFacebook}}" type="text" class="champ form-control" id="Facebook" name="_Facebook" maxlength="45" readonly>
-                                            <label class="list-group-item" style="height: 60px;" for="Cpnaissance">Linkedin      : </label>
-                                            <input value="{{User.getInfo.getLinkedin}}" type="text" class="champ form-control" id="Linkedin" name="_Linkedin" maxlength="45" readonly>
-
-                                        </div>
-
-                                        <div class="inputcontainer">
-                                            <label class="list-group-item" style="height: 60px;" for="Mobilite">Mobilite      :</label>
-                                            <input value="{{User.getInfo.getMobilite}}" type="text" class="champ form-control" id="Mobilite" name="_Mobilite" maxlength="45" readonly>
-                                            <label class="list-group-item" style="height: 60px;" for="Fratrie">Fratrie       : </label>
-                                            <input value="{{User.getInfo.getFratrie}}" type="text" class="champ form-control" id="Fratrie" name="_Fratrie" maxlength="45" readonly>
-
-                                        </div>
-
-                                        <div class="inputcontainer">
-
-                                            <label class="list-group-item" style="height: 60px;" for="Datenaissance">Hobbies :</label>
-
+                                    <div class="inputcontainer">
+                                        <label class="list-group-item" style="height: 60px;" >Langues :</label><br>
+                                        {% if Langue is defined %}
                                             {% set i = 0 %}
-                                            {% for hobby in User.getHobbies %}
-                                                <div id="hobbie{{ i }}" >
-                                                    <input type="hidden" name="hobbie[{{ i }}]" value="{{ hobby.getId }}" style="margin:10px 5px 10px 0" id="inputHobbie" >
-                                                    <label class="champ form-control" style="width: 150px;" for="hobbie">{{hobby.getHobbie}}</label>
-
-                                                    <img name="modification" style="display: none" onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
-
-
+                                            {% for lang in User.getLangue %}
+                                                <div id="langue{{ i }}" >
+                                                    <input type="hidden" name="langue[{{ i }}]" value="{{ lang.getId }}" style="margin:10px 5px 10px 0" id="inputLangue" >
+                                                    <label class="champ form-control" style="width: 150px;" for="langue">{{lang.getLangue}}</label>
+                                                    <label class="champ form-control"  for="Niveau">{{lang.getNiveau}}</label>
+                                                    <img name="modification"  style="display: none" onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
                                                 </div>
-
                                                 {% set i= i +1 %}
                                             {% endfor %}
+                                        {% endif %}
+                                    </div>
 
+                                    <div class="inputcontainer" >
+                                        <div id="ajout_langue" style="display: none;">
+                                            <select style=" width:150px;height: 40px" id="NewLangue"  name="_Langue">
+                                                <option value="">--?-- </option>
+                                                <option value="Francais">Francais </option>
+                                                <option value="Anglais">Anglais </option>
+                                                <option value="Espagnol">Espagnol </option>
+                                                <option value="Arabe">Arabe </option>
+                                                <option value="Allemand">Allemand </option>
 
+                                            </select>
+                                            <select  style="height: 40px;width:250px;"  id="NewNiveau"  name="_Niveau">
+                                                <option value="">--?-- </option>
+                                                <option value="connaissance de base">connaissance de base </option>
+                                                <option value="bonne connaissance">bonne connaissance</option>
+                                                <option value="courant">courant </option>
+                                                <option value="langue maternelle">langue maternelle </option>
 
-
-
+                                            </select>
+                                            <img onclick="ajouterLangue(this.previousElementSibling.previousElementSibling)"  src="{{ asset('image/add_x30.png') }}"/><br>
                                         </div>
+                                    </div>
+                                {% endif %}
+                            </form>
+                        </div>
+                    {% endif %}
 
-                                        <div class="inputcontainer" >
-                                            <div id="ajout_hobbie" style="display: none;">
-                                                {% if Hobbies is defined %}
-                                                    <select style=" width:150px;height: 40px" id="Newhobbie"  name="_Hobbie">
-                                                        <option value="">--?-- </option>
-                                                        {% for hobbie in Hobbies %}
-                                                            <option value="{{ hobbie.getId }}">{{ hobbie.getHobbie }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                {% endif %}
-                                                <img  OnClick="ajouterHobbie(this.previousElementSibling)"  src="{{ asset('image/add_x30.png') }}"/><br>
-                                            </div>
-                                        </div>
-
-                                        <div class="inputcontainer">
-                                            <label class="list-group-item" style="height: 60px;" >Langues :</label><br>
-                                            {% if Langue is defined %}
-                                                {% set i = 0 %}
-                                                {% for lang in User.getLangue %}
-                                                    <div id="langue{{ i }}" >
-                                                        <input type="hidden" name="langue[{{ i }}]" value="{{ lang.getId }}" style="margin:10px 5px 10px 0" id="inputLangue" >
-                                                        <label class="champ form-control" style="width: 150px;" for="langue">{{lang.getLangue}}</label>
-                                                        <label class="champ form-control"  for="Niveau">{{lang.getNiveau}}</label>
-                                                        <img name="modification"  style="display: none" onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
-                                                    </div>
-                                                    {% set i= i +1 %}
-                                                {% endfor %}
-                                            {% endif %}
-                                        </div>
-
-                                        <div class="inputcontainer" >
-                                            <div id="ajout_langue" style="display: none;">
-                                                <select style=" width:150px;height: 40px" id="NewLangue"  name="_Langue">
-                                                    <option value="">--?-- </option>
-                                                    <option value="Francais">Francais </option>
-                                                    <option value="Anglais">Anglais </option>
-                                                    <option value="Espagnol">Espagnol </option>
-                                                    <option value="Arabe">Arabe </option>
-                                                    <option value="Allemand">Allemand </option>
-
-                                                </select>
-                                                <select  style="height: 40px;width:250px;"  id="NewNiveau"  name="_Niveau">
-                                                    <option value="">--?-- </option>
-                                                    <option value="connaissance de base">connaissance de base </option>
-                                                    <option value="bonne connaissance">bonne connaissance</option>
-                                                    <option value="courant">courant </option>
-                                                    <option value="langue maternelle">langue maternelle </option>
-
-                                                </select>
-                                                <img onclick="ajouterLangue(this.previousElementSibling.previousElementSibling)"  src="{{ asset('image/add_x30.png') }}"/><br>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-
-                            </div>
-                        {% endif %}
-                    </form>
                     {% if User.hasRole('ROLE_APPRENANT') %}
                         <div id="info_parents" class="list-group affichage" style="display:none">
 
@@ -1032,40 +1034,8 @@
 <script src="{{ asset('js/PopUp.js') }}"></script>
 <script language="JavaScript">
     $('#document').bind('change', function() {
-
-        if(this.files[0].size > 1000000){
-            document.getElementById('submitaddDocument').disabled = true;
-        }
-        else{
-            document.getElementById('submitaddDocument').disabled = false;
-        }
-
+        document.getElementById('submitaddDocument').disabled = (this.files[0].size > 1000000);
     });
-    function show_Information(div,buttonID){
-        //document.getElementById('info_user').style.display = 'none';
-        document.getElementById('info_Apprenant').style.display = 'none';
-        document.getElementById('info_parents').style.display = 'none';
-        document.getElementById('info_Exp').style.display = 'none';
-        document.getElementById('info_recom').style.display ='none';
-        document.getElementById('info_diplome').style.display ='none';
-        document.getElementById('info_doc').style.display ='none';
-        document.getElementById('info_candidature').style.display ='none';
-        document.getElementById('QCM_Affinite').style.display ='none';
-        document.getElementById('QCM_Test').style.display ='none';
-        document.getElementById(div).style.display ='block';
-        //document.getElementById("Button_donnees").className = "NavButtonInactive";
-        document.getElementById("Button_Apprenant").className = "NavButtonInactive";
-        document.getElementById("Button_candidature").className = "NavButtonInactive";
-        document.getElementById("Button_parents").className = "NavButtonInactive";
-        document.getElementById("Button_Exp").className = "NavButtonInactive";
-        document.getElementById("Button_recom").className = "NavButtonInactive";
-        document.getElementById("Button_diplome").className = "NavButtonInactive";
-        document.getElementById("Button_doc").className = "NavButtonInactive";
-        document.getElementById("Button_Affinite").className = "NavButtonInactive";
-        document.getElementById("Button_Test").className = "NavButtonInactive";
-        document.getElementById(buttonID).className += " NavButtonClicked";
-        sessionStorage.setItem('onglet_tier',buttonID);
-    }
     function expire(route) {
         $.ajax({
             type: 'get',
@@ -1289,7 +1259,6 @@
         champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
 
     }
-
     function supprimerFormation(route, champs){
         $.ajax({
             type: 'get',

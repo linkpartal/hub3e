@@ -99,7 +99,7 @@
 {% endif %}
 
 
-<div id="FicheApprenant" class="popup" >
+<div id="FicheApprenant" class="popup">
     <div onclick="document.getElementById('submitReception2345').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-7" style="background-color: white;padding: 0;border:20px solid white;display: block; margin-left: 20%; ">
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
@@ -358,10 +358,16 @@
                     {% if user.hasRole('ROLE_APPRENANT') %}
                         <div class="col-xs-12 Liste">
 
-
-                            <label style="width:40px;height: 20px;background:yellowgreen;color:white;font-family: Arial; font-style:normal ;font-size:small;position: absolute;left: 0;z-index: 6;margin: 10px 0 0 10px;">100</label>
-                            <div style="width:10px;height:140px;background:yellowgreen;color:white;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;"></div>
-
+                        {% if scores[loop.index0] < 50 %}
+                            <label style="width:40px;height: 20px;background:gray;color:white;font:14px Roboto;line-height: 20px; position: absolute;left: 0;z-index: 6;margin: 10px 0 0 10px;text-align: center;">{{ scores[loop.index0] }}</label>
+                            <div style="width:10px;height:140px;background:gray;color:white;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;"></div>
+                            {% elseif scores[loop.index0] < 75 %}
+                            <label style="width:40px;height: 20px;background:orangered;color:white;font:14px Roboto;line-height: 20px; position: absolute;left: 0;z-index: 6;margin: 10px 0 0 10px;text-align: center;">{{ scores[loop.index0] }}</label>
+                            <div style="width:10px;height:140px;background:orangered;color:white;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;"></div>
+                            {% elseif scores[loop.index0] >= 75 %}
+                                <label style="width:40px;height: 20px;background:yellowgreen;color:white;font:14px Roboto;line-height: 20px; position: absolute;text-align: center;left: 0;z-index: 6;margin: 10px 0 0 10px;">{{ scores[loop.index0] }}</label>
+                                <div style="width:10px;height:140px;background:yellowgreen;color:white;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;"></div>
+                            {% endif %}
                             <img class="col-xs-1" onclick="show('FicheMission')" src="data:image/jpg;base64,{{user.getPhotos}}" style="margin: 10px 0 0 10px;height: 140px;width: 140px;">
 
                             <div class="col-xs-4" style="margin-left: 10px;margin-top:10px">
@@ -430,7 +436,7 @@
         {% set i =0 %}
         {% for apprenant in users %}
             <div id="apprenant{{ i }}" class="infobox">
-                <label style="float: left;color:white; font:10px Roboto ;margin: 15px 0 0 5px; line-height: 9px;">98%</label><div class="col-xs-1 active" style="    margin: 15px 0 0 5px;" ></div>
+                <label style="float: left;color:white; font:10px Roboto ;margin: 15px 0 0 5px; line-height: 9px;">{{ scores[i] }}%</label><div class="col-xs-1 active" style="margin: 15px 0 0 5px;" ></div>
                 <div class="inbox" >
                     <div >
                         {% if apprenant.getPhotos %}
@@ -454,7 +460,6 @@
     {% else %}
         <div id="wrapper" class="infobox-wrapper">
             <div id="Societe_Info" class="infobox">
-                <label style="float: left;color:white; font:10px Roboto ;margin: 15px 0 0 5px; line-height: 9px;">98%</label><div class="col-xs-1 active" style="    margin: 15px 0 0 5px;" ></div>
                 <div class="inbox" >
                     <div >
                         <img src="data:image/jpg;base64,{{ mission.etablissement.tier.getLogo }}" style="height:100%;width: 100%;border-radius: 50%;">
@@ -470,8 +475,9 @@
     {% endif %}
 
 </div>
-<script src="//code.jquery.com/jquery.min.js"></script>
-<!--script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script-->
+
+<script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
+<!--<script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>-->
 <script type="text/javascript" src="http://maps.google.com/maps/api/js"></script>
 <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/src/infobox.js"></script>
 <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclustererplus/2.1.2/src/markerclusterer.js"></script>
@@ -636,10 +642,12 @@
         document.getElementById('apprenants_mission').style.visibility= 'hidden';
         {% endif %}
         document.getElementById('map').style.visibility= 'hidden';
-        for (var i=0;i<infoWindows.length;i++) {
+        document.getElementById(div).style.visibility= 'visible';
+
+        for(var i = 0; i < infoWindows.length ; i++){
             infoWindows[i].close();
         }
-        document.getElementById(div).style.visibility= 'visible';
+
         var end = false;
         var id = setInterval(frame, 5);
 
@@ -796,13 +804,24 @@
                     locations.push(results[0].geometry.location);
                     if((locations.length + adresse_manquante) == informations_users.length) {
                         var markers = [];
+                        var scores = {{ scores|json_encode|raw }};
                         for(var j = 0; j< locations.length; j++ )
                         {
+                            var icone = '';
+                            if(scores[j]<50){
+                                icone = '{{ asset('image/lowscore_marker.png') }}';
+                            }
+                            else if(scores[j]<75){
+                                icone = '{{ asset('image/mediumscore_marker.png') }}';
+                            }
+                            else if(scores[j] >=75){
+                                icone = '{{ asset('image/highscore_marker.png') }}';
+                            }
                             var marker = new google.maps.Marker({
                                 map: map,
                                 position: locations[j],
                                 visible: true,
-                                icon: '{{ asset('image/highscore_marker.png') }}',
+                                icon: icone,
                                 title: informations_users[j][0]
                             });
                             markers.push(marker);

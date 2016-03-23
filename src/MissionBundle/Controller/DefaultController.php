@@ -36,7 +36,13 @@ class DefaultController extends Controller
         $mission->setTelContact($request->get('_TelContact'));
         $mission->setEmailContact($request->get('_EmailContact'));
         $mission->setIntitule($request->get('_Intitule'));
-        $mission->setEmploi($request->get('_Emploi'));
+        $mission->setNbreposte($request->get('_Emploi'));
+        if($request->get('_Embauche') == '1'){
+            $mission->setEmploi(true);
+        }
+        else{
+            $mission->setEmploi(false);
+        }
 
         $em->persist($mission);
         $em->flush();
@@ -53,7 +59,14 @@ class DefaultController extends Controller
             $em->persist($diffuser);
             $em->flush();
         }
-        return $this->render('GenericBundle::ReloadParent.html.twig');
+        foreach($request->get('reponse') as $rep){
+            $reponse = $em->getRepository('GenericBundle:Reponsedef')->find($rep);
+            $reponse->addMission($mission);
+            $em->flush();
+
+        }
+        
+        return $this->render('GenericBundle::ReloadParent.html.twig',array('clear'=>false));
     }
 
     public function affichageMissionAction($id)
@@ -103,6 +116,7 @@ class DefaultController extends Controller
             }
 
         }
+        $scores = array();
 
         foreach($users as $apprenant)
         {
@@ -110,6 +124,17 @@ class DefaultController extends Controller
             {
                 $apprenant->setPhotos(base64_encode(stream_get_contents($apprenant->getPhotos())));
             }
+            $scoreapprenant = 0;
+
+
+            foreach($mission->getReponsedef() as $rep){
+                if(in_array($rep,$apprenant->getReponsedef()->toArray())){
+
+                    $scoreapprenant = $scoreapprenant + $rep->getScore();
+                }
+                else{$scoreapprenant++;}
+            }
+            array_push($scores,$scoreapprenant);
         }
 
         if($mission->getEtablissement()->getTier()->getLogo())
@@ -134,7 +159,8 @@ class DefaultController extends Controller
 
 
         // var_dump($mission);die;
-        return $this->render('MissionBundle::afficheMission.html.twig',array('mission'=>$mission,'users'=>$users,'formations_prop'=>$formations_prop,'informations_maps'=>$informations_maps,'tuteur_etablissement'=>$tuteurs));
+        return $this->render('MissionBundle::afficheMission.html.twig',array('mission'=>$mission,'users'=>$users,'formations_prop'=>$formations_prop,'informations_maps'=>$informations_maps,
+            'tuteur_etablissement'=>$tuteurs,'scores'=>$scores));
 
 
 

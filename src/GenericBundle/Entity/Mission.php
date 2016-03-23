@@ -143,6 +143,13 @@ class Mission
     /**
      * @var string
      *
+     * @ORM\Column(name="NbrePoste", type="integer", nullable=true)
+     */
+    private $nbreposte;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="Horaire", type="string", length=45, nullable=true)
      */
     private $horaire;
@@ -187,7 +194,7 @@ class Mission
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Reponsedef", mappedBy="mission")
+     * @ORM\ManyToMany(targetEntity="Reponsedef", mappedBy="missions")
      */
     private $reponsedef;
 
@@ -794,5 +801,29 @@ class Mission
     public function getReponsedef()
     {
         return $this->reponsedef;
+    }
+
+    /**
+     * Set nbreposte
+     *
+     * @param integer $nbreposte
+     *
+     * @return Mission
+     */
+    public function setNbreposte($nbreposte)
+    {
+        $this->nbreposte = $nbreposte;
+
+        return $this;
+    }
+
+    /**
+     * Get nbreposte
+     *
+     * @return integer
+     */
+    public function getNbreposte()
+    {
+        return $this->nbreposte;
     }
 }

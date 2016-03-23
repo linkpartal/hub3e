@@ -147,6 +147,8 @@ form .NavBarTier button
     border: none;
 }
 
+form .NavBarTier button.active
 {
-    height: 100%;font: 20px Roboto;color: #3d8ad4;text-transform: uppercase;background-color: white;border: none;
+    color: #3d8ad4 !important;
+    background-color: white !important;
 }

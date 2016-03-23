@@ -38,7 +38,7 @@ class Reponsedef
     /**
      * @var string
      *
-     * @ORM\Column(name="Score", type="string", length=45, nullable=true)
+     * @ORM\Column(name="Score", type="integer", length=45, nullable=true)
      */
 
     private $score;
@@ -156,7 +156,7 @@ class Reponsedef
     /**
      * Set score
      *
-     * @param string $score
+     * @param integer $score
      *
      * @return Reponsedef
      */
@@ -170,7 +170,7 @@ class Reponsedef
     /**
      * Get score
      *
-     * @return string
+     * @return integer
      */
     public function getScore()
     {

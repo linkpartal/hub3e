@@ -170,8 +170,8 @@
         <div class="col-xs-3" style="height: 100%">
             <button class="col-xs-3" title="Voir plus d'information" type="button" onclick="
                     informationApprenant('{{import.getPhotos}}','{{ import.getCivilite }}','{{ import.getNom }}','{{ import.getPrenom }}','{{ import.getEmail }}',
-                    '{{ import.getTelephone }}','{{ import.getInfo.getDateNaissance|date("d/m/Y") }}','{{ import.getInfo.getCpNaissance }}','{{ import.getInfo.getLieunaissance }}',
-                    '{{ import.getInfo.getAdresse }}');show('FicheApprenant');" style="height: 100%;background-color: transparent;border: none">
+                    '{{ import.getTelephone }}'{% if import.getInfo %},'{{ import.getInfo.getDateNaissance|date("d/m/Y") }}','{{ import.getInfo.getCpNaissance }}','{{ import.getInfo.getLieunaissance }}',
+                    '{{ import.getInfo.getAdresse }}'{% endif %});show('FicheApprenant');" style="height: 100%;background-color: transparent;border: none">
                 <span class="glyphicon glyphicon-search" style="color: #1C5AA5"></span>
             </button>
             {% if not import.erreur == null %}
@@ -195,7 +195,7 @@
     </div>
 {% endfor %}
 </div>
-<script src="//code.jquery.com/jquery.min.js"></script>
+<script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/paginate.js') }}"></script>
 <script language="javascript">

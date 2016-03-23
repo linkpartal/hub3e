@@ -166,12 +166,14 @@ class MiseEnRelationController extends Controller
         $em->persist($message);
         $em->flush();
 
+        //Creation de la postulation
         $postulation = new Postulation();
         $postulation->setUser($this->get('security.token_storage')->getToken()->getUser());
         $postulation->setMission($messagereponse->getMission());
         $postulation->setStatut(1);
         $em->persist($postulation);
         $em->flush();
+
 
         if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT')){
             $mail = \Swift_Message::newInstance()

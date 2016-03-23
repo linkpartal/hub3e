@@ -269,7 +269,7 @@ iframe{
 .transition(height .35s ease);
 }
 
-.NavButtonInactive {
+.NavButtonIframe {
     font:14px Roboto;
     width: 100%;
     height: 40px;
@@ -283,7 +283,7 @@ iframe{
     white-space: nowrap;
 
 }
-.NavButtonClicked {
+.NavButtonIframe.active {
     background-color: #1abc9c !important;
     color: black !important;
 

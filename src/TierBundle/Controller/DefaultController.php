@@ -100,24 +100,28 @@ class DefaultController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         // LicenceDef pour peupler le select de l'instanciation de la licence
         $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
-        // Recuperation des differents QCM
-        $qcmstest = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findBy(array('affinite'=>false));
-        $qcmsaffinite = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findBy(array('affinite'=>true));
+
         // Etablissement à afficher
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
 
-        // séparer les QCMs affinité deja associer à l'etablissement des autres
-        $QcmNotEtab = array();
-        foreach($qcmsaffinite as $item)
+        // chargement des images
+        if($etablissement->getTier()->getLogo() and !is_string($etablissement->getTier()->getLogo()))
         {
-            if(!in_array ($item,$etablissement->getQcmdef()->toArray()))
-            {
-                array_push($QcmNotEtab,$item);
-            }
+            $etablissement->getTier()->setLogo(base64_encode(stream_get_contents($etablissement->getTier()->getLogo())));
+        }
+        if($etablissement->getTier()->getFondecran() and !is_string($etablissement->getTier()->getFondecran()))
+        {
+            $etablissement->getTier()->setFondecran(base64_encode(stream_get_contents($etablissement->getTier()->getFondecran())));
         }
 
-        // Tout les tuteurs existant
-        $userMiss = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_TUTEUR');
+        // Recup des licences associer au tier de l'etablissement.
+        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier(),'suspendu'=>false ));
+
+        // Les utilisateurs de l'etablissement et du tier auquel il est lié
+        $users = array();
+        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
+        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
+
         //Suppression de la notification de l'utilisateur connecté concernant l'etablissement affiché
         if($etablissement->getTier()->getEcole())
         {
@@ -133,55 +137,82 @@ class DefaultController extends Controller
             $this->getDoctrine()->getEntityManager()->flush();
         }
 
-        // chargement des images
-        if($etablissement->getTier()->getLogo() and !is_string($etablissement->getTier()->getLogo()))
-        {
-            $etablissement->getTier()->setLogo(base64_encode(stream_get_contents($etablissement->getTier()->getLogo())));
-        }
-        if($etablissement->getTier()->getFondecran() and !is_string($etablissement->getTier()->getFondecran()))
-        {
-            $etablissement->getTier()->setFondecran(base64_encode(stream_get_contents($etablissement->getTier()->getFondecran())));
-        }
+        if($etablissement->getTier()->getEcole()){
+            // Recuperation des differents QCM
+            $qcmstest = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findBy(array('affinite'=>false));
+            $qcmsaffinite = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findBy(array('affinite'=>true));
 
-        // Recup des licences associer au tier de l'etablissement.
-        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier(),'suspendu'=>false ));
-
-
-        // les formation de l'etablissement
-        $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$etablissement ));
-
-
-
-        $hobbie = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->findAll();
-
-        // Les utilisateurs de l'etablissement et du tier auquel il est lié
-        $users = array();
-        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
-        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
-
-        // les tiers pour peuplé l'association d'ecole
-        $alltiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAllExcept($etablissement->getTier()->getId());
-        $tiers = array();
-        foreach ( $alltiers as $tier)
-        {
-            if(!in_array($tier,$etablissement->getTier()->getTier1()->toArray()))
+            // séparer les QCMs affinité deja associer à l'etablissement des autres
+            $QcmNotEtab = array();
+            foreach($qcmsaffinite as $item)
             {
-                array_push($tiers,$tier);
+                if(!in_array ($item,$etablissement->getQcmdef()->toArray()))
+                {
+                    array_push($QcmNotEtab,$item);
+                }
             }
+
+            // les formation de l'etablissement
+            $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$etablissement ));
+
+            //remplir select hobby pour l'ajout apprenant
+            $hobbie = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->findAll();
+
+            // les tiers pour peuplé l'association d'ecole
+            $alltiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAllExcept($etablissement->getTier()->getId());
+            $tiers = array();
+            foreach ( $alltiers as $tier)
+            {
+                if(!in_array($tier,$etablissement->getTier()->getTier1()->toArray()))
+                {
+                    array_push($tiers,$tier);
+                }
+            }
+
+            //
+            $etablisementlier=array();
+            foreach ($etablissement->getTier()->getTier1() as $value ){
+                array_push($etablisementlier ,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$value)));
+            }
+            return $this->render('TierBundle::iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,'tiers'=>$tiers,'users'=>$users,
+                'formations'=>$formation,'hobbies' =>$hobbie,'libs'=>$licences,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab,'etablissementslier'=>$etablisementlier,
+                'formation_mission'=>$this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll()));
+        }
+        else{
+            // missions non suspendu
+            $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('datecreation' => 'DESC'));
+
+            // QCM pour la création des mission
+            $qcm = null;
+            $questions = null;
+            $reponses = null;
+            if(!$etablissement->getTier()->getEcole())
+            {
+                $qcm = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findOneBy(array('nom'=>'QCMparDéfault'));
+                $questions = $this->getDoctrine()->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef' => $qcm));
+                usort($questions, array('\GenericBundle\Entity\Questiondef', 'sort_questions_by_order'));
+                $reponses = array();
+
+                foreach ($questions as $keyqst => $qst) {
+                    $reps = $this->getDoctrine()->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef' => $qst));
+                    usort($reps, array('\GenericBundle\Entity\Reponsedef', 'sort_reponses_by_order'));
+                    $reponses[$keyqst] = $reps;
+                }
+            }
+            return $this->render('TierBundle::iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,'users'=>$users,
+                'libs'=>$licences, 'missions'=>$missions ,'QCMs' => $qcm, 'Questions' => $questions,
+                'reponses' => $reponses,'formation_mission'=>$this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll()));
         }
 
-        $etablisementlier=array();
-        foreach ($etablissement->getTier()->getTier1() as $value ){
-            array_push($etablisementlier ,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$value)));
-        }
+
+
         //$licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier(),'suspendu'=>false ));
 
-        // missions non suspendu
-        $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('datecreation' => 'DESC'));
 
-        return $this->render('TierBundle::iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,'tiers'=>$tiers,'users'=>$users,'formations'=>$formation,'hobbies' =>$hobbie,
-            'libs'=>$licences, 'missions'=>$missions ,'usermis'=>$userMiss,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab,'etablissementslier'=>$etablisementlier,
-            'formation_mission'=>$this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll()));
+
+
+
+
     }
 
     public function supprimeretabAction($id)
@@ -199,7 +230,7 @@ class DefaultController extends Controller
             $em->flush();
         }
 
-        return $this->render('GenericBundle::ReloadParent.html.twig');
+        return $this->render('GenericBundle::ReloadParent.html.twig',array('clear'=>true));
     }
 
     public function ecolesassociatedAction($id, Request $request)

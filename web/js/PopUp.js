@@ -48,9 +48,11 @@ function NaviguerOnglet(DivOnglet,OngletToShow,button){
     if(button){
         var buttons = button.parentElement.getElementsByTagName("button");
         for(var i = 0;i <buttons.length; i++){
-            buttons[i].setAttribute("class",'NavButtonInactive');
+            buttons[i].className = buttons[i].className.replace("active","");
         }
-        button.className += " NavButtonClicked";
+        button.className += " active";
+
+        if(stringWith(button.className,'NavButtonIframe')){sessionStorage.setItem('onglet_tier',button.getAttribute('id'));}
     }
 
     var divs = document.getElementById(DivOnglet).children;
@@ -69,9 +71,5 @@ function NaviguerOnglet(DivOnglet,OngletToShow,button){
             divs[i].style.display = 'none';
         }
         document.getElementById(OngletToShow).style.display = 'block';
-
     }
-
-
-
 }
