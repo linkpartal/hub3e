@@ -51,6 +51,7 @@ function NaviguerOnglet(DivOnglet,OngletToShow,button){
             buttons[i].setAttribute("class",'NavButtonInactive');
         }
         button.className += " NavButtonClicked";
+        sessionStorage.setItem('onglet_tier',button);
     }
 
     var divs = document.getElementById(DivOnglet).children;

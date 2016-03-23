@@ -355,7 +355,8 @@ class DefaultController extends Controller
         $InfoComp->setDatenaissance(date_create($request->get('_Datenaissance')) );
         $InfoComp->setAdresse($request->get('_Adresse').' '.$request->get('_Ville'));
         $InfoComp->setCp($request->get('_Codepostal'));
-        $InfoComp->setInsee($request->get('_NINSEE'));
+        $InfoComp->setCpnaissance($request->get('_Cpnaissance'));
+        $InfoComp->setLieunaissance($request->get('_Lieunaissance'));
         $InfoComp->setDatecreation(date_create());
 
         $em->flush();
@@ -370,18 +371,20 @@ class DefaultController extends Controller
         //
         // _Photos
         //$apprenant->setPhotos($request->get('_Photos'));
-        if($_FILES && $_FILES['_Photos']['size'] >0)
+       /* if($_FILES && $_FILES['_Photos']['size'] >0)
         {
             $apprenant->setPhotos(file_get_contents($_FILES['_Photos']['tmp_name']));
 
-        }
+        }*/
+        $apprenant->setCivilite(($request->get('_Civilite')));
         $apprenant->setNom($request->get('_Nom'));
         $apprenant->setPrenom($request->get('_Prenom'));
-        $apprenant->setCivilite($request->get('_Civilite'));
         $apprenant->setEmail($request->get('_Email'));
         $apprenant->setTelephone($request->get('_Telephone'));
         $apprenant->setInfo($InfoComp);
-        // var_dump($apprenant);die();
+
+
+      //var_dump($apprenant);die();
 
 
 
@@ -389,82 +392,12 @@ class DefaultController extends Controller
 
         $em->flush();
 
-        if($request->get('_Nomresp'))
+
+
+
+        if($request->get('formation'))
         {
-            for($i = 0; $i< count($request->get('_Nomresp'));$i++) {
-                $responsable = new Parents();
-                $responsable->setCivilite($request->get('_Civiliteresp')[$i]);
-                $responsable->setNom($request->get('_Nomresp')[$i]);
-                $responsable->setPrenom($request->get('_Prenomresp')[$i]);
-                $responsable->setAdresse($request->get('_Adresseresp')[$i].' '.$request->get('_CodePostaleresp')[$i].' '.$request->get('_Villeresp')[$i]);
-                $responsable->setMetier($request->get('_Metierresp')[$i]);
-                $responsable->setEmail($request->get('_Emailresp')[$i]);
-                $responsable->setProfession($request->get('_Profession')[$i]);
-                $responsable->setTelephone($request->get('_Telephoneresp')[$i]);
-                $responsable->setImportCandidat($apprenant);
-                $em->persist($responsable);
-                $em->flush();
-            }
-        }
-
-        if($request->get('_Libelle'))
-        {
-            for($i = 0; $i< count($request->get('_Libelle'));$i++) {
-                $diplome = new Diplome();
-                $diplome->setLibelle($request->get('_Libelle')[$i]);
-                $diplome->setObtention($request->get('_Obtention')[$i]);
-                $diplome->setEcole($request->get('_Ecole')[$i]);
-                $diplome->setImportCandidat($apprenant);
-                $em->persist($diplome);
-                $em->flush();
-            }
-        }
-
-        if($request->get('_Nomsociete'))
-        {
-            for($i = 0; $i< count($request->get('_Nomsociete'));$i++) {
-                $experience = new Experience();
-                $experience->setNomsociete($request->get('_Nomsociete')[$i]);
-                $experience->setActivite($request->get('_Activite')[$i]);
-                $experience->setLieu($request->get('_Lieu')[$i]);
-                $experience->setPoste($request->get('_Poste')[$i]);
-                $experience->setNbreannee($request->get('_Nbreannee')[$i]);
-                $experience->setDescription($request->get('_Descriptionexp')[$i]);
-                $experience->setImportCandidat($apprenant);
-                $em->persist($experience);
-                $em->flush();
-            }
-        }
-
-        if($request->get('_Nomrec'))
-        {
-            for($i = 0; $i< count($request->get('_Nomrec'));$i++) {
-                $recommandation = new Recommandation();
-                $recommandation->setNom($request->get('_Nomrec')[$i].' '.$request->get('_Prenomrec')[$i]);
-                $recommandation->setFonction($request->get('_Fonctionrec')[$i]);
-                $recommandation->setTelephone($request->get('_Telephonerec')[$i]);
-                $recommandation->setEmail($request->get('_Emailrec')[$i]);
-                $recommandation->setText($request->get('_Text')[$i]);
-                $recommandation->setImportCandidat($apprenant);
-                $em->persist($recommandation);
-                $em->flush();
-            }
-        }
-
-        if($request->get('_Langue'))
-        {
-
-            for($i = 0; $i< count($request->get('_Langue'));$i++) {
-                $langue = $em->getRepository('GenericBundle:Langue')->findOneBy(array('langue'=>$request->get('_Langue')[$i],'niveau'=>$request->get('_Niveau')[$i]));
-                $langue->addImportCandidat($apprenant);
-                $em->flush();
-            }
-
-        }
-
-        if($request->get('formations'))
-        {
-            foreach($request->get('formations') as $idFormation){
+            foreach($request->get('formation') as $idFormation){
                 $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->find($idFormation);
                 $candidature = new Candidature();
                 $candidature->setFormation($formation);
@@ -474,30 +407,27 @@ class DefaultController extends Controller
             }
         }
 
-        if($request->get('hobbies')) {
-            foreach ($request->get('hobbies') as $idHobbies) {
-                $hobby = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->find($idHobbies);
-                $hobby->addImportCandidat($apprenant);
-                $em->flush();
+
+
+        if($_FILES['_Document'])
+        {
+            for($i = 0; $i < count($_FILES['_Document']['type']); $i++)
+            {
+                if($_FILES['_Document']['size'][$i] > 0){
+                    $document = new Document();
+                    $document->setType($request->get('_Type')[$i]);
+                    $document->setExtension($_FILES['_Document']['type'][$i]);
+                    $document->setName($_FILES['_Document']['name'][$i]);
+                    $document->setTaille($_FILES['_Document']['size'][$i]);
+                    $document->setDocument(file_get_contents($_FILES['_Document']['tmp_name'][$i]));
+                    $document->setImportCandidat($apprenant);
+                    $em->persist($document);
+                    $em->flush();
+                }
+
             }
         }
 
-        if($request->get('_Type'))
-        {
-            for($i = 0; $i < count($request->get('_Type')); $i++)
-            {
-                $document = new Document();
-                $document->setType($request->get('_Type')[$i]);
-                $document->setExtension($_FILES['_Document']['type'][$i]);
-                $document->setName($_FILES['_Document']['name'][$i]);
-                $document->setTaille($_FILES['_Document']['size'][$i]);
-                $document->setDocument(file_get_contents($_FILES['_Document']['tmp_name'][$i]));
-                $document->setImportCandidat($apprenant);
-                $em->persist($document);
-                $em->flush();
-            }
-        }
-        // var_dump($apprenant);die;
 
 
 
