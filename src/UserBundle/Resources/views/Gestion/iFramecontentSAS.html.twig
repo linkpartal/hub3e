@@ -46,7 +46,7 @@
                     <form id="formaddparent" class="formulaire" action="{{ path("parent_addedSAS") }}" onsubmit="document.getElementById('submitaddparent').disabled=true" method="post" enctype="multipart/form-data" method="post" >
                         <input type="hidden" id="id" name="_idUser" value="{{ ImportCandidat.getId }}">
 
-                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Ajouter responsable</Label>
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px Roboto normal">Ajouter responsable</Label>
                         <div class="div_form" style="">
 
                             <div class="col-xs-10 input-colonne">
@@ -115,7 +115,7 @@
                     <form id="formaddExperience" class="formulaire" action="{{ path("experience_addedSAS") }}" onsubmit="document.getElementById('submitaddExperience').disabled=true"  method="post" enctype="multipart/form-data">
                         <input type="hidden" id="id" name="_idUser" value="{{ ImportCandidat.getId }}">
 
-                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Expérience de l'apprenant</Label>
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px Roboto normal">Expérience de l'apprenant</Label>
                         <div class="div_form" style="">
                             <div class="col-xs-10 input-colonne">
                                 <label id="startTimeLabel" visible="false"></label>
@@ -160,7 +160,7 @@
 
                         <input type="hidden" id="id" name="_idUser" value="{{ ImportCandidat.getId }}">
 
-                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Recommandation</Label>
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px Roboto normal">Recommandation</Label>
                         <div class="div_form" style="">
 
                             <div class="col-xs-6 input-colonne">
@@ -203,7 +203,7 @@
 
                         <input type="hidden" id="id" name="_idUser" value="{{ ImportCandidat.getId }}">
 
-                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Diplome</Label>
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px Roboto normal">Diplome</Label>
                         <div class="div_form" style="">
 
 
@@ -244,7 +244,7 @@
 
                         <input type="hidden" id="id" name="_idUser" value="{{ ImportCandidat.getId }}">
 
-                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Document</Label>
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px Roboto normal">Document</Label>
                         <div class="div_form" style="">
 
 
@@ -282,7 +282,7 @@
 
                         <input type="hidden" id="id" name="_idUser" value="{{ ImportCandidat.getId }}">
 
-                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Candidature</Label>
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px Roboto normal">Candidature</Label>
                         <div class="div_form" style="">
 
 
@@ -315,14 +315,14 @@
                 <div class="col-xs-12" style="height: 46px;">
                     <div style="height: 35px; width: 100%; padding: 15px 0 0 15px;display:flex;">
 
-                        <button id="Button_donnees" title="Données Utilisateur" onclick="show_Information('info_user','Button_donnees')" type="button"  style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Données Utilisateur</button>
-                        <button id="Button_Apprenant"  title="Details de l'Apprenant" onclick="show_Information('info_Apprenant','Button_Apprenant')" type="button" style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Details de l'Apprenant</button>
-                        <button id="Button_candidature"title="Formation de l'Apprenant" onclick="show_Information('info_candidature','Button_candidature')" style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Formation de l'Apprenant </button>
-                        <button id="Button_parents" title="Responsables" onclick="show_Information('info_parents','Button_parents')"  style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Responsables </button>
-                        <button id="Button_Exp" title="Expériences" onclick="show_Information('info_Exp','Button_Exp')"  style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Expériences </button>
-                        <button id="Button_recom" title="Recommandations" onclick="show_Information('info_recom','Button_recom')"  style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Recommandations </button>
-                        <button id="Button_diplome" title="Diplomes" onclick="show_Information('info_diplome','Button_diplome')"   style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Diplomes </button>
-                        <button id="Button_doc" title="Documents" onclick="show_Information('info_doc','Button_doc')"  style="font:16px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Documents </button>
+                        <button id="Button_donnees" title="Données Utilisateur" onclick="show_Information('info_user','Button_donnees')" type="button"  style="font:16px Roboto;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Données Utilisateur</button>
+                        <button id="Button_Apprenant"  title="Details de l'Apprenant" onclick="show_Information('info_Apprenant','Button_Apprenant')" type="button" style="font:16px Roboto;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Details de l'Apprenant</button>
+                        <button id="Button_candidature"title="Formation de l'Apprenant" onclick="show_Information('info_candidature','Button_candidature')" style="font:16px Roboto;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Formation de l'Apprenant </button>
+                        <button id="Button_parents" title="Responsables" onclick="show_Information('info_parents','Button_parents')"  style="font:16px Roboto;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Responsables </button>
+                        <button id="Button_Exp" title="Expériences" onclick="show_Information('info_Exp','Button_Exp')"  style="font:16px Roboto;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Expériences </button>
+                        <button id="Button_recom" title="Recommandations" onclick="show_Information('info_recom','Button_recom')"  style="font:16px Roboto;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Recommandations </button>
+                        <button id="Button_diplome" title="Diplomes" onclick="show_Information('info_diplome','Button_diplome')"   style="font:16px Roboto;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Diplomes </button>
+                        <button id="Button_doc" title="Documents" onclick="show_Information('info_doc','Button_doc')"  style="font:16px Roboto;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;overflow: hidden;text-overflow: ellipsis">Documents </button>
 
                             <!--select title="" id="select_info"  style="color:white;">
                                 <option value="info_user" style="color:black;">Données Utilisateur</option>

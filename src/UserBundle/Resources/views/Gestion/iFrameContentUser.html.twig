@@ -45,7 +45,7 @@
                     <form id="formaddparent" class="formulaire" action="{{ path("parent_added") }}" onsubmit="document.getElementById('submitaddparent').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data" method="post" >
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
 
-                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Ajouter responsable</Label>
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px Roboto normal">Ajouter responsable</Label>
                         <div class="div_form" style="">
 
                             <div class="col-xs-10 input-colonne">
@@ -114,7 +114,7 @@
                     <form id="formaddExperience" class="formulaire" action="{{ path("experience_added") }}" onsubmit="document.getElementById('submitaddExperience').disabled=true;ShowWaiter();"  method="post" enctype="multipart/form-data">
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
 
-                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Expérience de l'apprenant</Label>
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px Roboto normal">Expérience de l'apprenant</Label>
                         <div class="div_form" style="">
                             <div class="col-xs-10 input-colonne">
                                 <label id="startTimeLabel" visible="false"></label>
@@ -159,7 +159,7 @@
 
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
 
-                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Recommandation</Label>
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px Roboto normal">Recommandation</Label>
                         <div class="div_form" style="">
 
                             <div class="col-xs-6 input-colonne">
@@ -202,7 +202,7 @@
 
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
 
-                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Diplome</Label>
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px Roboto normal">Diplome</Label>
                         <div class="div_form" style="">
 
 
@@ -243,7 +243,7 @@
 
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
 
-                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal">Document</Label>
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px Roboto normal">Document</Label>
                         <div class="div_form" style="">
 
 
@@ -280,7 +280,7 @@
 
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
 
-                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px arial normal;"> Formation </Label>
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px Roboto normal;"> Formation </Label>
                         <div class="div_form" style="">
 
 
@@ -340,7 +340,7 @@
                            </select>-->
 
                         {% else  %}
-                            <Label  value="info_user" style="font:20px arial;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;text-align:left;">Données Utilisateur</Label>
+                            <Label  value="info_user" style="font:20px Roboto;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;text-align:left;">Données Utilisateur</Label>
                         {% endif %}
                     </div>
                 </div>
@@ -378,7 +378,7 @@
 
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="Nom">Nom :</label>
-                                    <input value="{{User.getNom}}" type="text" class="champ form-control" id="Nom" name="_Nom" maxlength="45" readonly>
+                                    <input value="{{User.getNom}}" type="text" class="champ form-control" id="Nom" name="_Nom" maxlength="45" readonly >
                                 </div>
 
                                 <div class="inputcontainer">
@@ -580,7 +580,7 @@
 
                                     <div class="inputcontainer">
                                         <label class="list-group-item" style="height: 60px;" for="Facebook">Facebook      :</label>
-                                        <input value="{{User.getInfo.getFacebook}}" type="url" class="champ form-control" id="Facebook" name="_Facebook" maxlength="45" readonly>
+                                        <input value="{{User.getInfo.getFacebook}}" type="url" class="champ form-control" id="Facebook" name="_Facebook" maxlength="45" readonly >
                                         <label class="list-group-item" style="height: 60px;" for="Linkedin">Linkedin      : </label>
                                         <input value="{{User.getInfo.getLinkedin}}" type="url" class="champ form-control" id="Linkedin" name="_Linkedin" maxlength="45" readonly>
 

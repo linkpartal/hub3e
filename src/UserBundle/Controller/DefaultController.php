@@ -355,6 +355,10 @@ class DefaultController extends Controller
         $InfoComp->setCp($request->get('_Codepostal'));
         $InfoComp->setCpnaissance($request->get('_Cpnaissance'));
         $InfoComp->setLieunaissance($request->get('_Lieunaissance'));
+        $InfoComp->setPortable($request->get('_Portable'));
+        $InfoComp->setPermis($request->get('_Permis'));
+        $InfoComp->setHandicape($request->get('_handicap'));
+        $InfoComp->setEntrepreneur($request->get('_entrepreneur'));
         $InfoComp->setDatecreation(date_create());
         $em->persist($InfoComp);
         $em->flush();
