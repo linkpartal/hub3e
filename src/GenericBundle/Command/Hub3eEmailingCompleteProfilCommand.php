@@ -26,7 +26,7 @@ class Hub3eEmailingCompleteProfilCommand extends ContainerAwareCommand
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $apprenants = $em->getRepository('GenericBundle:User')->findByRole('ROLE_APPRENANT');
         foreach($apprenants as $apprenant){
-            if(!$apprenant->getInfo()->getProfilcomplet()){
+            if(!$apprenant->getInfo()->getProfilcomplet() == 3){
                 if($apprenant->getEtablissement())
                 {
                     foreach($apprenant->getEtablissement()->getQcmdef() as $qcmdef){
@@ -80,7 +80,6 @@ class Hub3eEmailingCompleteProfilCommand extends ContainerAwareCommand
                         }
                     }
                 }
-                $apprenant->getInfo()->setProfilcomplet(true);
                 $em->flush();
                 a:
             }

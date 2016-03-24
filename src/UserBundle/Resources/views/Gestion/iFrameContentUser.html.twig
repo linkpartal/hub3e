@@ -2,7 +2,6 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/ajout.css') }}" />
@@ -1000,11 +999,11 @@
                  style="height: 100%;">
                 <div class="list-group"
                      style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
-                    {% if not User.isExpired %}
+                    {% if not User.isExpired and not User.hasRole('ROLE_APPRENANT') %}
                         <button onclick="expire('{{ path('expired',{'id':User.getId}) }}')" id="expired" type="button" class="list-group-item rightMenu" style="background-color: #94C400">
                             <div class="col-xs-12" style="display: inline-table;color: white;height: 46px;margin-top:10px;">Activer</div>
                         </button>
-                    {% else %}
+                    {% elseif not User.hasRole('ROLE_APPRENANT') %}
                         <button onclick="expire('{{ path('expired',{'id':User.getId}) }}')" id="expired" type="button" class="list-group-item rightMenu" style="background-color: red">
                             <div class="col-xs-12" style="display: inline-table;color: white;height: 46px;margin-top:10px;">Désactiver</div>
                         </button>
@@ -1015,20 +1014,30 @@
                     </button>
 
                     {% if is_granted('ROLE_ADMINSOC') or is_granted('ROLE_ADMINECOLE') %}
-                    <button onclick="if(confirm('Voulez-vous Supprimer cet utilisateur ?')){post('{{ path('supprimerUtilisateur',{'id': User.getId }) }}',true)}" type="button" class="list-group-item rightMenu" >
-                        <div class="col-xs-12" >Supprimer l'utilisateur</div>
+                        <button onclick="if(confirm('Voulez-vous Supprimer cet utilisateur ?')){post('{{ path('supprimerUtilisateur',{'id': User.getId }) }}',true)}" type="button" class="list-group-item rightMenu" >
+                            <div class="col-xs-12" >Supprimer l'utilisateur</div>
 
-                    </button>
-                    {% if User.hasRole('ROLE_APPRENANT') %}
-                    <button  onclick="CompleterProfil();"  type="button" class="list-group-item rightMenu" >
-                        <div class="col-xs-12" >Ordre enrichit par étudiant</div>
-                    </button>
-                    <button type="button" class="list-group-item rightMenu ">
-                        <div class="col-xs-12">Statut en cours</div>
-                    </button>
-                    <button type="button" class="list-group-item rightMenu">
-                        <div class="col-xs-12">Historique</div>
-                    </button>
+                        </button>
+                        {% if User.hasRole('ROLE_APPRENANT') %}
+                            <button  onclick="CompleterProfil();"  type="button" class="list-group-item rightMenu" >
+                                <div class="col-xs-12" >Ordre enrichit par étudiant</div>
+                            </button>
+                            <div class="col-xs-12 btn-group">
+                            <button id="STATUT_APPRENANT" type="button" class="col-xs-12 rightMenu dropdown-toggle" style="{% if User.info and User.info.profilcomplet == 3 %}background: #94C400;
+                                    {% elseif User.info and User.info.profilcomplet == 2 %}background: red;{% elseif User.info and User.info.profilcomplet == 1 %}background: #2A76CC;
+                                    {% else %}background: orangered;{% endif %}color: #0f0f0f;"
+                                    data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">Statut en cours</button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li><button onclick="ChangerStatut(2)" style="background: transparent;border:none;width:100%">Refuser</button></li>
+                                <li><button onclick="ChangerStatut(3)" style="background: transparent;border:none;width:100%">Accepter</button></li>
+                            </ul>
+                            </div>
+
+
+                            <button type="button" class="list-group-item rightMenu">
+                                <div class="col-xs-12">Historique</div>
+                            </button>
                         {% endif %}
                     {% endif %}
                 </div>
@@ -1071,7 +1080,7 @@
         if(refresh)
         {
             $.ajax({
-                type: 'get',
+                type: 'post',
                 url: path,
                 error: function () {
                     alert('Une erreur s\'est produite');
@@ -1177,7 +1186,27 @@
     {% if  User.getCivilite =='' or User.getNom=='' or User.getPrenom=='' or User.getPhotos=='' or User.getTelephone=='' or User.getUserName=='' or User.getEmail=='' or User.getInfo.getDatenaissance|date('Y-m-d')=='' or User.getInfo.getCpnaissance=='' or User.getInfo.getLieunaissance=='' or User.getInfo.getAdresse=='' or User.getInfo.getFacebook=='' or User.getInfo.getLinkedin=='' or User.getInfo.getMobilite=='' or User.getInfo.getFratrie==''   %}
     alert('Onglet apprenant manquant ou à remplir');
     {% endif %}
-
+    function ChangerStatut(statut){
+        var path = '{{ path('ChangerStatutApprenant',{'idUser':User.id,'statut':'STATUT'}) }}';
+        path = path.replace('STATUT',statut);
+        $.ajax({
+            type: 'post',
+            url: path,
+            error: function () {
+                alert('Une erreur s\'est produite');
+            },
+            success: function (data) {
+                if(data == 1 && statut == 2){
+                    document.getElementById('STATUT_APPRENANT').style.backgroundColor = "red";
+                    window.parent.document.getElementById('activeUser{{ User.id }}').style.backgroundColor = "red";
+                }
+                else if(data == 1 && statut == 3){
+                    document.getElementById('STATUT_APPRENANT').style.backgroundColor = "#94C400";
+                    window.parent.document.getElementById('activeUser{{ User.id }}').style.backgroundColor = "#94C400";
+                }
+            }
+        });
+    }
 
     function supprimerLangue(div){
 
@@ -1388,8 +1417,6 @@
 
 
     }
-
-
     function showFermer(){
         document.getElementById('addExperience').style.display="none";
         document.getElementById('addparent').style.display="none";

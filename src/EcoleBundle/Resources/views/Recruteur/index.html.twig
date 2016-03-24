@@ -502,9 +502,9 @@
                                      style="height: 31px; text-align: left;">
                                     <div class="col-xs-9 part" title="{{ s.getVille }}">{{ s.getVille }}</div>
                                     {% if s.getActive %}
-                                        <div class="col-xs-1 active" id="active{{ s.getId }}"></div>
+                                        <div class="col-xs-1 active" id="activeSociete{{ s.getId }}"></div>
                                     {% else %}
-                                        <div class="col-xs-1 inactive" id="active{{ s.getId }}"></div>
+                                        <div class="col-xs-1 inactive" id="activeSociete{{ s.getId }}"></div>
                                     {% endif %}
                                 </div>
                             </button>
@@ -539,16 +539,20 @@
                     {% if apprenants is defined %}
                         {% for u in apprenants %}
                             <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId} ) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
-                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.getUsername }},{{ u.prenom }},{{ u.email }},{% if u.tier %}{{ u.tier.siren }}{% elseif u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
+                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.getUsername }},{{ u.prenom }},{{ u.email }},{% if u.info %}{{ u.info.adresse }},{{ u.info.cp }},{{ u.info.insee }}{% endif %},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
                                 <div style="display: none;"></div>
                                 <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
                                     <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
-                                    {% if not u.isExpired %}
-                                        <div class="col-xs-1 active" id="active{{ u.getId }}"></div>
+                                    {% if u.info.profilcomplet == 3 %}
+                                        <div class="col-xs-1 active" id="activeUser{{ u.getId }}"></div>
+                                    {% elseif u.info.profilcomplet == 2 %}
+                                        <div class="col-xs-1 inactive" id="activeUser{{ u.getId }}"></div>
+                                    {% elseif u.info.profilcomplet == 1 %}
+                                        <div class="col-xs-1" style="background: #2A76CC;height:9px;border-radius: 100%;margin: 3px 0;width: 9px;float: right;" id="activeUser{{ u.getId }}"></div>
                                     {% else %}
-                                        <div class="col-xs-1 inactive" id="active{{ u.getId }}"></div>
+                                        <div class="col-xs-1" style="background: orangered;height:9px;border-radius: 100%;margin: 3px 0;width: 9px;float: right;" id="activeUser{{ u.getId }}"></div>
                                     {% endif %}
                                 </div>
                             </button>

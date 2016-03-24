@@ -88,7 +88,7 @@ class DefaultController extends Controller
             {
                 foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
                 {
-                    if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet()){
+                    if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3){
                         array_push($users,$candidature->getUser());
                     }
 
@@ -99,7 +99,7 @@ class DefaultController extends Controller
                 if($ecoleconnecte->hasRole('ROLE_ADMINECOLE') and $ecoleconnecte->getTier() == $diffusion->getFormation()->getEtablissement()->getTier()){
                     foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
                     {
-                        if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet()){
+                        if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3){
                             array_push($users,$candidature->getUser());
                         }
                     }
@@ -108,7 +108,7 @@ class DefaultController extends Controller
                 {
                     foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
                     {
-                        if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet()){
+                        if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3){
                             array_push($users,$candidature->getUser());
                         }
                     }

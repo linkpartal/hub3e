@@ -208,3 +208,7 @@ Mise_En_Relation:
 CompleterProfil:
     path: /CompleterProfil/IdUser={IdUser}
     defaults: {_controller: UserBundle:Default:CompleterProfil}
+
+ChangerStatutApprenant:
+    path: /ChangerStatutApprenant/IdUser={idUser}/statut={statut}
+    defaults: {_controller: UserBundle:Default:ChangerStatutApprenant}
