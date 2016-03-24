@@ -418,7 +418,8 @@
 
                                         <input placeholder="Prenom" class="input" type="text" id="Prenom" name="_Prenom" maxlength="45" required >
                                         <input placeholder="Adresse email" class="input" type="text" id="Email" name="_Email" maxlength="45" required >
-                                        <input placeholder="Téléphone portable" class="input" type="text" id="Telephone" name="_Telephone" maxlength="45" required >
+                                        <input placeholder="Téléphone portable" class="input" type="text" id="Portable" name="_Portable" maxlength="45" required >
+                                        <input placeholder="Téléphone Fix" class="input" type="text" id="Telephone" name="_Telephone" maxlength="45" required >
                                         <input placeholder="Adresse" class="input" type="text" id="Adresse" name="_Adresse" maxlength="45" required >
 
                                         <div class="col-xs-6 input-colonne" >
@@ -436,8 +437,19 @@
                                         <input placeholder="diplome obtenus" class="input" type="text" maxlength="45"  >
                                         <input placeholder="Format.ou en cours" class="input" type="text" >
                                         <div class="col-xs-12">
-                                            <input type="radio" name="" value="1"><label>HANDICAP</label>
-                                            <input type="radio" name="" value="0"><label>Entrepreneurs</label>
+                                            <input type="checkbox" name="_handicap" ><label>HANDICAP</label>
+                                            <input type="checkbox" name="_entrepreneur" ><label>Entrepreneurs</label>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <label>Permis</label>
+                                            <input type="radio" name="_Permis" value="1" ><label>oui</label>
+                                            <input type="radio" name="_Permis" value="-1"><label>non</label>
+                                            <input type="radio" name="_Permis" value="0"><label>en cours</label>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <label>Véhicule</label>
+                                            <input type="radio" name=""  value="1"><label>oui</label>
+                                            <input type="radio" name="" value="0" ><label>non</label>
                                         </div>
                                     </div>
 
@@ -629,16 +641,30 @@
                                 <input value="{{ etablissement.getSite }}" type="url" class="champ form-control" id="Site" name="_Site" maxlength="45" readonly>
                             </div>
                             <div class="inputcontainer">
-                                <label class="list-group-item" style="height: 40px;" for="Logo">Logo : <img alt="Logo" style="height:40px" src="data:image/jpg;base64,{{ etablissement.getTier.getLogo }}"/> </label>
 
-                                <input accept="image/*" type="file" class="champ form-control" id="Logo" name="_Logo" style="display: none !important;">
+
+                                {% if  etablissement.getTier.getLogo  %}
+                                    <label class="list-group-item" style="height: 40px;" for="Logo">Logo :
+                                        <img alt="Logo" style="height:40px" src="data:image/jpg;base64,{{ etablissement.getTier.getLogo }}"/> </label>
+                                    <input accept="image/*" type="file" class="champ form-control" id="Logo" name="_Logo" style="display: none !important;">
+                                {% else %}
+                                <label class="list-group-item" style="height: 40px;" for="Logo">Logo :
+                                    <label  >pas d'image définis</label></label>
+                                    <input accept="image/*" type="file" class="champ form-control" id="Logo" name="_Logo" style="display: none !important;">
+                                {% endif %}
 
                             </div>
 
                             <div class="inputcontainer">
-                                <label class="list-group-item" style="height: 60px;" for="image">image de fond : <img alt="Fond ecran" style="height:40px" src="data:image/jpg;base64,{{ etablissement.getTier.getFondecran }}"/> </label>
-
-                                <input accept="image/*" type="file" class="champ form-control" id="image" name="_image" style="display: none !important">
+                                {% if  etablissement.getTier.getFondecran   %}
+                                    <label class="list-group-item" style="height: 60px;" for="image">image de fond :
+                                        <img alt="Fond ecran" style="height:40px" src="data:image/jpg;base64,{{ etablissement.getTier.getFondecran }}"/> </label>
+                                    <input accept="image/*" type="file" id="image" name="_image" style="display: none !important">
+                                {% else %}
+                                    <label class="list-group-item" style="height: 60px;" for="image">image de fond :
+                                        <label for="image">pas d'image définis</label></label>
+                                    <input accept="image/*" type="file" id="image" name="_image" style="display: none !important">
+                                {% endif %}
 
                             </div>
 
