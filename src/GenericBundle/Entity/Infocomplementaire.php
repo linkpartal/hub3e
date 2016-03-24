@@ -80,6 +80,27 @@ class Infocomplementaire
     /**
      * @var string
      *
+     * @ORM\Column(name="portable", type="string", length=45, nullable=true)
+     */
+    private $portable;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="handicape", type="boolean", length=45, nullable=true)
+     */
+    private $handicape;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="entrepreneur", type="boolean", length=45, nullable=true)
+     */
+    private $entrepreneur;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="codepostal", type="string", length=45, nullable=true)
      */
     private $cp;
@@ -129,7 +150,7 @@ class Infocomplementaire
     /**
      * @var boolean
      *
-     * @ORM\Column(name="permis", type="boolean", nullable=true)
+     * @ORM\Column(name="permis", type="smallint", nullable=true)
      */
     private $permis;
 
@@ -609,5 +630,77 @@ class Infocomplementaire
     public function getProfilcomplet()
     {
         return $this->profilcomplet;
+    }
+
+    /**
+     * Set portable
+     *
+     * @param string $portable
+     *
+     * @return Infocomplementaire
+     */
+    public function setPortable($portable)
+    {
+        $this->portable = $portable;
+
+        return $this;
+    }
+
+    /**
+     * Get portable
+     *
+     * @return string
+     */
+    public function getPortable()
+    {
+        return $this->portable;
+    }
+
+    /**
+     * Set handicape
+     *
+     * @param boolean $handicape
+     *
+     * @return Infocomplementaire
+     */
+    public function setHandicape($handicape)
+    {
+        $this->handicape = $handicape;
+
+        return $this;
+    }
+
+    /**
+     * Get handicape
+     *
+     * @return boolean
+     */
+    public function getHandicape()
+    {
+        return $this->handicape;
+    }
+
+    /**
+     * Set entrepreneur
+     *
+     * @param boolean $entrepreneur
+     *
+     * @return Infocomplementaire
+     */
+    public function setEntrepreneur($entrepreneur)
+    {
+        $this->entrepreneur = $entrepreneur;
+
+        return $this;
+    }
+
+    /**
+     * Get entrepreneur
+     *
+     * @return boolean
+     */
+    public function getEntrepreneur()
+    {
+        return $this->entrepreneur;
     }
 }

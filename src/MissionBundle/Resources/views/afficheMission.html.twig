@@ -368,9 +368,9 @@
                                 <label style="width:40px;height: 20px;background:yellowgreen;color:white;font:14px Roboto;line-height: 20px; position: absolute;text-align: center;left: 0;z-index: 6;margin: 10px 0 0 10px;">{{ scores[loop.index0] }}</label>
                                 <div style="width:10px;height:140px;background:yellowgreen;color:white;position: absolute;left: 0;z-index: 5;margin: 10px 0 0 10px;"></div>
                             {% endif %}
-                            {% if msg.getExpediteur.getPhotos %}
+                            {% if user.getPhotos %}
                                 <img class="col-xs-1" onclick="show('FicheMission')" src="data:image/jpg;base64,{{user.getPhotos}}" style="margin: 10px 0 0 10px;height: 140px;width: 140px;">
-                            {% elseif msg.getExpediteur.getCivilite == 'Mme' or msg.getExpediteur.getCivilite == 'Madame' or User.getCivilite == 'Mademoiselle' %}
+                            {% elseif user.getCivilite == 'Mme' or user.getCivilite == 'Madame' or user.getCivilite == 'Mademoiselle' %}
                                 <img style="margin: 10px 0 0 10px;height: 140px;width: 140px;" src="{{ asset('image/femme.jpg') }}">
                             {% else %}
                                 <img style="margin: 10px 0 0 10px;height: 140px;width: 140px;" src="{{ asset('image/homme.jpg') }}">
