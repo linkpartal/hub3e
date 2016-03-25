@@ -316,15 +316,51 @@
                   {% if User.hasRole('ROLE_APPRENANT') %}
 
                   <!--button id="Button_donnees" class="NavButtonInactive" title="Données Utilisateur" onclick="show_Information('info_user','Button_donnees')" type="button">Données Utilisateur</button>-->
-                  <button id="Button_Apprenant" class="NavButtonIframe" title="Details de l'Apprenant" onclick="NaviguerOnglet('OngletApprenant','info_Apprenant',this)" type="button">Données Utilisateur</button>
-                  <button id="Button_candidature" class="NavButtonIframe" title="Formation de l'Apprenant" onclick="NaviguerOnglet('OngletApprenant','info_candidature',this)" >Formation de l'Apprenant </button>
-                  <button id="Button_parents" class="NavButtonIframe" title="Responsables" onclick="NaviguerOnglet('OngletApprenant','info_parents',this)" >Responsables </button>
-                  <button id="Button_Exp" class="NavButtonIframe" title="Expériences" onclick="NaviguerOnglet('OngletApprenant','info_Exp',this)" >Expériences </button>
-                  <button id="Button_recom" class="NavButtonIframe" title="Recommandations" onclick="NaviguerOnglet('OngletApprenant','info_recom',this)" >Recommandations </button>
-                  <button id="Button_diplome" class="NavButtonIframe" title="Diplomes" onclick="NaviguerOnglet('OngletApprenant','info_diplome',this)">Diplomes </button>
-                  <button id="Button_doc" class="NavButtonIframe" title="Documents" onclick="NaviguerOnglet('OngletApprenant','info_doc',this)">Documents </button>
-                  <button id="Button_Affinite" class="NavButtonIframe" title="QCM Affinite" onclick="NaviguerOnglet('OngletApprenant','QCM_Affinite',this)">QCM Affinite </button>
-                  <button id="Button_Test" class="NavButtonIframe" title="QCM Test" onclick="NaviguerOnglet('OngletApprenant','QCM_Test',this)">QCM Test </button>
+                  {% if not User.getCivilite or not User.getNom or not User.getPrenom or not User.getPhotos or not User.getTelephone or not User.getUserName or not User.getEmail or not User.getInfo.getDatenaissance|date('Y-m-d') or not User.getInfo.getCpnaissance or not User.getInfo.getLieunaissance or not User.getInfo.getAdresse or not User.getInfo.getFacebook or not User.getInfo.getLinkedin or not User.getInfo.getMobilite or not User.getInfo.getFratrie   %}
+                      <button id="Button_Apprenant" style="background-color: red !important;" class="NavButtonIframe" title="Details de l'Apprenant" onclick="NaviguerOnglet('OngletApprenant','info_Apprenant',this);" type="button">Données Utilisateur</button>
+                  {% else %}
+                      <button id="Button_Apprenant" class="NavButtonIframe" title="Details de l'Apprenant" onclick="NaviguerOnglet('OngletApprenant','info_Apprenant',this);" type="button">Données Utilisateur</button>
+                  {% endif %}
+                      {% if not candidatures is defined or candidatures|length == 0 %}
+                          <button id="Button_candidature" style="background-color: red !important;" class="NavButtonIframe" title="Formation de l'Apprenant" onclick="NaviguerOnglet('OngletApprenant','info_candidature',this);" >Formation de l'Apprenant </button>
+                      {% else %}
+                          <button id="Button_candidature" class="NavButtonIframe" title="Formation de l'Apprenant" onclick="NaviguerOnglet('OngletApprenant','info_candidature',this);" >Formation de l'Apprenant </button>
+                      {% endif %}
+                      {% if not  Parents is defined or Parents|length == 0 %}
+                          <button id="Button_parents" style="background-color: red !important;" class="NavButtonIframe" title="Responsables" onclick="NaviguerOnglet('OngletApprenant','info_parents',this);" >Responsables </button>
+                      {% else %}
+                          <button id="Button_parents" class="NavButtonIframe" title="Responsables" onclick="NaviguerOnglet('OngletApprenant','info_parents',this);" >Responsables </button>
+                      {% endif %}
+                      {% if not Experience is defined or Experience|length == 0 %}
+                      <button id="Button_Exp" style="background-color: red !important;" class="NavButtonIframe" title="Expériences" onclick="NaviguerOnglet('OngletApprenant','info_Exp',this);" >Expériences </button>
+                          {% else %}
+                              <button id="Button_Exp" class="NavButtonIframe" title="Expériences" onclick="NaviguerOnglet('OngletApprenant','info_Exp',this);" >Expériences </button>
+                              {% endif %}
+                      {% if not Recommandation is defined or Recommandation|length == 0 %}
+                      <button id="Button_recom" style="background-color: red !important;" class="NavButtonIframe" title="Recommandations" onclick="NaviguerOnglet('OngletApprenant','info_recom',this);" >Recommandations </button>
+                      {% else %}
+                          <button id="Button_recom" class="NavButtonIframe" title="Recommandations" onclick="NaviguerOnglet('OngletApprenant','info_recom',this);" >Recommandations </button>
+                          {% endif %}
+                  {% if not Diplome is defined or Diplome|length == 0 %}
+                      <button id="Button_diplome" style="background-color: red !important;" class="NavButtonIframe" title="Diplomes" onclick="NaviguerOnglet('OngletApprenant','info_diplome',this);">Diplomes </button>
+                      {% else %}
+                          <button id="Button_diplome" class="NavButtonIframe" title="Diplomes" onclick="NaviguerOnglet('OngletApprenant','info_diplome',this);">Diplomes </button>
+                          {% endif %}
+                  {% if not Document is defined or Document|length == 0 %}
+                      <button id="Button_doc" style="background-color: red !important;" class="NavButtonIframe" title="Documents" onclick="NaviguerOnglet('OngletApprenant','info_doc',this);">Documents </button>
+                      {% else %}
+                      <button id="Button_doc" class="NavButtonIframe" title="Documents" onclick="NaviguerOnglet('OngletApprenant','info_doc',this);">Documents </button>
+                          {% endif %}
+                      {% if not QCMs is defined or QCMs|length == 0 %}
+                      <button id="Button_Affinite" style="background-color: red !important;"  class="NavButtonIframe" title="QCM Affinite" onclick="NaviguerOnglet('OngletApprenant','QCM_Affinite',this);">QCM Affinite </button>
+                          {% else %}
+                              <button id="Button_Affinite" class="NavButtonIframe" title="QCM Affinite" onclick="NaviguerOnglet('OngletApprenant','QCM_Affinite',this);">QCM Affinite </button>
+                              {% endif %}
+                      {% if not QCMtest is defined or QCMtest|length == 0  %}
+                      <button id="Button_Test" style="background-color: red !important;"  class="NavButtonIframe" title="QCM Test" onclick="NaviguerOnglet('OngletApprenant','QCM_Test',this);">QCM Test </button>
+                          {% else %}
+                              <button id="Button_Test" class="NavButtonIframe" title="QCM Test" onclick="NaviguerOnglet('OngletApprenant','QCM_Test',this);">QCM Test </button>
+                              {% endif %}
 
                            <!--select title="" id="select_info"  style="color:white;">
                                <option value="info_user" style="color:black;">Données Utilisateur</option>
@@ -430,7 +466,19 @@
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;">Roles :
                                         {% for role in User.getRoles %}
-                                            <label style="color:black">{{role}}, </label>
+                                            {% if role == "ROLE_APPRENANT" %}
+                                            <label style="color:black">APPRENANT</label>
+                                        {% elseif role == "ROLE_ADMINECOLE" %}
+                                        <label style="color:black">Administrateur école</label>
+                                        {% elseif role == "ROLE_ADMINSOC" %}
+                                        <label style="color:black">Administrateur Société</label>
+                                        {% elseif role == "ROLE_TUTEUR" %}
+                                        <label style="color:black">Tuteur</label>
+                                        {% elseif role == "ROLE_RECRUTEUR" %}
+                                        <label style="color:black">Recruteur Placeur</label>
+                                        {% elseif role == "ROLE_SUPER_ADMIN" %}
+                                            <label style="color:black">Super Administrateur</label>
+                                        {% endif %}
                                         {% endfor %}
                                     </label>
 
@@ -540,7 +588,19 @@
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;">Roles :
                                         {% for role in User.getRoles %}
-                                            <label style="color:black">{{role}}, </label>
+                                            {% if role == "ROLE_APPRENANT" %}
+                                                <label style="color:black">APPRENANT</label>
+                                            {% elseif role == "ROLE_ADMINECOLE" %}
+                                                <label style="color:black">Administrateur école</label>
+                                            {% elseif role == "ROLE_ADMINSOC" %}
+                                                <label style="color:black">Administrateur Société</label>
+                                            {% elseif role == "ROLE_TUTEUR" %}
+                                                <label style="color:black">Tuteur</label>
+                                            {% elseif role == "ROLE_RECRUTEUR" %}
+                                                <label style="color:black">Recruteur Placeur</label>
+                                            {% elseif role == "ROLE_SUPER_ADMIN" %}
+                                                <label style="color:black">Super Administrateur</label>
+                                            {% endif %}
                                         {% endfor %}
                                     </label>
 
@@ -673,9 +733,6 @@
                                 {% endif %}
                             </form>
                         </div>
-                    {% endif %}
-
-                    {% if User.hasRole('ROLE_APPRENANT') %}
                         <div id="info_parents" class="list-group affichage" style="display:none">
 
                             {% if Parents is defined %}
@@ -1183,9 +1240,8 @@
         });
 
     }
-    {% if  User.getCivilite =='' or User.getNom=='' or User.getPrenom=='' or User.getPhotos=='' or User.getTelephone=='' or User.getUserName=='' or User.getEmail=='' or User.getInfo.getDatenaissance|date('Y-m-d')=='' or User.getInfo.getCpnaissance=='' or User.getInfo.getLieunaissance=='' or User.getInfo.getAdresse=='' or User.getInfo.getFacebook=='' or User.getInfo.getLinkedin=='' or User.getInfo.getMobilite=='' or User.getInfo.getFratrie==''   %}
-    alert('Onglet apprenant manquant ou à remplir');
-    {% endif %}
+
+
     function ChangerStatut(statut){
         var path = '{{ path('ChangerStatutApprenant',{'idUser':User.id,'statut':'STATUT'}) }}';
         path = path.replace('STATUT',statut);

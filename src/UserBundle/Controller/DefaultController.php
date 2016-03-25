@@ -41,9 +41,6 @@ class DefaultController extends Controller
             $this->getDoctrine()->getEntityManager()->flush();
         }
 
-
-
-
         // chargement des images
         if($userid->getPhotos() and !is_string($userid->getPhotos()))
         {
