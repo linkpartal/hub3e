@@ -136,9 +136,9 @@ class Infocomplementaire
     /**
      * @var boolean
      *
-     * @ORM\Column(name="profilcomplet", type="boolean", nullable=true)
+     * @ORM\Column(name="profilcomplet", type="smallint", nullable=true)
      */
-    private $profilcomplet = false;
+    private $profilcomplet = 0;
 
     /**
      * @var integer
@@ -611,7 +611,7 @@ class Infocomplementaire
     /**
      * Set profilcomplet
      *
-     * @param boolean $profilcomplet
+     * @param smallint $profilcomplet
      *
      * @return Infocomplementaire
      */
@@ -625,7 +625,7 @@ class Infocomplementaire
     /**
      * Get profilcomplet
      *
-     * @return boolean
+     * @return smallint
      */
     public function getProfilcomplet()
     {

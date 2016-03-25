@@ -18,7 +18,7 @@ body{
 {
     height: 100%;
     width: 100%;
-    position: absolute;
+    position: fixed;
 }
 
 .popup .nav
@@ -55,9 +55,8 @@ body{
 .popup .div_form .input
 {
     width: 100%;
-    font-size: 18px;
+    font: 18px Roboto;
     height: 40px;
-    font-family: Roboto;
     color: rgb(75, 75, 75);
     float: left;
     text-align: left;

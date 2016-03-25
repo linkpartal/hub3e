@@ -188,8 +188,10 @@
                                             <input type="radio" name="_Embauche" value="1">Oui
                                             <input type="radio" name="_Embauche" value="0">Non
                                         </div>
+
+                                        <label class="col-xs-12">Diffusion</label>
                                         {% if app.user.hasRole('ROLE_ADMINECOLE') %}
-                                            <select class="input"   name="formation" title="" >
+                                            <select class="input" style="height:150px;"  name="formation[]" title="" multiple>
                                                 {% for formation_x in formation_mission %}
                                                     {% if formation_x.etablissement.tier == app.user.tier or formation_x.etablissement.tier in app.user.tier.tier1|keys %}
                                                         <option value="{{ formation_x.getId }}">{{ formation_x.nom }} - {{ formation_x.etablissement.adresse }}</option>
@@ -197,11 +199,17 @@
                                                 {% endfor %}
                                             </select>
                                         {% elseif app.user.hasRole('ROLE_RECRUTEUR') %}
-                                            <select class="input"   name="formation" title="" >
+                                            <select class="input" style="height:150px;"  name="formation[]" title="" multiple>
                                                 {% for formation_x in formation_mission %}
                                                     {% if (formation_x.etablissement.tier == app.user.etablissement.tier) or (formation_x.etablissement.tier in app.user.etablissement.tier.tier1) %}
                                                         <option value="{{ formation_x.getId }}">{{ formation_x.nom }} - {{ formation_x.etablissement.adresse }}</option>
                                                     {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            {% elseif is_granted("ROLE_ADMINSOC") %}
+                                            <select class="input" style="height:150px;"  name="formation[]" title="" multiple>
+                                                {% for formation_x in formation_mission %}
+                                                        <option value="{{ formation_x.getId }}">{{ formation_x.nom }} - {{ formation_x.etablissement.adresse }}</option>
                                                 {% endfor %}
                                             </select>
                                         {% endif %}
@@ -448,8 +456,8 @@
                                         </div>
                                         <div class="col-xs-12">
                                             <label>Véhicule</label>
-                                            <input type="radio" name=""  value="1"><label>oui</label>
-                                            <input type="radio" name="" value="0" ><label>non</label>
+                                            <input type="radio" name="_Vehicule" value="1"><label>oui</label>
+                                            <input type="radio" name="_Vehicule" value="0" ><label>non</label>
                                         </div>
                                     </div>
 
@@ -700,7 +708,19 @@
                                             <div class="row">
                                                 <label class="cell" >Roles  :
                                                     {% for role in user.getRoles %}
-                                                        <label >{{role}}, </label>
+                                                        {% if role == "ROLE_APPRENANT" %}
+                                                            <label style="color:black">APPRENANT</label>
+                                                        {% elseif role == "ROLE_ADMINECOLE" %}
+                                                            <label style="color:black">Administrateur école</label>
+                                                        {% elseif role == "ROLE_ADMINSOC" %}
+                                                            <label style="color:black">Administrateur Société</label>
+                                                        {% elseif role == "ROLE_TUTEUR" %}
+                                                            <label style="color:black">Tuteur</label>
+                                                        {% elseif role == "ROLE_RECRUTEUR" %}
+                                                            <label style="color:black">Recruteur Placeur</label>
+                                                        {% elseif role == "ROLE_SUPER_ADMIN" %}
+                                                            <label style="color:black">Super Administrateur</label>
+                                                        {% endif %}
                                                     {% endfor %}
                                                 </label>
                                             </div>

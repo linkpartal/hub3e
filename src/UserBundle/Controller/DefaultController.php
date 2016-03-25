@@ -354,8 +354,21 @@ class DefaultController extends Controller
         $InfoComp->setLieunaissance($request->get('_Lieunaissance'));
         $InfoComp->setPortable($request->get('_Portable'));
         $InfoComp->setPermis($request->get('_Permis'));
-        $InfoComp->setHandicape($request->get('_handicap'));
-        $InfoComp->setEntrepreneur($request->get('_entrepreneur'));
+        $InfoComp->setVehicule($request->get('_Vehicule'));
+
+        if($request->get('_handicap')){
+            $InfoComp->setHandicape(true);
+        }
+        else{
+            $InfoComp->setHandicape(false);
+        }
+        if($request->get('_entrepreneur')){
+            $InfoComp->setEntrepreneur(true);
+        }
+        else{
+            $InfoComp->setEntrepreneur(false);
+        }
+
         $InfoComp->setDatecreation(date_create());
         $em->persist($InfoComp);
         $em->flush();
@@ -551,6 +564,7 @@ class DefaultController extends Controller
                 $info->setLinkedin($request->get('_Linkedin'));
                 $info->setMobilite($request->get('_Mobilite'));
                 $info->setFratrie($request->get('_Fratrie'));
+                $info->setProfilcomplet(1);
                 $info->setDatemodification(date_create());
                 $em->flush();
             }
@@ -565,6 +579,7 @@ class DefaultController extends Controller
                 $info->setDatecreation(date_create());
                 $info->setMobilite($request->get('_Mobilite'));
                 $info->setFratrie($request->get('_Fratrie'));
+                $info->setProfilcomplet(1);
                 $em->persist($info);
                 $em->flush();
             }
@@ -653,7 +668,7 @@ class DefaultController extends Controller
 
         $langue = $em->getRepository('GenericBundle:Langue')->findOneBy(array('langue'=>$id,'niveau'=>$IdNiveau));
         $langue->addUser($user);
-
+        $user->getInfo()->setProfilcomplet(1);
         $em->flush();
 
 
@@ -665,7 +680,8 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $par = $em->getRepository('GenericBundle:Parents')->find($id);
-
+        $par->getUser()->getInfo()->setProfilcomplet(1);
+        $em->flush();
         $em->remove($par);
         $em->flush();
         $reponse = new JsonResponse();
@@ -677,7 +693,8 @@ class DefaultController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $exp = $em->getRepository('GenericBundle:Experience')->find($id);
-
+        $exp->getUser()->getInfo()->setProfilcomplet(1);
+        $em->flush();
         $em->remove($exp);
         $em->flush();
         $reponse = new JsonResponse();
@@ -689,7 +706,8 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $recom = $em->getRepository('GenericBundle:Recommandation')->find($id);
-
+        $recom->getUser()->getInfo()->setProfilcomplet(1);
+        $em->flush();
         $em->remove($recom);
         $em->flush();
         $reponse = new JsonResponse();
@@ -700,7 +718,8 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $diplome = $em->getRepository('GenericBundle:Diplome')->find($id);
-
+        $diplome->getUser()->getInfo()->setProfilcomplet(1);
+        $em->flush();
         $em->remove($diplome);
         $em->flush();
         $reponse = new JsonResponse();
@@ -725,6 +744,8 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $document = $em->getRepository('GenericBundle:Document')->find($id);
+        $document->getUser()->getInfo()->setProfilcomplet(1);
+        $em->flush();
         $em->remove($document);
         $em->flush();
         $reponse = new JsonResponse();
@@ -1167,6 +1188,7 @@ class DefaultController extends Controller
             $em->persist($newuser);
 
             $newuser->getInfo()->setDaterecup(date_create());
+            $newuser->getInfo()->setProfilcomplet(1);
             $em->flush();
 
 
@@ -1451,7 +1473,7 @@ class DefaultController extends Controller
                 $em->flush();
             }
         }
-
+        $userfus->getInfo()->setProfilcomplet(1);
         $em->remove($import);
         $em->flush();
         return $reponse->setData(1);
@@ -1461,8 +1483,8 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         $parent = new Parents();
-
-        $parent->setUser($this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser')));
+        $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser'));
+        $parent->setUser($user);
 
 
         $parent->setNom($request->get('_Civiliteparent').' '.$request->get('_Nomparent'));
@@ -1474,6 +1496,7 @@ class DefaultController extends Controller
         $parent->setEmail($request->get('_Emailparent'));
 
         $em->persist($parent);
+        $user->getInfo()->setProfilcomplet(1);
         $em->flush();
         return $this->redirect($_SERVER['HTTP_REFERER']);
 
@@ -1483,7 +1506,8 @@ class DefaultController extends Controller
     public function AjouterExperienceAction(Request $request){
         $em = $this->getDoctrine()->getEntityManager();
         $experience = new Experience();
-        $experience->setUser($this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser')));
+        $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser'));
+        $experience->setUser($user);
 
         $experience->setNomsociete($request->get('_Nomsociete'));
         $experience->setActivite($request->get('_Activite'));
@@ -1493,6 +1517,7 @@ class DefaultController extends Controller
         $experience->setDescription($request->get('_Descriptionexp'));
 
         $em->persist($experience);
+        $user->getInfo()->setProfilcomplet(1);
         $em->flush();
 
         return $this->redirect($_SERVER['HTTP_REFERER']);
@@ -1502,7 +1527,8 @@ class DefaultController extends Controller
     public function AjouterRecommandationAction(Request $request){
         $em = $this->getDoctrine()->getEntityManager();
         $recommandation = new Recommandation();
-        $recommandation->setUser($this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser')));
+        $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser'));
+        $recommandation->setUser($user);
 
         $recommandation->setNom($request->get('_Nomrec').' '.$request->get('_Prenomrec'));
         $recommandation->setFonction($request->get('_Fonctionrec'));
@@ -1511,6 +1537,7 @@ class DefaultController extends Controller
         $recommandation->setText($request->get('_Text'));
 
         $em->persist($recommandation);
+        $user->getInfo()->setProfilcomplet(1);
         $em->flush();
 
         return $this->redirect($_SERVER['HTTP_REFERER']);
@@ -1522,13 +1549,15 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $diplome = new Diplome();
-        $diplome->setUser($this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser')));
+        $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser'));
+        $diplome->setUser($user);
 
         $diplome->setLibelle($request->get('_Libelle'));
         $diplome->setObtention($request->get('_Obtention'));
         $diplome->setEcole($request->get('_Ecole'));
 
         $em->persist($diplome);
+        $user->getInfo()->setProfilcomplet(1);
         $em->flush();
 
         return $this->redirect($_SERVER['HTTP_REFERER']);
@@ -1542,13 +1571,15 @@ class DefaultController extends Controller
         }
         if($_FILES['_Document'] and $_FILES['_Document']['size'] > 0){
             $document = new Document();
-            $document->setUser($this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser')));
+            $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser'));
+            $document->setUser($user);
             $document->setType($request->get('_Type'));
             $document->setExtension($_FILES['_Document']['type']);
             $document->setName($_FILES['_Document']['name']);
             $document->setTaille($_FILES['_Document']['size']);
             $document->setDocument(file_get_contents($_FILES['_Document']['tmp_name']));
             $em->persist($document);
+            $user->getInfo()->setProfilcomplet(1);
             $em->flush();
 
         }
@@ -1602,65 +1633,10 @@ class DefaultController extends Controller
         $reponse->addUser($apprenant);
         $em->flush();
 
-        //Verifier si le prifil 360 a été completé
-        if(!$apprenant->getInfo()->getProfilcomplet()){
-            if($apprenant->getEtablissement())
-            {
-                foreach($apprenant->getEtablissement()->getQcmdef() as $qcmdef){
-                    $questions = $em->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef'=>$qcmdef));
-                    foreach($questions as $question){
-                        $reponses = $em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef'=>$question));
 
-                        if($reponses )
-                        {
-                            if(count(array_intersect($reponses,$apprenant->getReponsedef()->toArray())) ==0){
-                                //$output->writeln($apprenant->getEmail());
-                                $message = \Swift_Message::newInstance()
-                                    ->setSubject('Email')
-                                    ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
-                                    ->setTo($apprenant->getEmail())
-                                    ->setBody($this->getContainer()->get('templating')->render('GenericBundle:Mail:EmailCompleterProfil.html.twig',array('apprenant'=>$apprenant))
-                                        ,'text/html'
-                                    );
-                                $this->getContainer()->get('mailer')->send($message);
-                                goto a;
-                            }
-                        }
+        $apprenant->getInfo()->setProfilcomplet(1);
+        $em->flush();
 
-                    }
-                }
-            }
-
-            $candidatures = $em->getRepository('GenericBundle:Candidature')->findBy(array('user'=>$apprenant));
-            foreach($candidatures as $candidature){
-                foreach($candidature->getFormation()->getQcmdef() as $qcmdef){
-                    $questions = $em->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef'=>$qcmdef));
-                    foreach($questions as $question){
-                        $reponses = $em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef'=>$question));
-
-                        if($reponses )
-                        {
-                            if(count(array_intersect($reponses,$apprenant->getReponsedef()->toArray())) ==0){
-                                //$output->writeln($apprenant->getEmail());
-                                $message = \Swift_Message::newInstance()
-                                    ->setSubject('Email')
-                                    ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
-                                    ->setTo($apprenant->getEmail())
-                                    ->setBody($this->getContainer()->get('templating')->render('GenericBundle:Mail:EmailCompleterProfil.html.twig',array('apprenant'=>$apprenant))
-                                        ,'text/html'
-                                    );
-                                $this->getContainer()->get('mailer')->send($message);
-                                goto a;
-                            }
-                        }
-
-                    }
-                }
-            }
-            $apprenant->getInfo()->setProfilcomplet(true);
-            $em->flush();
-            a:
-        }
 
         $reponsejson = new JsonResponse();
         return $reponsejson->setData(array('success'=>1));
@@ -1683,5 +1659,20 @@ class DefaultController extends Controller
         //$response->sendHeaders();
         $response->setContent(stream_get_contents( $document->getDocument()));
         return $response;
+    }
+
+    public function ChangerStatutApprenantAction($idUser,$statut){
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('GenericBundle:User')->find($idUser);
+        $reponse = new JsonResponse();
+        if($user->getInfo()){
+            $user->getInfo()->setProfilcomplet($statut);
+            $em->flush();
+            return $reponse->setData(1);
+        }
+        else{
+            return $reponse->setData(0);
+        }
+
     }
 }

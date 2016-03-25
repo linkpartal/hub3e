@@ -26,7 +26,7 @@
 
 <div id="apprenant" class="popup" >
     <div onclick="document.getElementById('submitaddapprenant').click();hide(this)" class="close"></div>
-    <div class="col-xs-offset-1 col-xs-9" style="top:40px;border:20px solid white;display: block;margin-bottom: 20px ;background: white;width:70%">
+    <div class="col-xs-offset-2 col-xs-8" style="top:40px;border:20px solid white;display: block;margin-bottom: 20px ;background: white;">
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
 
@@ -72,8 +72,8 @@
                         <input placeholder="diplome obtenus" class="input" type="text" maxlength="45"  >
                         <input placeholder="Format.ou en cours" class="input" type="text" >
                         <div class="col-xs-12">
-                            <input type="checkbox" name="_handicap" ><label>HANDICAP</label>
-                            <input type="checkbox" name="_entrepreneur" ><label>Entrepreneurs</label>
+                            <input type="checkbox" name="_handicap" value="1"><label>HANDICAP</label>
+                            <input type="checkbox" name="_entrepreneur" value="1"><label>Entrepreneurs</label>
                         </div>
                         <div class="col-xs-12">
                             <label>Permis</label>
@@ -83,8 +83,8 @@
                         </div>
                         <div class="col-xs-12">
                             <label>Véhicule</label>
-                            <input type="radio" name=""  value="1"><label>oui</label>
-                            <input type="radio" name="" value="0" ><label>non</label>
+                            <input type="radio" name="_Vehicule" value="1"><label>oui</label>
+                            <input type="radio" name="_Vehicule" value="0" ><label>non</label>
                         </div>
                     </div>
 
@@ -173,7 +173,7 @@
                         style="padding:0;width: 100%; height: 20px; border-radius: 0; background: none; border: 0;color: white">
                     {% if image %}
                         <img  src="data:image/jpg;base64,{{image}}" style="border-radius:50%; width:32px; height:32px" >
-                    {% elseif app.user.getCivilite == 'Mme' or app.user.getCivilite == 'Madame' or User.getCivilite == 'Mademoiselle' %}
+                    {% elseif app.user.getCivilite == 'Mme' or app.user.getCivilite == 'Madame' or app.user.getCivilite == 'Mademoiselle' %}
                         <img  src="{{ asset('image/femme.jpg') }}" style="border-radius:50%; width:32px; height:32px" >
                     {% else %}
                         <img  src="{{ asset('image/homme.jpg') }}" style="border-radius:50%; width:32px; height:32px" >
@@ -219,9 +219,9 @@
                                      style="height: 31px; text-align: left;">
                                     <div class="col-xs-9 part" title="{{ s.getVille }}">{{ s.getVille }}</div>
                                     {% if s.getActive %}
-                                        <div class="col-xs-1 active" id="active{{ s.getId }}"></div>
+                                        <div class="col-xs-1 active" id="activeSociete{{ s.getId }}"></div>
                                     {% else %}
-                                        <div class="col-xs-1 inactive" id="active{{ s.getId }}"></div>
+                                        <div class="col-xs-1 inactive" id="activeSociete{{ s.getId }}"></div>
                                     {% endif %}
                                 </div>
                             </button>
@@ -256,16 +256,20 @@
                     {% if apprenants is defined %}
                         {% for u in apprenants %}
                             <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId} ) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
-                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.getUsername }},{{ u.prenom }},{{ u.email }},{% if u.tier %}{{ u.tier.siren }}{% elseif u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
+                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.getUsername }},{{ u.prenom }},{{ u.email }},{% if u.info %}{{ u.info.adresse }},{{ u.info.cp }},{{ u.info.insee }}{% endif %},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
                                 <div style="display: none;"></div>
                                 <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
                                     <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
-                                    {% if not u.isExpired %}
-                                        <div class="col-xs-1 active" id="active{{ u.getId }}"></div>
+                                    {% if u.info.profilcomplet == 3 %}
+                                        <div class="col-xs-1 active" id="activeUser{{ u.getId }}"></div>
+                                    {% elseif u.info.profilcomplet == 2 %}
+                                        <div class="col-xs-1 inactive" id="activeUser{{ u.getId }}"></div>
+                                    {% elseif u.info.profilcomplet == 1 %}
+                                        <div class="col-xs-1" style="background: #2A76CC;height:9px;border-radius: 100%;margin: 3px 0;width: 9px;float: right;" id="activeUser{{ u.getId }}"></div>
                                     {% else %}
-                                        <div class="col-xs-1 inactive" id="active{{ u.getId }}"></div>
+                                        <div class="col-xs-1" style="background: orangered;height:9px;border-radius: 100%;margin: 3px 0;width: 9px;float: right;" id="activeUser{{ u.getId }}"></div>
                                     {% endif %}
                                 </div>
                             </button>
