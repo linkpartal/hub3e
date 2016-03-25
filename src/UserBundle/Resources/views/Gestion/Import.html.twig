@@ -219,10 +219,7 @@
 
     }
     function supprimerLigne(route,champs) {
-        champs.disabled = true;
-        //champs.src="{{ asset('image/waitmini.gif') }}";
-
-        champs.firstChild.src="{{ asset('image/waitmini.gif') }}";
+        ShowWaiter();
         $.ajax({
             type: 'get',
             url: route,
@@ -230,6 +227,7 @@
                 alert('Une erreur s\'est produite veuillez réessayer ulterieurement');
             },
             success: function(data){
+                DeleteWaiter();
                 if(data['Delete']=='1')
                 {
                     champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
