@@ -54,6 +54,8 @@ class DefaultController extends Controller
             $newtier->setSiren($request->get('_SIREN'));
             $newtier->setRaisonsoc($request->get('_RaisonSoc'));
             $newtier->setEcole(intval($request->get('_Ecole')));
+            $newtier->setAxe($request->get('_Axe'));
+            $newtier->setAvantage($request->get('_Avantages'));
             if($_FILES && $_FILES['_Logo']['size'] >0)
             {
                 $newtier->setLogo(file_get_contents($_FILES['_Logo']['tmp_name']));
@@ -78,10 +80,14 @@ class DefaultController extends Controller
             $etablissement->setTelephone($request->get('_Tel')[$i]);
             $etablissement->setFax($request->get('_Fax')[$i]);
             $etablissement->setVille($request->get('_Ville')[$i]);
-            $etablissement->setResponsable($request->get('_Resp')[$i]);
+            $etablissement->setNomResp($request->get('_Resp')[$i]);
+            $etablissement->setPrenomResp($request->get('_RespPrenom')[$i]);
             $etablissement->setTelResponsable($request->get('_TelResp')[$i]);
             $etablissement->setMailResponsable($request->get('_MailResp')[$i]);
             $etablissement->setSite($request->get('_Site')[$i]);
+            $etablissement->setType($request->get('_TypeSoc')[$i]);
+            $etablissement->setTaille($request->get('_Taille')[$i]);
+            $etablissement->setSecteur($request->get('_Secteur')[$i]);
             $etablissement->addUser($this->get('security.token_storage')->getToken()->getUser());
             $etablissement->setTier($tier);
 
@@ -203,16 +209,7 @@ class DefaultController extends Controller
                 'libs'=>$licences, 'missions'=>$missions ,'QCMs' => $qcm, 'Questions' => $questions,
                 'reponses' => $reponses,'formation_mission'=>$this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll()));
         }
-
-
-
         //$licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier(),'suspendu'=>false ));
-
-
-
-
-
-
     }
 
     public function supprimeretabAction($id)
@@ -258,53 +255,6 @@ class DefaultController extends Controller
         return $this->redirect($this->generateUrl('affiche_etab',array('id'=>$id)) );
     }
 
-    public function modifierAction($id)
-    {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $modeles = $this->getDoctrine()->getRepository('GenericBundle:Modele')->findBy(array('user'=>$user));
-        $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
-        $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
-
-        if($etablissement->getTier()->getEcole())
-        {
-            $type = 'Ecole';
-        }
-        else{
-            $type = 'Societe';
-        }
-        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('user'=>$user,'entite'=>$etablissement->getId(),'type'=>$type));
-        if($notifications)
-        {
-            $this->getDoctrine()->getEntityManager()->remove($notifications);
-            $this->getDoctrine()->getEntityManager()->flush();
-        }
-
-        if($etablissement->getTier()->getLogo() and !is_string($etablissement->getTier()->getLogo()))
-        {
-            $etablissement->getTier()->setLogo(base64_encode(stream_get_contents($etablissement->getTier()->getLogo())));
-        }
-        if($etablissement->getTier()->getFondecran() and !is_string($etablissement->getTier()->getFondecran()))
-        {
-            $etablissement->getTier()->setFondecran(base64_encode(stream_get_contents($etablissement->getTier()->getFondecran())));
-        }
-        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier() ));
-
-
-
-
-        $formation = array();
-
-        $formation = array_merge($formation,$this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$etablissement )));
-
-
-        $users = array();
-        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
-        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
-        $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
-        return $this->render('TierBundle::modifierEtablissement.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,
-            'libs'=>$licences,'tiers'=>$tiers,'users'=>$users,'modeles'=>$modeles,'formations'=>$formation));
-    }
-
     public function etabModifAction(Request $request){
 
         $em = $this->getDoctrine()->getManager();
@@ -316,13 +266,14 @@ class DefaultController extends Controller
         $etablissement->setTelephone($request->get('_Tel'));
         $etablissement->setFax($request->get('_Fax'));
         $etablissement->setVille($request->get('_Ville'));
-        $etablissement->setResponsable($request->get('_Resp'));
+        $etablissement->setNomResp($request->get('_Resp'));
+        $etablissement->setPrenomResp($request->get('_prenomResp'));
         $etablissement->setTelResponsable($request->get('_TelResp'));
         $etablissement->setMailResponsable($request->get('_MailResp'));
         $etablissement->setSite($request->get('_Site'));
 
-        $etablissement->getTier()->setRaisonsoc($request->get('_RaisonSoc'));
 
+        $etablissement->getTier()->setRaisonsoc($request->get('_RaisonSoc'));
         if($_FILES && $_FILES['_Logo']['size'] >0)
         {
             $etablissement->getTier()->setLogo(file_get_contents($_FILES['_Logo']['tmp_name']));

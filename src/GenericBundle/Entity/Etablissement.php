@@ -76,9 +76,16 @@ class Etablissement
     /**
      * @var string
      *
-     * @ORM\Column(name="responsable", type="string", length=45, nullable=true)
+     * @ORM\Column(name="nomResp", type="string", length=45, nullable=true)
      */
-    private $responsable;
+    private $nomResp;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="prenomResp", type="string", length=45, nullable=true)
+     */
+    private $prenomResp;
 
     /**
      * @var string
@@ -100,6 +107,27 @@ class Etablissement
      * @ORM\Column(name="site", type="string", length=45, nullable=true)
      */
     private $site;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=45, nullable=true)
+     */
+    private $type;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="taille", type="string", length=45, nullable=true)
+     */
+    private $taille;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="secteur", type="string", length=45, nullable=true)
+     */
+    private $secteur;
 
     /**
      * @var boolean
@@ -343,30 +371,6 @@ class Etablissement
     }
 
     /**
-     * Set responsable
-     *
-     * @param string $responsable
-     *
-     * @return Etablissement
-     */
-    public function setResponsable($responsable)
-    {
-        $this->responsable = $responsable;
-
-        return $this;
-    }
-
-    /**
-     * Get responsable
-     *
-     * @return string
-     */
-    public function getResponsable()
-    {
-        return $this->responsable;
-    }
-
-    /**
      * Set telresponsable
      *
      * @param string $telresponsable
@@ -580,5 +584,125 @@ class Etablissement
 
     public function __toString() {
         return $this->siret;
+    }
+
+    /**
+     * Set nomResp
+     *
+     * @param string $nomResp
+     *
+     * @return Etablissement
+     */
+    public function setNomResp($nomResp)
+    {
+        $this->nomResp = $nomResp;
+
+        return $this;
+    }
+
+    /**
+     * Get nomResp
+     *
+     * @return string
+     */
+    public function getNomResp()
+    {
+        return $this->nomResp;
+    }
+
+    /**
+     * Set prenomResp
+     *
+     * @param string $prenomResp
+     *
+     * @return Etablissement
+     */
+    public function setPrenomResp($prenomResp)
+    {
+        $this->prenomResp = $prenomResp;
+
+        return $this;
+    }
+
+    /**
+     * Get prenomResp
+     *
+     * @return string
+     */
+    public function getPrenomResp()
+    {
+        return $this->prenomResp;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return Etablissement
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set taille
+     *
+     * @param string $taille
+     *
+     * @return Etablissement
+     */
+    public function setTaille($taille)
+    {
+        $this->taille = $taille;
+
+        return $this;
+    }
+
+    /**
+     * Get taille
+     *
+     * @return string
+     */
+    public function getTaille()
+    {
+        return $this->taille;
+    }
+
+    /**
+     * Set secteur
+     *
+     * @param string $secteur
+     *
+     * @return Etablissement
+     */
+    public function setSecteur($secteur)
+    {
+        $this->secteur = $secteur;
+
+        return $this;
+    }
+
+    /**
+     * Get secteur
+     *
+     * @return string
+     */
+    public function getSecteur()
+    {
+        return $this->secteur;
     }
 }

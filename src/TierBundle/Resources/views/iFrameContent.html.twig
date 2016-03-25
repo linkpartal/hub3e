@@ -633,8 +633,12 @@
                                 <input type="tel" value="{{ etablissement.getFax }}" class="champ form-control" id="Fax" name="_Fax" maxlength="45" readonly>
                             </div>
                             <div class="inputcontainer">
-                                <label class="list-group-item" style="height: 60px;" for="Resp">Responsable établissement : </label>
-                                <input type="text" value="{{ etablissement.getResponsable }}" class="champ form-control" id="Resp" name="_Resp" maxlength="45" readonly>
+                                <label class="list-group-item" style="height: 60px;" for="Resp">Nom responsable établissement : </label>
+                                <input type="text" value="{{ etablissement.nomResp }}" class="champ form-control" id="Resp" name="_Resp" maxlength="45" readonly>
+                            </div>
+                            <div class="inputcontainer">
+                                <label class="list-group-item" style="height: 60px;" for="prenomResp">Prénom responsable établissement : </label>
+                                <input type="text" value="{{ etablissement.prenomResp }}" class="champ form-control" id="prenomResp" name="_prenomResp" maxlength="45" readonly>
                             </div>
                             <div class="inputcontainer">
                                 <label class="list-group-item" style="height: 60px;" for="TelResp">Téléphone responsable établissement : </label>

@@ -31,16 +31,23 @@ class Tier
     /**
      * @var string
      *
-     * @ORM\Column(name="raisonSoc", type="string", length=45, nullable=true)
+     * @ORM\Column(name="axe", type="string", length=45, nullable=true)
      */
-    private $raisonsoc;
+    private $axe;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="activite", type="string", length=45, nullable=true)
+     * @ORM\Column(name="avantage", type="string", length=45, nullable=true)
      */
-    private $activite;
+    private $avantage;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="raisonSoc", type="string", length=45, nullable=true)
+     */
+    private $raisonsoc;
 
     /**
      * @var string
@@ -251,27 +258,50 @@ class Tier
     }
 
     /**
-     * Set activite
+     * Set axe
      *
-     * @param string $activite
+     * @param string $axe
      *
      * @return Tier
      */
-    public function setActivite($activite)
+    public function setAxe($axe)
     {
-        $this->activite = $activite;
+        $this->axe = $axe;
 
         return $this;
     }
 
     /**
-     * Get activite
+     * Get axe
      *
      * @return string
      */
-    public function getActivite()
+    public function getAxe()
     {
-        return $this->activite;
+        return $this->axe;
     }
 
+    /**
+     * Set avantage
+     *
+     * @param string $avantage
+     *
+     * @return Tier
+     */
+    public function setAvantage($avantage)
+    {
+        $this->avantage = $avantage;
+
+        return $this;
+    }
+
+    /**
+     * Get avantage
+     *
+     * @return string
+     */
+    public function getAvantage()
+    {
+        return $this->avantage;
+    }
 }
