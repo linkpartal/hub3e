@@ -357,8 +357,21 @@ class DefaultController extends Controller
         $InfoComp->setLieunaissance($request->get('_Lieunaissance'));
         $InfoComp->setPortable($request->get('_Portable'));
         $InfoComp->setPermis($request->get('_Permis'));
-        $InfoComp->setHandicape($request->get('_handicap'));
-        $InfoComp->setEntrepreneur($request->get('_entrepreneur'));
+        $InfoComp->setVehicule($request->get('_Vehicule'));
+
+        if($request->get('_handicap')){
+            $InfoComp->setHandicape(true);
+        }
+        else{
+            $InfoComp->setHandicape(false);
+        }
+        if($request->get('_entrepreneur')){
+            $InfoComp->setEntrepreneur(true);
+        }
+        else{
+            $InfoComp->setEntrepreneur(false);
+        }
+
         $InfoComp->setDatecreation(date_create());
         $em->persist($InfoComp);
         $em->flush();
