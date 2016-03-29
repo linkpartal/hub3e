@@ -136,7 +136,7 @@
 
                             <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
                             <div class="col-xs-12 NavBarTier" >
-                                <button class="col-xs-3" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Information_generale',this)">Données</button>
+                                <button class="col-xs-3 active" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Information_generale',this)">Données</button>
                                 <button class="col-xs-3" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Onglet_Contacts',this)">Contact</button>
                                 <button class="col-xs-3" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','QCM_Affinite',this)">Candidat rêvé</button>
                                 <button class="col-xs-3" type="button">Documents</button>
@@ -406,9 +406,9 @@
                         <form class="formulaire" id="formApprenant" action="{{ path("apprenant_added") }}" onsubmit="document.getElementById('submitaddapprenant').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data" style="margin-top: 50px"   >
                             <input type="hidden" id="idEtab" name="_idEtab" value="{{ etablissement.getId }}">
                             <div class="col-xs-12 NavBarTier" >
-                                <button class="col-xs-4" style="white-space: nowrap;" type="button" onclick="NaviguerOnglet('PopUpApprenantOnglet','infoapprenant')">Données</button>
-                                <button class="col-xs-4" style="white-space: nowrap;" type="button" onclick="NaviguerOnglet('PopUpApprenantOnglet','apprenant_formation')">Formation Souhaitée</button>
-                                <button class="col-xs-4" style="white-space: nowrap;" type="button" onclick="NaviguerOnglet('PopUpApprenantOnglet','document_apprenant')">Documents</button>
+                                <button class="col-xs-4 active" style="white-space: nowrap;" type="button" onclick="NaviguerOnglet('PopUpApprenantOnglet','infoapprenant',this)">Données</button>
+                                <button class="col-xs-4" style="white-space: nowrap;" type="button" onclick="NaviguerOnglet('PopUpApprenantOnglet','apprenant_formation',this)">Formation Souhaitée</button>
+                                <button class="col-xs-4" style="white-space: nowrap;" type="button" onclick="NaviguerOnglet('PopUpApprenantOnglet','document_apprenant',this)">Documents</button>
                             </div>
                             <div id="PopUpApprenantOnglet">
 

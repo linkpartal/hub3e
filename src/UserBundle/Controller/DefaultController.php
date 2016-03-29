@@ -415,6 +415,7 @@ class DefaultController extends Controller
                 $candidature->setFormation($formation);
                 $candidature->setImportcandidat($apprenant);
                 $candidature->setDatecandidature(date_create());
+                $candidature->setStatut(2);
                 $em->persist($candidature);
                 $em->flush();
             }
@@ -559,6 +560,26 @@ class DefaultController extends Controller
                 $info->setDatenaissance(date_create($request->get('_Datenaissance')) );
                 $info->setCpnaissance($request->get('_Cpnaissance'));
                 $info->setLieunaissance($request->get('_Lieunaissance'));
+                $info->setPortable($request->get('_Portable'));
+                $info->setCp($request->get('_Codepostal'));
+                $info->setPermis($request->get('_Permis'));
+                $info->setVehicule($request->get('_Vehicule'));
+                //$info->setHandicape($request->get('_handicap'));
+                //$info->setEntrepreneur($request->get('_entrepreneur'));
+
+                if($request->get('_handicap')=="0"){
+                    $info->setHandicape(true);
+                }
+                else{
+                    $info->setHandicape(false);
+                }
+                if($request->get('_entrepreneur')=="0"){
+                    $info->setEntrepreneur(true);
+                }
+                else{
+                    $info->setEntrepreneur(false);
+                }
+
                 $info->setAdresse($request->get('_Adresse'));
                 $info->setFacebook($request->get('_Facebook'));
                 $info->setLinkedin($request->get('_Linkedin'));
