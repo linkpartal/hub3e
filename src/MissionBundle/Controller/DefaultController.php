@@ -49,13 +49,19 @@ class DefaultController extends Controller
         $mission->genererCode();
         $em->flush();
 
-        if($request->get('formation'))
+        foreach($request->get('formation') as $idFormation)
         {
             $diffuser = new Diffusion();
-            $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->find($request->get('formation'));
+            $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->find($idFormation);
             $diffuser->setFormation($formation);
             $diffuser->setMission($mission);
-            $diffuser->setStatut(5);
+            if($this->get('security.authorization_checker')->isGranted('ROLE_RECRUTEUR')){
+                $diffuser->setStatut(5);
+            }
+            else{
+                $diffuser->setStatut(1);
+            }
+
             $em->persist($diffuser);
             $em->flush();
         }
@@ -146,10 +152,8 @@ class DefaultController extends Controller
             $mission->getEtablissement()->getTier()->setFondecran(base64_encode(stream_get_contents($mission->getEtablissement()->getTier()->getFondecran())));
         }
         $formations_prop = null;
-        if($this->get('security.authorization_checker')->isGranted('ROLE_ADMINSOC'))
-        {
-            $formations_prop = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll();
-        }
+        $formations_prop = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll();
+
 
         $informations_maps = array();
         foreach($users as $user)
@@ -234,7 +238,12 @@ class DefaultController extends Controller
                 $diffuser = new Diffusion();
                 $diffuser->setFormation($formation);
                 $diffuser->setMission($mission);
-                $diffuser->setStatut(1);
+                if($this->get('security.authorization_checker')->isGranted('ROLE_RECRUTEUR')){
+                    $diffuser->setStatut(5);
+                }
+                else{
+                    $diffuser->setStatut(1);
+                }
                 $em->persist($diffuser);
                 $em->flush();
             }

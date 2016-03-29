@@ -54,6 +54,7 @@ class RecruteurController extends Controller
                 array_push($societes,$diffusion->getMission()->getEtablissement());
             }
         }
+        $societes = array_merge($societes,$user->getReferenciel()->toArray());
         $uniquesocietes = array_unique($societes);
         return $this->render('EcoleBundle:Recruteur:index.html.twig', array('notifications'=>$jsonContent ,'apprenants'=>$apprenants,'societes'=>$uniquesocietes,'missions'=>$mes_missions,
             'image'=>$user->getPhotos(),'formations'=>$formations,'hobbies'=>$Hobbies));

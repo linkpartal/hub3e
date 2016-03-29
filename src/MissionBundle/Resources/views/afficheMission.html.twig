@@ -73,7 +73,7 @@
     </div>
 </div>
 {% endif %}
-{% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
+{% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_ADMINSOC') %}
 <div id="Diffusion_formation" class="popup">
     <div onclick="document.getElementById('submitDiffusion8598').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-3 col-xs-4" style="padding: 0;border:20px solid white;display: block;top:150px;background-color: white;">
@@ -84,12 +84,16 @@
             <div class="div_form" style="display: block">
                 <select id="SelectMultipleFormation" style="width: 100%; overflow-x: auto" title="" class="row" name="formation[]" multiple required>
                     {% for formation in formations_prop %}
-                        <option value="{{ formation.id }}">{{ formation.nom }} - {{ formation.etablissement.tier.raisonsoc }} - {{ formation.etablissement.adresse }}</option>
+                        {% if is_granted('ROLE_ADMINSOC') or (formation.etablissement.tier == app.user.tier or formation.etablissement.tier in app.user.tier.tier1|keys) or ((formation.etablissement.tier == app.user.etablissement.tier) or (formation.etablissement.tier in app.user.etablissement.tier.tier1)) %}
+                            <option value="{{ formation.id }}">{{ formation.nom }} - {{ formation.etablissement.tier.raisonsoc }} - {{ formation.etablissement.adresse }}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
                 <select id="SelectMultipleRechercheFormation" style="display: none">
                     {% for formation in formations_prop %}
-                        <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
+                        {% if is_granted('ROLE_ADMINSOC') or (formation.etablissement.tier == app.user.tier or formation.etablissement.tier in app.user.tier.tier1|keys) or ((formation.etablissement.tier == app.user.etablissement.tier) or (formation.etablissement.tier in app.user.etablissement.tier.tier1)) %}
+                            <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
             </div>
@@ -325,7 +329,7 @@
                         <button onclick="show('Assigner_Tuteur')" type="button" class="list-group-item rightMenu" >
                             <div class="col-xs-12"  >Assigner un Tuteur</div>
                         </button>
-                        {% if is_granted('ROLE_ADMINSOC') %}
+                        {% if is_granted('ROLE_ADMINSOC') or is_granted('ROLE_RECRUTEUR') %}
                             <button type="button" class="list-group-item rightMenu" onclick="show('Diffusion_formation')" >
                                 <div class="col-xs-12" >Diffuser</div>
                             </button>
