@@ -208,7 +208,7 @@
                                             </select>
                                             {% elseif is_granted("ROLE_ADMINSOC") %}
                                             <select class="input" style="height:150px;"  name="formation[]" title="" multiple>
-                                                {% for formation_x in formation_mission %}
+                                                {% for formation_x in formations %}
                                                         <option value="{{ formation_x.getId }}">{{ formation_x.nom }} - {{ formation_x.etablissement.adresse }}</option>
                                                 {% endfor %}
                                             </select>
@@ -466,7 +466,7 @@
                                         <input class="row" style="width:100%" type="text" placeholder="Recherche" onkeyup="rechercheformation(this.value)">
                                     </div>
                                     <div class="col-xs-12 input-colonne " >
-                                        <select id="SelectMultipleFormation" style="width: 100%; overflow-x: auto" title="" class="row" name="formation[]" multiple >
+                                        <select id="SelectMultipleFormation" style="width: 100%; overflow-x: auto" title="" class="row" name="formation[]" multiple required>
                                             {% for formation in formations %}
                                                 <option value="{{ formation.id }}">{{ formation.nom }} - {{ formation.etablissement.tier.raisonsoc }} - {{ formation.etablissement.adresse }}</option>
                                             {% endfor %}
