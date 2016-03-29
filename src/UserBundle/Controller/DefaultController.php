@@ -563,7 +563,11 @@ class DefaultController extends Controller
                 $info->setFacebook($request->get('_Facebook'));
                 $info->setLinkedin($request->get('_Linkedin'));
                 $info->setMobilite($request->get('_Mobilite'));
-                $info->setFratrie($request->get('_Fratrie'));
+
+                if($request->get('_Fratrie') and intval($request->get('_Fratrie')) >= 0){
+                    $info->setFratrie(intval($request->get('_Fratrie')));
+                }
+
                 $info->setProfilcomplet(1);
                 $info->setDatemodification(date_create());
                 $em->flush();
@@ -1176,7 +1180,8 @@ class DefaultController extends Controller
             }
 
             $newuser->setInfo($import->getInfo());
-
+            $import->setInfo(null);
+            $em->flush();
 
             //generate a password
             $tokenGenerator = $this->get('fos_user.util.token_generator');
@@ -1188,7 +1193,7 @@ class DefaultController extends Controller
             $em->persist($newuser);
 
             $newuser->getInfo()->setDaterecup(date_create());
-            $newuser->getInfo()->setProfilcomplet(1);
+            $newuser->getInfo()->setProfilcomplet(0);
             $em->flush();
 
 
@@ -1241,22 +1246,8 @@ class DefaultController extends Controller
                 $em->flush();
             }*/
 
-
-            $superadmins = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_SUPER_ADMIN');
             $usercon = $this->get('security.token_storage')->getToken()->getUser();
-            $superadmins = array_merge($superadmins, $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$usercon->getTier())));
 
-            foreach($superadmins as $admin){
-                if(!$this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('entite'=>$newuser->getId(),'type'=>'Utilisateur','user'=>$admin))){
-                    $notif = new Notification();
-                    $notif->setEntite($newuser->getId());
-                    $notif->setType('Utilisateur');
-                    $notif->setUser($admin);
-                    $em->persist($notif);
-                    $em->flush();
-
-                }
-            }
 
             //send password
             if($usercon->getTier())
@@ -1292,8 +1283,6 @@ class DefaultController extends Controller
                 );
             $this->get('mailer')->send($message);
 
-            $import->setInfo(null);
-            $em->flush();
             $em->remove($import);
             $em->flush();
             return $response->setData(array('Ajout'=>'1'));
@@ -1352,6 +1341,15 @@ class DefaultController extends Controller
         }
         if(!$userfus->getInfo()->getInsee()){
             $userfus->getInfo()->setInsee($import->getInfo()->getInsee());
+        }
+        if(!$userfus->getInfo()->getHandicape()){
+            $userfus->getInfo()->setHandicape($import->getInfo()->getHandicape());
+        }
+        if(!$userfus->getInfo()->getEntrepreneur()){
+            $userfus->getInfo()->setEntrepreneur($import->getInfo()->getEntrepreneur());
+        }
+        if(!$userfus->getInfo()->getPortable()){
+            $userfus->getInfo()->setPortable($import->getInfo()->getPortable());
         }
         $em->flush();
 

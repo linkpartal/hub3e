@@ -826,4 +826,8 @@ class Mission
     {
         return $this->nbreposte;
     }
+
+    public function __toString() {
+        return $this->codemission;
+    }
 }

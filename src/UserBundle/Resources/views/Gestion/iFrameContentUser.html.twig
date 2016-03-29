@@ -276,18 +276,24 @@
                 <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
                     <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+
                     <form id="formaddFormation" class="formulaire" action="{{ path("Candidature_added") }}" onsubmit="document.getElementById('submitaddFormation').disabled=true;ShowWaiter();" method="post" >
 
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
 
                         <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px Roboto normal;"> Formation </Label>
-                        <div class="div_form" style="">
+                        <div class="div_form">
 
-
-                            <div class="col-xs-12 input-colonne " >
-                                <select class="input" title="" style="height: 100px" name="formations[]" multiple>
+                            <input class="input" style="margin-bottom: 10px;" type="text" placeholder="Recherche" onkeyup="rechercheformation(this.value)">
+                            <div class="col-xs-12" >
+                                <select id="SelectMultipleFormation" style="height: 100px;" title="" class="input" name="formations[]" multiple >
                                     {% for formation in formations %}
-                                        <option value="{{ formation.getId }}">{{ formation.getNom }}</option>
+                                        <option value="{{ formation.id }}">{{ formation.nom }} - {{ formation.etablissement.tier.raisonsoc }} - {{ formation.etablissement.adresse }}</option>
+                                    {% endfor %}
+                                </select>
+                                <select id="SelectMultipleRechercheFormation" style="display: none">
+                                    {% for formation in formations %}
+                                        <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -623,7 +629,7 @@
                                     <div class="inputcontainer">
                                         <label class="list-group-item" style="height: 60px;" for="Datenaissance">Date naissance :</label>
 
-                                        <input value="{{User.getInfo.getDatenaissance|date('Y-m-d') }}" type="date" class="champ form-control" id="Datenaissance" name="_Datenaissance" maxlength="45" required readonly>
+                                        <input value="{{User.getInfo.getDatenaissance|date('d/m/Y') }}" type="date" class="champ form-control" id="Datenaissance" name="_Datenaissance" maxlength="45" required readonly>
 
                                         <label class="list-group-item" style="height: 60px;" for="Cpnaissance">Cp naissance  :</label>
                                         <input value="{{User.getInfo.getCpnaissance}}" type="text" class="champ form-control" id="Cpnaissance" name="_Cpnaissance" maxlength="45" required readonly>
@@ -900,63 +906,65 @@
                             {% if candidatures is defined %}
                                 {% for candidature in candidatures %}
                                     {% set iddiv = random()  %}
-                                    <div class="col-xs-12 Liste">
-                                        <div class="row">
-                                            <label class="cell">Id : <label>{{ candidature.id }}</label></label>
-
-                                            <label class="cell"  >Statut : <label id="lblStatut" name="lblStatut">
-                                                    {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_TUTEUR') %}
-                                                        {% if candidature.statut == 1 %}
-                                                            En attente compléments
-                                                        {% elseif candidature.statut == 2 %}
-                                                            En attente validation
-                                                        {% elseif candidature.statut == 3 %}
-                                                            Validé
-                                                        {% elseif candidature.statut == 99 %}
-                                                            Refusé
-                                                        {% endif %}
-                                                    {% elseif is_granted('ROLE_APPRENANT') %}
-                                                        {% if candidature.statut == 1 %}
-                                                            A compléter
-                                                        {% elseif candidature.statut == 2 %}
-                                                            En attente école
-                                                        {% elseif candidature.statut == 3 %}
-                                                            Admis
-                                                        {% elseif candidature.statut == 99 %}
-                                                            Ajourné
-                                                        {% endif %}
-                                                    {% endif %}
-                                                </label>
-
-                                                {% if is_granted('ROLE_RECRUTEUR') %}
-
-                                                    {% if candidature.statut == 1 or candidature.statut == 2 %}
-
-                                                        <img name="modification" style="width:25px;display: none"  alt="Refusé"  title="Refusé" onclick="modifierStatut(this,99,'{{ candidature.id }}')" src="{{ asset('image/stop_x18.png') }}">
-                                                        <img name="modification" style="display:none" alt="Validé" title="Validé"  onclick="modifierStatut(this,3,'{{ candidature.id }}')" src="{{ asset('image/imgValide.png') }}">
-
-                                                    {% endif %}
-
-                                                {% endif %}
-
-
-                                                <img name="modification"   style="float:right;display:none" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerFormation('{{ path('supprimer_Candidature',{'id':candidature.getId}) }}',this)" />
-
-                                                <div class="button" style="float: right;" data-toggle="collapse" data-target="#cand{{ iddiv }}"></div></label>
-                                        </div>
-                                        <div id="cand{{ iddiv }}" class="collapse in" >
+                                    {% if app.user == candidature.user or is_granted('ROLE_SUPER_ADMIN') or app.user.tier == candidature.formation.etablissement.tier or app.user.etablissement == candidature.formation.etablissement %}
+                                        <div class="col-xs-12 Liste">
                                             <div class="row">
-                                                <label class="cell">Ecole  : <label>{{ candidature.formation.etablissement.tier.raisonsoc }}</label></label>
-                                                <label class="cell">Adresse : <label>{{ candidature.formation.etablissement.adresse }}</label></label>
+                                                <label class="cell">Id : <label>{{ candidature.id }}</label></label>
+
+                                                <label class="cell"  >Statut : <label id="lblStatut" name="lblStatut">
+                                                        {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_TUTEUR') %}
+                                                            {% if candidature.statut == 1 %}
+                                                                En attente compléments
+                                                            {% elseif candidature.statut == 2 %}
+                                                                En attente validation
+                                                            {% elseif candidature.statut == 3 %}
+                                                                Validé
+                                                            {% elseif candidature.statut == 99 %}
+                                                                Refusé
+                                                            {% endif %}
+                                                        {% elseif is_granted('ROLE_APPRENANT') %}
+                                                            {% if candidature.statut == 1 %}
+                                                                A compléter
+                                                            {% elseif candidature.statut == 2 %}
+                                                                En attente école
+                                                            {% elseif candidature.statut == 3 %}
+                                                                Admis
+                                                            {% elseif candidature.statut == 99 %}
+                                                                Ajourné
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </label>
+
+                                                    {% if is_granted('ROLE_RECRUTEUR') %}
+
+                                                        {% if candidature.statut == 1 or candidature.statut == 2 %}
+
+                                                            <img name="modification" style="width:25px;display: none"  alt="Refusé"  title="Refusé" onclick="modifierStatut(this,99,'{{ candidature.id }}')" src="{{ asset('image/stop_x18.png') }}">
+                                                            <img name="modification" style="display:none" alt="Validé" title="Validé"  onclick="modifierStatut(this,3,'{{ candidature.id }}')" src="{{ asset('image/imgValide.png') }}">
+
+                                                        {% endif %}
+
+                                                    {% endif %}
+
+
+                                                    <img name="modification"   style="float:right;display:none" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerFormation('{{ path('supprimer_Candidature',{'id':candidature.getId}) }}',this)" />
+
+                                                    <div class="button" style="float: right;" data-toggle="collapse" data-target="#cand{{ iddiv }}"></div></label>
                                             </div>
-                                            <div class="row">
-                                                <label class="cell">Formation : <label>{{ candidature.formation.nom }}</label></label>
-                                                <label class="cell">Date : <label>{{ candidature.datecandidature|date('d/m/Y') }}</label></label>
+                                            <div id="cand{{ iddiv }}" class="collapse in" >
+                                                <div class="row">
+                                                    <label class="cell">Ecole  : <label>{{ candidature.formation.etablissement.tier.raisonsoc }}</label></label>
+                                                    <label class="cell">Adresse : <label>{{ candidature.formation.etablissement.adresse }}</label></label>
+                                                </div>
+                                                <div class="row">
+                                                    <label class="cell">Formation : <label>{{ candidature.formation.nom }}</label></label>
+                                                    <label class="cell">Date : <label>{{ candidature.datecandidature|date('d/m/Y') }}</label></label>
+                                                </div>
+
                                             </div>
 
                                         </div>
-
-                                    </div>
+                                    {% endif %}
                                 {% endfor %}
                             {% endif %}
                             <div name="modification" style="display: none;">
@@ -1240,8 +1248,26 @@
         });
 
     }
-
-
+    function rechercheformation(mot) {
+        var mots = mot.toUpperCase().trim().split(/ +/g);
+        var select = document.getElementById('SelectMultipleFormation');
+        select.innerHTML = '';
+        var recherche = document.getElementById('SelectMultipleRechercheFormation');
+        for(var i = 0; i < recherche.childElementCount; i++)
+        {
+            for(var j = 0; j< mots.length;j++)
+            {
+                if (stringWith(recherche.options[i].innerHTML, mots[j])) {
+                    var option = document.createElement('option');
+                    var RecherchesMots = recherche.options[i].innerHTML.trim().split(';');
+                    option.value = RecherchesMots[0];
+                    option.innerHTML = RecherchesMots[1] + ' - ' + RecherchesMots[2] + ' - ' + RecherchesMots[3];
+                    select.appendChild(option);
+                    break;
+                }
+            }
+        }
+    }
     function ChangerStatut(statut){
         var path = '{{ path('ChangerStatutApprenant',{'idUser':User.id,'statut':'STATUT'}) }}';
         path = path.replace('STATUT',statut);

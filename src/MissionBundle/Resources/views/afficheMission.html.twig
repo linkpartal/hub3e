@@ -75,23 +75,26 @@
 {% endif %}
 {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
 <div id="Diffusion_formation" class="popup">
-    <div onclick="document.getElementById('submiAssigner_Tuteur8598').click();hide(this)" class="close"></div>
+    <div onclick="document.getElementById('submitDiffusion8598').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-3 col-xs-4" style="padding: 0;border:20px solid white;display: block;top:150px;background-color: white;">
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-        <input class="row" style="width: 100%" type="text" placeholder="Recherche" onkeyup="rechercheformation(this.value)">
+        <input class="row" style="width: 100%" type="text" placeholder="Recherche" onkeyup="if(event.keyCode==13){if(confirm('Voulez-vous envoyer?')){document.getElementById('submitDiffusion8598').click();}}else{rechercheformation(this.value);}">
         <form id="formDiffusion" class="formulaire" onsubmit="ShowWaiter();" method="post">
             <div class="div_form" style="display: block">
                 <select id="SelectMultipleFormation" style="width: 100%; overflow-x: auto" title="" class="row" name="formation[]" multiple required>
                     {% for formation in formations_prop %}
                         <option value="{{ formation.id }}">{{ formation.nom }} - {{ formation.etablissement.tier.raisonsoc }} - {{ formation.etablissement.adresse }}</option>
-                        <option value="Recherche" style="display: none">{{ formation.nom }} {{ formation.etablissement.tier.raisonsoc }} {{ formation.etablissement.adresse }},
-                            {{ formation.etablissement.siret }}</option>
+                    {% endfor %}
+                </select>
+                <select id="SelectMultipleRechercheFormation" style="display: none">
+                    {% for formation in formations_prop %}
+                        <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="div_button">
-                <input class="blue" id="submiAssigner_Tuteur8598" type="button" onclick="this.disabled = true;diffuserMission()" value="envoyer">
+                <input class="blue" id="submitDiffusion8598" type="button" onclick="this.disabled = true;diffuserMission()" value="envoyer">
             </div>
         </form>
     </div>
@@ -572,14 +575,19 @@
     function rechercheformation(mot) {
         var mots = mot.toUpperCase().trim().split(/ +/g);
         var select = document.getElementById('SelectMultipleFormation');
-        for(var i = 1; i < select.childElementCount; i=i+2)
+        select.innerHTML = '';
+        var recherche = document.getElementById('SelectMultipleRechercheFormation');
+        for(var i = 0; i < recherche.childElementCount; i++)
         {
-            select.options[i-1].style.display="block";
-
             for(var j = 0; j< mots.length;j++)
             {
-                if (!stringWith(select.options[i].innerHTML, mots[j])) {
-                    select.options[i-1].style.display="none";
+                if (stringWith(recherche.options[i].innerHTML, mots[j])) {
+                    var option = document.createElement('option');
+                    var RecherchesMots = recherche.options[i].innerHTML.trim().split(';');
+                    option.value = RecherchesMots[0];
+                    option.innerHTML = RecherchesMots[1] + ' - ' + RecherchesMots[2] + ' - ' + RecherchesMots[3];
+                    select.appendChild(option);
+                    break;
                 }
             }
         }

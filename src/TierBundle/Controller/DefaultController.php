@@ -93,6 +93,10 @@ class DefaultController extends Controller
 
             $em->persist($etablissement);
             $em->flush();
+            if($tier->getEcole()){
+                $em->getRepository('GenericBundle:Qcmdef')->findOneBy(array('nom'=>'QCMparDéfault'))->addEtablissement($etablissement) ;
+                $em->flush();
+            }
         }
 
         $em->flush();
@@ -181,33 +185,44 @@ class DefaultController extends Controller
                 array_push($etablisementlier ,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$value)));
             }
             return $this->render('TierBundle::iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,'tiers'=>$tiers,'users'=>$users,
-                'formations'=>$formation,'hobbies' =>$hobbie,'libs'=>$licences,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab,'etablissementslier'=>$etablisementlier,
-                'formation_mission'=>$this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll()));
+                'formations'=>$formation,'hobbies' =>$hobbie,'libs'=>$licences,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab,'etablissementslier'=>$etablisementlier));
         }
         else{
             // missions non suspendu
-            $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('datecreation' => 'DESC'));
+            if($user->hasRole('ROLE_SUPER_ADMIN')){
+                $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('etablissement'=>$etablissement,'suspendu'=>false),array('datecreation' => 'DESC'));
+            }
+            else{
+                $missions_etablissement = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('etablissement'=>$etablissement,'suspendu'=>false),array('datecreation' => 'DESC'));
+                $missions = array();
+                foreach($missions_etablissement as $mis){
+                    foreach($this->getDoctrine()->getRepository('GenericBundle:Diffusion')->findBy(array('mission'=>$mis)) as $diffusion ){
+                        if(($diffusion->getFormation()->getEtablissement()->getTier() == $user->getTier() or $diffusion->getFormation()->getEtablissement() == $user->getEtablissement()) and !in_array($mis,$missions)){
+                            array_push($missions,$mis);
+                        }
+                    }
+                }
+            }
 
             // QCM pour la création des mission
             $qcm = null;
             $questions = null;
             $reponses = null;
-            if(!$etablissement->getTier()->getEcole())
-            {
-                $qcm = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findOneBy(array('nom'=>'QCMparDéfault'));
-                $questions = $this->getDoctrine()->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef' => $qcm));
-                usort($questions, array('\GenericBundle\Entity\Questiondef', 'sort_questions_by_order'));
-                $reponses = array();
 
-                foreach ($questions as $keyqst => $qst) {
-                    $reps = $this->getDoctrine()->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef' => $qst));
-                    usort($reps, array('\GenericBundle\Entity\Reponsedef', 'sort_reponses_by_order'));
-                    $reponses[$keyqst] = $reps;
-                }
+            $qcm = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findOneBy(array('nom'=>'QCMparDéfault'));
+            $questions = $this->getDoctrine()->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef' => $qcm));
+            usort($questions, array('\GenericBundle\Entity\Questiondef', 'sort_questions_by_order'));
+            $reponses = array();
+
+            foreach ($questions as $keyqst => $qst) {
+                $reps = $this->getDoctrine()->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef' => $qst));
+                usort($reps, array('\GenericBundle\Entity\Reponsedef', 'sort_reponses_by_order'));
+                $reponses[$keyqst] = $reps;
             }
+
             return $this->render('TierBundle::iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,'users'=>$users,
                 'libs'=>$licences, 'missions'=>$missions ,'QCMs' => $qcm, 'Questions' => $questions,
-                'reponses' => $reponses,'formation_mission'=>$this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll()));
+                'reponses' => $reponses,'formations'=>$this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll()));
         }
         //$licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier(),'suspendu'=>false ));
     }

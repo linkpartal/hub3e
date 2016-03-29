@@ -144,7 +144,7 @@
 </div>
 <div id="SASListe" class="col-xs-12" style="margin-bottom: 40px;height: 100%;">
 {% for import in imports %}
-    <div class="col-xs-10 col-xs-offset-1 SASPaginate" >
+    <div id="Import{{ import.getId }}" class="col-xs-10 col-xs-offset-1 SASPaginate" >
         <div class="col-xs-1" style="margin: auto;">
             {{ import.getId }}
         </div>
@@ -153,9 +153,9 @@
                 {% if import.getPhotos %}
                     <img id="image{{ import.id }}" src="data:image/jpg;base64,{{import.getPhotos }}" style="height:70px;width:70px;border-radius: 100%">
                 {% elseif import.getCivilite == 'Mme' or import.getCivilite == 'Madame' or import.getCivilite == 'Mademoiselle' %}
-                    <img id="Photosimg" alt="Photos" style="height:40px" src="{{ asset('image/femme.jpg') }}">
+                    <img id="image{{ import.id }}" alt="Photos" style="height:40px" src="{{ asset('image/femme.jpg') }}">
                 {% else %}
-                    <img id="Photosimg" alt="Photos" style="height:40px" src="{{ asset('image/homme.jpg') }}">
+                    <img id="image{{ import.id }}" alt="Photos" style="height:40px" src="{{ asset('image/homme.jpg') }}">
                 {% endif %}
             </div>
 
@@ -247,14 +247,14 @@
                 }
                 if(data['Ajout']=='0')
                 {
+                    champs.disabled = false;
                     if(confirm('Il se peut que cet personne existe déjà dans notre base de données, voulez-vous voir les duplicatas de cet apprenant?')){
-                        voirduplica(data['Id'],data['Id'],data['Id'])
+                        voirduplica(data['Id'],data['LieuNaissance'],data['DateNaissance']);
                     }
                 }
             }
         });
-
-    };
+    }
     function voirduplica(id, lieunaissance ,datenaissance) {
         var route = '{{ path("afficher_duplica",{'id':"_id"}) }}';
         route = route.replace('_id',id);
@@ -310,6 +310,8 @@
             success:function(data){
                 if(data==1){
                     document.getElementById('DuplicaPopUp').style.display = 'none';
+                    var divImport = document.getElementById('Import'+idImportFusion);
+                    divImport.parentNode.removeChild(divImport);
                     alert('La fusion s\'est correctement effectuée');
                 }
 
