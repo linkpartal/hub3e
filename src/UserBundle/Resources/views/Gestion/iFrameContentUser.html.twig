@@ -5,8 +5,16 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/ajout.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
-    {% block CSS %}{% endblock %}
+    {% block CSS %}
+        <style>
+            .ui-widget-header{color:black;}
+            .ui-datepicker-calendar {
+                display: none;
+            }
+        </style>
+    {% endblock %}
 
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
 
@@ -132,12 +140,11 @@
                                     <input placeholder="Poste" class="input"  type="text" id="Poste" name="_Poste" maxlength="45" required >
                                 </div>
                                 <div class="col-xs-6 input-colonne" style="border-right: 0">
-                                    <label style="float: left">A partir de :</label><input type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' class="date" id="Datedebut" name="_Datedebut" title="Datedebut" required >
+                                    <label style="float: left">A partir de :</label><input type="text" class="date" id="Datedebut" name="_Datedebut" title="Datedebut" required >
                                 </div>
                                 <div class="col-xs-6 input-colonne" style="border-right: 0">
-                                    <label style="float: left">à :</label><input  type="date" data-date='{"buttonOnly": true, "calculateWidth": true}' class="date" id="Datefin" name="_Datefin" title="Datefin" required>
+                                    <label style="float: left">à :</label><input  type="text" class="date" id="Datefin" name="_Datefin" title="Datefin" required>
                                 </div>
-                                <input placeholder="Nombre d'années" class="input" type="number" id="Nbreannee" name="_Nbreannee" maxlength="11" required >
                             </div>
 
 
@@ -605,7 +612,7 @@
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="Datenaissance">Date naissance :</label>
 
-                                    <input value="{{User.getInfo.getDatenaissance|date('Y-m-d') }}" type="date" class="champ form-control" id="Datenaissance" name="_Datenaissance" maxlength="45" required >
+                                    <input value="{{User.getInfo.getDatenaissance|date('d/m/Y') }}" type="text" class="champ form-control" id="Datenaissance" name="_Datenaissance" maxlength="45" required >
                                 </div>
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="Cpnaissance">Cp naissance  :</label>
@@ -1196,6 +1203,7 @@
 </div>
 <script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('js/PopUp.js') }}"></script>
 <script language="JavaScript">
     $('#document').bind('change', function() {
@@ -1347,7 +1355,17 @@
             }
         });
     }
-
+    $('.date').datepicker( {
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'mm/yy',
+        monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+        monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+        onClose: function(dateText, inst) {
+            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+        }
+    });
     function supprimerLangue(div){
 
         var route = '{{path('supprimer_Langue',{'id':"_idLangue",'IdUser':"_IdUser"})}}';
