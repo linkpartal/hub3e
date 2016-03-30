@@ -1141,6 +1141,15 @@ class DefaultController extends Controller
             $em->flush();
             $em->remove($info);
             $em->flush();
+            $mail = $import->getEmail();
+            if($mail){
+                $message = \Swift::newInstance()
+                    ->setSubject('')
+                    ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
+                    ->setTo($mail)
+                    ->setBody($this->renderView('GenericBundle:Mail:EmailSupp.html.twig',array('ImportCandidat'=>$import)),'text/html');
+                $this->get('mailer')->send($message);
+            }
 
             return $response->setData(array('Delete'=>'1'));
         }
