@@ -296,4 +296,48 @@ class MiseEnRelationController extends Controller
             return $rep->setData($date);
         }
     }
+
+    public function envoiMailRemplirCRAction($idUser,$idRDV){
+        $rdv = $this->getDoctrine()->getRepository('GenericBundle:RDV')->find($idRDV);
+        $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($idUser);
+        $reponse = new JsonResponse();
+
+        if($user == $rdv->getApprenant()){
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Email')
+                ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
+                ->setTo($rdv->getApprenant()->getEmail())
+                ->setBody($this->render('GenericBundle:Mail:EmailRemplirCompteRendu.html.twig',array('rdv'=>$rdv,'tuteur'=>false))
+                    ,'text/html'
+                );
+            $this->get('mailer')->send($message);
+            $reponse->setData(1);
+        }
+        elseif($user == $rdv->getTuteur()){
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Email')
+                ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
+                ->setTo($rdv->getTuteur()->getEmail())
+                ->setBody($this->render('GenericBundle:Mail:EmailRemplirCompteRendu.html.twig',array('rdv'=>$rdv,'tuteur'=>true))
+                    ,'text/html'
+                );
+            $this->get('mailer')->send($message);
+            $reponse->setData(1);
+        }
+        else{
+            $reponse->setData(0);
+        }
+        return $reponse;
+
+    }
+
+    public function ConsulterCompteRenduAction($idRDV){
+        $rdv = $this->getDoctrine()->getRepository('GenericBundle:RDV')->find($idRDV);
+        $Arraycomptes = array();
+        $rep = new JsonResponse();
+        foreach ($this->getDoctrine()->getRepository('GenericBundle:CompteRendu')->findBy(array('rendezvous'=>$rdv)) as $item) {
+            array_push($Arraycomptes,array($item->getAuteur()->getCivilite().' '.$item->getAuteur()->getNom().' '.$item->getAuteur()->getPrenom(),$item->getCompterendu(),date_format($item->getDate(),'d/m/Y H:i') ));
+        }
+        return $rep->setData($Arraycomptes);
+    }
 }

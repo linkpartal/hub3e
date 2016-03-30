@@ -208,11 +208,15 @@ class DefaultController extends Controller
 
     public function afficher_rendezvousAction(){
         $user = $this->get('security.token_storage')->getToken()->getUser();
+        $rendezvous= null;
         if($user->hasRole('ROLE_APPRENANT')){
             $rendezvous = $this->getDoctrine()->getRepository('GenericBundle:RDV')->findBy(array('apprenant'=>$user ));
         }
-        else{
+        elseif ($user->hasRole('ROLE_TUTEUR')){
             $rendezvous = $this->getDoctrine()->getRepository('GenericBundle:RDV')->findBy(array('tuteur'=>$user ));
+        }
+        elseif($user->hasRole('ROLE_SUPER_ADMIN')){
+            $rendezvous = $this->getDoctrine()->getRepository('GenericBundle:RDV')->findAll();
         }
 
         foreach($rendezvous as $rdv)

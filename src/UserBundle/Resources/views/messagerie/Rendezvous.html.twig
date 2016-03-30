@@ -6,12 +6,13 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/mission.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
     {% block CSS %}{% endblock %}
 
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
 
 </head>
-<body>
+<body onunload="window.parent.document.getElementById('iframe').style.position ='static';window.parent.document.getElementById('iframe').style.height ='calc(100% - 72px)';">
 
 <div id="CompteRendu" class="popup" >
     <div onclick="fermeture();hide(this)" class="close"></div>
@@ -62,6 +63,12 @@
 
 
 </div>
+<div id="ConsultationCompteRendu" class="popup" >
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-7" style="background-color: white;padding: 0;border:20px solid white;display: block; margin-left: 20%; ">
+        <div id="ComptesRenduContainer"></div>
+    </div>
+</div>
 <div id="ajounerPopUp" class="popup" >
     <div onclick="fermeture();hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-7" style="background-color: white;padding: 0;border:20px solid white;display: block; margin-left: 20%; ">
@@ -88,210 +95,296 @@
 
 
 </div>
-<div style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;width: 100%;height: 90%;position: absolute;">
+<div style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;height: 100%;padding-bottom: 40px;overflow: hidden;">
 
-    <div class="row" style="margin:10px 0 0 10px ;margin-bottom: 10px"  >
-        <div>
-            <select class="input" title="messages" style="margin-left: 20px;height:40px;width:200px">
-                <option value="les messages">Tous les messages</option>
-            </select>
-
-            <label style="width:20px" id="startTimeLabel" visible="false"></label>
-
-            <span class="glyphicon glyphicon-search" ></span>
-            <input type="text" class="input" placeholder="Recherche" style="padding:5px; border:solid 1px #666666; color:#666666; border-radius:5px;width:200px;height:40px;margin-right:607px" >
-            <input  class="blue" style="background:white;color:#666666;border:1px solid #ccc;height:40px;width: 40px;color:#257ef0" type="button" value="1">
-            <input  class="blue" style="background:white;color:#666666;border:1px solid #ccc;height:40px;width: 40px;color:#257ef0" type="button" value="2">
-            <button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
-
+    <div class="col-xs-10 col-xs-offset-1" style="margin-top: 10px;">
+        <select class="input col-xs-2" title="messages" style="height:40px;">
+            <option value="les messages">Tous les messages</option>
+        </select>
+        <div class="col-xs-2" style="margin-left: 20px;height:40px;display: flex;">
+            <span class="glyphicon glyphicon-search col-xs-2" id="basic-addon1" style="height: 30px;padding: 7px;float: left;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;background-color: transparent;"></span>
+            <input class="col-xs-10" type="text" aria-describedby="basic-addon1" style="height: 31px;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;background-color: transparent;" placeholder="Recherche ...">
         </div>
+        <div id="paginationContainer" class="customepaginate" style="max-width: 240px;float: right;display: flex;">
+            <button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px;float: right;" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
+        </div>
+
     </div>
 
+    <div id="Liste-RDV" class="col-xs-10 col-xs-offset-1">
+        {% if rendezvous is defined %}
+            {% for rdv in rendezvous %}
+
+                <div id="{{ rdv.id }}" class="Liste" style="border: 1px solid #ddd;margin: 0;height:100px;width: 100%;" >
+                    {% if app.user.hasRole('ROLE_TUTEUR') %}
+                        <div class="col-xs-2" >
+                            <div style="border: 15px solid transparent">
+                                {% if rdv.apprenant.getPhotos %}
+                                    <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="data:image/jpg;base64,{{ rdv.apprenant.getPhotos }}">
+                                {% elseif rdv.apprenant.getCivilite == 'Mme' or rdv.apprenant.getCivilite == 'Madame' or User.getCivilite == 'Mademoiselle' %}
+                                    <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/femme.jpg') }}">
+                                {% else %}
+                                    <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/homme.jpg') }}">
+                                {% endif %}
+                            </div>
 
 
-    {% if rendezvous is defined %}
-        {% for rdv in rendezvous %}
+                        </div>
 
-            <div id="{{ rdv.id }}" class="col-xs-10" style="border: 1px solid #ddd;margin:0 20px;height:100px;" >
-                {% if not app.user.hasRole('ROLE_APPRENANT') %}
-                    <div class="col-xs-2" >
-                        <div style="border: 15px solid transparent">
-                            {% if rdv.apprenant.getPhotos %}
-                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="data:image/jpg;base64,{{ rdv.apprenant.getPhotos }}">
-                            {% elseif rdv.apprenant.getCivilite == 'Mme' or rdv.apprenant.getCivilite == 'Madame' or User.getCivilite == 'Mademoiselle' %}
-                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/femme.jpg') }}">
-                            {% else %}
-                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/homme.jpg') }}">
+                        <div id="date{{ rdv.id }}" class="col-xs-3" style="display:flex;height: 100px;text-align: left; ">
+                            {% if rdv.statut == 1 or rdv.statut== 2 %}
+                                <label style="font:18px Roboto;margin: auto;" > {{ rdv.getDate1|date('d-m-Y à H:i') }}</label>
+
+                            {% elseif rdv.statut == -1 %}
+                                {% if rdv.date1 %}
+                                    <label style="font:18px Roboto;margin: auto;" > {{ rdv.getDate1|date('d-m-Y à H:i') }}
+                                        {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                            <button onclick="ChoisirDate({{ rdv.id }},1,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>
+                                        {% endif %}
+                                    </label>
+                                {% endif %}
+                                {% if rdv.date2 %}
+                                    <label style="font:18px arial;margin: auto;" > {{ rdv.getDate2|date('d-m-Y à H:i') }}
+                                        {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                            <button onclick="ChoisirDate({{ rdv.id }},2,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>
+                                        {% endif %}
+                                    </label>
+                                {% endif %}
+                                {% if rdv.date3 %}
+                                    <label style="font:18px Roboto;margin: auto;" > {{ rdv.getDate3|date('d-m-Y à H:i') }}
+                                        {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                            <button onclick="ChoisirDate({{ rdv.id }},3,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>
+                                        {% endif %}
+                                    </label>
+                                {% endif %}
                             {% endif %}
                         </div>
 
-
-                    </div>
-
-                    <div id="date{{ rdv.id }}" class="col-xs-3" style="margin-top:10px;text-align: left; ">
-                        {% if rdv.statut == 1 or rdv.statut== 2 %}
-                            <label style="font:18px Roboto;" > {{ rdv.getDate1|date('d-m-Y à H:i') }}</label>
-
-                        {% elseif rdv.statut == -1 %}
-                            {% if rdv.date1 %}
-                                <label style="font:18px Roboto;" > {{ rdv.getDate1|date('d-m-Y à H:i') }}
-                                    {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
-                                        <button onclick="ChoisirDate({{ rdv.id }},1,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>
-                                    {% endif %}
-                                </label>
-                            {% endif %}
-                            {% if rdv.date2 %}
-                                <label style="font:18px arial;" > {{ rdv.getDate2|date('d-m-Y à H:i') }}
-                                    {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
-                                        <button onclick="ChoisirDate({{ rdv.id }},2,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>
-                                    {% endif %}
-                                </label>
-                            {% endif %}
-                            {% if rdv.date3 %}
-                                <label style="font:18px Roboto;" > {{ rdv.getDate3|date('d-m-Y à H:i') }}
-                                    {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
-                                        <button onclick="ChoisirDate({{ rdv.id }},3,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>
-                                    {% endif %}
-                                </label>
-                            {% endif %}
-                        {% endif %}
-                    </div>
-
-                    <div class="col-xs-4" style="margin-top:10px;text-align: left">
-                        <label style="font:16px Roboto;margin-top: 20px;float:left;width: 100%" > {{ rdv.getMission.getIntitule }} - <label style="font:18px Roboto;color:#2A76CC" > {{ rdv.getMission.etablissement.tier.raisonsoc }}</label> </label>
-                    </div>
-
-                    <div class="col-xs-offset-1 col-xs-1" style="margin-top:10px;">
-                        {% if rdv.statut == 1 %}
-                            <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin-top: 30px;color: green;" > établi </label>
-                        {% elseif rdv.statut == -1 %}
-                            <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin-top: 30px;color: orangered;" > Ajouné </label>
-                        {% elseif rdv.statut == -2 %}
-                            <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin-top: 30px;color: red;" > Annulé </label>
-                        {% elseif rdv.statut == 2 %}
-                            <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin-top: 30px;" > Date dépassée </label>
-                        {% else %}
-                            <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin-top: 30px" > Répondez </label>
-                        {% endif %}
-                    </div>
-                    <div class="dropdown clearfix col-xs-1" style="height: 100px">
-
-                        <button style="height: 100%;width: 100%;background-color: transparent;border: none;" class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            <span class="glyphicon glyphicon-option-vertical" style="height:20px;color:#8c8c8c"></span>
-                        </button>
-                        <ul id="menuRDV{{ rdv.id }}" class="dropdown-menu" style="left:100%;top:0;" aria-labelledby="dropdownMenu1">
-                            {% if rdv.statut == -1 %}
-                                <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="AnnulerRDV({{ rdv.id }})">Annulé</button></li>
-                                <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" href="#">Demander une réponse</button></li>
-                            {% elseif rdv.statut == -2 %}
-                                <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id }}">Proposez des rendez-vous</button></li>
-                            {% elseif rdv.statut == 2 %}
-                                <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id }}">Proposez des rendez-vous</button></li>
-                                <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('CompteRendu');rendezvousSelectionne = {{ rdv.id }}">Compte rendu</button></li>
-                            {% else %}
-                                <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="AnnulerRDV({{ rdv.id }})">Annulé</button></li>
-                                <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id }}">Ajouné</button></li>
-
-                                {% if rdv.statut == 1 and rdv.date1 < date('-1hours') %}
-                                    <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('CompteRendu');rendezvousSelectionne = {{ rdv.id }}">Compte rendu</button></li>
-                                {% endif %}
-
-                            {% endif %}
-                        </ul>
-                    </div>
-                {% else %}
-                    <div class="col-xs-2" >
-                        <div style="border: 15px solid transparent">
-                            <img   src="data:image/jpg;base64,{{ rdv.mission.etablissement.tier.logo }}" style="height:70px;width:70px;margin:0 40px;border-radius: 100%">
+                        <div class="col-xs-4" style="display:flex;height: 100px;text-align: left">
+                            <label style="font:16px Roboto;float:left;margin: auto;" > {{ rdv.getMission.getIntitule }} - <label style="font:18px Roboto;color:#2A76CC" > {{ rdv.getMission.etablissement.tier.raisonsoc }}</label> </label>
                         </div>
 
-
-                    </div>
-
-                    <div id="date{{ rdv.id }}" class="col-xs-3" style="margin-top:10px;text-align: left; ">
-                        {% if rdv.statut == 1 or rdv.statut== 2 %}
-                            <label style="font:18px Roboto;" > {{ rdv.getDate1|date('d-m-Y à H:i') }}</label>
-
-                        {% elseif rdv.statut == -1 %}
-                            {% if rdv.date1 %}
-                                <label style="font:18px Roboto;" > {{ rdv.getDate1|date('d-m-Y à H:i') }}
-                                    {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
-                                        <button onclick="ChoisirDate({{ rdv.id }},1,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>
-                                    {% endif %}
-                                </label>
-                            {% endif %}
-                            {% if rdv.date2 %}
-                                <label style="font:18px Roboto;" > {{ rdv.getDate2|date('d-m-Y à H:i') }}
-                                    {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
-                                        <button onclick="ChoisirDate({{ rdv.id }},2,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>
-                                    {% endif %}
-                                </label>
-                            {% endif %}
-                            {% if rdv.date3 %}
-                                <label style="font:18px Roboto;" > {{ rdv.getDate3|date('d-m-Y à H:i') }}
-                                    {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
-                                        <button onclick="ChoisirDate({{ rdv.id }},3,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>
-                                    {% endif %}
-                                </label>
-                            {% endif %}
-                        {% endif %}
-                    </div>
-
-                    <div class="col-xs-4" style="margin-top:10px;text-align: left">
-                        <label style="font:16px Roboto;margin-top: 20px;float:left;width: 100%" > {{ rdv.getMission.getIntitule }} - <label style="font:18px Roboto;color:#2A76CC" > {{ rdv.getMission.etablissement.tier.raisonsoc }}</label> </label>
-                    </div>
-
-                    <div class="col-xs-offset-1 col-xs-1" style="margin-top:10px;">
-                        {% if rdv.statut == 1 %}
-                            <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin-top: 30px;color: green;" > établi </label>
-                        {% elseif rdv.statut == -1 %}
-                            <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin-top: 30px;color: orangered;" > Ajouné </label>
-                        {% elseif rdv.statut == -2 %}
-                            <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin-top: 30px;color: red;" > Annulé </label>
-                        {% elseif rdv.statut == 2 %}
-                            <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin-top: 30px;" > Date dépassée </label>
-                        {% else %}
-                            <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin-top: 30px" > Répondez </label>
-                        {% endif %}
-                    </div>
-                    <div class="dropdown clearfix col-xs-1" style="height: 100px">
-
-                        <button style="height: 100%;width: 100%;background-color: transparent;border: none;" class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            <span class="glyphicon glyphicon-option-vertical" style="height:20px;color:#8c8c8c"></span>
-                        </button>
-                        <ul id="menuRDV{{ rdv.id }}" class="dropdown-menu" style="left:100%;top:0;" aria-labelledby="dropdownMenu1">
-                            {% if rdv.statut == -1 %}
-                                <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="AnnulerRDV({{ rdv.id }})">Annulé</button></li>
-                                <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" href="#">Demander une réponse</button></li>
+                        <div class="col-xs-offset-1 col-xs-1" style="display:flex;height: 100px;">
+                            {% if rdv.statut == 1 %}
+                                <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin: auto;color: green;" > établi </label>
+                            {% elseif rdv.statut == -1 %}
+                                <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin: auto;color: orangered;" > Ajouné </label>
                             {% elseif rdv.statut == -2 %}
-                                <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id }}">Proposez des rendez-vous</button></li>
+                                <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin: auto;color: red;" > Annulé </label>
                             {% elseif rdv.statut == 2 %}
-                                <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id }}">Proposez des rendez-vous</button></li>
-                                <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('CompteRendu');rendezvousSelectionne = {{ rdv.id }}">Compte rendu</button></li>
+                                <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin: auto;" > Date dépassée </label>
                             {% else %}
-                                <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="AnnulerRDV({{ rdv.id }})">Annulé</button></li>
-                                <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id }}">Ajouné</button></li>
-
-                                {% if rdv.statut == 1 and rdv.date1 < date('-1hours') %}
-                                    <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('CompteRendu');rendezvousSelectionne = {{ rdv.id }}">Compte rendu</button></li>
-                                {% endif %}
-
+                                <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin: auto;" > Répondez </label>
                             {% endif %}
-                        </ul>
-                    </div>
-                {% endif %}
-            </div>
+                        </div>
+                        <div class="dropdown clearfix col-xs-1" style="height: 100px">
 
-        {% endfor %}
-    {% endif %}
+                            <button style="height: 100%;width: 100%;background-color: transparent;border: none;" class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <span class="glyphicon glyphicon-option-vertical" style="height:20px;color:#8c8c8c"></span>
+                            </button>
+                            <ul id="menuRDV{{ rdv.id }}" class="dropdown-menu" style="left:50%;top:50%;" aria-labelledby="dropdownMenu1">
+                                {% if rdv.statut == -1 %}
+                                    <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="AnnulerRDV({{ rdv.id }})">Annulé</button></li>
+                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" href="#">Demander une réponse</button></li>
+                                {% elseif rdv.statut == -2 %}
+                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id }}">Proposez des rendez-vous</button></li>
+                                {% elseif rdv.statut == 2 %}
+                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id }}">Proposez des rendez-vous</button></li>
+                                    <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('CompteRendu');rendezvousSelectionne = {{ rdv.id }}">Compte rendu</button></li>
+                                {% else %}
+                                    <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="AnnulerRDV({{ rdv.id }})">Annulé</button></li>
+                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id }}">Ajouné</button></li>
+
+                                    {% if rdv.statut == 1 and rdv.date1 < date('-1hours') %}
+                                        <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('CompteRendu');rendezvousSelectionne = {{ rdv.id }}">Compte rendu</button></li>
+                                    {% endif %}
+
+                                {% endif %}
+                            </ul>
+                        </div>
+                    {% elseif is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_ADMINSOC') %}
+                        <div class="col-xs-2" >
+                            <div style="border: 15px solid transparent">
+                                {% if rdv.apprenant.getPhotos %}
+                                    <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="data:image/jpg;base64,{{ rdv.apprenant.getPhotos }}">
+                                {% elseif rdv.apprenant.getCivilite == 'Mme' or rdv.apprenant.getCivilite == 'Madame' or User.getCivilite == 'Mademoiselle' %}
+                                    <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/femme.jpg') }}">
+                                {% else %}
+                                    <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/homme.jpg') }}">
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div id="date{{ rdv.id }}" class="col-xs-2" style="display:flex;height: 100px;text-align: left; ">
+                            {% if rdv.statut == 1 or rdv.statut== 2 %}
+                                <label style="font:18px Roboto;margin: auto;" > {{ rdv.getDate1|date('d-m-Y à H:i') }}</label>
+
+                            {% elseif rdv.statut == -1 %}
+                                {% if rdv.date1 %}
+                                    <label style="font:18px Roboto;margin: auto;" > {{ rdv.getDate1|date('d-m-Y à H:i') }}
+                                        {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                            <button onclick="ChoisirDate({{ rdv.id }},1,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>
+                                        {% endif %}
+                                    </label>
+                                {% endif %}
+                                {% if rdv.date2 %}
+                                    <label style="font:18px arial;margin: auto;" > {{ rdv.getDate2|date('d-m-Y à H:i') }}
+                                        {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                            <button onclick="ChoisirDate({{ rdv.id }},2,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>
+                                        {% endif %}
+                                    </label>
+                                {% endif %}
+                                {% if rdv.date3 %}
+                                    <label style="font:18px Roboto;margin: auto;" > {{ rdv.getDate3|date('d-m-Y à H:i') }}
+                                        {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                            <button onclick="ChoisirDate({{ rdv.id }},3,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>
+                                        {% endif %}
+                                    </label>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+
+                        <div class="col-xs-2" style="display:flex;height: 100px;text-align: left">
+                            <label style="font:16px Roboto;float:left;margin: auto;" > {{ rdv.getMission.getIntitule }} - <label style="font:18px Roboto;color:#2A76CC" > {{ rdv.getMission.etablissement.tier.raisonsoc }}</label> </label>
+                        </div>
+                        <div class="col-xs-4" style="display:flex;height: 100px;text-align: left">
+                            <label class="col-xs-6" style="font:16px Roboto;float:left;margin: auto;text-overflow: ellipsis;overflow: hidden;" title="{{ rdv.tuteur.civilite }} {{ rdv.tuteur.nom }} {{ rdv.tuteur.prenom }}">{{ rdv.tuteur.civilite }} {{ rdv.tuteur.nom }} {{ rdv.tuteur.prenom }} - <label style="font:18px Roboto;color:#2A76CC;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;" title="{{ rdv.tuteur.email }}" > {{ rdv.tuteur.email }}</label></label>
+                            <label class="col-xs-6" style="font:16px Roboto;float:left;margin: auto;text-overflow: ellipsis;overflow: hidden;" title="{{ rdv.apprenant.civilite }} {{ rdv.apprenant.nom }} {{ rdv.apprenant.prenom }}">{{ rdv.apprenant.civilite }} {{ rdv.apprenant.nom }} {{ rdv.apprenant.prenom }} - <label style="font:18px Roboto;color:#2A76CC;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;" title="{{ rdv.apprenant.email }}"> {{ rdv.apprenant.email }}</label></label>
+                        </div>
+
+                        <div class="col-xs-1" style="display:flex;height: 100px;">
+                            {% if rdv.statut == 1 %}
+                                <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin: auto;color: green;" > établi </label>
+                            {% elseif rdv.statut == -1 %}
+                                <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin: auto;color: orangered;" > Ajouné </label>
+                            {% elseif rdv.statut == -2 %}
+                                <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin: auto;color: red;" > Annulé </label>
+                            {% elseif rdv.statut == 2 %}
+                                <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin: auto;" > Date dépassée </label>
+                            {% else %}
+                                <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin: auto;" > Répondez </label>
+                            {% endif %}
+                        </div>
+                        <div class="dropdown clearfix col-xs-1" style="height: 100px">
+
+                            <button style="height: 100%;width: 100%;background-color: transparent;border: none;" class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <span class="glyphicon glyphicon-option-vertical" style="height:20px;color:#8c8c8c"></span>
+                            </button>
+                            <ul id="menuRDV{{ rdv.id }}" class="dropdown-menu" style="left:50%;top:50%;" aria-labelledby="dropdownMenu1">
+                                {% if rdv.statut == -1 %}
+                                    <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="AnnulerRDV({{ rdv.id }})">Annulé</button></li>
+                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="ConsulterCR({{ rdv.id }})">Voir Comptes rendu</button></li>
+                                {% else %}
+                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="ConsulterCR({{ rdv.id }})">Voir Comptes rendu</button></li>
+                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="OrdreDeRemplirCR({{ rdv.apprenant.id }},{{ rdv.id }})">Ordre à l'apprenant</button></li>
+                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="OrdreDeRemplirCR({{ rdv.tuteur.id }},{{ rdv.id }})">Ordre au tuteur</button></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    {% else %}
+                        <div class="col-xs-2" >
+                            <div style="border: 15px solid transparent">
+                                <img   src="data:image/jpg;base64,{{ rdv.mission.etablissement.tier.logo }}" style="height:70px;width:70px;margin:0 40px;border-radius: 100%">
+                            </div>
+                        </div>
+
+                        <div id="date{{ rdv.id }}" class="col-xs-3" style="display:flex;height: 100px;text-align: left; ">
+                            {% if rdv.statut == 1 or rdv.statut== 2 %}
+                                <label style="font:18px Roboto;margin:auto;" > {{ rdv.getDate1|date('d-m-Y à H:i') }}</label>
+
+                            {% elseif rdv.statut == -1 %}
+                                {% if rdv.date1 %}
+                                    <label style="font:18px Roboto;margin:auto;" > {{ rdv.getDate1|date('d-m-Y à H:i') }}
+                                        {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                            <button onclick="ChoisirDate({{ rdv.id }},1,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>
+                                        {% endif %}
+                                    </label>
+                                {% endif %}
+                                {% if rdv.date2 %}
+                                    <label style="font:18px Roboto;margin:auto;" > {{ rdv.getDate2|date('d-m-Y à H:i') }}
+                                        {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                            <button onclick="ChoisirDate({{ rdv.id }},2,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>
+                                        {% endif %}
+                                    </label>
+                                {% endif %}
+                                {% if rdv.date3 %}
+                                    <label style="font:18px Roboto;margin:auto;" > {{ rdv.getDate3|date('d-m-Y à H:i') }}
+                                        {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                            <button onclick="ChoisirDate({{ rdv.id }},3,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>
+                                        {% endif %}
+                                    </label>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+
+                        <div class="col-xs-4" style="display:flex;height: 100px;text-align: left">
+                            <label style="font:16px Roboto;margin: auto;float:left;width: 100%" > {{ rdv.getMission.getIntitule }} - <label style="font:18px Roboto;color:#2A76CC" > {{ rdv.getMission.etablissement.tier.raisonsoc }}</label> </label>
+                        </div>
+
+                        <div class="col-xs-offset-1 col-xs-1" style="display:flex;height: 100px;">
+                            {% if rdv.statut == 1 %}
+                                <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin: auto;color: green;" > établi </label>
+                            {% elseif rdv.statut == -1 %}
+                                <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin: auto;color: orangered;" > Ajouné </label>
+                            {% elseif rdv.statut == -2 %}
+                                <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin: auto;color: red;" > Annulé </label>
+                            {% elseif rdv.statut == 2 %}
+                                <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin: auto;" > Date dépassée </label>
+                            {% else %}
+                                <label id="statut{{ rdv.id }}" style="font:18px Roboto;margin: auto;" > Répondez </label>
+                            {% endif %}
+                        </div>
+                        <div class="dropdown clearfix col-xs-1" style="height: 100px">
+
+                            <button style="height: 100%;width: 100%;background-color: transparent;border: none;" class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <span class="glyphicon glyphicon-option-vertical" style="height:20px;color:#8c8c8c"></span>
+                            </button>
+                            <ul id="menuRDV{{ rdv.id }}" class="dropdown-menu" style="left:50%;top:50%;" aria-labelledby="dropdownMenu1">
+                                {% if rdv.statut == -1 %}
+                                    <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="AnnulerRDV({{ rdv.id }})">Annulé</button></li>
+                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" href="#">Demander une réponse</button></li>
+                                {% elseif rdv.statut == -2 %}
+                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id }}">Proposez des rendez-vous</button></li>
+                                {% elseif rdv.statut == 2 %}
+                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id }}">Proposez des rendez-vous</button></li>
+                                    <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('CompteRendu');rendezvousSelectionne = {{ rdv.id }}">Compte rendu</button></li>
+                                {% else %}
+                                    <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="AnnulerRDV({{ rdv.id }})">Annulé</button></li>
+                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id }}">Ajouné</button></li>
+
+                                    {% if rdv.statut == 1 and rdv.date1 < date('-1hours') %}
+                                        <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('CompteRendu');rendezvousSelectionne = {{ rdv.id }}">Compte rendu</button></li>
+                                    {% endif %}
+
+                                {% endif %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+
+            {% endfor %}
+        {% endif %}
+    </div>
 </div>
 
 
 <script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/PopUp.js') }}"></script>
+<script src="{{ asset('js/paginate.js') }}"></script>
 <script language="JavaScript">
     var rendezvousSelectionne;
+    $(document).ready(function(){
+        window.parent.document.getElementById('iframe').style.left ='0';
+        window.parent.document.getElementById('iframe').style.top ='32px';
+        window.parent.document.getElementById('iframe').style.height ='calc(100% - 32px)';
+        window.parent.document.getElementById('iframe').style.position ='fixed';
+        $("#paginationContainer").customPaginate({
+            itemsToPaginate : ".Liste",
+            activeClass : "active-class"
+        });
+
+    });
     function ChoisirDate(id,date,button){
         if(confirm('Confirmez-vous votre choix?')){
             var route = '{{ path('DateRDV',{'id':'_ID','numero':'_NUMERO'}) }}';
@@ -386,6 +479,61 @@
                 document.getElementById('date'+rendezvousSelectionne).innerHTML = innerhtmldate;
                 document.getElementById('menuRDV'+rendezvousSelectionne).innerHTML ='<li><button type="button" style="height:100%;width:100%;background-color:transparent;border:none;" onclick="AnnulerRDV('+ rendezvousSelectionne+')">Annulé</button></li>'+
                        '<li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" href="#">Demander une réponse</button></li>';
+            }
+        })
+    }
+    function OrdreDeRemplirCR(id,rdv){
+        var route = '{{ path('OrdreCompleterCR',{'idUser':'_IDUSER','idRDV':'_IDRDV'}) }}';
+        route = route.replace('_IDUSER',id);
+        route = route.replace('_IDRDV',rdv);
+        $.ajax({
+            type:'post',
+            url: route,
+            success:function(data){
+                if(data==1){
+                    alert('le message a été envoyé correctement!')
+                }
+                else{
+                    console.log(data);
+                }
+            },
+            error:function(){
+                alert('Une erreur s\'est produite sur le serveur');
+            }
+        })
+    }
+    function ConsulterCR(id){
+        var route = '{{ path('ConsulterCR',{'idRDV':'_IDRDV'}) }}';
+        route = route.replace('_IDRDV',id);
+        $.ajax({
+            type: 'post',
+            url: route,
+            success:function(data){
+                var container = document.getElementById('ComptesRenduContainer');
+                container.innerHTML = '';
+
+                for(var i = 0; i < data.length; i++){
+                    var label = document.createElement('label');
+                    label.style.color = '#2A76CC';
+                    label.style.textTransform = 'uppercase';
+                    label.style.float = 'left';
+                    label.innerHTML = data[i][0] + ' - ' + data[i][2];
+
+                    var textarea = document.createElement('textarea');
+                    textarea.style.backgroundColor = '#e4b9b9';
+                    textarea.innerHTML = data[i][1];
+
+                    var divCompteRendu = document.createElement('div');
+                    divCompteRendu.style.marginBottom = "20px";
+                    divCompteRendu.appendChild(label);
+                    divCompteRendu.appendChild(textarea);
+
+                    container.appendChild(divCompteRendu);
+                }
+                show('ConsultationCompteRendu');
+            },
+            error:function(){
+                alert('Une erreur s\'est produite sur le serveur');
             }
         })
     }

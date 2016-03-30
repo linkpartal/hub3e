@@ -212,3 +212,11 @@ CompleterProfil:
 ChangerStatutApprenant:
     path: /ChangerStatutApprenant/IdUser={idUser}/statut={statut}
     defaults: {_controller: UserBundle:Default:ChangerStatutApprenant}
+
+OrdreCompleterCR:
+    path: /EmailRemplirCR/IdUser={idUser}/rdv={idRDV}
+    defaults: {_controller: UserBundle:MiseEnRelation:envoiMailRemplirCR}
+
+ConsulterCR:
+    path: /ConsulterCR/rdv={idRDV}
+    defaults: {_controller: UserBundle:MiseEnRelation:ConsulterCompteRendu}
