@@ -5,8 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/mission.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
-    {% block CSS %}{% endblock %}
+    {% block CSS %}
+        <style>
+            .ui-widget-header{color:black;}
+        </style>
+    {% endblock %}
 
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
 
@@ -90,11 +95,11 @@
                     </div>
                     <div  class="rightMenu " style="padding: 8px !important;">
                         <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                        <input value="{{mission.getDatedebut|date('Y-m-d')}}" type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' id="Datedebut" name="_Datedebut" readonly>
+                        <input value="{{mission.getDatedebut|date('d/m/Y')}}" type="text"  id="Datedebut" name="_Datedebut" readonly>
                     </div>
                     <div  class="rightMenu " style="padding: 8px !important;">
                         <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                        <input value="{{mission.getDatefin|date('Y-m-d')}}" type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' id="Datefin" name="_Datefin" readonly>
+                        <input value="{{mission.getDatefin|date('d/m/Y')}}" type="text"  id="Datefin" name="_Datefin" readonly>
                     </div>
                     <div class="rightMenu" style="padding: 8px !important;" >
                         <span class="glyphicon glyphicon-eur" aria-hidden="true"></span>
@@ -176,7 +181,31 @@
 </div>
 <script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/jquery-ui.min.js') }}"></script>
 <script language="JavaScript">
+
+    $('#Datefin').datepicker( {
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'dd/mm/yy',
+        monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+        monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+        onClose: function(dateText, inst) {
+            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+        }
+    });
+    $('#Datedebut').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'dd/mm/yy',
+        monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+        monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+        onClose: function(dateText, inst) {
+            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+        }
+    });
     function moveto(button,div) {
         var elem = document.getElementById("baronglet");
         var pos = elem.offsetLeft;

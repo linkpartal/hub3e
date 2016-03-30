@@ -28,8 +28,8 @@ class DefaultController extends Controller
         $mission->setRemuneration($request->get('_Remuneration'));
         $mission->setHoraire($request->get('_Horaire'));
 
-        $mission->setDatedebut(date_create($request->get('_Datedebut')) );
-        $mission->setDatefin(date_create($request->get('_Datefin')) );
+        $mission->setDatedebut(date_create_from_format('d/m/Y',$request->get('_Datedebut')) );
+        $mission->setDatefin(date_create_from_format('d/m/Y',$request->get('_Datefin')) );
         $mission->setNomcontact($request->get('_NomContact'));
         $mission->setPrenomContact($request->get('_PrenomContact'));
         $mission->setFonctionContact($request->get('_FonctionContact'));
@@ -48,29 +48,34 @@ class DefaultController extends Controller
         $em->flush();
         $mission->genererCode();
         $em->flush();
-
-        foreach($request->get('formation') as $idFormation)
-        {
-            $diffuser = new Diffusion();
-            $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->find($idFormation);
-            $diffuser->setFormation($formation);
-            $diffuser->setMission($mission);
-            if($this->get('security.authorization_checker')->isGranted('ROLE_RECRUTEUR')){
-                $diffuser->setStatut(5);
-            }
-            else{
-                $diffuser->setStatut(1);
-            }
-
-            $em->persist($diffuser);
-            $em->flush();
+if($request->get('formation')){
+    foreach($request->get('formation') as $idFormation)
+    {
+        $diffuser = new Diffusion();
+        $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->find($idFormation);
+        $diffuser->setFormation($formation);
+        $diffuser->setMission($mission);
+        if($this->get('security.authorization_checker')->isGranted('ROLE_RECRUTEUR')){
+            $diffuser->setStatut(5);
         }
-        foreach($request->get('reponse') as $rep){
-            $reponse = $em->getRepository('GenericBundle:Reponsedef')->find($rep);
-            $reponse->addMission($mission);
-            $em->flush();
-
+        else{
+            $diffuser->setStatut(1);
         }
+
+        $em->persist($diffuser);
+        $em->flush();
+    }
+}
+
+        if($request->get('reponse')){
+            foreach($request->get('reponse') as $rep){
+                $reponse = $em->getRepository('GenericBundle:Reponsedef')->find($rep);
+                $reponse->addMission($mission);
+                $em->flush();
+
+            }
+        }
+
 
         return $this->render('GenericBundle::ReloadParent.html.twig',array('clear'=>false));
     }
@@ -206,10 +211,10 @@ class DefaultController extends Controller
             $mission->setDomaine($request->get('_Domaine'));
         }
         if($request->get('_Datedebut') and !$request->get('_Datedebut')==''){
-            $mission->setDatedebut(date_create($request->get('_Datedebut')) );
+            $mission->setDatedebut(date_create_from_format('d/m/Y',$request->get('_Datedebut')) );
         }
         if($request->get('_Datefin') and !$request->get('_Datefin')==''){
-            $mission->setDatefin(date_create($request->get('_Datefin')) );
+            $mission->setDatefin(date_create_from_format('d/m/Y',$request->get('_Datefin')) );
         }
         if($request->get('_Remuneration') and !$request->get('_Remuneration')==''){
             $mission->setRemuneration($request->get('_Remuneration'));
