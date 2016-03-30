@@ -561,7 +561,7 @@ class DefaultController extends Controller
 
             if($info)
             {
-                $info->setDatenaissance(date_create($request->get('_Datenaissance')) );
+                $info->setDatenaissance(date_create_from_format('d/m/Y',$request->get('_Datenaissance')) );
                 $info->setCpnaissance($request->get('_Cpnaissance'));
                 $info->setLieunaissance($request->get('_Lieunaissance'));
                 $info->setPortable($request->get('_Portable'));
@@ -599,7 +599,7 @@ class DefaultController extends Controller
             }
             else{
                 $info = new Infocomplementaire();
-                $info->setDatenaissance(date_create($request->get('_Datenaissance')) );
+                $info->setDatenaissance(date_create_from_format('d/m/Y',$request->get('_Datenaissance')) );
                 $info->setCpnaissance($request->get('_Cpnaissance'));
                 $info->setLieunaissance($request->get('_Lieunaissance'));
                 $info->setAdresse($request->get('_Adresse'));

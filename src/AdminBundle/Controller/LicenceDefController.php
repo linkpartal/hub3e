@@ -39,7 +39,7 @@ class LicenceDefController extends Controller
         $licence->setMaxapp($licencedef->getMaxapp());
         $licence->setMaxmission($licencedef->getMaxmission());
         $licence->setTier($etablissement->getTier());
-        $date=date_create($request->get('_Date'));
+        $date=date_create_from_format('d/m/Y',$request->get('_Date'));
 
         $licence->setDatedebut($date);
         $datefin=date_create($request->get('_Date'));

@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/ajout.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
 
     <style>
@@ -18,7 +18,11 @@
         .dropdown-submenu.pull-left{float:none;}.dropdown-submenu.pull-left>.dropdown-menu{left:-100%;margin-left:10px;-webkit-border-radius:6px 0 6px 6px;-moz-border-radius:6px 0 6px 6px;border-radius:6px 0 6px 6px;}
     </style>
 
-    {% block CSS %}{% endblock %}
+    {% block CSS %}
+        <style>
+            .ui-widget-header{color:black;}
+        </style>
+    {% endblock %}
 
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
 
@@ -58,7 +62,7 @@
                                 {% endfor %}
                             </select>
 
-                            <input class="date hide-spinbtns" placeholder="Date Début" type="date" id="Date" name="_Date"  data-date='{"buttonOnly": true,	"calculateWidth": true}'  required>
+                            <input class="date hide-spinbtns" placeholder="Date Début" type="text" id="Date" name="_Date"    required>
                         </div>
                         <div class="div_button">
                             <input  id="submitInstanceLicence" class="blue" type="submit" value="Valider" >
@@ -149,10 +153,10 @@
                                         <textarea style="height: 100px;resize: none;" class="input" id="Descriptif" name="_Descriptif" placeholder="Descriptif" required MAXLENGTH="255"></textarea>
 
                                         <div class="col-xs-6">
-                                            <label style="float: left">Date début :</label><input type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' class="date" id="Datedebut" name="_Datedebut" title="Datedebut" required >
+                                            <label style="float: left">Date début :</label><input type="text"  class="date" id="Datedebut" name="_Datedebut" title="Datedebut" required >
                                         </div>
                                         <div class="col-xs-6">
-                                            <label style="float: left">Date fin :</label><input  type="date" data-date='{"buttonOnly": true, "calculateWidth": true}' class="date" id="Datefin" name="_Datefin" title="Datefin" required>
+                                            <label style="float: left">Date fin :</label><input  type="text"  class="date" id="Datefin" name="_Datefin" title="Datefin" required>
                                         </div>
 
 
@@ -440,7 +444,7 @@
                                     <div class="col-xs-6 input-colonne">
                                         <input placeholder="CP Naissance" class="input" type="text" id="Cpnaissance" name="_Cpnaissance" maxlength="45" required >
                                         <input placeholder="Ville Naissance" class="input" type="text" id="Lieunaissance" name="_Lieunaissance" maxlength="45" required >
-                                        <input placeholder="Date de Naissance" type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' class="date" id="Datenaissance" name="_Datenaissance" title="Date de Naissance" required >
+                                        <input placeholder="Date de Naissance" type="text"  class="date" id="Datenaissance" name="_Datenaissance" title="Date de Naissance" required >
                                         <input placeholder="diplome obtenus" class="input" type="text" maxlength="45"  >
                                         <input placeholder="Format.ou en cours" class="input" type="text" >
                                         <div class="col-xs-12">
@@ -879,8 +883,8 @@
                                                     <label class="cell">Profil : <input type="text"  value="{{ mission.getProfil }}" id="Profil" name="_Profil" readonly></label>
                                                 </div>
                                                 <div class="row">
-                                                    <label class="cell" >Date Debut :<input type="date"  value="{{ mission.getDatedebut|date('Y-m-d')}}" id="Datedebut" name="_Datedebut" readonly> </label>
-                                                    <label class="cell" >Date fin :<input type="date"  value="{{mission.getDatefin|date('Y-m-d')}}" id="Datefin" name="_Datefin" readonly > </label>
+                                                    <label class="cell" >Date Debut :<input type="date"  value="{{ mission.getDatedebut|date('d/m/Y')}}" id="Datedebut" name="_Datedebut" readonly> </label>
+                                                    <label class="cell" >Date fin :<input type="date"  value="{{mission.getDatefin|date('d/m/Y')}}" id="Datefin" name="_Datefin" readonly > </label>
 
                                             </div>
                                             <div class="row">
@@ -990,12 +994,57 @@
     <script src="http://maps.googleapis.com/maps/api/js"></script>
     <script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('js/PopUp.js') }}"></script>
-    <script src="//cdn.jsdelivr.net/webshim/1.14.5/polyfiller.js"></script>
-    <script>
-        webshims.polyfill('forms forms-ext');
-    </script>
+
     <script language="JavaScript">
+
+        $('#Date').datepicker( {
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            dateFormat: 'dd/mm/yy',
+            monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+            monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+            onClose: function(dateText, inst) {
+                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+            }
+        });
+        $('#Datenaissance').datepicker( {
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            dateFormat: 'dd/mm/yy',
+            monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+            monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+            onClose: function(dateText, inst) {
+                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+            }
+        });
+
+        $('#Datedebut').datepicker( {
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            dateFormat: 'dd/mm/yy',
+            monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+            monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+            onClose: function(dateText, inst) {
+                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+            }
+        });
+
+        $('#Datefin').datepicker( {
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            dateFormat: 'dd/mm/yy',
+            monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+            monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+            onClose: function(dateText, inst) {
+                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+            }
+        });
 
         function loading(){
             Array.prototype.forEach.call(document.querySelectorAll('input[type=radio]'),function(elem){
