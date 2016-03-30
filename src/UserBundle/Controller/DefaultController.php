@@ -1707,4 +1707,45 @@ class DefaultController extends Controller
         }
 
     }
+
+    public function ChangementRoleAction($idUser){
+        $em = $this->getDoctrine()->getManager();
+        $response = new JsonResponse();
+        $user = $em->getRepository('GenericBundle:User')->find($idUser);
+        if($user->hasRole('ROLE_TUTEUR') or $user->hasRole('ROLE_RECRUTEUR')){
+            $user->setTier($user->getEtablissement()->getTier());
+            $user->setEtablissement(null);
+            if($user->hasRole('ROLE_TUTEUR')){
+                $user->removeRole('ROLE_TUTEUR');
+                $user->addRole('ROLE_ADMINSOC');
+            }
+            else{
+                $user->removeRole('ROLE_RECRUTEUR');
+                $user->addRole('ROLE_ADMINECOLE');
+            }
+            $em->flush();
+            return $response->setData(1);
+        }
+        elseif($user->hasRole('ROLE_ADMINECOLE') or $user->hasRole('ROLE_ADMINSOC')){
+            $etablissement = $em->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$user->getTier()));
+
+            if(count($etablissement) > 1){
+                return $response->setData(0);
+            }
+            
+            $user->setEtablissement($etablissement[0]);
+            $user->setTier(null);
+            if($user->hasRole('ROLE_ADMINECOLE')){
+                $user->removeRole('ROLE_ADMINECOLE');
+                $user->addRole('ROLE_RECRUTEUR');
+            }
+            else{
+                $user->removeRole('ROLE_ADMINSOC');
+                $user->addRole('ROLE_TUTEUR');
+            }
+            $em->flush();
+            return $response->setData(1);
+        }
+
+    }
 }

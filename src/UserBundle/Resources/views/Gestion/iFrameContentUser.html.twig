@@ -1170,6 +1170,15 @@
                             <div class="col-xs-12" >Supprimer l'utilisateur</div>
 
                         </button>
+                        {% if User.hasRole('ROLE_TUTEUR') or User.hasRole('ROLE_RECRUTEUR') %}
+                            <button onclick="ChangeRole()" type="button" class="list-group-item rightMenu" >
+                                <div class="col-xs-12" >Promouvoir</div>
+                            </button>
+                        {% elseif User.hasRole('ROLE_ADMINECOLE') or User.hasRole('ROLE_ADMINSOC') %}
+                            <button onclick="ChangeRole()" type="button" class="list-group-item rightMenu" >
+                                <div class="col-xs-12" >Rétrograder</div>
+                            </button>
+                        {% endif %}
                         {% if User.hasRole('ROLE_APPRENANT') %}
                             <button  onclick="CompleterProfil();"  type="button" class="list-group-item rightMenu" >
                                 <div class="col-xs-12" >Ordre enrichit par étudiant</div>
@@ -1265,7 +1274,24 @@
 
             reader.readAsDataURL(input.files[0]);
         }
-    };
+    }
+    {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
+    function ChangeRole(){
+        $.ajax({
+            type:'Post',
+            url:'{{ path('ChangementRole',{'idUser':User.id}) }}',
+            success: function(data){
+                if(data == 0){
+                    alert('L\'utilisateur ne peut être rétrogradé par cette interface, veuillez contacter un super admin!');
+                }
+                else if(data == 1){alert('action correctement executer');}
+            },
+            error:function(){
+                alert('Une erreur s\'est produit sur le serveur!');
+            }
+        })
+    }
+    {% endif %}
     {% if User.hasRole('ROLE_APPRENANT') %}
     function modifierStatut(div,value,idcand){
 

@@ -220,3 +220,7 @@ OrdreCompleterCR:
 ConsulterCR:
     path: /ConsulterCR/rdv={idRDV}
     defaults: {_controller: UserBundle:MiseEnRelation:ConsulterCompteRendu}
+
+ChangementRole:
+    path: /ChangementRole/id={idUser}
+    defaults: {_controller: UserBundle:Default:ChangementRole}
