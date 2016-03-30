@@ -10,9 +10,6 @@
     {% block CSS %}
         <style>
             .ui-widget-header{color:black;}
-            .ui-datepicker-calendar {
-                display: none;
-            }
         </style>
     {% endblock %}
 
@@ -1364,6 +1361,17 @@
         monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
         onClose: function(dateText, inst) {
             $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+        }
+    });
+    $('#Datenaissance').datepicker( {
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'dd/mm/yy',
+        monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+        monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+        onClose: function(dateText, inst) {
+            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
         }
     });
     function supprimerLangue(div){
