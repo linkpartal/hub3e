@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
     {% block CSS %}{% endblock %}
-
+    <style>
+        .hidden{display: none !important;}
+    </style>
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
 
 </head>
@@ -241,7 +243,7 @@
         </select>
         <div class="col-xs-2" style="margin-left: 20px;height:40px;display: flex;">
             <span class="glyphicon glyphicon-search col-xs-2" id="basic-addon1" style="height: 30px;padding: 7px;float: left;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;background-color: transparent;"></span>
-            <input class="col-xs-10" type="text" aria-describedby="basic-addon1" style="height: 31px;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;background-color: transparent;" placeholder="Recherche ...">
+            <input class="col-xs-10" type="text" onkeyup="search(this.value)" aria-describedby="basic-addon1" style="height: 31px;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;background-color: transparent;" placeholder="Recherche ...">
         </div>
         <div id="paginationContainer" class="customepaginate" style="max-width: 240px;float: right;display: flex;">
             <button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px;float: right;" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
@@ -255,6 +257,7 @@
         {% for msg in messageies %}
 
             <div id="{{ msg.id }}" class="Liste" style="border: 1px solid #ddd;float: left;;margin: 0;width: 100%;height:100px;" >
+                <div name="Recherche" style="display: none;">{{ msg.date|date('d/m/Y') }},{{ msg.message }},{{ msg.expediteur.nom }},{{ msg.expediteur.prenom }},{{ msg.expediteur.email }},{% if msg.expediteur.info %}{{ msg.expediteur.info.adresse }},{{ msg.expediteur.info.cp }},{{ msg.expediteur.info.insee }}{% endif %},{% if msg.mission %}{{ msg.mission.intitule }},{{ msg.mission.codemission }},{{ msg.mission.descriptif }},{{ msg.mission.domaine }},{% if msg.mission.etablissement %}{{ msg.mission.etablissement.siret }},{{ msg.mission.etablissement.adresse }},{{ msg.mission.etablissement.secteur }},{{ msg.mission.etablissement.tier.raisonsoc }}{% endif %}{% endif %}</div>
                 {% if msg.expediteur.hasRole('ROLE_APPRENANT') %}
                     <div class="col-xs-2" >
                         <div style="border: 15px solid transparent">
@@ -361,6 +364,33 @@
         });
 
     });
+    function search(mot){
+        var mots = mot.toUpperCase().trim().split(/ +/g);
+        var Recherches = document.getElementsByName('Recherche');
+        for(var i = 0; i < Recherches.length; i++)
+        {
+            var score = 0;
+            Recherches[i].parentNode.classList.remove('hidden');
+            var recherchermot = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g);
+            for(var k = 0; k< recherchermot.length; k++)
+            {
+                for(var j = 0; j< mots.length;j++)
+                {
+                    if (stringWith(recherchermot[k], mots[j])) {
+                        score++;
+                    }
+                }
+            }
+            if(score === 0 ){
+                Recherches[i].parentNode.classList.add('hidden');
+            }
+        }
+        $(".Liste").show();
+        $("#paginationContainer").html('<button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px;float: right;" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>').customPaginate({
+            itemsToPaginate : ".Liste:not(.hidden)",
+            activeClass : "active-class"
+        });
+    }
     function postuler(){
         var route = '{{ path('Postuler_Messagerie',{'idmessage':'_IDMESSAGE'}) }}';
         route = route.replace('_IDMESSAGE',idMessage);

@@ -43,6 +43,9 @@
                 var numberToHide = paginationContainer.find("ul li").filter(":lt(" + (linkNumber-3 )  + ")");
                 $.merge(numberToHide, itemsToPaginate.filter(":gt(" + (linkNumber  + 2)  + ")"));
             }
+            else{
+                var numberToHide = paginationContainer.find("ul li").filter(":gt(" + 5  + ")");
+            }
 
             var itemsToHide = itemsToPaginate.filter(":lt(" + ((linkNumber-1) * itemsPerPage)  + ")");
             $.merge(itemsToHide, itemsToPaginate.filter(":gt(" + ((linkNumber * itemsPerPage) - 1)  + ")"));
@@ -52,10 +55,10 @@
             $("html,body").animate({scrollTop:"0px"}, function(){
                 itemsToHide.hide();
                 itemsToShow.show();
-                if(linkNumber > 3) {
-                    numberToHide.hide();
-                    numberToShow.show();
-                }
+
+                numberToHide.hide();
+                numberToShow.show();
+
             });
         });
            

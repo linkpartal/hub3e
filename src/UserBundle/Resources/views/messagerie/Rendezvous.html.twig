@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
     {% block CSS %}{% endblock %}
-
+    <style>
+        .hidden{display: none !important;}
+    </style>
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
 
 </head>
@@ -99,11 +101,11 @@
 
     <div class="col-xs-10 col-xs-offset-1" style="margin-top: 10px;">
         <select class="input col-xs-2" title="messages" style="height:40px;">
-            <option value="les messages">Tous les messages</option>
+            <option value="les messages">Tous les rendez-vous</option>
         </select>
         <div class="col-xs-2" style="margin-left: 20px;height:40px;display: flex;">
             <span class="glyphicon glyphicon-search col-xs-2" id="basic-addon1" style="height: 30px;padding: 7px;float: left;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;background-color: transparent;"></span>
-            <input class="col-xs-10" type="text" aria-describedby="basic-addon1" style="height: 31px;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;background-color: transparent;" placeholder="Recherche ...">
+            <input class="col-xs-10" type="text" onkeyup="search(this.value)" aria-describedby="basic-addon1" style="height: 31px;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;background-color: transparent;" placeholder="Recherche ...">
         </div>
         <div id="paginationContainer" class="customepaginate" style="max-width: 240px;float: right;display: flex;">
             <button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px;float: right;" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
@@ -116,6 +118,7 @@
             {% for rdv in rendezvous %}
 
                 <div id="{{ rdv.id }}" class="Liste" style="border: 1px solid #ddd;margin: 0;height:100px;width: 100%;" >
+                    <div name="Recherche" style="display: none;">{{ rdv.apprenant.nom }},{{ rdv.apprenant.prenom }},{{ rdv.apprenant.email }},{{ rdv.tuteur.nom }},{{ rdv.tuteur.prenom }},{{ rdv.tuteur.email }},{% if rdv.mission %}{{ rdv.mission.intitule }},{{ rdv.mission.codemission }},{{ rdv.mission.descriptif }},{{ rdv.mission.domaine }},{% if rdv.mission.etablissement %}{{ rdv.mission.etablissement.siret }},{{ rdv.mission.etablissement.adresse }},{{ rdv.mission.etablissement.secteur }},{{ rdv.mission.etablissement.tier.raisonsoc }}{% endif %}{% endif %}</div>
                     {% if app.user.hasRole('ROLE_TUTEUR') %}
                         <div class="col-xs-2" >
                             <div style="border: 15px solid transparent">
@@ -536,6 +539,33 @@
                 alert('Une erreur s\'est produite sur le serveur');
             }
         })
+    }
+    function search(mot){
+        var mots = mot.toUpperCase().trim().split(/ +/g);
+        var Recherches = document.getElementsByName('Recherche');
+        for(var i = 0; i < Recherches.length; i++)
+        {
+            var score = 0;
+            Recherches[i].parentNode.classList.remove('hidden');
+            var recherchermot = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g);
+            for(var k = 0; k< recherchermot.length; k++)
+            {
+                for(var j = 0; j< mots.length;j++)
+                {
+                    if (stringWith(recherchermot[k], mots[j])) {
+                        score++;
+                    }
+                }
+            }
+            if(score === 0 ){
+                Recherches[i].parentNode.classList.add('hidden');
+            }
+        }
+        $(".Liste").show();
+        $("#paginationContainer").html('<button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px;float: right;" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>').customPaginate({
+            itemsToPaginate : ".Liste:not(.hidden)",
+            activeClass : "active-class"
+        });
     }
 </script>
 </body>
