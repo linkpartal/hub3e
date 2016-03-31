@@ -34,7 +34,7 @@ class Diffusion
      *
      * @ORM\ManyToOne(targetEntity="Formation")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="formation_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="formation_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $formation;
@@ -44,7 +44,7 @@ class Diffusion
      *
      * @ORM\ManyToOne(targetEntity="Mission")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="mission_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="mission_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $mission;

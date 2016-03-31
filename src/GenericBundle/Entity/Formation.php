@@ -51,7 +51,7 @@ class Formation
      *
      * @ORM\ManyToOne(targetEntity="Etablissement")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="etablissement_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="etablissement_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $etablissement;

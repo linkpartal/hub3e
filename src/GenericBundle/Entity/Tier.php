@@ -73,13 +73,13 @@ class Tier
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Tier", inversedBy="tier")
+     * @ORM\ManyToMany(targetEntity="Tier", inversedBy="tier", cascade={"remove"})
      * @ORM\JoinTable(name="tier_has_tier",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="tier_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="tier_id", referencedColumnName="id", onDelete="CASCADE")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="tier_id1", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="tier_id1", referencedColumnName="id", onDelete="CASCADE")
      *   }
      * )
      */

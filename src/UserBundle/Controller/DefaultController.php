@@ -1111,7 +1111,11 @@ class DefaultController extends Controller
         $response = new JsonResponse();
         if($import)
         {
-            $info = $import->getInfo();
+            foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('importcandidat'=>$import)) as $candidature)
+            {
+                $em->remove($candidature);
+                $em->flush();
+            }
             foreach($em->getRepository('GenericBundle:Experience')->findBy(array('importCandidat'=>$import)) as $experience)
             {
                 $em->remove($experience);
@@ -1137,13 +1141,12 @@ class DefaultController extends Controller
                 $em->remove($recommandation);
                 $em->flush();
             }
+
             $em->remove($import);
-            $em->flush();
-            $em->remove($info);
             $em->flush();
             $mail = $import->getEmail();
             if($mail){
-                $message = \Swift::newInstance()
+                $message = \Swift_Message::newInstance()
                     ->setSubject('')
                     ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
                     ->setTo($mail)

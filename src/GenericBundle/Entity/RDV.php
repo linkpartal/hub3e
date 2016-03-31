@@ -60,7 +60,7 @@ class RDV
     /**
      * @var \User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="tuteur", referencedColumnName="id")
      * })
@@ -70,7 +70,7 @@ class RDV
     /**
      * @var \User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="apprenant", referencedColumnName="id")
      * })

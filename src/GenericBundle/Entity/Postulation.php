@@ -32,7 +32,7 @@ class Postulation
     /**
      * @var \Mission
      *
-     * @ORM\ManyToOne(targetEntity="Mission")
+     * @ORM\ManyToOne(targetEntity="Mission", cascade={"remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="mission_id", referencedColumnName="id")
      * })
@@ -42,7 +42,7 @@ class Postulation
     /**
      * @var \User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="users_id", referencedColumnName="id")
      * })

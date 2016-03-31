@@ -99,7 +99,7 @@ class User extends BaseUser
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Etablissement", mappedBy="users")
+     * @ORM\ManyToMany(targetEntity="Etablissement", mappedBy="users", cascade={"remove"})
      */
     private $referenciel;
 

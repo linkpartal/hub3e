@@ -103,14 +103,14 @@ class ImportCandidat
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\Hobbies", mappedBy="importCandidat")
+     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\Hobbies", mappedBy="importCandidat",cascade={"remove"})
      */
     private $hobbies;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\Langue", mappedBy="importCandidat")
+     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\Langue", mappedBy="importCandidat",cascade={"remove"})
      */
     private $langue;
 

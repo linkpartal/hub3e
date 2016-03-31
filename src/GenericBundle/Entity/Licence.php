@@ -75,7 +75,7 @@ class Licence
      *
      * @ORM\ManyToOne(targetEntity="Tier")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="tier_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="tier_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $tier;

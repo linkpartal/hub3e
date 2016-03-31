@@ -56,7 +56,7 @@ class Reponsedef
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="reponsedef")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="reponsedef", cascade={"remove"})
      * @ORM\JoinTable(name="reponsedef_has_users",
      *   joinColumns={
      *     @ORM\JoinColumn(name="reponsedef_id", referencedColumnName="id")

@@ -47,7 +47,7 @@ class CompteRendu
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="auteur", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="auteur", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $auteur;
@@ -57,7 +57,7 @@ class CompteRendu
      *
      * @ORM\ManyToOne(targetEntity="RDV")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="rendezvous", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="rendezvous", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $rendezvous;

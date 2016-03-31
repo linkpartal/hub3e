@@ -94,7 +94,7 @@ class Parents
     /**
      * @var \User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="users_id", referencedColumnName="id")
      * })
@@ -104,7 +104,7 @@ class Parents
     /**
      * @var \GenericBundle\Entity\ImportCandidat
      *
-     * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\ImportCandidat")
+     * @ORM\ManyToOne(targetEntity="ImportCandidat", cascade={"remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
      * })

@@ -47,7 +47,7 @@ class Candidature
      *
      * @ORM\ManyToOne(targetEntity="Formation")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="formation_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="formation_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $formation;
@@ -57,7 +57,7 @@ class Candidature
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="users_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="users_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $user;
@@ -67,7 +67,7 @@ class Candidature
      *
      * @ORM\ManyToOne(targetEntity="ImportCandidat")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $importcandidat;

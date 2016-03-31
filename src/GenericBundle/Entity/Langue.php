@@ -39,13 +39,13 @@ class Langue
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="langue")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="langue",cascade={"remove"})
      * @ORM\JoinTable(name="langue_has_users",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="langue_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="langue_id", referencedColumnName="id", onDelete="CASCADE")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="users_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="users_id", referencedColumnName="id", onDelete="CASCADE")
      *   }
      * )
      */
@@ -54,13 +54,13 @@ class Langue
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\ImportCandidat", inversedBy="langue")
+     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\ImportCandidat", inversedBy="langue",cascade={"remove"})
      * @ORM\JoinTable(name="langue_has_import_candidat",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="langue_import_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="langue_import_id", referencedColumnName="id", onDelete="CASCADE")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id", onDelete="CASCADE")
      *   }
      * )
      */

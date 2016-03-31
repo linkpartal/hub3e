@@ -148,7 +148,7 @@ class Etablissement
      *
      * @ORM\ManyToOne(targetEntity="Tier")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="tier_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="tier_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $tier;
@@ -159,10 +159,10 @@ class Etablissement
      * @ORM\ManyToMany(targetEntity="Qcmdef", inversedBy="etablissement")
      * @ORM\JoinTable(name="etablissement_has_qcmdef",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="etablissement_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="etablissement_id", referencedColumnName="id", onDelete="CASCADE")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="qcmdef_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="qcmdef_id", referencedColumnName="id", onDelete="CASCADE")
      *   }
      * )
      */
@@ -171,13 +171,13 @@ class Etablissement
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="etablissement")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="etablissement", cascade={"remove"})
      * @ORM\JoinTable(name="referentiel",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="referentiel_etablissement_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="referentiel_etablissement_id", referencedColumnName="id", onDelete="CASCADE")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="users_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="users_id", referencedColumnName="id", onDelete="CASCADE")
      *   }
      * )
      */

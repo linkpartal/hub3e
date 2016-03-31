@@ -45,7 +45,7 @@ class Qcmdef
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Formation", inversedBy="qcmdef")
+     * @ORM\ManyToMany(targetEntity="Formation", inversedBy="qcmdef", cascade={"remove"})
      * @ORM\JoinTable(name="qcmdef_has_formation",
      *   joinColumns={
      *     @ORM\JoinColumn(name="qcmdef_id", referencedColumnName="id")
