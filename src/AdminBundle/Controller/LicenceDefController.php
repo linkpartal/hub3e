@@ -42,7 +42,7 @@ class LicenceDefController extends Controller
         $date=date_create_from_format('d/m/Y',$request->get('_Date'));
 
         $licence->setDatedebut($date);
-        $datefin=date_create($request->get('_Date'));
+        $datefin=date_create_from_format('d/m/Y',$request->get('_Date'));
         $licence->setDatefin(date_add($datefin,date_interval_create_from_date_string($licencedef->getDuree()." days")));
         $em=$this->getDoctrine()->getManager();
         $em->persist($licence);
