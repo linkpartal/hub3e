@@ -195,9 +195,7 @@ class DefaultController extends Controller
         {
             if($msg->getExpediteur()->getPhotos() and !is_string($msg->getExpediteur()->getPhotos()))
             {
-                //  $msg->getDestinataire()->setPhotos(base64_encode(stream_get_contents($msg->getDestinataire()->getPhotos())));
                 $msg->getExpediteur()->setPhotos(base64_encode(stream_get_contents($msg->getExpediteur()->getPhotos())));
-
             }
             if($msg->getMission()->getEtablissement()->getTier()->getLogo() and !is_string($msg->getMission()->getEtablissement()->getTier()->getLogo())){
                 $msg->getMission()->getEtablissement()->getTier()->setLogo(base64_encode(stream_get_contents($msg->getMission()->getEtablissement()->getTier()->getLogo())));
@@ -473,15 +471,29 @@ class DefaultController extends Controller
         $candi->setStatut($statut);
         $em->flush();
 
-
         if($statut==3)
         {
             $Statutmessage ='validé';
+            if($candi->getUser()->getInfo()){
+                $candi->getUser()->getInfo()->setProfilcomplet(3);
+                $em->flush();
+            }
 
         }
         elseif($statut==99)
         {
             $Statutmessage ='refusé';
+            $StatutApprenant = 2;
+            foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('user'=>$candi->getUser())) as $candidature){
+                if($candidature->getStatut() == 3 ){
+                    $StatutApprenant = 3;
+                    break;
+                }
+            }
+            if($candi->getUser()->getInfo()){
+                $candi->getUser()->getInfo()->setProfilcomplet($StatutApprenant);
+            }
+            $em->flush();
 
         }
         if($candi->getUser())
@@ -799,15 +811,24 @@ class DefaultController extends Controller
     public function suppCandidatureAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $candidature = $em->getRepository('GenericBundle:Candidature')->find($id);
+        $candi = $em->getRepository('GenericBundle:Candidature')->find($id);
+        $user = $candi->getUser();
 
-        $em->remove($candidature);
+        $em->remove($candi);
         $em->flush();
+        $StatutApprenant = 2;
+        foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('user'=>$user)) as $candidature){
+            if($candidature->getStatut() == 3 ){
+                $StatutApprenant = 3;
+                break;
+            }
+        }
+        if($candi->getUser()->getInfo()){
+            $candi->getUser()->getInfo()->setProfilcomplet($StatutApprenant);
+            $em->flush();
+        }
         $reponse = new JsonResponse();
-        return $reponse->setData(array('Status' => 'Candidature correctement supprimer'));
-
-
-
+        return $reponse->setData($StatutApprenant);
     }
 
     public function suppDocumentAction($id)
@@ -1599,7 +1620,8 @@ class DefaultController extends Controller
             $experience->setActivite($request->get('_Activite'));
             $experience->setLieu($request->get('_Lieu'));
             $experience->setPoste($request->get('_Poste'));
-            $experience->setNbreannee($request->get('_Nbreannee'));
+            $experience->setDebut(date_create_from_format('m/Y',$request->get('_Datedebut')));
+            $experience->setFin(date_create_from_format('m/Y',$request->get('_Datefin')));
             $experience->setDescription($request->get('_Descriptionexp'));
             $em->persist($experience);
             $em->flush();
@@ -1613,7 +1635,8 @@ class DefaultController extends Controller
             $experience->setActivite($request->get('_Activite'));
             $experience->setLieu($request->get('_Lieu'));
             $experience->setPoste($request->get('_Poste'));
-            $experience->setNbreannee($request->get('_Nbreannee'));
+            $experience->setDebut(date_create_from_format('m/Y',$request->get('_Datedebut')));
+            $experience->setFin(date_create_from_format('m/Y',$request->get('_Datefin')));
             $experience->setDescription($request->get('_Descriptionexp'));
 
             $em->persist($experience);
@@ -1783,7 +1806,9 @@ class DefaultController extends Controller
 
         // Send headers before outputting anything
         //$response->sendHeaders();
-        $response->setContent(stream_get_contents( $document->getDocument()));
+        if(!is_string($document->getDocument())){
+            $response->setContent(stream_get_contents( $document->getDocument()));
+        }
         return $response;
     }
 

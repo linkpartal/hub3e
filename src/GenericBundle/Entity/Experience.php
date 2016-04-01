@@ -52,9 +52,16 @@ class Experience
     /**
      * @var integer
      *
-     * @ORM\Column(name="nbreAnnee", type="integer", nullable=true)
+     * @ORM\Column(name="Debut", type="date", nullable=true)
      */
-    private $nbreannee;
+    private $debut;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="fin", type="date", nullable=true)
+     */
+    private $fin;
 
     /**
      * @var string
@@ -192,30 +199,6 @@ class Experience
     }
 
     /**
-     * Set nbreannee
-     *
-     * @param integer $nbreannee
-     *
-     * @return Experience
-     */
-    public function setNbreannee($nbreannee)
-    {
-        $this->nbreannee = $nbreannee;
-
-        return $this;
-    }
-
-    /**
-     * Get nbreannee
-     *
-     * @return integer
-     */
-    public function getNbreannee()
-    {
-        return $this->nbreannee;
-    }
-
-    /**
      * Set description
      *
      * @param string $description
@@ -297,5 +280,53 @@ class Experience
         else{
             return false;
         }
+    }
+
+    /**
+     * Set debut
+     *
+     * @param \DateTime $debut
+     *
+     * @return Experience
+     */
+    public function setDebut($debut)
+    {
+        $this->debut = $debut;
+
+        return $this;
+    }
+
+    /**
+     * Get debut
+     *
+     * @return \DateTime
+     */
+    public function getDebut()
+    {
+        return $this->debut;
+    }
+
+    /**
+     * Set fin
+     *
+     * @param \DateTime $fin
+     *
+     * @return Experience
+     */
+    public function setFin($fin)
+    {
+        $this->fin = $fin;
+
+        return $this;
+    }
+
+    /**
+     * Get fin
+     *
+     * @return \DateTime
+     */
+    public function getFin()
+    {
+        return $this->fin;
     }
 }
