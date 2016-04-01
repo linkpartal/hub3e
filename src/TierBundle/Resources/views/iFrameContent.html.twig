@@ -132,7 +132,7 @@
             {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_ADMINSOC') %}
                 <div id="addmission" class="popup" >
                     <div onclick="document.getElementById('submitaddmission').click();hide(this)" class="close"></div>
-                    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;position:fixed;margin-bottom: 40px;" >
+                    <div class="col-xs-offset-1 col-xs-9 formContainer">
                         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
                         <form id="formaddmission" class="formulaire" action= "{{ path("mission_added") }}" onsubmit="document.getElementById('submitaddmission').disabled=true;ShowWaiter();" method="post">
@@ -279,7 +279,7 @@
             {% if is_granted('ROLE_ADMINECOLE') %}
                 <div id="ajouterformation" class="popup">
                     <div onclick="document.getElementById('submitaddformation').click();hideAjouterForm(this);" class="close"></div>
-                    <div class="col-xs-offset-3 col-xs-4" style="padding: 0;border:20px solid white;display: block">
+                    <div class="col-xs-offset-3 col-xs-4 formContainer" >
                         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
                         <form  class="formulaire" id="formAjouterformation" action="{{ path('addFormation') }}" onsubmit="document.getElementById('submitaddformation').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data">
@@ -304,7 +304,7 @@
                 </div>
                 <div id="addQCM" class="popup" >
                     <div onclick="hide(this)" class="close"></div>
-                    <div class="col-xs-offset-1 col-xs-9" style=" padding: 0;border:20px solid white;display: block">
+                    <div class="col-xs-offset-1 col-xs-9 formContainer" >
                         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
                         <div id="formaddQCM" class="formulaire" style="text-align: center" >
@@ -353,7 +353,7 @@
                 </div>
                 <div id="addQCMAff" class="popup" >
                     <div onclick="hide(this)" class="close"></div>
-                    <div class="col-xs-offset-1 col-xs-9" style=" padding: 0;border:20px solid white;display: block">
+                    <div class="col-xs-offset-1 col-xs-9 formContainer" >
                         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
                         <div id="formaddQCMAff" class="formulaire" style="text-align: center" >
@@ -403,7 +403,7 @@
 
                 <div id="apprenant" class="popup" >
                     <div onclick="document.getElementById('submitaddapprenant').click();hide(this)" class="close"></div>
-                    <div class="col-xs-offset-1 col-xs-9" style="top:40px;border:20px solid white;display: block;margin-bottom: 20px ;background: white;width:70%">
+                    <div class="col-xs-offset-1 col-xs-9 formContainer" >
                         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
 
@@ -553,7 +553,7 @@
             {% if is_granted('ROLE_SUPER_ADMIN') %}
                 <div id="associerecole" class="popup">
                     <div onclick="document.getElementById('submitassocierecole').click();hide(this)" class="close"></div>
-                    <div class="col-xs-offset-4 col-xs-4" style="padding: 0;border:20px solid white;display: block">
+                    <div class="col-xs-offset-4 col-xs-4 formContainer" >
                         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
                         <form class="formulaire" id="formAssiation" action="{{ path("ecoles_assiciated",{'id':etablissement.getId}) }}" onsubmit="document.getElementById('submitassocierecole').disabled=true;ShowWaiter();" method="post">
@@ -1096,7 +1096,6 @@
                     }
                 });
             });
-
             var onglet = sessionStorage.getItem('onglet_tier');
             if(onglet)
             {

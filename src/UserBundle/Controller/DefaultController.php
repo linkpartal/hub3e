@@ -631,7 +631,29 @@ class DefaultController extends Controller
                 $em->persist($info);
                 $em->flush();
             }
+
+            /*if($request->get('_IDParent'))
+            {
+                for($i = 0; $i< count($request->get('_IDParent'));$i++) {
+                    $responsable = $em->getRepository('GenericBundle:Parents')->find(array('id'=>$request->get('_IDParent')[$i]));
+                    $responsable->setNom($request->get('_Nomresp')[$i]);
+                    $responsable->setPrenom($request->get('_Prenomresp')[$i]);
+                    $responsable->setTelephone($request->get('_Telephoneresp')[$i]);
+                    $responsable->setAdresse($request->get('_Adresseresp')[$i]);
+                    $responsable->setEmail($request->get('_Emailresp')[$i]);
+                    $responsable->setNomjeunefille($request->get('_Nomjeunefille')[$i]);
+                    $responsable->setUser($user);
+                    $em->flush();
+                }
+            }*/
+
+
+
+
         }
+
+
+
 
         return $this->redirect($_SERVER['HTTP_REFERER']);
     }
@@ -1536,22 +1558,34 @@ class DefaultController extends Controller
     public function AjouterParentAction(Request $request){
         $em = $this->getDoctrine()->getEntityManager();
 
-        $parent = new Parents();
-        $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser'));
-        $parent->setUser($user);
+        if($request->get('_IDPARENT')){
+            $parent = $em->getRepository('GenericBundle:Parents')->find(array('id'=>$request->get('_IDPARENT')));
+            $parent->setNom($request->get('_Nomresp'));
+            $parent->setPrenom($request->get('_Prenomresp'));
+            $parent->setTelephone($request->get('_Telephoneresp'));
+            $parent->setAdresse($request->get('_Adresseresp'));
+            $parent->setEmail($request->get('_Emailresp'));
+            $parent->setNomjeunefille($request->get('_Nomjeunefille'));
+            $em->persist($parent);
+            $em->flush();
+        }
+        else{
+            $parent = new Parents();
+            $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser'));
+            $parent->setUser($user);
+            $parent->setNom($request->get('_Civiliteparent').' '.$request->get('_Nomparent'));
+            $parent->setPrenom($request->get('_Prenomparent'));
+            $parent->setMetier($request->get('_Metierparent'));
+            $parent->setProfession($request->get('_Professionparent'));
+            $parent->setTelephone($request->get('_Telephoneparent'));
+            $parent->setAdresse($request->get('_Adresseparent').' '.$request->get('_Villeparent').' '.$request->get('_CodePostaleparent'));
+            $parent->setEmail($request->get('_Emailparent'));
 
+            $em->persist($parent);
+            $user->getInfo()->setProfilcomplet(1);
+            $em->flush();
+        }
 
-        $parent->setNom($request->get('_Civiliteparent').' '.$request->get('_Nomparent'));
-        $parent->setPrenom($request->get('_Prenomparent'));
-        $parent->setMetier($request->get('_Metierparent'));
-        $parent->setProfession($request->get('_Professionparent'));
-        $parent->setTelephone($request->get('_Telephoneparent'));
-        $parent->setAdresse($request->get('_Adresseparent').' '.$request->get('_Villeparent').' '.$request->get('_CodePostaleparent'));
-        $parent->setEmail($request->get('_Emailparent'));
-
-        $em->persist($parent);
-        $user->getInfo()->setProfilcomplet(1);
-        $em->flush();
         return $this->redirect($_SERVER['HTTP_REFERER']);
 
 
@@ -1559,20 +1593,35 @@ class DefaultController extends Controller
 
     public function AjouterExperienceAction(Request $request){
         $em = $this->getDoctrine()->getEntityManager();
-        $experience = new Experience();
-        $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser'));
-        $experience->setUser($user);
+        if($request->get('_IDExp')){
+            $experience = $em->getRepository('GenericBundle:Experience')->find(array('id'=>$request->get('_IDExp')));
+            $experience->setNomsociete($request->get('_Nomsociete'));
+            $experience->setActivite($request->get('_Activite'));
+            $experience->setLieu($request->get('_Lieu'));
+            $experience->setPoste($request->get('_Poste'));
+            $experience->setNbreannee($request->get('_Nbreannee'));
+            $experience->setDescription($request->get('_Descriptionexp'));
+            $em->persist($experience);
+            $em->flush();
+        }
+        else{
+            $experience = new Experience();
+            $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser'));
+            $experience->setUser($user);
 
-        $experience->setNomsociete($request->get('_Nomsociete'));
-        $experience->setActivite($request->get('_Activite'));
-        $experience->setLieu($request->get('_Lieu'));
-        $experience->setPoste($request->get('_Poste'));
-        $experience->setNbreannee($request->get('_Nbreannee'));
-        $experience->setDescription($request->get('_Descriptionexp'));
+            $experience->setNomsociete($request->get('_Nomsociete'));
+            $experience->setActivite($request->get('_Activite'));
+            $experience->setLieu($request->get('_Lieu'));
+            $experience->setPoste($request->get('_Poste'));
+            $experience->setNbreannee($request->get('_Nbreannee'));
+            $experience->setDescription($request->get('_Descriptionexp'));
 
-        $em->persist($experience);
-        $user->getInfo()->setProfilcomplet(1);
-        $em->flush();
+            $em->persist($experience);
+            $user->getInfo()->setProfilcomplet(1);
+            $em->flush();
+        }
+
+
 
         return $this->redirect($_SERVER['HTTP_REFERER']);
 
@@ -1580,19 +1629,30 @@ class DefaultController extends Controller
 
     public function AjouterRecommandationAction(Request $request){
         $em = $this->getDoctrine()->getEntityManager();
-        $recommandation = new Recommandation();
-        $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser'));
-        $recommandation->setUser($user);
+        if($request->get('_IDRecom')){
+            $recommandation = $em->getRepository('GenericBundle:Recommandation')->find(array('id'=>$request->get('_IDRecom')));
+            $recommandation->setNom($request->get('_Nomrec'));
+            $recommandation->setFonction($request->get('_Fonctionrec'));
+            $recommandation->setTelephone($request->get('_Telephonerec'));
+            $recommandation->setEmail($request->get('_Emailrec'));
+            $recommandation->setText($request->get('_Text'));
+            $em->persist($recommandation);
+            $em->flush();
+        }
+        else{
+            $recommandation = new Recommandation();
+            $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser'));
+            $recommandation->setUser($user);
+            $recommandation->setNom($request->get('_Nomrec').' '.$request->get('_Prenomrec'));
+            $recommandation->setFonction($request->get('_Fonctionrec'));
+            $recommandation->setTelephone($request->get('_Telephonerec'));
+            $recommandation->setEmail($request->get('_Emailrec'));
+            $recommandation->setText($request->get('_Text'));
+            $em->persist($recommandation);
+            $user->getInfo()->setProfilcomplet(1);
+            $em->flush();
+        }
 
-        $recommandation->setNom($request->get('_Nomrec').' '.$request->get('_Prenomrec'));
-        $recommandation->setFonction($request->get('_Fonctionrec'));
-        $recommandation->setTelephone($request->get('_Telephonerec'));
-        $recommandation->setEmail($request->get('_Emailrec'));
-        $recommandation->setText($request->get('_Text'));
-
-        $em->persist($recommandation);
-        $user->getInfo()->setProfilcomplet(1);
-        $em->flush();
 
         return $this->redirect($_SERVER['HTTP_REFERER']);
 
@@ -1602,17 +1662,28 @@ class DefaultController extends Controller
     public function AjouterDiplomeAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $diplome = new Diplome();
-        $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser'));
-        $diplome->setUser($user);
+        if($request->get('_IDDiplome')){
+            $diplome = $em->getRepository('GenericBundle:Diplome')->find(array('id'=>$request->get('_IDDiplome')));
+            $diplome->setLibelle($request->get('_Libelle'));
+            $diplome->setObtention($request->get('_Obtention'));
+            $diplome->setEcole($request->get('_Ecole'));
+            $em->persist($diplome);
+            $em->flush();
 
-        $diplome->setLibelle($request->get('_Libelle'));
-        $diplome->setObtention($request->get('_Obtention'));
-        $diplome->setEcole($request->get('_Ecole'));
+        }
+        else{
+            $diplome = new Diplome();
+            $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser'));
+            $diplome->setUser($user);
+            $diplome->setLibelle($request->get('_Libelle'));
+            $diplome->setObtention($request->get('_Obtention'));
+            $diplome->setEcole($request->get('_Ecole'));
 
-        $em->persist($diplome);
-        $user->getInfo()->setProfilcomplet(1);
-        $em->flush();
+            $em->persist($diplome);
+            $user->getInfo()->setProfilcomplet(1);
+            $em->flush();
+        }
+
 
         return $this->redirect($_SERVER['HTTP_REFERER']);
     }
@@ -1620,6 +1691,7 @@ class DefaultController extends Controller
     public function AjouterDocumentAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+
         if($_FILES['_Document'] and $_FILES['_Document']['size'] > 1000000){
             return new Response('<script language="JavaScript">window.onload = function(){alert("la taille du fichier est trop grande!");window.location.href = "'.$_SERVER['HTTP_REFERER'].'"}</script>');
         }

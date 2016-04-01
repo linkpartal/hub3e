@@ -16,7 +16,7 @@
 <div id="addtier" class="popup col-xs-3">
 
     <div onclick="document.getElementById('submittier').click();hide(this)" class="close"></div>
-    <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block;background-color: white;">
+    <div class="col-xs-offset-3 col-xs-6 formContainer" >
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
 
@@ -225,7 +225,7 @@
 </div>
 <div id="import" class="popup col-xs-3">
     <div onclick="document.getElementById('submitimport').click();hide(this)" class="close"></div>
-    <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block;background-color: white;">
+    <div class="col-xs-offset-1 col-xs-9 formContainer" >
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
         <form id="form" action="{{ path('import') }}" onsubmit="document.getElementById('submitimport').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data">

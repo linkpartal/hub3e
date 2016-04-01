@@ -21,6 +21,15 @@ body{
     position: fixed;
 }
 
+.popup .formContainer
+{
+    padding: 0;
+    border:10px solid white;
+    display: block;
+    overflow:hidden;
+    background-color: white;
+    margin-bottom: 40px;
+}
 .popup .nav
 {
     border: 1px solid rgb(230, 230, 230);

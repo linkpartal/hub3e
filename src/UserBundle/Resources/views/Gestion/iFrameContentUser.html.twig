@@ -47,7 +47,7 @@
 
             <div id="addparent" class="popup" >
                 <div onclick="document.getElementById('submitaddparent').click();hide(this)" class="close" ></div>
-                <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display: block ;margin-top: 20px ">
+                <div class="col-xs-offset-1 col-xs-7 formContainer" >
                     <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
                     <form id="formaddparent" class="formulaire" action="{{ path("parent_added") }}" onsubmit="document.getElementById('submitaddparent').disabled=true;ShowWaiter();" enctype="multipart/form-data" method="post" >
@@ -115,7 +115,7 @@
 
             <div id="addExperience" class="popup">
                 <div onclick="document.getElementById('submitaddExperience').click();hide(this)" class="close"></div>
-                <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
+                <div class="col-xs-offset-1 col-xs-7 formContainer" >
                     <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
                     <form id="formaddExperience" class="formulaire" action="{{ path("experience_added") }}" onsubmit="document.getElementById('submitaddExperience').disabled=true;ShowWaiter();"  method="post" enctype="multipart/form-data">
@@ -161,7 +161,7 @@
 
             <div id="addRecommandation" class="popup">
                 <div onclick="document.getElementById('submitaddRecommandation').click();hide(this)" class="close"></div>
-                <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
+                <div class="col-xs-offset-1 col-xs-7 formContainer" >
                     <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
                     <form id="formaddRecommandation" class="formulaire" action="{{ path("recommandation_added") }}" onsubmit="document.getElementById('submitaddRecommandation').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data">
@@ -204,7 +204,7 @@
 
             <div id="addDiplome" class="popup">
                 <div onclick="document.getElementById('submitaddDiplome').click();hide(this)" class="close"></div>
-                <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
+                <div class="col-xs-offset-1 col-xs-7 formContainer" >
                     <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
                     <form id="formaddDiplome" class="formulaire" action="{{ path("diplome_added") }}" onsubmit="document.getElementById('submitaddDiplome').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data">
@@ -245,7 +245,7 @@
 
             <div id="addDocument" class="popup">
                 <div onclick="document.getElementById('submitaddDocument').click();hide(this)" class="close"></div>
-                <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
+                <div class="col-xs-offset-1 col-xs-7 formContainer" >
                     <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
                     <form id="formaddDocument" class="formulaire" action="{{ path("Document_added") }}" onsubmit="document.getElementById('submitaddDocument').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data">
@@ -282,7 +282,7 @@
 
             <div id="addFormation" class="popup">
                 <div onclick="document.getElementById('submitaddFormation').click();hide(this)" class="close"></div>
-                <div class="col-xs-offset-1 col-xs-7" style="padding:0; border:20px solid white;display:block;margin-top: 20px">
+                <div class="col-xs-offset-1 col-xs-7 formContainer" >
                     <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
 
@@ -477,7 +477,6 @@
                                     <label class="list-group-item" style="height: 60px;" for="Tel">Téléphone :</label>
                                     <input value="{{User.getTelephone}}" type="text" class="champ form-control" id="Telephone" name="_Tel" maxlength="45" >
                                 </div>
-
 
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="UserName">UserName :</label>
@@ -694,7 +693,6 @@
                                 {% if User.GetInfo  %}
                                     <input type="hidden" value="{{ User.GetInfo.getId }}" id="id" name="_IdInfo">
                                     <div class="inputcontainer">
-
                                         {% if User.getInfo.getHandicape  %}
                                             <input value="1"  type="checkbox" id="handicap" checked name="_handicap" ><label>HANDICAP</label>
                                         {% else %}
@@ -706,7 +704,6 @@
                                         {% else %}
                                             <input value="0" type="checkbox" id="entrepreneur"  name="_entrepreneur" ><label>Entrepreneurs</label>
                                         {% endif %}
-
                                     </div>
                                     <div class="inputcontainer">
                                         <label>Permis  :  </label>
@@ -725,7 +722,6 @@
 
                                     </div>
 
-
                                     <div class="inputcontainer">
                                         <label class="list-group-item" style="height: 60px;" for="FormationActuel">Formation actuel  :</label>
                                         <input value="{{User.getInfo.formationactuelle}}" type="text" class="champ form-control" id="FormationActuel" name="_FormationActuel" maxlength="45"  >
@@ -741,7 +737,6 @@
                                         <input value="{{User.getInfo.getLinkedin}}" type="url" class="champ form-control" id="Linkedin" name="_Linkedin" maxlength="45" >
 
                                     </div>
-
                                     <div class="inputcontainer">
                                         <label class="list-group-item" style="height: 60px;" for="Mobilite">Mobilite      :</label>
                                         <select class="List-invisible" width="50px" title="" id="Mobilite"  name="_Mobilite" >
@@ -786,10 +781,6 @@
 
                                             {% set i= i +1 %}
                                         {% endfor %}
-
-
-
-
 
                                     </div>
 
@@ -853,64 +844,67 @@
                             {% if Parents is defined %}
                                 {% for parent in Parents %}
                                     {% set iddiv = random()  %}
-                                    <div class="col-xs-12 Liste">
-                                        <div class="row">
-                                            <label class="cell">Nom : <label>{{ parent.getNom }}</label></label>
-                                            <label class="cell">Prénom : <label>{{parent.getPrenom }}</label>
+                                    <form id="formParent" action="{{ path("parent_added") }}" onsubmit="document.getElementById('submitaddparent').disabled=true;ShowWaiter();" enctype="multipart/form-data" method="post">
+                                        <input type="hidden" value="{{ parent.getId }}" id="id" name="_IDPARENT">
 
-                                                <img name="modification" style="float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerParent('{{ path('supprimer_Parent',{'id': parent.getId }) }}',this)" />
-                                                <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#parent{{ iddiv }}"></button></label>
-                                        </div>
-                                        <div id="parent{{ iddiv }}" class="collapse in" >
+                                        <div class="col-xs-12 Liste">
                                             <div class="row">
-                                                <label class="cell">Telephone : <label>{{ parent.getTelephone }}</label></label>
-                                                <label class="cell">Adresse  : <label>{{ parent.getAdresse }}</label></label>
-                                            </div>
-                                            <div class="row">
-                                                <label class="cell">Email : <label>{{ parent.getEmail}}</label></label>
-                                                {% if parent.getNomjeunefille  %}
-                                                    <label class="cell">Nom jeune fille  : <label>{{ parent.getNomjeunefille }}</label></label>
-                                                {% endif %}
-                                            </div>
+                                                <label class="cell">Nom : <input value="{{ parent.getNom }}"  id="Nomresp" name="_Nomresp" ></label>
+                                                <label class="cell">Prénom : <input value="{{parent.getPrenom }}" id="Prenomresp" name="_Prenomresp">
 
+                                                    <img name="modification" style="float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerParent('{{ path('supprimer_Parent',{'id': parent.getId }) }}',this)" />
+                                                    <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#parent{{ iddiv }}"></button></label>
+                                            </div>
+                                            <div id="parent{{ iddiv }}" class="collapse in" >
+                                                <div class="row">
+                                                    <label class="cell">Telephone : <input value="{{ parent.getTelephone }}" id="Telephoneresp" name="_Telephoneresp"></label>
+                                                    <label class="cell">Adresse  : <input value="{{ parent.getAdresse }}" id="Adresseresp" name="_Adresseresp"></label>
+                                                </div>
+                                                <div class="row">
+                                                    <label class="cell">Email : <input value="{{ parent.getEmail}}" id="Emailresp" name="_Emailresp"></label>
+                                                    {% if parent.getNomjeunefille  %}
+                                                        <label class="cell">Nom jeune fille  : <input value="{{ parent.getNomjeunefille }}" id="Nomjeunefille" name="_Nomjeunefille"></label>
+                                                    {% endif %}
+                                                    <input type="submit" value="Modifier">
+                                                </div>
+                                            </div>
                                         </div>
-
-                                    </div>
+                                    </form>
                                 {% endfor %}
                             {% endif %}
+
                             <div name="modification" >
                                 <button type="button" class="col-xs-12 blue" style="margin-top:40px;"  onclick="show('addparent')">Ajouter un responsable légal</button>
                             </div>
 
                         </div>
-
                         <div id="info_Exp" class="list-group affichage" style="display:none">
                             {% if Experience is defined %}
                                 {% for Exp in Experience %}
                                     {% set iddiv = random()  %}
+                            <form id="formExperience" class="formulaire" action="{{ path("experience_added") }}" onsubmit="document.getElementById('submitaddExperience').disabled=true;ShowWaiter();"  method="post" enctype="multipart/form-data">
+                                <input type="hidden" value="{{ Exp.getId }}" id="id" name="_IDExp">
                                     <div class="col-xs-12 Liste">
                                         <div class="row">
-                                            <label class="cell">Nom societe : <label>{{ Exp.getNomsociete }}</label></label>
-                                            <label class="cell">Activite : <label>{{Exp.getActivite }}</label>
+                                            <label class="cell">Nom societe : <input value="{{ Exp.getNomsociete }}" id="Nomsociete" name="_Nomsociete"></label>
+                                            <label class="cell">Activite : <input value="{{Exp.getActivite }}" id="Activite" name="_Activite">
                                                 <img name="modification" style="float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerExperience('{{ path('supprimer_Experience',{'id':Exp.getId}) }}',this)" />
-
                                                 <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#exper{{ iddiv }}"></button>
                                             </label>
-
-
                                         </div>
                                         <div id="exper{{ iddiv }}" class="collapse in" >
                                             <div class="row">
-                                                <label class="cell">Lieu  : <label>{{ Exp.getLieu }}</label></label>
-                                                <label class="cell">Poste  : <label>{{ Exp.getPoste }}</label></label>
+                                                <label class="cell">Lieu  : <input value="{{ Exp.getLieu }}" id="Lieu" name="_Lieu"></label>
+                                                <label class="cell">Poste  : <input value="{{ Exp.getPoste }}" id="Poste" name="_Poste"></label>
                                             </div>
                                             <div class="row">
-                                                <label class="cell">Nbreannee : <label>{{ Exp.getNbreannee}}</label></label>
-                                                <label class="cell">Description : <label>{{ Exp.getDescription }}</label></label>
-
+                                                <label class="cell">Nbreannee : <input value="{{ Exp.getNbreannee}}" id="Nbreannee" name="_Nbreannee"></label>
+                                                <label class="cell">Description : <input value="{{ Exp.getDescription }}" id="Descriptionexp" name="_Descriptionexp"></label>
+                                                <input type="submit" value="Modifier">
                                             </div>
                                         </div>
                                     </div>
+                                </form>
                                 {% endfor %}
                             {% endif %}
 
@@ -923,25 +917,28 @@
                             {% if Recommandation is defined %}
                                 {% for Recom in Recommandation %}
                                     {% set iddiv = random()  %}
+                            <form id="formRecommandation"  action="{{ path("recommandation_added") }}" onsubmit="document.getElementById('submitaddRecommandation').disabled=true;ShowWaiter();" enctype="multipart/form-data" method="post" >
+                                <input type="hidden" value="{{ Recom.getId }}" id="id" name="_IDRecom">
                                     <div class="col-xs-12 Liste">
                                         <div class="row">
-                                            <label class="cell">Text  : <label>{{ Recom.getText }}</label></label>
-                                            <label class="cell">Nom : <label>{{Recom.getNom }}</label>
+                                            <label class="cell">Text  : <input value="{{ Recom.getText }}" id="Text" name="_Text"></label>
+                                            <label class="cell">Nom : <input value="{{Recom.getNom }}" id="Nomrec" name="_Nomrec">
                                                 <img name="modification" style="float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerRecommandation('{{ path('supprimer_Recommandation',{'id':Recom.getId}) }}',this)" />
                                                 <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#recommandation{{ iddiv }}"></button></label>
 
                                         </div>
                                         <div id="recommandation{{ iddiv }}" class="collapse in" >
                                             <div class="row">
-                                                <label class="cell">Fonction  : <label>{{ Recom.getFonction }}</label></label>
-                                                <label class="cell">Email  : <label>{{ Recom.getEmail }}</label></label>
+                                                <label class="cell">Fonction  : <input value="{{ Recom.getFonction }}" id="Fonctionrec" name="_Fonctionrec"></label>
+                                                <label class="cell">Email  : <input value="{{ Recom.getEmail }}" id="Emailrec" name="_Emailrec"></label>
                                             </div>
                                             <div class="row">
-                                                <label class="cell">Téléphone : <label>{{ Recom.getTelephone}}</label></label>
-
+                                                <label class="cell">Téléphone : <input value="{{ Recom.getTelephone}}" id="Telephonerec" name="_Telephonerec"></label>
+                                                <input type="submit" value="Modifier">
                                             </div>
                                         </div>
                                     </div>
+                                </form>
                                 {% endfor %}
                             {% endif %}
                             <div name="modification" >
@@ -953,21 +950,24 @@
                             {% if Diplome is defined %}
                                 {% for Dip in Diplome %}
                                     {% set iddiv = random()  %}
+                            <form id="formDiplome" class="formulaire" action="{{ path("diplome_added") }}" onsubmit="document.getElementById('submitaddDiplome').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data">
+                                <input type="hidden" value="{{ Dip.getId }}" id="id" name="_IDDiplome">
                                     <div class="col-xs-12 Liste">
                                         <div class="row">
-                                            <label class="cell">Text  : <label>{{ Dip.getLibelle }}</label></label>
-                                            <label class="cell">Obtention : <label>{{Dip.getObtention }}</label>
+                                            <label class="cell">Text  : <input value="{{ Dip.getLibelle }}" id="Libelle" name="_Libelle" ></label>
+                                            <label class="cell">Obtention : <input value="{{Dip.getObtention }}" id="Obtention" name="_Obtention">
                                                 <img name="modification" style="float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerDiplome('{{ path('supprimer_Diplome',{'id':Dip.getId}) }}',this)" />
                                                 <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#diplome{{ iddiv }}"></button></label>
 
                                         </div>
                                         <div id="diplome{{ iddiv }}" class="collapse in" >
                                             <div class="row">
-                                                <label class="cell">Ecole  : <label>{{ Dip.getEcole}}</label></label>
-
+                                                <label class="cell">Ecole  : <input value="{{ Dip.getEcole}}" id="Ecole" name="_Ecole"></label>
+                                                <input type="submit" value="Modifier">
                                             </div>
                                         </div>
                                     </div>
+                                </form>
                                 {% endfor %}
                             {% endif %}
 
@@ -979,6 +979,7 @@
                             {% if Document is defined %}
                                 {% for Doc in Document %}
                                     {% set iddiv = random()  %}
+
                                     <div class="col-xs-12 Liste">
                                         <div class="row">
                                             <label class="cell">Type   : <label>{{ Doc.getType }}</label></label>
@@ -995,7 +996,6 @@
                                                         <a target="_blank" href="{{ path('show_Document',{'id':Doc.id}) }}" >
                                                             <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px;" title="{{ Doc.name }}" alt="{{ Doc.name }}" >
                                                         </a>
-
                                                     {% else %}
                                                         <a target="_blank" href="{{ path('show_Document',{'id':Doc.id}) }}" >
                                                             <img src="{{ asset('image/file.png') }}"  style="width:40px; height:40px;" title="{{ Doc.name }}" alt="{{ Doc.name }}" >
@@ -1005,6 +1005,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                </form>
                                 {% endfor %}
                             {% endif %}
                             <div name="modification" >

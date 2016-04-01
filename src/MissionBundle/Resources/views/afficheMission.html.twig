@@ -21,7 +21,7 @@
 {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_ADMINSOC') %}
     <div id="MettreEnRelation" class="popup">
         <div onclick="document.getElementById('submitMettreEnRelation').click();hide(this)" class="close"></div>
-        <div class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block; margin-left: 20%;margin-top:100px">
+        <div class="col-xs-offset-3 col-xs-6 formContainer">
             <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
             <form id="formMettreEnRelation" class="formulaire" action="" onsubmit="document.getElementById('submitMettreEnRelation').disabled=true;ShowWaiter();" method="post">
@@ -60,7 +60,7 @@
     </div>
     <div id="Assigner_Tuteur" class="popup">
     <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-5 col-xs-2" style="padding: 0;border:20px solid white;display: block;top:150px">
+    <div class="col-xs-offset-5 col-xs-2 formContainer">
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
         <form id="formAssignTuteur" action="{{ path('Assigner_tuteur',{'id':mission.id}) }}" onsubmit="this.disabled = true;ShowWaiter();" class="formulaire" method="post">
@@ -81,7 +81,7 @@
 {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_ADMINSOC') %}
 <div id="Diffusion_formation" class="popup">
     <div onclick="document.getElementById('submitDiffusion8598').click();hide(this)" class="close"></div>
-    <div class="col-xs-offset-3 col-xs-4" style="padding: 0;border:20px solid white;display: block;top:150px;background-color: white;">
+    <div class="col-xs-offset-3 col-xs-4 formContainer">
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
         <input class="row" style="width: 100%" type="text" placeholder="Recherche" onkeyup="if(event.keyCode==13){if(confirm('Voulez-vous envoyer?')){document.getElementById('submitDiffusion8598').click();}}else{rechercheformation(this.value);}">
@@ -113,7 +113,7 @@
 
 <div id="FicheApprenant" class="popup">
     <div onclick="document.getElementById('submitReception2345').click();hide(this)" class="close"></div>
-    <div class="col-xs-offset-1 col-xs-7" style="background-color: white;padding: 0;border:20px solid white;display: block; margin-left: 20%; ">
+    <div class="col-xs-offset-1 col-xs-7" style="border:20px solid white;">
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
         <form id="formFicheApprenant" class="formulaire"  onsubmit="ShowWaiter();"  method="post">

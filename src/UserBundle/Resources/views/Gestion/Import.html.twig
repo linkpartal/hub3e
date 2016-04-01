@@ -14,7 +14,7 @@
 <body onload="loading();" onunload="window.parent.document.getElementById('iframe').style.position ='static';window.parent.document.getElementById('iframe').style.height ='calc(100% - 72px)';">
 <div id="FicheApprenant" class="popup" >
     <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-4 col-xs-4" style="background-color: white;padding: 0;border:20px solid white;display: block;">
+    <div class="col-xs-offset-4 col-xs-4 formContainer" >
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
         <form id="formFicheApprenant" class="formulaire"   method="post">
@@ -87,11 +87,8 @@
 
 </div>
 <div id="DuplicaPopUp" class="popup">
-    <div onclick="hide(this)" class="close">
-
-    </div>
-    <div class="col-xs-offset-1 col-xs-10" style="background-color: white;padding: 0;display: block;
-                border-top: 4px solid white;border-bottom: 4px solid white;border-radius: 4px;box-shadow: 0 1px 40px 0 rgb(0, 0, 0);">
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-10" style="border-top: 4px solid white;border-bottom: 4px solid white;border-radius: 4px;box-shadow: 0 1px 40px 0 rgb(0, 0, 0);">
 
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
