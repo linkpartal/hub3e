@@ -94,19 +94,11 @@
                             <div class="col-xs-3 input-colonne">
                                 <input placeholder="Code postale" class="input" type="text" id="CodePostaleparent" name="_CodePostaleparent" maxlength="45" required >
                             </div>
-
-
                         </div>
-
-
                         <div class="div_button" style="background-color: white">
-
                             <input class="blue" onclick="showFermer()" style="float: left" name="submitApprenant" type="button" value="Annuler">
                             <input class="blue" id="submitaddparent" type="submit" style="margin-left: 550px"  value="Enregistrer" >
-
                         </div>
-
-
 
                     </form>
 
@@ -139,13 +131,9 @@
                                     <label style="float: left">à :</label><input  type="text" class="date" id="Datefin" name="_Datefin" title="Datefin" required>
                                 </div>
                             </div>
-
-
                             <div class="col-xs-6 input-colonne " style="height:150px">
                                 <textarea placeholder="Description" class="input" id="Descriptionexp" name="_Descriptionexp"  required style="resize:none;height:calc( 100% - 13px)"></textarea>
-
                             </div>
-
                         </div>
                         <div class="div_button" style="background-color: white">
 
@@ -305,9 +293,9 @@
                                     </select>
                                     <select title="" id="SelectMultipleRechercheFormation" style="display: none">
                                         {% for formation in formations %}
-                                        {% if formation.etablissement.tier == app.user.tier or formation.etablissement.tier in app.user.tier.tier1|keys %}
-                                            <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
-                                        {% endif %}
+                                            {% if formation.etablissement.tier == app.user.tier or formation.etablissement.tier in app.user.tier.tier1|keys %}
+                                                <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
+                                            {% endif %}
                                         {% endfor %}
                                     </select>
                                 {% elseif app.user.hasRole('ROLE_RECRUTEUR') %}
@@ -698,17 +686,17 @@
                                     <div class="inputcontainer">
                                         <label>Permis  :  </label>
 
-                                            <input title="oui" value="1" type="radio" {% if User.getInfo.getPermis == '1' %} checked {% endif %} name="_Permis"  ><label>oui</label>
-                                            <input title="non" value="-1" type="radio" {% if User.getInfo.getPermis == '-1' %} checked {% endif %}  name="_Permis" ><label>non</label>
-                                            <input title="en cours" value="0" type="radio" {% if User.getInfo.getPermis == '0' %} checked {% endif %}  name="_Permis" ><label>en cours</label>
+                                        <input title="oui" value="1" type="radio" {% if User.getInfo.getPermis == '1' %} checked {% endif %} name="_Permis"  ><label>oui</label>
+                                        <input title="non" value="-1" type="radio" {% if User.getInfo.getPermis == '-1' %} checked {% endif %}  name="_Permis" ><label>non</label>
+                                        <input title="en cours" value="0" type="radio" {% if User.getInfo.getPermis == '0' %} checked {% endif %}  name="_Permis" ><label>en cours</label>
 
 
                                     </div>
                                     <div class="inputcontainer">
                                         <label>Véhicule  :  </label>
 
-                                            <input title="oui" value="1" {% if User.getInfo.getVehicule == '1'%}checked{% endif %} type="radio" name="_Vehicule" ><label>oui</label>
-                                            <input title="non" value="0" {% if User.getInfo.getVehicule == '0'%}checked{% endif %} type="radio" name="_Vehicule"  ><label>non</label>
+                                        <input title="oui" value="1" {% if User.getInfo.getVehicule == '1'%}checked{% endif %} type="radio" name="_Vehicule" ><label>oui</label>
+                                        <input title="non" value="0" {% if User.getInfo.getVehicule == '0'%}checked{% endif %} type="radio" name="_Vehicule"  ><label>non</label>
 
                                     </div>
 
@@ -755,77 +743,82 @@
                                     </div>
 
                                     <div class="inputcontainer">
-
-                                        <label class="list-group-item" style="height: 60px;">Hobbies :</label>
-
-                                        {% set i = 0 %}
-                                        {% for hobby in User.getHobbies %}
-                                            <div id="hobbie{{ i }}" >
-                                                <input type="hidden" name="hobbie[{{ i }}]" value="{{ hobby.getId }}" style="margin:10px 5px 10px 0" id="inputHobbie" >
-                                                <label class="champ form-control" style="width: 150px;" for="hobbie">{{hobby.getHobbie}}</label>
-
-                                                <img onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
-
-
-                                            </div>
-
-                                            {% set i= i +1 %}
-                                        {% endfor %}
-
-                                    </div>
-
-                                    <div class="inputcontainer" >
-                                        <div id="ajout_hobbie" >
-                                            {% if Hobbies is defined %}
-                                                <select title="Hobbies" style=" width:150px;height: 40px" id="Newhobbie"  name="_Hobbie">
-                                                    <option value="">--?-- </option>
-                                                    {% for hobbie in Hobbies %}
-                                                        <option value="{{ hobbie.getId }}">{{ hobbie.hobbie }}</option>
-                                                    {% endfor %}
-                                                </select>
+                                        <label class="list-group-item" style="height: 60px;vertical-align: top;" for="Hobbies">Hobbies :</label>
+                                        <div id="HobbiesContainer" style="display: inline-block;">
+                                            {% if  User.getInfo.getHobbie1  %}
+                                                <div id="hobbie" >
+                                                    <input title="" value="{{ User.getInfo.getHobbie1 }}" name="_hobbie[]" type="text"  class="champ form-control" >
+                                                    <img  onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
                                             {% endif %}
-                                            <img  OnClick="ajouterHobbie(this.previousElementSibling)"  src="{{ asset('image/add_x30.png') }}"/><br>
+                                            {% if User.getInfo.getHobbie2 %}
+                                                <div id="hobbie1"  >
+                                                    <input title="" value="{{ User.getInfo.getHobbie2 }}" name="_hobbie[]" type="text" class="champ form-control" >
+                                                    <img   onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getHobbie3 %}
+                                                <div id="hobbie2" >
+                                                    <input title="" value="{{ User.getInfo.getHobbie3 }}" name="_hobbie[]" type="text" class="champ form-control" >
+                                                    <img onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getHobbie4 %}
+                                                <div id="hobbie3" >
+                                                    <input title="" value="{{ User.getInfo.getHobbie4 }}" name="_hobbie[]" type="text" class="champ form-control" >
+                                                    <img onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getHobbie5 %}
+                                                <div id="hobbie4" >
+                                                    <input title="" value="{{ User.getInfo.getHobbie5 }}" name="_hobbie[]" type="text" class="champ form-control" >
+                                                    <img  onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
                                         </div>
+                                        <img  OnClick="ajouterHobbie()" style="vertical-align: top;float: right;margin: 9px;"  src="{{ asset('image/add_x30.png') }}"/>
                                     </div>
+
+
 
                                     <div class="inputcontainer">
-                                        <label class="list-group-item" style="height: 60px;" >Langues :</label><br>
-                                        {% if Langue is defined %}
-                                            {% set i = 0 %}
-                                            {% for lang in User.getLangue %}
-                                                <div id="langue{{ i }}" >
-                                                    <input type="hidden" name="langue[{{ i }}]" value="{{ lang.getId }}" style="margin:10px 5px 10px 0" id="inputLangue" >
-                                                    <label class="champ form-control" style="width: 150px;" for="langue">{{lang.getLangue}}</label>
-                                                    <label class="champ form-control"  for="Niveau">{{lang.getNiveau}}</label>
-                                                    <img onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
+                                        <label class="list-group-item" style="height: 60px;vertical-align: top;" >Langues :</label>
+                                        <div id="LanguesContainer" style="display: inline-block;">
+                                            {% if User.getInfo.getLangue1 %}
+                                                <div id="langue1">
+                                                    <input title="" value="{{ User.getInfo.getLangue1 }}" name="_Langue[]" type="text" class="champ form-control" >
+                                                    <img  onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
                                                 </div>
-                                                {% set i= i +1 %}
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getLangue2 %}
+                                                <div id="langue2">
+                                                    <input title="" value="{{ User.getInfo.getLangue2 }}" name="_Langue[]" type="text"  class="champ form-control" >
+                                                    <img  onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getLangue3 %}
+                                                <div id="langue3">
+                                                    <input title="" value="{{ User.getInfo.getLangue3 }}" name="_Langue[]" type="text"  class="champ form-control" >
+                                                    <img  onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getLangue4 %}
+                                                <div id="langue4">
+                                                    <input title="" value="{{ User.getInfo.getLangue4 }}" name="_Langue[]" type="text"  class="champ form-control" >
+                                                    <img  onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getLangue5 %}
+                                                <div id="langue5">
+                                                    <input title="" value="{{ User.getInfo.getLangue5 }}" name="_Langue[]" type="text"  class="champ form-control" >
+                                                    <img  onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
 
-                                    <div class="inputcontainer" >
-                                        <div id="ajout_langue" >
-                                            <select title="Langue" style=" width:150px;height: 40px" id="NewLangue"  name="_Langue">
-                                                <option value="">--?-- </option>
-                                                <option value="Francais">Francais </option>
-                                                <option value="Anglais">Anglais </option>
-                                                <option value="Espagnol">Espagnol </option>
-                                                <option value="Arabe">Arabe </option>
-                                                <option value="Allemand">Allemand </option>
-
-                                            </select>
-                                            <select title="Niveau" style="height: 40px;width:250px;"  id="NewNiveau"  name="_Niveau">
-                                                <option value="">--?-- </option>
-                                                <option value="connaissance de base">connaissance de base </option>
-                                                <option value="bonne connaissance">bonne connaissance</option>
-                                                <option value="courant">courant </option>
-                                                <option value="langue maternelle">langue maternelle </option>
-
-                                            </select>
-                                            <img onclick="ajouterLangue(this.previousElementSibling.previousElementSibling)"  src="{{ asset('image/add_x30.png') }}"/><br>
                                         </div>
+                                        <img onclick="ajouterLangue()" style="vertical-align: top;float: right;margin: 9px;" src="{{ asset('image/add_x30.png') }}"/><br>
                                     </div>
+
                                 {% endif %}
                             </form>
                         </div>
@@ -864,7 +857,7 @@
                             {% endif %}
 
 
-                                <button type="button" class="col-xs-12 blue" style="margin-top:40px;"  onclick="show('addparent')">Ajouter un responsable légal</button>
+                            <button type="button" class="col-xs-12 blue" style="margin-top:40px;"  onclick="show('addparent')">Ajouter un responsable légal</button>
 
 
                         </div>
@@ -872,39 +865,39 @@
                             {% if Experience is defined %}
                                 {% for Exp in Experience %}
                                     {% set iddiv = random()  %}
-                            <form id="formExperience" class="formulaire" action="{{ path("experience_added") }}" onsubmit="document.getElementById('submitaddExperience').disabled=true;ShowWaiter();"  method="post" enctype="multipart/form-data">
-                                <input type="hidden" value="{{ Exp.getId }}" id="id" name="_IDExp">
-                                    <div class="col-xs-12 Liste">
-                                        <div class="row">
-                                            <label class="cell">Nom societe : <input value="{{ Exp.nomsociete }}" id="Nomsociete" name="_Nomsociete"></label>
-                                            <label class="cell">Activite : <input value="{{Exp.getActivite }}" name="_Activite">
-                                                <img style="float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerExperience('{{ path('supprimer_Experience',{'id':Exp.getId}) }}',this)" />
-                                                <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#exper{{ iddiv }}"></button>
-                                            </label>
-                                        </div>
-                                        <div id="exper{{ iddiv }}" class="collapse in" >
+                                    <form id="formExperience" class="formulaire" action="{{ path("experience_added") }}" onsubmit="document.getElementById('submitaddExperience').disabled=true;ShowWaiter();"  method="post" enctype="multipart/form-data">
+                                        <input type="hidden" value="{{ Exp.getId }}" id="id" name="_IDExp">
+                                        <div class="col-xs-12 Liste">
                                             <div class="row">
-                                                <label class="cell">Lieu  : <input value="{{ Exp.lieu }}" id="Lieu" name="_Lieu"></label>
-                                                <label class="cell">Poste  : <input value="{{ Exp.poste }}" id="Poste" name="_Poste"></label>
+                                                <label class="cell">Nom societe : <input value="{{ Exp.nomsociete }}" id="Nomsociete" name="_Nomsociete"></label>
+                                                <label class="cell">Activite : <input value="{{Exp.getActivite }}" name="_Activite">
+                                                    <img style="float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerExperience('{{ path('supprimer_Experience',{'id':Exp.getId}) }}',this)" />
+                                                    <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#exper{{ iddiv }}"></button>
+                                                </label>
                                             </div>
-                                            <div class="row">
-                                                <label class="cell">Début : <input value="{{ Exp.debut | date('m/Y')}}" class="date" id="Nbreannee" name="_Datedebut"></label>
-                                                <label class="cell">Fin : <input value="{{ Exp.fin | date('m/Y')}}" class="date" id="Nbreannee" name="_Datefin"></label>
+                                            <div id="exper{{ iddiv }}" class="collapse in" >
+                                                <div class="row">
+                                                    <label class="cell">Lieu  : <input value="{{ Exp.lieu }}" id="Lieu" name="_Lieu"></label>
+                                                    <label class="cell">Poste  : <input value="{{ Exp.poste }}" id="Poste" name="_Poste"></label>
+                                                </div>
+                                                <div class="row">
+                                                    <label class="cell">Début : <input value="{{ Exp.debut | date('m/Y')}}" class="date" id="Nbreannee" name="_Datedebut"></label>
+                                                    <label class="cell">Fin : <input value="{{ Exp.fin | date('m/Y')}}" class="date" id="Nbreannee" name="_Datefin"></label>
 
 
-                                            </div>
-                                            <div class="row">
-                                                <label class="cell">Description : <input value="{{ Exp.description }}" id="Descriptionexp" name="_Descriptionexp"></label>
-                                                <input type="submit" value="Modifier">
+                                                </div>
+                                                <div class="row">
+                                                    <label class="cell">Description : <input value="{{ Exp.description }}" id="Descriptionexp" name="_Descriptionexp"></label>
+                                                    <input type="submit" value="Modifier">
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
                                 {% endfor %}
                             {% endif %}
 
 
-                                <button type="button" class="col-xs-12 blue" style="margin-top: 40px" onclick="show('addExperience')" >Ajouter une Expérience</button>
+                            <button type="button" class="col-xs-12 blue" style="margin-top: 40px" onclick="show('addExperience')" >Ajouter une Expérience</button>
 
 
                         </div>
@@ -912,32 +905,32 @@
                             {% if Recommandation is defined %}
                                 {% for Recom in Recommandation %}
                                     {% set iddiv = random()  %}
-                            <form id="formRecommandation"  action="{{ path("recommandation_added") }}" onsubmit="document.getElementById('submitaddRecommandation').disabled=true;ShowWaiter();" enctype="multipart/form-data" method="post" >
-                                <input type="hidden" value="{{ Recom.getId }}" id="id" name="_IDRecom">
-                                    <div class="col-xs-12 Liste">
-                                        <div class="row">
-                                            <label class="cell">Text  : <input value="{{ Recom.text }}" id="Text" name="_Text"></label>
-                                            <label class="cell">Nom : <input value="{{Recom.getNom }}" id="Nomrec" name="_Nomrec">
-                                                <img style="float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerRecommandation('{{ path('supprimer_Recommandation',{'id':Recom.getId}) }}',this)" />
-                                                <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#recommandation{{ iddiv }}"></button></label>
+                                    <form id="formRecommandation"  action="{{ path("recommandation_added") }}" onsubmit="document.getElementById('submitaddRecommandation').disabled=true;ShowWaiter();" enctype="multipart/form-data" method="post" >
+                                        <input type="hidden" value="{{ Recom.getId }}" id="id" name="_IDRecom">
+                                        <div class="col-xs-12 Liste">
+                                            <div class="row">
+                                                <label class="cell">Text  : <input value="{{ Recom.text }}" id="Text" name="_Text"></label>
+                                                <label class="cell">Nom : <input value="{{Recom.getNom }}" id="Nomrec" name="_Nomrec">
+                                                    <img style="float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerRecommandation('{{ path('supprimer_Recommandation',{'id':Recom.getId}) }}',this)" />
+                                                    <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#recommandation{{ iddiv }}"></button></label>
 
-                                        </div>
-                                        <div id="recommandation{{ iddiv }}" class="collapse in" >
-                                            <div class="row">
-                                                <label class="cell">Fonction  : <input value="{{ Recom.fonction }}" id="Fonctionrec" name="_Fonctionrec"></label>
-                                                <label class="cell">Email  : <input value="{{ Recom.email }}" id="Emailrec" name="_Emailrec"></label>
                                             </div>
-                                            <div class="row">
-                                                <label class="cell">Téléphone : <input value="{{ Recom.telephone}}" id="Telephonerec" name="_Telephonerec"></label>
-                                                <input type="submit" value="Modifier">
+                                            <div id="recommandation{{ iddiv }}" class="collapse in" >
+                                                <div class="row">
+                                                    <label class="cell">Fonction  : <input value="{{ Recom.fonction }}" id="Fonctionrec" name="_Fonctionrec"></label>
+                                                    <label class="cell">Email  : <input value="{{ Recom.email }}" id="Emailrec" name="_Emailrec"></label>
+                                                </div>
+                                                <div class="row">
+                                                    <label class="cell">Téléphone : <input value="{{ Recom.telephone}}" id="Telephonerec" name="_Telephonerec"></label>
+                                                    <input type="submit" value="Modifier">
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
                                 {% endfor %}
                             {% endif %}
 
-                                <button type="button" class="col-xs-12 blue" style="margin-top: 40px" onclick="show('addRecommandation')">Ajouter une Recommandation</button>
+                            <button type="button" class="col-xs-12 blue" style="margin-top: 40px" onclick="show('addRecommandation')">Ajouter une Recommandation</button>
 
 
                         </div>
@@ -945,29 +938,29 @@
                             {% if Diplome is defined %}
                                 {% for Dip in Diplome %}
                                     {% set iddiv = random()  %}
-                            <form id="formDiplome" class="formulaire" action="{{ path("diplome_added") }}" onsubmit="document.getElementById('submitaddDiplome').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data">
-                                <input type="hidden" value="{{ Dip.getId }}" id="id" name="_IDDiplome">
-                                    <div class="col-xs-12 Liste">
-                                        <div class="row">
-                                            <label class="cell">Text  : <input value="{{ Dip.libelle }}" id="Libelle" name="_Libelle" ></label>
-                                            <label class="cell">Obtention : <input value="{{ Dip.obtention }}" id="Obtention" name="_Obtention">
-                                                <img style="float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerDiplome('{{ path('supprimer_Diplome',{'id':Dip.getId}) }}',this)" />
-                                                <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#diplome{{ iddiv }}"></button></label>
-
-                                        </div>
-                                        <div id="diplome{{ iddiv }}" class="collapse in" >
+                                    <form id="formDiplome" class="formulaire" action="{{ path("diplome_added") }}" onsubmit="document.getElementById('submitaddDiplome').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" value="{{ Dip.getId }}" id="id" name="_IDDiplome">
+                                        <div class="col-xs-12 Liste">
                                             <div class="row">
-                                                <label class="cell">Ecole  : <input value="{{ Dip.ecole}}" id="Ecole" name="_Ecole"></label>
-                                                <input type="submit" value="Modifier">
+                                                <label class="cell">Text  : <input value="{{ Dip.libelle }}" id="Libelle" name="_Libelle" ></label>
+                                                <label class="cell">Obtention : <input value="{{ Dip.obtention }}" id="Obtention" name="_Obtention">
+                                                    <img style="float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerDiplome('{{ path('supprimer_Diplome',{'id':Dip.getId}) }}',this)" />
+                                                    <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#diplome{{ iddiv }}"></button></label>
+
+                                            </div>
+                                            <div id="diplome{{ iddiv }}" class="collapse in" >
+                                                <div class="row">
+                                                    <label class="cell">Ecole  : <input value="{{ Dip.ecole}}" id="Ecole" name="_Ecole"></label>
+                                                    <input type="submit" value="Modifier">
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
                                 {% endfor %}
                             {% endif %}
 
 
-                                <button type="button" class="col-xs-12 blue" style="margin-top:40px" onclick="show('addDiplome')">Ajouter un Diplome</button>
+                            <button type="button" class="col-xs-12 blue" style="margin-top:40px" onclick="show('addDiplome')">Ajouter un Diplome</button>
 
                         </div>
                         <div id="info_doc" class="list-group affichage" style="display:none">
@@ -1003,7 +996,7 @@
                                 {% endfor %}
                             {% endif %}
 
-                                <button type="button" class="col-xs-12 blue" style="margin-top:40px" onclick="show('addDocument')">Ajouter un document</button>
+                            <button type="button" class="col-xs-12 blue" style="margin-top:40px" onclick="show('addDocument')">Ajouter un document</button>
 
                         </div>
                         <div id="info_candidature" class="list-group affichage" style="display:none">
@@ -1074,37 +1067,37 @@
                                 {% endfor %}
                             {% endif %}
 
-                                <button  type="button" class="col-xs-12 blue" style="margin-top:40px" onclick="show('addFormation')">Ajouter une Formation</button>
+                            <button  type="button" class="col-xs-12 blue" style="margin-top:40px" onclick="show('addFormation')">Ajouter une Formation</button>
 
                         </div>
                         <div id="QCM_Affinite" class="list-group affichage" style="display:none">
 
                             <div class="col-xs-12">
                                 <div class="list-group" style="background: white; margin: 30px 0 0 30px; padding: 0 0; border-left: 20px solid white; border-right: 20px solid white !important; text-align: left;">
-                                        {% set i = 0 %}
-                                        {% set reponsegroupe = 0 %}
-                                        {% if QCMs is defined %}
-                                            {% for QCM in QCMs %}
+                                    {% set i = 0 %}
+                                    {% set reponsegroupe = 0 %}
+                                    {% if QCMs is defined %}
+                                        {% for QCM in QCMs %}
+                                            <div class="inputcontainer">
+                                                <label class="list-group-item" style="height: 60px;" for="QCM">Nom du Questionnaire :</label>
+                                                <input type="text" class="champ " id="QCM" name="_Nom" value="{{ QCM.getNom }}" required maxlength="45" readonly><br>
+                                            </div>
+                                            {% set y = 0 %}
+                                            {% for question in Questions[i] %}
                                                 <div class="inputcontainer">
-                                                    <label class="list-group-item" style="height: 60px;" for="QCM">Nom du Questionnaire :</label>
-                                                    <input type="text" class="champ " id="QCM" name="_Nom" value="{{ QCM.getNom }}" required maxlength="45" readonly><br>
-                                                </div>
-                                                {% set y = 0 %}
-                                                {% for question in Questions[i] %}
-                                                    <div class="inputcontainer">
-                                                        <!--<label class="list-group-item" style="height: 60px;" for="Question">Question :</label>-->
-                                                        <label class="champ" style="width: 100%;" >{{question.getQuestion  }}</label>
-                                                        {% for reponse in reponses[i][y] %}
+                                                    <!--<label class="list-group-item" style="height: 60px;" for="Question">Question :</label>-->
+                                                    <label class="champ" style="width: 100%;" >{{question.getQuestion  }}</label>
+                                                    {% for reponse in reponses[i][y] %}
                                                         <div>
                                                             <input type="radio" onclick="envoyerNouvelleReponse({{ reponse.getId }})" name="reponse[{{ reponse.questiondef.id }}]" title="{{ reponse.getReponse }}" value="{{ reponse.getId }}"{% if reponse in User.reponsedef %} checked{% endif %}><label style="font: 14px Roboto black;height: inherit;">{{ reponse.getReponse }}</label>
                                                         </div>
-                                                        {% endfor %}
-                                                    </div>
-                                                    {% set y = y + 1 %}
-                                                {% endfor %}
-                                                {% set i = i + 1 %}
+                                                    {% endfor %}
+                                                </div>
+                                                {% set y = y + 1 %}
                                             {% endfor %}
-                                        {% endif %}
+                                            {% set i = i + 1 %}
+                                        {% endfor %}
+                                    {% endif %}
                                 </div>
                             </div>
 
@@ -1112,32 +1105,32 @@
                         <div id="QCM_Test" class="list-group affichage" style="display:none">
                             <div class="col-xs-12">
                                 <div class="list-group formulaire" style="background: white; margin: 30px 0 0 30px; padding: 0 0; border-left: 20px solid white; border-right: 20px solid white !important; text-align: left;">
-                                        {% set i = 0 %}
-                                        {% set reponsegroupe = 0 %}
-                                        {% if QCMtest is defined %}
-                                            {% for QCM in QCMtest %}
+                                    {% set i = 0 %}
+                                    {% set reponsegroupe = 0 %}
+                                    {% if QCMtest is defined %}
+                                        {% for QCM in QCMtest %}
 
+                                            <div class="inputcontainer">
+                                                <label class="list-group-item" style="height: 60px;" for="QCM">Nom du Questionnaire :</label>
+                                                <input type="text" class="champ " id="QCM" name="_Nom" value="{{ QCM.getNom }}" required maxlength="45" readonly><br>
+                                            </div>
+                                            {% set y = 0 %}
+
+                                            {% for questionTest in QuestionsTest[i] %}
                                                 <div class="inputcontainer">
-                                                    <label class="list-group-item" style="height: 60px;" for="QCM">Nom du Questionnaire :</label>
-                                                    <input type="text" class="champ " id="QCM" name="_Nom" value="{{ QCM.getNom }}" required maxlength="45" readonly><br>
+                                                    <!--<label class="list-group-item" style="height: 60px;" for="Question">Question :</label>-->
+                                                    <label class="champ" style="width: 100%;" >{{questionTest.getQuestion  }}</label>
+                                                    {% for reponseTest in reponsesTest[i][y] %}
+                                                        <input title="{{ reponseTest.getReponse }}" type="radio" onclick="envoyerNouvelleReponse({{ reponseTest.getId }})" name="reponse[{{ reponseTest.questiondef.id }}]" value="{{ reponseTest.getId }}" {% if reponseTest in User.reponsedef %}checked{% endif %} ><label style="font: 14px Roboto black;height: inherit;">{{ reponseTest.getReponse }}</label>
+                                                    {% endfor %}
+
                                                 </div>
-                                                {% set y = 0 %}
-
-                                                {% for questionTest in QuestionsTest[i] %}
-                                                    <div class="inputcontainer">
-                                                        <!--<label class="list-group-item" style="height: 60px;" for="Question">Question :</label>-->
-                                                        <label class="champ" style="width: 100%;" >{{questionTest.getQuestion  }}</label>
-                                                        {% for reponseTest in reponsesTest[i][y] %}
-                                                                <input title="{{ reponseTest.getReponse }}" type="radio" onclick="envoyerNouvelleReponse({{ reponseTest.getId }})" name="reponse[{{ reponseTest.questiondef.id }}]" value="{{ reponseTest.getId }}" {% if reponseTest in User.reponsedef %}checked{% endif %} ><label style="font: 14px Roboto black;height: inherit;">{{ reponseTest.getReponse }}</label>
-                                                        {% endfor %}
-
-                                                    </div>
-                                                    {% set y = y + 1 %}
-                                                {% endfor %}
-
-                                                {% set i = i + 1 %}
+                                                {% set y = y + 1 %}
                                             {% endfor %}
-                                        {% endif %}
+
+                                            {% set i = i + 1 %}
+                                        {% endfor %}
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -1162,7 +1155,7 @@
 
                     {% if is_granted('ROLE_ADMINSOC') or is_granted('ROLE_ADMINECOLE') %}
                         <button onclick="if(confirm('Voulez-vous Supprimer cet utilisateur ?')){post('{{ path('supprimerUtilisateur',{'id': User.getId }) }}',true)}" type="button" class="col-xs-12 rightMenu" >
-                           Supprimer l'utilisateur
+                            Supprimer l'utilisateur
 
                         </button>
                         {% if User.hasRole('ROLE_TUTEUR') or User.hasRole('ROLE_RECRUTEUR') %}
@@ -1428,24 +1421,8 @@
 
     }
     function supprimerHobbie(div){
-
-        var route = '{{path('supprimer_Hobbie',{'id':"_idHobbie",'IdUser':"_IdUser"})}}';
         var input = div.getElementsByTagName("input")[0];
         div.parentNode.removeChild(div);
-        route=route.replace('_idHobbie',input.value);
-        route=route.replace('_IdUser','{{ User.id}}');
-        $.ajax({
-            type: 'get',
-            url: route,
-            success: function(data) {
-                console.log(data);
-            },
-            error: function(data) {
-                console.log(data);
-            }
-        });
-
-
 
     }
     function supprimerParent(route, champs) {
@@ -1527,100 +1504,32 @@
         champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
 
     }
-    function ajouterHobbie(me){
-
-        var dup = document.getElementById('Hobby');
-        var clone = dup.cloneNode(true);
-
-        var route = '{{path('ajouter_Hobbie',{'id':"_idHobbie",'IdUser':"_IdUser"})}}';
-        var select = document.getElementById("Newhobbie");
-        var choice = select.selectedIndex; // Récupération de l'index du <option> choisi
-        var idhobbie = select.options[choice].value; // Récupération du texte du <option> d'index "choice"
-
-        if(me.value.trim() =='')
-        {
-            alert('choisissez une hobbie');
-            me.value='';
-            return;
+    function ajouterHobbie(){
+        if(document.getElementsByName('_hobbie[]').length < 5){
+            var newHobby = document.createElement('input');
+            newHobby.setAttribute('name','_hobbie[]');
+            newHobby.setAttribute('type','text');
+            newHobby.className = 'champ form-control';
+            newHobby.setAttribute('style','display :block !important');
+            document.getElementById('HobbiesContainer').appendChild(newHobby);
         }
-
-
-        route=route.replace('_idHobbie',idhobbie);
-        route=route.replace('_IdUser','{{ User.id}}');
-        $.ajax({
-            type: 'get',
-            url: route,
-            success: function() {
-                //me.parentNode.getAttribute('id')
-                clone.style.display = 'block';
-                clone.getElementsByTagName("label")[0].innerHTML = select.options[choice].innerHTML;
-                clone.getElementsByTagName("input")[0].setAttribute("name","hobbie"+me.parentNode.parentNode.getAttribute('id'));
-                clone.getElementsByTagName("input")[0].value = me.value.trim();
-
-                // me.parentNode.parentNode.parentNode.previousSibling.appendChild(clone);
-
-                me.parentNode.parentNode.previousElementSibling.appendChild(clone);
-
-            }
-        });
-
-
+        else{
+            alert('5 hobby maximum');
+        }
     }
-    function ajouterLangue(me){
+    function ajouterLangue(){
 
-        var dup = document.getElementById('DivNewLangue');
-        var clone = dup.cloneNode(true);
-
-        var route = '{{path('ajouter_Langue',{'id':"_idLangue",'IdNiveau':"_idNiveau",'IdUser': User.id})}}';
-        var select = document.getElementById("NewLangue");
-        var choice = select.selectedIndex;  // Récupération de l'index du <option> choisi
-        var idLangue = select.options[choice].value.trim(); // Récupération du texte du <option> d'index "choice"
-
-        var select2 = document.getElementById("NewNiveau");
-        var choice2 = select2.selectedIndex;  // Récupération de l'index du <option> choisi
-        var idNiveau = select2.options[choice2].value.trim(); // Récupération du texte du <option> d'index "choice"
-
-        if(me.value.trim() =='')
-        {
-            alert('choisissez une langue');
-            me.value='';
-            return;
+        if(document.getElementsByName('_Langue[]').length < 5){
+            var newHobby = document.createElement('input');
+            newHobby.setAttribute('name','_Langue[]');
+            newHobby.setAttribute('type','text');
+            newHobby.className = 'champ form-control';
+            newHobby.setAttribute('style','display :block !important');
+            document.getElementById('LanguesContainer').appendChild(newHobby);
         }
-
-        if(me.nextElementSibling.value.trim() =='')
-        {
-            alert('choisissez une niveau');
-            me.value='';
-            return;
+        else {
+            alert('5 hobby maximum');
         }
-
-        route=route.replace('_idLangue',idLangue);
-        route=route.replace('_idNiveau',idNiveau);
-        $.ajax({
-            type: 'get',
-            url: route,
-            success: function(data) {
-                if(data['success']==1)
-                {
-                    //me.parentNode.getAttribute('id')
-                    clone.style.display = 'block';
-
-                    clone.getElementsByTagName("label")[0].innerHTML = select.options[choice].innerHTML;
-                    clone.getElementsByTagName("input")[0].setAttribute("name","langue"+me.parentNode.parentNode.getAttribute('id'));
-                    clone.getElementsByTagName("input")[0].value = me.value.trim();
-                    clone.getElementsByTagName("label")[1].innerHTML = select2.options[choice2].innerHTML;
-                    clone.getElementsByTagName("input")[1].setAttribute("name","niveau["+me.parentNode.parentNode.getAttribute('id')+"][]");
-                    clone.getElementsByTagName("input")[1].value = me.nextElementSibling.value.trim();
-
-                    me.parentNode.parentNode.previousElementSibling.appendChild(clone);
-                }
-                else if(data['success']==0)
-                {
-                    alert('Cette langue est déjà présente');
-                }
-
-            }
-        });
 
 
     }

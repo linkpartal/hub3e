@@ -946,75 +946,69 @@
             </div>
             {% if is_granted('ROLE_RECRUTEUR') or (is_granted('ROLE_ADMINSOC') and etablissement.getTier == app.user.getTier) %}
                 <div class="col-xs-3" style="height: 100%;">
-                    <div class="list-group"
-                         style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
+                    <div style="margin: 15px 0 0 15px;">
 
 
                         {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
                         {% if etablissement.getActive %}
-                            <button onclick="active('{{ path('activate',{'id':etablissement.getId}) }}')" id="activate" type="button" class="list-group-item rightMenu" style="background-color: #94C400">
-                                <div class="col-xs-12" style="color: white;">ACTIVE</div>
+                            <button onclick="active('{{ path('activate',{'id':etablissement.getId}) }}')" id="activate" type="button" class="col-xs-12 rightMenu" style="color: white;background-color: #94C400;">
+                                ACTIVE
                             </button>
                         {% else %}
-                            <button onclick="active('{{ path('activate',{'id':etablissement.getId}) }}')" id="activate" type="button" class="list-group-item rightMenu" style="background-color: red">
-                                <div class="col-xs-12" style="color: white;">DÉSACTIVE</div>
+                            <button onclick="active('{{ path('activate',{'id':etablissement.getId}) }}')" id="activate" type="button" class="col-xs-12 rightMenu" style="color: white;background-color: red;">
+                                DÉSACTIVE
                             </button>
                         {% endif %}
                         {% endif %}
                         {% if is_granted('ROLE_SUPER_ADMIN') %}
-                            <button onclick="show('instanceLicence')"  type="button" class="list-group-item rightMenu">
-                                <div class="col-xs-12">Instancier une licence</div>
-
+                            <button onclick="show('instanceLicence')"  type="button" class="col-xs-12 rightMenu">
+                                Instancier une licence
                             </button>
                         {% endif %}
 
                         {% if (is_granted('ROLE_RECRUTEUR') and etablissement.getTier.getEcole) or (is_granted('ROLE_ADMINSOC') and not etablissement.getTier.getEcole )%}
-                            <button onclick="show('adduser')" type="button" class="list-group-item rightMenu">
-                                <div class="col-xs-12">Ajouter un utilisateur</div>
-
+                            <button onclick="show('adduser')" type="button" class="col-xs-12 rightMenu">
+                                Ajouter un utilisateur
                             </button>
                         {% endif %}
 
                         {% if not etablissement.getTier.getEcole %}
                             {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_ADMINSOC') %}
-                                <button onclick="show('addmission')" type="button" class="list-group-item rightMenu">
-                                    <div class="col-xs-12">Ajouter une mission</div>
-
+                                <button onclick="show('addmission')" type="button" class="col-xs-12 rightMenu">
+                                    Ajouter une mission
                                 </button>
                             {% endif %}
                         {% else %}
                             {% if is_granted('ROLE_ADMINECOLE') %}
-                                <button onclick="show('apprenant')" type="button" class="list-group-item rightMenu">
-                                    <div class="col-xs-12">Ajouter un apprenant</div>
-
+                                <button onclick="show('apprenant')" type="button" class="col-xs-12 rightMenu">
+                                    Ajouter un apprenant
                                 </button>
-                                <button onclick="show('ajouterformation')" type="button" class="list-group-item rightMenu">
-                                    <div class="col-xs-12">Ajouter une formation</div>
-
+                                <button onclick="show('ajouterformation')" type="button" class="col-xs-12 rightMenu">
+                                    Ajouter une formation
                                 </button>
-                                <button onclick="show('addQCMAff',{{ etablissement.getId }})" type="button" class="list-group-item rightMenu">
-                                    <div class="col-xs-12">Ajouter un test d'affinité</div>
+                                <button onclick="show('addQCMAff',{{ etablissement.getId }})" type="button" class="col-xs-12 rightMenu">
+                                    Ajouter un test d'affinité
 
                                 </button>
                             {% endif %}
                             {% if is_granted('ROLE_SUPER_ADMIN') %}
-                                <button onclick="show('associerecole')" type="button" class="list-group-item rightMenu">
-                                    <div class="col-xs-12">Liéé une ecole</div>
+                                <button onclick="show('associerecole')" type="button" class="col-xs-12 rightMenu">
+                                    Liéé école
                                 </button>
                             {% endif %}
                         {% endif %}
                         {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
-                        <button onclick="modifier('formEtab',this)"type="button" class="list-group-item rightMenu">
-                            <div class="col-xs-12">Modifier la fiche</div>
+                        <button onclick="modifier('formEtab',this)" type="button" class="col-xs-12 rightMenu">
+                            Modifier la fiche
                         </button>
 
-                        <button onclick="alert('Ce button n\'est pas encore fonctionel!')" type="button" class="list-group-item rightMenu">
-                            <div class="col-xs-12">Gérer les droits</div>
+                        <button onclick="alert('Ce button n\'est pas encore fonctionel!')" type="button" class="col-xs-12 rightMenu">
+                            Gérer les droits
                         </button>
                         {% endif %}
                         {% if is_granted('ROLE_SUPER_ADMIN') or (is_granted('ROLE_RECRUTEUR') and not etablissement.tier.ecole ) %}
-                            <button onclick="if(confirm('Voulez-vous Supprimer cet établissement?')){post('{{ path('supprimeretablissement',{'id': etablissement.getId }) }}');}" type="button" class="list-group-item rightMenu">
-                                <div class="col-xs-12">Supprimer l'établissement</div>
+                            <button onclick="if(confirm('Voulez-vous Supprimer cet établissement?')){post('{{ path('supprimeretablissement',{'id': etablissement.getId }) }}');}" type="button" class="col-xs-12 rightMenu">
+                                Supprimer l'établissement
                             </button>
                         {% endif %}
                     </div>
