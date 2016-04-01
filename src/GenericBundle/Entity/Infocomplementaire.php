@@ -115,6 +115,20 @@ class Infocomplementaire
     /**
      * @var string
      *
+     * @ORM\Column(name="formationactuelle", type="string", length=45, nullable=true)
+     */
+    private $formationactuelle;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dernierDiplome", type="string", length=45, nullable=true)
+     */
+    private $dernierDiplome;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="linkedin", type="string", length=45, nullable=true)
      */
     private $linkedin;
@@ -702,5 +716,53 @@ class Infocomplementaire
     public function getEntrepreneur()
     {
         return $this->entrepreneur;
+    }
+
+    /**
+     * Set formationactuelle
+     *
+     * @param string $formationactuelle
+     *
+     * @return Infocomplementaire
+     */
+    public function setFormationactuelle($formationactuelle)
+    {
+        $this->formationactuelle = $formationactuelle;
+
+        return $this;
+    }
+
+    /**
+     * Get formationactuelle
+     *
+     * @return string
+     */
+    public function getFormationactuelle()
+    {
+        return $this->formationactuelle;
+    }
+
+    /**
+     * Set dernierDiplome
+     *
+     * @param string $dernierDiplome
+     *
+     * @return Infocomplementaire
+     */
+    public function setDernierDiplome($dernierDiplome)
+    {
+        $this->dernierDiplome = $dernierDiplome;
+
+        return $this;
+    }
+
+    /**
+     * Get dernierDiplome
+     *
+     * @return string
+     */
+    public function getDernierDiplome()
+    {
+        return $this->dernierDiplome;
     }
 }

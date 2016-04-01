@@ -11,7 +11,7 @@
     <title>HUB3E - {% block title %}Apprenant{% endblock %}</title>
 
 </head>
-<body onload="loading();putbadged();getMyGeocode();">
+<body onload="loading();getMyGeocode();">
 
 <div class="container">
     {% block TopBar %}
@@ -345,69 +345,6 @@
         return k;
     }
 
-    function putbadged() {
-        var iframe = sessionStorage.getItem('_Iframe');
-        if(iframe)
-        {
-            document.getElementById("iframe").src = iframe;
-        }
-        else
-        {
-            document.getElementById("iframe").src = '{{ path('afficher_profil') }}';
-        }
-        document.getElementById("iframe").style.visibility = 'visible';
-
-
-        var notifs = JSON.parse('{{ notifications }}');
-        var ecole =0;
-        var societe = 0;
-        var user = 0;
-        for(var i = 0; i< notifs.length;i++)
-        {
-            var span = document.createElement("span");
-            span.className = 'badge';
-            span.innerHTML = 'New';
-            if(notifs[i].type == 'Ecole')
-            {
-                ecole++;
-                var active = document.getElementById("active"+ notifs[i].entite);
-                if(active != null){active.parentNode.insertBefore(span,active);}
-
-            }
-            if(notifs[i].type == 'Societe')
-            {
-                societe++;
-                var active = document.getElementById("active"+ notifs[i].entite);
-                if(active != null){active.parentNode.insertBefore(span,active);}
-
-            }
-            if(notifs[i].type == 'Utilisateur')
-            {
-                user++;
-                var active = document.getElementById("active"+ notifs[i].entite);
-                if(active != null){active.parentNode.insertBefore(span,active);}
-
-            }
-        }
-
-        if(societe >0)
-        {var spansociete = document.createElement("span");
-            spansociete.className = 'badge';
-            spansociete.className = spansociete.className + ' notifTopbar';
-            spansociete.innerHTML = societe;
-            var buttonsociete = document.getElementById("societetop");
-            buttonsociete.appendChild(spansociete);
-        }
-        if(user >0)
-        {var spanuser = document.createElement("span");
-            spanuser.className = 'badge';
-            spanuser.className = spanuser.className + ' notifTopbar';
-            spanuser.innerHTML = user;
-            var buttonuser = document.getElementById("usertop");
-            buttonuser.appendChild(spanuser);
-        }
-
-    }
     function readURL(input,baliseimg) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();

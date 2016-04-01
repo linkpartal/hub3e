@@ -48,24 +48,24 @@ class DefaultController extends Controller
         $em->flush();
         $mission->genererCode();
         $em->flush();
-if($request->get('formation')){
-    foreach($request->get('formation') as $idFormation)
-    {
-        $diffuser = new Diffusion();
-        $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->find($idFormation);
-        $diffuser->setFormation($formation);
-        $diffuser->setMission($mission);
-        if($this->get('security.authorization_checker')->isGranted('ROLE_RECRUTEUR')){
-            $diffuser->setStatut(5);
-        }
-        else{
-            $diffuser->setStatut(1);
-        }
+        if($request->get('formation')){
+            foreach($request->get('formation') as $idFormation)
+            {
+                $diffuser = new Diffusion();
+                $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->find($idFormation);
+                $diffuser->setFormation($formation);
+                $diffuser->setMission($mission);
+                if($this->get('security.authorization_checker')->isGranted('ROLE_RECRUTEUR')){
+                    $diffuser->setStatut(5);
+                }
+                else{
+                    $diffuser->setStatut(1);
+                }
 
-        $em->persist($diffuser);
-        $em->flush();
-    }
-}
+                $em->persist($diffuser);
+                $em->flush();
+            }
+        }
 
         if($request->get('reponse')){
             foreach($request->get('reponse') as $rep){
@@ -95,7 +95,17 @@ if($request->get('formation')){
         }
         foreach($em->getRepository('GenericBundle:Diffusion')->findBy(array('mission'=>$mission)) as $diffusion)
         {
-            if($this->get('security.authorization_checker')->isGranted('ROLE_ADMINSOC') and $diffusion->getStatut() == 2)
+            $Userconnecte = $this->get('security.token_storage')->getToken()->getUser();
+            if($Userconnecte->hasRole('ROLE_SUPER_ADMIN') and ($diffusion->getStatut() == 2 or $diffusion->getStatut() == 5)) {
+                foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
+                {
+                    if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3){
+                        array_push($users,$candidature->getUser());
+                    }
+
+                }
+            }
+            elseif($Userconnecte->hasRole('ROLE_ADMINSOC') and $diffusion->getStatut() == 2)
             {
                 foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
                 {
@@ -105,30 +115,28 @@ if($request->get('formation')){
 
                 }
             }
-            else{
-                $ecoleconnecte = $this->get('security.token_storage')->getToken()->getUser();
-                if($ecoleconnecte->hasRole('ROLE_ADMINECOLE') and $ecoleconnecte->getTier() == $diffusion->getFormation()->getEtablissement()->getTier()){
-                    foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
-                    {
-                        if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3){
-                            array_push($users,$candidature->getUser());
-                        }
-                    }
-                }
-                elseif($ecoleconnecte->hasRole('ROLE_RECRUTEUR') and $ecoleconnecte->getEtablissement() == $diffusion->getFormation()->getEtablissement())
+            elseif($Userconnecte->hasRole('ROLE_ADMINECOLE') and $Userconnecte->getTier() == $diffusion->getFormation()->getEtablissement()->getTier()){
+                foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
                 {
-                    foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
-                    {
-                        if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3){
-                            array_push($users,$candidature->getUser());
-                        }
+                    if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3){
+                        array_push($users,$candidature->getUser());
                     }
                 }
             }
 
+            elseif($Userconnecte->hasRole('ROLE_RECRUTEUR') and $Userconnecte->getEtablissement() == $diffusion->getFormation()->getEtablissement())
+            {
+                foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
+                {
+                    if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3){
+                        array_push($users,$candidature->getUser());
+                    }
+                }
+            }
         }
-        $scores = array();
 
+        //calcul Score
+        $scores = array();
         foreach($users as $apprenant)
         {
             if($apprenant->getPhotos())

@@ -67,10 +67,10 @@
                                 <label class="cell" style="float:left;">Adresse       : <label id="Information_Apprenant_Adresse" ></label></label>
                             </div>
                             <div class="col-xs-10">
-                                <label class="cell" style="float:left;">Dernier diplome :</label>
+                                <label class="cell" style="float:left;">Dernier diplome : <label id="Information_Apprenant_Diplome" ></label></label>
                             </div>
                             <div class="col-xs-10">
-                                <label class="cell" style="float:left;">Formation en cours : </label>
+                                <label class="cell" style="float:left;">Formation en cours : <label id="Information_Apprenant_Formation" ></label></label>
                             </div>
                         </div>
                     </div>
@@ -187,7 +187,7 @@
             <button class="col-xs-3" title="Voir plus d'information" type="button" onclick="
                     informationApprenant('{{import.getPhotos}}','{{ import.getCivilite }}','{{ import.getNom }}','{{ import.getPrenom }}','{{ import.getEmail }}',
                     '{{ import.getTelephone }}'{% if import.getInfo %},'{{ import.getInfo.getDateNaissance|date("d/m/Y") }}','{{ import.getInfo.getCpNaissance }}','{{ import.getInfo.getLieunaissance }}',
-                    '{{ import.getInfo.getAdresse }}'{% endif %});show('FicheApprenant');" style="height: 100%;background-color: transparent;border: none">
+                    '{{ import.getInfo.getAdresse }}','{{ import.info.formationactuelle }}','{{ import.info.dernierDiplome }}'{% endif %});show('FicheApprenant');" style="height: 100%;background-color: transparent;border: none">
                 <span class="glyphicon glyphicon-search" style="color: #1C5AA5"></span>
             </button>
             {% if not import.erreur == null %}
@@ -329,7 +329,7 @@
             }
         })
     }
-    function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse) {
+    function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse,formation,diplome) {
         if(image != ''){
             document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
         }
@@ -351,6 +351,8 @@
         document.getElementById('Information_Apprenant_Adresse').innerHTML =adresse;
         document.getElementById('Information_Apprenant_titre').innerHTML= nom +' '+ prenom;
         document.getElementById('Information_Apprenant_titre_adresse').innerHTML = adresse;
+        document.getElementById('Information_Apprenant_Formation').innerHTML = formation;
+        document.getElementById('Information_Apprenant_Diplome').innerHTML = diplome;
     }
     function search(mot){
         var mots = mot.toUpperCase().trim().split(/ +/g);

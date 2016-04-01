@@ -17,8 +17,9 @@ class DefaultController extends Controller
         {
             $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
         }
-        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
-
+        /*$notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
+        $serializer = $this->get('jms_serializer');
+        $jsonContent = $serializer->serialize($notifications, 'json');*/
 
         $ecoles = array();
         $ecoles = array_merge($ecoles,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($user->getTier()->getId()))  ;
@@ -57,7 +58,6 @@ class DefaultController extends Controller
 
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$user->getTier()));
 
-        $serializer = $this->get('jms_serializer');
 
 
         $missions = array();
@@ -66,9 +66,9 @@ class DefaultController extends Controller
 
         }
 
-        $jsonContent = $serializer->serialize($notifications, 'json');
 
-        return $this->render('SocieteBundle:AdminSoc:index.html.twig', array('ecoles'=>$ecoles , 'notifications'=>$jsonContent,'users'=>$users,'users'=>$notapprenant,
+
+        return $this->render('SocieteBundle:AdminSoc:index.html.twig', array('ecoles'=>$ecoles, /*'notifications'=>$jsonContent,*/'users'=>$users,'users'=>$notapprenant,
             'AllLicences'=>$licences,'societes'=>$societes,'image'=>$user->getPhotos(),'missions'=>$missions));
     }
 

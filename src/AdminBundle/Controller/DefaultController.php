@@ -18,8 +18,9 @@ class DefaultController extends Controller
             $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
         }
 
-        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
-
+        /*$notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
+        $serializer = $this->get('jms_serializer');
+        $jsonContent = $serializer->serialize($notifications, 'json');*/
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAll();
 
         $ecoles = array();
@@ -51,8 +52,6 @@ class DefaultController extends Controller
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array(),array('datecreation'=>'DESC'));
         $qcms = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findAll();
-        $serializer = $this->get('jms_serializer');
-        $jsonContent = $serializer->serialize($notifications, 'json');
 
         //modele
         $modeles = array();
@@ -81,7 +80,7 @@ class DefaultController extends Controller
             closedir($handle);
         }
 
-        return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$notapprenant,'modeles'=>$modeles,
+        return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,/*'notifications'=>$jsonContent ,*/'users'=>$notapprenant,'modeles'=>$modeles,
             'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'missions'=>$missions,'apprenants'=>$apprenants,'image'=>$user->getPhotos()));
     }
 

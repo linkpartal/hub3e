@@ -349,7 +349,6 @@ class DefaultController extends Controller
     public function ajouterApprenantAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
         $InfoComp = new Infocomplementaire();
         $InfoComp->setDatenaissance(date_create($request->get('_Datenaissance')) );
         $InfoComp->setAdresse($request->get('_Adresse').' '.$request->get('_Ville'));
@@ -359,7 +358,8 @@ class DefaultController extends Controller
         $InfoComp->setPortable($request->get('_Portable'));
         $InfoComp->setPermis($request->get('_Permis'));
         $InfoComp->setVehicule($request->get('_Vehicule'));
-
+        $InfoComp->setFormationactuelle($request->get('_FormationCours'));
+        $InfoComp->setDernierDiplome($request->get('_Diplome'));
         if($request->get('_handicap')){
             $InfoComp->setHandicape(true);
         }
@@ -383,15 +383,6 @@ class DefaultController extends Controller
         $apprenant = new ImportCandidat();
         $apprenant->setEtablissement($this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_idEtab')));
         $apprenant->setUser($this->get('security.token_storage')->getToken()->getUser());
-
-        //
-        // _Photos
-        //$apprenant->setPhotos($request->get('_Photos'));
-       /* if($_FILES && $_FILES['_Photos']['size'] >0)
-        {
-            $apprenant->setPhotos(file_get_contents($_FILES['_Photos']['tmp_name']));
-
-        }*/
         $apprenant->setCivilite(($request->get('_Civilite')));
         $apprenant->setNom($request->get('_Nom'));
         $apprenant->setPrenom($request->get('_Prenom'));
@@ -444,7 +435,13 @@ class DefaultController extends Controller
             }
         }
 
-
+        if($request->get('_Diplome')){
+            $diplome = new Diplome();
+            $diplome->setImportCandidat($apprenant);
+            $diplome->setLibelle($request->get('_Diplome'));
+            $em->persist($diplome);
+            $em->flush();
+        }
 
 
         return $this->redirect($_SERVER['HTTP_REFERER']);
@@ -568,9 +565,8 @@ class DefaultController extends Controller
                 $info->setCp($request->get('_Codepostal'));
                 $info->setPermis($request->get('_Permis'));
                 $info->setVehicule($request->get('_Vehicule'));
-                //$info->setHandicape($request->get('_handicap'));
-                //$info->setEntrepreneur($request->get('_entrepreneur'));
-
+                $info->setFormationactuelle($request->get('_FormationActuel'));
+                $info->setDernierDiplome($request->get('_DernierDiplome'));
                 if($request->get('_handicap')=="0"){
                     $info->setHandicape(true);
                 }
@@ -602,13 +598,36 @@ class DefaultController extends Controller
                 $info->setDatenaissance(date_create_from_format('d/m/Y',$request->get('_Datenaissance')) );
                 $info->setCpnaissance($request->get('_Cpnaissance'));
                 $info->setLieunaissance($request->get('_Lieunaissance'));
+                $info->setPortable($request->get('_Portable'));
+                $info->setCp($request->get('_Codepostal'));
+                $info->setPermis($request->get('_Permis'));
+                $info->setVehicule($request->get('_Vehicule'));
+                $info->setFormationactuelle($request->get('_FormationActuel'));
+                $info->setDernierDiplome($request->get('_DernierDiplome'));
+                if($request->get('_handicap')=="0"){
+                    $info->setHandicape(true);
+                }
+                else{
+                    $info->setHandicape(false);
+                }
+                if($request->get('_entrepreneur')=="0"){
+                    $info->setEntrepreneur(true);
+                }
+                else{
+                    $info->setEntrepreneur(false);
+                }
+                $info->setDatecreation(date_create());
                 $info->setAdresse($request->get('_Adresse'));
                 $info->setFacebook($request->get('_Facebook'));
                 $info->setLinkedin($request->get('_Linkedin'));
-                $info->setDatecreation(date_create());
                 $info->setMobilite($request->get('_Mobilite'));
-                $info->setFratrie($request->get('_Fratrie'));
+
+                if($request->get('_Fratrie') and intval($request->get('_Fratrie')) >= 0){
+                    $info->setFratrie(intval($request->get('_Fratrie')));
+                }
+
                 $info->setProfilcomplet(1);
+                $info->setDatemodification(date_create());
                 $em->persist($info);
                 $em->flush();
             }
@@ -1208,18 +1227,13 @@ class DefaultController extends Controller
             $newuser->setEtablissement($import->getEtablissement());
             $newuser->setPhotos($import->getPhotos());
             $newuser->addRole('ROLE_APPRENANT');
-            $usernameexist = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('username'=>$import->getPrenom().'.'.$import->getNom()));
+            $usernameexist = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('prenom'=>$import->getPrenom(),'nom'=>$import->getNom()));
             if($usernameexist){
                 $newuser->setUsername($import->getPrenom().'.'.$import->getNom().''.count($usernameexist));
             }
             else{
                 $newuser->setUsername($import->getPrenom().'.'.$import->getNom());
             }
-
-            $newuser->setInfo($import->getInfo());
-            $import->setInfo(null);
-            $em->flush();
-
             //generate a password
             $tokenGenerator = $this->get('fos_user.util.token_generator');
             $password = substr($tokenGenerator->generateToken(), 0, 8); // 8 chars
@@ -1228,11 +1242,16 @@ class DefaultController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($newuser);
-
-            $newuser->getInfo()->setDaterecup(date_create());
-            $newuser->getInfo()->setProfilcomplet(0);
             $em->flush();
 
+            if($import->getInfo()) {
+                $import->getInfo()->setDaterecup(date_create());
+                $import->getInfo()->setProfilcomplet(0);
+                $em->flush();
+                $newuser->setInfo($import->getInfo());
+                $import->setInfo(null);
+                $em->flush();
+            }
 
             foreach($em->getRepository('GenericBundle:Document')->findBy(array('importCandidat'=>$import)) as $document)
             {
@@ -1246,6 +1265,12 @@ class DefaultController extends Controller
                 $candidature->setImportCandidat(null);
                 $em->flush();
             }
+            foreach($em->getRepository('GenericBundle:Diplome')->findBy(array('importCandidat'=>$import)) as $diplome)
+            {
+                $diplome->setUser($newuser);
+                $diplome->setImportCandidat(null);
+                $em->flush();
+            }
 
             /*
             foreach($em->getRepository('GenericBundle:Experience')->findBy(array('importCandidat'=>$import)) as $experience)
@@ -1254,12 +1279,7 @@ class DefaultController extends Controller
                 $experience->setImportCandidat(null);
                 $em->flush();
             }
-            foreach($em->getRepository('GenericBundle:Diplome')->findBy(array('importCandidat'=>$import)) as $diplome)
-            {
-                $diplome->setUser($newuser);
-                $diplome->setImportCandidat(null);
-                $em->flush();
-            }
+
             foreach($import->getHobbies() as $hobby)
             {
                 $newuser->addHobby($hobby);
@@ -1284,7 +1304,6 @@ class DefaultController extends Controller
             }*/
 
             $usercon = $this->get('security.token_storage')->getToken()->getUser();
-
 
             //send password
             if($usercon->getTier())

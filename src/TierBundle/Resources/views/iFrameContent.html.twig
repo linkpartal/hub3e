@@ -410,8 +410,8 @@
                         <form class="formulaire" id="formApprenant" action="{{ path("apprenant_added") }}" onsubmit="document.getElementById('submitaddapprenant').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data" style="margin-top: 50px"   >
                             <input type="hidden" id="idEtab" name="_idEtab" value="{{ etablissement.getId }}">
                             <div class="col-xs-12 NavBarTier" >
-                                <button class="col-xs-4 active" style="white-space: nowrap;" type="button" onclick="NaviguerOnglet('PopUpApprenantOnglet','infoapprenant',this)">Données</button>
-                                <button class="col-xs-4" style="white-space: nowrap;" type="button" onclick="NaviguerOnglet('PopUpApprenantOnglet','apprenant_formation',this)">Formation Souhaitée</button>
+                                <button class="col-xs-4 active" style="white-space: nowrap;" id="BoutonOnlgetDonnéesApprenant" type="button" onclick="NaviguerOnglet('PopUpApprenantOnglet','infoapprenant',this)">Données</button>
+                                <button class="col-xs-4" style="white-space: nowrap;" id="BoutonOnlgetFormationApprenant" type="button" onclick="NaviguerOnglet('PopUpApprenantOnglet','apprenant_formation',this)">Formation Souhaitée</button>
                                 <button class="col-xs-4" style="white-space: nowrap;" type="button" onclick="NaviguerOnglet('PopUpApprenantOnglet','document_apprenant',this)">Documents</button>
                             </div>
                             <div id="PopUpApprenantOnglet">
@@ -445,8 +445,8 @@
                                         <input placeholder="CP Naissance" class="input" type="text" id="Cpnaissance" name="_Cpnaissance" maxlength="45" required >
                                         <input placeholder="Ville Naissance" class="input" type="text" id="Lieunaissance" name="_Lieunaissance" maxlength="45" required >
                                         <input placeholder="Date de Naissance" type="text"  class="date" id="Datenaissance" name="_Datenaissance" title="Date de Naissance" required >
-                                        <input placeholder="diplome obtenus" class="input" type="text" maxlength="45"  >
-                                        <input placeholder="Format.ou en cours" class="input" type="text" >
+                                        <input placeholder="diplome obtenus" class="input" id="Diplome" name="_Diplome" type="text" maxlength="45"   >
+                                        <input placeholder="Format.ou en cours" class="input" id="FormationCours" name="_FormationCours" type="text" >
                                         <div class="col-xs-12">
                                             <input type="checkbox" name="_handicap" ><label>HANDICAP</label>
                                             <input type="checkbox" name="_entrepreneur" ><label>Entrepreneurs</label>
@@ -470,16 +470,49 @@
                                         <input class="row" style="width:100%" type="text" placeholder="Recherche" onkeyup="rechercheformation(this.value)">
                                     </div>
                                     <div class="col-xs-12 input-colonne " >
-                                        <select id="SelectMultipleFormation" style="width: 100%; overflow-x: auto" title="" class="row" name="formation[]" multiple required>
-                                            {% for formation in formations %}
-                                                <option value="{{ formation.id }}">{{ formation.nom }} - {{ formation.etablissement.tier.raisonsoc }} - {{ formation.etablissement.adresse }}</option>
-                                            {% endfor %}
-                                        </select>
-                                        <select id="SelectMultipleRechercheFormation" style="display: none">
-                                            {% for formation in formations %}
-                                                <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
-                                            {% endfor %}
-                                        </select>
+                                        {% if app.user.hasRole('ROLE_ADMINECOLE') %}
+                                            <select id="SelectMultipleFormation" style="height: 100px;" title="" class="input" name="formations[]" multiple required>
+                                                {% for formation_x in formations %}
+
+                                                    {% if formation_x.etablissement.tier == app.user.tier or formation_x.etablissement.tier in app.user.tier.tier1|keys %}
+                                                        <option value="{{ formation_x.getId }}">{{ formation_x.nom }} - {{ formation_x.etablissement.tier.raisonsoc }} - {{ formation_x.etablissement.adresse }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <select id="SelectMultipleRechercheFormation" style="display: none">
+                                                {% for formation in formations %}
+                                                    {% if formation.etablissement.tier == app.user.tier or formation.etablissement.tier in app.user.tier.tier1|keys %}
+                                                        <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        {% elseif app.user.hasRole('ROLE_RECRUTEUR') %}
+                                            <select id="SelectMultipleFormation" style="height: 100px;" title="" class="input" name="formations[]" multiple required>
+                                                {% for formation_x in formations %}
+                                                    {% if (formation_x.etablissement.tier == app.user.etablissement.tier) or (formation_x.etablissement.tier in app.user.etablissement.tier.tier1) %}
+                                                        <option value="{{ formation_x.getId }}">{{ formation_x.nom }} - {{ formation_x.etablissement.tier.raisonsoc }} - {{ formation_x.etablissement.adresse }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <select id="SelectMultipleRechercheFormation" style="display: none">
+                                                {% for formation in formations %}
+                                                    {% if (formation.etablissement.tier == app.user.etablissement.tier) or (formation.etablissement.tier in app.user.etablissement.tier.tier1) %}
+                                                        <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        {% elseif is_granted("ROLE_ADMINSOC") %}
+                                            <select id="SelectMultipleFormation" style="height: 100px;" title="" class="input" name="formations[]" multiple required>
+                                                {% for formation_x in formations %}
+                                                    <option value="{{ formation_x.getId }}">{{ formation_x.nom }} - {{ formation_x.etablissement.tier.raisonsoc }} - {{ formation_x.etablissement.adresse }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <select id="SelectMultipleRechercheFormation" style="display: none">
+                                                {% for formation in formations %}
+                                                    <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        {% endif %}
 
 
                                     </div>
@@ -508,8 +541,9 @@
                             </div>
 
                             <div class="div_button" style="margin-top: 10px" >
-                                <input class="blue" id="submitaddapprenant" type="submit"  style="margin-right: 10px" value="Enregistrer">
-                                <input class="blue" type="submit" value="Annuler" >
+                                <input class="blue" id="submitaddapprenant" type="button"  style="margin-right: 10px" value="Enregistrer">
+                                <input id="hiddenSubmitApprenant" style="display: none;" type="submit">
+                                <input class="blue" type="button" value="Annuler" >
                             </div>
                         </form>
 
@@ -1021,7 +1055,6 @@
                 $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
             }
         });
-
         $('#Datedebut').datepicker( {
             changeMonth: true,
             changeYear: true,
@@ -1033,7 +1066,6 @@
                 $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
             }
         });
-
         $('#Datefin').datepicker( {
             changeMonth: true,
             changeYear: true,
@@ -1045,7 +1077,17 @@
                 $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
             }
         });
-
+        document.getElementById('submitaddapprenant').onclick = function(){
+            if($('#SelectMultipleFormation option:selected').length == 0){
+                document.getElementById('BoutonOnlgetFormationApprenant').click();
+                $('#hiddenSubmitApprenant').click();
+            }
+            else if($('#formApprenant input[value=""]').length == 0){
+                document.getElementById('BoutonOnlgetDonnéesApprenant').click();
+                $('#hiddenSubmitApprenant').click();
+            }
+            else{$('#hiddenSubmitApprenant').click();}
+        }
         function loading(){
             Array.prototype.forEach.call(document.querySelectorAll('input[type=radio]'),function(elem){
                 elem.addEventListener('dblclick', function() {

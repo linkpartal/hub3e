@@ -10,9 +10,9 @@ class DefaultController extends Controller
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
+        /*$notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
         $serializer = $this->get('jms_serializer');
-        $jsonContent = $serializer->serialize($notifications, 'json');
+        $jsonContent = $serializer->serialize($notifications, 'json');*/
 
 
 
@@ -35,6 +35,6 @@ class DefaultController extends Controller
         }
 
 
-        return $this->render('ApprenantBundle:Default:index.html.twig', array('notifications'=>$jsonContent ,'societes'=>$societes,'missions'=>$missions,'image'=>$user->getPhotos()));
+        return $this->render('ApprenantBundle:Default:index.html.twig', array(/*'notifications'=>$jsonContent ,*/'societes'=>$societes,'missions'=>$missions,'image'=>$user->getPhotos()));
     }
 }

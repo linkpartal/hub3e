@@ -21,7 +21,7 @@
     <title>HUB3E - {% block title %}Ecole{% endblock %}</title>
 
 </head>
-<body onload="loading();putbadged()">
+<body onload="loading();">
 
 <div id="addtier" class="popup col-xs-3">
 
@@ -277,8 +277,8 @@
                         <input placeholder="CP Naissance" class="input" type="text" id="Cpnaissance" name="_Cpnaissance" maxlength="45" required >
                         <input placeholder="Ville Naissance" class="input" type="text" id="Lieunaissance" name="_Lieunaissance" maxlength="45" required >
                         <input placeholder="Date de Naissance" type="date" data-date='{"buttonOnly": true,	"calculateWidth": true}' class="date" id="Datenaissance" name="_Datenaissance" title="Date de Naissance" required >
-                        <input placeholder="diplome obtenus" class="input" type="text" maxlength="45"  >
-                        <input placeholder="Format.ou en cours" class="input" type="text" >
+                        <input placeholder="diplome obtenus" class="input" id="Diplome" name="_Diplome" type="text" maxlength="45"   >
+                        <input placeholder="Format.ou en cours" class="input" id="FormationCours" name="_FormationCours" type="text" >
                         <div class="col-xs-12">
                             <input type="checkbox" name="_handicap" value="1"><label>HANDICAP</label>
                             <input type="checkbox" name="_entrepreneur" value="1"><label>Entrepreneurs</label>
@@ -419,7 +419,7 @@
                     <option value="mission">Voir Missions</option>
                 </select>
 
-                <div id="societe" class="list-group col-xs-2 leftbar">
+                <div id="societe" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
                     {% if societes is defined %}
                         {% for s in societes %}
                             <button onclick="postiframe('{{ path('affiche_etab',{'id': s.getId }) }}',{{ s.getId }},this)" id="etablissement{{ s.getId }}" type="button" class="list-group-item butonLigne">
@@ -463,7 +463,7 @@
                     {% endif %}
 
                 </div>
-                <div id="user" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                <div id="user" class="list-group col-xs-2 leftbar">
                     {% if apprenants is defined %}
                         {% for u in apprenants %}
                             <button onclick="postiframeUser('{{ path('metier_user_afficheUser',{'id': u.getId} ) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
@@ -542,6 +542,13 @@
         sessionStorage.setItem('leftonglet',x);
     };
     function loading(){
+        Array.prototype.forEach.call(document.querySelectorAll('input[type=radio]'),function(elem){
+            elem.addEventListener('dblclick', function() {
+                if(this.checked){
+                    this.checked = false;
+                }
+            });
+        });
         var onglet = sessionStorage.getItem('leftonglet');
         if(onglet)
         {
@@ -645,69 +652,6 @@
         for(var t = 0, l = toSort.length; t < l; t++) {
             parent.appendChild(toSort[t]);
         }
-    }
-    function putbadged() {
-
-        var iframe = sessionStorage.getItem('_Iframe');
-        if(iframe)
-        {
-            document.getElementById("iframe").src = iframe;
-        }
-        else
-        {
-            document.getElementById("iframe").src = '';
-        }
-        document.getElementById("iframe").style.visibility = 'visible';
-        {% if notifications is defined %}
-        var notifs = JSON.parse('{{ notifications }}');
-        var ecole =0;
-        var societe = 0;
-        var user = 0;
-        for(var i = 0; i< notifs.length;i++)
-        {
-            var span = document.createElement("span");
-            span.className = 'badge';
-            span.innerHTML = 'New';
-            if(notifs[i].type == 'Ecole')
-            {
-                ecole++;
-                var active = document.getElementById("active"+ notifs[i].entite);
-                if(active != null){active.parentNode.insertBefore(span,active);}
-
-            }
-            if(notifs[i].type == 'Societe')
-            {
-                societe++;
-                var active = document.getElementById("active"+ notifs[i].entite);
-                if(active != null){active.parentNode.insertBefore(span,active);}
-
-            }
-            if(notifs[i].type == 'Utilisateur')
-            {
-                user++;
-                var active = document.getElementById("active"+ notifs[i].entite);
-                if(active != null){active.parentNode.insertBefore(span,active);}
-
-            }
-        }
-
-        if(societe >0)
-        {var spansociete = document.createElement("span");
-            spansociete.className = 'badge';
-            spansociete.className = spansociete.className + ' notifTopbar';
-            spansociete.innerHTML = societe;
-            var buttonsociete = document.getElementById("societetop");
-            buttonsociete.appendChild(spansociete);
-        }
-        if(user >0)
-        {var spanuser = document.createElement("span");
-            spanuser.className = 'badge';
-            spanuser.className = spanuser.className + ' notifTopbar';
-            spanuser.innerHTML = user;
-            var buttonuser = document.getElementById("usertop");
-            buttonuser.appendChild(spanuser);
-        }
-        {% endif %}
     }
     function dupliqueradresse() {
         var dup = document.getElementById("div_adresse");

@@ -20,9 +20,9 @@ class RecruteurController extends Controller
 
 
 
-        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
+        /*$notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
         $serializer = $this->get('jms_serializer');
-        $jsonContent = $serializer->serialize($notifications, 'json');
+        $jsonContent = $serializer->serialize($notifications, 'json');*/
 
         $apprenants = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$user->getEtablissement()));
 
@@ -56,7 +56,7 @@ class RecruteurController extends Controller
         }
         $societes = array_merge($societes,$user->getReferenciel()->toArray());
         $uniquesocietes = array_unique($societes);
-        return $this->render('EcoleBundle:Recruteur:index.html.twig', array('notifications'=>$jsonContent ,'apprenants'=>$apprenants,'societes'=>$uniquesocietes,'missions'=>$mes_missions,
+        return $this->render('EcoleBundle:Recruteur:index.html.twig', array(/*'notifications'=>$jsonContent ,*/'apprenants'=>$apprenants,'societes'=>$uniquesocietes,'missions'=>$mes_missions,
             'image'=>$user->getPhotos(),'formations'=>$formations,'hobbies'=>$Hobbies));
     }
 

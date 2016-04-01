@@ -18,9 +18,9 @@ class DefaultController extends Controller
         }
 
 
-        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
+        /*$notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
         $serializer = $this->get('jms_serializer');
-        $jsonContent = $serializer->serialize($notifications, 'json');
+        $jsonContent = $serializer->serialize($notifications, 'json');*/
 
         $ecoles = array();
         $ecoles = array_merge($ecoles,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($user->getTier()->getId()));
@@ -77,13 +77,8 @@ class DefaultController extends Controller
 
 
 
-        return $this->render('EcoleBundle:Adminecole:index.html.twig', array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$notapprenant,'AllLicences'=>$licences,
+        return $this->render('EcoleBundle:Adminecole:index.html.twig', array('ecoles'=>$ecoles,/*'notifications'=>$jsonContent ,*/'users'=>$notapprenant,'AllLicences'=>$licences,
             'societes'=>$user->getReferenciel(),'missions'=>$mes_missions,'missions_propose'=>$missions_propose,'apprenants'=>$apprenants,'image'=>$user->getPhotos()));
-    }
-
-    public function loadiframeAction()
-    {
-        return $this->render('EcoleBundle:Adminecole:index.html.twig');
     }
 
     public function affichageLicenceAction($id)

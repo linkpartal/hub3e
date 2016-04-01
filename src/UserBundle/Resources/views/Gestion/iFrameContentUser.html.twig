@@ -10,6 +10,9 @@
     {% block CSS %}
         <style>
             .ui-widget-header{color:black;}
+            #Activite{
+                font-size: 9px;
+            }
         </style>
     {% endblock %}
 
@@ -53,27 +56,24 @@
                         <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px Roboto normal">Responsable légal</Label>
                         <div class="div_form" style="">
 
-                            <div class="col-xs-10 input-colonne">
-                                <label id="startTimeLabel" visible="false"></label>
-                            </div>
-
                             <div class="col-xs-3 input-colonne">
+                                <input list="STATUTDATALIST" class="input" title="Statut" name="_Metierparent" required>
+                                <datalist id="STATUTDATALIST" class="input" title="Statut" name="_Metierparent">
+                                    <option value="Père">
+                                    <option value="Mère">
+                                    <option value="Tuteur légal">
+                                </datalist>
                                 <input placeholder="Nom" class="input" type="text" id="Nomparent" name="_Nomparent" maxlength="45" required >
+                            </div>
+                            <div class="col-xs-3 input-colonne">
+
                                 <select class="input "  title="" name="_Civiliteparent">
                                     <option value="Monsieur">Mr.</option>
                                     <option value="Madame">Mme.</option>
                                 </select>
-
-                            </div>
-                            <div class="col-xs-3 input-colonne">
                                 <input placeholder="Prenom" class="input" type="text" id="Prenomparent" name="_Prenomparent" maxlength="45" required >
-                                <select class="input" title="Statut" name="_Metierparent">
-                                    <option value="Père">Père.</option>
-                                    <option value="Mère">Mère.</option>
-                                    <option value="Tuteur légal">Tuteur légal.</option>
-                                    <option value="Autre">Autre.</option>
-                                </select>
                             </div>
+
 
                             <div class="col-xs-6 input-colonne">
                                 <input placeholder="Adresse email" class="input" type="text" id="Emailparent" name="_Emailparent" maxlength="45" required >
@@ -123,13 +123,10 @@
 
                         <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px Roboto normal">Expérience de l'apprenant</Label>
                         <div class="div_form" style="">
-                            <div class="col-xs-10 input-colonne">
-                                <label id="startTimeLabel" visible="false"></label>
-                            </div>
                             <div class="col-xs-6 input-colonne">
                                 <div class="col-xs-6 input-colonne">
                                     <input placeholder="Nom Société" class="input" type="text" id="Nomsociete" name="_Nomsociete" maxlength="45" required >
-                                    <input placeholder="Type(ex :stage,emploi,voyage…)" class="input" type="text" id="Activite" name="_Activite" maxlength="45" required >
+                                    <input placeholder="Type(ex :stage,emploi,voyage…)"  class="input" type="text" onkeyup="if(this.value){this.style.fontSize = '18px';}else{this.style.fontSize = '9px';}" id="Activite" name="_Activite" maxlength="45" required >
 
                                 </div>
                                 <div class="col-xs-6 input-colonne" style="border-right: 0">
@@ -298,16 +295,50 @@
 
                             <input class="input" style="margin-bottom: 10px;" type="text" placeholder="Recherche" onkeyup="rechercheformation(this.value)">
                             <div class="col-xs-12" >
-                                <select id="SelectMultipleFormation" style="height: 100px;" title="" class="input" name="formations[]" multiple >
-                                    {% for formation in formations %}
-                                        <option value="{{ formation.id }}">{{ formation.nom }} - {{ formation.etablissement.tier.raisonsoc }} - {{ formation.etablissement.adresse }}</option>
-                                    {% endfor %}
-                                </select>
-                                <select id="SelectMultipleRechercheFormation" style="display: none">
-                                    {% for formation in formations %}
-                                        <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
-                                    {% endfor %}
-                                </select>
+                                {% if app.user.hasRole('ROLE_ADMINECOLE') %}
+                                    <select id="SelectMultipleFormation" style="height: 100px;" title="" class="input" name="formations[]" multiple >
+                                        {% for formation_x in formations %}
+
+                                            {% if formation_x.etablissement.tier == app.user.tier or formation_x.etablissement.tier in app.user.tier.tier1|keys %}
+                                                <option value="{{ formation_x.getId }}">{{ formation_x.nom }} - {{ formation_x.etablissement.tier.raisonsoc }} - {{ formation_x.etablissement.adresse }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    <select id="SelectMultipleRechercheFormation" style="display: none">
+                                        {% for formation in formations %}
+                                        {% if formation.etablissement.tier == app.user.tier or formation.etablissement.tier in app.user.tier.tier1|keys %}
+                                            <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                {% elseif app.user.hasRole('ROLE_RECRUTEUR') %}
+                                    <select id="SelectMultipleFormation" style="height: 100px;" title="" class="input" name="formations[]" multiple >
+                                        {% for formation_x in formations %}
+                                            {% if (formation_x.etablissement.tier == app.user.etablissement.tier) or (formation_x.etablissement.tier in app.user.etablissement.tier.tier1) %}
+                                                <option value="{{ formation_x.getId }}">{{ formation_x.nom }} - {{ formation_x.etablissement.tier.raisonsoc }} - {{ formation_x.etablissement.adresse }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    <select id="SelectMultipleRechercheFormation" style="display: none">
+                                        {% for formation in formations %}
+                                            {% if (formation.etablissement.tier == app.user.etablissement.tier) or (formation.etablissement.tier in app.user.etablissement.tier.tier1) %}
+                                                <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                {% elseif is_granted("ROLE_ADMINSOC") %}
+                                    <select id="SelectMultipleFormation" style="height: 100px;" title="" class="input" name="formations[]" multiple >
+                                        {% for formation_x in formations %}
+                                            <option value="{{ formation_x.getId }}">{{ formation_x.nom }} - {{ formation_x.etablissement.tier.raisonsoc }} - {{ formation_x.etablissement.adresse }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <select id="SelectMultipleRechercheFormation" style="display: none">
+                                        {% for formation in formations %}
+                                            <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
+
                             </div>
 
                         </div>
@@ -345,9 +376,9 @@
                                 <button id="Button_candidature" class="NavButtonIframe" title="Formation de l'Apprenant" onclick="NaviguerOnglet('OngletApprenant','info_candidature',this);" >Formation de l'Apprenant </button>
                             {% endif %}
                             {% if not  Parents is defined or Parents|length == 0 %}
-                                <button id="Button_parents" style="background-color: red;" class="NavButtonIframe" title="Responsables" onclick="NaviguerOnglet('OngletApprenant','info_parents',this);" >Responsables </button>
+                                <button id="Button_parents" style="background-color: red;" class="NavButtonIframe" title="Responsables" onclick="NaviguerOnglet('OngletApprenant','info_parents',this);" >Responsables légaux</button>
                             {% else %}
-                                <button id="Button_parents" class="NavButtonIframe" title="Responsables" onclick="NaviguerOnglet('OngletApprenant','info_parents',this);" >Responsables </button>
+                                <button id="Button_parents" class="NavButtonIframe" title="Responsables" onclick="NaviguerOnglet('OngletApprenant','info_parents',this);" >Responsables légaux</button>
                             {% endif %}
                             {% if not Experience is defined or Experience|length == 0 %}
                                 <button id="Button_Exp" style="background-color: red ;" class="NavButtonIframe" title="Expériences" onclick="NaviguerOnglet('OngletApprenant','info_Exp',this);" >Expériences </button>
@@ -379,19 +410,6 @@
                             {% else %}
                                 <button id="Button_Test" class="NavButtonIframe" title="QCM Test" onclick="NaviguerOnglet('OngletApprenant','QCM_Test',this);">QCM Test </button>
                             {% endif %}
-
-                            <!--select title="" id="select_info"  style="color:white;">
-                               <option value="info_user" style="color:black;">Données Utilisateur</option>
-                               <option value="info_Apprenant" style="color:black;">Details de l'Apprenant</option>
-                               <option value="info_candidature" style="color:black;">Formation de l'Apprenant </option>
-                               <option value="info_parents" style="color:black;">Responsables </option>
-                               <option value="info_Exp" style="color:black;">Expériences </option>
-                               <option value="info_recom" style="color:black;">Recommandations </option>
-                               <option value="info_diplome" style="color:black;">Diplomes </option>
-                               <option value="info_doc" style="color:black;">Documents </option>
-                               <option value="QCM_Affinite" style="color:black;">QCM Affinite </option>
-                               <option value="QCM_Test" style="color:black;">QCM Test </option>
-                           </select>-->
 
                         {% else  %}
                             <Label  value="info_user" style="font:20px Roboto;width: 100%; height: 40px;line-height: 40px;border-radius: 0; background: #1C5AA5; border: 0; color: white;text-align:left;">Données Utilisateur</Label>
@@ -589,8 +607,21 @@
                                 </div>
 
                                 <div class="inputcontainer">
+                                    <label class="list-group-item" style="height: 60px;" for="Datenaissance">Date naissance :</label>
+                                    <input value="{{User.getInfo.getDatenaissance|date('d/m/Y') }}" type="text" class="champ form-control" id="Datenaissance" name="_Datenaissance" maxlength="45" required >
+                                </div>
+                                <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="Adresse">Adresse       : </label>
                                     <input value="{{User.getInfo.getAdresse}}" type="text" class="champ form-control" id="Adresse" name="_Adresse" maxlength="45" >
+                                </div>
+                                <div class="inputcontainer">
+                                    <label class="list-group-item" style="height: 60px;" for="Cpnaissance">Cp naissance  :</label>
+                                    <input value="{{User.getInfo.getCpnaissance}}" type="text" class="champ form-control" id="Cpnaissance" name="_Cpnaissance" maxlength="45" required >
+
+                                </div>
+                                <div class="inputcontainer">
+                                    <label class="list-group-item" style="height: 60px;" for="Lieunaissance">Lieu naissance:</label>
+                                    <input value="{{User.getInfo.getLieunaissance}}" type="text" class="champ form-control" id="Lieunaissance" name="_Lieunaissance" maxlength="45" required >
                                 </div>
 
                                 <div class="inputcontainer">
@@ -601,20 +632,6 @@
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="UserName">UserName :</label>
                                     <input value="{{User.getUserName}}" type="text" class="champ form-control" id="UserName" name="_Username" maxlength="255" >
-                                </div>
-                                <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" for="Lieunaissance">Lieu naissance:</label>
-                                    <input value="{{User.getInfo.getLieunaissance}}" type="text" class="champ form-control" id="Lieunaissance" name="_Lieunaissance" maxlength="45" required >
-                                </div>
-                                <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" for="Datenaissance">Date naissance :</label>
-
-                                    <input value="{{User.getInfo.getDatenaissance|date('d/m/Y') }}" type="text" class="champ form-control" id="Datenaissance" name="_Datenaissance" maxlength="45" required >
-                                </div>
-                                <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" for="Cpnaissance">Cp naissance  :</label>
-                                    <input value="{{User.getInfo.getCpnaissance}}" type="text" class="champ form-control" id="Cpnaissance" name="_Cpnaissance" maxlength="45" required >
-
                                 </div>
 
                                 <div class="inputcontainer">
@@ -709,7 +726,14 @@
                                     </div>
 
 
-
+                                    <div class="inputcontainer">
+                                        <label class="list-group-item" style="height: 60px;" for="FormationActuel">Formation actuel  :</label>
+                                        <input value="{{User.getInfo.formationactuelle}}" type="text" class="champ form-control" id="FormationActuel" name="_FormationActuel" maxlength="45"  >
+                                    </div>
+                                    <div class="inputcontainer">
+                                        <label class="list-group-item" style="height: 60px;" for="DernierDiplome">Dernier diplome :</label>
+                                        <input value="{{User.getInfo.dernierDiplome}}" type="text" class="champ form-control" id="DernierDiplome" name="_DernierDiplome" maxlength="45"  >
+                                    </div>
                                     <div class="inputcontainer">
                                         <label class="list-group-item" style="height: 60px;" for="Facebook">Facebook      :</label>
                                         <input value="{{User.getInfo.getFacebook}}" type="url" class="champ form-control" id="Facebook" name="_Facebook" maxlength="45"  >
@@ -747,7 +771,7 @@
 
                                     <div class="inputcontainer">
 
-                                        <label class="list-group-item" style="height: 60px;" for="Datenaissance">Hobbies :</label>
+                                        <label class="list-group-item" style="height: 60px;">Hobbies :</label>
 
                                         {% set i = 0 %}
                                         {% for hobby in User.getHobbies %}
@@ -855,7 +879,7 @@
                                 {% endfor %}
                             {% endif %}
                             <div name="modification" >
-                                <button type="button" class="col-xs-12 blue" style="margin-top:40px;"  onclick="show('addparent')">Ajouter un parent</button>
+                                <button type="button" class="col-xs-12 blue" style="margin-top:40px;"  onclick="show('addparent')">Ajouter un responsable légal</button>
                             </div>
 
                         </div>

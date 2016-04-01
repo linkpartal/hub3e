@@ -22,7 +22,7 @@ class DefaultController extends Controller
 
         if (!$user) {
 
-            return $this->forward('GenericBundle:Default:loadlogin');
+            return $this->render('GenericBundle:Security:login.html.twig',array('error'=>'cet utilisateur n\'est pas enregistré!'));
 
         }
         $factory = $this->get('security.encoder_factory');
@@ -73,7 +73,7 @@ class DefaultController extends Controller
         }
         else
         {
-            return $this->forward('GenericBundle:Default:loadlogin');
+            return $this->render('GenericBundle:Security:login.html.twig',array('error'=>'mot de passe erroné!'));
         }
 
 

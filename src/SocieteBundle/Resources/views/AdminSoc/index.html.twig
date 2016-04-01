@@ -344,7 +344,7 @@
             document.getElementById("iframe").src = '';
         }
         document.getElementById("iframe").style.visibility = 'visible';
-
+        {% if notifications is defined %}
         var notifs = JSON.parse('{{ notifications }}');
         console.log(notifs);
         var ecole =0;
@@ -394,7 +394,7 @@
             var buttonuser = document.getElementById("usertop");
             buttonuser.appendChild(spanuser);
         }
-
+        {% endif %}
     }
     function dupliqueradresse() {
         var dup = document.getElementById("div_adresse");
