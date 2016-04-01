@@ -131,7 +131,7 @@ if($request->get('formation')){
 
         foreach($users as $apprenant)
         {
-            if($apprenant->getPhotos())
+            if($apprenant->getPhotos() and !is_string($apprenant->getPhotos()))
             {
                 $apprenant->setPhotos(base64_encode(stream_get_contents($apprenant->getPhotos())));
             }

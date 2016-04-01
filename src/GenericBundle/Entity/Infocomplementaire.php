@@ -127,6 +127,68 @@ class Infocomplementaire
     private $viadeo;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="langue1", type="string", length=45, nullable=true)
+     */
+    private $langue1;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="langue2", type="string", length=45, nullable=true)
+     */
+    private $langue2;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="langue3", type="string", length=45, nullable=true)
+     */
+    private $langue3;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="langue4", type="string", length=45, nullable=true)
+     */
+    private $langue4;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="langue5", type="string", length=45, nullable=true)
+     */
+    private $langue5;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hobbie1", type="string", length=45, nullable=true)
+     */
+    private $hobbie1;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hobbie2", type="string", length=45, nullable=true)
+     */
+    private $hobbie2;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hobbie3", type="string", length=45, nullable=true)
+     */
+    private $hobbie3;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hobbie4", type="string", length=45, nullable=true)
+     */
+    private $hobbie4;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hobbie5", type="string", length=45, nullable=true)
+     */
+    private $hobbie5;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="mobilite", type="integer", nullable=true)
@@ -702,5 +764,245 @@ class Infocomplementaire
     public function getEntrepreneur()
     {
         return $this->entrepreneur;
+    }
+
+    /**
+     * Set langue1
+     *
+     * @param string $langue1
+     *
+     * @return Infocomplementaire
+     */
+    public function setLangue1($langue1)
+    {
+        $this->langue1 = $langue1;
+
+        return $this;
+    }
+
+    /**
+     * Get langue1
+     *
+     * @return string
+     */
+    public function getLangue1()
+    {
+        return $this->langue1;
+    }
+
+    /**
+     * Set langue2
+     *
+     * @param string $langue2
+     *
+     * @return Infocomplementaire
+     */
+    public function setLangue2($langue2)
+    {
+        $this->langue2 = $langue2;
+
+        return $this;
+    }
+
+    /**
+     * Get langue2
+     *
+     * @return string
+     */
+    public function getLangue2()
+    {
+        return $this->langue2;
+    }
+
+    /**
+     * Set langue3
+     *
+     * @param string $langue3
+     *
+     * @return Infocomplementaire
+     */
+    public function setLangue3($langue3)
+    {
+        $this->langue3 = $langue3;
+
+        return $this;
+    }
+
+    /**
+     * Get langue3
+     *
+     * @return string
+     */
+    public function getLangue3()
+    {
+        return $this->langue3;
+    }
+
+    /**
+     * Set langue4
+     *
+     * @param string $langue4
+     *
+     * @return Infocomplementaire
+     */
+    public function setLangue4($langue4)
+    {
+        $this->langue4 = $langue4;
+
+        return $this;
+    }
+
+    /**
+     * Get langue4
+     *
+     * @return string
+     */
+    public function getLangue4()
+    {
+        return $this->langue4;
+    }
+
+    /**
+     * Set langue5
+     *
+     * @param string $langue5
+     *
+     * @return Infocomplementaire
+     */
+    public function setLangue5($langue5)
+    {
+        $this->langue5 = $langue5;
+
+        return $this;
+    }
+
+    /**
+     * Get langue5
+     *
+     * @return string
+     */
+    public function getLangue5()
+    {
+        return $this->langue5;
+    }
+
+    /**
+     * Set hobbie1
+     *
+     * @param string $hobbie1
+     *
+     * @return Infocomplementaire
+     */
+    public function setHobbie1($hobbie1)
+    {
+        $this->hobbie1 = $hobbie1;
+
+        return $this;
+    }
+
+    /**
+     * Get hobbie1
+     *
+     * @return string
+     */
+    public function getHobbie1()
+    {
+        return $this->hobbie1;
+    }
+
+    /**
+     * Set hobbie2
+     *
+     * @param string $hobbie2
+     *
+     * @return Infocomplementaire
+     */
+    public function setHobbie2($hobbie2)
+    {
+        $this->hobbie2 = $hobbie2;
+
+        return $this;
+    }
+
+    /**
+     * Get hobbie2
+     *
+     * @return string
+     */
+    public function getHobbie2()
+    {
+        return $this->hobbie2;
+    }
+
+    /**
+     * Set hobbie3
+     *
+     * @param string $hobbie3
+     *
+     * @return Infocomplementaire
+     */
+    public function setHobbie3($hobbie3)
+    {
+        $this->hobbie3 = $hobbie3;
+
+        return $this;
+    }
+
+    /**
+     * Get hobbie3
+     *
+     * @return string
+     */
+    public function getHobbie3()
+    {
+        return $this->hobbie3;
+    }
+
+    /**
+     * Set hobbie4
+     *
+     * @param string $hobbie4
+     *
+     * @return Infocomplementaire
+     */
+    public function setHobbie4($hobbie4)
+    {
+        $this->hobbie4 = $hobbie4;
+
+        return $this;
+    }
+
+    /**
+     * Get hobbie4
+     *
+     * @return string
+     */
+    public function getHobbie4()
+    {
+        return $this->hobbie4;
+    }
+
+    /**
+     * Set hobbie5
+     *
+     * @param string $hobbie5
+     *
+     * @return Infocomplementaire
+     */
+    public function setHobbie5($hobbie5)
+    {
+        $this->hobbie5 = $hobbie5;
+
+        return $this;
+    }
+
+    /**
+     * Get hobbie5
+     *
+     * @return string
+     */
+    public function getHobbie5()
+    {
+        return $this->hobbie5;
     }
 }

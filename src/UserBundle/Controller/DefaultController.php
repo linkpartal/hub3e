@@ -540,7 +540,6 @@ class DefaultController extends Controller
 
         $user = $em->getRepository('GenericBundle:User')->findOneBy(array('id'=>$request->get('_ID')));
 
-
         $user->setCivilite($request->get('_Civilite'));
         $user->setNom($request->get('_Nom'));
         $user->setPrenom($request->get('_Prenom'));
@@ -557,7 +556,7 @@ class DefaultController extends Controller
         $em->flush();
 
         if($user->hasRole('ROLE_APPRENANT')){
-            $info = $em->getRepository('GenericBundle:infocomplementaire')->find(array('id'=>$request->get('_IdInfo')));
+            $info = $em->getRepository('GenericBundle:infocomplementaire')->find($request->get('_IdInfo'));
 
             if($info)
             {
@@ -583,7 +582,6 @@ class DefaultController extends Controller
                 else{
                     $info->setEntrepreneur(false);
                 }
-
                 $info->setAdresse($request->get('_Adresse'));
                 $info->setFacebook($request->get('_Facebook'));
                 $info->setLinkedin($request->get('_Linkedin'));
@@ -592,6 +590,58 @@ class DefaultController extends Controller
                 if($request->get('_Fratrie') and intval($request->get('_Fratrie')) >= 0){
                     $info->setFratrie(intval($request->get('_Fratrie')));
                 }
+                $info->setHobbie1(null);
+                $info->setHobbie2(null);
+                $info->setHobbie3(null);
+                $info->setHobbie4(null);
+                $info->setHobbie5(null);
+                for($i = 0; $i < count($request->get('_hobbie')); $i++){
+                    if($i == 0 and !$request->get('_hobbie')[0]==''){
+                        $info->setHobbie1($request->get('_hobbie')[0]);
+                    }
+                    if($i == 1 and !$request->get('_hobbie')[1]==''){
+                        $info->setHobbie2($request->get('_hobbie')[1]);
+                    }
+                    if($i == 2 and !$request->get('_hobbie')[2]==''){
+                        $info->setHobbie3($request->get('_hobbie')[2]);
+                    }
+                    if($i == 3 and !$request->get('_hobbie')[3]==''){
+                        $info->setHobbie4($request->get('_hobbie')[3]);
+                    }
+                    if($i == 4 and !$request->get('_hobbie')[4]==''){
+                        $info->setHobbie5($request->get('_hobbie')[4]);
+                    }
+
+                }
+
+                $info->setLangue1(null);
+                $info->setLangue2(null);
+                $info->setLangue3(null);
+                $info->setLangue4(null);
+                $info->setLangue5(null);
+                for($i = 0; $i < count($request->get('_Langue')); $i++){
+                    if($i == 0 and !$request->get('_Langue')[0]==''){
+                        $info->setLangue1($request->get('_Langue')[0]);
+                    }
+                    if($i == 1 and !$request->get('_Langue')[1]==''){
+                        $info->setLangue2($request->get('_Langue')[1]);
+                    }
+                    if($i == 2 and !$request->get('_Langue')[2]==''){
+                        $info->setLangue3($request->get('_Langue')[2]);
+                    }
+                    if($i == 3 and !$request->get('_Langue')[3]==''){
+                        $info->setLangue4($request->get('_Langue')[3]);
+                    }
+                    if($i == 4 and !$request->get('_Langue')[4]==''){
+                        $info->setLangue5($request->get('_Langue')[4]);
+                    }
+
+                }
+
+
+
+
+   //var_dump($info);die;
 
                 $info->setProfilcomplet(1);
                 $info->setDatemodification(date_create());
@@ -612,24 +662,6 @@ class DefaultController extends Controller
                 $em->persist($info);
                 $em->flush();
             }
-
-            /*if($request->get('_IDParent'))
-            {
-                for($i = 0; $i< count($request->get('_IDParent'));$i++) {
-                    $responsable = $em->getRepository('GenericBundle:Parents')->find(array('id'=>$request->get('_IDParent')[$i]));
-                    $responsable->setNom($request->get('_Nomresp')[$i]);
-                    $responsable->setPrenom($request->get('_Prenomresp')[$i]);
-                    $responsable->setTelephone($request->get('_Telephoneresp')[$i]);
-                    $responsable->setAdresse($request->get('_Adresseresp')[$i]);
-                    $responsable->setEmail($request->get('_Emailresp')[$i]);
-                    $responsable->setNomjeunefille($request->get('_Nomjeunefille')[$i]);
-                    $responsable->setUser($user);
-                    $em->flush();
-                }
-            }*/
-
-
-
 
         }
 
@@ -696,7 +728,6 @@ class DefaultController extends Controller
         $hobbie = $em->getRepository('GenericBundle:Hobbies')->find($id);
         $user = $em->getRepository('GenericBundle:User')->find($IdUser);
         $hobbie->addUser($user);
-
 
         $em->flush();
 
@@ -1039,12 +1070,12 @@ class DefaultController extends Controller
     {
         $imports =$this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser()));
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        if($user->getPhotos())
+        if($user->getPhotos() and !is_string($user->getPhotos()))
         {
             $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
         }
         foreach($imports as $import){
-            if($import->getPhotos())
+            if($import->getPhotos() and !is_string($import->getPhotos()))
             {
                 $import->setPhotos(base64_encode(stream_get_contents($import->getPhotos())));
             }
@@ -1187,7 +1218,7 @@ class DefaultController extends Controller
         $users = $em->getRepository('GenericBundle:User')->findApprenantDuplicata($id);
         $results = array();
         foreach($users as $user){
-            if($user->getPhotos())
+            if($user->getPhotos() and !is_string($user->getPhotos()))
             {
                 $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
             }
@@ -1365,7 +1396,7 @@ class DefaultController extends Controller
             $userfus->setTelephone($import->getTelephone());
         }
 
-        if(!$userfus->getPhotos()){
+        if(!$userfus->getPhotos() and !is_string(!$userfus->getPhotos())){
             $userfus->setPhotos($import->getPhotos());
         }
         if(!$userfus->getInfo()->getAdresse()){
@@ -1537,7 +1568,7 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         if($request->get('_IDPARENT')){
-            $parent = $em->getRepository('GenericBundle:Parents')->find(array('id'=>$request->get('_IDPARENT')));
+            $parent = $em->getRepository('GenericBundle:Parents')->find($request->get('_IDPARENT'));
             $parent->setNom($request->get('_Nomresp'));
             $parent->setPrenom($request->get('_Prenomresp'));
             $parent->setTelephone($request->get('_Telephoneresp'));
@@ -1572,7 +1603,7 @@ class DefaultController extends Controller
     public function AjouterExperienceAction(Request $request){
         $em = $this->getDoctrine()->getEntityManager();
         if($request->get('_IDExp')){
-            $experience = $em->getRepository('GenericBundle:Experience')->find(array('id'=>$request->get('_IDExp')));
+            $experience = $em->getRepository('GenericBundle:Experience')->find($request->get('_IDExp'));
             $experience->setNomsociete($request->get('_Nomsociete'));
             $experience->setActivite($request->get('_Activite'));
             $experience->setLieu($request->get('_Lieu'));
@@ -1608,7 +1639,7 @@ class DefaultController extends Controller
     public function AjouterRecommandationAction(Request $request){
         $em = $this->getDoctrine()->getEntityManager();
         if($request->get('_IDRecom')){
-            $recommandation = $em->getRepository('GenericBundle:Recommandation')->find(array('id'=>$request->get('_IDRecom')));
+            $recommandation = $em->getRepository('GenericBundle:Recommandation')->find($request->get('_IDRecom'));
             $recommandation->setNom($request->get('_Nomrec'));
             $recommandation->setFonction($request->get('_Fonctionrec'));
             $recommandation->setTelephone($request->get('_Telephonerec'));
@@ -1641,7 +1672,7 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         if($request->get('_IDDiplome')){
-            $diplome = $em->getRepository('GenericBundle:Diplome')->find(array('id'=>$request->get('_IDDiplome')));
+            $diplome = $em->getRepository('GenericBundle:Diplome')->find($request->get('_IDDiplome'));
             $diplome->setLibelle($request->get('_Libelle'));
             $diplome->setObtention($request->get('_Obtention'));
             $diplome->setEcole($request->get('_Ecole'));

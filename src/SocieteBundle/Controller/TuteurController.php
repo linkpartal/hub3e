@@ -10,7 +10,7 @@ class TuteurController extends Controller
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        if($user->getPhotos())
+        if($user->getPhotos() and !is_string($user->getPhotos()))
         {
             $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
         }

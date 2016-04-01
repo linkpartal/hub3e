@@ -94,19 +94,11 @@
                             <div class="col-xs-3 input-colonne">
                                 <input placeholder="Code postale" class="input" type="text" id="CodePostaleparent" name="_CodePostaleparent" maxlength="45" required >
                             </div>
-
-
                         </div>
-
-
                         <div class="div_button" style="background-color: white">
-
                             <input class="blue" onclick="showFermer()" style="float: left" name="submitApprenant" type="button" value="Annuler">
                             <input class="blue" id="submitaddparent" type="submit" style="margin-left: 550px"  value="Enregistrer" >
-
                         </div>
-
-
 
                     </form>
 
@@ -143,13 +135,9 @@
                                     <label style="float: left">à :</label><input  type="text" class="date" id="Datefin" name="_Datefin" title="Datefin" required>
                                 </div>
                             </div>
-
-
                             <div class="col-xs-6 input-colonne " style="height:150px">
                                 <textarea placeholder="Description" class="input" type="text" id="Descriptionexp" name="_Descriptionexp"  required style="resize:none;height:calc( 100% - 13px)"></textarea>
-
                             </div>
-
                         </div>
                         <div class="div_button" style="background-color: white">
 
@@ -739,77 +727,83 @@
                                     </div>
 
                                     <div class="inputcontainer">
-
-                                        <label class="list-group-item" style="height: 60px;" for="Datenaissance">Hobbies :</label>
-
-                                        {% set i = 0 %}
-                                        {% for hobby in User.getHobbies %}
-                                            <div id="hobbie{{ i }}" >
-                                                <input type="hidden" name="hobbie[{{ i }}]" value="{{ hobby.getId }}" style="margin:10px 5px 10px 0" id="inputHobbie" >
-                                                <label class="champ form-control" style="width: 150px;" for="hobbie">{{hobby.getHobbie}}</label>
-
-                                                <img name="modification"  onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
-
-
-                                            </div>
-
-                                            {% set i= i +1 %}
-                                        {% endfor %}
-
-                                    </div>
-
-                                    <div class="inputcontainer" >
-                                        <div id="ajout_hobbie" >
-                                            {% if Hobbies is defined %}
-                                                <select style=" width:150px;height: 40px" id="Newhobbie"  name="_Hobbie">
-                                                    <option value="">--?-- </option>
-                                                    {% for hobbie in Hobbies %}
-                                                        <option value="{{ hobbie.getId }}">{{ hobbie.getHobbie }}</option>
-                                                    {% endfor %}
-                                                </select>
+                                        <label class="list-group-item" style="height: 60px;vertical-align: top;" for="Hobbies">Hobbies :</label>
+                                        <div id="HobbiesContainer" style="display: inline-block;">
+                                            {% if  User.getInfo.getHobbie1  %}
+                                            <div id="hobbie" >
+                                            <input value="{{ User.getInfo.getHobbie1 }}" name="_hobbie[]" type="text"  class="champ form-control" >
+                                                <img  onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
                                             {% endif %}
-                                            <img  OnClick="ajouterHobbie(this.previousElementSibling)"  src="{{ asset('image/add_x30.png') }}"/><br>
+                                            {% if User.getInfo.getHobbie2 %}
+                                            <div id="hobbie1"  >
+                                            <input value="{{ User.getInfo.getHobbie2 }}" name="_hobbie[]" type="text" class="champ form-control" >
+                                                <img   onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getHobbie3 %}
+                                            <div id="hobbie2" >
+                                            <input value="{{ User.getInfo.getHobbie3 }}" name="_hobbie[]" type="text" class="champ form-control" >
+                                                <img onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getHobbie4 %}
+                                            <div id="hobbie3" >
+                                            <input value="{{ User.getInfo.getHobbie4 }}" name="_hobbie[]" type="text" class="champ form-control" >
+                                                <img   onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getHobbie5 %}
+                                            <div id="hobbie4" >
+                                            <input value="{{ User.getInfo.getHobbie5 }}" name="_hobbie[]" type="text" class="champ form-control" >
+                                                <img  onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
                                         </div>
+                                        <img  OnClick="ajouterHobbie()" style="vertical-align: top;float: right;margin: 9px;"  src="{{ asset('image/add_x30.png') }}"/>
                                     </div>
+
+
 
                                     <div class="inputcontainer">
-                                        <label class="list-group-item" style="height: 60px;" >Langues :</label><br>
-                                        {% if Langue is defined %}
-                                            {% set i = 0 %}
-                                            {% for lang in User.getLangue %}
-                                                <div id="langue{{ i }}" >
-                                                    <input type="hidden" name="langue[{{ i }}]" value="{{ lang.getId }}" style="margin:10px 5px 10px 0" id="inputLangue" >
-                                                    <label class="champ form-control" style="width: 150px;" for="langue">{{lang.getLangue}}</label>
-                                                    <label class="champ form-control"  for="Niveau">{{lang.getNiveau}}</label>
-                                                    <img name="modification" onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
+                                        <label class="list-group-item" style="height: 60px;vertical-align: top;" >Langues :</label>
+                                        <div id="LanguesContainer" style="display: inline-block;">
+                                            {% if User.getInfo.getLangue1 %}
+                                                <div id="langue1">
+                                                <input value="{{ User.getInfo.getLangue1 }}" name="_Langue[]" type="text" class="champ form-control" >
+                                                <img  onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                    </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getLangue2 %}
+                                            <div id="langue2">
+                                                <input value="{{ User.getInfo.getLangue2 }}" name="_Langue[]" type="text"  class="champ form-control" >
+                                                <img  onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
                                                 </div>
-                                                {% set i= i +1 %}
-                                            {% endfor %}
-                                        {% endif %}
+                                            {% endif %}
+                                            {% if User.getInfo.getLangue3 %}
+                                            <div id="langue3">
+                                                <input value="{{ User.getInfo.getLangue3 }}" name="_Langue[]" type="text"  class="champ form-control" >
+                                                <img  onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                           </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getLangue4 %}
+                                            <div id="langue4">
+                                                <input value="{{ User.getInfo.getLangue4 }}" name="_Langue[]" type="text"  class="champ form-control" >
+                                                <img  onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getLangue5 %}
+                                            <div id="langue6">
+                                                <input value="{{ User.getInfo.getLangue5 }}" name="_Langue[]" type="text"  class="champ form-control" >
+                                                <img  onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+
+
+                                       </div>
+                                        <img onclick="ajouterLangue()" style="vertical-align: top;float: right;margin: 9px;" src="{{ asset('image/add_x30.png') }}"/><br>
                                     </div>
 
-                                    <div class="inputcontainer" >
-                                        <div id="ajout_langue" >
-                                            <select style=" width:150px;height: 40px" id="NewLangue"  name="_Langue">
-                                                <option value="">--?-- </option>
-                                                <option value="Francais">Francais </option>
-                                                <option value="Anglais">Anglais </option>
-                                                <option value="Espagnol">Espagnol </option>
-                                                <option value="Arabe">Arabe </option>
-                                                <option value="Allemand">Allemand </option>
-
-                                            </select>
-                                            <select  style="height: 40px;width:250px;"  id="NewNiveau"  name="_Niveau">
-                                                <option value="">--?-- </option>
-                                                <option value="connaissance de base">connaissance de base </option>
-                                                <option value="bonne connaissance">bonne connaissance</option>
-                                                <option value="courant">courant </option>
-                                                <option value="langue maternelle">langue maternelle </option>
-
-                                            </select>
-                                            <img onclick="ajouterLangue(this.previousElementSibling.previousElementSibling)"  src="{{ asset('image/add_x30.png') }}"/><br>
-                                        </div>
-                                    </div>
                                 {% endif %}
                             </form>
                         </div>
@@ -1395,24 +1389,8 @@
 
     }
     function supprimerHobbie(div){
-
-        var route = '{{path('supprimer_Hobbie',{'id':"_idHobbie",'IdUser':"_IdUser"})}}';
         var input = div.getElementsByTagName("input")[0];
         div.parentNode.removeChild(div);
-        route=route.replace('_idHobbie',input.value);
-        route=route.replace('_IdUser','{{ User.id}}');
-        $.ajax({
-            type: 'get',
-            url: route,
-            success: function(data) {
-                console.log(data);
-            },
-            error: function(data) {
-                console.log(data);
-            }
-        });
-
-
 
     }
     function supprimerParent(route, champs) {
@@ -1487,98 +1465,32 @@
     }
     function ajouterHobbie(me){
 
-        var dup = document.getElementById('Hobby');
-        var clone = dup.cloneNode(true);
-
-        var route = '{{path('ajouter_Hobbie',{'id':"_idHobbie",'IdUser':"_IdUser"})}}';
-        var select = document.getElementById("Newhobbie");
-        var choice = select.selectedIndex  // Récupération de l'index du <option> choisi
-        var idhobbie = select.options[choice].value; // Récupération du texte du <option> d'index "choice"
-
-        if(me.value.trim() =='')
-        {
-            alert('choisissez une hobbie');
-            me.value='';
-            return;
+        if(document.getElementsByName('_hobbie[]').length < 5){
+            var newHobby = document.createElement('input');
+            newHobby.setAttribute('name','_hobbie[]');
+            newHobby.setAttribute('type','text');
+            newHobby.className = 'champ form-control';
+            newHobby.setAttribute('style','display :block !important');
+            document.getElementById('HobbiesContainer').appendChild(newHobby);
         }
-
-
-        route=route.replace('_idHobbie',idhobbie);
-        route=route.replace('_IdUser','{{ User.id}}');
-        $.ajax({
-            type: 'get',
-            url: route,
-            success: function(data) {
-                //me.parentNode.getAttribute('id')
-                clone.style.display = 'block';
-                clone.getElementsByTagName("label")[0].innerHTML = select.options[choice].innerHTML;
-                clone.getElementsByTagName("input")[0].setAttribute("name","hobbie"+me.parentNode.parentNode.getAttribute('id'));
-                clone.getElementsByTagName("input")[0].value = me.value.trim();
-
-                // me.parentNode.parentNode.parentNode.previousSibling.appendChild(clone);
-
-                me.parentNode.parentNode.previousElementSibling.appendChild(clone);
-
-            }
-        });
-
+        else{
+            alert('5 hobby maximum');
+        }
 
     }
     function ajouterLangue(me){
 
-        var dup = document.getElementById('DivNewLangue');
-        var clone = dup.cloneNode(true);
-
-        var route = '{{path('ajouter_Langue',{'id':"_idLangue",'IdNiveau':"_idNiveau",'IdUser': User.id})}}';
-        var select = document.getElementById("NewLangue");
-        var choice = select.selectedIndex;  // Récupération de l'index du <option> choisi
-        var idLangue = select.options[choice].value.trim(); // Récupération du texte du <option> d'index "choice"
-
-        var select2 = document.getElementById("NewNiveau");
-        var choice2 = select2.selectedIndex;  // Récupération de l'index du <option> choisi
-        var idNiveau = select2.options[choice2].value.trim(); // Récupération du texte du <option> d'index "choice"
-
-        if(me.value.trim() =='')
-        {
-            alert('choisissez une langue');
-            me.value='';
-            return;
+        if(document.getElementsByName('_Langue[]').length < 5){
+            var newHobby = document.createElement('input');
+            newHobby.setAttribute('name','_Langue[]');
+            newHobby.setAttribute('type','text');
+            newHobby.className = 'champ form-control';
+            newHobby.setAttribute('style','display :block !important');
+            document.getElementById('LanguesContainer').appendChild(newHobby);
         }
-
-        if(me.nextElementSibling.value.trim() =='')
-        {
-            alert('choisissez une niveau');
-            me.value='';
-            return;
+        else {
+            alert('5 hobby maximum');
         }
-
-        route=route.replace('_idLangue',idLangue);
-        route=route.replace('_idNiveau',idNiveau);
-        $.ajax({
-            type: 'get',
-            url: route,
-            success: function(data) {
-                if(data['success']==1)
-                {
-                    //me.parentNode.getAttribute('id')
-                    clone.style.display = 'block';
-
-                    clone.getElementsByTagName("label")[0].innerHTML = select.options[choice].innerHTML;
-                    clone.getElementsByTagName("input")[0].setAttribute("name","langue"+me.parentNode.parentNode.getAttribute('id'));
-                    clone.getElementsByTagName("input")[0].value = me.value.trim();
-                    clone.getElementsByTagName("label")[1].innerHTML = select2.options[choice2].innerHTML;
-                    clone.getElementsByTagName("input")[1].setAttribute("name","niveau["+me.parentNode.parentNode.getAttribute('id')+"][]");
-                    clone.getElementsByTagName("input")[1].value = me.nextElementSibling.value.trim();
-
-                    me.parentNode.parentNode.previousElementSibling.appendChild(clone);
-                }
-                else if(data['success']==0)
-                {
-                    alert('Cette langue est déjà présente');
-                }
-
-            }
-        });
 
 
     }
