@@ -23,9 +23,9 @@
                             <div class="inputcontainer">
                                 <label class="list-group-item" style="height: 60px;" for="affinite">Test d'affinité :</label>
                                 {% if QCM.getAffinite %}
-                                    <input type="text" class="champ form-control" id="affinite" name="_affinite" value="1" maxlength="1" required>
+                                    <input type="text" class="champ form-control" id="affinite" name="_affinite" value="1" title="affiniteTrue" maxlength="1" required>
                                 {% else %}
-                                    <input type="text" class="champ form-control" id="affinite" name="_affinite" value="0"maxlength="1" required>
+                                    <input type="text" class="champ form-control" id="affinite" name="_affinite" value="0" title="affiniteFalse"  maxlength="1" required>
                                 {% endif %}
                             </div>
                             {% if Questions is defined %}

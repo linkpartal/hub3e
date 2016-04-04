@@ -79,35 +79,35 @@
                      style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
                     <div  class="rightMenu" style="padding: 8px !important;" >
                         <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-                        <input value="{{mission.getDatecreation|date('d/m/Y')}}" disabled>
+                        <input value="{{mission.getDatecreation|date('d/m/Y')}}" title="Date creation" disabled>
                     </div>
                     <div class="rightMenu" style="padding: 8px !important;" >
                         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                        <input value="{{ mission.nomcontact }} {{ mission.prenomcontact }}" disabled>
+                        <input value="{{ mission.nomcontact }} {{ mission.prenomcontact }}" title="Prenom contact" disabled>
                     </div>
                     <div class="rightMenu" style="padding: 8px !important;">
                         <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-                        <input value="{{mission.getEmailcontact}}" type="email" name="_Emailcontact" maxlength="45" readonly>
+                        <input value="{{mission.getEmailcontact}}" type="email" name="_Emailcontact" maxlength="45" title="Email cantact" readonly>
                     </div>
                     <div class="rightMenu" style="padding: 8px !important;">
                         <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
-                        <input value="{{mission.getTypecontrat}}" type="text" id="TypeContrat" name="_TypeContrat" maxlength="45" readonly>
+                        <input value="{{mission.getTypecontrat}}" type="text" id="TypeContrat" name="_TypeContrat" maxlength="45" title="Type Contrat" readonly>
                     </div>
                     <div  class="rightMenu " style="padding: 8px !important;">
                         <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                        <input value="{{mission.getDatedebut|date('d/m/Y')}}" type="text"  id="Datedebut" name="_Datedebut" readonly>
+                        <input value="{{mission.getDatedebut|date('d/m/Y')}}" type="text"  id="Datedebut" name="_Datedebut" title="Date debut" readonly>
                     </div>
                     <div  class="rightMenu " style="padding: 8px !important;">
                         <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                        <input value="{{mission.getDatefin|date('d/m/Y')}}" type="text"  id="Datefin" name="_Datefin" readonly>
+                        <input value="{{mission.getDatefin|date('d/m/Y')}}" type="text"  id="Datefin" name="_Datefin" title="Date fin" readonly>
                     </div>
                     <div class="rightMenu" style="padding: 8px !important;" >
                         <span class="glyphicon glyphicon-eur" aria-hidden="true"></span>
-                        <input value="{{mission.getRemuneration}}" type="number" id="Remuneration" name="_Remuneration" maxlength="5" readonly>
+                        <input value="{{mission.getRemuneration}}" type="number" id="Remuneration" name="_Remuneration" maxlength="5" title="remuneration" readonly>
                     </div>
                     <div class="rightMenu" style="padding: 8px !important;">
                         <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>
-                        <input placeholder="Code mission"  value="{{mission.getCodemission}}" name="_Codemission" required maxlength="9" type="text" readonly>
+                        <input placeholder="Code mission"  value="{{mission.getCodemission}}" name="_Codemission" required maxlength="9" title="Code mission" type="text" readonly>
                     </div>
 
                 </div>

@@ -21,14 +21,14 @@
     <div id="reponse" style="display: none;">
         <input type="hidden" id="inputrep" >
         <input type="hidden" id="idScore" >
-        <input type="radio" value="1"   >
+        <input type="radio" value="1"    title="radiorepond">
         <label style="font: 14px Roboto black; "></label>
 
 
 
 
 
-        <img align="rigth" src="{{ asset('image/vide.gif') }}" width="30px" , height="0px" />
+        <img align="rigth" src="{{ asset('image/vide.gif') }}" width="30px"  height="0px" />
         <img src="{{ asset('image/up_x18.png') }}" alt="Monter" title="Monter" onclick="monter(this.parentNode)"  />
         <img src="{{ asset('image/down_x18.png') }}" alt="Descendre" title="Descendre"  onclick="descendre(this.parentNode)"   />
         <img src="{{ asset('image/imgSupprimer.png') }}" alt="Supprimer Question" title="Supprimer Question"  onclick="supprimer(this.parentNode)" />
@@ -48,12 +48,12 @@
                                 <label class="list-group-item" style="height: 60px;" for="QCM">Nom du Questionnaire :</label>
                                 <input type="text" class="champ " id="QCM" name="_Nom" value="{{ QCM.getNom }}" required maxlength="45"><br>
                                 {% if QCM.getAffinite %}
-                                    <input type="radio" name="_affinite" value="1" style="margin:10px 5px 10px 0" checked> Test d'affinité
-                                    <input type="radio" name="_affinite" value="0" style="margin:10px 5px 10px 10px"> Test de formation
+                                    <input type="radio" name="_affinite" value="1" style="margin:10px 5px 10px 0" checked title="testAffinite"> Test d'affinité
+                                    <input type="radio" name="_affinite" value="0" style="margin:10px 5px 10px 10px" title="testFormation"> Test de formation
 
                                 {% else %}
-                                    <input type="radio" name="_affinite" value="1" style="margin:10px 5px 10px 0" > Test d'affinité
-                                    <input type="radio" name="_affinite" value="0" style="margin:10px 5px 10px 10px" checked> Test de formation
+                                    <input type="radio" name="_affinite" value="1" style="margin:10px 5px 10px 0" title="testAffinite"> Test d'affinité
+                                    <input type="radio" name="_affinite" value="0" style="margin:10px 5px 10px 10px" title="testFormation" checked> Test de formation
 
                                 {% endif %}
                             </div>
@@ -77,8 +77,8 @@
                                                             <div>
                                                                 <input type="hidden" name="reponse[{{ i }}][]" value="{{ rep.getReponse }}" style="margin:10px 5px 10px 0" id="inputrep" >
                                                                 <input type="hidden" name="score[{{ i }}][]" value="{{ rep.getScore }}" style="margin:10px 5px 10px 0" id="idScore" >
-                                                                <input type="radio" value="1"   ><label style="font: 14px Roboto black; ">{{ rep.getReponse }}</label>
-                                                                <img  src="{{ asset('image/vide.gif') }}" width="30px" , height="0px" />
+                                                                <input type="radio" value="1"  title="ReponseTrue"><label style="font: 14px Roboto black; ">{{ rep.getReponse }}</label>
+                                                                <img  src="{{ asset('image/vide.gif') }}" style="width:30px;height:0px;" />
                                                                 <img src="{{ asset('image/up_x18.png') }}" alt="Monter" title="Monter" onclick="monter(this.parentNode)"  />
                                                                 <img src="{{ asset('image/down_x18.png') }}" alt="Descendre" title="Descendre"  onclick="descendre(this.parentNode)"   />
                                                                 <img src="{{ asset('image/imgSupprimer.png') }}" alt="Supprimer Question" title="Supprimer Question"  onclick="supprimer(this.parentNode)" />
@@ -129,24 +129,16 @@
     {% else %}
         <div class="row" style="margin: 0;overflow-y: auto;height: 100%">
 
-            <div class="col-xs-12"
-                 style="background: rgb(238, 241, 246); height: 100%;">
-
+            <div class="col-xs-12" style="background: rgb(238, 241, 246); height: 100%;">
                 <div class="col-xs-12">
-                    <div class="list-group"
-                         style="background: #1B2024; margin: 30px; padding: 0 0; border-left: 20px solid white; border-right: 20px solid white !important; text-align: left;">
-
-
+                    <div class="list-group"  style="background: #1B2024; margin: 30px; padding: 0 0; border-left: 20px solid white; border-right: 20px solid white !important; text-align: left;">
                         <form class="formulaire" id="form" action="{{ path('Add_QCM') }}" method="post">
-
                             <div class="inputcontainer" name="21456dddd">
                                 <label class="list-group-item" style="height: 60px;">Nom du Questionnaire :</label>
                                 <input type="text" class="champ " id="QCM" name="_Nom" required maxlength="45" ><br>
-                                <input type="radio" name="_affinite" value="1" style="margin:10px 5px 10px 0" checked> Test d'affinité
-                                <input type="radio" name="_affinite" value="0" style="margin:10px 5px 10px 10px"> Test de formation
+                                <input type="radio" name="_affinite" value="1" title="affiniteTrue" style="margin:10px 5px 10px 0" checked> Test d'affinité
+                                <input type="radio" name="_affinite" value="0" style="margin:10px 5px 10px 10px" title="affiniteFalse"> Test de formation
                             </div>
-
-
                             <div id="button_container" name="21456dddd">
                                 <input type="text" onkeyup="if(event.keyCode==13){dupliquer(this);}" style="resize: none;overflow: hidden;vertical-align: bottom" class="champ" placeholder="Ajouter Question">
                                 <button onclick="check()" type="button" style="vertical-align: bottom">Valider le QCM</button>

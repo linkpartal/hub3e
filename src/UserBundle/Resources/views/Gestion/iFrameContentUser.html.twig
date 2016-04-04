@@ -832,19 +832,19 @@
 
                                         <div class="col-xs-12 Liste">
                                             <div class="row">
-                                                <label class="cell">Nom : <input value="{{ parent.nom }}"  id="Nomresp" name="_Nomresp" ></label>
-                                                <label class="cell">Prénom : <input value="{{ parent.prenom }}" id="Prenomresp" name="_Prenomresp">
+                                                <label class="cell">Nom : <input value="{{ parent.nom }}" title="Nom Parent" id="Nomresp" name="_Nomresp" ></label>
+                                                <label class="cell">Prénom : <input value="{{ parent.prenom }}" title="Prenom parent" id="Prenomresp" name="_Prenomresp">
 
                                                     <img style="float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerParent('{{ path('supprimer_Parent',{'id': parent.getId }) }}',this)" />
                                                     <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#parent{{ iddiv }}"></button></label>
                                             </div>
                                             <div id="parent{{ iddiv }}" class="collapse in" >
                                                 <div class="row">
-                                                    <label class="cell">Telephone : <input value="{{ parent.telephone }}" id="Telephoneresp" name="_Telephoneresp"></label>
-                                                    <label class="cell">Adresse  : <input value="{{ parent.adresse }}" id="Adresseresp" name="_Adresseresp"></label>
+                                                    <label class="cell">Telephone : <input value="{{ parent.telephone }}" title="Telephone" id="Telephoneresp" name="_Telephoneresp"></label>
+                                                    <label class="cell">Adresse  : <input value="{{ parent.adresse }}" title="Adresse Parent" id="Adresseresp" name="_Adresseresp"></label>
                                                 </div>
                                                 <div class="row">
-                                                    <label class="cell">Email : <input value="{{ parent.email }}" id="Emailresp" name="_Emailresp"></label>
+                                                    <label class="cell">Email : <input value="{{ parent.email }}" title="Email Parent" id="Emailresp" name="_Emailresp"></label>
                                                     {% if parent.nomjeunefille  %}
                                                         <label class="cell">Nom jeune fille  : <input value="{{ parent.nomjeunefille }}" id="Nomjeunefille" name="_Nomjeunefille"></label>
                                                     {% endif %}
@@ -883,8 +883,6 @@
                                                 <div class="row">
                                                     <label class="cell">Début : <input value="{{ Exp.debut | date('m/Y')}}" class="date" id="Nbreannee" name="_Datedebut"></label>
                                                     <label class="cell">Fin : <input value="{{ Exp.fin | date('m/Y')}}" class="date" id="Nbreannee" name="_Datefin"></label>
-
-
                                                 </div>
                                                 <div class="row">
                                                     <label class="cell">Description : <input value="{{ Exp.description }}" id="Descriptionexp" name="_Descriptionexp"></label>
@@ -909,19 +907,19 @@
                                         <input type="hidden" value="{{ Recom.getId }}" id="id" name="_IDRecom">
                                         <div class="col-xs-12 Liste">
                                             <div class="row">
-                                                <label class="cell">Text  : <input value="{{ Recom.text }}" id="Text" name="_Text"></label>
-                                                <label class="cell">Nom : <input value="{{Recom.getNom }}" id="Nomrec" name="_Nomrec">
+                                                <label class="cell">Text  : <input value="{{ Recom.text }}" title="Text" id="Text" name="_Text"></label>
+                                                <label class="cell">Nom : <input value="{{Recom.getNom }}"title="Nom Recommandation" id="Nomrec" name="_Nomrec">
                                                     <img style="float:right" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="supprimerRecommandation('{{ path('supprimer_Recommandation',{'id':Recom.getId}) }}',this)" />
                                                     <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#recommandation{{ iddiv }}"></button></label>
 
                                             </div>
                                             <div id="recommandation{{ iddiv }}" class="collapse in" >
                                                 <div class="row">
-                                                    <label class="cell">Fonction  : <input value="{{ Recom.fonction }}" id="Fonctionrec" name="_Fonctionrec"></label>
-                                                    <label class="cell">Email  : <input value="{{ Recom.email }}" id="Emailrec" name="_Emailrec"></label>
+                                                    <label class="cell">Fonction  : <input value="{{ Recom.fonction }}" title="Fonction recommandation" id="Fonctionrec" name="_Fonctionrec"></label>
+                                                    <label class="cell">Email  : <input value="{{ Recom.email }}" title="Email" id="Emailrec" name="_Emailrec"></label>
                                                 </div>
                                                 <div class="row">
-                                                    <label class="cell">Téléphone : <input value="{{ Recom.telephone}}" id="Telephonerec" name="_Telephonerec"></label>
+                                                    <label class="cell">Téléphone : <input value="{{ Recom.telephone}}" title="Telephone" id="Telephonerec" name="_Telephonerec"></label>
                                                     <input type="submit" value="Modifier">
                                                 </div>
                                             </div>
@@ -958,8 +956,6 @@
                                     </form>
                                 {% endfor %}
                             {% endif %}
-
-
                             <button type="button" class="col-xs-12 blue" style="margin-top:40px" onclick="show('addDiplome')">Ajouter un Diplome</button>
 
                         </div>

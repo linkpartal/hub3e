@@ -42,9 +42,6 @@
                             <div class="col-xs-12" style="height: 20px;color: #666666;font-family:Roboto;font-style:normal;font-size:large;margin-left: 250px">{{mission.getCodemission }}</div>
                         </div>
                     </div>
-                    <div class="col-xs-10 input-colonne">
-                        <label id="startTimeLabel" visible="false"></label>
-                    </div>
 
                     <textarea style="height: 200px;resize: none;" class="input" id="Descriptif" name="_Descriptif" placeholder="Cette mission peut vous intéresser,postuler si vous le souhaitez ..." required ></textarea>
 
@@ -198,7 +195,7 @@
                     </div>
 
                     <div class="col-xs-12">
-                        <input style="text-align:left;font-family: Roboto;width:100%">
+                        <input style="text-align:left;font-family: Roboto;width:100%" title="Inputlien">
                     </div>
 
                 </div>
@@ -292,56 +289,56 @@
                      style="margin: 15px 0 0 15px;height: 100%; background-color: white;">
                     <div  class="rightMenu" style="padding: 8px !important;" >
                         <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-                        <input value="{{mission.getDatecreation|date('d/m/Y')}}" disabled>
+                        <input value="{{mission.getDatecreation|date('d/m/Y')}}" title="DateCreation" disabled>
                     </div>
                     <div class="rightMenu" style="padding: 8px !important;" >
-                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                        <input value="{{ mission.nomcontact }} {{ mission.prenomcontact }}" disabled>
+                        <span class="glyphicon glyphicon-user" aria-hidden="true" ></span>
+                        <input value="{{ mission.nomcontact }} {{ mission.prenomcontact }}" title="prenomContact" disabled>
                     </div>
                     <div class="rightMenu" style="padding: 8px !important;">
                         <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-                        <input value="{{mission.getEmailcontact}}" type="email" name="_Emailcontact" maxlength="45" readonly>
+                        <input value="{{mission.getEmailcontact}}" type="email" name="_Emailcontact" title="Emailcontact" maxlength="45" readonly>
                     </div>
                     <div class="rightMenu" style="padding: 8px !important;">
                         <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
-                        <input value="{{mission.getTypecontrat}}" type="text" id="TypeContrat" name="_TypeContrat" maxlength="45" readonly>
+                        <input value="{{mission.getTypecontrat}}" type="text" id="TypeContrat" name="_TypeContrat" title="TypeContrat" maxlength="45" readonly>
                     </div>
                     <div  class="rightMenu " style="padding: 8px !important;">
                         <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                        <input value="{{mission.getDatedebut|date('d/m/Y')}}" type="text"  id="Datedebut" name="_Datedebut" readonly>
+                        <input value="{{mission.getDatedebut|date('d/m/Y')}}" type="text"  id="Datedebut" name="_Datedebut" title="datedebut" readonly>
                     </div>
                     <div  class="rightMenu " style="padding: 8px !important;">
                         <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                        <input value="{{mission.getDatefin|date('d/m/Y')}}" type="text"  id="Datefin" name="_Datefin" readonly>
+                        <input value="{{mission.getDatefin|date('d/m/Y')}}" type="text"  id="Datefin" name="_Datefin" title="dateFin" readonly>
                     </div>
                     <div class="rightMenu" style="padding: 8px !important;" >
                         <span class="glyphicon glyphicon-eur" aria-hidden="true"></span>
-                        <input value="{{mission.getRemuneration}}" type="number" id="Remuneration" name="_Remuneration" maxlength="5" readonly>
+                        <input value="{{mission.getRemuneration}}" type="number" id="Remuneration" name="_Remuneration" title="Remuneration" maxlength="5" readonly>
                     </div>
                     <div class="rightMenu" style="padding: 8px !important;">
                         <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>
-                        <input placeholder="Code mission"  value="{{mission.getCodemission}}" name="_Codemission" required maxlength="9" type="text" readonly>
+                        <input placeholder="Code mission"  value="{{mission.getCodemission}}" name="_Codemission" title="Code mission" required maxlength="9" type="text" readonly>
                     </div>
                     {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_ADMINSOC') %}
-                        <button onclick="modifier('formMission',this);" type="button" class="list-group-item rightMenu" >
-                            <div class="col-xs-12"  >Modifier la fiche</div>
+                        <button onclick="modifier('formMission',this);" type="button" class="col-xs-12 rightMenu" >
+                           Modifier la fiche
                         </button>
 
 
-                        <button onclick="if(confirm('Voulez-vous supprimer la mission ?')){post('{{ path('supprimer_Mission',{'id': mission.getId }) }}',true)}" type="button" class="list-group-item rightMenu" >
-                            <div class="col-xs-12" >Supprimer Mission</div>
+                        <button onclick="if(confirm('Voulez-vous supprimer la mission ?')){post('{{ path('supprimer_Mission',{'id': mission.getId }) }}',true)}" type="button" class="col-xs-12 rightMenu" >
+                           Supprimer Mission
                         </button>
-                        <button onclick="show('Assigner_Tuteur')" type="button" class="list-group-item rightMenu" >
-                            <div class="col-xs-12"  >Assigner un Tuteur</div>
+                        <button onclick="show('Assigner_Tuteur')" type="button" class="col-xs-12 rightMenu" >
+                           Assigner un Tuteur
                         </button>
                         {% if is_granted('ROLE_ADMINSOC') or is_granted('ROLE_RECRUTEUR') %}
-                            <button type="button" class="list-group-item rightMenu" onclick="show('Diffusion_formation')" >
-                                <div class="col-xs-12" >Diffuser</div>
+                            <button type="button" class="col-xs-12 rightMenu" onclick="show('Diffusion_formation')" >
+                                Diffuser
                             </button>
                         {% endif %}
                     {% elseif app.user.hasRole('ROLE_APPRENANT') %}
-                        <button onclick="postuler()" type="button" class="list-group-item rightMenu" >
-                            <div class="col-xs-12" >Postuler pour cette Mission</div>
+                        <button onclick="postuler()" type="button" class="col-xs-12 rightMenu" >
+                            Postuler pour cette Mission
                         </button>
                     {% endif %}
                 </div>

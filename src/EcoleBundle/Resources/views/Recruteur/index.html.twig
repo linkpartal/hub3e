@@ -8,14 +8,6 @@
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="icon" type="image/png" href="{{ asset('image/Logo_Hub_3e.png') }}" />
 
-    <style>
-        .dropdown-submenu{position:relative;}
-        .dropdown-submenu>.dropdown-menu{top:0;left:100%;margin-top:-6px;margin-left:-1px;-webkit-border-radius:0 6px 6px 6px;-moz-border-radius:0 6px 6px 6px;border-radius:0 6px 6px 6px;}
-        .dropdown-submenu:hover>.dropdown-menu{display:block;}
-        .dropdown-submenu>a:after{display:block;content:" ";float:right;width:0;height:0;border-color:transparent;border-style:solid;border-width:5px 0 5px 5px;border-left-color:#cccccc;margin-top:5px;margin-right:-10px;}
-        .dropdown-submenu:hover>a:after{border-left-color:#ffffff;}
-        .dropdown-submenu.pull-left{float:none;}.dropdown-submenu.pull-left>.dropdown-menu{left:-100%;margin-left:10px;-webkit-border-radius:6px 0 6px 6px;-moz-border-radius:6px 0 6px 6px;border-radius:6px 0 6px 6px;}
-    </style>
     {% block CSS %}{% endblock %}
 
     <title>HUB3E - {% block title %}Ecole{% endblock %}</title>
@@ -109,7 +101,7 @@
 
                     <div class="col-xs-6 input-colonne">
                         <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Siren</label>
-                        <input type="text" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" required>
+                        <input type="text" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" title="siren" required>
 
                         <label for="Logo" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Importer un logo</label>
                         <label style="display: flex;float: left;" for="Logo">
@@ -120,7 +112,7 @@
 
                     <div class="col-xs-6 input-colonne">
                         <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Raison sociale</label>
-                        <input type="text" class="input" id="RaisonSoc" name="_RaisonSoc" maxlength="45" required>
+                        <input type="text" class="input" id="RaisonSoc" name="_RaisonSoc" title="RaisonSoc" maxlength="45" required>
 
                         <label for="Logo" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Importer un fond'écran</label>
                         <label style="float: left;" for="image">
@@ -250,7 +242,7 @@
                 <div class="div_form" id="infoapprenant" style="border-bottom:1px solid #2b542c;"  >
                     <div class="col-xs-6 input-colonne">
                         <div class="col-xs-6 input-colonne">
-                            <select class="input "  title="" name="_Civilite" maxlength="45" required>
+                            <select class="input "  title="" name="_Civilite" required>
                                 <option value="Monsieur">Mr.</option>
                                 <option value="Madame">Mme.</option>
                             </select>
@@ -280,19 +272,19 @@
                         <input placeholder="diplome obtenus" class="input" id="Diplome" name="_Diplome" type="text" maxlength="45"   >
                         <input placeholder="Format.ou en cours" class="input" id="FormationCours" name="_FormationCours" type="text" >
                         <div class="col-xs-12">
-                            <input type="checkbox" name="_handicap" value="1"><label>HANDICAP</label>
-                            <input type="checkbox" name="_entrepreneur" value="1"><label>Entrepreneurs</label>
+                            <input type="checkbox" name="_handicap" value="1" title="handicap"><label>HANDICAP</label>
+                            <input type="checkbox" name="_entrepreneur" value="1" title="entrepreneur" ><label>Entrepreneurs</label>
                         </div>
                         <div class="col-xs-12">
                             <label>Permis</label>
-                            <input type="radio" name="_Permis" value="1" ><label>oui</label>
-                            <input type="radio" name="_Permis" value="-1"><label>non</label>
-                            <input type="radio" name="_Permis" value="0"><label>en cours</label>
+                            <input type="radio" name="_Permis" value="1" title="Oui"><label>oui</label>
+                            <input type="radio" name="_Permis" value="-1" title="Non"><label>non</label>
+                            <input type="radio" name="_Permis" value="0" title="EnCours"><label>en cours</label>
                         </div>
                         <div class="col-xs-12">
                             <label>Véhicule</label>
-                            <input type="radio" name="_Vehicule" value="1"><label>oui</label>
-                            <input type="radio" name="_Vehicule" value="0" ><label>non</label>
+                            <input type="radio" name="_Vehicule" value="1" title="Oui"><label>oui</label>
+                            <input type="radio" name="_Vehicule" value="0" title="Non"><label>non</label>
                         </div>
                     </div>
 
@@ -307,7 +299,7 @@
                                 <option value="{{ formation.id }}">{{ formation.nom }} - {{ formation.etablissement.tier.raisonsoc }} - {{ formation.etablissement.adresse }}</option>
                             {% endfor %}
                         </select>
-                        <select id="SelectMultipleRechercheFormation" style="display: none">
+                        <select id="SelectMultipleRechercheFormation" style="display: none" title="SelectFormation">
                             {% for formation in formations %}
                                 <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
                             {% endfor %}
@@ -321,7 +313,7 @@
                 <div class="div_form" id="document_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
                     <div class="col-xs-12">
                         <div class="col-xs-3 input-colonne">
-                            <select class="input" titre="" name="_Type[]">
+                            <select class="input"  name="_Type[]">
                                 <option value="CV">CV</option>
                                 <option value="lettre de motivation">Lettre de motivation</option>
                                 <option value="Notes">Notes</option>
@@ -362,18 +354,18 @@
 
                 <button id="usertop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ apprenants|length }} Apprenant</button>
             </div>
-            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 5px;height: 21px;float: left;">
                 <button onclick="show('addtier',0)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                 ></button>
 
                 <button id="societetop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ societes|length }} Sociétés</button>
 
             </div>
-            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 5px;height: 21px;float: left;">
                 <button onclick="document.getElementById('iframe').src='{{ path('afficher_import') }}'" style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">SAS Admissions</button>
             </div>
 
-            <div class="input-group col-xs-1" style="margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+            <div class="input-group col-xs-1" style="margin-left: 10px;border: 0;padding: 5px;height: 21px;float: left;">
                 <button onclick="document.getElementById('iframe').src='{{ path('affiche_etab',{'id':app.user.etablissement.id }) }}'" style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; "> Ecole </button>
             </div>
 
@@ -499,7 +491,7 @@
                     <span class="glyphicon glyphicon-search input-group-addon topbaradd"
                           id="basic-addon1" style="width: 27px;height: 27px;padding: 7px"></span>
                     <input onkeyup="search(this.value)" type="text" class="recherche" aria-describedby="basic-addon1"
-                           style="height: 27px;">
+                           style="height: 27px;" title="recherche">
                 </div>
 
                 <div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px;">

@@ -45,14 +45,14 @@
                 <a href="{{ path('metier_user_login') }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 100%" >        </a>
             </div>
 
-            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="display: inline; margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="display: inline; margin-left: 10px;border: 0;padding: 5px;height: 21px;float: left;">
                 <button onclick="show('adduser')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                 ></button>
 
                 <button id="usertop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ users|length }} Utilisateurs</button>
             </div>
 
-            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 5px;height: 21px;float: left;">
                 <button  onclick="show('import')"  style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">SAS Admissions</button>
             </div>
             <div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px; float: right; margin-right: 40px;">
@@ -181,7 +181,7 @@
                 <div class="input-group col-xs-offset-1 col-xs-6" style="margin-top: 5px; float: left;">
                     <span class="glyphicon glyphicon-search input-group-addon topbaradd"
                           id="basic-addon1" style="width: 27px;height: 27px;padding: 7px"></span>
-                    <input onkeyup="search(this.value)" type="text" class="recherche" aria-describedby="basic-addon1"
+                    <input onkeyup="search(this.value)" type="text" class="recherche" title="recherche" aria-describedby="basic-addon1"
                            style="height: 27px;">
                 </div>
 
