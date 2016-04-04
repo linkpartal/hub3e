@@ -646,12 +646,6 @@ class DefaultController extends Controller
 
                 }
 
-
-
-
-   //var_dump($info);die;
-
-                $info->setProfilcomplet(1);
                 $info->setDatemodification(date_create());
                 $em->flush();
             }
@@ -687,8 +681,53 @@ class DefaultController extends Controller
                 if($request->get('_Fratrie') and intval($request->get('_Fratrie')) >= 0){
                     $info->setFratrie(intval($request->get('_Fratrie')));
                 }
+                $info->setHobbie1(null);
+                $info->setHobbie2(null);
+                $info->setHobbie3(null);
+                $info->setHobbie4(null);
+                $info->setHobbie5(null);
+                for($i = 0; $i < count($request->get('_hobbie')); $i++){
+                    if($i == 0 and !$request->get('_hobbie')[0]==''){
+                        $info->setHobbie1($request->get('_hobbie')[0]);
+                    }
+                    if($i == 1 and !$request->get('_hobbie')[1]==''){
+                        $info->setHobbie2($request->get('_hobbie')[1]);
+                    }
+                    if($i == 2 and !$request->get('_hobbie')[2]==''){
+                        $info->setHobbie3($request->get('_hobbie')[2]);
+                    }
+                    if($i == 3 and !$request->get('_hobbie')[3]==''){
+                        $info->setHobbie4($request->get('_hobbie')[3]);
+                    }
+                    if($i == 4 and !$request->get('_hobbie')[4]==''){
+                        $info->setHobbie5($request->get('_hobbie')[4]);
+                    }
 
-                $info->setProfilcomplet(1);
+                }
+
+                $info->setLangue1(null);
+                $info->setLangue2(null);
+                $info->setLangue3(null);
+                $info->setLangue4(null);
+                $info->setLangue5(null);
+                for($i = 0; $i < count($request->get('_Langue')); $i++){
+                    if($i == 0 and !$request->get('_Langue')[0]==''){
+                        $info->setLangue1($request->get('_Langue')[0]);
+                    }
+                    if($i == 1 and !$request->get('_Langue')[1]==''){
+                        $info->setLangue2($request->get('_Langue')[1]);
+                    }
+                    if($i == 2 and !$request->get('_Langue')[2]==''){
+                        $info->setLangue3($request->get('_Langue')[2]);
+                    }
+                    if($i == 3 and !$request->get('_Langue')[3]==''){
+                        $info->setLangue4($request->get('_Langue')[3]);
+                    }
+                    if($i == 4 and !$request->get('_Langue')[4]==''){
+                        $info->setLangue5($request->get('_Langue')[4]);
+                    }
+
+                }
                 $info->setDatemodification(date_create());
                 $em->persist($info);
                 $em->flush();
@@ -781,7 +820,6 @@ class DefaultController extends Controller
 
         $langue = $em->getRepository('GenericBundle:Langue')->findOneBy(array('langue'=>$id,'niveau'=>$IdNiveau));
         $langue->addUser($user);
-        $user->getInfo()->setProfilcomplet(1);
         $em->flush();
 
 
@@ -793,8 +831,6 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $par = $em->getRepository('GenericBundle:Parents')->find($id);
-        $par->getUser()->getInfo()->setProfilcomplet(1);
-        $em->flush();
         $em->remove($par);
         $em->flush();
         $reponse = new JsonResponse();
@@ -806,8 +842,6 @@ class DefaultController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $exp = $em->getRepository('GenericBundle:Experience')->find($id);
-        $exp->getUser()->getInfo()->setProfilcomplet(1);
-        $em->flush();
         $em->remove($exp);
         $em->flush();
         $reponse = new JsonResponse();
@@ -819,8 +853,6 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $recom = $em->getRepository('GenericBundle:Recommandation')->find($id);
-        $recom->getUser()->getInfo()->setProfilcomplet(1);
-        $em->flush();
         $em->remove($recom);
         $em->flush();
         $reponse = new JsonResponse();
@@ -831,8 +863,6 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $diplome = $em->getRepository('GenericBundle:Diplome')->find($id);
-        $diplome->getUser()->getInfo()->setProfilcomplet(1);
-        $em->flush();
         $em->remove($diplome);
         $em->flush();
         $reponse = new JsonResponse();
@@ -866,8 +896,6 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $document = $em->getRepository('GenericBundle:Document')->find($id);
-        $document->getUser()->getInfo()->setProfilcomplet(1);
-        $em->flush();
         $em->remove($document);
         $em->flush();
         $reponse = new JsonResponse();
@@ -1601,7 +1629,7 @@ class DefaultController extends Controller
                 $em->flush();
             }
         }
-        $userfus->getInfo()->setProfilcomplet(1);
+
         $em->remove($import);
         $em->flush();
         return $reponse->setData(1);
@@ -1634,7 +1662,6 @@ class DefaultController extends Controller
             $parent->setEmail($request->get('_Emailparent'));
 
             $em->persist($parent);
-            $user->getInfo()->setProfilcomplet(1);
             $em->flush();
         }
 
@@ -1671,7 +1698,6 @@ class DefaultController extends Controller
             $experience->setDescription($request->get('_Descriptionexp'));
 
             $em->persist($experience);
-            $user->getInfo()->setProfilcomplet(1);
             $em->flush();
         }
 
@@ -1703,7 +1729,6 @@ class DefaultController extends Controller
             $recommandation->setEmail($request->get('_Emailrec'));
             $recommandation->setText($request->get('_Text'));
             $em->persist($recommandation);
-            $user->getInfo()->setProfilcomplet(1);
             $em->flush();
         }
 
@@ -1734,7 +1759,6 @@ class DefaultController extends Controller
             $diplome->setEcole($request->get('_Ecole'));
 
             $em->persist($diplome);
-            $user->getInfo()->setProfilcomplet(1);
             $em->flush();
         }
 
@@ -1759,7 +1783,6 @@ class DefaultController extends Controller
             $document->setTaille($_FILES['_Document']['size']);
             $document->setDocument(file_get_contents($_FILES['_Document']['tmp_name']));
             $em->persist($document);
-            $user->getInfo()->setProfilcomplet(1);
             $em->flush();
 
         }
@@ -1812,11 +1835,6 @@ class DefaultController extends Controller
         }
         $reponse->addUser($apprenant);
         $em->flush();
-
-
-        $apprenant->getInfo()->setProfilcomplet(1);
-        $em->flush();
-
 
         $reponsejson = new JsonResponse();
         return $reponsejson->setData(array('success'=>1));

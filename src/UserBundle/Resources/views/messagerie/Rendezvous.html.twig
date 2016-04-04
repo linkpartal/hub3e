@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/mission.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
     {% block CSS %}{% endblock %}
     <style>
         .hidden{display: none !important;}
+        .ui-widget-header{color:black;}
     </style>
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
 
@@ -79,11 +81,12 @@
 
 
             <div class="div_form" id="Assister">
-                <button type="button" onclick="if(this.parentElement.children.length < 4){var clone = this.nextElementSibling.cloneNode(true);this.parentNode.appendChild(clone);}">+</button>
-                <section>
-                    <input name="dateRDV[]" type="date" required><input name="timeRDV[]" type="time" required>
-                    <button type="button" onclick="if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}">-</button>
-                </section>
+                <button type="button" onclick="AddDateTimeDiv(this)">+</button>
+                <div class="col-xs-4 col-xs-offset-4">
+                    <label class="col-xs-1">Le : </label><input title="Date du rendez-vous" name="dateRDV[]" type="text" class="col-xs-4" required>
+                    <label class="col-xs-1"> à </label><input title="Heure du rendez-vous" name="timeRDV[]" class="col-xs-4" type="text" required>
+                    <button type="button" class="col-xs-offset-1 col-xs-1" onclick="if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}">-</button>
+                </div>
             </div>
 
             <div id="Assister_button" class="div_button">
@@ -190,16 +193,16 @@
                                     <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="AnnulerRDV({{ rdv.id }})">Annulé</button></li>
                                     <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" href="#">Demander une réponse</button></li>
                                 {% elseif rdv.statut == -2 %}
-                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id }}">Proposez des rendez-vous</button></li>
+                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id|e('js') }};">Proposez des rendez-vous</button></li>
                                 {% elseif rdv.statut == 2 %}
-                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id }}">Proposez des rendez-vous</button></li>
-                                    <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('CompteRendu');rendezvousSelectionne = {{ rdv.id }}">Compte rendu</button></li>
+                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id|e('js') }};">Proposez des rendez-vous</button></li>
+                                    <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('CompteRendu');rendezvousSelectionne ={{ rdv.id|e('js') }};">Compte rendu</button></li>
                                 {% else %}
                                     <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="AnnulerRDV({{ rdv.id }})">Annulé</button></li>
-                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id }}">Ajouné</button></li>
+                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id|e('js') }};">Ajouné</button></li>
 
                                     {% if rdv.statut == 1 and rdv.date1 < date('-1hours') %}
-                                        <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('CompteRendu');rendezvousSelectionne = {{ rdv.id }}">Compte rendu</button></li>
+                                        <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('CompteRendu');rendezvousSelectionne = {{ rdv.id|e('js') }};">Compte rendu</button></li>
                                     {% endif %}
 
                                 {% endif %}
@@ -210,7 +213,7 @@
                             <div style="border: 15px solid transparent">
                                 {% if rdv.apprenant.getPhotos %}
                                     <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="data:image/jpg;base64,{{ rdv.apprenant.getPhotos }}">
-                                {% elseif rdv.apprenant.getCivilite == 'Mme' or rdv.apprenant.getCivilite == 'Madame' or User.getCivilite == 'Mademoiselle' %}
+                                {% elseif rdv.apprenant.getCivilite == 'Mme' or rdv.apprenant.getCivilite == 'Madame' or rdv.apprenant.getCivilite == 'Mademoiselle' %}
                                     <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/femme.jpg') }}">
                                 {% else %}
                                     <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/homme.jpg') }}">
@@ -291,27 +294,27 @@
                             </div>
                         </div>
 
-                        <div id="date{{ rdv.id }}" class="col-xs-3" style="display:flex;height: 100px;text-align: left; ">
+                        <div id="date{{ rdv.id }}" class="col-xs-3" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;;display:flex;height: 100px;text-align: left; ">
                             {% if rdv.statut == 1 or rdv.statut== 2 %}
-                                <label style="font:18px Roboto;margin:auto;" > {{ rdv.getDate1|date('d-m-Y à H:i') }}</label>
+                                <label class="col-xs-12" style="font:18px Roboto;margin:auto;" > {{ rdv.getDate1|date('d-m-Y à H:i') }}</label>
 
                             {% elseif rdv.statut == -1 %}
                                 {% if rdv.date1 %}
-                                    <label style="font:18px Roboto;margin:auto;" > {{ rdv.getDate1|date('d-m-Y à H:i') }}
+                                    <label class="col-xs-12" style="font:18px Roboto;margin:auto;" > {{ rdv.getDate1|date('d-m-Y à H:i') }}
                                         {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
                                             <button onclick="ChoisirDate({{ rdv.id }},1,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>
                                         {% endif %}
                                     </label>
                                 {% endif %}
                                 {% if rdv.date2 %}
-                                    <label style="font:18px Roboto;margin:auto;" > {{ rdv.getDate2|date('d-m-Y à H:i') }}
+                                    <label class="col-xs-12" style="font:18px Roboto;margin:auto;" > {{ rdv.getDate2|date('d-m-Y à H:i') }}
                                         {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
                                             <button onclick="ChoisirDate({{ rdv.id }},2,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>
                                         {% endif %}
                                     </label>
                                 {% endif %}
                                 {% if rdv.date3 %}
-                                    <label style="font:18px Roboto;margin:auto;" > {{ rdv.getDate3|date('d-m-Y à H:i') }}
+                                    <label class="col-xs-12" style="font:18px Roboto;margin:auto;" > {{ rdv.getDate3|date('d-m-Y à H:i') }}
                                         {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
                                             <button onclick="ChoisirDate({{ rdv.id }},3,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>
                                         {% endif %}
@@ -347,16 +350,16 @@
                                     <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="AnnulerRDV({{ rdv.id }})">Annulé</button></li>
                                     <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" href="#">Demander une réponse</button></li>
                                 {% elseif rdv.statut == -2 %}
-                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id }}">Proposez des rendez-vous</button></li>
+                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id|e('js') }};">Proposez des rendez-vous</button></li>
                                 {% elseif rdv.statut == 2 %}
-                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id }}">Proposez des rendez-vous</button></li>
-                                    <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('CompteRendu');rendezvousSelectionne = {{ rdv.id }}">Compte rendu</button></li>
+                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id|e('js') }};">Proposez des rendez-vous</button></li>
+                                    <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('CompteRendu');rendezvousSelectionne ={{ rdv.id|e('js') }};">Compte rendu</button></li>
                                 {% else %}
                                     <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="AnnulerRDV({{ rdv.id }})">Annulé</button></li>
-                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id }}">Ajouné</button></li>
+                                    <li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('ajounerPopUp');rendezvousSelectionne ={{ rdv.id|e('js') }};">Ajouné</button></li>
 
                                     {% if rdv.statut == 1 and rdv.date1 < date('-1hours') %}
-                                        <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('CompteRendu');rendezvousSelectionne = {{ rdv.id }}">Compte rendu</button></li>
+                                        <li><button type="button" style="height: 100%;width: 100%;background-color: transparent;border: none;" onclick="show('CompteRendu');rendezvousSelectionne ={{ rdv.id|e('js') }};">Compte rendu</button></li>
                                     {% endif %}
 
                                 {% endif %}
@@ -372,16 +375,75 @@
 
 
 <script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
+<script src="{{ asset('js/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/PopUp.js') }}"></script>
 <script src="{{ asset('js/paginate.js') }}"></script>
 <script language="JavaScript">
     var rendezvousSelectionne;
+    function AddDateTimeDiv(button){
+        if(button.parentElement.children.length < 4) {
+            var divContainer = document.createElement('div');
+            divContainer.className = 'col-xs-4 col-xs-offset-4';
+            //label DATE
+            var LabelDate = document.createElement('label');
+            LabelDate.className = 'col-xs-1';
+            LabelDate.innerHTML = 'Le : ';
+            //INPUT DATE
+            var inputDate = document.createElement('input');
+            inputDate.setAttribute('name','dateRDV[]');
+            inputDate.setAttribute('id',button.nextElementSibling.firstElementChild.id +'_'+button.parentElement.children.length);
+            inputDate.setAttribute('type','text');
+            inputDate.className = "col-xs-4";
+            //label DATE
+            var LabelTime = document.createElement('label');
+            LabelTime.className = 'col-xs-1';
+            LabelTime.innerHTML = ' à ';
+            //INPUT TIME
+            var inputTime = document.createElement('input');
+            inputTime.setAttribute('name','timeRDV[]');
+            inputTime.setAttribute('id',button.nextElementSibling.children[1].id +'_'+button.parentElement.children.length);
+            inputTime.setAttribute('type','text');
+            inputTime.className = "col-xs-4";
+            //delete button
+            var deleteButton = document.createElement('button');
+            deleteButton.setAttribute('onclick','if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}');
+            deleteButton.setAttribute('type','button');
+            deleteButton.className = "col-xs-offset-1 col-xs-1";
+            deleteButton.innerHTML = '-';
+
+            //append
+            divContainer.appendChild(LabelDate);
+            divContainer.appendChild(inputDate);
+            divContainer.appendChild(LabelTime);
+            divContainer.appendChild(inputTime);
+            divContainer.appendChild(deleteButton);
+
+            button.parentNode.appendChild(divContainer);
+        }
+    }
+    $(document).on( "focus", "input[name='dateRDV[]']:not(.hasDatepicker)", function() {
+        //toastr.info( "Initializing " + this.id );
+
+        $( this ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            dateFormat: 'dd/mm/yy',
+            monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+            monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+            onClose: function(dateText, inst) {
+                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+            }
+        });
+    });
+
     $(document).ready(function(){
         window.parent.document.getElementById('iframe').style.left ='0';
         window.parent.document.getElementById('iframe').style.top ='32px';
         window.parent.document.getElementById('iframe').style.height ='calc(100% - 32px)';
         window.parent.document.getElementById('iframe').style.position ='fixed';
+        window.parent.document.getElementById('iframe').style.visibility ='visible';
         $("#paginationContainer").customPaginate({
             itemsToPaginate : ".Liste",
             activeClass : "active-class"
@@ -432,7 +494,7 @@
                         document.getElementById('statut'+id).style.color = 'red';
                         document.getElementById('date'+id).innerHTML = '';
                         document.getElementById('menuRDV'+id).innerHTML ='<li><button style="height: 100%;width: 100%;background-color: transparent;border: none;"'+
-                        'onclick="show("ajounerPopUp");rendezvousSelectionne = '+id+'">Proposez des rendez-vous</button></li>';
+                        'onclick="show(\'ajounerPopUp\');rendezvousSelectionne = '+id+'">Proposez des rendez-vous</button></li>';
 
                     }
                 }
@@ -464,6 +526,16 @@
         });
     }
     function Ajournement(){
+        var inputTimes = document.getElementsByName('timeRDV[]');
+        for(var k = 0; k < inputTimes.length; k++){
+            var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(inputTimes[k].value);
+
+            if (!isValid) {
+                alert('verifiez que les heure respect le format HH:MM');
+                return;
+            }
+        }
+
         var route = '{{ path('AjournementRDV',{'id':'_ID'}) }}';
         route = route.replace('_ID',rendezvousSelectionne);
         $.ajax({
@@ -475,13 +547,14 @@
                 document.getElementById('statut'+rendezvousSelectionne).style.color = 'orangered';
                 var innerhtmldate='';
                 for(var i=0; i< data.length; i++){
-                    innerhtmldate =innerhtmldate + '<label style="font:18px Roboto;" > '+data[i]+
+                    innerhtmldate =innerhtmldate + '<label class="col-xs-12" style="font:18px Roboto;" > '+data[i]+
                             '<button onclick="ChoisirDate('+rendezvousSelectionne+',3,this)" type="button" style="height: 21px;width: 21px;border:none;background-color: #2b542c"></button>'+
                             '</label>';
                 }
                 document.getElementById('date'+rendezvousSelectionne).innerHTML = innerhtmldate;
                 document.getElementById('menuRDV'+rendezvousSelectionne).innerHTML ='<li><button type="button" style="height:100%;width:100%;background-color:transparent;border:none;" onclick="AnnulerRDV('+ rendezvousSelectionne+')">Annulé</button></li>'+
-                       '<li><button style="height: 100%;width: 100%;background-color: transparent;border: none;" href="#">Demander une réponse</button></li>';
+                       '<li><button style="height: 100%;width: 100%;background-color: transparent;border: none;">Demander une réponse</button></li>';
+                document.getElementById('ajounerPopUp').style.display = 'none';
             }
         })
     }

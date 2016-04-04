@@ -273,14 +273,14 @@ class MiseEnRelationController extends Controller
             {
                 $datetimeRDV = $request->get('dateRDV')[$i].' '.$request->get('timeRDV')[$i];
 
-                if($i == 2){
-                    $rdv->setDate1(date_create($datetimeRDV));
+                if($i == 0){
+                    $rdv->setDate1(date_create_from_format('d/m/Y H:i',$datetimeRDV));
                 }
                 if($i == 1){
-                    $rdv->setDate2(date_create($datetimeRDV));
+                    $rdv->setDate2(date_create_from_format('d/m/Y H:i',$datetimeRDV));
                 }
-                if($i == 0){
-                    $rdv->setDate3(date_create($datetimeRDV));
+                if($i == 2){
+                    $rdv->setDate3(date_create_from_format('d/m/Y H:i',$datetimeRDV));
                 }
 
                 array_push($date,date_format(date_create($datetimeRDV),"d M Y à H:i"));

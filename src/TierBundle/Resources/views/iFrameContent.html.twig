@@ -9,15 +9,6 @@
     <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
 
-    <style>
-        .dropdown-submenu{position:relative;}
-        .dropdown-submenu>.dropdown-menu{top:0;left:100%;margin-top:-6px;margin-left:-1px;-webkit-border-radius:0 6px 6px 6px;-moz-border-radius:0 6px 6px 6px;border-radius:0 6px 6px 6px;}
-        .dropdown-submenu:hover>.dropdown-menu{display:block;}
-        .dropdown-submenu>a:after{display:block;content:" ";float:right;width:0;height:0;border-color:transparent;border-style:solid;border-width:5px 0 5px 5px;border-left-color:#cccccc;margin-top:5px;margin-right:-10px;}
-        .dropdown-submenu:hover>a:after{border-left-color:#ffffff;}
-        .dropdown-submenu.pull-left{float:none;}.dropdown-submenu.pull-left>.dropdown-menu{left:-100%;margin-left:10px;-webkit-border-radius:6px 0 6px 6px;-moz-border-radius:6px 0 6px 6px;border-radius:6px 0 6px 6px;}
-    </style>
-
     {% block CSS %}
         <style>
             .ui-widget-header{color:black;}
@@ -139,8 +130,8 @@
 
                             <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
                             <div class="col-xs-12 NavBarTier" >
-                                <button class="col-xs-3 active" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Information_generale',this)">Données</button>
-                                <button class="col-xs-3" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Onglet_Contacts',this)">Contact</button>
+                                <button class="col-xs-3 active" id="BoutonOnlgetDonnéesMission" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Information_generale',this)">Données</button>
+                                <button class="col-xs-3" id="BoutonOnlgetContactMission" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Onglet_Contacts',this)">Contact</button>
                                 <button class="col-xs-3" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','QCM_Affinite',this)">Candidat rêvé</button>
                                 <button class="col-xs-3" type="button">Documents</button>
                             </div>
@@ -269,7 +260,8 @@
                                 </div>
                             </div>
                             <div class="div_button">
-                                <input id="submitaddmission" class="blue" type="submit" value="envoyer">
+                                <input id="submitaddmission" class="blue" type="button" value="envoyer">
+                                <input id="hiddenSubmitMission" style="display: none;" type="submit">
                             </div>
                         </form>
                     </div>
@@ -917,8 +909,8 @@
                                                     <label class="cell">Profil : <input type="text"  value="{{ mission.getProfil }}" id="Profil" name="_Profil" readonly></label>
                                                 </div>
                                                 <div class="row">
-                                                    <label class="cell" >Date Debut :<input type="date"  value="{{ mission.getDatedebut|date('d/m/Y')}}" id="Datedebut" name="_Datedebut" readonly> </label>
-                                                    <label class="cell" >Date fin :<input type="date"  value="{{mission.getDatefin|date('d/m/Y')}}" id="Datefin" name="_Datefin" readonly > </label>
+                                                    <label class="cell" >Date Debut :<input type="text" class="date"  value="{{ mission.getDatedebut|date('d/m/Y')}}" id="Datedebut" name="_Datedebut" readonly> </label>
+                                                    <label class="cell" >Date fin :<input type="text" class="date" value="{{mission.getDatefin|date('d/m/Y')}}" id="Datefin" name="_Datefin" readonly > </label>
 
                                             </div>
                                             <div class="row">
@@ -1027,7 +1019,7 @@
 
     <script language="JavaScript">
 
-        $('#Date').datepicker( {
+        $('.date:not(:read-only)').datepicker( {
             changeMonth: true,
             changeYear: true,
             showButtonPanel: true,
@@ -1038,50 +1030,31 @@
                 $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
             }
         });
-        $('#Datenaissance').datepicker( {
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            dateFormat: 'dd/mm/yy',
-            monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
-            monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
-            onClose: function(dateText, inst) {
-                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
-            }
-        });
-        $('#Datedebut').datepicker( {
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            dateFormat: 'dd/mm/yy',
-            monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
-            monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
-            onClose: function(dateText, inst) {
-                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
-            }
-        });
-        $('#Datefin').datepicker( {
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            dateFormat: 'dd/mm/yy',
-            monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
-            monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
-            onClose: function(dateText, inst) {
-                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
-            }
-        });
-        document.getElementById('submitaddapprenant').onclick = function(){
-            if($('#SelectMultipleFormation option:selected').length == 0){
+        $('#submitaddapprenant').on('click', function(){
+            if($("#SelectMultipleFormation").find("option:selected").length == 0){
                 document.getElementById('BoutonOnlgetFormationApprenant').click();
-                $('#hiddenSubmitApprenant').click();
             }
-            else if($('#formApprenant input[value=""]').length == 0){
+            else if($("#formApprenant").find("input").filter(function () {
+                        return !this.value;
+                    }).length == 0){
                 document.getElementById('BoutonOnlgetDonnéesApprenant').click();
-                $('#hiddenSubmitApprenant').click();
             }
-            else{$('#hiddenSubmitApprenant').click();}
-        }
+            $('#hiddenSubmitApprenant').click();
+        });
+        $('#submitaddmission').on('click',function(){
+            if($("#Onglet_Contacts").find("input").filter(function () {
+                        return !this.value;
+                    }).length != 0){
+                document.getElementById('BoutonOnlgetContactMission').click();
+            }
+            else if($("#Information_generale").find("input").filter(function () {
+                        return !this.value;
+                    }).length != 0){
+                document.getElementById('BoutonOnlgetDonnéesMission').click();
+            }
+            $('#hiddenSubmitMission').click();
+
+        });
         function loading(){
             Array.prototype.forEach.call(document.querySelectorAll('input[type=radio]'),function(elem){
                 elem.addEventListener('dblclick', function() {
@@ -1125,7 +1098,7 @@
                 formulaire.getElementsByTagName("input")[i].readOnly=false;
             }
 
-            button.getElementsByTagName("div")[0].innerHTML="valider";
+            button.innerHTML="valider";
             button.setAttribute('onclick','envoyer()');
         }
 
@@ -1143,7 +1116,17 @@
 
             button.innerHTML="valider";
             button.setAttribute('onclick','document.getElementById(\'formMissionModifier\').submit()');
-
+            $('.date:not(:read-only)').datepicker( {
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                dateFormat: 'dd/mm/yy',
+                monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+                monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+                onClose: function(dateText, inst) {
+                    $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+                }
+            });
         }
 
         function active(route) {
@@ -1199,8 +1182,8 @@
 
             }
 
-            $("#rightValuesAff option:selected").each(function(){
-                route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
+            $("#rightValuesAff").find("option:selected").each(function(){
+                var route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
                 route = route.replace('_id',$(this).val());
                 var a = document.createElement("a");
                 a.setAttribute("href",route);
@@ -1211,8 +1194,8 @@
             });
 
 
-            $("#leftValuesAff option:selected").each(function(){
-                route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
+            $("#leftValuesAff").find("option:selected").each(function(){
+                var route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
                 route = route.replace('_id',$(this).val());
                 var a = document.createElement("a");
                 a.setAttribute("href",route);

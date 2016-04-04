@@ -48,6 +48,11 @@ class DefaultController extends Controller
         $em->flush();
         $mission->genererCode();
         $em->flush();
+        if($request->get('_TUTEURMISSION')){
+            $tuteur = $em->getRepository('GenericBundle:User')->find($request->get('_TUTEURMISSION'));
+            $mission->setTuteur($tuteur);
+            $em->flush();
+        }
         if($request->get('formation')){
             foreach($request->get('formation') as $idFormation)
             {

@@ -413,6 +413,7 @@
                     <option value="user">Voir Utilisateurs</option>
                     <option value="apprenants">Voir Apprenants</option>
                     <option value="mission">Voir Missions</option>
+                    <option value="mission_propose">Voir Missions proposées</option>
                     <option value="QCM">Gestion QCM</option>
                     <option value="modele">Gestion Modèles</option>
                 </select>
@@ -525,6 +526,34 @@
                     {% if missions is defined %}
                         {% for m in missions %}
                             <button onclick="postiframeUser('{{ path('admin_afficheMission',{'id': m.getId }) }}',this)" id="mission{{ m.getId }}" type="button" class="list-group-item butonLigne">
+                                <div name="Recherche" style="display: none;">{{ m.intitule }},{{ m.profil }},{{ m.typecontrat }},{{ m.codemission }},{{ m.domaine }},{{ m.etablissement.tier.raisonsoc }},{{ m.etablissement.siret }},{{ m.etablissement.adresse }},{{ m.etablissement.codepostal }},{{ m.etablissement.ville }}</div>
+                                <div style="display: none;"></div>
+                                <div class="col-xs-12 part" title="{{m.getIntitule}}">{{m.getIntitule}}</div>
+                                <div class="col-xs-12 part"
+                                     style="height: 31px; text-align: left;">
+
+                                    <div class="col-xs-9 part" style="color:#2975cb" title="{{m.getEtablissement.getTier.getRaisonsoc}}">
+                                        {{ m.getEtablissement.getTier.getRaisonsoc}}
+                                        <span style="color:#7F7F7F">{{ m.getEtablissement.getVille}}</span>
+                                    </div>
+
+                                    {% if not m.getSuspendu %}
+                                        <div class="col-xs-1 active" id="active{{ m.getId }}"></div>
+                                    {% else %}
+                                        <div class="col-xs-1 inactive" id="active{{ m.getId }}"></div>
+                                    {% endif %}
+
+                                </div>
+                            </button>
+                        {% endfor %}
+                    {% endif %}
+
+                </div>
+                <div id="mission_propose" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                    {% if DiffusionEnSuspend is defined %}
+                        {% for diff in DiffusionEnSuspend %}
+                            {% set m = diff.mission %}
+                            <button onclick="postiframeUser('{{ path('Afficher_Mission_Propose',{'id':m.id}) }}')" id="mission_propose{{ m.getId }}" type="button" class="list-group-item butonLigne">
                                 <div name="Recherche" style="display: none;">{{ m.intitule }},{{ m.profil }},{{ m.typecontrat }},{{ m.codemission }},{{ m.domaine }},{{ m.etablissement.tier.raisonsoc }},{{ m.etablissement.siret }},{{ m.etablissement.adresse }},{{ m.etablissement.codepostal }},{{ m.etablissement.ville }}</div>
                                 <div style="display: none;"></div>
                                 <div class="col-xs-12 part" title="{{m.getIntitule}}">{{m.getIntitule}}</div>
@@ -826,6 +855,7 @@
             sessionStorage.setItem('_Iframe','{{ path('creeNewModele') }}');
         }
         document.getElementById('mission').style.visibility= 'hidden';
+        document.getElementById('mission_propose').style.visibility= 'hidden';
         document.getElementById('ecole').style.visibility= 'hidden';
         document.getElementById('societe').style.visibility= 'hidden';
         document.getElementById('licence').style.visibility= 'hidden';
