@@ -179,8 +179,8 @@
                                         <input type="number" class="input " id="Emploi" name="_Emploi" placeholder="Nbre de poste à pourvoir" required  min="0" max="9" maxlength="1" >
                                         <div class="col-xs-12">
                                             <label class="col-xs12">Embauche à l'issue de la mission?</label>
-                                            <input type="radio" name="_Embauche" value="1">Oui
-                                            <input type="radio" name="_Embauche" value="0">Non
+                                            <input type="radio" name="_Embauche" value="1" title="Oui" >Oui
+                                            <input type="radio" name="_Embauche" value="0" title="Non" >Non
                                         </div>
 
                                         <label class="col-xs-12">Diffusion</label>
@@ -247,7 +247,7 @@
                                                 <div class="col-xs-9" style="display: flex;height: 100%">
                                                 {% for reponse in reponses[y] %}
                                                     <div style="margin: auto;display: flex;">
-                                                        <input style="margin: auto;" type="radio" id="idreponse{{ reponse.getId }}" name="reponse[{{ reponse.questiondef.id }}]" value="{{ reponse.getId }}">
+                                                        <input style="margin: auto;" type="radio" id="idreponse{{ reponse.getId }}" name="reponse[{{ reponse.questiondef.id }}]" value="{{ reponse.getId }}" title="reponse" >
                                                         <label style="font: 14px Roboto black;" for=idreponse{{ reponse.getId }}">{{ reponse.getReponse }}</label>
                                                     </div>
 
@@ -410,7 +410,7 @@
                                 <div class="div_form" id="infoapprenant" style="border-bottom:1px solid #2b542c;"  >
                                     <div class="col-xs-6 input-colonne">
                                         <div class="col-xs-6 input-colonne">
-                                            <select class="input "  title="" name="_Civilite" maxlength="45" required>
+                                            <select class="input "  title="" name="_Civilite"  required>
                                                 <option value="Monsieur">Mr.</option>
                                                 <option value="Madame">Mme.</option>
                                             </select>
@@ -440,19 +440,19 @@
                                         <input placeholder="diplome obtenus" class="input" id="Diplome" name="_Diplome" type="text" maxlength="45"   >
                                         <input placeholder="Format.ou en cours" class="input" id="FormationCours" name="_FormationCours" type="text" >
                                         <div class="col-xs-12">
-                                            <input type="checkbox" name="_handicap" ><label>HANDICAP</label>
-                                            <input type="checkbox" name="_entrepreneur" ><label>Entrepreneurs</label>
+                                            <input type="checkbox" name="_handicap" title="handicap" ><label>HANDICAP</label>
+                                            <input type="checkbox" name="_entrepreneur" title="entrepreneur" ><label>Entrepreneurs</label>
                                         </div>
                                         <div class="col-xs-12">
                                             <label>Permis</label>
-                                            <input type="radio" name="_Permis" value="1" ><label>oui</label>
-                                            <input type="radio" name="_Permis" value="-1"><label>non</label>
-                                            <input type="radio" name="_Permis" value="0"><label>en cours</label>
+                                            <input type="radio" name="_Permis" value="1" title="Oui" ><label>oui</label>
+                                            <input type="radio" name="_Permis" value="-1" title="Non"><label>non</label>
+                                            <input type="radio" name="_Permis" value="0" title="EnCours"><label>en cours</label>
                                         </div>
                                         <div class="col-xs-12">
                                             <label>Véhicule</label>
-                                            <input type="radio" name="_Vehicule" value="1"><label>oui</label>
-                                            <input type="radio" name="_Vehicule" value="0" ><label>non</label>
+                                            <input type="radio" name="_Vehicule" value="1" title="Oui"><label>oui</label>
+                                            <input type="radio" name="_Vehicule" value="0" title="Non"><label>non</label>
                                         </div>
                                     </div>
 
@@ -471,7 +471,7 @@
                                                     {% endif %}
                                                 {% endfor %}
                                             </select>
-                                            <select id="SelectMultipleRechercheFormation" style="display: none">
+                                            <select id="SelectMultipleRechercheFormation" title="" style="display: none">
                                                 {% for formation in formations %}
                                                     {% if formation.etablissement.tier == app.user.tier or formation.etablissement.tier in app.user.tier.tier1|keys %}
                                                         <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
@@ -486,7 +486,7 @@
                                                     {% endif %}
                                                 {% endfor %}
                                             </select>
-                                            <select id="SelectMultipleRechercheFormation" style="display: none">
+                                            <select id="SelectMultipleRechercheFormation" title="" style="display: none">
                                                 {% for formation in formations %}
                                                     {% if (formation.etablissement.tier == app.user.etablissement.tier) or (formation.etablissement.tier in app.user.etablissement.tier.tier1) %}
                                                         <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
@@ -499,7 +499,7 @@
                                                     <option value="{{ formation_x.getId }}">{{ formation_x.nom }} - {{ formation_x.etablissement.tier.raisonsoc }} - {{ formation_x.etablissement.adresse }}</option>
                                                 {% endfor %}
                                             </select>
-                                            <select id="SelectMultipleRechercheFormation" style="display: none">
+                                            <select id="SelectMultipleRechercheFormation" title="" style="display: none">
                                                 {% for formation in formations %}
                                                     <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
                                                 {% endfor %}
@@ -514,7 +514,7 @@
                                 <div class="div_form" id="document_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
                                     <div class="col-xs-12">
                                         <div class="col-xs-3 input-colonne">
-                                            <select class="input" titre="" name="_Type[]">
+                                            <select class="input"  name="_Type[]">
                                                 <option value="CV">CV</option>
                                                 <option value="lettre de motivation">Lettre de motivation</option>
                                                 <option value="Notes">Notes</option>
@@ -601,7 +601,7 @@
                         {% endif %}
                         {% if etablissement.getTier.getEcole %}
                             {% if is_granted('ROLE_SUPER_ADMIN') %}
-                                <button id="Button_TIER_TIER" onclick="NaviguerOnglet('OngletEtablissement','info_tier_tier',this)" value="info_tier_tier" type="button"class="NavButtonIframe">Ecoles liées</button>
+                                <button id="Button_TIER_TIER" onclick="NaviguerOnglet('OngletEtablissement','info_tier_tier',this)" value="info_tier_tier" type="button" class="NavButtonIframe" >Ecoles liées</button>
                             {% endif %}
                             {% if is_granted('ROLE_ADMINECOLE') %}
                                 <button id="Button_Formation" onclick="NaviguerOnglet('OngletEtablissement','info_formation',this)" type="button" class="NavButtonIframe">Formations</button>
@@ -894,14 +894,13 @@
                                 <input type="hidden" value="{{ mission.getId }}" id="id" name="_ID">
                                         <div class="col-xs-12 Liste">
                                             <div class="row">
-                                                <label class="cell"  >CodeMission : <label type="text"  id="CodeMission" name="_Codemission" >{{ mission.getCodemission }}</label></label>
+                                                <label class="cell"  >CodeMission : <label   id="CodeMission" name="_Codemission" >{{ mission.getCodemission }}</label></label>
                                                 <label class="cell" >Date : <label style="font-size: medium"   >{{ mission.getDatecreation|date('d/m/Y H:i')}}</label>
                                                     <button onclick="modifierMission('formMissionModifier',this)" type="button" style="background: #1C5AA5;color:white;height:40px;width:120px;" >modifier</button>
                                                     <img   style="float:right;" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="if(confirm('Voulez-vous Supprimer cette mission?')){supprimerligne('{{ path('supprimer_Mission',{'id': mission.getId}) }}',this)}" />
 
                                                     <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#mission{{ iddiv }}"></button>
                                                 </label>
-
                                             </div>
                                             <div id="mission{{ iddiv }}" class="collapse in" >
                                                 <div class="row">
@@ -909,8 +908,10 @@
                                                     <label class="cell">Profil : <input type="text"  value="{{ mission.getProfil }}" id="Profil" name="_Profil" readonly></label>
                                                 </div>
                                                 <div class="row">
-                                                    <label class="cell" >Date Debut :<input type="text" class="date"  value="{{ mission.getDatedebut|date('d/m/Y')}}" id="Datedebut" name="_Datedebut" readonly> </label>
-                                                    <label class="cell" >Date fin :<input type="text" class="date" value="{{mission.getDatefin|date('d/m/Y')}}" id="Datefin" name="_Datefin" readonly > </label>
+
+                                                    <label class="cell" >Date Debut :<input type="text" class="date"  value="{{ mission.getDatedebut|date('d/m/Y')}}" name="_Datedebut" readonly> </label>
+                                                    <label class="cell" >Date fin :<input type="text" class="date" value="{{mission.getDatefin|date('d/m/Y')}}" name="_Datefin" readonly > </label>
+
 
                                             </div>
                                             <div class="row">
@@ -919,7 +920,7 @@
                                             </div>
                                             <div class="row">
                                                 <label class="cell">Domaine  : <input type="text"  value="{{ mission.getDomaine }}" id="Domaine" name="_Domaine" readonly></label>
-                                                <label class="cell">Tuteur  : <label type="text"  id="Tuteur" name="_Tuteur" >{{ mission.getTuteur }}</label></label>
+                                                <label class="cell">Tuteur  : <label  id="Tuteur" name="_Tuteur" >{{ mission.getTuteur }}</label></label>
                                             </div>
                                             <div class="row">
                                                 <label class="cell" style="height: 280px;word-wrap: break-word;width: 150px;hyphens: auto;max-width: 100px;">Descriptif : <textarea style="resize: none;width:900px;height:90%" id="Descriptif" name="_Descriptif" maxlength="255" readonly >{{ mission.getDescriptif }}</textarea></label>
@@ -980,7 +981,6 @@
                                 </button>
                                 <button onclick="show('addQCMAff',{{ etablissement.getId }})" type="button" class="col-xs-12 rightMenu">
                                     Ajouter un test d'affinité
-
                                 </button>
                             {% endif %}
                             {% if is_granted('ROLE_SUPER_ADMIN') %}
@@ -1038,6 +1038,7 @@
                         return !this.value;
                     }).length == 0){
                 document.getElementById('BoutonOnlgetDonnéesApprenant').click();
+
             }
             $('#hiddenSubmitApprenant').click();
         });
@@ -1046,6 +1047,7 @@
                         return !this.value;
                     }).length != 0){
                 document.getElementById('BoutonOnlgetContactMission').click();
+
             }
             else if($("#Information_generale").find("input").filter(function () {
                         return !this.value;
@@ -1053,7 +1055,6 @@
                 document.getElementById('BoutonOnlgetDonnéesMission').click();
             }
             $('#hiddenSubmitMission').click();
-
         });
         function loading(){
             Array.prototype.forEach.call(document.querySelectorAll('input[type=radio]'),function(elem){
@@ -1097,7 +1098,6 @@
             {
                 formulaire.getElementsByTagName("input")[i].readOnly=false;
             }
-
             button.innerHTML="valider";
             button.setAttribute('onclick','envoyer()');
         }
