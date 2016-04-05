@@ -38,7 +38,7 @@ class Notification
     private $type;
 
     /**
-     * @var \User
+     * @var \GenericBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
@@ -110,11 +110,11 @@ class Notification
     /**
      * Set users
      *
-     * @param \GenericBundle\Entity\User $users
+     * @param User $user
      *
      * @return Notification
      */
-    public function setUser(\GenericBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 

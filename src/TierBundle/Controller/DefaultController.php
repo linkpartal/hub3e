@@ -3,7 +3,6 @@
 namespace TierBundle\Controller;
 
 use GenericBundle\Entity\Etablissement;
-use GenericBundle\Entity\ImportCandidat;
 use GenericBundle\Entity\Qcmdef;
 use GenericBundle\Entity\Notification;
 use GenericBundle\Entity\Tier;
@@ -340,7 +339,7 @@ class DefaultController extends Controller
     public function etablissementQcmAction($id){
         $em = $this->getDoctrine()->getEntityManager();
         $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($id);
-        $serializer = SerializerBuilder::create()->build();
+        $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($etablissement->getQcmdef(), 'json');
         $reponse = new JsonResponse();
 

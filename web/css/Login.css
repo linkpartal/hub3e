@@ -11,10 +11,7 @@ website: http://www.dhenriquez.cl
 }
 
 body {
-    background-image: url("../image/buton.jpg");
-    background-repeat: no-repeat;
-    background-position : center;
-    background-attachment: fixed;
+    background: url("../image/buton.jpg") no-repeat center fixed;
     background-size: cover;
     font: 14px Roboto !important;
 }
@@ -32,7 +29,7 @@ body {
     border-radius: 6px;
     margin: 10%;
     opacity: 0.95;
-    box-shadow: 0px 0px 50px rgba(0,0,0,.5);
+    box-shadow: 0 0 50px rgba(0,0,0,.5);
 }
 
 .Changelogin {
@@ -41,19 +38,18 @@ body {
     border-radius: 6px;
     margin: 10%;
     opacity: 0.85;
-    box-shadow: 0px 0px 50px rgba(0,0,0,.5);
+    box-shadow: 0 0 50px rgba(0,0,0,.5);
 }
 
 .Changelogin .Titre {
     height: 14px;
     padding-top: 13px;
     padding-bottom: 13px;
-    font-size: 14px;
+    font: 14px Roboto;
     text-align: center;
     color: #ffffff;
     font-weight: bold;
     margin-bottom: 30px;
-    font-family: Roboto;
 }
 
 .Changelogin form {
@@ -150,8 +146,8 @@ input[type="checkbox"] + label > mark {
 	width:15px; 
 	height:15px; 
 	vertical-align:middle; 
-	border-radius:2.5px; 
-	border:0.5px solid #ccc; 
+	border-radius:3px;
+	border:1px solid #ccc;
 	background:#fff; 
 	text-indent: 0; }
 	

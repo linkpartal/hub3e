@@ -3,12 +3,13 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * ImportCandidat
  *
  * @ORM\Table(name="import_candidat")
- * @ORM\Entity(repositoryClass="GenericBundle\Repository\ImportCandidatRepository")
+ * @ORM\Entity
  */
 class ImportCandidat
 {
@@ -119,8 +120,8 @@ class ImportCandidat
      */
     public function __construct()
     {
-        $this->hobbies = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->langue = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->hobbies = new ArrayCollection();
+        $this->langue = new ArrayCollection();
     }
 
     /**
@@ -284,7 +285,7 @@ class ImportCandidat
      *
      * @return ImportCandidat
      */
-    public function setUser(\GenericBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -308,7 +309,7 @@ class ImportCandidat
      *
      * @return ImportCandidat
      */
-    public function setEtablissement(\GenericBundle\Entity\Etablissement $etablissement = null)
+    public function setEtablissement(Etablissement $etablissement = null)
     {
         $this->etablissement = $etablissement;
 
@@ -332,7 +333,7 @@ class ImportCandidat
      *
      * @return ImportCandidat
      */
-    public function setInfo(\GenericBundle\Entity\Infocomplementaire $info = null)
+    public function setInfo(Infocomplementaire $info = null)
     {
         $this->info = $info;
 
@@ -356,7 +357,7 @@ class ImportCandidat
      *
      * @return ImportCandidat
      */
-    public function addHobby(\GenericBundle\Entity\Hobbies $hobby)
+    public function addHobby(Hobbies $hobby)
     {
         $this->hobbies[] = $hobby;
 
@@ -368,7 +369,7 @@ class ImportCandidat
      *
      * @param \GenericBundle\Entity\Hobbies $hobby
      */
-    public function removeHobby(\GenericBundle\Entity\Hobbies $hobby)
+    public function removeHobby(Hobbies $hobby)
     {
         $this->hobbies->removeElement($hobby);
     }
@@ -390,7 +391,7 @@ class ImportCandidat
      *
      * @return ImportCandidat
      */
-    public function addLangue(\GenericBundle\Entity\Langue $langue)
+    public function addLangue(Langue $langue)
     {
         $this->langue[] = $langue;
 
@@ -402,7 +403,7 @@ class ImportCandidat
      *
      * @param \GenericBundle\Entity\Langue $langue
      */
-    public function removeLangue(\GenericBundle\Entity\Langue $langue)
+    public function removeLangue(Langue $langue)
     {
         $this->langue->removeElement($langue);
     }

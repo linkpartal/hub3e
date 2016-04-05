@@ -4,6 +4,7 @@ namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Langue
@@ -71,8 +72,8 @@ class Langue
      */
     public function __construct()
     {
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->importCandidat = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->importCandidat = new ArrayCollection();
     }
 
 
@@ -117,7 +118,7 @@ class Langue
      *
      * @return Langue
      */
-    public function addUser(\GenericBundle\Entity\User $user)
+    public function addUser(User $user)
     {
         $this->users[] = $user;
 
@@ -129,7 +130,7 @@ class Langue
      *
      * @param \GenericBundle\Entity\User $user
      */
-    public function removeUser(\GenericBundle\Entity\User $user)
+    public function removeUser(User $user)
     {
         $this->users->removeElement($user);
     }
@@ -175,7 +176,7 @@ class Langue
      *
      * @return Langue
      */
-    public function addImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat)
+    public function addImportCandidat(ImportCandidat $importCandidat)
     {
         $this->importCandidat[] = $importCandidat;
 
@@ -187,7 +188,7 @@ class Langue
      *
      * @param \GenericBundle\Entity\ImportCandidat $importCandidat
      */
-    public function removeImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat)
+    public function removeImportCandidat(ImportCandidat $importCandidat)
     {
         $this->importCandidat->removeElement($importCandidat);
     }

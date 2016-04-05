@@ -22,7 +22,6 @@ class Hub3eEmailingCompleteCompteRenduCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $argument = $input->getArgument('argument');
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $rendezvous1 = $em->getRepository('GenericBundle:RDV')->findBy(array('statut'=>1));
         foreach($rendezvous1 as $rdv){

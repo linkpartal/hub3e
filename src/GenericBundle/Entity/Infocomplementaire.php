@@ -3,6 +3,7 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Infocomplementaire
@@ -189,7 +190,7 @@ class Infocomplementaire
      */
     public function __construct()
     {
-        $this->villesFranceFreeVille = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->villesFranceFreeVille = new ArrayCollection();
     }
 
 
@@ -490,7 +491,7 @@ class Infocomplementaire
      *
      * @return Infocomplementaire
      */
-    public function addVillesFranceFreeVille(\GenericBundle\Entity\VillesFranceFree $villesFranceFreeVille)
+    public function addVillesFranceFreeVille(VillesFranceFree $villesFranceFreeVille)
     {
         $this->villesFranceFreeVille[] = $villesFranceFreeVille;
 
@@ -502,7 +503,7 @@ class Infocomplementaire
      *
      * @param \GenericBundle\Entity\VillesFranceFree $villesFranceFreeVille
      */
-    public function removeVillesFranceFreeVille(\GenericBundle\Entity\VillesFranceFree $villesFranceFreeVille)
+    public function removeVillesFranceFreeVille(VillesFranceFree $villesFranceFreeVille)
     {
         $this->villesFranceFreeVille->removeElement($villesFranceFreeVille);
     }
@@ -688,7 +689,7 @@ class Infocomplementaire
     /**
      * Set profilcomplet
      *
-     * @param smallint $profilcomplet
+     * @param int $profilcomplet
      *
      * @return Infocomplementaire
      */
@@ -702,7 +703,7 @@ class Infocomplementaire
     /**
      * Get profilcomplet
      *
-     * @return smallint
+     * @return int
      */
     public function getProfilcomplet()
     {

@@ -3,6 +3,7 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Qcmdef
@@ -64,8 +65,8 @@ class Qcmdef
      */
     public function __construct()
     {
-        $this->etablissement = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->formation = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->etablissement = new ArrayCollection();
+        $this->formation = new ArrayCollection();
     }
 
     /**
@@ -109,7 +110,7 @@ class Qcmdef
      *
      * @return Qcmdef
      */
-    public function addEtablissement(\GenericBundle\Entity\Etablissement $etablissement)
+    public function addEtablissement(Etablissement $etablissement)
     {
         $this->etablissement[] = $etablissement;
 
@@ -121,7 +122,7 @@ class Qcmdef
      *
      * @param \GenericBundle\Entity\Etablissement $etablissement
      */
-    public function removeEtablissement(\GenericBundle\Entity\Etablissement $etablissement)
+    public function removeEtablissement(Etablissement $etablissement)
     {
         $this->etablissement->removeElement($etablissement);
     }
@@ -167,7 +168,7 @@ class Qcmdef
      *
      * @return Qcmdef
      */
-    public function addFormation(\GenericBundle\Entity\Formation $formation)
+    public function addFormation(Formation $formation)
     {
         $this->formation[] = $formation;
 
@@ -179,7 +180,7 @@ class Qcmdef
      *
      * @param \GenericBundle\Entity\Formation $formation
      */
-    public function removeFormation(\GenericBundle\Entity\Formation $formation)
+    public function removeFormation(Formation $formation)
     {
         $this->formation->removeElement($formation);
     }

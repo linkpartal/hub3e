@@ -58,7 +58,7 @@ class RDV
     private $choixApprenant;
 
     /**
-     * @var \User
+     * @var \GenericBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
      * @ORM\JoinColumns({
@@ -68,7 +68,7 @@ class RDV
     private $tuteur;
 
     /**
-     * @var \User
+     * @var \GenericBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
      * @ORM\JoinColumns({
@@ -78,7 +78,7 @@ class RDV
     private $apprenant;
 
     /**
-     * @var \Mission
+     * @var \GenericBundle\Entity\Mission
      *
      * @ORM\ManyToOne(targetEntity="Mission")
      * @ORM\JoinColumns({
@@ -122,61 +122,13 @@ class RDV
     }
 
     /**
-     * Set compterenduApprenant
-     *
-     * @param string $compterenduApprenant
-     *
-     * @return RDV
-     */
-    public function setCompterenduApprenant($compterenduApprenant)
-    {
-        $this->compterenduApprenant = $compterenduApprenant;
-
-        return $this;
-    }
-
-    /**
-     * Get compterenduApprenant
-     *
-     * @return string
-     */
-    public function getCompterenduApprenant()
-    {
-        return $this->compterenduApprenant;
-    }
-
-    /**
-     * Set compterenduTuteur
-     *
-     * @param string $compterenduTuteur
-     *
-     * @return RDV
-     */
-    public function setCompterenduTuteur($compterenduTuteur)
-    {
-        $this->compterendu_Tuteur = $compterenduTuteur;
-
-        return $this;
-    }
-
-    /**
-     * Get compterenduTuteur
-     *
-     * @return string
-     */
-    public function getCompterenduTuteur()
-    {
-        return $this->compterendu_Tuteur;
-    }
-
-    /**
      * Set tuteur
      *
      * @param \GenericBundle\Entity\User $tuteur
      *
      * @return RDV
      */
-    public function setTuteur(\GenericBundle\Entity\User $tuteur = null)
+    public function setTuteur(User $tuteur = null)
     {
         $this->tuteur = $tuteur;
 
@@ -200,7 +152,7 @@ class RDV
      *
      * @return RDV
      */
-    public function setApprenant(\GenericBundle\Entity\User $apprenant = null)
+    public function setApprenant(User $apprenant = null)
     {
         $this->apprenant = $apprenant;
 
@@ -224,7 +176,7 @@ class RDV
      *
      * @return RDV
      */
-    public function setMission(\GenericBundle\Entity\Mission $mission = null)
+    public function setMission(Mission $mission = null)
     {
         $this->mission = $mission;
 

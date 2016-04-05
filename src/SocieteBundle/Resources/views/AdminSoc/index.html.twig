@@ -229,7 +229,7 @@
         var onglet = sessionStorage.getItem('leftonglet');
         if(onglet)
         {
-            $('#leftselect option[value="' + onglet + '"]').prop('selected', true).change();
+            $('#leftselect').find('option[value="' + onglet + '"]').prop('selected', true).change();
         }
     }
     function postiframe(url,id,button) {
@@ -283,7 +283,7 @@
                 elements[0].parentNode.removeChild(elements[0]);
             }
         }
-    };
+    }
     function search(mot){
         var mots = mot.toUpperCase().trim().split(/ +/g);
         var Recherches = document.getElementsByName('Recherche');

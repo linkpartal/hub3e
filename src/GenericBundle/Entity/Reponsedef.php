@@ -3,6 +3,7 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Reponsedef
@@ -44,7 +45,7 @@ class Reponsedef
     private $score;
 
     /**
-     * @var \Questiondef
+     * @var \GenericBundle\Entity\Questiondef
      *
      * @ORM\ManyToOne(targetEntity="Questiondef")
      * @ORM\JoinColumns({
@@ -86,8 +87,8 @@ class Reponsedef
 
     public function __construct()
     {
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->missions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->missions = new ArrayCollection();
     }
 
 
@@ -186,7 +187,7 @@ class Reponsedef
      *
      * @return Reponsedef
      */
-    public function setQuestiondef(\GenericBundle\Entity\Questiondef $questiondef = null)
+    public function setQuestiondef(Questiondef $questiondef = null)
     {
         $this->questiondef = $questiondef;
 
@@ -203,7 +204,7 @@ class Reponsedef
         return $this->questiondef;
     }
 
-    static function sort_reponses_by_order(\GenericBundle\Entity\Reponsedef $a,\GenericBundle\Entity\Reponsedef $b) {
+    static function sort_reponses_by_order(Reponsedef $a,Reponsedef $b) {
         if($a->getOrdre() == $b->getOrdre()){ return 0 ; }
         return ($a->getOrdre()< $b->getOrdre()) ? -1 : 1;
     }
@@ -215,7 +216,7 @@ class Reponsedef
      *
      * @return Reponsedef
      */
-    public function addUser(\GenericBundle\Entity\User $user)
+    public function addUser(User $user)
     {
         $this->users[] = $user;
 
@@ -227,7 +228,7 @@ class Reponsedef
      *
      * @param \GenericBundle\Entity\User $user
      */
-    public function removeUser(\GenericBundle\Entity\User $user)
+    public function removeUser(User $user)
     {
         $this->users->removeElement($user);
     }
@@ -253,7 +254,7 @@ class Reponsedef
      *
      * @return Reponsedef
      */
-    public function addMission(\GenericBundle\Entity\Mission $mission)
+    public function addMission(Mission $mission)
     {
         $this->missions[] = $mission;
 
@@ -265,7 +266,7 @@ class Reponsedef
      *
      * @param \GenericBundle\Entity\Mission $mission
      */
-    public function removeMission(\GenericBundle\Entity\Mission $mission)
+    public function removeMission(Mission $mission)
     {
         $this->missions->removeElement($mission);
     }

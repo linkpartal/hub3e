@@ -1,4 +1,5 @@
 @CHARSET "utf-8";
+/*noinspection CssUnknownTarget*/
 @import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css");
 
 [class*="col-"] {
@@ -239,17 +240,17 @@ iframe{
 }
 
 .Liste .row .cell .button.collapsed:before{
-    font-family: 'Glyphicons Halflings';
+    font-family: 'Glyphicons Halflings', serif;
     content:" \e252";
 }
 
 .Liste .row .cell .button:before{
-    font-family: 'Glyphicons Halflings';
+    font-family: 'Glyphicons Halflings', serif;
     content:" \e253";
 }
 
 .Liste .row .cell .button:before {
-    font-family: 'Glyphicons Halflings';
+    font-family: 'Glyphicons Halflings', serif;
     content:" \e253";
 }
 

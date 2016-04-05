@@ -175,8 +175,8 @@
                                     <input type="text" class="input" id="EmailContact" name="_EmailContact" placeholder="EmailContact" required MAXLENGTH="45">
                                 </div>-->
                                     <div class="col-xs-6">
-                                        <input type="number"  class="input " id="Remuneration" name="_Remuneration" placeholder="Remuneration" required maxlength="11">
-                                        <input type="number" class="input " id="Emploi" name="_Emploi" placeholder="Nbre de poste à pourvoir" required  min="0" max="9" maxlength="1" >
+                                        <input type="number"  class="input " id="Remuneration" name="_Remuneration" placeholder="Remuneration" required max="1000000">
+                                        <input type="number" class="input " id="Emploi" name="_Emploi" placeholder="Nbre de poste à pourvoir" required  min="0" max="1000" >
                                         <div class="col-xs-12">
                                             <label class="col-xs12">Embauche à l'issue de la mission?</label>
                                             <input type="radio" name="_Embauche" value="1" title="Oui" >Oui
@@ -574,8 +574,8 @@
 
             <div class="col-xs-4" >
                 <div class="col-xs-12"
-                     style="margin:0px 40px;height: 40px; text-align: left; padding: 10px;"><label style="font-size: large" >{{ etablissement.getTier.getRaisonSoc }}&nbsp;-&nbsp;  </label><label style="font-size: large;color:#2A76CC" > {{ etablissement.getVille }}</label></div>
-                <div class="col-xs-12" style="margin: 0px 40px;height: 20px; text-align: left;">{{etablissement.getAdresse }}, {{ etablissement.getCodePostal }} {{ etablissement.getVille }}</div>
+                     style="margin:0 40px;height: 40px; text-align: left; padding: 10px;"><label style="font-size: large" >{{ etablissement.getTier.getRaisonSoc }}&nbsp;-&nbsp;  </label><label style="font-size: large;color:#2A76CC" > {{ etablissement.getVille }}</label></div>
+                <div class="col-xs-12" style="margin: 0 40px;height: 20px; text-align: left;">{{etablissement.getAdresse }}, {{ etablissement.getCodePostal }} {{ etablissement.getVille }}</div>
             </div>
             <div class="col-xs-offset-5 col-xs-1">
                 <div class="col-xs-12" style="height: 30px;; padding-top: 10px;"><label style="font-size: large;color:#2A76CC" > 549</label></div>
@@ -865,12 +865,11 @@
                                                         </a>
                                                     </label>
                                                     <button  style="border: 0;font: 18px Roboto white;background-color: rgb(61, 138, 212);height: 40px; width: 150px;"  onclick="if(confirm('Voulez-vous supprimer cette formation ?')){supprimerformation('{{ path('supprimerFormation',{'id':formation.getId}) }}', this)}">
-                                                        <div   >Supprimer</div>
+                                                        Supprimer
 
                                                     </button>&nbsp;&nbsp;
                                                     <button  style="border: 0;font: 18px Roboto white;background-color: rgb(61, 138, 212);height: 40px; width: 150px;"  onclick="showqcm('addQCM',{{ formation.getId }})" >
-                                                        <div   >Ajouter un test</div>
-
+                                                        Ajouter un test
                                                     </button>
 
 
@@ -1019,7 +1018,7 @@
 
     <script language="JavaScript">
 
-        $('.date:not(:read-only)').datepicker( {
+        $('.date:not([readonly])').datepicker( {
             changeMonth: true,
             changeYear: true,
             showButtonPanel: true,
@@ -1057,12 +1056,8 @@
             $('#hiddenSubmitMission').click();
         });
         function loading(){
-            Array.prototype.forEach.call(document.querySelectorAll('input[type=radio]'),function(elem){
-                elem.addEventListener('dblclick', function() {
-                    if(this.checked){
-                        this.checked = false;
-                    }
-                });
+            $("input:radio").on('dblclick',function(){
+                $(this).prop( "checked", false );
             });
             var onglet = sessionStorage.getItem('onglet_tier');
             if(onglet)
@@ -1116,7 +1111,7 @@
 
             button.innerHTML="valider";
             button.setAttribute('onclick','document.getElementById(\'formMissionModifier\').submit()');
-            $('.date:not(:read-only)').datepicker( {
+            $('.date:not([readonly])').datepicker( {
                 changeMonth: true,
                 changeYear: true,
                 showButtonPanel: true,
@@ -1215,8 +1210,8 @@
 
             }
 
-            $("#rightValues option:selected").each(function(){
-                route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
+            $("#rightValues").find("option:selected").each(function(){
+                var route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
                 route = route.replace('_id',$(this).val());
                 var a = document.createElement("a");
                 a.setAttribute("href",route);
@@ -1227,8 +1222,8 @@
             });
 
 
-            $("#leftValues option:selected").each(function(){
-                route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
+            $("#leftValues").find("option:selected").each(function(){
+                var route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
                 route = route.replace('_id',$(this).val());
                 var a = document.createElement("a");
                 a.setAttribute("href",route);
@@ -1290,7 +1285,7 @@
         }
 
         $("#btnLeft").click(function () {
-            var selectedItem = $("#rightValues option:selected");
+            var selectedItem = $("#rightValues").find("option:selected");
             $("#leftValues").append(selectedItem);
 
             var route = '{{path('remove_formation_qcm',{'idformation':"_id",'idqcm':"_idqcmright"})}}';
@@ -1308,7 +1303,7 @@
         });
 
         $("#btnRight").click(function () {
-            var selectedItem = $("#leftValues option:selected");
+            var selectedItem = $("#leftValues").find("option:selected");
             $("#rightValues").append(selectedItem);
 
 
@@ -1331,7 +1326,7 @@
             document.getElementById("idformation").innerHTML = id;
 
             popup.style.display = 'block';
-            $("#rightValues > option").each(function(){
+            $("#rightValues").find("option").each(function(){
                 $("#leftValues").append(this);
             });
 
@@ -1350,7 +1345,7 @@
                     var formation = JSON.parse(data.adresses);
                     for (var i = 0; i < formation.length; i++)
                     {
-                        var selectedItem = $('#leftValues option[value="'+formation[i].id+'"]');
+                        var selectedItem = $('#leftValues').find('option[value="'+formation[i].id+'"]');
                         $("#rightValues").append(selectedItem);
 
 
@@ -1362,7 +1357,7 @@
         }
 
         $("#btnLeftaff").click(function () {
-            var selectedItem = $("#rightValuesAff option:selected");
+            var selectedItem = $("#rightValuesAff").find("option:selected");
             $("#leftValuesAff").append(selectedItem);
 
 
@@ -1380,7 +1375,7 @@
         });
 
         $("#btnRightaff").click(function () {
-            var selectedItem = $("#leftValuesAff option:selected");
+            var selectedItem = $("#leftValuesAff").find("option:selected");
             $("#rightValuesAff").append(selectedItem);
 
 
@@ -1414,7 +1409,7 @@
                 success: function(data){console.log(data);}
             });
             champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
-        };
+        }
 
         function supprimerPartenariat(route, champs) {
             $.ajax({
@@ -1431,7 +1426,7 @@
             window.location.reload();
 
 
-        };
+        }
 
         function dupliquerDocument() {
 
@@ -1454,17 +1449,6 @@
             dup.appendChild(divsupp);
 
             dup.parentElement.appendChild(clone);
-
-            /*
-             var parentdiv = dup.parentNode;
-             var close =dup.parentNode.parentNode;
-             if(parentdiv.offsetHeight  > close.offsetHeight )
-             {
-             close.style.height = parentdiv.offsetHeight;
-             clone.children[0].style.height = parentdiv.offsetHeight;
-             }
-
-             */
         }
 
         function envoyer(){

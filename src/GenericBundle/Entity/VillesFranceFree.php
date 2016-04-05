@@ -3,6 +3,7 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * VillesFranceFree
@@ -223,7 +224,7 @@ class VillesFranceFree
      */
     public function __construct()
     {
-        $this->infocomplementaire = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->infocomplementaire = new ArrayCollection();
     }
 
     /**
@@ -867,7 +868,7 @@ class VillesFranceFree
      *
      * @return VillesFranceFree
      */
-    public function addInfocomplementaire(\GenericBundle\Entity\Infocomplementaire $infocomplementaire)
+    public function addInfocomplementaire(Infocomplementaire $infocomplementaire)
     {
         $this->infocomplementaire[] = $infocomplementaire;
 
@@ -879,7 +880,7 @@ class VillesFranceFree
      *
      * @param \GenericBundle\Entity\Infocomplementaire $infocomplementaire
      */
-    public function removeInfocomplementaire(\GenericBundle\Entity\Infocomplementaire $infocomplementaire)
+    public function removeInfocomplementaire(Infocomplementaire $infocomplementaire)
     {
         $this->infocomplementaire->removeElement($infocomplementaire);
     }

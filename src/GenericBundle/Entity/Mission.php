@@ -3,6 +3,7 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use \Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Mission
@@ -162,7 +163,7 @@ class Mission
     private $suspendu= false;
 
     /**
-     * @var \Etablissement
+     * @var \GenericBundle\Entity\Etablissement
      *
      * @ORM\ManyToOne(targetEntity="Etablissement")
      * @ORM\JoinColumns({
@@ -172,7 +173,7 @@ class Mission
     private $etablissement;
 
     /**
-     * @var \Users
+     * @var \GenericBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
@@ -182,7 +183,7 @@ class Mission
     private $tuteur;
 
     /**
-     * @var \Users
+     * @var \GenericBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
@@ -203,7 +204,7 @@ class Mission
      */
     public function __construct()
     {
-        $this->reponsedef = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->reponsedef = new ArrayCollection();
     }
 
     /**
@@ -675,11 +676,11 @@ class Mission
     /**
      * Set etablissement
      *
-     * @param \GenericBundle\Entity\Etablissement $etablissement
+     * @param Etablissement $etablissement
      *
      * @return Mission
      */
-    public function setEtablissement(\GenericBundle\Entity\Etablissement $etablissement = null)
+    public function setEtablissement(Etablissement $etablissement = null)
     {
         $this->etablissement = $etablissement;
 
@@ -703,7 +704,7 @@ class Mission
      *
      * @return Mission
      */
-    public function setTuteur(\GenericBundle\Entity\User $tuteur = null)
+    public function setTuteur(User $tuteur = null)
     {
         $this->tuteur = $tuteur;
 
@@ -727,7 +728,7 @@ class Mission
      *
      * @return Mission
      */
-    public function setApprentit(\GenericBundle\Entity\User $apprentit = null)
+    public function setApprentit(User $apprentit = null)
     {
         $this->apprentit = $apprentit;
 
@@ -776,7 +777,7 @@ class Mission
      *
      * @return Mission
      */
-    public function addReponsedef(\GenericBundle\Entity\Reponsedef $reponsedef)
+    public function addReponsedef(Reponsedef $reponsedef)
     {
         $this->reponsedef[] = $reponsedef;
 
@@ -788,7 +789,7 @@ class Mission
      *
      * @param \GenericBundle\Entity\Reponsedef $reponsedef
      */
-    public function removeReponsedef(\GenericBundle\Entity\Reponsedef $reponsedef)
+    public function removeReponsedef(Reponsedef $reponsedef)
     {
         $this->reponsedef->removeElement($reponsedef);
     }

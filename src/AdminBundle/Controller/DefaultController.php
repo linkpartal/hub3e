@@ -5,7 +5,6 @@ namespace AdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use GenericBundle\Entity\Mission;
-use \JMS\Serializer\SerializerBuilder;
 
 
 class DefaultController extends Controller

@@ -35,8 +35,9 @@ body{
     border: 1px solid rgb(230, 230, 230);
     background-color: rgb(61, 138, 212);
     height: 79px;
-    font-size: 16px; width: 100%;border-radius: 0;
-    font-family: Roboto;
+    font: 16px Roboto;
+    width: 100%;
+    border-radius: 0;
     color: white;
     text-transform: uppercase;
     line-height: 4;
@@ -77,10 +78,9 @@ body{
 .popup .div_form .date
 {
     width: calc(100% - 10px);
-    font-size: 18px;
+    font: 18px Roboto;
     float: left;
     height: 40px;
-    font-family: Roboto;
     color: rgb(75, 75, 75);
     text-align: left;
     border: 1px solid rgb(230, 230, 230);
@@ -91,9 +91,8 @@ body{
 #IE .popup .div_form .date
 {
     width: 300%;
-    font-size: 18px;
+    font: 18px Roboto;
     height: 40px;
-    font-family: Roboto;
     color: rgb(75, 75, 75);
     text-align: left;
     border: 1px solid rgb(230, 230, 230);
@@ -104,8 +103,7 @@ body{
 .popup .div_button .blue
 {
     border: 0;
-    font-size: 18px;
-    font-family: Roboto;
+    font: 18px Roboto;
     color: white;
     text-align: left;
     background-color: rgb(61, 138, 212);
@@ -117,8 +115,7 @@ body{
 .form .info_formation .blue
 {
     border: 0;
-    font-size: 18px;
-    font-family: Roboto;
+    font: 18px Roboto;
     color: white;
     text-align: left;
     background-color: rgb(61, 138, 212);
@@ -137,7 +134,6 @@ body{
     border: 0;
     width: 300px;
     text-align: center;
-    align:center;
 }
 
 form .NavBarTier

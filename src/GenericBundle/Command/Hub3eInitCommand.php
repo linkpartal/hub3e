@@ -25,7 +25,6 @@ class Hub3eInitCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $argument = $input->getArgument('argument');
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $nomQCM = 'QCMparDéfault';
         $affinte = true;

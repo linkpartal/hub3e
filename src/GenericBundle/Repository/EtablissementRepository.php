@@ -12,11 +12,6 @@ use \Doctrine\ORM\EntityRepository;
 
 class EtablissementRepository extends EntityRepository
 {
-    /**
-     * @param string $role
-     *
-     * @return array
-     */
     public function findSocietes()
     {
         $qb = $this->getEntityManager()->createQuery("SELECT e FROM GenericBundle:Etablissement e JOIN e.tier t WHERE t.ecole = false");

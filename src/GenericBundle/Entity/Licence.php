@@ -71,7 +71,7 @@ class Licence
     private $suspendu= false;
 
     /**
-     * @var \Tier
+     * @var \GenericBundle\Entity\Tier
      *
      * @ORM\ManyToOne(targetEntity="Tier")
      * @ORM\JoinColumns({
@@ -195,7 +195,7 @@ class Licence
      *
      * @return Licence
      */
-    public function setTier(\GenericBundle\Entity\Tier $tier = null)
+    public function setTier(Tier $tier = null)
     {
         $this->tier = $tier;
 

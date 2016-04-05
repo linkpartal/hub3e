@@ -6,12 +6,4 @@ societe_tuteur:
     path:     /tuteur/Home/{societe}
     defaults: { _controller: SocieteBundle:Tuteur:loadTuteur }
 
-ecole_admin_afficheLicence:
-    path: /affichageLicence/id={id}
-    defaults: { _controller: SocieteBundle:Default:affichageLicence}
-
-loadconsulterQCM:
-    path:     /consulterQCM/{id}
-    defaults: { _controller: SocieteBundle:Default:loadQCM }
-
 

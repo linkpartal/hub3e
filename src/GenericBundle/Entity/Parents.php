@@ -92,7 +92,7 @@ class Parents
     private $metier;
 
     /**
-     * @var \User
+     * @var \GenericBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
      * @ORM\JoinColumns({
@@ -346,7 +346,7 @@ class Parents
      *
      * @return Parents
      */
-    public function setUser(\GenericBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -370,7 +370,7 @@ class Parents
      *
      * @return Parents
      */
-    public function setImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat = null)
+    public function setImportCandidat(ImportCandidat $importCandidat = null)
     {
         $this->importCandidat = $importCandidat;
 

@@ -106,11 +106,8 @@ class DefaultController extends Controller
                     'reponses' => $reponses, 'QCMtest' => $QCMtest, 'QuestionsTest' => $questionsTest, 'reponsesTest' => $reponsesTest,'formations'=>$formation));
             }
         }
-        else{
-            return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid));
-        }
 
-
+        return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid));
     }
 
     public function affichageProfilAction()
@@ -182,9 +179,9 @@ class DefaultController extends Controller
                     'reponses' => $reponses, 'QCMtest' => $QCMtest, 'QuestionsTest' => $questionsTest, 'reponsesTest' => $reponsesTest,'formations'=>$formation));
             }
         }
-        else{
-            return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid));
-        }
+
+        return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig',array('User'=>$userid));
+
     }
 
     public function afficher_messagerieAction(){
@@ -348,7 +345,7 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $InfoComp = new Infocomplementaire();
-        $InfoComp->setDatenaissance(date_create($request->get('_Datenaissance')) );
+        $InfoComp->setDatenaissance(date_create_from_format('d/m/Y',$request->get('_Datenaissance')) );
         $InfoComp->setAdresse($request->get('_Adresse').' '.$request->get('_Ville'));
         $InfoComp->setCp($request->get('_Codepostal'));
         $InfoComp->setCpnaissance($request->get('_Cpnaissance'));
@@ -388,21 +385,12 @@ class DefaultController extends Controller
         $apprenant->setTelephone($request->get('_Telephone'));
         $apprenant->setInfo($InfoComp);
 
-
-      //var_dump($apprenant);die();
-
-
-
         $em->persist($apprenant);
-
         $em->flush();
 
-
-
-
-        if($request->get('formation'))
+        if($request->get('formations'))
         {
-            foreach($request->get('formation') as $idFormation){
+            foreach($request->get('formations') as $idFormation){
                 $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->find($idFormation);
                 $candidature = new Candidature();
                 $candidature->setFormation($formation);
@@ -470,7 +458,8 @@ class DefaultController extends Controller
 
         $candi->setStatut($statut);
         $em->flush();
-
+        $mail =null;
+        $Statutmessage = null;
         if($statut==3)
         {
             $Statutmessage ='validé';
@@ -496,6 +485,7 @@ class DefaultController extends Controller
             $em->flush();
 
         }
+
         if($candi->getUser())
         {
             $mail = $candi->getUser()->getEmail();
@@ -908,26 +898,16 @@ class DefaultController extends Controller
         if($request->get('Import')==0)
         {
             $this->ImportApprenant($request,$_FILES['_CSV']['tmp_name']);
-            if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_ADMINECOLE'))
-            {
-                return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$this->get('security.token_storage')->getToken()->getUser()->getTier()->getRaisonsoc())));
-            }
-            elseif($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_SUPER_ADMIN'))
-            {
-                return $this->redirect($this->generateUrl('metier_user_admin'));
-            }
-
         }
         elseif($request->get('Import')==1)
         {
             $this->ImportMissions($_FILES['_CSV']['tmp_name']);
-            return $this->redirect($this->generateUrl('afficher_import'));
         }
         elseif($request->get('Import')==2)
         {
             $this->ImportMissions($_FILES['_CSV']['tmp_name']);
-            return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$this->get('security.token_storage')->getToken()->getUser()->getTier()->getRaisonsoc())));
         }
+        return $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     private function ImportApprenant(Request $request,$uploadedfile)
@@ -1068,7 +1048,6 @@ class DefaultController extends Controller
                     $newsiege->setTier($tier);
                     $em->persist($newsiege);
                     $em->flush();
-                    $siege = $newsiege;
                 }
                 $etab_mission = $em->getRepository('GenericBundle:Etablissement')->findOneBy(array('siret'=>mb_convert_encoding($row[2],'UTF-8','auto')));
                 if(!$etab_mission)
@@ -1137,91 +1116,29 @@ class DefaultController extends Controller
     public function afficherImportsAction()
     {
         $imports =$this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser()));
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        if($user->getPhotos() and !is_string($user->getPhotos()))
-        {
-            $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
-        }
+
+        $array_candidature = array();
         foreach($imports as $import){
             if($import->getPhotos() and !is_string($import->getPhotos()))
             {
                 $import->setPhotos(base64_encode(stream_get_contents($import->getPhotos())));
             }
-        }
-        if($user->hasRole('ROLE_SUPER_ADMIN')){
-            $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAll();
-
-            $ecoles = array();
-            $societes = array();
-            foreach($etablissement as $item)
-            {
-                if($item->getTier()->getEcole() && !$item->getSuspendu())
-                {
-                    array_push($ecoles,$item);
-                }
-                elseif(!$item->getTier()->getEcole() && !$item->getSuspendu()){
-                    array_push($societes,$item);
+            $jsonstring = '[';
+            $first =true;
+            foreach($this->getDoctrine()->getRepository('GenericBundle:Candidature')->findBy(array('importcandidat'=>$import)) as $candidature){
+                if($first){
+                    $first = false;
+                    $jsonstring = $jsonstring . '{\'NomeFormation\':\''.$candidature->getFormation()->getNom().'\',\'Adresse\':\''.$candidature->getFormation()->getEtablissement()->getAdresse().'\',\'NomEcole\':\''.$candidature->getFormation()->getEtablissement()->getTier()->getRaisonsoc().'\',\'statut\':\''.$candidature->getStatut().'\'}';
+                }else{
+                    $jsonstring = $jsonstring . ',{\'NomeFormation\':\''.$candidature->getFormation()->getNom().'\',\'Adresse\':\''.$candidature->getFormation()->getEtablissement()->getAdresse().'\',\'NomEcole\':\''.$candidature->getFormation()->getEtablissement()->getTier()->getRaisonsoc().'\',\'statut\':\''.$candidature->getStatut().'\'}';
                 }
             }
-            $users = $this->getDoctrine()->getRepository('GenericBundle:User')->findAll();
-            $apprenants =array();
-            $notapprenant = array();
-            foreach($users as $userd)
-            {
-                if($userd->hasRole('ROLE_APPRENANT'))
-                {
-                    array_push($apprenants,$userd);
-                }
-                else{
-                    array_push($notapprenant,$userd);
-                }
-            }
+            $jsonstring = $jsonstring . ']';
+            array_push($array_candidature,$jsonstring);
 
-            $licences = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
-            return $this->render('UserBundle:Gestion:Import.html.twig',array('imports'=>$imports,'image'=>$user->getPhotos(),'AllLicences'=>$licences,'ecoles'=>$ecoles,'societes'=>$societes,
-                'users'=>$notapprenant));
-        }
-        elseif($user->hasRole('ROLE_ADMINECOLE')){
-            $ecoles = array();
-            $ecoles = array_merge($ecoles,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($user->getTier()->getId()));
-
-            foreach($user->getTier()->getTier1() as $partenaire) {
-                $ecoles = array_merge($ecoles, $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($partenaire->getId()));
-            }
-
-            foreach($ecoles as $key => $ecole)
-            {
-                if($ecole->getSuspendu())
-                {
-                    unset($ecoles[$key]);
-                }
-            }
-            $users = $this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($user->getTier());
-            $apprenants =array();
-            $notapprenant = array();
-            foreach($users as $userd)
-            {
-                if($userd->hasRole('ROLE_APPRENANT'))
-                {
-                    array_push($apprenants,$userd);
-                }
-                else{
-                    array_push($notapprenant,$userd);
-                }
-            }
-            $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$user->getTier(),'suspendu'=>false));
-            return $this->render('UserBundle:Gestion:Import.html.twig',array('ecoles'=>$ecoles,'imports'=>$imports,'image'=>$user->getPhotos(),'users'=>$notapprenant,'AllLicences'=>$licences,
-                'societes'=>$user->getReferenciel()));
-        }
-        elseif($user->hasRole('ROLE_RECRUTEUR')){
-            $apprenants = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$user->getEtablissement()));
-            $Hobbies = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->findAll();
-            $formations = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$user->getEtablissement()));
-
-            return $this->render('UserBundle:Gestion:Import.html.twig',array('imports'=>$imports,'image'=>$user->getPhotos(),'apprenants'=>$apprenants,'societes'=>$user->getReferenciel(),
-                'formations'=>$formations,'hobbies'=>$Hobbies));
         }
 
+        return $this->render('UserBundle:Gestion:Import.html.twig',array('imports'=>$imports,'candidatures'=>$array_candidature));
     }
 
     public function supprimerImportsAction($id)
@@ -1292,6 +1209,11 @@ class DefaultController extends Controller
             if($user->getPhotos() and !is_string($user->getPhotos()))
             {
                 $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
+            }
+            elseif(!$user->getPhotos()){
+                if($user->getCivilite()){
+
+                }
             }
             if($user->getInfo())
             {
@@ -1914,6 +1836,8 @@ class DefaultController extends Controller
             $em->flush();
             return $response->setData(1);
         }
+
+        return $response->setData("Error");
 
     }
 }

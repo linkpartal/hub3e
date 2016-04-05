@@ -4,6 +4,7 @@ namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Formation
@@ -47,7 +48,7 @@ class Formation
 
 
     /**
-     * @var \Etablissement
+     * @var \GenericBundle\Entity\Etablissement
      *
      * @ORM\ManyToOne(targetEntity="Etablissement")
      * @ORM\JoinColumns({
@@ -68,7 +69,7 @@ class Formation
      */
     public function __construct()
     {
-        $this->qcmdef = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->qcmdef = new ArrayCollection();
     }
 
     /**
@@ -106,37 +107,13 @@ class Formation
     }
 
     /**
-     * Set document
-     *
-     * @param string $document
-     *
-     * @return Formation
-     */
-    public function setDocument($document)
-    {
-        $this->document = $document;
-
-        return $this;
-    }
-
-    /**
-     * Get document
-     *
-     * @return string
-     */
-    public function getDocument()
-    {
-        return $this->document;
-    }
-
-    /**
      * Set etablissement
      *
      * @param \GenericBundle\Entity\Etablissement $etablissement
      *
      * @return Formation
      */
-    public function setEtablissement(\GenericBundle\Entity\Etablissement $etablissement = null)
+    public function setEtablissement(Etablissement $etablissement = null)
     {
         $this->etablissement = $etablissement;
 
@@ -160,7 +137,7 @@ class Formation
      *
      * @return Formation
      */
-    public function addQcmdef(\GenericBundle\Entity\Qcmdef $qcmdef)
+    public function addQcmdef(Qcmdef $qcmdef)
     {
         $this->qcmdef[] = $qcmdef;
 
@@ -172,7 +149,7 @@ class Formation
      *
      * @param \GenericBundle\Entity\Qcmdef $qcmdef
      */
-    public function removeQcmdef(\GenericBundle\Entity\Qcmdef $qcmdef)
+    public function removeQcmdef(Qcmdef $qcmdef)
     {
         $this->qcmdef->removeElement($qcmdef);
     }

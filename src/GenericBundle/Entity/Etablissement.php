@@ -6,6 +6,7 @@ namespace GenericBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Etablissement
@@ -144,7 +145,7 @@ class Etablissement
     private $suspendu = false;
 
     /**
-     * @var \Tier
+     * @var \GenericBundle\Entity\Tier
      *
      * @ORM\ManyToOne(targetEntity="Tier")
      * @ORM\JoinColumns({
@@ -188,8 +189,8 @@ class Etablissement
      */
     public function __construct()
     {
-        $this->qcmdef = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->qcmdef = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     /**
@@ -449,7 +450,7 @@ class Etablissement
      *
      * @return Etablissement
      */
-    public function setTier(\GenericBundle\Entity\Tier $tier = null)
+    public function setTier(Tier $tier = null)
     {
         $this->tier = $tier;
 
@@ -473,7 +474,7 @@ class Etablissement
      *
      * @return Etablissement
      */
-    public function addQcmdef(\GenericBundle\Entity\Qcmdef $qcmdef)
+    public function addQcmdef(Qcmdef $qcmdef)
     {
         $this->qcmdef[] = $qcmdef;
 
@@ -485,7 +486,7 @@ class Etablissement
      *
      * @param \GenericBundle\Entity\Qcmdef $qcmdef
      */
-    public function removeQcmdef(\GenericBundle\Entity\Qcmdef $qcmdef)
+    public function removeQcmdef(Qcmdef $qcmdef)
     {
         $this->qcmdef->removeElement($qcmdef);
     }
@@ -555,7 +556,7 @@ class Etablissement
      *
      * @return Etablissement
      */
-    public function addUser(\GenericBundle\Entity\User $user)
+    public function addUser(User $user)
     {
         $this->users[] = $user;
 
@@ -567,7 +568,7 @@ class Etablissement
      *
      * @param \GenericBundle\Entity\User $user
      */
-    public function removeUser(\GenericBundle\Entity\User $user)
+    public function removeUser(User $user)
     {
         $this->users->removeElement($user);
     }

@@ -349,7 +349,7 @@
             <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="height: 100%;">
                 <a href="{{ path('metier_user_login') }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 100%" >        </a>
             </div>
-            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="display: inline; margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="display: inline; margin-left: 10px;border: 0;padding: 4px;height: 21px;float: left;">
                 <button onclick="show('apprenant')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                 ></button>
 
@@ -535,28 +535,24 @@
         sessionStorage.setItem('leftonglet',x);
     };
     document.getElementById('submitaddapprenant').onclick = function(){
-        if($('#SelectMultipleFormation option:selected').length == 0){
+        if($('#SelectMultipleFormation').find('option:selected').length == 0){
             document.getElementById('BoutonOnlgetFormationApprenant').click();
             $('#hiddenSubmitApprenant').click();
         }
-        else if($('#formApprenant input[value=""]').length == 0){
+        else if($('#formApprenant').find('input[value=""]').length == 0){
             document.getElementById('BoutonOnlgetDonnéesApprenant').click();
             $('#hiddenSubmitApprenant').click();
         }
         else{$('#hiddenSubmitApprenant').click();}
     };
     function loading(){
-        Array.prototype.forEach.call(document.querySelectorAll('input[type=radio]'),function(elem){
-            elem.addEventListener('dblclick', function() {
-                if(this.checked){
-                    this.checked = false;
-                }
-            });
+        $("input:radio").on('dblclick',function(){
+            $(this).prop( "checked", false );
         });
         var onglet = sessionStorage.getItem('leftonglet');
         if(onglet)
         {
-            $('#leftselect option[value="' + onglet + '"]').prop('selected', true).change();
+            $('#leftselect').find('option[value="' + onglet + '"]').prop('selected', true).change();
         }
     }
     function postiframe(url,id,button) {
@@ -609,7 +605,7 @@
                 elements[0].parentNode.removeChild(elements[0]);
             }
         }
-    };
+    }
     function search(mot){
         var mots = mot.toUpperCase().trim().split(/ +/g);
         var Recherches = document.getElementsByName('Recherche');
@@ -678,7 +674,7 @@
         }
 
         i++;
-    };
+    }
     function submitAjaxForm(url,form){
 
         var route;
@@ -786,7 +782,7 @@
 
             reader.readAsDataURL(input.files[0]);
         }
-    };
+    }
     function supprimerAdresse(div){
         div.parentNode.parentNode.removeChild(div.parentNode);
     }
@@ -840,7 +836,7 @@
         }
 
         DocumentCount++;
-    };
+    }
 </script>
 
 {% block JS %}

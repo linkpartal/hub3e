@@ -44,7 +44,7 @@ class Message
     private $statut;
 
     /**
-     * @var \User
+     * @var \GenericBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
      * @ORM\JoinColumns({
@@ -54,7 +54,7 @@ class Message
     private $expediteur;
 
     /**
-     * @var \User
+     * @var \GenericBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
      * @ORM\JoinColumns({
@@ -64,7 +64,7 @@ class Message
     private $destinataire;
 
     /**
-     * @var \Mission
+     * @var \GenericBundle\Entity\Mission
      *
      * @ORM\ManyToOne(targetEntity="Mission", cascade={"remove"})
      * @ORM\JoinColumns({
@@ -128,7 +128,7 @@ class Message
      *
      * @return Message
      */
-    public function setExpediteur(\GenericBundle\Entity\User $expediteur)
+    public function setExpediteur(User $expediteur)
     {
         $this->expediteur = $expediteur;
 
@@ -152,7 +152,7 @@ class Message
      *
      * @return Message
      */
-    public function setDestinataire(\GenericBundle\Entity\User $destinataire)
+    public function setDestinataire(User $destinataire)
     {
         $this->destinataire = $destinataire;
 
@@ -186,7 +186,7 @@ class Message
      *
      * @return Message
      */
-    public function setMission(\GenericBundle\Entity\Mission $mission = null)
+    public function setMission(Mission $mission = null)
     {
         $this->mission = $mission;
 

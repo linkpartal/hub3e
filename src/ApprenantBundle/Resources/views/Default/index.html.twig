@@ -174,7 +174,7 @@
 
             {% block Content%}
 
-                <iframe id="iframe" style="visibility: hidden;" src=""></iframe>
+                <iframe id="iframe" src="{{ path('afficher_profil') }}"></iframe>
 
             {% endblock %}
         </div>
@@ -199,7 +199,7 @@
                 geocode_me = null;
             }
         });
-    };
+    }
     document.getElementById("leftselect").onchange = function(){
         var x = document.getElementById("leftselect").value;
 
@@ -213,7 +213,7 @@
         var onglet = sessionStorage.getItem('leftonglet');
         if(onglet)
         {
-            $('#leftselect option[value="' + onglet + '"]').prop('selected', true).change();
+            $('#leftselect').find('option[value="' + onglet + '"]').prop('selected', true).change();
         }
     }
     function postiframe(url,id,button) {
@@ -254,7 +254,7 @@
 
         sessionStorage.setItem('_Iframe',url);
 
-    };
+    }
     function postiframeUser(url,button) {
         document.getElementById("iframe").src = url;
         sessionStorage.setItem('_Iframe',url);
@@ -266,7 +266,7 @@
                 elements[0].parentNode.removeChild(elements[0]);
             }
         }
-    };
+    }
 
 
     function search(mot){
@@ -339,10 +339,9 @@
         var f=(3.14159265358979*long1/180);
         var g=(3.14159265358979*lat2/180);
         var h=(3.14159265358979*long2/180);
-        i=(Math.cos(e)*Math.cos(g)*Math.cos(f)*Math.cos(h)+Math.cos(e)*Math.sin(f)*Math.cos(g)*Math.sin(h)+Math.sin(e)*Math.sin(g));
-        j=(Math.acos(i));
-        k=round(6371*j);
-        return k;
+        var i=(Math.cos(e)*Math.cos(g)*Math.cos(f)*Math.cos(h)+Math.cos(e)*Math.sin(f)*Math.cos(g)*Math.sin(h)+Math.sin(e)*Math.sin(g));
+        var j=(Math.acos(i));
+        return round(6371*j);
     }
 
     function readURL(input,baliseimg) {

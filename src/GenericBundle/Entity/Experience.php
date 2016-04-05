@@ -71,7 +71,7 @@ class Experience
     private $description;
 
     /**
-     * @var \User
+     * @var \GenericBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
@@ -229,7 +229,7 @@ class Experience
      *
      * @return Experience
      */
-    public function setUser(\GenericBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -249,11 +249,11 @@ class Experience
     /**
      * Set importCandidat
      *
-     * @param \GenericBundle\Entity\ImportCandidat $importCandidat
+     * @param \GenericBundle\Entity\ImportCandidat importCandidat
      *
      * @return Experience
      */
-    public function setImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat = null)
+    public function setImportCandidat(ImportCandidat $importCandidat = null)
     {
         $this->importCandidat = $importCandidat;
 

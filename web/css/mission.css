@@ -1,5 +1,6 @@
 @CHARSET "utf-8";
-@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css");
+/*noinspection CssUnknownTarget*/
+@import url('//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css');
 
 [class*="col-"] {
     text-align: center;
@@ -102,7 +103,7 @@ button:focus{
 
 .infobox {
     background-color: #232d37;
-    box-shadow: 0px 6px 4px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 4px 0 rgba(0, 0, 0, 0.25);
     width: 152px;
     height: 204px;
     margin-bottom: 8px;
@@ -110,7 +111,7 @@ button:focus{
 }
 
 .infobox:after{
-    font-family: 'Glyphicons Halflings';
+    font-family: 'Glyphicons Halflings', serif;
     content:"\e252";
     font-size: 2em;
     position: relative;
@@ -195,17 +196,17 @@ button:focus{
 }
 
 .Liste .row .cell .button.collapsed:before{
-    font-family: 'Glyphicons Halflings';
+    font-family: 'Glyphicons Halflings', serif;
     content:" \e252";
 }
 
 .Liste .row .cell .button:before{
-    font-family: 'Glyphicons Halflings';
+    font-family: 'Glyphicons Halflings', serif;
     content:" \e253";
 }
 
 .Liste .row .cell .button:before{
-    font-family: 'Glyphicons Halflings';
+    font-family: 'Glyphicons Halflings', serif;
     content:" \e253";
 }
 

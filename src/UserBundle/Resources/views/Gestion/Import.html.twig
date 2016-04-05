@@ -25,7 +25,7 @@
                 <div class="col-lg-12">
                     <label id="Information_Apprenant_titre" style="color:black" ></label>
                 </div>
-                <div id="Information_Apprenant_titre_adresse" class="col-xs-12" style="height: 20px;color: #666666;font-family:Roboto;font-style:normal;font-size: medium;margin-bottom: 40px"></div>
+                <div id="Information_Apprenant_titre_adresse" class="col-xs-12" style="height: 20px;color: #666666;font:medium Roboto;margin-bottom: 40px"></div>
             </div>
 
             <div class="div_form"  id="information_apprenant" style="border: none;">
@@ -86,7 +86,7 @@
 </div>
 <div id="DuplicaPopUp" class="popup">
     <div onclick="hide(this)" class="close"></div>
-    <div class="col-xs-offset-1 col-xs-10" style="border-top: 4px solid white;border-bottom: 4px solid white;border-radius: 4px;box-shadow: 0 1px 40px 0 rgb(0, 0, 0);">
+    <div class="col-xs-offset-1 col-xs-10" style="background-color: white;border-top: 4px solid white;border-bottom: 4px solid white;border-radius: 4px;box-shadow: 0 1px 40px 0 rgb(0, 0, 0);">
 
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
@@ -150,39 +150,35 @@
 {% for import in imports %}
     <div id="Import{{ import.getId }}" class="col-xs-10 col-xs-offset-1 SASPaginate" >
         <div name="Recherche" style="display: none;">{{ import.nom }},{{ import.prenom }},{{ import.email }},{% if import.info %}{{ import.info.adresse }},{{ import.info.cp }},{{ import.info.insee }}{% endif %},{% if import.etablissement %}{{ import.etablissement.siret }}{% endif %}</div>
-        <div class="col-xs-1" style="margin: auto;">
+        <div class="col-xs-1" style="text-align: center;margin: auto;">
             {{ import.getId }}
         </div>
-        <div class="col-xs-2" >
-            <div style="border: 15px solid transparent">
+
                 {% if import.getPhotos %}
-                    <img id="image{{ import.id }}" src="data:image/jpg;base64,{{import.getPhotos }}" style="height:70px;width:70px;border-radius: 100%">
+                    <img id="image{{ import.id }}" class="col-xs-1" style="border: 15px solid transparent;padding: 0;border-radius: 100%" src="data:image/jpg;base64,{{import.getPhotos }}">
                 {% elseif import.getCivilite == 'Mme' or import.getCivilite == 'Madame' or import.getCivilite == 'Mademoiselle' %}
-                    <img id="image{{ import.id }}" alt="Photos" style="height:40px" src="{{ asset('image/femme.jpg') }}">
+                    <img id="image{{ import.id }}" class="col-xs-1" style="border: 15px solid transparent;padding: 0;border-radius: 100%" alt="Photos"  src="{{ asset('image/femme.jpg') }}">
                 {% else %}
-                    <img id="image{{ import.id }}" alt="Photos" style="height:40px" src="{{ asset('image/homme.jpg') }}">
+                    <img id="image{{ import.id }}" class="col-xs-1" style="border: 15px solid transparent;padding: 0;border-radius: 100%" alt="Photos" src="{{ asset('image/homme.jpg') }}">
                 {% endif %}
-            </div>
 
-
-        </div>
-        <div id="Nom{{ import.id }}" title="{{ import.getNom }}" class="col-xs-1" style="margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+        <div id="Nom{{ import.id }}" title="{{ import.getNom }}" class="col-xs-2" style="text-align: center;margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
             {{ import.getNom }}
         </div>
-        <div id="Prenom{{ import.id }}" title="{{ import.getPrenom }}" class="col-xs-1" style="margin: auto;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+        <div id="Prenom{{ import.id }}" title="{{ import.getPrenom }}" class="col-xs-2" style="text-align: center;margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
             {{ import.getPrenom }}
         </div>
-        <div id="Telephone{{ import.id }}" title="{{ import.getTelephone }}" class="col-xs-1" style="margin: auto; ">
+        <div id="Telephone{{ import.id }}" title="{{ import.getTelephone }}" class="col-xs-2" style="text-align: center;margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
             {{ import.getTelephone }}
         </div>
-        <div id="Email{{ import.id }}" title="{{ import.getEmail }}" class="col-xs-3" style="margin: auto;color: #1C5AA5;text-decoration: underline;">
+        <div id="Email{{ import.id }}" title="{{ import.getEmail }}" class="col-xs-2" style="text-align: center;margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;color: #1C5AA5;text-decoration: underline;">
             {{ import.getEmail }}
         </div>
-        <div class="col-xs-3" style="height: 100%">
+        <div class="col-xs-2" style="height: 100%">
             <button class="col-xs-3" title="Voir plus d'information" type="button" onclick="
                     informationApprenant('{{import.getPhotos}}','{{ import.getCivilite }}','{{ import.getNom }}','{{ import.getPrenom }}','{{ import.getEmail }}',
                     '{{ import.getTelephone }}'{% if import.getInfo %},'{{ import.getInfo.getDateNaissance|date("d/m/Y") }}','{{ import.getInfo.getCpNaissance }}','{{ import.getInfo.getLieunaissance }}',
-                    '{{ import.getInfo.getAdresse }}','{{ import.info.formationactuelle }}','{{ import.info.dernierDiplome }}'{% endif %});show('FicheApprenant');" style="height: 100%;background-color: transparent;border: none">
+                    '{{ import.getInfo.getAdresse }}','{{ import.info.formationactuelle }}','{{ import.info.dernierDiplome }}'{% endif %}{% if candidatures is defined %},'{{ candidatures[loop.index0] }}'{% endif %});show('FicheApprenant');" style="height: 100%;background-color: transparent;border: none">
                 <span class="glyphicon glyphicon-search" style="color: #1C5AA5"></span>
             </button>
             {% if not import.erreur == null %}
@@ -217,6 +213,7 @@
         window.parent.document.getElementById('iframe').style.top ='32px';
         window.parent.document.getElementById('iframe').style.height ='calc(100% - 32px)';
         window.parent.document.getElementById('iframe').style.position ='fixed';
+        window.parent.document.getElementById('iframe').style.visibility ='visible';
         $("#paginationContainer").customPaginate({
             itemsToPaginate : ".SASPaginate",
             activeClass : "active-class"

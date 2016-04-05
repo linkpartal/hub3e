@@ -22,7 +22,6 @@ class Hub3eEmailingCompleteProfilCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $argument = $input->getArgument('argument');
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $apprenants = $em->getRepository('GenericBundle:User')->findByRole('ROLE_APPRENANT');
         foreach($apprenants as $apprenant){

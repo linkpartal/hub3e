@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CompteRendu
  *
  * @ORM\Table(name="compte_rendu")
- * @ORM\Entity(repositoryClass="GenericBundle\Repository\CompteRenduRepository")
+ * @ORM\Entity
  */
 class CompteRendu
 {
@@ -43,7 +43,7 @@ class CompteRendu
     private $honorer;
 
     /**
-     * @var \User
+     * @var \GenericBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
@@ -53,7 +53,7 @@ class CompteRendu
     private $auteur;
 
     /**
-     * @var \RDV
+     * @var \GenericBundle\Entity\RDV
      *
      * @ORM\ManyToOne(targetEntity="RDV")
      * @ORM\JoinColumns({
@@ -121,9 +121,9 @@ class CompteRendu
     }
 
     /**
-     * Set statut
+     * Set honorer
      *
-     * @param integer $statut
+     * @param integer $honorer
      *
      * @return CompteRendu
      */
@@ -151,7 +151,7 @@ class CompteRendu
      *
      * @return CompteRendu
      */
-    public function setAuteur(\GenericBundle\Entity\User $auteur = null)
+    public function setAuteur(User $auteur = null)
     {
         $this->auteur = $auteur;
 
@@ -175,7 +175,7 @@ class CompteRendu
      *
      * @return CompteRendu
      */
-    public function setRendezvous(\GenericBundle\Entity\RDV $rendezvous = null)
+    public function setRendezvous(RDV $rendezvous = null)
     {
         $this->rendezvous = $rendezvous;
 

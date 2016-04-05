@@ -261,23 +261,23 @@
             <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="height: 100%;">
                 <a href="{{ path('metier_user_login') }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 100%;" >        </a>
             </div>
-            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 4px;height: 21px;float: left;">
                 <button onclick="show('addtier',0)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                 ></button>
 
                 <button id="societetop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ societes|length }} Sociétés</button>
 
             </div>
-            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="display: inline; margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="display: inline; margin-left: 10px;border: 0;padding: 4px;height: 21px;float: left;">
                 <button onclick="show('adduser')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                 ></button>
 
                 <button id="usertop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ users|length }} Utilisateurs</button>
             </div>
-            <div class="input-group col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+            <div class="input-group col-xs-1" style=" margin-left: 10px;border: 0;padding: 4px;height: 21px;float: left;">
                 <button onclick="show('import')" style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">Importer</button>
             </div>
-            <div class="input-group col-xs-1" style=" margin-left: 10px;border: 0;padding: 4.5px;height: 21px;float: left;">
+            <div class="input-group col-xs-1" style=" margin-left: 10px;border: 0;padding: 4px;height: 21px;float: left;">
 
                 <button onclick="document.getElementById('iframe').src='{{ path('afficher_import') }}'" style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">SAS Admissions</button>
             </div>
@@ -526,7 +526,7 @@
         var onglet = sessionStorage.getItem('leftonglet');
         if(onglet)
         {
-            $('#leftselect option[value="' + onglet + '"]').prop('selected', true).change();
+            $('#leftselect').find('option[value="' + onglet + '"]').prop('selected', true).change();
         }
     }
     function postiframe(url,id,button) {
@@ -580,7 +580,7 @@
                 elements[0].parentNode.removeChild(elements[0]);
             }
         }
-    };
+    }
     function search(mot){
         var mots = mot.toUpperCase().trim().split(/ +/g);
         var Recherches = document.getElementsByName('Recherche');

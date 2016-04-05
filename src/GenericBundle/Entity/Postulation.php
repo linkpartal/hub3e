@@ -30,7 +30,7 @@ class Postulation
     private $statut;
 
     /**
-     * @var \Mission
+     * @var \GenericBundle\Entity\Mission
      *
      * @ORM\ManyToOne(targetEntity="Mission", cascade={"remove"})
      * @ORM\JoinColumns({
@@ -40,7 +40,7 @@ class Postulation
     private $mission;
 
     /**
-     * @var \User
+     * @var \GenericBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
      * @ORM\JoinColumns({
@@ -106,7 +106,7 @@ class Postulation
      *
      * @return Postulation
      */
-    public function setMission(\GenericBundle\Entity\Mission $mission)
+    public function setMission(Mission $mission)
     {
         $this->mission = $mission;
 
@@ -130,7 +130,7 @@ class Postulation
      *
      * @return Postulation
      */
-    public function setUser(\GenericBundle\Entity\User $user)
+    public function setUser(User $user)
     {
         $this->user = $user;
 

@@ -6,7 +6,6 @@ use GenericBundle\Entity\CompteRendu;
 use GenericBundle\Entity\Message;
 use GenericBundle\Entity\Postulation;
 use GenericBundle\Entity\RDV;
-use JMS\Serializer\Serializer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,7 +37,7 @@ class MiseEnRelationController extends Controller
                 ,'text/html'
             );
         $this->get('mailer')->send($mail);
-        $reponsejson = new JsonResponse();
+
         return $reponsejson->setData(1);
     }
 
@@ -295,6 +294,7 @@ class MiseEnRelationController extends Controller
             $em->flush();
             return $rep->setData($date);
         }
+        return $rep->setdata(0);
     }
 
     public function envoiMailRemplirCRAction($idUser,$idRDV){

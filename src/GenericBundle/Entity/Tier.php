@@ -3,6 +3,7 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Tier
@@ -90,7 +91,7 @@ class Tier
      */
     public function __construct()
     {
-        $this->tier1 = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tier1 = new ArrayCollection();
     }
 
     /**
@@ -230,7 +231,7 @@ class Tier
      *
      * @return Tier
      */
-    public function addTier1(\GenericBundle\Entity\Tier $tier1)
+    public function addTier1(Tier $tier1)
     {
         $this->tier1[] = $tier1;
 
@@ -242,7 +243,7 @@ class Tier
      *
      * @param \GenericBundle\Entity\Tier $tier1
      */
-    public function removeTier1(\GenericBundle\Entity\Tier $tier1)
+    public function removeTier1(Tier $tier1)
     {
         $this->tier1->removeElement($tier1);
     }

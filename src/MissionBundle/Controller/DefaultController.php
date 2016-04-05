@@ -80,9 +80,7 @@ class DefaultController extends Controller
 
             }
         }
-
-
-        return $this->render('GenericBundle::ReloadParent.html.twig',array('clear'=>false));
+        return $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function affichageMissionAction($id)
@@ -311,13 +309,8 @@ class DefaultController extends Controller
 
         //$postdup = $em->getRepository('GenericBundle:Message')->findOneBy(array('expediteur'=>$user,'mission'=>$mission,'statut'=>7));
         $postdup = $em->getRepository('GenericBundle:Postulation')->findOneBy(array('user'=>$user,'mission'=>$mission));
-        if($postdup)
-        {
-            return $reponse->setData(0);
-        }
-        else{
-
-            $postulation = new Postulation();
+        if(!$postdup){
+                    $postulation = new Postulation();
             $postulation->setUser($this->get('security.token_storage')->getToken()->getUser());
             $postulation->setMission($mission);
             $postulation->setStatut(1);
@@ -355,10 +348,7 @@ class DefaultController extends Controller
 
             }
         }
-
-
-
-
+        return $reponse->setData(0);
     }
 
     public function AssignerTuteurAction($id,Request $request){
