@@ -51,6 +51,7 @@ class DefaultController extends Controller
 
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array(),array('datecreation'=>'DESC'));
+        $diffusionEnSuspend = $this->getDoctrine()->getRepository('GenericBundle:Diffusion')->findBy(array('statut'=>1));
         $qcms = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findAll();
 
         //modele
@@ -81,7 +82,7 @@ class DefaultController extends Controller
         }
 
         return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,/*'notifications'=>$jsonContent ,*/'users'=>$notapprenant,'modeles'=>$modeles,
-            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'missions'=>$missions,'apprenants'=>$apprenants,'image'=>$user->getPhotos()));
+            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'missions'=>$missions,'DiffusionEnSuspend'=>$diffusionEnSuspend,'apprenants'=>$apprenants,'image'=>$user->getPhotos()));
     }
 
     public function loadiframeAction()

@@ -130,8 +130,8 @@
 
                             <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
                             <div class="col-xs-12 NavBarTier" >
-                                <button class="col-xs-3 active" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Information_generale',this)">Données</button>
-                                <button class="col-xs-3" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Onglet_Contacts',this)">Contact</button>
+                                <button class="col-xs-3 active" id="BoutonOnlgetDonnéesMission" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Information_generale',this)">Données</button>
+                                <button class="col-xs-3" id="BoutonOnlgetContactMission" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Onglet_Contacts',this)">Contact</button>
                                 <button class="col-xs-3" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','QCM_Affinite',this)">Candidat rêvé</button>
                                 <button class="col-xs-3" type="button">Documents</button>
                             </div>
@@ -260,7 +260,8 @@
                                 </div>
                             </div>
                             <div class="div_button">
-                                <input id="submitaddmission" class="blue" type="submit" value="envoyer">
+                                <input id="submitaddmission" class="blue" type="button" value="envoyer">
+                                <input id="hiddenSubmitMission" style="display: none;" type="submit">
                             </div>
                         </form>
                     </div>
@@ -907,8 +908,10 @@
                                                     <label class="cell">Profil : <input type="text"  value="{{ mission.getProfil }}" id="Profil" name="_Profil" readonly></label>
                                                 </div>
                                                 <div class="row">
-                                                    <label class="cell" >Date Debut :<input  type="text" value="{{ mission.getDatedebut|date('d/m/Y')}}" id="DatedebutMis" name="_Datedebut" readonly> </label>
-                                                    <label class="cell" >Date fin :<input  type="text" value="{{mission.getDatefin|date('d/m/Y')}}" id="DatefinMis" name="_Datefin" readonly > </label>
+
+                                                    <label class="cell" >Date Debut :<input type="text" class="date"  value="{{ mission.getDatedebut|date('d/m/Y')}}" name="_Datedebut" readonly> </label>
+                                                    <label class="cell" >Date fin :<input type="text" class="date" value="{{mission.getDatefin|date('d/m/Y')}}" name="_Datefin" readonly > </label>
+
 
                                             </div>
                                             <div class="row">
@@ -1016,7 +1019,7 @@
 
     <script language="JavaScript">
 
-        $('#Date').datepicker( {
+        $('.date:not(:read-only)').datepicker( {
             changeMonth: true,
             changeYear: true,
             showButtonPanel: true,
@@ -1027,71 +1030,34 @@
                 $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
             }
         });
-        $('#Datenaissance').datepicker( {
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            dateFormat: 'dd/mm/yy',
-            monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
-            monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
-            onClose: function(dateText, inst) {
-                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
-            }
-        });
-        $('#Datedebut').datepicker( {
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            dateFormat: 'dd/mm/yy',
-            monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
-            monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
-            onClose: function(dateText, inst) {
-                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
-            }
-        });
-        $('#DatedebutMis').datepicker( {
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            dateFormat: 'dd/mm/yy',
-            monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
-            monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
-            onClose: function(dateText, inst) {
-                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
-            }
-        });
-        $('#DatefinMis').datepicker( {
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            dateFormat: 'dd/mm/yy',
-            monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
-            monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
-            onClose: function(dateText, inst) {
-                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
-            }
-        });
-        $('#Datefin').datepicker( {
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            dateFormat: 'dd/mm/yy',
-            monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
-            monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
-            onClose: function(dateText, inst) {
-                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
-            }
-        });
-        $('#submitaddapprenant').on('click' ,function(){
-            if($('#SelectMultipleFormation option:selected').length == 0){
+        $('#submitaddapprenant').on('click', function(){
+            if($("#SelectMultipleFormation").find("option:selected").length == 0){
                 document.getElementById('BoutonOnlgetFormationApprenant').click();
-                $('#hiddenSubmitApprenant').click();
             }
-            else if($('#formApprenant input[value=""]').length == 0){
+
+            else if($("#formApprenant").find("input").filter(function () {
+                        return !this.value;
+                    }).length == 0){
                 document.getElementById('BoutonOnlgetDonnéesApprenant').click();
-                $('#hiddenSubmitApprenant').click();
+
             }
-            else{$('#hiddenSubmitApprenant').click();}
+            $('#hiddenSubmitApprenant').click();
+        });
+
+        $('#submitaddmission').on('click',function(){
+            if($("#Onglet_Contacts").find("input").filter(function () {
+                        return !this.value;
+                    }).length != 0){
+                document.getElementById('BoutonOnlgetContactMission').click();
+
+            }
+            else if($("#Information_generale").find("input").filter(function () {
+                        return !this.value;
+                    }).length != 0){
+                document.getElementById('BoutonOnlgetDonnéesMission').click();
+            }
+
+            $('#hiddenSubmitMission').click();
         });
         function loading(){
             Array.prototype.forEach.call(document.querySelectorAll('input[type=radio]'),function(elem){
@@ -1153,7 +1119,17 @@
 
             button.innerHTML="valider";
             button.setAttribute('onclick','document.getElementById(\'formMissionModifier\').submit()');
-
+            $('.date:not(:read-only)').datepicker( {
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                dateFormat: 'dd/mm/yy',
+                monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+                monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+                onClose: function(dateText, inst) {
+                    $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+                }
+            });
         }
 
         function active(route) {
@@ -1209,8 +1185,8 @@
 
             }
 
-            $("#rightValuesAff option:selected").each(function(){
-                route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
+            $("#rightValuesAff").find("option:selected").each(function(){
+                var route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
                 route = route.replace('_id',$(this).val());
                 var a = document.createElement("a");
                 a.setAttribute("href",route);
@@ -1221,8 +1197,8 @@
             });
 
 
-            $("#leftValuesAff option:selected").each(function(){
-                route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
+            $("#leftValuesAff").find("option:selected").each(function(){
+                var route='{{ path('loadconsulterQCM',{'id':'_id'}) }}';
                 route = route.replace('_id',$(this).val());
                 var a = document.createElement("a");
                 a.setAttribute("href",route);

@@ -332,7 +332,8 @@
             </div>
 
             <div class="div_button" style="margin-top: 10px" >
-                <input class="blue" id="submitaddapprenant" type="submit"  style="margin-right: 10px" value="Enregistrer">
+                <input class="blue" id="submitaddapprenant" type="button"  style="margin-right: 10px" value="Enregistrer">
+                <input id="hiddenSubmitApprenant" style="display: none;" type="submit">
                 <input class="blue" type="submit" value="Annuler" >
             </div>
         </form>
@@ -532,6 +533,17 @@
         document.getElementById('user').style.visibility= 'hidden';
         document.getElementById(x).style.visibility='visible';
         sessionStorage.setItem('leftonglet',x);
+    };
+    document.getElementById('submitaddapprenant').onclick = function(){
+        if($('#SelectMultipleFormation option:selected').length == 0){
+            document.getElementById('BoutonOnlgetFormationApprenant').click();
+            $('#hiddenSubmitApprenant').click();
+        }
+        else if($('#formApprenant input[value=""]').length == 0){
+            document.getElementById('BoutonOnlgetDonnéesApprenant').click();
+            $('#hiddenSubmitApprenant').click();
+        }
+        else{$('#hiddenSubmitApprenant').click();}
     };
     function loading(){
         Array.prototype.forEach.call(document.querySelectorAll('input[type=radio]'),function(elem){
