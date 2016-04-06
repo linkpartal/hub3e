@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/mission.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}">
     <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
     <style>
@@ -27,9 +28,12 @@
                 </div>
                 <div id="Information_Apprenant_titre_adresse" class="col-xs-12" style="height: 20px;color: #666666;font:medium Roboto;margin-bottom: 40px"></div>
             </div>
-
             <div class="div_form"  id="information_apprenant" style="border: none;">
                 <div class="row" style=" margin-bottom: 20px">
+                    <div class="row" >
+                        <button onclick="document.getElementById('info_apprenant').style.display ='block';document.getElementById('FormationSouhaitee').style.display ='none';"  class="col-xs-4 onglet"  type="button" style="margin-left: 20px;width: 50%" >FICHE APPRENANT</button>
+                        <button onclick="document.getElementById('FormationSouhaitee').style.display ='block';document.getElementById('info_apprenant').style.display ='none';" class="col-xs-4 onglet"  type="button" style="width: calc(50% - 50px)" >Formation Souhaitée</button>
+                    </div>
                     <div id="info_apprenant" style="border-top: 1px solid #B0B0B0;margin: 0;overflow-y: auto;width: 100%;">
                         <div class="col-xs-12 Liste" >
 
@@ -71,6 +75,9 @@
                                 <label class="cell" style="float:left;">Formation en cours : <label id="Information_Apprenant_Formation" ></label></label>
                             </div>
                         </div>
+                    </div>
+
+                    <div id="FormationSouhaitee" class="col-xs-10 col-xs-offset-1" style="border-top: 1px solid #B0B0B0;margin: 0;height: 281px;width: 100%;display:none;">
                     </div>
                 </div>
 
@@ -321,7 +328,7 @@
             }
         })
     }
-    function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse,formation,diplome) {
+    function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse,formation,diplome,candidatures) {
         if(image != ''){
             document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
         }
@@ -345,6 +352,41 @@
         document.getElementById('Information_Apprenant_titre_adresse').innerHTML = adresse;
         document.getElementById('Information_Apprenant_Formation').innerHTML = formation;
         document.getElementById('Information_Apprenant_Diplome').innerHTML = diplome;
+
+        var mycandid = JSON.parse(candidatures);
+        for(var i = 0; i < mycandid.length; i++){
+            var nomformation = document.createElement('label');
+            nomformation.className = 'col-xs-3';
+            nomformation.style.height = '15px';
+            nomformation.innerHTML = mycandid[i].NomeFormation;
+            var adresse = document.createElement('label');
+            adresse.className = 'col-xs-4';
+            adresse.style.height = '15px';
+            adresse.innerHTML = mycandid[i].Adresse;
+            var ecole = document.createElement('label');
+            ecole.className = 'col-xs-3';
+            ecole.style.height = '15px';
+            ecole.innerHTML = mycandid[i].NomEcole;
+            var statut = document.createElement('div');
+            statut.className = 'col-xs-2';
+            statut.style.height = '15px';
+            if(mycandid[i].statut==3){
+                statut.style.backgroundColor = 'Green';
+            }else if(mycandid[i].statut==2){
+                statut.style.backgroundColor = 'red';
+            }else if(mycandid[i].statut==1){
+                statut.style.backgroundColor = 'Yellow';
+            }else if(mycandid[i].statut==99){
+                statut.style.backgroundColor = 'black';
+            }
+            var formationContainer = document.getElementById('FormationSouhaitee');
+            formationContainer.innerHTML ='';
+            formationContainer.appendChild(nomformation);
+            formationContainer.appendChild(adresse);
+            formationContainer.appendChild(ecole);
+            formationContainer.appendChild(statut);
+        }
+
     }
     function search(mot){
         var mots = mot.toUpperCase().trim().split(/ +/g);
