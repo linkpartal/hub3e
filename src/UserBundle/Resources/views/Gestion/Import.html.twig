@@ -354,20 +354,22 @@
         document.getElementById('Information_Apprenant_Diplome').innerHTML = diplome;
 
         var mycandid = JSON.parse(candidatures);
+        var formationContainer = document.getElementById('FormationSouhaitee');
+        formationContainer.innerHTML ='';
         for(var i = 0; i < mycandid.length; i++){
             var nomformation = document.createElement('label');
-            nomformation.className = 'col-xs-3';
+            nomformation.className = 'col-xs-4';
             nomformation.style.height = '15px';
             nomformation.innerHTML = mycandid[i].NomeFormation;
-            var adresse = document.createElement('label');
-            adresse.className = 'col-xs-4';
-            adresse.style.height = '15px';
-            adresse.innerHTML = mycandid[i].Adresse;
+            var adresseLabel = document.createElement('label');
+            adresseLabel.className = 'col-xs-4';
+            adresseLabel.style.height = '15px';
+            adresseLabel.innerHTML = mycandid[i].Adresse;
             var ecole = document.createElement('label');
-            ecole.className = 'col-xs-3';
+            ecole.className = 'col-xs-4';
             ecole.style.height = '15px';
             ecole.innerHTML = mycandid[i].NomEcole;
-            var statut = document.createElement('div');
+            /*var statut = document.createElement('div');
             statut.className = 'col-xs-2';
             statut.style.height = '15px';
             if(mycandid[i].statut==3){
@@ -378,13 +380,12 @@
                 statut.style.backgroundColor = 'Yellow';
             }else if(mycandid[i].statut==99){
                 statut.style.backgroundColor = 'black';
-            }
-            var formationContainer = document.getElementById('FormationSouhaitee');
-            formationContainer.innerHTML ='';
+            }*/
+
             formationContainer.appendChild(nomformation);
-            formationContainer.appendChild(adresse);
+            formationContainer.appendChild(adresseLabel);
             formationContainer.appendChild(ecole);
-            formationContainer.appendChild(statut);
+            //formationContainer.appendChild(statut);
         }
 
     }
