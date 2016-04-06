@@ -67,7 +67,7 @@
 
         {% endif %}
 
-        {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
+        {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_ADMINSOC') %}
             <div id="adduser" class="popup">
                 <div onclick="document.getElementById('submitadduser').click();hide(this)" class="close">
                 </div>
@@ -87,7 +87,9 @@
 
                                 <select class="input" title="Sélectionner un role" name="_role">
                                     {% if etablissement.getTier.getEcole %}
-                                        <option value="ROLE_ADMINECOLE">Administrateur école</option>
+                                        {% if is_granted('ROLE_ADMINECOLE') %}
+                                            <option value="ROLE_ADMINECOLE">Administrateur école</option>
+                                        {% endif %}
                                         <option value="ROLE_RECRUTEUR">Recruteur Placeur</option>
 
                                     {% else %}
