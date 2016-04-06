@@ -320,25 +320,7 @@ class DefaultController extends Controller
             );
         $this->get('mailer')->send($message);
 
-        if($request->get('_id') and $usercon->hasRole('ROLE_SUPER_ADMIN'))
-        {
-            return $this->redirect($this->generateUrl('affiche_etab',array('id'=>$request->get('_id'))));
-        }
-        elseif($usercon->hasRole('ROLE_SUPER_ADMIN'))
-        {
-            return $this->redirect($this->generateUrl('metier_user_admin'));
-        }
-        elseif($request->get('_id') and $usercon->hasRole('ROLE_ADMINECOLE'))
-        {
-            return $this->redirect($this->generateUrl('affiche_etab',array('id'=>$request->get('_id'))));
-        }
-        elseif($request->get('_id') and $usercon->hasRole('ROLE_ADMINSOC'))
-        {
-            return $this->redirect($this->generateUrl('affiche_etab',array('id'=>$request->get('_id'))));
-        }
-        else{
-            throw new Exception('ERROR');
-        }
+        return $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function ajouterApprenantAction(Request $request)
