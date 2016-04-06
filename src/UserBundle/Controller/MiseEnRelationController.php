@@ -106,9 +106,9 @@ class MiseEnRelationController extends Controller
                 for( $i = 0; $i < count($request->get('dateRDV')) and $i<3;$i++)
                 {
                     $datetimeRDV = $request->get('dateRDV')[$i].' '.$request->get('timeRDV')[$i];
-                    if($i == 2){$rdv->setDate1(date_create($datetimeRDV));}
-                    if($i == 1){$rdv->setDate2(date_create($datetimeRDV));}
-                    if($i == 0){$rdv->setDate3(date_create($datetimeRDV));}
+                    if($i == 2){$rdv->setDate1(date_create_from_format('d/m/Y H:i',$datetimeRDV));}
+                    if($i == 1){$rdv->setDate2(date_create_from_format('d/m/Y H:i',$datetimeRDV));}
+                    if($i == 0){$rdv->setDate3(date_create_from_format('d/m/Y H:i',$datetimeRDV));}
                 }
                 $em->flush();
             }
@@ -121,9 +121,9 @@ class MiseEnRelationController extends Controller
                 for( $i = 0; $i < count($request->get('dateRDV')) and $i<3;$i++)
                 {
                     $datetimeRDV = $request->get('dateRDV')[$i].' '.$request->get('timeRDV')[$i];
-                    if($i == 0){$rdv->setDate1(date_create($datetimeRDV));}
-                    if($i == 1){$rdv->setDate2(date_create($datetimeRDV));}
-                    if($i == 2){$rdv->setDate3(date_create($datetimeRDV));}
+                    if($i == 0){$rdv->setDate1(date_create_from_format('d/m/Y H:i',$datetimeRDV));}
+                    if($i == 1){$rdv->setDate2(date_create_from_format('d/m/Y H:i',$datetimeRDV));}
+                    if($i == 2){$rdv->setDate3(date_create_from_format('d/m/Y H:i',$datetimeRDV));}
 
                 }
                 $em->persist($rdv);
@@ -152,37 +152,58 @@ class MiseEnRelationController extends Controller
         $reponsejson = new JsonResponse();
 
         $em = $this->getDoctrine()->getEntityManager();
-        $message = new Message();
-        $date = new \DateTime();
-        $message->setDate($date);
-        $message->setExpediteur($this->get('security.token_storage')->getToken()->getUser());
         $messagereponse = $em->getRepository('GenericBundle:Message')->find($idmessage);
-        $message->setDestinataire($messagereponse->getExpediteur());
-        $message->setMission($messagereponse->getMission());
+        $messagedup = $em->getRepository('GenericBundle:Message')->findOneBy(array('destinataire'=>$messagereponse->getMission()->getTuteur(),'expediteur'=>$this->get('security.token_storage')->getToken()->getUser(),'mission'=>$messagereponse->getMission()));
+        if(!$messagedup) {
+            //Message RP
+            $messageRP = new Message();
+            $date = new \DateTime();
+            $messageRP->setDate($date);
+            $messageRP->setExpediteur($this->get('security.token_storage')->getToken()->getUser());
+            $messageRP->setDestinataire($messagereponse->getExpediteur());
+            $messageRP->setMission($messagereponse->getMission());
+            $messageRP->setMessage('L\'apprenant a donné suite a votre message!');
+            $em->persist($messageRP);
+            $em->flush();
+            //Message au Tuteur
+            $messageTuteur = new Message();
+            $date = new \DateTime();
+            $messageTuteur->setDate($date);
+            $messageTuteur->setExpediteur($this->get('security.token_storage')->getToken()->getUser());
+            $messageTuteur->setDestinataire($messagereponse->getMission()->getTuteur());
+            $messageTuteur->setMission($messagereponse->getMission());
+            $messageTuteur->setMessage('Cet apprenant correspond au profil demandé');
+            $messagereponse->setStatut(1);
+            $em->persist($messageTuteur);
+            $em->flush();
+            $messagedup = $messageTuteur;
+        }
+        else{
+            $messagedup->setMessage('Cet apprenant correspond au profil demandé');
+            $messagedup->setStatut(1);
+            $em->flush();
+        }
+        $postdup = $em->getRepository('GenericBundle:Postulation')->findOneBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser(),'mission'=>$messagereponse->getMission()));
+        if(!$postdup) {
+            //Creation de la postulation
+            $postulation = new Postulation();
+            $postulation->setUser($this->get('security.token_storage')->getToken()->getUser());
+            $postulation->setMission($messagereponse->getMission());
+            $postulation->setStatut(1);
+            $em->persist($postulation);
+            $em->flush();
 
-        $message->setMessage('L\'apprenant a donné suite à votre message!');
-        $messagereponse->setStatut(1);
-        $em->persist($message);
-        $em->flush();
-
-        //Creation de la postulation
-        $postulation = new Postulation();
-        $postulation->setUser($this->get('security.token_storage')->getToken()->getUser());
-        $postulation->setMission($messagereponse->getMission());
-        $postulation->setStatut(1);
-        $em->persist($postulation);
-        $em->flush();
-
-
-        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT')){
-            $mail = \Swift_Message::newInstance()
-                ->setSubject('Postulation')
-                ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
-                ->setTo($messagereponse->getExpediteur()->getEmail())
-                ->setBody($this->renderView('GenericBundle:Mail:PostulationMessage.html.twig',array('message'=>$message->getMessage(),'apprenant'=>$message->getExpediteur(),'mission'=>$message->getMission()))
-                    ,'text/html'
-                );
-            $this->get('mailer')->send($mail);
+            if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT')){
+                $mail = \Swift_Message::newInstance()
+                    ->setSubject('Postulation')
+                    ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
+                    ->setTo($messagereponse->getMission()->getTuteur()->getEmail())
+                    ->setCc($messagereponse->getExpediteur()->getEmail())
+                    ->setBody($this->renderView('GenericBundle:Mail:PostulationMessage.html.twig',array('message'=>$messagedup->getMessage(),'apprenant'=>$messagedup->getExpediteur(),'mission'=>$messagedup->getMission()))
+                        ,'text/html'
+                    );
+                $this->get('mailer')->send($mail);
+            }
         }
         return $reponsejson->setData(1);
 
@@ -282,7 +303,7 @@ class MiseEnRelationController extends Controller
                     $rdv->setDate3(date_create_from_format('d/m/Y H:i',$datetimeRDV));
                 }
 
-                array_push($date,date_format(date_create($datetimeRDV),"d M Y à H:i"));
+                array_push($date,$datetimeRDV);
             }
             if($this->get('security.token_storage')->getToken()->getUser() == $rdv->getApprenant()){
                 $rdv->setChoixApprenant(false);

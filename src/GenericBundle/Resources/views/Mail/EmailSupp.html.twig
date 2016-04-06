@@ -5,8 +5,26 @@
     <title>Title</title>
 </head>
 <body>
-Bonjour, Nous avons bien reçu votre candidature et vous remercions de l'intérêt que vous portez à notre école.
-Toutefois, après examination de votre dossier, je vous informe que vous n’avez pas été retenu pour la formation.
+Bonjour {% if ImportCandidat is defined %}{{ ImportCandidat.civilite }} {{ ImportCandidat.prenom }} {{ ImportCandidat.nom }}{% endif %}, <br>
+Nous avons bien reçu votre candidature et vous remercions de l'intérêt que vous portez à notre école.<br>
+Toutefois, après examination de votre dossier, je vous informe que vous n’avez pas été retenu pour
+{% if Candidatures is defined %}
+    {% if Candidatures|length == 1 %}
+        la formation {{ Candidatures[0].formation.nom }} - {{ Candidatures[0].formation.etablissement.adresse }} - {{ Candidatures[0].formation.etablissement.tier.raisonsoc }} .
+        {% elseif Candidatures == null %}
+        notre école.
+    {% else %}
+        {% for candidature in Candidatures %}
+            {% if loop.first %}
+                les formations {{ candidature.formation.nom }} - {{ candidature.formation.etablissement.adresse }} - {{ candidature.formation.etablissement.tier.raisonsoc }}
+            {% else %}
+                , {{ candidature.formation.nom }} - {{ candidature.formation.etablissement.adresse }} - {{ candidature.formation.etablissement.tier.raisonsoc }}
+            {% endif %}
+        {% endfor %}.
+    {% endif %}
+
+{% endif %}
+<br>
 Nous vous souhaitons pleine réussite dans vos recherches.
 Cordialement,
 </body>

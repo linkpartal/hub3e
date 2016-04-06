@@ -505,10 +505,12 @@
 <script language="JavaScript">
     var idMRDestinataire;
     function postuler(){
+        ShowWaiter();
         var route = '{{ path('postuler_Mission',{'id': mission.id }) }}';
         $.ajax({
             type: 'POST',
             url: route,
+            error: DeleteWaiter(),
             success: function(data){
                 if(data===1)
                 {
@@ -518,22 +520,26 @@
                 {
                     alert('Vous avez déjà postuler pour la mission {{ mission.codemission }}' );
                 }
+                DeleteWaiter();
             }
         });
     }
     function envoyerMRAction(){
+        ShowWaiter();
         var route = '{{ path('MiseEnRelation_mission',{'idDest':'_IDUSER','idEnv':app.user.id,'mission':mission.id}) }}';
         route = route.replace('_IDUSER',idMRDestinataire);
         $.ajax({
             type: 'POST',
             url: route,
             data: $('#formMettreEnRelation').serialize(),
+            error: DeleteWaiter(),
             success: function(data){
                 if(data===1)
                 {
                     document.getElementById('MettreEnRelation').style.display = 'none';
                     document.getElementById('formMettreEnRelation').reset();
                 }
+                DeleteWaiter();
             }
         });
 
@@ -576,11 +582,13 @@
         }
     });
     function diffuserMission() {
+        ShowWaiter();
         var route = '{{ path('Diffuser_Mission',{id:mission.id}) }}';
         $.ajax({
             type: "POST",
             url: route,
             data: $("#formDiffusion").serialize(),
+            error: DeleteWaiter(),
             success: function(data)
             {
                 if(data['status']===1)
@@ -590,6 +598,7 @@
                     var inputs = document.getElementById('formDiffusion').getElementsByTagName("input");
                     inputs[inputs.length - 1].disabled = false;
                 }
+                DeleteWaiter();
             }
         });
 
@@ -720,6 +729,7 @@
                 url: path,
                 error: function () {
                     alert('Une erreur s\'est produite');
+                    DeleteWaiter();
                 },
                 success: function () {
                     window.parent.location.reload();

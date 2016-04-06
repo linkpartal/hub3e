@@ -102,29 +102,6 @@ class ImportCandidat
     private $info;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\Hobbies", mappedBy="importCandidat",cascade={"remove"})
-     */
-    private $hobbies;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\Langue", mappedBy="importCandidat",cascade={"remove"})
-     */
-    private $langue;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->hobbies = new ArrayCollection();
-        $this->langue = new ArrayCollection();
-    }
-
-    /**
      * Get id
      *
      * @return integer
@@ -348,74 +325,6 @@ class ImportCandidat
     public function getInfo()
     {
         return $this->info;
-    }
-
-    /**
-     * Add hobby
-     *
-     * @param \GenericBundle\Entity\Hobbies $hobby
-     *
-     * @return ImportCandidat
-     */
-    public function addHobby(Hobbies $hobby)
-    {
-        $this->hobbies[] = $hobby;
-
-        return $this;
-    }
-
-    /**
-     * Remove hobby
-     *
-     * @param \GenericBundle\Entity\Hobbies $hobby
-     */
-    public function removeHobby(Hobbies $hobby)
-    {
-        $this->hobbies->removeElement($hobby);
-    }
-
-    /**
-     * Get hobbies
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getHobbies()
-    {
-        return $this->hobbies;
-    }
-
-    /**
-     * Add langue
-     *
-     * @param \GenericBundle\Entity\Langue $langue
-     *
-     * @return ImportCandidat
-     */
-    public function addLangue(Langue $langue)
-    {
-        $this->langue[] = $langue;
-
-        return $this;
-    }
-
-    /**
-     * Remove langue
-     *
-     * @param \GenericBundle\Entity\Langue $langue
-     */
-    public function removeLangue(Langue $langue)
-    {
-        $this->langue->removeElement($langue);
-    }
-
-    /**
-     * Get langue
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getLangue()
-    {
-        return $this->langue;
     }
 
     /**

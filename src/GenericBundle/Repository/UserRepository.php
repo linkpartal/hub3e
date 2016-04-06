@@ -57,7 +57,7 @@ class UserRepository extends EntityRepository
 
     public function findApprenantDuplicata($id)
     {
-        $users = new ArrayCollection();
+        $users = array();
         $em = $this->getEntityManager();
         $import = $em->getRepository('GenericBundle:ImportCandidat')->find($id);
 
@@ -72,7 +72,7 @@ class UserRepository extends EntityRepository
                     if ($userdup->getInfo()->getDatenaissance() == $import->getInfo()->getDatenaissance() and $userdup->getInfo()->getLieunaissance()==$import->getInfo()->getLieunaissance()
                         and $userdup->hasRole('ROLE_APPRENANT'))
                     {
-                        $users->add($userdup);
+                        array_push($users,$userdup);
                     }
                 }
             }
