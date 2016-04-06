@@ -1126,17 +1126,23 @@ class DefaultController extends Controller
             $jsonstring = '[';
             $first =true;
             foreach($this->getDoctrine()->getRepository('GenericBundle:Candidature')->findBy(array('importcandidat'=>$import)) as $candidature){
+
                 if($first){
                     $first = false;
-                    $jsonstring = $jsonstring . '{\'NomeFormation\':\''.$candidature->getFormation()->getNom().'\',\'Adresse\':\''.$candidature->getFormation()->getEtablissement()->getAdresse().'\',\'NomEcole\':\''.$candidature->getFormation()->getEtablissement()->getTier()->getRaisonsoc().'\',\'statut\':\''.$candidature->getStatut().'\'}';
+                    $jsonstring = $jsonstring . '{"NomeFormation":"'.$candidature->getFormation()->getNom().'","Adresse":"'.$candidature->getFormation()->getEtablissement()->getAdresse().'","NomEcole":"'.$candidature->getFormation()->getEtablissement()->getTier()->getRaisonsoc().'","statut":'.$candidature->getStatut().'}';
                 }else{
-                    $jsonstring = $jsonstring . ',{\'NomeFormation\':\''.$candidature->getFormation()->getNom().'\',\'Adresse\':\''.$candidature->getFormation()->getEtablissement()->getAdresse().'\',\'NomEcole\':\''.$candidature->getFormation()->getEtablissement()->getTier()->getRaisonsoc().'\',\'statut\':\''.$candidature->getStatut().'\'}';
+                    $jsonstring = $jsonstring . ',{"NomeFormation":"'.$candidature->getFormation()->getNom().'","Adresse":"'.$candidature->getFormation()->getEtablissement()->getAdresse().'","NomEcole":"'.$candidature->getFormation()->getEtablissement()->getTier()->getRaisonsoc().'","statut":'.$candidature->getStatut().'}';
                 }
+
             }
+
             $jsonstring = $jsonstring . ']';
+
             array_push($array_candidature,$jsonstring);
 
+
         }
+       // var_dump($array_candidature,$jsonstring);die();
 
         return $this->render('UserBundle:Gestion:Import.html.twig',array('imports'=>$imports,'candidatures'=>$array_candidature));
     }
