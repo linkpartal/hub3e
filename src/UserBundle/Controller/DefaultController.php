@@ -186,7 +186,7 @@ class DefaultController extends Controller
 
     public function afficher_messagerieAction(){
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $message = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user ));
+        $message = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user ),array('date'=>'desc'));
 
         foreach($message as $msg)
         {
