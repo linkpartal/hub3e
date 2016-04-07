@@ -51,11 +51,6 @@ class DefaultController extends Controller
             $Parents = $this->getDoctrine()->getRepository('GenericBundle:Parents')->findBy(array('user'=>$userid));
 
             $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll();
-            $Langue = $this->getDoctrine()->getRepository('GenericBundle:Langue')->findAll();
-            $Hobbies = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->findAll();
-
-
-
 
             $Experience = $this->getDoctrine()->getRepository('GenericBundle:Experience')->findBy(array('user'=>$userid));
             $Recommandation = $this->getDoctrine()->getRepository('GenericBundle:Recommandation')->findBy(array('user'=>$userid));
@@ -102,7 +97,7 @@ class DefaultController extends Controller
                 }
                 return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig', array('User' => $userid,
                     'Infocomplementaire' => $info, 'Parents' => $Parents, 'Experience' => $Experience, 'Recommandation' => $Recommandation, 'Diplome' => $Diplome, 'Document' => $Document,
-                    'Langue' => $Langue, 'Hobbies' => $Hobbies,'candidatures' => $candidatures, 'QCMs' => $userid->getEtablissement()->getQcmdef(), 'Questions' => $questions,
+                    'candidatures' => $candidatures, 'QCMs' => $userid->getEtablissement()->getQcmdef(), 'Questions' => $questions,
                     'reponses' => $reponses, 'QCMtest' => $QCMtest, 'QuestionsTest' => $questionsTest, 'reponsesTest' => $reponsesTest,'formations'=>$formation));
             }
         }
@@ -124,11 +119,6 @@ class DefaultController extends Controller
             $Parents = $this->getDoctrine()->getRepository('GenericBundle:Parents')->findBy(array('user'=>$userid));
 
             $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll();
-            $Langue = $this->getDoctrine()->getRepository('GenericBundle:Langue')->findAll();
-            $Hobbies = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->findAll();
-
-
-
 
             $Experience = $this->getDoctrine()->getRepository('GenericBundle:Experience')->findBy(array('user'=>$userid));
             $Recommandation = $this->getDoctrine()->getRepository('GenericBundle:Recommandation')->findBy(array('user'=>$userid));
@@ -175,7 +165,7 @@ class DefaultController extends Controller
                 }
                 return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig', array('User' => $userid,
                     'Infocomplementaire' => $info, 'Parents' => $Parents, 'Experience' => $Experience, 'Recommandation' => $Recommandation, 'Diplome' => $Diplome, 'Document' => $Document,
-                    'Langue' => $Langue, 'Hobbies' => $Hobbies,'candidatures' => $candidatures, 'QCMs' => $userid->getEtablissement()->getQcmdef(), 'Questions' => $questions,
+                    'candidatures' => $candidatures, 'QCMs' => $userid->getEtablissement()->getQcmdef(), 'Questions' => $questions,
                     'reponses' => $reponses, 'QCMtest' => $QCMtest, 'QuestionsTest' => $questionsTest, 'reponsesTest' => $reponsesTest,'formations'=>$formation));
             }
         }
@@ -212,6 +202,35 @@ class DefaultController extends Controller
         }
         elseif($user->hasRole('ROLE_SUPER_ADMIN')){
             $rendezvous = $this->getDoctrine()->getRepository('GenericBundle:RDV')->findAll();
+        }
+        elseif($user->hasRole('ROLE_RECRUTEUR')){
+            $apprenants = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$user->getEtablissement()));
+
+            foreach($apprenants as $key => $value)
+            {
+                if(!$value->hasRole('ROLE_APPRENANT'))
+                {
+                    unset($apprenants[$key]);
+                }
+            }
+            $rendezvous = array();
+            foreach($apprenants as $apprenant){
+                $rendezvous = array_merge($rendezvous, $this->getDoctrine()->getRepository('GenericBundle:RDV')->findBy(array('apprenant'=>$apprenant )));
+            }
+        }
+        elseif($user->hasRole('ROLE_ADMINECOLE')){
+            $apprenants =$this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($user->getTier());
+            foreach($apprenants as $key => $value)
+            {
+                if(!$value->hasRole('ROLE_APPRENANT'))
+                {
+                    unset($apprenants[$key]);
+                }
+            }
+            $rendezvous = array();
+            foreach($apprenants as $apprenant){
+                $rendezvous = array_merge($rendezvous, $this->getDoctrine()->getRepository('GenericBundle:RDV')->findBy(array('apprenant'=>$apprenant )));
+            }
         }
 
         foreach($rendezvous as $rdv)
@@ -730,75 +749,6 @@ class DefaultController extends Controller
 
     }
 
-    public function supprimerLangueAction($id,$IdUser)
-    {
-
-
-
-        $em = $this->getDoctrine()->getEntityManager();
-        $langue = $em->getRepository('GenericBundle:Langue')->find($id);
-        $user = $em->getRepository('GenericBundle:User')->find($IdUser);
-        $langue->removeUser($user);
-
-        $em->flush();
-
-        $reponse = new JsonResponse();
-        return $reponse->setData(array('succes'=>'0'));
-
-
-    }
-
-    public function supprimerHobbieAction($id,$IdUser)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-        $hobbie = $em->getRepository('GenericBundle:Hobbies')->find($id);
-        $user = $em->getRepository('GenericBundle:User')->find($IdUser);
-        $hobbie->removeUser($user);
-
-        $em->flush();
-
-        $reponse = new JsonResponse();
-        return $reponse->setData(array('succes'=>'0'));
-
-
-    }
-
-    public function ajouterHobbieAction($id,$IdUser)
-    {
-
-        $em = $this->getDoctrine()->getEntityManager();
-        $hobbie = $em->getRepository('GenericBundle:Hobbies')->find($id);
-        $user = $em->getRepository('GenericBundle:User')->find($IdUser);
-        $hobbie->addUser($user);
-
-        $em->flush();
-
-        $reponse = new JsonResponse();
-        return $reponse->setData(array('succes'=>1));
-
-    }
-
-    public function ajouterLangueAction($id,$IdNiveau,$IdUser)
-    {
-
-        $em = $this->getDoctrine()->getEntityManager();
-        $user = $em->getRepository('GenericBundle:User')->find($IdUser);
-        $reponse = new JsonResponse();
-        foreach ($em->getRepository('GenericBundle:Langue')->findBy(array('langue' => $id)) as $langue_dup){
-            if (in_array($langue_dup, $user->getLangue()->toArray())) {
-                return $reponse->setData(array('success' => 0));
-            }
-        }
-
-        $langue = $em->getRepository('GenericBundle:Langue')->findOneBy(array('langue'=>$id,'niveau'=>$IdNiveau));
-        $langue->addUser($user);
-        $em->flush();
-
-
-        return $reponse->setData(array('success'=>1));
-
-    }
-
     public function suppParentAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -1135,50 +1085,18 @@ class DefaultController extends Controller
 
         $import = $em->getRepository('GenericBundle:ImportCandidat')->find($id);
         $response = new JsonResponse();
+
         if($import)
         {
-            foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('importcandidat'=>$import)) as $candidature)
-            {
-                $em->remove($candidature);
-                $em->flush();
-            }
-            foreach($em->getRepository('GenericBundle:Experience')->findBy(array('importCandidat'=>$import)) as $experience)
-            {
-                $em->remove($experience);
-                $em->flush();
-            }
-            foreach($em->getRepository('GenericBundle:Diplome')->findBy(array('importCandidat'=>$import)) as $diplome)
-            {
-                $em->remove($diplome);
-                $em->flush();
-            }
-            foreach($em->getRepository('GenericBundle:Document')->findBy(array('importCandidat'=>$import)) as $document)
-            {
-                $em->remove($document);
-                $em->flush();
-            }
-            foreach($em->getRepository('GenericBundle:Parents')->findBy(array('importCandidat'=>$import)) as $parents)
-            {
-                $em->remove($parents);
-                $em->flush();
-            }
-            foreach($em->getRepository('GenericBundle:Recommandation')->findBy(array('importCandidat'=>$import)) as $recommandation)
-            {
-                $em->remove($recommandation);
-                $em->flush();
-            }
+            $message = \Swift_Message::newInstance()
+                ->setSubject('')
+                ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
+                ->setTo($import->getEmail())
+                ->setBody($this->renderView('GenericBundle:Mail:EmailSupp.html.twig',array('ImportCandidat'=>$import,'Candidatures'=>$em->getRepository('GenericBundle:Candidature')->findBy(array('importcandidat'=>$import)))),'text/html');
+            $this->get('mailer')->send($message);
 
             $em->remove($import);
             $em->flush();
-            $mail = $import->getEmail();
-            if($mail){
-                $message = \Swift_Message::newInstance()
-                    ->setSubject('')
-                    ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))
-                    ->setTo($mail)
-                    ->setBody($this->renderView('GenericBundle:Mail:EmailSupp.html.twig',array('ImportCandidat'=>$import)),'text/html');
-                $this->get('mailer')->send($message);
-            }
 
             return $response->setData(array('Delete'=>'1'));
         }
@@ -1550,10 +1468,12 @@ class DefaultController extends Controller
 
         if($request->get('_IDPARENT')){
             $parent = $em->getRepository('GenericBundle:Parents')->find($request->get('_IDPARENT'));
+            $parent->setCivilite($request->get('_Civiliteparent'));
             $parent->setNom($request->get('_Nomresp'));
             $parent->setPrenom($request->get('_Prenomresp'));
             $parent->setTelephone($request->get('_Telephoneresp'));
             $parent->setAdresse($request->get('_Adresseresp'));
+            $parent->setStatut($request->get('_Statutparent'));
             $parent->setEmail($request->get('_Emailresp'));
             $parent->setNomjeunefille($request->get('_Nomjeunefille'));
             $em->persist($parent);
@@ -1563,9 +1483,10 @@ class DefaultController extends Controller
             $parent = new Parents();
             $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser'));
             $parent->setUser($user);
-            $parent->setNom($request->get('_Civiliteparent').' '.$request->get('_Nomparent'));
+            $parent->setCivilite($request->get('_Civiliteparent'));
+            $parent->setNom($request->get('_Nomparent'));
             $parent->setPrenom($request->get('_Prenomparent'));
-            $parent->setMetier($request->get('_Metierparent'));
+            $parent->setStatut($request->get('_Statutparent'));
             $parent->setProfession($request->get('_Professionparent'));
             $parent->setTelephone($request->get('_Telephoneparent'));
             $parent->setAdresse($request->get('_Adresseparent').' '.$request->get('_Villeparent').' '.$request->get('_CodePostaleparent'));

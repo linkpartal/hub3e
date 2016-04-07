@@ -452,11 +452,17 @@
         });
     }
     function postuler(){
+        ShowWaiter();
         var route = '{{ path('Postuler_Messagerie',{'idmessage':'_IDMESSAGE'}) }}';
         route = route.replace('_IDMESSAGE',idMessage);
         $.ajax({
             type: 'POST',
             url: route,
+            error: function(errorMessage){
+                DeleteWaiter();
+                console.log(errorMessage);
+                document.getElementById('FicheMission').style.display = 'none';
+            },
             success: function(data){
                 document.getElementById('FicheMission').style.display = 'none';
                 if(data===1)
@@ -464,10 +470,12 @@
                     document.getElementById('statut'+idMessage).style.color = 'green';
                     document.getElementById('statut'+idMessage).innerHTML = 'Valider';
                 }
+                DeleteWaiter();
             }
         });
     }
     function envoyerReponse(div,checkDate){
+
         if(typeof checkDate !== 'undefined' && checkDate){
             var inputTimes = document.getElementsByName('timeRDV[]');
             for(var k = 0; k < inputTimes.length; k++){
@@ -479,12 +487,14 @@
                 }
             }
         }
+        ShowWaiter();
         var route = '{{ path('Reponse_Messagerie',{'idmessage':'_IDMESSAGE'}) }}';
         route = route.replace('_IDMESSAGE',idMessage);
         $.ajax({
             type: 'POST',
             url: route,
             data: $('#'+div).serialize(),
+            error: DeleteWaiter(),
             success: function(data){
                 if(data===-1)
                 {
@@ -508,7 +518,7 @@
                     console.log(data);
                 }
 
-
+                DeleteWaiter();
 
             }
         });

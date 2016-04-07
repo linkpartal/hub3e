@@ -164,9 +164,6 @@ class DefaultController extends Controller
             // les formation de l'etablissement
             $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$etablissement ));
 
-            //remplir select hobby pour l'ajout apprenant
-            $hobbie = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->findAll();
-
             // les tiers pour peuplé l'association d'ecole
             $alltiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAllExcept($etablissement->getTier()->getId());
             $tiers = array();
@@ -184,7 +181,7 @@ class DefaultController extends Controller
                 array_push($etablisementlier ,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$value)));
             }
             return $this->render('TierBundle::iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,'tiers'=>$tiers,'users'=>$users,
-                'formations'=>$formation,'hobbies' =>$hobbie,'libs'=>$licences,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab,'etablissementslier'=>$etablisementlier));
+                'formations'=>$formation,'libs'=>$licences,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab,'etablissementslier'=>$etablisementlier));
         }
         else{
             // missions non suspendu

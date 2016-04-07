@@ -467,7 +467,6 @@
                                         {% if app.user.hasRole('ROLE_ADMINECOLE') %}
                                             <select id="SelectMultipleFormation" style="height: 100px;" title="" class="input" name="formations[]" multiple required>
                                                 {% for formation_x in formations %}
-
                                                     {% if formation_x.etablissement.tier == app.user.tier or formation_x.etablissement.tier in app.user.tier.tier1|keys %}
                                                         <option value="{{ formation_x.getId }}">{{ formation_x.nom }} - {{ formation_x.etablissement.tier.raisonsoc }} - {{ formation_x.etablissement.adresse }}</option>
                                                     {% endif %}
@@ -1038,7 +1037,7 @@
 
             else if($("#formApprenant").find("input").filter(function () {
                         return !this.value;
-                    }).length == 0){
+                    }).length  != 0){
                 document.getElementById('BoutonOnlgetDonnéesApprenant').click();
 
             }

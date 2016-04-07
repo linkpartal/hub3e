@@ -93,23 +93,9 @@ class User extends BaseUser
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Hobbies", mappedBy="users")
-     */
-    private $hobbies;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
      * @ORM\ManyToMany(targetEntity="Etablissement", mappedBy="users", cascade={"remove"})
      */
     private $referenciel;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Langue", mappedBy="users")
-     */
-    private $langue;
 
     /**
      * @var \GenericBundle\Entity\Infocomplementaire
@@ -134,9 +120,7 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
-        $this->langue = new ArrayCollection();
         $this->referenciel = new ArrayCollection();
-        $this->hobbies = new ArrayCollection();
         $this->reponsedef = new ArrayCollection();
     }
 
@@ -309,40 +293,6 @@ class User extends BaseUser
     }
 
     /**
-     * Add hobby
-     *
-     * @param \GenericBundle\Entity\Hobbies $hobby
-     *
-     * @return User
-     */
-    public function addHobby(Hobbies $hobby)
-    {
-        $this->hobbies[] = $hobby;
-
-        return $this;
-    }
-
-    /**
-     * Remove hobby
-     *
-     * @param \GenericBundle\Entity\Hobbies $hobby
-     */
-    public function removeHobby(Hobbies $hobby)
-    {
-        $this->hobbies->removeElement($hobby);
-    }
-
-    /**
-     * Get hobbies
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getHobbies()
-    {
-        return $this->hobbies;
-    }
-
-    /**
      * Add referenciel
      *
      * @param \GenericBundle\Entity\Etablissement $referenciel
@@ -374,40 +324,6 @@ class User extends BaseUser
     public function getReferenciel()
     {
         return $this->referenciel;
-    }
-
-    /**
-     * Add langue
-     *
-     * @param \GenericBundle\Entity\Langue $langue
-     *
-     * @return User
-     */
-    public function addLangue(Langue $langue)
-    {
-        $this->langue[] = $langue;
-
-        return $this;
-    }
-
-    /**
-     * Remove langue
-     *
-     * @param \GenericBundle\Entity\Langue $langue
-     */
-    public function removeLangue(Langue $langue)
-    {
-        $this->langue->removeElement($langue);
-    }
-
-    /**
-     * Get langue
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getLangue()
-    {
-        return $this->langue;
     }
 
     /**

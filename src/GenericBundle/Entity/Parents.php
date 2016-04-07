@@ -87,9 +87,9 @@ class Parents
     /**
      * @var string
      *
-     * @ORM\Column(name="metier", type="string", length=45, nullable=true)
+     * @ORM\Column(name="statut", type="string", length=45, nullable=true)
      */
-    private $metier;
+    private $statut;
 
     /**
      * @var \GenericBundle\Entity\User
@@ -316,27 +316,27 @@ class Parents
     }
 
     /**
-     * Set metier
+     * Set statut
      *
-     * @param string $metier
+     * @param string $statut
      *
      * @return Parents
      */
-    public function setMetier($metier)
+    public function setStatut($statut)
     {
-        $this->metier = $metier;
+        $this->statut = $statut;
 
         return $this;
     }
 
     /**
-     * Get metier
+     * Get statut
      *
      * @return string
      */
-    public function getMetier()
+    public function getStatut()
     {
-        return $this->metier;
+        return $this->statut;
     }
 
     /**
