@@ -41,6 +41,12 @@ class Diplome
      * @ORM\Column(name="ecole", type="string", length=45, nullable=true)
      */
     private $ecole;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="niveau", type="string", length=45, nullable=true)
+     */
+    private $niveau;
 
     /**
      * @var \GenericBundle\Entity\User
@@ -202,5 +208,29 @@ class Diplome
         {
             return false;
         }
+    }
+
+    /**
+     * Set niveau
+     *
+     * @param string $niveau
+     *
+     * @return Diplome
+     */
+    public function setNiveau($niveau)
+    {
+        $this->niveau = $niveau;
+
+        return $this;
+    }
+
+    /**
+     * Get niveau
+     *
+     * @return string
+     */
+    public function getNiveau()
+    {
+        return $this->niveau;
     }
 }

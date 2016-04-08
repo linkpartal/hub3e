@@ -742,7 +742,6 @@ class DefaultController extends Controller
             throw new Exception('Aucun utilisateur ne posséde l\'id ' . $id);
         }
 
-
         $em->remove($user);
         $em->flush();
         return $this->render('GenericBundle::ReloadParent.html.twig',array('clear'=>true));
@@ -1339,7 +1338,7 @@ class DefaultController extends Controller
         }
         $em->flush();
 
-        foreach($import->getLangue() as $langue)
+       /* foreach($import->getLangue() as $langue)
         {
             if(!in_array($langue,$userfus->getLangue()->toArray()))
             {
@@ -1354,7 +1353,7 @@ class DefaultController extends Controller
                 $userfus->addHobby($hobbie);
                 $em->flush();
             }
-        }
+        }*/
         foreach($import->getInfo()->getVillesFranceFreeVille() as $ville)
         {
             if(!in_array($ville,$userfus->getInfo()->getVillesFranceFreeVille()->toArray()))
@@ -1575,6 +1574,7 @@ class DefaultController extends Controller
         if($request->get('_IDDiplome')){
             $diplome = $em->getRepository('GenericBundle:Diplome')->find($request->get('_IDDiplome'));
             $diplome->setLibelle($request->get('_Libelle'));
+            $diplome->setNiveau($request->get('_Niveau'));
             $diplome->setObtention($request->get('_Obtention'));
             $diplome->setEcole($request->get('_Ecole'));
             $em->persist($diplome);
@@ -1586,6 +1586,7 @@ class DefaultController extends Controller
             $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser'));
             $diplome->setUser($user);
             $diplome->setLibelle($request->get('_Libelle'));
+            $diplome->setNiveau($request->get('_Niveau'));
             $diplome->setObtention($request->get('_Obtention'));
             $diplome->setEcole($request->get('_Ecole'));
 

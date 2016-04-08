@@ -17,18 +17,25 @@ class MiseEnRelationController extends Controller
         $reponsejson = new JsonResponse();
 
         $em = $this->getDoctrine()->getEntityManager();
-        $message = new Message();
-        $message->setMessage($request->get('_Descriptif'));
-        $date = new \DateTime();
-        $message->setDate($date);
         $expediteur = $em->getRepository('GenericBundle:User')->find($idEnv);
-        $message->setExpediteur($expediteur);
         $destinataire = $em->getRepository('GenericBundle:User')->find($idDest);
-        $message->setDestinataire($destinataire);
         $mission = $em->getRepository('GenericBundle:Mission')->find($mission);
-        $message->setMission($mission);
-        $em->persist($message);
-        $em->flush();
+        $MRduplica = $em->getRepository('GenericBundle:Message')->findBy(array('mission'=>$mission,'destinataire'=>$destinataire));
+        if(!$MRduplica){
+            $message = new Message();
+            $message->setMessage($request->get('_Descriptif'));
+            $date = new \DateTime();
+            $message->setDate($date);
+            $message->setExpediteur($expediteur);
+            $message->setDestinataire($destinataire);
+            $message->setMission($mission);
+            $em->persist($message);
+            $em->flush();
+        }
+        else{
+            return $reponsejson->setData(-1);
+        }
+
         $mail = \Swift_Message::newInstance()
             ->setSubject('Postulation')
             ->setFrom(array('symfony.atpmg@gmail.com'=>"HUB3E"))

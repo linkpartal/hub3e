@@ -74,7 +74,7 @@ class Infocomplementaire
     /**
      * @var string
      *
-     * @ORM\Column(name="adresse", type="string", length=45, nullable=true)
+     * @ORM\Column(name="adresse", type="string", length=100, nullable=true)
      */
     private $adresse;
 

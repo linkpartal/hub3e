@@ -135,7 +135,7 @@
             </div>
 
 
-            <div id="information_button" class="div_button">
+            <div id="information_button" class="div_button" style="display: block;">
                 <input  onclick="show_formapprenant()" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Décliner">
                 <input id="submitReception" class="blue" type="button" onclick="this.parentNode.parentNode.parentNode.parentNode.style.display='none';" style="margin-left: 250px"  value="Répondre plus tard">
                 <input onclick="show_formapprenantproposer()"  class="blue" type="button"   value="Proposer un rendez-vous">
@@ -220,7 +220,7 @@
 
             </div>
 
-            <div id="mission_button" class="div_button">
+            <div id="mission_button" class="div_button" style="display:block;">
                 <input  onclick="show_formmission()"  class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Décliner">
                 <input id="submitReception" class="blue" type="submit" style="margin-left: 270px" onclick="this.parentNode.parentNode.parentNode.parentNode.style.display='none';" value="Répondre plus tard">
                 <input  class="blue" type="button" onclick="postuler()"   value="Postuler">
@@ -294,12 +294,12 @@
                             <label id="statut{{ msg.id }}" style="font:18px Roboto;margin-top: 30px" > Répondez </label>
                         {% endif %}
                     </div>
-                    <div {% if not msg.statut == -1 and not msg.statut == 1 %}
+                    <div
                             onclick="informationApprenant('{{msg.getExpediteur.getPhotos|escape('js')}}','{{ msg.getExpediteur.getCivilite|escape('js') }}','{{ msg.getExpediteur.getNom|escape('js') }}','{{ msg.getExpediteur.getPrenom|escape('js') }}',
                                     '{{ msg.getExpediteur.getEmail|escape('js') }}','{{ msg.getExpediteur.getTelephone|escape('js') }}','{{ msg.getExpediteur.getInfo.getDateNaissance|date("d/m/Y") }}',
-                                    '{{ msg.getExpediteur.getInfo.getCpNaissance|escape('js') }}','{{ msg.getExpediteur.getInfo.getLieunaissance|escape('js') }}','{{ msg.getExpediteur.getInfo.getAdresse|escape('js') }}','{{ msg.message|escape('js') }}');
+                                    '{{ msg.getExpediteur.getInfo.getCpNaissance|escape('js') }}','{{ msg.getExpediteur.getInfo.getLieunaissance|escape('js') }}','{{ msg.getExpediteur.getInfo.getAdresse|escape('js') }}','{{ msg.message|escape('js') }}','{{ msg.statut|escape('js') }}');
                             show('FicheApprenant');idMessage={{ msg.id|e('js') }};"
-                            {% endif %}
+
                             class="col-xs-1" style="height: 100%">
                         <span class="glyphicon glyphicon-option-vertical" style="margin-top:40px;height:20px;color:#8c8c8c"></span>
                     </div>
@@ -330,11 +330,11 @@
                             <label id="statut{{ msg.id }}" style="font:18px Roboto;margin-top: 30px" > Répondez </label>
                         {% endif %}
                     </div>
-                    <div {% if not msg.statut == -1 and not msg.statut == 1 %}
+                    <div
                             onclick="informationMission('{{ msg.mission.etablissement.tier.logo|escape('js') }}','{{ msg.mission.intitule|escape('js') }}','{{ msg.mission.etablissement.tier.raisonsoc|escape('js') }}','{{ msg.mission.descriptif|escape('js') }}',
-                            '{{ msg.mission.codemission|escape('js') }}','{{ msg.mission.etablissement.adresse|escape('js') }}','{{ msg.mission.etablissement.ville|escape('js')  }}','{{ msg.mission.etablissement.codepostal|escape('js') }}','{{ msg.message|escape('js') }}');
+                            '{{ msg.mission.codemission|escape('js') }}','{{ msg.mission.etablissement.adresse|escape('js') }}','{{ msg.mission.etablissement.ville|escape('js')  }}','{{ msg.mission.etablissement.codepostal|escape('js') }}','{{ msg.message|escape('js') }}','{{ msg.statut|escape('js') }}');
                             show('FicheMission');idMessage={{ msg.id|e('js') }}"
-                            {% endif %}
+
                             class="col-xs-1" style="height: 100%">
                         <span class="glyphicon glyphicon-option-vertical" style="margin-top:40px;height:20px;color:#8c8c8c"></span>
 
@@ -553,7 +553,7 @@
         document.getElementById('declinerMission').style.display= 'none';
         document.getElementById('declinerMission_button').style.display= 'none';
     }
-    function informationMission(image,intitule,raisonsoc,descriptif,codemission,adresse,ville,cp,message) {
+    function informationMission(image,intitule,raisonsoc,descriptif,codemission,adresse,ville,cp,message,Msgstatut) {
         document.getElementById('FicheMission').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
         document.getElementById('Information_Mission_Descriptif').innerHTML = descriptif;
         document.getElementById('Information_Mission_Intitule').innerHTML= intitule;
@@ -561,6 +561,12 @@
         document.getElementById('Information_Mission_code').innerHTML= codemission;
         document.getElementById('Information_Mission_titre_adresse').innerHTML = adresse +', '+ cp +' '+ ville;
         document.getElementById('Information_Mission_Message').innerHTML = message;
+        if(Msgstatut == 1){
+            document.getElementById('mission_button').style.display = 'none';
+        }
+        if(Msgstatut == -1){
+            document.getElementById('mission_button').style.display = 'none';
+        }
         if(marker_societe)
         {
             marker_societe.setMap(null);
@@ -581,7 +587,7 @@
             }
         });
     }
-    function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse,message) {
+    function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse,message,Msgstatut) {
 
         if(image != ''){
             document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
@@ -606,6 +612,15 @@
         document.getElementById('Information_Apprenant_titre').innerHTML= nom +' '+ prenom;
         document.getElementById('Information_Apprenant_titre_adresse').innerHTML = adresse;
         document.getElementById('Information_Apprenant_Message').innerHTML = message;
+        if(Msgstatut == 1){
+            document.getElementById('information_button').style.display = 'none';
+        }
+        if(Msgstatut == -1){
+            document.getElementById('information_button').style.display = 'none';
+        }
+
+
+
         if(marker)
         {
             marker.setMap(null);

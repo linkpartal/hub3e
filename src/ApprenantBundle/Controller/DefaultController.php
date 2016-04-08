@@ -14,12 +14,20 @@ class DefaultController extends Controller
         $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');*/
 
-
-
         if($user->getPhotos() and !is_string($user->getPhotos()))
         {
             $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
         }
+
+
+        $messages = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user));
+        $messageNonLu = 0;
+        foreach($messages as $msg){
+            if(!$msg->getStatut()==1 and !$msg->getStatut()==-1){
+                $messageNonLu++;
+            }
+        }
+
 
         $societes = array();
         $missions = array();
@@ -35,6 +43,6 @@ class DefaultController extends Controller
         }
 
 
-        return $this->render('ApprenantBundle:Default:index.html.twig', array(/*'notifications'=>$jsonContent ,*/'societes'=>$societes,'missions'=>$missions,'image'=>$user->getPhotos()));
+        return $this->render('ApprenantBundle:Default:index.html.twig', array(/*'notifications'=>$jsonContent ,*/'societes'=>$societes,'missions'=>$missions,'image'=>$user->getPhotos(),'messages'=>$messageNonLu));
     }
 }

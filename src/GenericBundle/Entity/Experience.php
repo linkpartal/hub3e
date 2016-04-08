@@ -66,7 +66,7 @@ class Experience
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=45, nullable=true)
+     * @ORM\Column(name="description", type="string", length=300, nullable=true)
      */
     private $description;
 

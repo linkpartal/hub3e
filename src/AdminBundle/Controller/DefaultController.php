@@ -21,7 +21,6 @@ class DefaultController extends Controller
         $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');*/
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAll();
-
         $ecoles = array();
         $societes = array();
         foreach($etablissement as $item)
@@ -49,6 +48,15 @@ class DefaultController extends Controller
         }
 
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
+
+        $messages = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user));
+        $messageNonLu = 0;
+        foreach($messages as $message){
+            if(!$message->getStatut()==1 and !$message->getStatut()==-1){
+                $messageNonLu++;
+            }
+        }
+
         $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array(),array('datecreation'=>'DESC'));
         $diffusionEnSuspend = $this->getDoctrine()->getRepository('GenericBundle:Diffusion')->findBy(array('statut'=>1));
         $qcms = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findAll();
@@ -81,7 +89,7 @@ class DefaultController extends Controller
         }
 
         return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,/*'notifications'=>$jsonContent ,*/'users'=>$notapprenant,'modeles'=>$modeles,
-            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'missions'=>$missions,'DiffusionEnSuspend'=>$diffusionEnSuspend,'apprenants'=>$apprenants,'image'=>$user->getPhotos()));
+            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'missions'=>$missions,'DiffusionEnSuspend'=>$diffusionEnSuspend,'apprenants'=>$apprenants,'image'=>$user->getPhotos(),'messages'=>$messageNonLu));
     }
 
     public function loadiframeAction()

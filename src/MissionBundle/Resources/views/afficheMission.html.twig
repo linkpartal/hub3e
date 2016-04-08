@@ -49,7 +49,7 @@
                 </div>
                 <div class="div_button">
                     <input id="submitAnnuler" onclick="this.parentNode.parentNode.parentNode.parentNode.style.display='none';" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Annuler">
-                    <input id="submitMettreEnRelation" onclick="envoyerMRAction()" class="blue" type="button"  style="margin-left: 390px" value="Mettre en relation">
+                    <input id="submitMettreEnRelation" onclick="envoyerMRAction();ShowWaiter();" class="blue" type="button"  style="margin-left: 390px" value="Mettre en relation">
 
                 </div>
             </form>
@@ -502,6 +502,7 @@
 <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclustererplus/2.1.2/src/markerclusterer.js"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/PopUp.js') }}"></script>
+
 <script language="JavaScript">
     var idMRDestinataire;
     function postuler(){
@@ -538,6 +539,9 @@
                 {
                     document.getElementById('MettreEnRelation').style.display = 'none';
                     document.getElementById('formMettreEnRelation').reset();
+                }
+                else if(data==-1){
+                    alert('l\'apprenant a déjà recu une mise en relation!')
                 }
                 DeleteWaiter();
             }
