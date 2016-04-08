@@ -561,11 +561,11 @@
         document.getElementById('Information_Mission_code').innerHTML= codemission;
         document.getElementById('Information_Mission_titre_adresse').innerHTML = adresse +', '+ cp +' '+ ville;
         document.getElementById('Information_Mission_Message').innerHTML = message;
-        if(Msgstatut == 1){
+        if(Msgstatut == 1 || Msgstatut == -1){
             document.getElementById('mission_button').style.display = 'none';
         }
-        if(Msgstatut == -1){
-            document.getElementById('mission_button').style.display = 'none';
+        else{
+            document.getElementById('mission_button').style.display = 'block';
         }
         if(marker_societe)
         {
@@ -612,11 +612,10 @@
         document.getElementById('Information_Apprenant_titre').innerHTML= nom +' '+ prenom;
         document.getElementById('Information_Apprenant_titre_adresse').innerHTML = adresse;
         document.getElementById('Information_Apprenant_Message').innerHTML = message;
-        if(Msgstatut == 1){
+        if(Msgstatut == 1 || Msgstatut == -1){
             document.getElementById('information_button').style.display = 'none';
-        }
-        if(Msgstatut == -1){
-            document.getElementById('information_button').style.display = 'none';
+        }else{
+            document.getElementById('information_button').style.display = 'block';
         }
 
 

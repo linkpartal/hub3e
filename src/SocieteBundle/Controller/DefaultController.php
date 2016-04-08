@@ -18,6 +18,13 @@ class DefaultController extends Controller
         $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');*/
 
+        $messages = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user));
+        $messageNonLu = 0 ;
+        foreach($messages as $msg){
+            if(!$msg->getStatut()==1 and !$msg->getStatut()==-1){
+                $messageNonLu++;
+            }
+        }
         $ecoles = array();
         $ecoles = array_merge($ecoles,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($user->getTier()->getId()))  ;
         foreach($user->getTier()->getTier1() as $partenaire) {
@@ -66,6 +73,6 @@ class DefaultController extends Controller
 
 
         return $this->render('SocieteBundle:AdminSoc:index.html.twig', array('ecoles'=>$ecoles, /*'notifications'=>$jsonContent,*/'users'=>$notapprenant,
-            'AllLicences'=>$licences,'societes'=>$societes,'image'=>$user->getPhotos(),'missions'=>$missions));
+            'AllLicences'=>$licences,'societes'=>$societes,'image'=>$user->getPhotos(),'missions'=>$missions,'messages'=>$messageNonLu));
     }
 }

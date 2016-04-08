@@ -15,6 +15,14 @@ class RecruteurController extends Controller
             $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
         }
 
+        $messages = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user));
+        $messageNonLu = 0;
+        foreach($messages as $msg){
+            if($msg->getStatut()==1 and $msg->getStatut()==-1){
+                $messageNonLu++;
+            }
+        }
+
         /*$notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
         $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');*/
@@ -52,7 +60,7 @@ class RecruteurController extends Controller
         $societes = array_merge($societes,$user->getReferenciel()->toArray());
         $uniquesocietes = array_unique($societes);
         return $this->render('EcoleBundle:Recruteur:index.html.twig', array(/*'notifications'=>$jsonContent ,*/'apprenants'=>$apprenants,'societes'=>$uniquesocietes,'missions'=>$mes_missions,
-            'image'=>$user->getPhotos(),'formations'=>$formations));
+            'image'=>$user->getPhotos(),'formations'=>$formations,'messages'=>$messageNonLu));
     }
 
 

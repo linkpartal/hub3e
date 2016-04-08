@@ -15,6 +15,13 @@ class TuteurController extends Controller
             $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
         }
 
+        $messages = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user));
+        $messageNonLu = 0;
+        foreach($messages as $message){
+            if(!$message->getStatut()==1 and !$message->getStatut()==-1){
+                $messageNonLu++;
+            }
+        }
         /*
         $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
         $serializer = $this->get('jms_serializer');
@@ -45,7 +52,7 @@ class TuteurController extends Controller
 
         }
 
-        return $this->render('SocieteBundle:Tuteur:index.html.twig', array(/*'notifications'=>$jsonContent ,*/'apprenants'=>$apprenants, 'missions'=>$mes_missions,'image'=>$user->getPhotos()));
+        return $this->render('SocieteBundle:Tuteur:index.html.twig', array(/*'notifications'=>$jsonContent ,*/'apprenants'=>$apprenants, 'missions'=>$mes_missions,'image'=>$user->getPhotos(),'messages'=>$messageNonLu));
     }
 
 

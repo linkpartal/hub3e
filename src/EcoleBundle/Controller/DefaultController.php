@@ -17,7 +17,13 @@ class DefaultController extends Controller
             $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
         }
 
-
+        $messages = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user));
+        $messageNonLu = 0;
+        foreach($messages as $msg){
+            if(!$msg->getStatut()==1 and !$msg->getStatut()==-1){
+                $messageNonLu++;
+            }
+        }
         /*$notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
         $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($notifications, 'json');*/
@@ -78,7 +84,7 @@ class DefaultController extends Controller
 
 
         return $this->render('EcoleBundle:Adminecole:index.html.twig', array('ecoles'=>$ecoles,/*'notifications'=>$jsonContent ,*/'users'=>$notapprenant,'AllLicences'=>$licences,
-            'societes'=>$user->getReferenciel(),'missions'=>$mes_missions,'missions_propose'=>$missions_propose,'apprenants'=>$apprenants,'image'=>$user->getPhotos()));
+            'societes'=>$user->getReferenciel(),'missions'=>$mes_missions,'missions_propose'=>$missions_propose,'apprenants'=>$apprenants,'image'=>$user->getPhotos(),'messages'=>$messageNonLu));
     }
 
     public function affichageLicenceAction($id)

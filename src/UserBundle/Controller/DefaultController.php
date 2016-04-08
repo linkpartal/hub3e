@@ -946,15 +946,14 @@ class DefaultController extends Controller
     private function ImportMissions($uploadedfile)
     {
         $file = new \SplFileObject($uploadedfile);
-        $reader = new CsvReader($file);
+        $reader = new ExcelReader($file);
         $jump = 0;
         $em = $this->getDoctrine()->getEntityManager();
         foreach ($reader as $row) {
-            if($jump++<1 || (''==$row[1] and ''==$row[2] and '' == $row[3] and '' == $row[4])){
+            if($jump++ < 1 || ('' == $row[1] and '' ==$row[2] and '' == $row[3] and '' == $row[4])){
                 continue;
             }
             else{
-
                 $siren = substr(mb_convert_encoding($row[1],'UTF-8','auto'),0,9);
                 $tier = $em->getRepository('GenericBundle:Tier')->findOneBy(array('siren'=>$siren));
                 if(!$tier)
@@ -962,7 +961,6 @@ class DefaultController extends Controller
                     $newtier = new Tier();
                     $newtier->setSiren($siren);
                     $newtier->setRaisonsoc(mb_convert_encoding($row[3],'UTF-8','auto'));
-                    $newtier->setActivite(mb_convert_encoding($row[4],'UTF-8','auto'));
                     $newtier->setEcole(false);
                     $em->persist($newtier);
                     $em->flush();
@@ -976,6 +974,7 @@ class DefaultController extends Controller
                     $newsiege->setAdresse(mb_convert_encoding($row[5],'UTF-8','auto'));
                     $newsiege->setCodepostal(mb_convert_encoding($row[6],'UTF-8','auto'));
                     $newsiege->setVille(mb_convert_encoding($row[7],'UTF-8','auto'));
+                    $newsiege->setActive(mb_convert_encoding($row[4],'UTF-8','auto'));
                     $newsiege->setTier($tier);
                     $em->persist($newsiege);
                     $em->flush();
@@ -985,6 +984,7 @@ class DefaultController extends Controller
                 {
                     $newetab = new Etablissement();
                     $newetab->setSiret(mb_convert_encoding($row[2],'UTF-8','auto'));
+                    $newetab->setActive(mb_convert_encoding($row[4],'UTF-8','auto'));
                     $newetab->setAdresse(mb_convert_encoding($row[8],'UTF-8','auto'));
                     $newetab->setCodepostal(mb_convert_encoding($row[9],'UTF-8','auto'));
                     $newetab->setVille(mb_convert_encoding($row[10],'UTF-8','auto'));
@@ -995,10 +995,7 @@ class DefaultController extends Controller
                 }
 
                 $mission = new Mission();
-                $mission->setEtat('À pourvoir');
-
                 $mission->setTypecontrat(mb_convert_encoding($row[16],'UTF-8','auto'));
-
                 $mission->setIntitule(mb_convert_encoding($row[18],'UTF-8','auto'));
                 $mission->setDescriptif(mb_convert_encoding($row[19],'UTF-8','auto'));
                 $mission->setDomaine(mb_convert_encoding($row[20],'UTF-8','auto'));
@@ -1011,7 +1008,7 @@ class DefaultController extends Controller
                 if(!$row[0]=='' and !mb_convert_encoding($row[0],'UTF-8','auto')=='jj/mm/aaaa')
                 {
                     $date=date_create_from_format('dd/mm/YYYY',mb_convert_encoding($row[0],'UTF-8','auto'));
-                    $mission->setDate($date);
+                    $mission->setDatecreation($date);
                 }
 
                 $em->persist($mission);
@@ -1043,6 +1040,7 @@ class DefaultController extends Controller
             }
         }
     }
+    private function ImportSoc($uploadfile){}
 
     public function afficherImportsAction()
     {
