@@ -569,13 +569,13 @@ class DefaultController extends Controller
                 $info->setVehicule($request->get('_Vehicule'));
                 $info->setFormationactuelle($request->get('_FormationActuel'));
                 $info->setDernierDiplome($request->get('_DernierDiplome'));
-                if($request->get('_handicap')=="0"){
+                if($request->get('_handicap')){
                     $info->setHandicape(true);
                 }
                 else{
                     $info->setHandicape(false);
                 }
-                if($request->get('_entrepreneur')=="0"){
+                if($request->get('_entrepreneur')){
                     $info->setEntrepreneur(true);
                 }
                 else{

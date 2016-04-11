@@ -48,7 +48,7 @@ class Message
      *
      * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="expediteur", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="expediteur", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $expediteur;
@@ -58,7 +58,7 @@ class Message
      *
      * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="destinataire", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="destinataire", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $destinataire;
@@ -68,7 +68,7 @@ class Message
      *
      * @ORM\ManyToOne(targetEntity="Mission", cascade={"remove"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="mission", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="mission", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $mission;

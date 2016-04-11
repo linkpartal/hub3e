@@ -135,7 +135,8 @@
                                 </div>
                             </div>
                             <div class="col-xs-6 input-colonne " style="height:150px">
-                                <textarea placeholder="Description ( 300 caractères max ) " class="input" id="Descriptionexp" name="_Descriptionexp" maxlength="300" required style="resize:none;height:calc( 100% - 13px)"></textarea>
+                                <textarea placeholder="Description ( 300 caractères max )" onkeyup="document.getElementById('CharRestant').innerHTML = (300-this.value.length) +'caractère restant';" class="input" id="Descriptionexp" name="_Descriptionexp" maxlength="300" required style="resize:none;height:calc( 100% - 13px)"></textarea>
+                                <label id="CharRestant"></label>
                             </div>
                         </div>
                         <div class="div_button" style="background-color: white">
@@ -586,12 +587,12 @@
 
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="Tel">Téléphone :</label>
-                                    <input value="{{User.getTelephone}}" type="text" class="champ form-control" minlength="10" max="20" id="Tel" name="_Tel" maxlength="20" >
+                                    <input value="{{User.getTelephone}}" type="tel" class="champ form-control"   id="Tel" name="_Tel" maxlength="20" >
                                 </div>
 
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="Portable">Téléphone portable :</label>
-                                    <input value="{{User.getInfo.getPortable}}" type="text" class="champ form-control" id="Portable" name="_Portable" maxlength="45" >
+                                    <input value="{{User.getInfo.getPortable}}" type="tel" class="champ form-control" id="Portable" name="_Portable" maxlength="20" >
                                 </div>
 
                                 <div class="inputcontainer">
@@ -1164,7 +1165,7 @@
                     </button>
 
                     {% if (is_granted('ROLE_ADMINSOC') or is_granted('ROLE_ADMINECOLE')) and not User.hasRole('ROLE_APPRENANT') %}
-                        <button onclick="if(confirm('Voulez-vous Supprimer cet utilisateur ?')){post('{{ path('supprimerUtilisateur',{'id': User.getId }) }}',true)}" type="button" class="col-xs-12 rightMenu" >
+                        <button onclick="if(confirm('Voulez-vous Supprimer cet utilisateur ?')){window.location.href = '{{ path('supprimerUtilisateur',{'id': User.getId }) }}';}" type="button" class="col-xs-12 rightMenu" >
                             Supprimer l'utilisateur
                         </button>
                         {% if User.hasRole('ROLE_TUTEUR') or User.hasRole('ROLE_RECRUTEUR') %}
@@ -1178,7 +1179,7 @@
                         {% endif %}
                     {% endif %}
                     {% if User.hasRole('ROLE_APPRENANT') and is_granted('ROLE_RECRUTEUR') %}
-                        <button onclick="if(confirm('Voulez-vous Supprimer cet utilisateur ?')){post('{{ path('supprimerUtilisateur',{'id': User.getId }) }}',true)}" type="button" class="col-xs-12 rightMenu" >
+                        <button onclick="if(confirm('Voulez-vous Supprimer cet utilisateur ?')){window.location.href = '{{ path('supprimerUtilisateur',{'id': User.getId }) }}';}" type="button" class="col-xs-12 rightMenu" >
                             Supprimer l'apprenant
                         </button>
                         <button  onclick="CompleterProfil();"  type="button" class="col-xs-12 rightMenu" >
@@ -1237,25 +1238,6 @@
             }
         });
 
-    }
-    function post(path,refresh) {
-        if(refresh)
-        {
-            $.ajax({
-                type: 'post',
-                url: path,
-                error: function () {
-                    alert('Une erreur s\'est produite');
-                },
-                success: function () {
-                    window.parent.location.reload();
-                }
-            });
-        }
-        else
-        {
-            window.location = path;
-        }
     }
     function loading(){
         var onglet = sessionStorage.getItem('onglet_tier');

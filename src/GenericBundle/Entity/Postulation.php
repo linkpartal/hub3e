@@ -34,7 +34,7 @@ class Postulation
      *
      * @ORM\ManyToOne(targetEntity="Mission", cascade={"remove"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="mission_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="mission_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $mission;
@@ -44,7 +44,7 @@ class Postulation
      *
      * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="users_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="users_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $user;

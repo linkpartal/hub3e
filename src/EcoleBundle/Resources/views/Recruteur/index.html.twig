@@ -28,8 +28,8 @@
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
 
         <div id="div_adresse" name="ajouterAdresse" style="border-bottom: 10px;display: none;">
-            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo" style="display: none;"></button>
-            <button class="toggle" type="button" onclick="supprimerAdresse(this)" style="display: none;">-</button>
+            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo"></button>
+            <button class="toggle" type="button" onclick="supprimerAdresse(this)" >-</button>
             <div id="demo" class="collapse in">
 
 
@@ -130,7 +130,7 @@
 
 
                     <div id="adressecontainer">
-                        <div id="div_adresse" name="ajouterAdresse" style="border-bottom: 10px;">
+                        <div id="div_adresse" name="ajouterAdresse" style="border-bottom: 10px;display:inline-block;">
                             <button class="toggle" type="button" data-toggle="collapse" data-target="#demo" style="display: none;"></button>
                             <button class="toggle" type="button" onclick="supprimerAdresse(this)" style="display: none;">-</button>
                             <div id="demo" class="collapse in">
@@ -688,7 +688,7 @@
 
         var div = clone.children[2];
         div.setAttribute("id","Adresse" + i);
-        clone.style.display = 'block';
+        clone.style.display = 'inline-block';
 
         document.getElementById("adressecontainer").appendChild(clone);
         var parentdiv = dup.parentNode;

@@ -21,8 +21,8 @@
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
 
         <div id="div_adresse" name="ajouterAdresse" style="border-bottom: 10px;display: none;">
-            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo" style="display: none;"></button>
-            <button class="toggle" type="button" onclick="supprimerAdresse(this)" style="display: none;">-</button>
+            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo" style="margin-top: 40px;"></button>
+            <button class="toggle" type="button" onclick="supprimerAdresse(this)" style="margin-top: 40px;">-</button>
             <div id="demo" class="collapse in">
 
 
@@ -40,8 +40,8 @@
 
                 <label for="Tel" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Téléphone</label>
                 <label for="Fax" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Fax</label>
-                <input class="input" type="tel" id="Tel" name="_Tel[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="10" required>
-                <input class="input" type="tel" id="Fax" name="_Fax[]" style="width: 50%;" maxlength="10" required>
+                <input class="input" type="tel" id="Tel" name="_Tel[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="20" required>
+                <input class="input" type="tel" id="Fax" name="_Fax[]" style="width: 50%;" maxlength="20" required>
 
                 <label for="Site" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Site web</label>
                 <input class="input" type="url" id="Site" name="_Site[]" maxlength="45" required>
@@ -123,7 +123,7 @@
 
 
                     <div id="adressecontainer">
-                        <div id="div_adresse" name="ajouterAdresse" style="border-bottom: 10px;">
+                        <div id="div_adresse" name="ajouterAdresse" style="border-bottom: 10px;display:inline-block;">
                             <button class="toggle" type="button" data-toggle="collapse" data-target="#demo" style="display: none;"></button>
                             <button class="toggle" type="button" onclick="supprimerAdresse(this)" style="display: none;">-</button>
                             <div id="demo" class="collapse in">
@@ -709,7 +709,7 @@
 
         var div = clone.children[2];
         div.setAttribute("id","Adresse" + i);
-        clone.style.display = 'block';
+        clone.style.display = 'inline-block';
 
         document.getElementById("adressecontainer").appendChild(clone);
         var parentdiv = dup.parentNode;
