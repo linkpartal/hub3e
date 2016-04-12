@@ -555,6 +555,7 @@
         document.getElementById('declinerMission').style.display= 'none';
         document.getElementById('declinerMission_button').style.display= 'none';
     }
+
     function informationMission(image,intitule,raisonsoc,descriptif,codemission,adresse,ville,cp,message,Msgstatut) {
         document.getElementById('FicheMission').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
         document.getElementById('Information_Mission_Descriptif').innerHTML = descriptif;
@@ -564,9 +565,11 @@
         document.getElementById('Information_Mission_titre_adresse').innerHTML = adresse +', '+ cp +' '+ ville;
         document.getElementById('Information_Mission_Message').innerHTML = message;
         if(Msgstatut == 1 || Msgstatut == -1 || Msgstatut == 2 ){
+
             document.getElementById('mission_button').style.display = 'none';
         }
         else{
+            
             document.getElementById('mission_button').style.display = 'block';
         }
         if(marker_societe)
