@@ -108,7 +108,7 @@
                                 <input type="text" class="input" style="width: calc(75% - 10px);" id="Prenom" name="_Prenom" placeholder="Prénom" required maxlength="45">
                                 <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom" required maxlength="45">
 
-                                <input type="tel" class="input " id="Tel" name="_Tel" placeholder="Tel" required maxlength="45">
+                                <input type="tel" class="input " id="Tel" name="_Tel" placeholder="Tel" required maxlength="20">
                             </div>
 
 
@@ -221,7 +221,7 @@
                                         <input type="text" style="width: calc(33% - 10px);" class="input " id="NomContact" name="_NomContact" placeholder="NomContact" required MAXLENGTH="45">
                                         <input type="text" style="width: calc(33% - 10px);margin-left: 15px" class="input " id="PrenomContact" name="_PrenomContact" placeholder="PrenomContact" required MAXLENGTH="45">
                                         <input type="text" style="width: calc(33% - 10px);margin-left: 15px" class="input" id="FonctionContact" name="_FonctionContact" placeholder="FonctionContact" required MAXLENGTH="45">
-                                        <input type="text" style="width: calc(33% - 10px);" class="input" id="TelContact" name="_TelContact" placeholder="TelContact" required MAXLENGTH="45">
+                                        <input type="text" style="width: calc(33% - 10px);" class="input" id="TelContact" name="_TelContact" placeholder="TelContact" required MAXLENGTH="20">
                                         <input type="text" style="width: calc(33% - 10px);margin-left: 15px;" class="input" id="EmailContact" name="_EmailContact" placeholder="EmailContact" required MAXLENGTH="45">
                                     </div>
                                     <label class="col-xs-3 input-colonne">
@@ -424,7 +424,7 @@
                                         <input placeholder="Prenom" class="input" type="text" id="Prenom" name="_Prenom" maxlength="45" required >
                                         <input placeholder="Adresse email" class="input" type="text" id="Email" name="_Email" maxlength="45" required >
                                         <input placeholder="Téléphone portable" class="input" type="text" id="Portable" name="_Portable" maxlength="45" required >
-                                        <input placeholder="Téléphone Fix" class="input" type="text" id="Telephone" name="_Telephone" maxlength="45" required >
+                                        <input placeholder="Téléphone Fix" class="input" type="text" id="Telephone" name="_Telephone" maxlength="20" required >
                                         <input placeholder="Adresse" class="input" type="text" id="Adresse" name="_Adresse" maxlength="45" required >
 
                                         <div class="col-xs-6 input-colonne" >
@@ -659,7 +659,7 @@
                             </div>
                             <div class="inputcontainer">
                                 <label class="list-group-item" style="height: 60px;" for="Tel">Téléphone : </label>
-                                <input value="{{ etablissement.getTelephone }}" type="tel" class="champ form-control"  id="Tel" name="_Tel" maxlength="45" readonly>
+                                <input value="{{ etablissement.getTelephone }}" type="tel" class="champ form-control"  id="Tel" name="_Tel" maxlength="20" readonly>
                             </div>
                             <div class="inputcontainer">
                                 <label class="list-group-item" style="height: 60px;" for="Fax">FAX : </label>
@@ -675,7 +675,7 @@
                             </div>
                             <div class="inputcontainer">
                                 <label class="list-group-item" style="height: 60px;" for="TelResp">Téléphone responsable établissement : </label>
-                                <input type="tel" value="{{ etablissement.getTelResponsable }}" class="champ form-control" id="TelResp" name="_TelResp" maxlength="45" readonly>
+                                <input type="tel" value="{{ etablissement.getTelResponsable }}" class="champ form-control" id="TelResp" name="_TelResp" maxlength="20" readonly>
                             </div>
                             <div class="inputcontainer">
                                 <label class="list-group-item" style="height: 60px;" for="MailResp">Email responsable établissement : </label>
@@ -939,8 +939,7 @@
             </div>
             {% if is_granted('ROLE_RECRUTEUR') or (is_granted('ROLE_ADMINSOC') and etablissement.getTier == app.user.getTier) %}
                 <div class="col-xs-3" style="height: 100%;">
-                    <div style="margin: 15px 0 0 15px;">
-
+                    <div style="margin: 15px 0 0 15px;position: fixed;width: calc(25% - 20px);">
 
                         {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
                         {% if etablissement.getActive %}

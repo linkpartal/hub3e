@@ -1150,7 +1150,7 @@
             </div>
 
             <div class="col-xs-3" style="height: 100%;">
-                <div style="margin: 15px 0 0 15px;">
+                <div style="margin: 15px 0 0 15px;position: fixed;width: calc(25% - 20px);">
                     {% if not User.isExpired and not User.hasRole('ROLE_APPRENANT') %}
                         <button onclick="expire('{{ path('expired',{'id':User.getId}) }}')" id="expired" type="button" class="col-xs-12 rightMenu" style="background-color: #94C400;color:white;">
                             Activer

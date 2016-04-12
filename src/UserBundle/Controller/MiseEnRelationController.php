@@ -21,6 +21,8 @@ class MiseEnRelationController extends Controller
         $destinataire = $em->getRepository('GenericBundle:User')->find($idDest);
         $mission = $em->getRepository('GenericBundle:Mission')->find($mission);
         $MRduplica = $em->getRepository('GenericBundle:Message')->findBy(array('mission'=>$mission,'destinataire'=>$destinataire));
+
+
         if(!$MRduplica){
             $message = new Message();
             $message->setMessage($request->get('_Descriptif'));
@@ -30,6 +32,17 @@ class MiseEnRelationController extends Controller
             $message->setDestinataire($destinataire);
             $message->setMission($mission);
             $em->persist($message);
+            $em->flush();
+
+            $messageRetour = new Message();
+            $messageRetour->setMessage("En attente d'une réponse");
+            $date = new \DateTime();
+            $messageRetour->setDate($date);
+            $messageRetour->setExpediteur($destinataire);
+            $messageRetour->setDestinataire($expediteur);
+            $messageRetour->setMission($mission);
+            $messageRetour->setStatut(2);
+            $em->persist($messageRetour);
             $em->flush();
         }
         else{
@@ -45,6 +58,10 @@ class MiseEnRelationController extends Controller
             );
         $this->get('mailer')->send($mail);
 
+
+
+
+
         return $reponsejson->setData(1);
     }
 
@@ -52,21 +69,69 @@ class MiseEnRelationController extends Controller
         $reponsejson = new JsonResponse();
 
         $em = $this->getDoctrine()->getEntityManager();
-        $message = new Message();
-        $date = new \DateTime();
-        $message->setDate($date);
-        $message->setExpediteur($this->get('security.token_storage')->getToken()->getUser());
+        $userConnecte = $this->get('security.token_storage')->getToken()->getUser();
         $messagereponse = $em->getRepository('GenericBundle:Message')->find($idmessage);
-        $message->setDestinataire($messagereponse->getExpediteur());
-        $message->setMission($messagereponse->getMission());
+        $messageDup = $em->getRepository('GenericBundle:Message')->findOneBy(array('expediteur'=>$userConnecte,'destinataire'=>$messagereponse->getExpediteur(),'mission'=>$messagereponse->getMission()));
+
+        if(!$messageDup){
+            $message = new Message();
+            $date = new \DateTime();
+            $message->setDate($date);
+            $message->setExpediteur($userConnecte);
+            $message->setDestinataire($messagereponse->getExpediteur());
+            $message->setMission($messagereponse->getMission());
+            if($request->get('MessageRefus')){
+                $message->setMessage($request->get('MessageRefus'));
+                $message->setStatut(-1);
+                $messagereponse->setStatut(-1);
+                $em->persist($message);
+                $em->flush();
+            }
+            elseif($request->get('MessageAcceptation')) {
+                if ($request->get('LienDoodle')) {
+                    $lien = '<a href="' . $request->get('LienDoodle') . '" target="_blank">' . $request->get('LienDoodle') . '</a>';
+                    if ($request->get('MessageAcceptation')) {
+                        $message->setMessage($request->get('MessageAcceptation') . ' Rendez-vous sur : ' . $lien);
+                    }
+                } else {
+                    $message->setMessage($request->get('MessageAcceptation'));
+                }
+
+                $message->setStatut(1);
+                $messagereponse->setStatut(1);
+                $em->persist($message);
+                $em->flush();
+            }
+        }
+        else{
+            $date = new \DateTime();
+            $messageDup->setDate($date);
+            if($request->get('MessageRefus')){
+                $messageDup->setMessage($request->get('MessageRefus'));
+                $messageDup->setStatut(-1);
+                $messagereponse->setStatut(-1);
+                $em->flush();
+            }
+            elseif($request->get('MessageAcceptation')) {
+                if ($request->get('LienDoodle')) {
+                    $lien = '<a href="' . $request->get('LienDoodle') . '" target="_blank">' . $request->get('LienDoodle') . '</a>';
+                    if ($request->get('MessageAcceptation')) {
+                        $messageDup->setMessage($request->get('MessageAcceptation') . ' Rendez-vous sur : ' . $lien);
+                    }
+                } else {
+                    $messageDup->setMessage($request->get('MessageAcceptation'));
+                }
+
+                $messageDup->setStatut(1);
+                $messagereponse->setStatut(1);
+                $em->flush();
+            }
+            $message = $messageDup;
+            $em->flush();
+        }
+
 
         if($request->get('MessageRefus')){
-            $message->setMessage($request->get('MessageRefus'));
-            $message->setStatut(-1);
-            $messagereponse->setStatut(-1);
-            $em->persist($message);
-            $em->flush();
-
             if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT')){
                 $mail = \Swift_Message::newInstance()
                     ->setSubject('Postulation')
@@ -91,22 +156,6 @@ class MiseEnRelationController extends Controller
             return $reponsejson->setData(-1);
         }
         elseif($request->get('MessageAcceptation')){
-            if($request->get('LienDoodle'))
-            {
-                $lien = '<a href="'.$request->get('LienDoodle').'" target="_blank">'. $request->get('LienDoodle').'</a>';
-                if($request->get('MessageAcceptation'))
-                {
-                    $message->setMessage($request->get('MessageAcceptation') .' Rendez-vous sur : '. $lien);
-                }
-            }
-            else{
-                $message->setMessage($request->get('MessageAcceptation'));
-            }
-
-            $message->setStatut(1);
-            $messagereponse->setStatut(1);
-            $em->persist($message);
-            $em->flush();
             $rdv = $em->getRepository('GenericBundle:RDV')->findOneBy(array('mission'=>$messagereponse->getMission(),'tuteur'=>$messagereponse->getMission()->getTuteur(),'apprenant'=>$messagereponse->getExpediteur()));
             if($rdv)
             {
@@ -157,20 +206,14 @@ class MiseEnRelationController extends Controller
 
     public function PostulerMessagerieAction($idmessage){
         $reponsejson = new JsonResponse();
-
         $em = $this->getDoctrine()->getEntityManager();
         $messagereponse = $em->getRepository('GenericBundle:Message')->find($idmessage);
         $messagedup = $em->getRepository('GenericBundle:Message')->findOneBy(array('destinataire'=>$messagereponse->getMission()->getTuteur(),'expediteur'=>$this->get('security.token_storage')->getToken()->getUser(),'mission'=>$messagereponse->getMission()));
         if(!$messagedup) {
             //Message RP
-            $messageRP = new Message();
-            $date = new \DateTime();
-            $messageRP->setDate($date);
-            $messageRP->setExpediteur($this->get('security.token_storage')->getToken()->getUser());
-            $messageRP->setDestinataire($messagereponse->getExpediteur());
-            $messageRP->setMission($messagereponse->getMission());
-            $messageRP->setMessage('L\'apprenant a donné suite a votre message!');
-            $em->persist($messageRP);
+            $messageRP = $em->getRepository('GenericBundle:Message')->findOneBy(array('expediteur'=>$this->get('security.token_storage')->getToken()->getUser(),'destinataire'=>$messagereponse->getExpediteur(),'mission'=>$messagereponse->getMission()));
+            $messageRP->setStatut(1);
+            $messageRP->getMessage("L'apprenant a donné suite à votre mise en relation");
             $em->flush();
             //Message au Tuteur
             $messageTuteur = new Message();
@@ -188,6 +231,7 @@ class MiseEnRelationController extends Controller
         else{
             $messagedup->setMessage('Cet apprenant correspond au profil demandé');
             $messagedup->setStatut(1);
+            $messagereponse->setStatut(1);
             $em->flush();
         }
         $postdup = $em->getRepository('GenericBundle:Postulation')->findOneBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser(),'mission'=>$messagereponse->getMission()));

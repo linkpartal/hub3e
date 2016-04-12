@@ -21,8 +21,8 @@
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
 
         <div id="div_adresse" name="ajouterAdresse" style="border-bottom: 10px;display: none;">
-            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo" style="margin-top: 40px;"></button>
-            <button class="toggle" type="button" onclick="supprimerAdresse(this)" style="margin-top: 40px;">-</button>
+            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo" style="background-color: rgb(215,215,215);height: 40px;border: none;margin-top: 40px;"></button>
+            <button class="toggle" type="button" onclick="supprimerAdresse(this)" style="background-color: rgb(215,215,215);height: 40px;border: none;margin-top: 40px;">-</button>
             <div id="demo" class="collapse in">
 
 
@@ -54,7 +54,7 @@
 
                 <label for="TelResp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Téléphone</label>
                 <label for="MailResp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Email</label>
-                <input class="input" type="tel" id="TelResp" name="_TelResp[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="45" required>
+                <input class="input" type="tel" id="TelResp" name="_TelResp[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="20" required>
                 <input class="input" type="email" id="MailResp" name="_MailResp[]" style="width: 50%;" maxlength="45" required>
                 <!----------------------------------------------------------------------------------------------------------------------------------------------->
                 <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Société</label>
@@ -69,14 +69,14 @@
                     <option value="ONG Association">ONG Association</option>
                     <option value="Ecole Centre de formation">Ecole Centre de formation</option>
                 </select>
-                <select class="input" id="RespPrenom" name="" style="width: 50%;" required>
+                <select class="input" id="Taille" name="_Taille[]"  style="width: 50%;" required>
                     <option value="Moins de 10 salariés">Moins de 10 salariés</option>
                     <option value="Moins de 100 salariés">Moins de 100 salariés</option>
                     <option value="Plus de 100salariés">Plus de 100 salariés</option>
                 </select>
 
                 <label for="TelResp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Secteur d"activité</label>
-                <select class="input" id="MailResp" name="" style="width: 50%;" required>
+                <select class="input" id="Secteur" name="_Secteur[]"  style="width: 50%;" required>
                     <option value="Primaire">Primaire</option>
                     <option value="Secondaire">Secondaire</option>
                     <option value="Tertiaire">Tertiaire</option>
@@ -141,8 +141,8 @@
 
                                 <label for="Tel" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Téléphone</label>
                                 <label for="Fax" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Fax</label>
-                                <input class="input" type="tel" id="Tel" name="_Tel[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="10" required>
-                                <input class="input" type="tel" id="Fax" name="_Fax[]" style="width: 50%;" maxlength="10" required>
+                                <input class="input" type="tel" id="Tel" name="_Tel[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="20" required>
+                                <input class="input" type="tel" id="Fax" name="_Fax[]" style="width: 50%;" maxlength="20" required>
 
                                 <label for="Site" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Site web</label>
                                 <input class="input" type="url" id="Site" name="_Site[]" maxlength="45" required>
@@ -155,7 +155,7 @@
 
                                 <label for="TelResp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Téléphone</label>
                                 <label for="MailResp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Email</label>
-                                <input class="input" type="tel" id="TelResp" name="_TelResp[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="45" required>
+                                <input class="input" type="tel" id="TelResp" name="_TelResp[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="20" required>
                                 <input class="input" type="email" id="MailResp" name="_MailResp[]" style="width: 50%;" maxlength="45" required>
                                 <!----------------------------------------------------------------------------------------------------------------------------------------------->
                                 <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Société</label>
@@ -457,6 +457,7 @@
                                      style="height: 31px; text-align: left;">
 
                                     <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
+                                    {% if app.user.info %}
                                     {% if u.info.profilcomplet == 3 %}
                                         <div class="col-xs-1 active" id="activeUser{{ u.getId }}"></div>
                                     {% elseif u.info.profilcomplet == 2 %}
@@ -465,6 +466,7 @@
                                         <div class="col-xs-1" style="background: #2A76CC;height:9px;border-radius: 100%;margin: 3px 0;width: 9px;float: right;" id="activeUser{{ u.getId }}"></div>
                                     {% else %}
                                         <div class="col-xs-1" style="background: orangered;height:9px;border-radius: 100%;margin: 3px 0;width: 9px;float: right;" id="activeUser{{ u.getId }}"></div>
+                                    {% endif %}
                                     {% endif %}
 
                                 </div>

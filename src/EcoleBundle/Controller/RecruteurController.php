@@ -18,7 +18,7 @@ class RecruteurController extends Controller
         $messages = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user));
         $messageNonLu = 0;
         foreach($messages as $msg){
-            if($msg->getStatut()==1 and $msg->getStatut()==-1){
+            if(!$msg->getStatut()==1 and !$msg->getStatut()==-1){
                 $messageNonLu++;
             }
         }

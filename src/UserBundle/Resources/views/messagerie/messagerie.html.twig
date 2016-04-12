@@ -272,8 +272,6 @@
                                 <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/homme.jpg') }}">
                             {% endif %}
                         </div>
-
-
                     </div>
 
                     <div class="col-xs-1" style="margin-top:10px;text-align: left ">
@@ -290,6 +288,8 @@
                             <label id="statut{{ msg.id }}" style="font:18px Roboto;margin-top: 30px;color: green;" > Valider </label>
                         {% elseif msg.statut == -1 %}
                             <label id="statut{{ msg.id }}" style="font:18px Roboto;margin-top: 30px;color: red;" > Décliner </label>
+                        {% elseif msg.statut == 2 %}
+                            <label id="statut{{ msg.id }}" style="font:18px Roboto;margin-top: 30px;" > En attente </label>
                         {% else %}
                             <label id="statut{{ msg.id }}" style="font:18px Roboto;margin-top: 30px" > Répondez </label>
                         {% endif %}
@@ -326,6 +326,8 @@
                             <label id="statut{{ msg.id }}" style="font:18px Roboto;margin-top: 30px;color: green;" > Valider </label>
                         {% elseif msg.statut == -1 %}
                             <label id="statut{{ msg.id }}" style="font:18px Roboto;margin-top: 30px;color: red;" > Décliner </label>
+                        {% elseif msg.statut == 2 %}
+                            <label id="statut{{ msg.id }}" style="font:18px Roboto;margin-top: 30px;" > En attente </label>
                         {% else %}
                             <label id="statut{{ msg.id }}" style="font:18px Roboto;margin-top: 30px" > Répondez </label>
                         {% endif %}
@@ -561,7 +563,7 @@
         document.getElementById('Information_Mission_code').innerHTML= codemission;
         document.getElementById('Information_Mission_titre_adresse').innerHTML = adresse +', '+ cp +' '+ ville;
         document.getElementById('Information_Mission_Message').innerHTML = message;
-        if(Msgstatut == 1 || Msgstatut == -1){
+        if(Msgstatut == 1 || Msgstatut == -1 || Msgstatut == 2 ){
             document.getElementById('mission_button').style.display = 'none';
         }
         else{
@@ -612,7 +614,7 @@
         document.getElementById('Information_Apprenant_titre').innerHTML= nom +' '+ prenom;
         document.getElementById('Information_Apprenant_titre_adresse').innerHTML = adresse;
         document.getElementById('Information_Apprenant_Message').innerHTML = message;
-        if(Msgstatut == 1 || Msgstatut == -1){
+        if(Msgstatut == 1 || Msgstatut == -1 || Msgstatut == 2 ){
             document.getElementById('information_button').style.display = 'none';
         }else{
             document.getElementById('information_button').style.display = 'block';
