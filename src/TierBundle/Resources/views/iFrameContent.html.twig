@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="{{ asset('css/ajout.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/Form.css') }}" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
 
     {% block CSS %}
         <style>
@@ -81,7 +83,7 @@
                         <div class="div_form" >
 
                             <div class="col-xs-6 input-colonne">
-                                <input type="text" class="input" id="Username" name="_Username" placeholder="Username" required maxlength="255">
+                                <input type="text" class="input" id="Username" name="_Username" placeholder="Pseudo" required maxlength="255">
 
                                 <input type="email" class="input " id="mail" name="_mail" placeholder="Email" required maxlength="255">
 
@@ -132,18 +134,18 @@
 
                             <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
                             <div class="col-xs-12 NavBarTier" >
-                                <button class="col-xs-3 active" id="BoutonOnlgetDonnéesMission" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Information_generale',this)">Données</button>
-                                <button class="col-xs-3" id="BoutonOnlgetContactMission" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Onglet_Contacts',this)">Contact</button>
-                                <button class="col-xs-3" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','QCM_Affinite',this)">Candidat rêvé</button>
-                                <button class="col-xs-3" type="button">Documents</button>
+                                <button class="col-xs-4 active" id="BoutonOnlgetDonnéesMission" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Information_generale',this)">Données</button>
+                                <button class="col-xs-4" id="BoutonOnlgetContactMission" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Onglet_Contacts',this)">Contact</button>
+                                <button class="col-xs-4" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','QCM_Affinite',this)">Candidat rêvé</button>
+                                {#<button class="col-xs-3" type="button">Documents</button>#}
                             </div>
                             <div id="PopUpMissionOnglet">
                                 <div id="Information_generale" style="" class="div_form">
                                     <div class="col-xs-6 input-colonne">
 
-                                        <input type="text" class="input" id="Intitule" name="_Intitule" placeholder="Intitule" required maxlength="75">
+                                        <input type="text" class="input" id="Intitule" name="_Intitule" placeholder="Intitulé mission" required maxlength="75">
                                         <!--<textarea style="height: 140px;resize: none;" class="input" id="Profil" name="_Profil" placeholder="Profil" required maxlength="255"></textarea>-->
-                                        <textarea style="height: 100px;resize: none;" class="input" id="Descriptif" name="_Descriptif" placeholder="Descriptif" required MAXLENGTH="255"></textarea>
+                                        <textarea style="height: 100px;resize: none;" class="input" id="Descriptif" name="_Descriptif" placeholder="Descriptif mission" required MAXLENGTH="255"></textarea>
 
                                         <div class="col-xs-6">
                                             <label style="float: left">Date début :</label><input type="text"  class="date" id="Datedebut" name="_Datedebut" title="Datedebut" required >
@@ -160,10 +162,12 @@
                                             <option value="Contrat d'apprentissage">Contrat d'apprentissage</option>
                                         </select>
                                         <select title="Horaire" class="input " id="Horaire" name="_Horaire">
-                                            <option value="Fixe">Fixe</option>
-                                            <option value="Flexible">Flexible</option>
+                                            <option value="Horaires fixes">Horaires fixes</option>
+                                            <option value="Horaires flexibles">Horaires flexibles</option>
                                         </select>
+                                        <label>Sélectionner un domaine</label>
                                         <select title="Domaine" class="input " id="Domaine" name="_Domaine">
+                                            <option value=""> </option>
                                             <option value="Commerce">Commerce</option>
                                             <option value="Marketing">Marketing</option>
                                             <option value="Informatique">Informatique</option>
@@ -177,15 +181,17 @@
                                     <input type="text" class="input" id="EmailContact" name="_EmailContact" placeholder="EmailContact" required MAXLENGTH="45">
                                 </div>-->
                                     <div class="col-xs-6">
-                                        <input type="number"  class="input " id="Remuneration" name="_Remuneration" placeholder="Remuneration" required max="1000000">
+                                        <input type="number"  class="input " id="Remuneration" name="_Remuneration" placeholder="Rémunération" required max="1000000">
                                         <input type="number" class="input " id="Emploi" name="_Emploi" placeholder="Nbre de poste à pourvoir" required  min="0" max="1000" >
-                                        <div class="col-xs-12">
+                                        {#<div class="col-xs-12">
                                             <label class="col-xs12">Embauche à l'issue de la mission?</label>
                                             <input type="radio" name="_Embauche" value="1" title="Oui" >Oui
                                             <input type="radio" name="_Embauche" value="0" title="Non" >Non
-                                        </div>
+                                        </div>#}
 
-                                        <label class="col-xs-12">Diffusion</label>
+                                        <br>
+                                        <label class="col-xs-12">Liste des formations ciblées pour la mission</label>
+                                        <label class="col-xs-12"><i>(Multisélection possible en utilisant ctrl+clic)</i></label>
                                         {% if app.user.hasRole('ROLE_ADMINECOLE') %}
                                             <select class="input" style="height:150px;" name="formation[]" title="" multiple>
                                                 {% for formation_x in formations %}
@@ -439,10 +445,10 @@
                                         <input placeholder="CP Naissance" class="input" type="text" id="Cpnaissance" name="_Cpnaissance" maxlength="45" required >
                                         <input placeholder="Ville Naissance" class="input" type="text" id="Lieunaissance" name="_Lieunaissance" maxlength="45" required >
                                         <input placeholder="Date de Naissance" type="text"  class="date" id="Datenaissance" name="_Datenaissance" title="Date de Naissance" required >
-                                        <input placeholder="diplome obtenus" class="input" id="Diplome" name="_Diplome" type="text" maxlength="45"   >
+                                        <input placeholder="Diplômes obtenus" class="input" id="Diplome" name="_Diplome" type="text" maxlength="45"   >
                                         <input placeholder="Format.ou en cours" class="input" id="FormationCours" name="_FormationCours" type="text" >
                                         <div class="col-xs-12">
-                                            <input type="checkbox" name="_handicap" title="handicap" ><label>HANDICAP</label>
+                                            <input type="checkbox" name="_handicap" title="handicap" ><label>Handicap</label>
                                             <input type="checkbox" name="_entrepreneur" title="entrepreneur" ><label>Entrepreneurs</label>
                                         </div>
                                         <div class="col-xs-12">
@@ -578,6 +584,7 @@
                      style="margin:0 40px;height: 40px; text-align: left; padding: 10px;"><label style="font-size: large" >{{ etablissement.getTier.getRaisonSoc }}&nbsp;-&nbsp;  </label><label style="font-size: large;color:#2A76CC" > {{ etablissement.getVille }}</label></div>
                 <div class="col-xs-12" style="margin: 0 40px;height: 20px; text-align: left;">{{etablissement.getAdresse }}, {{ etablissement.getCodePostal }} {{ etablissement.getVille }}</div>
             </div>
+            {# CHAMPS EN DUR COMMENTES POUR LA PRESENTATION
             <div class="col-xs-offset-5 col-xs-1">
                 <div class="col-xs-12" style="height: 30px;; padding-top: 10px;"><label style="font-size: large;color:#2A76CC" > 549</label></div>
                 <div class="col-xs-12" style="height: 20px;">Apprenant</div>
@@ -586,6 +593,7 @@
                 <div class="col-xs-12" style="height: 30px; padding-top: 10px;"><label style="font-size: large;color:#2A76CC" > 151</label></div>
                 <div class="col-xs-12" style="height: 20px;">Missions</div>
             </div>
+            #}
         </div>
 
         <div class="row" style="background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;height: calc(100% - 78px)">
@@ -595,7 +603,7 @@
                 <div class="col-xs-12" style="height: 46px;">
                     <div style="height: 35px; width: 100%; padding: 15px 0 0 15px;display: flex;">
 
-                        <button id="Button_ETABLISSEMENT" onclick="NaviguerOnglet('OngletEtablissement','info_etab',this)" type="button" class="NavButtonIframe">Information</button>
+                        <button id="Button_ETABLISSEMENT" onclick="NaviguerOnglet('OngletEtablissement','info_etab',this)" type="button" class="NavButtonIframe">Informations</button>
                         <button id="Button_User" onclick="NaviguerOnglet('OngletEtablissement','info_user',this)" type="button" class="NavButtonIframe">Utilisateurs</button>
                         {% if is_granted('ROLE_SUPER_ADMIN') %}
                             <button id="Button_Licence" onclick="NaviguerOnglet('OngletEtablissement','info_licence',this)" type="button" class="NavButtonIframe">Licences</button>
@@ -662,7 +670,7 @@
                                 <input value="{{ etablissement.getTelephone }}" type="tel" class="champ form-control"  id="Tel" name="_Tel" maxlength="20" readonly>
                             </div>
                             <div class="inputcontainer">
-                                <label class="list-group-item" style="height: 60px;" for="Fax">FAX : </label>
+                                <label class="list-group-item" style="height: 60px;" for="Fax">Fax  : </label>
                                 <input type="tel" value="{{ etablissement.getFax }}" class="champ form-control" id="Fax" name="_Fax" maxlength="45" readonly>
                             </div>
                             <div class="inputcontainer">
@@ -725,7 +733,7 @@
                                     <div class="col-xs-12 Liste">
                                         <div class="row">
                                             <label class="cell">Email : <label>{{ user.getEmail }}</label></label>
-                                            <label class="cell">Username : <label>{{ user.getUsername }}</label>
+                                            <label class="cell">Pseudo : <label>{{ user.getUsername }}</label>
                                                 <button class="button" style="float: right" type="button" data-toggle="collapse" data-target="#user{{ iddiv }}"></button>
                                             </label>
 
@@ -896,9 +904,11 @@
                                             <div class="row">
                                                 <label class="cell"  >CodeMission : <label   id="CodeMission" name="_Codemission" >{{ mission.getCodemission }}</label></label>
                                                 <label class="cell" >Date : <label style="font-size: medium"   >{{ mission.getDatecreation|date('d/m/Y H:i')}}</label>
-                                                    <button onclick="modifierMission('formMissionModifier',this)" type="button" style="background: #1C5AA5;color:white;height:40px;width:120px;" >modifier</button>
-                                                    <img   style="float:right;" alt="" src="{{ asset('image/imgSupprimer.png') }}" onclick="if(confirm('Voulez-vous Supprimer cette mission?')){supprimerligne('{{ path('supprimer_Mission',{'id': mission.getId}) }}',this)}" />
-
+                                                    {# MODIFICATION DU BOUTON MODIFIER ET DE L'ICONE DE SUPPRESSION #}
+                                                    <span>
+                                                        <button type="button" class="btn btn-primary" onclick="modifierMission('formMissionModifier',this)">Modifier</button>
+                                                    </span>
+                                                    <span class="glyphicon glyphicon-remove" style="color:red ; float:right" aria-hidden="true" name="modification" title="Supprimer" onclick="if(confirm('Voulez-vous Supprimer cette mission?')){supprimerligne('{{ path('supprimer_Mission',{'id': mission.getId}) }}',this)}"></span>
                                                     <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#mission{{ iddiv }}"></button>
                                                 </label>
                                             </div>
@@ -923,7 +933,7 @@
                                                 <label class="cell">Tuteur  : <label  id="Tuteur" name="_Tuteur" >{{ mission.getTuteur }}</label></label>
                                             </div>
                                             <div class="row">
-                                                <label class="cell" style="height: 280px;word-wrap: break-word;width: 150px;hyphens: auto;max-width: 100px;">Descriptif : <textarea style="resize: none;width:900px;height:90%" id="Descriptif" name="_Descriptif" maxlength="255" readonly >{{ mission.getDescriptif }}</textarea></label>
+                                                <label class="cell" style="height: 280px;word-wrap: break-word;width: 150px;hyphens: auto;max-width: 100px;">Descriptif : <textarea style="resize: both;width:600px;height:90%" id="Descriptif" name="_Descriptif" maxlength="255" readonly >{{ mission.getDescriptif }}</textarea></label>
                                             </div>
 
                                         </div>
@@ -993,7 +1003,7 @@
                             Modifier la fiche
                         </button>
 
-                        <button onclick="alert('Ce button n\'est pas encore fonctionel!')" type="button" class="col-xs-12 rightMenu">
+                        <button onclick="alert('Ce button n\'est pas encore fonctionnel!')" type="button" class="col-xs-12 rightMenu">
                             Gérer les droits
                         </button>
                         {% endif %}

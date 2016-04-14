@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="icon" type="image/png" href="{{ asset('image/Logo_Hub_3e.png') }}" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
 
     {% block CSS %}{% endblock %}
 
@@ -50,7 +51,7 @@
 
                     <li><button onclick="postiframeUser('{{ path('afficher_profil') }}')" style="background: transparent;border:transparent;width:100%">PROFIL</button></li>
                     <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_messagerie') }}';" style="background: transparent;border:transparent;width:100%">MESSAGERIE</button></li>
-                    <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_rendezvous') }}';" style="background: transparent;border:transparent;width:100%">Rendez-vous</button></li>
+                    <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_rendezvous') }}';" style="background: transparent;border:transparent;width:100%">RENDEZ-VOUS</button></li>
                     <li><a onclick="sessionStorage.clear()" href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">LOGOUT</button> </a></li>
 
 

@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{{ asset('css/mission.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/Form.css') }}" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
     {% block CSS %}
         <style>
             .ui-widget-header{color:black;}
@@ -233,6 +235,7 @@
                 {{mission.getEtablissement.getAdresse }}, {{ mission.getEtablissement.getCodePostal }} {{ mission.getEtablissement.getVille }}
             </div>
         </div>
+        {# INFOS EN DUR COMMENTEES POUR LA PRESENTATION
         <div class="col-xs-1">
             <div class="col-xs-12" style="height: 30px;; padding-top: 10px;"><label style="font-size:large;color:#2A76CC;" > 18</label></div>
             <div class="col-xs-12" style="height: 20px;width:100px;color: #666666;">mises en relation</div>
@@ -241,6 +244,7 @@
             <div class="col-xs-12" style="height: 30px; padding-top: 10px;"><label style="font-size: large;color:#2A76CC" > 5</label></div>
             <div class="col-xs-12" style="height: 20px;color: #666666;">candidatures</div>
         </div>
+        #}
     </div>
 
 

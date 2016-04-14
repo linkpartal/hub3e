@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="icon" type="image/png" href="{{ asset('image/Logo_Hub_3e.png') }}" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
     {% block CSS %}{% endblock %}
 
     <title>HUB3E - {% block title %}Ecole{% endblock %}</title>
@@ -80,7 +81,7 @@
                     <option value="Primaire">Primaire</option>
                     <option value="Secondaire">Secondaire</option>
                     <option value="Tertiaire">Tertiaire</option>
-                    <option value="quaternaire">quaternaire</option>
+                    <option value="Quaternaire">Quaternaire</option>
                 </select>
 
                 <input type="hidden" class="form-control" id="Geocode" name="_Geocode[]" required>
@@ -90,15 +91,19 @@
 
         <form id="formTier" action="{{ path('tieradded') }}" onsubmit="document.getElementById('submittier').disabled = true;ShowWaiter();" method="post" enctype="multipart/form-data">
             <div class="NavBarTier col-xs-12" >
-                <button class="col-xs-6 active" type="button" onclick="NaviguerOnglet('PopUpAddTierOnglet','InformationTierObligatoire',this);">Données</button>
+                <button class="col-xs-12 active" onclick="NaviguerOnglet('PopUpAddTierOnglet','InformationTierObligatoire',this);">Informations Générales</button>
+                {# L'ONGET DOCUMENTS NE SERA PAS UTILISE POUR LE MOMENT
                 <button class="col-xs-6" type="button" onclick="NaviguerOnglet('PopUpAddTierOnglet','InformationComp',this);">Documents/Infos</button>
+                #}
             </div>
             <div id="PopUpAddTierOnglet">
                 <div id="InformationTierObligatoire" class="div_form" style="display: inline-table;" >
+                    {# JE RECUPERE CETTE SECTION EN TITRE DE POPUP PLUS HAUT
                     <label style="text-transform: uppercase;font: 16px Roboto;color: rgb(75, 75, 75);font-weight: bold;text-align: left;" class="col-xs-12">Informations générales</label>
+                    #}
 
                     <div class="col-xs-6 input-colonne">
-                        <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Siren</label>
+                        <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Siren *</label>
                         <input type="text" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" required>
 
                         <label for="Logo" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Importer un logo</label>
@@ -109,7 +114,7 @@
                     </div>
 
                     <div class="col-xs-6 input-colonne">
-                        <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Raison sociale</label>
+                        <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Raison sociale *</label>
                         <input type="text" class="input" id="RaisonSoc" name="_RaisonSoc" maxlength="45" required>
 
                         <label for="Logo" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Importer un fond'écran</label>
@@ -181,7 +186,7 @@
                                     <option value="Primaire">Primaire</option>
                                     <option value="Secondaire">Secondaire</option>
                                     <option value="Tertiaire">Tertiaire</option>
-                                    <option value="quaternaire">quaternaire</option>
+                                    <option value="Quaternaire">Quaternaire</option>
                                 </select>
 
                                 <input type="hidden" class="form-control" id="Geocode" name="_Geocode[]" required>
@@ -265,21 +270,21 @@
                 <button onclick="show('addtier',0)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                 ></button>
 
-                <button id="societetop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ societes|length }} Sociétés</button>
+                <button id="societetop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ societes|length }} Société(s)</button>
 
             </div>
             <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="display: inline; margin-left: 10px;border: 0;padding: 4px;height: 21px;float: left;">
                 <button onclick="show('adduser')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                 ></button>
 
-                <button id="usertop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ users|length }} Utilisateurs</button>
+                <button id="usertop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ users|length }} Utilisateur(s)</button>
             </div>
             <div class="input-group col-xs-1" style=" margin-left: 10px;border: 0;padding: 4px;height: 21px;float: left;">
                 <button onclick="show('import')" style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">Importer</button>
             </div>
             <div class="input-group col-xs-1" style=" margin-left: 10px;border: 0;padding: 4px;height: 21px;float: left;">
 
-                <button onclick="document.getElementById('iframe').src='{{ path('afficher_import') }}'" style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">SAS Admissions</button>
+                <button onclick="document.getElementById('iframe').src='{{ path('afficher_import') }}'" style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">SAS Admission</button>
             </div>
 
             <div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px; float: right; margin-right: 40px;">
@@ -489,7 +494,7 @@
                            style="height: 27px;">
                 </div>
 
-                <div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px;">
+                {#<div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px;">
                     <button type="button" class="btn btn-default dropdown-toggle"
                             data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false"
@@ -500,7 +505,7 @@
                     <ul id="filtre" class="dropdown-menu" aria-labelledby="dropdownMenu1">
 
                     </ul>
-                </div>
+                </div>#}
             </div>
 
             {% block Content%}

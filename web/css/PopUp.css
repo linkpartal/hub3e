@@ -153,6 +153,6 @@ form .NavBarTier button
 
 form .NavBarTier button.active
 {
-    color: #3d8ad4 !important;
-    background-color: white !important;
+    color: white  !important;
+    background-color: #337AB7  !important;
 }
