@@ -1183,7 +1183,7 @@
                             Supprimer l'apprenant
                         </button>
                         <button  onclick="CompleterProfil();"  type="button" class="col-xs-12 rightMenu" >
-                            Ordre enrichit par étudiant
+                            Demande d'enrichissement
                         </button>
                         <div class="col-xs-12 btn-group">
                             <button id="STATUT_APPRENANT" type="button" class="col-xs-12 rightMenu dropdown-toggle" style="{% if User.info and User.info.profilcomplet == 3 %}background: #94C400;
@@ -1198,7 +1198,7 @@
                         </div>
 
 
-                        <button type="button" class="col-xs-12 rightMenu">
+                        <button type="button" class="col-xs-12 rightMenu" style="display: none;">
                             Historique
                         </button>
                     {% endif %}

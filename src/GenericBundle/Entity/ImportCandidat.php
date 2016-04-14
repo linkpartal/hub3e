@@ -76,7 +76,7 @@ class ImportCandidat
      *
      * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $user;
@@ -86,7 +86,7 @@ class ImportCandidat
      *
      * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\Etablissement")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="etablissement_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="etablissement_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $etablissement;
