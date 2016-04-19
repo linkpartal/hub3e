@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="icon" type="image/png" href="{{ asset('image/Logo_Hub_3e.png') }}" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
     {% block CSS %}{% endblock %}
 
     <title>HUB3E - {% block title %}Ecole{% endblock %}</title>
@@ -138,7 +139,7 @@
                             <button onclick="postiframeUser('{{ path('admin_afficheMission',{'id': m.getId }) }}',this)" id="mission{{ m.getId }}" type="button" class="list-group-item butonLigne">
                                 <div name="Recherche" style="display: none;">{{ m.intitule }},{{ m.profil }},{{ m.typecontrat }},{{ m.codemission }},{{ m.domaine }},{{ m.etablissement.tier.raisonsoc }},{{ m.etablissement.siret }},{{ m.etablissement.adresse }},{{ m.etablissement.codepostal }},{{ m.etablissement.ville }}</div>
                                 <div style="display: none;"></div>
-                                <div class="col-xs-12 part" title="{{m.getCodemission}}">{{m.getCodemission}}</div>
+                                <div class="col-xs-12 part" title="{{m.intitule}}">{{m.intitule}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
 

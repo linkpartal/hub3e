@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="icon" type="image/png" href="{{ asset('image/Logo_Hub_3e.png') }}" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
 
     {% block CSS %}{% endblock %}
 
@@ -50,7 +51,7 @@
 
                     <li><button onclick="postiframeUser('{{ path('afficher_profil') }}')" style="background: transparent;border:transparent;width:100%">PROFIL</button></li>
                     <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_messagerie') }}';" style="background: transparent;border:transparent;width:100%">MESSAGERIE</button></li>
-                    <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_rendezvous') }}';" style="background: transparent;border:transparent;width:100%">Rendez-vous</button></li>
+                    <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_rendezvous') }}';" style="background: transparent;border:transparent;width:100%">RENDEZ-VOUS</button></li>
                     <li><a onclick="sessionStorage.clear()" href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">LOGOUT</button> </a></li>
 
 
@@ -78,7 +79,7 @@
                             <button onclick="postiframeUser('{{ path('admin_afficheMission',{'id': m.getId }) }}',this)" id="mission{{ m.getId }}" type="button" class="list-group-item butonLigne">
                                 <div name="Recherche" style="display: none;">{{ m.intitule }},{{ m.profil }},{{ m.typecontrat }},{{ m.codemission }},{{ m.domaine }},{{ m.etablissement.tier.raisonsoc }},{{ m.etablissement.siret }},{{ m.etablissement.adresse }},{{ m.etablissement.codepostal }},{{ m.etablissement.ville }}</div>
                                 <div style="display: none;"></div>
-                                <div class="col-xs-12 part" title="{{m.getCodemission}}">{{m.getCodemission}}</div>
+                                <div class="col-xs-12 part" title="{{m.intitule}}">{{m.intitule}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
 

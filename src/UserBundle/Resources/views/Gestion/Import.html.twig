@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/mission.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}">
     <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
     <style>
         .hiddenSAS{display: none !important;}
     </style>
@@ -234,7 +235,7 @@
             url: route,
             error: function (response) {
                 console.log(response);
-                alert('Une erreur s\'est produite veuillez réessayer ulterieurement');
+                alert('Une erreur s\'est produite veuillez réessayer ultérieurement');
                 DeleteWaiter();
             },
             success: function(data){
@@ -242,22 +243,22 @@
                 if(data['Delete']=='1')
                 {
                     champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
-                    alert('Suppression correctement effectuer');
+                    alert('Suppression correctement effectuée');
                 }
                 if(data['Delete']=='0')
                 {
                     champs.disabled = false;
-                    alert('Suppression à rencontrer une erreur en cours d\'excecution');
+                    alert('La suppression à rencontré une erreur en cours d\'exécution');
                 }
                 if(data['Ajout']=='1')
                 {
                     champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
-                    alert('Ajout correctement effectuer');
+                    alert('Ajout correctement effectué');
                 }
                 if(data['Ajout']=='0')
                 {
                     champs.disabled = false;
-                    if(confirm('Il se peut que cet personne existe déjà dans notre base de données, voulez-vous voir les duplicatas de cet apprenant?')){
+                    if(confirm('Il se peut que cette personne existe déjà dans notre base de données, voulez-vous voir les duplicatas de cet apprenant?')){
                         voirduplica(data['Id'],data['LieuNaissance'],data['DateNaissance']);
                     }
                 }

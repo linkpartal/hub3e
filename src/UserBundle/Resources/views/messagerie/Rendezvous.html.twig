@@ -186,7 +186,8 @@
                         <div class="dropdown clearfix col-xs-1" style="height: 100px">
 
                             <button style="height: 100%;width: 100%;background-color: transparent;border: none;" class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <span class="glyphicon glyphicon-option-vertical" style="height:20px;color:#8c8c8c"></span>
+                                <!--span class="glyphicon glyphicon-option-vertical" style="height:20px;color:#8c8c8c"></span-->
+                                Actions
                             </button>
                             <ul id="menuRDV{{ rdv.id }}" class="dropdown-menu" style="left:50%;top:50%;" aria-labelledby="dropdownMenu1">
                                 {% if rdv.statut == -1 %}
@@ -274,7 +275,8 @@
                         <div class="dropdown clearfix col-xs-1" style="height: 100px">
 
                             <button style="height: 100%;width: 100%;background-color: transparent;border: none;" class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <span class="glyphicon glyphicon-option-vertical" style="height:20px;color:#8c8c8c"></span>
+                                <!--span class="glyphicon glyphicon-option-vertical" style="height:20px;color:#8c8c8c"></span-->
+                                Actions
                             </button>
                             <ul id="menuRDV{{ rdv.id }}" class="dropdown-menu" style="left:50%;top:50%;" aria-labelledby="dropdownMenu1">
                                 {% if rdv.statut == -1 %}
@@ -343,7 +345,8 @@
                         <div class="dropdown clearfix col-xs-1" style="height: 100px">
 
                             <button style="height: 100%;width: 100%;background-color: transparent;border: none;" class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <span class="glyphicon glyphicon-option-vertical" style="height:20px;color:#8c8c8c"></span>
+                                <!--span class="glyphicon glyphicon-option-vertical" style="height:20px;color:#8c8c8c"></span-->
+                                Actions
                             </button>
                             <ul id="menuRDV{{ rdv.id }}" class="dropdown-menu" style="left:50%;top:50%;" aria-labelledby="dropdownMenu1">
                                 {% if rdv.statut == -1 %}
@@ -531,7 +534,7 @@
             },
             success: function(data){
                 if(data===1){
-                    alert('Compte rendu envoyer');
+                    alert('Compte rendu envoyé');
                     document.getElementById('CompteRendu').style.display = 'none';
                     fermeture();
                 }

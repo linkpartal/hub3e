@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}" />
     <link rel="icon" type="image/png" href="{{ asset('image/Logo_Hub_3e.png') }}" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
 
     {% block CSS %}
         <style>
@@ -87,7 +88,7 @@
                     <option value="Primaire">Primaire</option>
                     <option value="Secondaire">Secondaire</option>
                     <option value="Tertiaire">Tertiaire</option>
-                    <option value="quaternaire">quaternaire</option>
+                    <option value="Quaternaire">Quaternaire</option>
                 </select>
 
                 <input type="hidden" class="form-control" id="Geocode" name="_Geocode[]" required>
@@ -97,15 +98,20 @@
 
         <form id="formTier" action="{{ path('tieradded') }}" onsubmit="document.getElementById('submittier').disabled = true;ShowWaiter();" method="post" enctype="multipart/form-data">
             <div class="NavBarTier col-xs-12" >
-                <button class="col-xs-6 active" type="button" onclick="NaviguerOnglet('PopUpAddTierOnglet','InformationTierObligatoire',this);">Données</button>
+                <button class="col-xs-12 active" onclick="NaviguerOnglet('PopUpAddTierOnglet','InformationTierObligatoire',this);">Informations Générales</button>
+
+                {# L'ONGET DOCUMENTS NE SERA PAS UTILISE POUR LE MOMENT
                 <button class="col-xs-6" type="button" onclick="NaviguerOnglet('PopUpAddTierOnglet','InformationComp',this);">Documents/Infos</button>
+                #}
             </div>
             <div id="PopUpAddTierOnglet">
                 <div id="InformationTierObligatoire" class="div_form" style="display: inline-table;" >
+                    {# JE RECUPERE CETTE SECTION EN TITRE DE POPUP PLUS HAUT
                     <label style="text-transform: uppercase;font: 16px Roboto;color: rgb(75, 75, 75);font-weight: bold;text-align: left;" class="col-xs-12">Informations générales</label>
+                    #}
 
                     <div class="col-xs-6 input-colonne">
-                        <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Siren</label>
+                        <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Siren *</label>
                         <input type="text" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" title="siren" required>
 
                         <label for="Logo" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Importer un logo</label>
@@ -116,14 +122,14 @@
                     </div>
 
                     <div class="col-xs-6 input-colonne">
-                        <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Raison sociale</label>
+                        <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Raison sociale *</label>
                         <input type="text" class="input" id="RaisonSoc" name="_RaisonSoc" title="RaisonSoc" maxlength="45" required>
 
-                        <label for="Logo" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Importer un fond'écran</label>
+                        {#<label for="Logo" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Importer un fond'écran</label>
                         <label style="float: left;" for="image">
                             <img id="backimg" style="border: 1px solid rgb(230, 230, 230);background-image: -moz-linear-gradient( 90deg, rgb(215,215,215) 0%, rgb(255,255,255) 100%);background-image: -webkit-linear-gradient( 90deg, rgb(215,215,215) 0%, rgb(255,255,255) 100%);background-image: -ms-linear-gradient( 90deg, rgb(215,215,215) 0%, rgb(255,255,255) 100%);width: 255px;height: 90px;" src="" onclick="this.src='{{ asset('image/wait_x300.gif') }}'" />
                         </label>
-                        <input onchange="readURL(this,'backimg');" accept="image/*" type="file" class="input" id="image" name="_image" style="display: none">
+                        <input onchange="readURL(this,'backimg');" accept="image/*" type="file" class="input" id="image" name="_image" style="display: none">#}
                     </div>
 
                     <input  type="hidden" id="EcoleBool" name="_Ecole">
@@ -134,40 +140,40 @@
                             <button class="toggle" type="button" data-toggle="collapse" data-target="#demo" style="display: none;"></button>
                             <button class="toggle" type="button" onclick="supprimerAdresse(this)" style="display: none;">-</button>
                             <div id="demo" class="collapse in">
-                                <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Adresse Principale</label>
-                                <label for="Adresse" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Siret</label>
-                                <input placeholder="Siret" class="input" type="text" id="SIRET" name="_SIRET[]" pattern=".{14}" maxlength="14" required>
+                                <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Adresse Principale </label>
+                                <label for="Adresse" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Siret *</label>
+                                <input class="input" type="text" id="SIRET" name="_SIRET[]" pattern=".{14}" maxlength="14" required>
 
-                                <label for="Adresse" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Rue</label>
+                                <label for="Adresse" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Rue *</label>
                                 <input class="input" type="text" id="Adresse" name="_Adresse[]" maxlength="45" required>
 
-                                <label for="CodeP" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Code postal</label>
-                                <label for="Ville" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Ville</label>
+                                <label for="CodeP" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Code postal *</label>
+                                <label for="Ville" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Ville *</label>
                                 <input class="input" type="text" id="CodeP" name="_CodeP[]" style="width: calc(50% - 10px); margin-right: 10px" maxlength="10" required>
                                 <input class="input" type="text" id="Ville" name="_Ville[]" style="width: 50%;" maxlength="20" required>
 
-                                <label for="Tel" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Téléphone</label>
-                                <label for="Fax" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Fax</label>
+                                <label for="Tel" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Téléphone *</label>
+                                <label for="Fax" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Fax *</label>
                                 <input class="input" type="tel" id="Tel" name="_Tel[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="20" required>
                                 <input class="input" type="tel" id="Fax" name="_Fax[]" style="width: 50%;" maxlength="20" required>
 
-                                <label for="Site" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Site web</label>
-                                <input class="input" type="url" id="Site" name="_Site[]" maxlength="45" required>
+                                <label for="Site" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Site web *</label>
+                                <input class="input" placeholder=" ex : http://www.votresite.fr" type="url" id="Site" name="_Site[]" maxlength="45" required>
                                 <!----------------------------------------------------------------------------------------------------------------------------------------------->
-                                <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Responsable</label>
-                                <label for="Resp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Nom</label>
-                                <label for="RespPrenom" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Prénom</label>
+                                <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Responsable </label>
+                                <label for="Resp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Nom *</label>
+                                <label for="RespPrenom" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Prénom *</label>
                                 <input class="input" type="text" id="Resp" name="_Resp[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="45" required>
                                 <input class="input" type="text" id="RespPrenom" name="_RespPrenom[]" style="width: 50%;" maxlength="45" required>
 
-                                <label for="TelResp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Téléphone</label>
-                                <label for="MailResp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Email</label>
+                                <label for="TelResp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Téléphone *</label>
+                                <label for="MailResp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Email *</label>
                                 <input class="input" type="tel" id="TelResp" name="_TelResp[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="20" required>
                                 <input class="input" type="email" id="MailResp" name="_MailResp[]" style="width: 50%;" maxlength="45" required>
                                 <!----------------------------------------------------------------------------------------------------------------------------------------------->
                                 <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Société</label>
                                 <label for="TypeSoc" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Type d'entreprise</label>
-                                <label for="Taille" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Taille de la socété</label>
+                                <label for="Taille" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Taille de la société</label>
                                 <select class="input" id="TypeSoc" name="_TypeSoc[]" style="width: calc(50% - 10px);margin-right: 10px" required>
                                     <option value="Start Up">Start Up</option>
                                     <option value="TPE PME">TPE PME</option>
@@ -185,10 +191,10 @@
 
                                 <label for="Secteur" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Secteur d"activité</label>
                                 <select class="input" id="Secteur" name="_Secteur[]" style="width: 50%;" required>
-                                    <option value="Primaire">Primaire</option>
-                                    <option value="Secondaire">Secondaire</option>
-                                    <option value="Tertiaire">Tertiaire</option>
-                                    <option value="quaternaire">quaternaire</option>
+                                    <option value="Primaire">Primaire (ex: Agriculture )</option>
+                                    <option value="Secondaire">Secondaire  (ex: Industrie )</option>
+                                    <option value="Tertiaire">Tertiaire  (ex: Service )</option>
+                                    <option value="Quaternaire">Quaternaire  (ex: Informatique)</option>
                                 </select>
 
                                 <input type="hidden" class="form-control" id="Geocode" name="_Geocode[]" required>
@@ -274,11 +280,12 @@
                         <input placeholder="CP Naissance" class="input" type="text" id="Cpnaissance" name="_Cpnaissance" maxlength="45" required >
                         <input placeholder="Ville Naissance" class="input" type="text" id="Lieunaissance" name="_Lieunaissance" maxlength="45" required >
                         <input placeholder="Date de Naissance" type="text" class="date" id="Datenaissance" name="_Datenaissance" title="Date de Naissance" required >
-                        <input placeholder="diplome obtenus" class="input" id="Diplome" name="_Diplome" type="text" maxlength="45"   >
+                        <input placeholder="Diplômes  obtenus" class="input" id="Diplome" name="_Diplome" type="text" maxlength="45"   >
                         <input placeholder="Format.ou en cours" class="input" id="FormationCours" name="_FormationCours" type="text" >
                         <div class="col-xs-12">
-                            <input type="checkbox" name="_handicap" value="1" title="handicap"><label>HANDICAP</label>
-                            <input type="checkbox" name="_entrepreneur" value="1" title="entrepreneur" ><label>Entrepreneurs</label>
+                            <input type="checkbox" name="_handicap" value="1"> &nbsp<label>Handicap</label>
+                            <br/>
+                            <input type="checkbox" name="_entrepreneur" value="1"> &nbsp<label>Entrepreneurs</label>
                         </div>
                         <div class="col-xs-12">
                             <label>Permis</label>
@@ -298,6 +305,9 @@
                     <div class="col-xs-12 input-colonne " >
                         <input class="row" style="width:100%" type="text" placeholder="Recherche" onkeyup="rechercheformation(this.value)">
                     </div>
+                    <br>
+                    <div>  </div>
+                    <div class="col-xs-12 input-colonne " > <i>Pour sélectionner plusieurs formations utiliser ctrl+clic </i> </div>
                     <div class="col-xs-12 input-colonne " >
                         <select id="SelectMultipleFormation" style="width: 100%; overflow-x: auto" title="" class="row" name="formations[]" multiple required>
                             {% for formation in formations %}
@@ -358,7 +368,7 @@
                 <button onclick="show('apprenant')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                 ></button>
 
-                <button id="usertop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ apprenants|length }} Apprenant</button>
+                <button id="usertop" style="color:white;white-space: nowrap;overflow: hidden; ">{{ apprenants|length }} Apprenants</button>
             </div>
             <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style=" margin-left: 10px;border: 0;padding: 5px;height: 21px;float: left;">
                 <button onclick="show('addtier',0)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
@@ -372,7 +382,7 @@
             </div>
 
             <div class="input-group col-xs-1" style="margin-left: 10px;border: 0;padding: 5px;height: 21px;float: left;">
-                <button onclick="document.getElementById('iframe').src='{{ path('affiche_etab',{'id':app.user.etablissement.id }) }}'" style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; "> Ecole </button>
+                <button onclick="document.getElementById('iframe').src='{{ path('affiche_etab',{'id':app.user.etablissement.id }) }}'" style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">Votre  Ecole </button>
             </div>
 
             <div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px; float: right; margin-right: 40px;">
@@ -400,7 +410,7 @@
 
                     <li><button onclick="postiframeUser('{{ path('afficher_profil') }}')" style="background: transparent;border:transparent;width:100%">PROFIL</button></li>
                     <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_messagerie') }}';" style="background: transparent;border:transparent;width:100%">MESSAGERIE</button></li>
-                    <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_rendezvous') }}';" style="background: transparent;border:transparent;width:100%">Rendez-vous</button></li>
+                    <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_rendezvous') }}';" style="background: transparent;border:transparent;width:100%">RENDEZ-VOUS</button></li>
                     <li><a onclick="sessionStorage.clear()" href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">LOGOUT</button> </a></li>
 
 
@@ -451,7 +461,7 @@
                             <button onclick="postiframeUser('{{ path('admin_afficheMission',{'id': m.getId }) }}',this)" id="mission{{ m.getId }}" type="button" class="list-group-item butonLigne">
                                 <div name="Recherche" style="display: none;">{{ m.intitule }},{{ m.profil }},{{ m.typecontrat }},{{ m.codemission }},{{ m.domaine }},{{ m.etablissement.tier.raisonsoc }},{{ m.etablissement.siret }},{{ m.etablissement.adresse }},{{ m.etablissement.codepostal }},{{ m.etablissement.ville }}</div>
                                 <div style="display: none;"></div>
-                                <div class="col-xs-12 part" title="{{m.getCodemission}}">{{m.getCodemission}}</div>
+                                <div class="col-xs-12 part" title="{{m.intitule}}">{{m.intitule}}</div>
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
 
@@ -509,7 +519,7 @@
                            style="height: 27px;" title="recherche">
                 </div>
 
-                <div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px;">
+                {#<div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px;">
                     <button type="button" class="btn btn-default dropdown-toggle"
                             data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false"
@@ -520,7 +530,7 @@
                     <ul id="filtre" class="dropdown-menu" aria-labelledby="dropdownMenu1">
 
                     </ul>
-                </div>
+                </div>#}
             </div>
 
             {% block Content%}
@@ -744,7 +754,7 @@
                 }
                 else if(data['status']==='is_ecole')
                 {
-                    alert('Le siren indiquée appartient à une école!');
+                    alert('Le siren indiqué appartient à une école!');
                     document.getElementById('submittier').disabled=false;
                 }
                 else
@@ -792,7 +802,7 @@
                         submitAjaxForm(check,'formTier');
                     }
                 } else {
-                    alert('Pas de géocodage trouver pour l\'adresse spécifiée');
+                    alert('Pas de géocodage trouvé pour l\'adresse spécifiée');
                     document.getElementById('submittier').disabled=false;
                 }
             });

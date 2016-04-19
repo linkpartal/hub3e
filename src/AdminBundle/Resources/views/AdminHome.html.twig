@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="icon" type="image/png" href="{{ asset('image/Logo_Hub_3e.png') }}" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
 
     {% block CSS %}{% endblock %}
 
@@ -29,7 +30,7 @@
             <div id="demo" class="collapse in">
 
 
-                <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Adresse Secondaire</label>
+                <label style="margin: 10px 0;text-transform: uppercase;font: input-group col-xs-118px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Adresse Secondaire</label>
                 <label for="Adresse" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Siret</label>
                 <input placeholder="Siret" class="input" type="text" id="SIRET" name="_SIRET[]" pattern=".{14}" maxlength="14" required>
 
@@ -83,7 +84,7 @@
                     <option value="Primaire">Primaire</option>
                     <option value="Secondaire">Secondaire</option>
                     <option value="Tertiaire">Tertiaire</option>
-                    <option value="quaternaire">quaternaire</option>
+                    <option value="Quaternaire">Quaternaire</option>
                 </select>
 
                 <input type="hidden" class="form-control" id="Geocode" name="_Geocode[]" required>
@@ -93,15 +94,18 @@
 
         <form id="formTier" action="{{ path('tieradded') }}" onsubmit="document.getElementById('submittier').disabled = true;ShowWaiter();" method="post" enctype="multipart/form-data">
             <div class="NavBarTier col-xs-12" >
-                <button class="col-xs-6 active" type="button" onclick="NaviguerOnglet('PopUpAddTierOnglet','InformationTierObligatoire',this);">Données</button>
-                <button class="col-xs-6" type="button" onclick="NaviguerOnglet('PopUpAddTierOnglet','InformationComp',this);">Documents/Infos</button>
+                <button class="col-xs-12 active" onclick="NaviguerOnglet('PopUpAddTierOnglet','InformationTierObligatoire',this);">Informations Générales</button>
+                {# L'ONGET DOCUMENTS NE SERA PAS UTILISE POUR LE MOMENT
+                    <button class="col-xs-6" type="button" onclick="NaviguerOnglet('PopUpAddTierOnglet','InformationComp',this);">Documents/Infos</button>
+                 #}
             </div>
             <div id="PopUpAddTierOnglet">
             <div id="InformationTierObligatoire" class="div_form" style="display: inline-table;" >
-                <label style="text-transform: uppercase;font: 16px Roboto;color: rgb(75, 75, 75);font-weight: bold;text-align: left;" class="col-xs-12">Informations générales</label>
-
+                {# JE RECUPERE CETTE SECTION EN TITRE DE POPUP PLUS HAUT
+                    <label style="text-transform: uppercase;font: 16px Roboto;color: rgb(75, 75, 75);font-weight: bold;text-align: left;" class="col-xs-12">Informations générales</label>
+                #}
                 <div class="col-xs-6 input-colonne">
-                    <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Siren</label>
+                    <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Siren *</label>
                     <input type="text" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" required>
 
                     <label for="Logo" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Importer un logo</label>
@@ -184,7 +188,7 @@
                                 <option value="Primaire">Primaire</option>
                                 <option value="Secondaire">Secondaire</option>
                                 <option value="Tertiaire">Tertiaire</option>
-                                <option value="quaternaire">quaternaire</option>
+                                <option value="Quaternaire">Quaternaire</option>
                             </select>
 
                             <input type="hidden" class="form-control" id="Geocode" name="_Geocode[]" required>
@@ -274,7 +278,7 @@
 
             <div class="div_form" style="display: inline-table;" >
                 <div class="col-xs-6 input-colonne">
-                    <input placeholder="Libelle" class="input" type="text" id="Libelle" name="_Libelle" maxlength="255" required >
+                    <input placeholder="Libellé" class="input" type="text" id="Libelle" name="_Libelle" maxlength="255" required >
 
                     <input class="input" type="number"  min="1" max="99999" placeholder="Durée" id="Duree" name="_Duree" required maxlength="11" >
                 </div>
@@ -339,7 +343,7 @@
         <div class="input-group col-xs-1" style="margin-left: 10px;border: 0;padding: 4px;height: 21px;float: left;">
             <button onclick="show('addtier',1)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                     ></button>
-            <button id="ecoletop" style="color:white;white-space: nowrap;overflow: hidden; ">{% if ecoles is defined %}{{ ecoles|length }} {% endif %}Ecoles</button>
+            <button id="ecoletop" class="BtnText"  style="color:white;white-space: nowrap;overflow: hidden; ">{% if ecoles is defined %}{{ ecoles|length }} {% endif %}Ecoles</button>
         </div>
          <div class="input-group col-xs-1" style=" margin-left: 10px;border: 0;padding: 4px;height: 21px;float: left;">
              <button onclick="show('addtier',0)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
@@ -400,7 +404,7 @@
             <ul id="profil" class="dropdown-menu" aria-labelledby="dropdownMenu1" style="color:white;background: #2975cb;">
                 <li><button onclick="postiframeUser('{{ path('afficher_profil') }}')" style="background: transparent;border:transparent;width:100%">PROFIL</button></li>
                 <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_messagerie') }}';" style="background: transparent;border:transparent;width:100%">MESSAGERIE</button></li>
-                <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_rendezvous') }}';" style="background: transparent;border:transparent;width:100%">Rendez-vous</button></li>
+                <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_rendezvous') }}';" style="background: transparent;border:transparent;width:100%">RENDEZ-VOUS</button></li>
                 <li><a onclick="sessionStorage.clear()" href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">LOGOUT</button> </a></li>
             </ul>
 
@@ -634,13 +638,14 @@
                 </div>
 
                 <div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px;">
-                    <button type="button" class="btn btn-default dropdown-toggle"
+                    {# FILTRE Caché#}
+                    {#<button type="button" class="btn btn-default dropdown-toggle"
                             data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false"
                             style="font:20px Roboto; width: 100%; height: 20px; border-radius: 0; background: none; border: 0;color: white">
                         Filtres <span class="glyphicon glyphicon-menu-down"
                                      aria-hidden="true"></span>
-                    </button>
+                    </button> #}
                     <ul id="filtre" class="dropdown-menu" aria-labelledby="dropdownMenu1">
 
                     </ul>
@@ -767,12 +772,12 @@
                 }
                 else if(data['status']==='exist')
                 {
-                    alert('un des sirets existe deja');
+                    alert('un des sirets éxiste déjà');
                     document.getElementById('submittier').disabled=false;
                 }
                 else if(data['status']==='is_ecole')
                 {
-                    alert('Le siren indiquée appartient à une école!');
+                    alert('Le siren indiqué appartient à une école!');
                     document.getElementById('submittier').disabled=false;
                 }
                 else
@@ -820,7 +825,7 @@
                         submitAjaxForm(check,'formTier');
                     }
                 } else {
-                    alert('Pas de géocodage trouver pour l\'adresse spécifiée');
+                    alert('Pas de géocodage trouvé pour l\'adresse spécifiée');
                     document.getElementById('submittier').disabled=false;
                 }
             });
