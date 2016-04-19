@@ -364,7 +364,7 @@
 
         </div>
 
-        <div class="row" style="height: 150px; margin:10px;background:white">
+        <div id="ApprenantContainer" class="row" style="height: 150px; margin:10px;background:white">
             {% if users is defined %}
                 {% for user in users %}
                     {% if user.hasRole('ROLE_APPRENANT') %}
@@ -547,6 +547,23 @@
             }
         });
 
+    }
+    function SortByScore(){
+        var toSort = document.getElementById("ApprenantContainer").children;
+        toSort = Array.prototype.slice.call(toSort, 0);
+
+        toSort.sort(function(a, b) {
+            var aord = +a.children[0].innerHTML;
+            var bord = +b.children[0].innerHTML;
+            // two elements never have the same ID hence this is sufficient:
+            return (aord > bord) ? -1 : 1;
+        });
+        var parent = document.getElementById("ApprenantContainer");
+        parent.innerHTML = "";
+
+        for(var t = 0, l = toSort.length; t < l; t++) {
+            parent.appendChild(toSort[t]);
+        }
     }
     function modifier(formid,button) {
         var inputs = document.getElementById(formid).getElementsByTagName('input');
@@ -749,6 +766,7 @@
         document.getElementById(form).submit();
     }
     function initialize() {
+        SortByScore();
         var locations =[];
         var loc, map, marker, infobox;
         {% if not mission.getEtablissement == null %}
