@@ -55,11 +55,12 @@ class DefaultController extends Controller
             $newtier->setEcole(intval($request->get('_Ecole')));
             $newtier->setAxe($request->get('_Axe'));
             $newtier->setAvantage($request->get('_Avantages'));
-            if($_FILES && $_FILES['_Logo']['size'] >0)
+            if(isset($_FILES['_Logo']) && $_FILES['_Logo']['size'] >0)
             {
                 $newtier->setLogo(file_get_contents($_FILES['_Logo']['tmp_name']));
             }
-            if($_FILES && $_FILES['_image']['size'] >0)
+
+            if(isset($_FILES['_image']) && $_FILES['_image']['size'] >0)
             {
                 $newtier->setFondecran(file_get_contents($_FILES['_image']['tmp_name']));
             }

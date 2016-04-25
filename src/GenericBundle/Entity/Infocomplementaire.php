@@ -109,9 +109,21 @@ class Infocomplementaire
     /**
      * @var string
      *
-     * @ORM\Column(name="facebook", type="string", length=45, nullable=true)
+     * @ORM\Column(name="Lienexterne1", type="string", length=45, nullable=true)
      */
-    private $facebook;
+    private $Lienexterne1;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Lienexterne2", type="string", length=45, nullable=true)
+     */
+    private $Lienexterne2;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Lienexterne3", type="string", length=45, nullable=true)
+     */
+    private $Lienexterne3;
 
     /**
      * @var string
@@ -127,12 +139,6 @@ class Infocomplementaire
      */
     private $dernierDiplome;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="linkedin", type="string", length=45, nullable=true)
-     */
-    private $linkedin;
 
     /**
      * @var string
@@ -301,29 +307,7 @@ class Infocomplementaire
         return $this->adresse;
     }
 
-    /**
-     * Set facebook
-     *
-     * @param string $facebook
-     *
-     * @return Infocomplementaire
-     */
-    public function setFacebook($facebook)
-    {
-        $this->facebook = $facebook;
 
-        return $this;
-    }
-
-    /**
-     * Get facebook
-     *
-     * @return string
-     */
-    public function getFacebook()
-    {
-        return $this->facebook;
-    }
 
     /**
      * @var string
@@ -1068,5 +1052,77 @@ class Infocomplementaire
     public function getHobbie5()
     {
         return $this->hobbie5;
+    }
+
+    /**
+     * Set lienexterne1
+     *
+     * @param string $lienexterne1
+     *
+     * @return Infocomplementaire
+     */
+    public function setLienexterne1($lienexterne1)
+    {
+        $this->Lienexterne1 = $lienexterne1;
+
+        return $this;
+    }
+
+    /**
+     * Get lienexterne1
+     *
+     * @return string
+     */
+    public function getLienexterne1()
+    {
+        return $this->Lienexterne1;
+    }
+
+    /**
+     * Set lienexterne2
+     *
+     * @param string $lienexterne2
+     *
+     * @return Infocomplementaire
+     */
+    public function setLienexterne2($lienexterne2)
+    {
+        $this->Lienexterne2 = $lienexterne2;
+
+        return $this;
+    }
+
+    /**
+     * Get lienexterne2
+     *
+     * @return string
+     */
+    public function getLienexterne2()
+    {
+        return $this->Lienexterne2;
+    }
+
+    /**
+     * Set lienexterne3
+     *
+     * @param string $lienexterne3
+     *
+     * @return Infocomplementaire
+     */
+    public function setLienexterne3($lienexterne3)
+    {
+        $this->Lienexterne3 = $lienexterne3;
+
+        return $this;
+    }
+
+    /**
+     * Get lienexterne3
+     *
+     * @return string
+     */
+    public function getLienexterne3()
+    {
+        return $this->Lienexterne3;
     }
 }

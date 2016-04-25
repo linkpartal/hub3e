@@ -535,6 +535,48 @@ class DefaultController extends Controller
 
     }
 
+    public function ModifAppSasAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+
+        $apprenant = $em->getRepository('GenericBundle:ImportCandidat')->find($request->get('_ID'));
+        if($request->get('_Civilite') and !$request->get('_Civilite')==''){
+            $apprenant->setCivilite($request->get('_Civilite'));
+        }
+        if($request->get('_NomAppr') and !$request->get('_NomAppr')==''){
+            $apprenant->setNom($request->get('_NomAppr'));
+        }
+        if($request->get('_PrenomAppr') and !$request->get('_PrenomAppr')==''){
+            $apprenant->setPrenom($request->get('_PrenomAppr'));
+        }
+        if($request->get('_EmailAppr') and !$request->get('_EmailAppr')==''){
+            $apprenant->setEmail($request->get('_EmailAppr'));
+        }
+        if($request->get('_telAppr') and !$request->get('_telAppr')==''){
+            $apprenant->setTelephone($request->get('_telAppr'));
+        }
+        if($request->get('_DateNaissance') and !$request->get('_DateNaissance')==''){
+            $apprenant->getInfo()->setDatenaissance(date_create_from_format('d/m/Y',$request->get('_DateNaissance')));
+        }
+        if($request->get('_CpNaissance') and !$request->get('_CpNaissance')==''){
+            $apprenant->getInfo()->setCpnaissance($request->get('_CpNaissance'));
+        }
+        if($request->get('_LieuNaissance') and !$request->get('_LieuNaissance')==''){
+            $apprenant->getInfo()->setLieunaissance($request->get('_LieuNaissance'));
+        }
+        if($request->get('_Adresse') and !$request->get('_Adresse')==''){
+            $apprenant->getInfo()->setAdresse($request->get('_Adresse'));
+        }
+        if($request->get('_Diplome') and !$request->get('_Diplome')==''){
+            $apprenant->getInfo()->setDernierDiplome($request->get('_Diplome'));
+        }
+        if($request->get('_Formation') and !$request->get('_Formation')==''){
+            $apprenant->getInfo()->setFormationactuelle($request->get('_Formation'));
+        }
+
+        $em->flush();
+        return $this->redirect($_SERVER['HTTP_REFERER']);
+    }
+
     public function userModifAction(Request $request){
         $em = $this->getDoctrine()->getManager();
 
@@ -582,13 +624,32 @@ class DefaultController extends Controller
                     $info->setEntrepreneur(false);
                 }
                 $info->setAdresse($request->get('_Adresse'));
-                $info->setFacebook($request->get('_Facebook'));
-                $info->setLinkedin($request->get('_Linkedin'));
+                //$info->setFacebook($request->get('_Facebook'));
+                //$info->setLinkedin($request->get('_Linkedin'));
                 $info->setMobilite($request->get('_Mobilite'));
 
-                if($request->get('_Fratrie') and intval($request->get('_Fratrie')) >= 0){
+                $info->setLienexterne1(null);
+                $info->setLienexterne2(null);
+                $info->setLienexterne3(null);
+
+                for($i = 0; $i < count($request->get('_lien')); $i++){
+                    if($i == 0 and !$request->get('_lien')[0]==''){
+                        $info->setLienexterne1($request->get('_lien')[0]);
+                    }
+                    if($i == 1 and !$request->get('_lien')[1]==''){
+                        $info->setLienexterne2($request->get('_lien')[1]);
+                    }
+                    if($i == 2 and !$request->get('_lien')[2]==''){
+                        $info->setLienexterne3($request->get('_lien')[2]);
+                    }
+
+                }
+
+                if($request->get('_Fratrie')!=null and intval($request->get('_Fratrie')) >= 0){
                     $info->setFratrie(intval($request->get('_Fratrie')));
                 }
+
+
                 $info->setHobbie1(null);
                 $info->setHobbie2(null);
                 $info->setHobbie3(null);
@@ -638,6 +699,9 @@ class DefaultController extends Controller
                 }
 
                 $info->setDatemodification(date_create());
+
+
+
                 $em->flush();
             }
             else{
@@ -665,13 +729,31 @@ class DefaultController extends Controller
                 }
                 $info->setDatecreation(date_create());
                 $info->setAdresse($request->get('_Adresse'));
-                $info->setFacebook($request->get('_Facebook'));
-                $info->setLinkedin($request->get('_Linkedin'));
+                //$info->setFacebook($request->get('_Facebook'));
+                //$info->setLinkedin($request->get('_Linkedin'));
                 $info->setMobilite($request->get('_Mobilite'));
 
-                if($request->get('_Fratrie') and intval($request->get('_Fratrie')) >= 0){
+                if($request->get('_Fratrie')!=null and intval($request->get('_Fratrie')) >= 0){
                     $info->setFratrie(intval($request->get('_Fratrie')));
                 }
+
+                $info->setLienexterne1(null);
+                $info->setLienexterne2(null);
+                $info->setLienexterne3(null);
+                for($i = 0;$i < count($request->get('_lien')); $i++){
+                    if($i == 0 and !$request->get('_lien')[0]==''){
+                        $info->setLienexterne1($request->get('_lien')[0]);
+                    }
+                    if($i == 1 and !$request->get('_lien')[1]==''){
+                        $info->setLienexterne2($request->get('_lien')[1]);
+                    }
+                    if($i == 2 and !$request->get('_lien')[2]==''){
+                        $info->setLienexterne3($request->get('_lien')[2]);
+                    }
+                }
+
+
+
                 $info->setHobbie1(null);
                 $info->setHobbie2(null);
                 $info->setHobbie3(null);

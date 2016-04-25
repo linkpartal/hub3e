@@ -186,18 +186,18 @@
 
             </div>
 
-            <div class="div_form" id="proposerApprenant" style="display: none">
+            <div class="div_form" id="proposerApprenant" style="margin: 0;width: 100%;display: none">
                 <div class="row" style=" margin-bottom: 20px;">
 
                     <div class="col-xs-12" >
-                        <textarea style="height: 200px;resize: none;" class="input" id="Descriptif" name="_Descriptif" placeholder="Votre profil nous intéresse,nous vous proposons une plage de rendez-vous en lien Doodle" required ></textarea>
+                        <textarea style="height: 200px;resize: none;width:770px;margin-left: 20px" class="input" id="Descriptif" name="_Descriptif" placeholder="Votre profil nous intéresse,nous vous proposons une plage de rendez-vous en lien Doodle" required ></textarea>
                     </div>
                     <div class="col-xs-12">
-                        <label style="text-align:left;width:100%;">Proposer un lien externe pour la prise de rendez-vous (type Doodle) : </label>
+                        <label style="margin-left:20px;float:left;" >Proposer un lien externe pour la prise de rendez-vous (type Doodle) : </label>
                     </div>
 
                     <div class="col-xs-12">
-                        <input style="text-align:left;width:100%" title="Inputlien">
+                        <input style="width:770px;" title="Inputlien">
                     </div>
 
                 </div>
@@ -252,13 +252,13 @@
 
 <div class="row" style="margin: 0;">
     {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
-    <button onclick="moveto(this,'info_mission')" class="col-xs-4 onglet"  type="button" > FICHE MISSION</button>
-    <button onclick="moveto(this,'apprenants_mission')" class="col-xs-4 onglet"  type="button" >LISTE DES APPRENANTS</button>
-    <button onclick="moveto(this,'map')" class="col-xs-4 onglet"  type="button"  >CARTE DES APPRENANTS</button>
+    <button onclick="moveto(this,'info_mission')" class="col-xs-4 onglet slide"  type="button" data-show="info_mission" > FICHE MISSION</button>
+    <button onclick="moveto(this,'apprenants_mission')" class="col-xs-4 onglet slide"  type="button" data-show="apprenants_mission" >LISTE DES APPRENANTS</button>
+    <button onclick="moveto(this,'map')" class="col-xs-4 onglet slide"  type="button" data-show="map" >CARTE DES APPRENANTS</button>
     <div id="baronglet" class="col-xs-4" style="height: 5px;background-color: #257ef0; z-index: 60;"></div>
     {% else %}
-        <button onclick="moveto(this,'info_mission')" class="col-xs-6 onglet"  type="button" > FICHE MISSION</button>
-        <button onclick="moveto(this,'map')" class="col-xs-6 onglet"  type="button"  >CARTE DES APPRENANTS</button>
+        <button onclick="moveto(this,'info_mission')" class="col-xs-6 onglet slide"  type="button" data-show="info_mission"> FICHE MISSION</button>
+        <button onclick="moveto(this,'map')" class="col-xs-6 onglet slide"  type="button" data-show="map" >CARTE DES APPRENANTS</button>
         <div id="baronglet" class="col-xs-6" style="height: 5px;background-color: #257ef0; z-index: 60;"></div>
     {% endif %}
 </div>
@@ -274,16 +274,31 @@
                     <div class="list-group affichage">
 
                         <label class="list-group-item mission" >LA MISSION : <br/>
-                            <textarea id="Descriptif" name="_Descriptif" maxlength="255"  style="color:black; font-weight: lighter" readonly >{{mission.getDescriptif}}</textarea>
+                            <textarea id="Descriptif" name="_Descriptif" maxlength="255"  style="height:60px;color:black; font-weight: lighter" readonly >{{mission.getDescriptif}}</textarea>
                         </label>
 
                         <label class="list-group-item mission" >LE PROFIL RECHERCHE :<br/>
-                            <textarea style="color:black; font-weight: lighter" id="Profil" name="_Profil" required maxlength="255" readonly >{{mission.getProfil}}</textarea>
+                            <textarea style="height:60px;color:black; font-weight: lighter" id="Profil" name="_Profil" required maxlength="255" readonly >{{mission.getProfil}}</textarea>
                         </label>
 
 
                         <label class="list-group-item mission">Domaine : <br/>
                             <input style="color:black; font-weight: lighter" value="{{mission.getDomaine}}" type="text" id="Domaine" name="_Domaine" maxlength="45" readonly>
+                        </label>
+                        <label class="list-group-item mission">Contact Mission: </br>
+                           <label style="color:black;font-weight: lighter;">{{ mission.getNomcontact }}</label>  <label style="color:black;font-weight: lighter;margin-left:40px;">{{ mission.getPrenomcontact }}</label>
+                            <label style="color:black;font-weight: lighter;margin-left:40px;" >{{ mission.getFonctioncontact }}</label>
+                            <label style="color:black;font-weight: lighter;margin-left:40px;">{{ mission.getTelcontact }}</label><label style="color:black;font-weight: lighter;margin-left:40px;">{{ mission.getEmailcontact }}</label>
+                        </label>
+
+                        <label class="list-group-item mission">Formation Ciblées: </br>
+
+                            <label></label>
+
+                        </label>
+
+                        <label class="list-group-item mission" >Commentaire :<br/>
+                            <textarea style="color:black;height: 60px; font-weight: lighter" id="Commentaire" name="_Commentaire" required maxlength="255" readonly >{{mission.getCommentaire}}</textarea>
                         </label>
 
 
@@ -713,39 +728,24 @@
         document.getElementById('proposerApprenant').style.display= 'none';
         document.getElementById('proposer_button').style.display= 'none';
     }
-    function moveto(button,div) {
-        var elem = document.getElementById("baronglet");
-        var pos = elem.offsetLeft;
+    $(".slide").click(function(){
         document.getElementById('info_mission').style.visibility= 'hidden';
         {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
         document.getElementById('apprenants_mission').style.visibility= 'hidden';
         {% endif %}
         document.getElementById('map').style.visibility= 'hidden';
-        document.getElementById(div).style.visibility= 'visible';
+        document.getElementById($(this).attr("data-show")).style.visibility= 'visible';
 
         for(var i = 0; i < infoWindows.length ; i++){
             infoWindows[i].close();
         }
+        var target = $(this).offset();
 
-        var end = false;
-        var id = setInterval(frame, 5);
 
-        function frame() {
-            if (pos == button.offsetLeft || (pos ==0 && end)) {
-                clearInterval(id);
-            } else {
-                if(elem.offsetLeft > button.offsetLeft)
-                {
-                    end = true;
-                    elem.style.left = pos-- + 'px';
-                }
-                else
-                {
-                    elem.style.left = pos++ + 'px';
-                }
-            }
-        }
-    }
+                        $("#baronglet").animate({left: "+="+(target.left - $("#baronglet").offset().left)},500)
+
+
+    });
     function post(path,refresh) {
         if(refresh)
         {

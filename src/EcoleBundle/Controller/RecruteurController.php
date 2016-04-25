@@ -39,7 +39,6 @@ class RecruteurController extends Controller
 
 
         $mes_missions = array();
-        $missions_propose = array();
         $societes =array();
         $formations = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$user->getEtablissement()));
         foreach($formations as $formation)
@@ -47,14 +46,14 @@ class RecruteurController extends Controller
             $diffusions = $this->getDoctrine()->getRepository('GenericBundle:Diffusion')->findBy(array('formation'=>$formation));
             foreach($diffusions as $diffusion)
             {
-                if($diffusion->getStatut()==5)
+                if($diffusion->getStatut()==5 and !in_array($diffusion->getMission(),$mes_missions))
                 {
                     array_push($mes_missions,$diffusion->getMission());
                 }
-                elseif($diffusion->getStatut()==1){
-                    array_push($missions_propose,$diffusion->getMission());
+                if(!in_array($diffusion->getMission()->getEtablissement(),$societes)){
+                    array_push($societes,$diffusion->getMission()->getEtablissement());
                 }
-                array_push($societes,$diffusion->getMission()->getEtablissement());
+
             }
         }
         $societes = array_merge($societes,$user->getReferenciel()->toArray());

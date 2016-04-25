@@ -15,11 +15,12 @@
 </head>
 <body onload="loading();" onunload="window.parent.document.getElementById('iframe').style.position ='static';window.parent.document.getElementById('iframe').style.height ='calc(100% - 72px)';">
 <div id="FicheApprenant" class="popup" >
-    <div onclick="hide(this)" class="close"></div>
+    <div onclick="hide(this);document.getElementById('ModifierSAS').setAttribute('type','button');document.getElementById('ModifierSAS').setAttribute('onclick','modifierApprenant()');"
+         class="close"></div>
     <div class="col-xs-offset-4 col-xs-4 formContainer" >
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-        <form id="formFicheApprenant" class="formulaire"   method="post">
+        <div id="formFicheApprenant" class="formulaire">
             <div style="text-align: center;">
                 <div class="col-lg-12" >
                     <img src="" style="border-radius:50%; width:50px; height:50px" >
@@ -35,58 +36,67 @@
                         <button onclick="document.getElementById('info_apprenant').style.display ='block';document.getElementById('FormationSouhaitee').style.display ='none';"  class="col-xs-4 onglet"  type="button" style="margin-left: 20px;width: 50%" >FICHE APPRENANT</button>
                         <button onclick="document.getElementById('FormationSouhaitee').style.display ='block';document.getElementById('info_apprenant').style.display ='none';" class="col-xs-4 onglet"  type="button" style="width: calc(50% - 50px)" >Formation Souhaitée</button>
                     </div>
+
                     <div id="info_apprenant" style="border-top: 1px solid #B0B0B0;margin: 0;overflow-y: auto;width: 100%;">
-                        <div class="col-xs-12 Liste" >
+                        <form id="formFicheApprenant" action="{{ path('ModifAppSas') }}"  method="post" enctype="multipart/form-data">
 
-                            <div class="col-xs-12" >
-                                <label class="cell"  style="float:left;">Civilité : <label id="Information_Apprenant_Civilite"></label></label>
-                            </div>
-                            <div class="col-xs-10 ">
-                                <label class="cell" style="float:left;">Nom : <label id="Information_Apprenant_Nom"></label> </label>
-                            </div>
-                            <div class="col-xs-10">
-                                <label class="cell" style="float:left;">Prenom : <label id="Information_Apprenant_Prenom"></label></label>
+                            <div class="col-xs-12 Liste" >
+                                <input type="hidden" id="Information_Apprenant_ID" name="_ID">
+                                <div class="col-xs-12" >
+                                    <label class="cell"  style="float:left;">Civilité : <input id="Information_Apprenant_Civilite" name="_Civilite" ></label>
+                                </div>
+                                <div class="col-xs-10 ">
+                                    <label class="cell" style="float:left;">Nom : <input id="Information_Apprenant_Nom" name="_NomAppr" > </label>
+                                </div>
+                                <div class="col-xs-10">
+                                    <label class="cell" style="float:left;">Prenom : <input id="Information_Apprenant_Prenom" name="_PrenomAppr" ></label>
 
-                            </div>
-                            <div class="col-xs-10">
-                                <label class="cell" style="float:left;">Email  : <label id="Information_Apprenant_Email"></label></label>
-                            </div>
-                            <div class="col-xs-10">
-                                <label class="cell" style="float:left;">Téléphone : <label id="Information_Apprenant_Telephone"></label></label>
+                                </div>
+                                <div class="col-xs-10">
+                                    <label class="cell" style="float:left;">Email  : <input id="Information_Apprenant_Email" name="_EmailAppr" ></label>
+                                </div>
+                                <div class="col-xs-10">
+                                    <label class="cell" style="float:left;">Téléphone : <input id="Information_Apprenant_Telephone" name="_telAppr"></label>
 
-                            </div>
-                            <div class="col-xs-10">
-                                <label class="cell" style="float:left;">Date naissance : <label id="Information_Apprenant_DateNaissance"  ></label></label>
-                            </div>
-                            <div class="col-xs-10">
-                                <label class="cell" style="float:left;">Cp naissance  : <label id="Information_Apprenant_CpNaissance" ></label></label>
+                                </div>
+                                <div class="col-xs-10">
+                                    <label class="cell" style="float:left;">Date naissance : <input id="Information_Apprenant_DateNaissance" name="_DateNaissance" ></label>
+                                </div>
+                                <div class="col-xs-10">
+                                    <label class="cell" style="float:left;">Cp naissance  : <input id="Information_Apprenant_CpNaissance" name="_CpNaissance"></label>
+                                </div>
 
+                                <div class="col-xs-10">
+                                    <label class="cell" style="float:left;">Lieu naissance: <input id="Information_Apprenant_LieuNaissance" name="_LieuNaissance"></label>
+                                </div>
+                                <div class="col-xs-10">
+                                    <label class="cell" style="float:left;">Adresse       : <input id="Information_Apprenant_Adresse" name="_Adresse" ></label>
+                                </div>
+                                <div class="col-xs-10">
+                                    <label class="cell" style="float:left;">Dernier diplome : <input id="Information_Apprenant_Diplome" name="_Diplome" ></label>
+                                </div>
+                                <div class="col-xs-10">
+                                    <label class="cell" style="float:left;">Formation en cours : <input id="Information_Apprenant_Formation" name="_Formation" ></label>
+                                </div>
                             </div>
 
-                            <div class="col-xs-10">
-                                <label class="cell" style="float:left;">Lieu naissance: <label id="Information_Apprenant_LieuNaissance" ></label></label>
-                            </div>
-                            <div class="col-xs-10">
-                                <label class="cell" style="float:left;">Adresse       : <label id="Information_Apprenant_Adresse" ></label></label>
-                            </div>
-                            <div class="col-xs-10">
-                                <label class="cell" style="float:left;">Dernier diplome : <label id="Information_Apprenant_Diplome" ></label></label>
-                            </div>
-                            <div class="col-xs-10">
-                                <label class="cell" style="float:left;">Formation en cours : <label id="Information_Apprenant_Formation" ></label></label>
-                            </div>
-                        </div>
+                        <span>
+                          <input type="button" class="btn btn-primary" id="ModifierSAS" onclick="modifierApprenant()" value="Modifier">
+                        </span>
+                        </form>
                     </div>
 
                     <div id="FormationSouhaitee" class="col-xs-10 col-xs-offset-1" style="border-top: 1px solid #B0B0B0;margin: 0;height: 281px;width: 100%;display:none;">
                     </div>
+
+
                 </div>
 
 
 
             </div>
 
-        </form>
+        </div>
 
     </div>
 
@@ -184,9 +194,7 @@
         </div>
         <div class="col-xs-2" style="height: 100%">
             <button class="col-xs-3" title="Voir plus d'information" type="button" onclick="
-                    informationApprenant('{{import.getPhotos}}','{{ import.getCivilite }}','{{ import.getNom }}','{{ import.getPrenom }}','{{ import.getEmail }}',
-                    '{{ import.getTelephone }}'{% if import.getInfo %},'{{ import.getInfo.getDateNaissance|date("d/m/Y") }}','{{ import.getInfo.getCpNaissance }}','{{ import.getInfo.getLieunaissance }}',
-                    '{{ import.getInfo.getAdresse }}','{{ import.info.formationactuelle }}','{{ import.info.dernierDiplome }}'{% endif %}{% if candidatures is defined %},'{{ candidatures[loop.index0] }}'{% endif %});show('FicheApprenant');" style="height: 100%;background-color: transparent;border: none">
+                    informationApprenant('{{import.getPhotos|e('js')}}',{{ import.id|e('js') }},'{{ import.getCivilite|e('js') }}','{{ import.getNom|e('js') }}','{{ import.getPrenom|e('js') }}','{{ import.getEmail|e('js') }}','{{ import.getTelephone|e('js') }}'{% if import.getInfo|e('js') %},'{{ import.getInfo.getDateNaissance|date("d/m/Y")|e('js') }}','{{ import.getInfo.getCpNaissance|e('js') }}','{{ import.getInfo.getLieunaissance|e('js') }}','{{ import.getInfo.getAdresse|e('js') }}','{{ import.info.formationactuelle|e('js') }}','{{ import.info.dernierDiplome|e('js') }}'{% endif %}{% if candidatures is defined %},'{{ candidatures[loop.index0]|e('js') }}'{% endif %});show('FicheApprenant');" style="height: 100%;background-color: transparent;border: none">
                 <span class="glyphicon glyphicon-search" style="color: #1C5AA5"></span>
             </button>
             {% if not import.erreur == null %}
@@ -329,7 +337,7 @@
             }
         })
     }
-    function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse,formation,diplome,candidatures) {
+    function informationApprenant(image,id,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse,formation,diplome,candidatures) {
         if(image != ''){
             document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
         }
@@ -339,28 +347,34 @@
         else{
             document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='{{ asset('image/homme.jpg') }}';
         }
-
-        document.getElementById('Information_Apprenant_Civilite').innerHTML = civilite;
-        document.getElementById('Information_Apprenant_Nom').innerHTML = nom;
-        document.getElementById('Information_Apprenant_Prenom').innerHTML= prenom;
-        document.getElementById('Information_Apprenant_Email').innerHTML = email;
-        document.getElementById('Information_Apprenant_Telephone').innerHTML =telephone;
-        document.getElementById('Information_Apprenant_DateNaissance').innerHTML =Datenaissance;
-        document.getElementById('Information_Apprenant_CpNaissance').innerHTML =cpnaissance;
-        document.getElementById('Information_Apprenant_LieuNaissance').innerHTML =lieuNaissance;
-        document.getElementById('Information_Apprenant_Adresse').innerHTML =adresse;
+        document.getElementById('Information_Apprenant_ID').value = id;
+        document.getElementById('Information_Apprenant_Civilite').value = civilite;
+        document.getElementById('Information_Apprenant_Nom').value = nom;
+        document.getElementById('Information_Apprenant_Prenom').value= prenom;
+        document.getElementById('Information_Apprenant_Email').value = email;
+        document.getElementById('Information_Apprenant_Telephone').value =telephone;
+        document.getElementById('Information_Apprenant_DateNaissance').value =Datenaissance;
+        document.getElementById('Information_Apprenant_CpNaissance').value =cpnaissance;
+        document.getElementById('Information_Apprenant_LieuNaissance').value =lieuNaissance;
+        document.getElementById('Information_Apprenant_Adresse').value =adresse;
         document.getElementById('Information_Apprenant_titre').innerHTML= nom +' '+ prenom;
         document.getElementById('Information_Apprenant_titre_adresse').innerHTML = adresse;
-        document.getElementById('Information_Apprenant_Formation').innerHTML = formation;
-        document.getElementById('Information_Apprenant_Diplome').innerHTML = diplome;
+        document.getElementById('Information_Apprenant_Formation').value = formation;
+        document.getElementById('Information_Apprenant_Diplome').value = diplome;
 
         var mycandid = JSON.parse(candidatures);
         var formationContainer = document.getElementById('FormationSouhaitee');
         formationContainer.innerHTML ='';
         for(var i = 0; i < mycandid.length; i++){
+
+          //  <div class="col-xs-12 Liste" >
+            //    <div class="col-xs-12" >
+            var divContainer = document.createElement('div');
+            divContainer.className = 'col-xs-12 Liste';
             var nomformation = document.createElement('label');
             nomformation.className = 'col-xs-4';
             nomformation.style.height = '15px';
+            nomformation.setAttribute('style','margin: auto');
             nomformation.innerHTML = mycandid[i].NomeFormation;
             var adresseLabel = document.createElement('label');
             adresseLabel.className = 'col-xs-4';
@@ -383,12 +397,29 @@
                 statut.style.backgroundColor = 'black';
             }*/
 
-            formationContainer.appendChild(nomformation);
-            formationContainer.appendChild(adresseLabel);
-            formationContainer.appendChild(ecole);
+
+            divContainer.appendChild(nomformation);
+            divContainer.appendChild(adresseLabel);
+            divContainer.appendChild(ecole);
+            formationContainer.appendChild(divContainer);
+            //formationContainer.appendChild(adresseLabel);
+            //formationContainer.appendChild(ecole);
             //formationContainer.appendChild(statut);
         }
 
+    }
+    function modifierApprenant() {
+        var button = document.getElementById("ModifierSAS");
+
+        var inputs = document.getElementById("formFicheApprenant").getElementsByTagName('input');
+        for(var i = 0; i< inputs.length; i++)
+        {
+            inputs[i].readOnly = false;
+            //document.getElementById(inputs[i])
+        }
+
+        //button.value="valider";
+        button.setAttribute("type","submit");
     }
     function search(mot){
         var mots = mot.toUpperCase().trim().split(/ +/g);

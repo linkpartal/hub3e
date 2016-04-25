@@ -167,3 +167,7 @@ ConsulterCR:
 ChangementRole:
     path: /ChangementRole/id={idUser}
     defaults: {_controller: UserBundle:Default:ChangementRole}
+
+ModifAppSas:
+    path: /ModifAppSas
+    defaults: { _controller: UserBundle:Default:ModifAppSas}

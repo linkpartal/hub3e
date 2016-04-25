@@ -64,8 +64,8 @@
                         <div class="div_form" style="">
 
                             <div class="col-xs-3 input-colonne">
-                                <input list="STATUTDATALIST" class="input" title="Statut" name="_Statutparent" required>
-                                <datalist id="STATUTDATALIST" class="input" title="Statut">
+                                <input list="STATUTDATALIST" class="input" title="Statut" name="_Statutparent" placeholder="Statut" required>
+                                <datalist id="STATUTDATALIST" class="List-visible" title="Statut">
                                     <option value="Père">
                                     <option value="Mère">
                                     <option value="Tuteur légal">
@@ -74,7 +74,7 @@
                             </div>
                             <div class="col-xs-3 input-colonne">
 
-                                <select class="input "  title="" name="_Civiliteparent">
+                                <select class="input"  title="" name="_Civiliteparent">
                                     <option value="Monsieur">Mr.</option>
                                     <option value="Madame">Mme.</option>
                                 </select>
@@ -124,12 +124,12 @@
                         <div class="div_form" style="">
                             <div class="col-xs-6 input-colonne">
                                 <div class="col-xs-6 input-colonne">
-                                    <input placeholder="Nom Société" class="input" type="text" id="Nomsociete" name="_Nomsociete" maxlength="45" required >
+                                    <input placeholder="Nom Société" class="input" type="text" id="Nomsociete" name="_Nomsociete" maxlength="45" >
                                     <input placeholder="Type(ex :stage,emploi,voyage…)"  class="input" type="text" onkeyup="if(this.value){this.style.fontSize = '18px';}else{this.style.fontSize = '9px';}" id="Activite" name="_Activite" maxlength="45" required >
                                 </div>
                                 <div class="col-xs-6 input-colonne" style="border-right: 0">
                                     <input placeholder="Lieu(ville, pays)" class="input" type="text" id="Lieu" name="_Lieu" maxlength="45" required >
-                                    <input placeholder="Poste" class="input"  type="text" id="Poste" name="_Poste" maxlength="45" required >
+                                    <input placeholder="Poste" class="input"  type="text" id="Poste" name="_Poste" maxlength="45"  >
                                 </div>
                                 <div class="col-xs-6 input-colonne" style="border-right: 0">
                                     <label style="float: left">A partir de :</label><input type="text" class="date" id="Datedebut" name="_Datedebut" title="Datedebut" required >
@@ -359,7 +359,7 @@
                         {% if User.hasRole('ROLE_APPRENANT') %}
 
                             <!--button id="Button_donnees" class="NavButtonInactive" title="Données Utilisateur" onclick="show_Information('info_user','Button_donnees')" type="button">Données Utilisateur</button>-->
-                            {% if not User.getCivilite or not User.getNom or not User.getPrenom or not User.getPhotos or not User.getTelephone or not User.getUserName or not User.getEmail or not User.getInfo.getDatenaissance|date('Y-m-d') or not User.getInfo.getCpnaissance or not User.getInfo.getLieunaissance or not User.getInfo.getAdresse  or not User.getInfo.getMobilite   %}
+                            {% if not User.getCivilite or not User.getNom or not User.getPrenom or not User.getPhotos or not User.getTelephone or not User.getUserName or not User.getEmail or not User.getInfo.getDatenaissance|date('Y-m-d') or not User.getInfo.getCpnaissance or not User.getInfo.getLieunaissance or not User.getInfo.getAdresse  or not User.getInfo.getFratrie   %}
                                 <button id="Button_Apprenant" style="background-color: #d2d2d2; color:red;" class="NavButtonIframe" title="Details de l'Apprenant" onclick="NaviguerOnglet('OngletApprenant','info_Apprenant',this);" type="button">Détails</button>
                             {% else %}
                                 <button id="Button_Apprenant" class="NavButtonIframe" title="Details de l'Apprenant" onclick="NaviguerOnglet('OngletApprenant','info_Apprenant',this);" type="button">Détails</button>
@@ -541,11 +541,36 @@
                             <form class="formulaire" id="formUser" action="{{ path('userModif') }}" onsubmit="ShowWaiter();" method="post" enctype="multipart/form-data">
                                 <input type="hidden" value="{{ User.getId }}" id="id" name="_ID">
 
-                                <div class="inputcontainer">
+                             {#  <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="civilite">Civilité : </label>
 
                                     <label style="height: 60px;" for="civilite"> &nbsp {{User.getCivilite}}</label>
+                                </div> #}
+
+                                <div class="inputcontainer">
+                                    <label class="list-group-item" style="height: 60px;" for="civilite">Civilité :</label>
+
+                                    <select   class="champ form-control" title="" id="civilite"  name="_Civilite">
+                                        {% if User.getCivilite == 'Mr' %}
+                                            <option selected="selected" value="Mr">Mr.</option>
+                                        {% else %}
+                                            <option value="Mr">Mr.</option>
+                                        {% endif %}
+
+                                        {% if User.getCivilite == 'Mme' %}
+                                            <option selected="selected" value="Mme">Mme.</option>
+                                        {% else %}
+                                            <option value="Mme">Mme.</option>
+                                        {% endif %}
+
+                                        {% if User.getCivilite == 'Mlle' %}
+                                            <option selected="selected" value="Mlle">Mlle.</option>
+                                        {% else %}
+                                            <option value="Mlle">Mlle.</option>
+                                        {% endif %}
+                                    </select>
                                 </div>
+
 
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="Nom">Nom :</label>
@@ -691,24 +716,51 @@
 
                                     </div>
 
-                                    <div class="inputcontainer">
+                                   {#  <div class="inputcontainer">
                                         <label class="list-group-item" style="height: 60px;" for="FormationActuel">Formation actuel  :</label>
                                         <input value="{{User.getInfo.formationactuelle}}" type="text" class="champ form-control" id="FormationActuel" name="_FormationActuel" maxlength="45"  >
-                                    </div>
-                                    <div class="inputcontainer">
+                                    </div>#}
+                                   {#<div class="inputcontainer">
                                         <label class="list-group-item" style="height: 60px;" for="DernierDiplome">Dernier diplome :</label>
                                         <input value="{{User.getInfo.dernierDiplome}}" type="text" class="champ form-control" id="DernierDiplome" name="_DernierDiplome" maxlength="45"  >
-                                    </div>
-                                    <div class="inputcontainer">
+                                    </div>#}
+
+                                   {#  <div class="inputcontainer">
                                         <label class="list-group-item" style="height: 60px;" for="Facebook">Facebook      :</label>
                                         <input value="{{User.getInfo.getFacebook}}"  class="champ form-control" id="Facebook" name="_Facebook" maxlength="45"  >
                                         <label class="list-group-item" style="height: 60px;" for="Linkedin">Linkedin      : </label>
                                         <input value="{{User.getInfo.getLinkedin}}"  class="champ form-control" id="Linkedin" name="_Linkedin" maxlength="45" >
 
+                                    </div>#}
+                                    <div class="inputcontainer">
+                                        <label class="list-group-item" style="height: 60px;vertical-align: top;" for="Liens">Lien externe :</label>
+                                        <div id="LienexterneContainer" style="display: inline-block;">
+                                            {% if  User.getInfo.getLienexterne1  %}
+                                                <div id="lien1" >
+                                                    <input title="" value="{{ User.getInfo.getLienexterne1 }}" name="_lien[]" type="text"  class="champ form-control" >
+                                                    <img  onclick="supprimerLien(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getLienexterne2 %}
+                                                <div id="lien2"  >
+                                                    <input title="" value="{{ User.getInfo.getLienexterne2 }}" name="_lien[]" type="text" class="champ form-control" >
+                                                    <img   onclick="supprimerLien(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getLienexterne3 %}
+                                                <div id="lien3" >
+                                                    <input title="" value="{{ User.getInfo.getLienexterne3 }}" name="_lien[]" type="text" class="champ form-control" >
+                                                    <img onclick="supprimerLien(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <span class="glyphicon glyphicon-plus" style="color:green;vertical-align: top;float: right;margin: 9px;" aria-hidden="true" name="modification" title="Ajouter" OnClick="ajouterLien()"></span>
+                                        {#<img  OnClick="ajouterHobbie()" style="vertical-align: top;float: right;margin: 9px;"  src="{{ asset('image/add_x30.png') }}"/>#}
                                     </div>
+
                                     <div class="inputcontainer">
                                         <label class="list-group-item" style="height: 60px;" for="Mobilite">Mobilité      :</label>
-                                        <select class="List-invisible" title="" id="Mobilite"  name="_Mobilite" >
+                                        <select class="champ form-control" title="" id="Mobilite"  name="_Mobilite" >
                                             {% if User.getInfo.getMobilite == '10' %}
                                                 <option selected="selected" value="10" >moins de 10 min.</option>
                                             {% else %}
@@ -728,7 +780,7 @@
                                         </select>
                                     </div>
                                     <div class="inputcontainer">
-                                        <label class="list-group-item" style="height: 60px;" for="Fratrie">Fratrie       : </label>
+                                        <label class="list-group-item" style="height: 60px;" for="Fratrie">Nombre de frère et sœur : </label>
                                         <input value="{{User.getInfo.getFratrie}}" type="number" class="champ form-control" id="Fratrie" min="0" name="_Fratrie" maxlength="45" >
 
                                     </div>
@@ -834,7 +886,6 @@
                                                         <option value="Tuteur légal">
                                                     </datalist></label>
                                                 <label class="cell">Civilité : <select class="input "  title="" name="_Civiliteparent">
-
                                                         <option value="Monsieur" {% if parent.civilite == 'Monsieur' %}selected{% endif %}>Mr.</option>
                                                         <option value="Madame" {% if parent.civilite == 'Madame' %}selected{% endif %}>Mme.</option>
                                                     </select>
@@ -867,9 +918,9 @@
                             {% endif %}
 
 
-                            <div class="col-md-6 .col-md-offset-3">
+                          {#<div class="col-md-6 .col-md-offset-3">#}
                                 <button type="button" id="buttonInfoApprenant" class="col-xs-4 col-xs-offset-4 btn btn-primary " style="margin-top:40px;" onclick="show('addparent')">Ajouter un Responsable légal</button>
-                            </div>
+                           {# </div> #}
 
 
                         </div>
@@ -898,7 +949,8 @@
                                                     <label class="cell">Fin : <input value="{{ Exp.fin | date('m/Y')}}" class="date" id="Nbreannee" name="_Datefin"></label>
                                                 </div>
                                                 <div class="row">
-                                                    <label class="cell">Description : <input value="{{ Exp.description }}" id="Descriptionexp" name="_Descriptionexp"></label>
+                                                    <label class="cell">Description : <textarea style="resize: both;width:350px;height:100px" id="Descriptionexp" name="_Descriptionexp" maxlength="255"  >{{ Exp.description }}</textarea>
+                                                        </label>
                                                     <input type="submit" value="Modifier">
                                                 </div>
                                             </div>
@@ -906,7 +958,8 @@
                                     </form>
                                 {% endfor %}
                             {% endif %}
-                            <button type="button" class="col-xs-14 col-xs-offset-4 btn btn-primary" style="margin-top: 40px" onclick="show('addExperience')" >Ajouter une Expérience</button>
+
+                            <button type="button" class="col-xs-4 col-xs-offset-4 btn btn-primary" style="margin-top: 40px" onclick="show('addExperience')" >Ajouter une Expérience</button>
                         </div>
                         <div id="info_recom" class="list-group affichage" style="display:none">
                             {% if Recommandation is defined %}
@@ -916,7 +969,8 @@
                                         <input type="hidden" value="{{ Recom.getId }}" id="id" name="_IDRecom">
                                         <div class="col-xs-12 Liste">
                                             <div class="row">
-                                                <label class="cell">Text  : <input value="{{ Recom.text }}" title="Text" id="Text" name="_Text"></label>
+                                                <label class="cell">Text  : <textarea style="resize: both;width:350px;" id="Text" name="_Text" maxlength="255"  >{{ Recom.text }}</textarea>
+                                                   </label>
                                                 <label class="cell">Nom : <input value="{{Recom.getNom }}" title="Nom Recommandation" id="Nomrec" name="_Nomrec">
                                                     <span class="glyphicon glyphicon-remove" style="color:red ; float:right" aria-hidden="true" name="modification" title="Supprimer" onclick="supprimerRecommandation('{{ path('supprimer_Recommandation',{'id':Recom.getId}) }}',this)"></span>
                                                     <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#recommandation{{ iddiv }}"></button></label>
@@ -953,7 +1007,7 @@
                                         <div class="col-xs-12 Liste">
                                             <div class="row">
                                                 <label class="cell">Libellé  : <input value="{{ Dip.libelle }}" id="Libelle" name="_Libelle" ></label>
-                                                <label class="cell">Obtention : <input value="{{ Dip.obtention }}" id="Obtention" name="_Obtention">
+                                                <label class="cell">Niveau  : <input value="{{ Dip.niveau }}" id="Niveau" name="_Niveau" >
                                                     <span class="glyphicon glyphicon-remove" style="color:red ; float:right" aria-hidden="true" name="modification" title="Supprimer" onclick="supprimerDiplome('{{ path('supprimer_Diplome',{'id':Dip.getId}) }}',this)"></span>
                                                     <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#diplome{{ iddiv }}"></button></label>
 
@@ -964,6 +1018,7 @@
                                             <div id="diplome{{ iddiv }}" class="collapse in" >
                                                 <div class="row">
                                                     <label class="cell">Ecole  : <input value="{{ Dip.ecole}}" id="Ecole" name="_Ecole"></label>
+                                                    <label class="cell">Obtention : <input value="{{ Dip.obtention }}" id="Obtention" name="_Obtention"></label>
                                                     <input type="submit" value="Modifier">
                                                 </div>
                                             </div>
@@ -1423,6 +1478,10 @@
         div.parentNode.removeChild(div);
 
     }
+    function supprimerLien(div){
+        var input = div.getElementsByTagName("input")[0];
+        div.parentNode.removeChild(div);
+    }
     function supprimerParent(route, champs) {
         $.ajax({
             type: 'get',
@@ -1513,6 +1572,20 @@
         }
         else{
             alert('5 hobby maximum');
+        }
+    }
+
+    function ajouterLien(){
+        if(document.getElementsByName('_lien[]').length < 3){
+            var newLien = document.createElement('input');
+            newLien.setAttribute('name','_lien[]');
+            newLien.setAttribute('type','text');
+            newLien.className = 'champ form-control';
+            newLien.setAttribute('style','display :block !important');
+            document.getElementById('LienexterneContainer').appendChild(newLien);
+        }
+        else{
+            alert('3 lien maximum');
         }
     }
     function ajouterLangue(){

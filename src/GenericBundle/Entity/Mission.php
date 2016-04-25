@@ -77,6 +77,12 @@ class Mission
      * @ORM\Column(name="EmailContact", type="string", length=45, nullable=true)
      */
     private $emailcontact;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Commentaire", type="string", length=255, nullable=true)
+     */
+    private $commentaire;
 
     /**
      * @var string
@@ -830,5 +836,29 @@ class Mission
 
     public function __toString() {
         return $this->codemission;
+    }
+
+    /**
+     * Set commentaire
+     *
+     * @param string $commentaire
+     *
+     * @return Mission
+     */
+    public function setCommentaire($commentaire)
+    {
+        $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    /**
+     * Get commentaire
+     *
+     * @return string
+     */
+    public function getCommentaire()
+    {
+        return $this->commentaire;
     }
 }

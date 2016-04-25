@@ -35,6 +35,7 @@ class DefaultController extends Controller
         $mission->setFonctionContact($request->get('_FonctionContact'));
         $mission->setTelContact($request->get('_TelContact'));
         $mission->setEmailContact($request->get('_EmailContact'));
+        $mission->setCommentaire($request->get('_Commentaire'));
         $mission->setIntitule($request->get('_Intitule'));
         $mission->setNbreposte($request->get('_Emploi'));
         if($request->get('_Embauche') == '1'){
@@ -87,6 +88,10 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $mission = $this->getDoctrine()->getRepository('GenericBundle:Mission')->find($id);
+
+        //$Diffusion = $this->getDoctrine()->getRepository('GenericBundle:Diffusion')->findBy(array('mission'=>$mission));
+        //$formationCibl = $this->getDoctrine()->getRepository('GenericBundle:Formation')->
+
         $users = array();
         $tuteurs = array();
         foreach($em->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$mission->getEtablissement())) as $users_etablissement)
