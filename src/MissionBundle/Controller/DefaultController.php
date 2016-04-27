@@ -29,7 +29,11 @@ class DefaultController extends Controller
         $mission->setHoraire($request->get('_Horaire'));
 
         $mission->setDatedebut(date_create_from_format('d/m/Y',$request->get('_Datedebut')) );
-        $mission->setDatefin(date_create_from_format('d/m/Y',$request->get('_Datefin')) );
+        if($request->get('_Datefin') and !$request->get('_Datefin')==''){
+            $mission->setDatefin(date_create_from_format('d/m/Y',$request->get('_Datefin')) );
+        }
+
+
         $mission->setNomcontact($request->get('_NomContact'));
         $mission->setPrenomContact($request->get('_PrenomContact'));
         $mission->setFonctionContact($request->get('_FonctionContact'));
@@ -89,9 +93,6 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $mission = $this->getDoctrine()->getRepository('GenericBundle:Mission')->find($id);
 
-        //$Diffusion = $this->getDoctrine()->getRepository('GenericBundle:Diffusion')->findBy(array('mission'=>$mission));
-        //$formationCibl = $this->getDoctrine()->getRepository('GenericBundle:Formation')->
-
         $users = array();
         $tuteurs = array();
         foreach($em->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$mission->getEtablissement())) as $users_etablissement)
@@ -107,7 +108,7 @@ class DefaultController extends Controller
             if($Userconnecte->hasRole('ROLE_SUPER_ADMIN') and ($diffusion->getStatut() == 2 or $diffusion->getStatut() == 5)) {
                 foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
                 {
-                    if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3){
+                    if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3 and !in_array($candidature->getUser(),$users)){
                         array_push($users,$candidature->getUser());
                     }
 
@@ -117,7 +118,7 @@ class DefaultController extends Controller
             {
                 foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
                 {
-                    if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3){
+                    if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3 and !in_array($candidature->getUser(),$users)){
                         array_push($users,$candidature->getUser());
                     }
 
@@ -126,7 +127,7 @@ class DefaultController extends Controller
             elseif($Userconnecte->hasRole('ROLE_ADMINECOLE') and $Userconnecte->getTier() == $diffusion->getFormation()->getEtablissement()->getTier()){
                 foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
                 {
-                    if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3){
+                    if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3 and !in_array($candidature->getUser(),$users)){
                         array_push($users,$candidature->getUser());
                     }
                 }
@@ -136,7 +137,7 @@ class DefaultController extends Controller
             {
                 foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
                 {
-                    if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3){
+                    if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3 and !in_array($candidature->getUser(),$users)){
                         array_push($users,$candidature->getUser());
                     }
                 }
@@ -172,6 +173,9 @@ class DefaultController extends Controller
         {
             $mission->getEtablissement()->getTier()->setFondecran(base64_encode(stream_get_contents($mission->getEtablissement()->getTier()->getFondecran())));
         }
+
+
+
         $formations_prop = null;
         $formations_prop = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll();
 
@@ -183,11 +187,15 @@ class DefaultController extends Controller
         }
 
 
+
+        $Diffusion = $this->getDoctrine()->getRepository('GenericBundle:Diffusion')->findBy(array('mission'=>$mission));
+
+        $miseEnrelation = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('mission'=>$mission));
+
+
         // var_dump($mission);die;
         return $this->render('MissionBundle::afficheMission.html.twig',array('mission'=>$mission,'users'=>$users,'formations_prop'=>$formations_prop,'informations_maps'=>$informations_maps,
-            'tuteur_etablissement'=>$tuteurs,'scores'=>$scores));
-
-
+            'tuteur_etablissement'=>$tuteurs,'scores'=>$scores,'Diffusions'=>$Diffusion,'miseEnrelation'=>$miseEnrelation));
 
     }
 

@@ -681,19 +681,19 @@ class DefaultController extends Controller
                 $info->setLangue5(null);
                 for($i = 0; $i < count($request->get('_Langue')); $i++){
                     if($i == 0 and !$request->get('_Langue')[0]==''){
-                        $info->setLangue1($request->get('_Langue')[0]);
+                        $info->setLangue1($request->get('_Langue')[0].','.$request->get('_Niveau')[0]);
                     }
                     if($i == 1 and !$request->get('_Langue')[1]==''){
-                        $info->setLangue2($request->get('_Langue')[1]);
+                        $info->setLangue2($request->get('_Langue')[1].','. $request->get('_Niveau')[1]);
                     }
                     if($i == 2 and !$request->get('_Langue')[2]==''){
-                        $info->setLangue3($request->get('_Langue')[2]);
+                        $info->setLangue3($request->get('_Langue')[2].','. $request->get('_Niveau')[2]);
                     }
                     if($i == 3 and !$request->get('_Langue')[3]==''){
-                        $info->setLangue4($request->get('_Langue')[3]);
+                        $info->setLangue4($request->get('_Langue')[3].','. $request->get('_Niveau')[3]);
                     }
                     if($i == 4 and !$request->get('_Langue')[4]==''){
-                        $info->setLangue5($request->get('_Langue')[4]);
+                        $info->setLangue5($request->get('_Langue')[4].','. $request->get('_Niveau')[4]);
                     }
 
                 }
@@ -785,19 +785,19 @@ class DefaultController extends Controller
                 $info->setLangue5(null);
                 for($i = 0; $i < count($request->get('_Langue')); $i++){
                     if($i == 0 and !$request->get('_Langue')[0]==''){
-                        $info->setLangue1($request->get('_Langue')[0]);
+                        $info->setLangue1($request->get('_Langue')[0].','.$request->get('_Niveau')[0]);
                     }
                     if($i == 1 and !$request->get('_Langue')[1]==''){
-                        $info->setLangue2($request->get('_Langue')[1]);
+                        $info->setLangue2($request->get('_Langue')[1].','.$request->get('_Niveau')[1]);
                     }
                     if($i == 2 and !$request->get('_Langue')[2]==''){
-                        $info->setLangue3($request->get('_Langue')[2]);
+                        $info->setLangue3($request->get('_Langue')[2].','.$request->get('_Niveau')[2]);
                     }
                     if($i == 3 and !$request->get('_Langue')[3]==''){
-                        $info->setLangue4($request->get('_Langue')[3]);
+                        $info->setLangue4($request->get('_Langue')[3]. ','.$request->get('_Niveau')[3]);
                     }
                     if($i == 4 and !$request->get('_Langue')[4]==''){
-                        $info->setLangue5($request->get('_Langue')[4]);
+                        $info->setLangue5($request->get('_Langue')[4]. ','.$request->get('_Niveau')[4]);
                     }
 
                 }

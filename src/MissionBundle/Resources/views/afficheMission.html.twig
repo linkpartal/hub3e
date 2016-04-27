@@ -111,7 +111,7 @@
 
 
 <div id="FicheApprenant" class="popup">
-    <div onclick="document.getElementById('submitReception2345').click();hide(this)" class="close"></div>
+    <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-7 formContainer" style="border:20px;">
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
@@ -121,12 +121,10 @@
                     <img src="" style="border-radius:50%; width:50px; height:50px" >
                 </div>
                 <div class="col-lg-12">
-                    <label id="Information_Apprenant_titre" style="color:black" ></label>
+                    <label id="Information_Apprenant_titre" style="color:black;margin-right: 10px;" ></label>
                 </div>
                 <div id="Information_Apprenant_titre_adresse" class="col-xs-12" style="height: 20px;color: #666666;font:medium Roboto;margin-bottom: 40px"></div>
             </div>
-
-
 
             <div class="div_form"  id="information_apprenant" >
                 <div class="row" style=" margin-bottom: 20px">
@@ -186,32 +184,6 @@
 
             </div>
 
-            <div class="div_form" id="proposerApprenant" style="margin: 0;width: 100%;display: none">
-                <div class="row" style=" margin-bottom: 20px;">
-
-                    <div class="col-xs-12" >
-                        <textarea style="height: 200px;resize: none;width:770px;margin-left: 20px" class="input" id="Descriptif" name="_Descriptif" placeholder="Votre profil nous intéresse,nous vous proposons une plage de rendez-vous en lien Doodle" required ></textarea>
-                    </div>
-                    <div class="col-xs-12">
-                        <label style="margin-left:20px;float:left;" >Proposer un lien externe pour la prise de rendez-vous (type Doodle) : </label>
-                    </div>
-
-                    <div class="col-xs-12">
-                        <input style="width:770px;" title="Inputlien">
-                    </div>
-
-                </div>
-            </div>
-
-            <div id="information_button" class="div_button">
-                <input id="submitReception" class="blue" type="submit" style="margin-left: 250px"  value="Répondre plus tard">
-                <input onclick="show_formapprenantproposer()"  class="blue" type="button"   value="Proposer un rendez-vous">
-            </div>
-            <div id="proposer_button" class="div_button" style="display: none">
-                <input  class="blue" onclick="FermerPopup()" style="background:white;color:#666666;border:1px solid #ccc;float: left;text-align: center ;width: 120px;height:50px" type="button" value="Annuler">
-                <input id="submitReception2345" class="blue" type="submit" style="margin-left: 300px;text-align:center;width: 120px;height:50px"  value="Valider">
-
-            </div>
 
         </form>
 
@@ -286,19 +258,24 @@
                             <input style="color:black; font-weight: lighter" value="{{mission.getDomaine}}" type="text" id="Domaine" name="_Domaine" maxlength="45" readonly>
                         </label>
                         <label class="list-group-item mission">Contact Mission: </br>
-                           <label style="color:black;font-weight: lighter;">{{ mission.getNomcontact }}</label>  <label style="color:black;font-weight: lighter;margin-left:40px;">{{ mission.getPrenomcontact }}</label>
-                            <label style="color:black;font-weight: lighter;margin-left:40px;" >{{ mission.getFonctioncontact }}</label>
-                            <label style="color:black;font-weight: lighter;margin-left:40px;">{{ mission.getTelcontact }}</label><label style="color:black;font-weight: lighter;margin-left:40px;">{{ mission.getEmailcontact }}</label>
+                          <label > Nom :</label> <label style="color:black;font-weight: lighter;margin-right: 30px;">{{ mission.getNomcontact }}</label>
+                          <label > Prenom :</label> <label style="color:black;font-weight: lighter;margin-right: 30px;">{{ mission.getPrenomcontact }}</label>
+                          <label > Fonction :</label>  <label style="color:black;font-weight: lighter;margin-right: 30px;" >{{ mission.getFonctioncontact }}</label>
+                          <label > Tel :</label>  <label style="color:black;font-weight: lighter;margin-right: 30px;">{{ mission.getTelcontact }}</label>
+                          <label > Mail : </label><label style="color:black;font-weight: lighter;margin-right: 30px;">{{ mission.getEmailcontact }}</label>
                         </label>
 
                         <label class="list-group-item mission">Formation Ciblées: </br>
 
-                            <label></label>
+                            {% for Diffusion in Diffusions %}
+              <label style="color: black;font-weight: lighter;">{{ Diffusion.formation.nom }} - {{ Diffusion.formation.etablissement.tier.raisonsoc }} - {{ Diffusion.formation.etablissement.adresse }} </label></br>
 
-                        </label>
+                              {% endfor %}
+
+                            </label>
 
                         <label class="list-group-item mission" >Commentaire :<br/>
-                            <textarea style="color:black;height: 60px; font-weight: lighter" id="Commentaire" name="_Commentaire" required maxlength="255" readonly >{{mission.getCommentaire}}</textarea>
+                            <textarea style="color:black;height: 50px; font-weight: lighter" id="Commentaire" name="_Commentaire" required maxlength="255" readonly >{{mission.getCommentaire}}</textarea>
                         </label>
 
 
@@ -442,7 +419,8 @@
                                 <button onclick="
                                         informationApprenant('{{user.getPhotos}}','{{ user.getCivilite }}','{{ user.getNom }}','{{ user.getPrenom }}','{{ user.getEmail }}',
                                         '{{ user.getTelephone }}','{{ user.getInfo.getDateNaissance|date("d/m/Y") }}','{{ user.getInfo.getCpNaissance }}','{{ user.getInfo.getLieunaissance }}',
-                                        '{{ user.getInfo.getAdresse }}');show('FicheApprenant');" type="button"  style=" background:white;color: #adadad;width:150px;height:30px;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Roboto;border:1px solid #ccc;margin-bottom:10px" >
+                                        '{{ user.getInfo.getAdresse }}');show('FicheApprenant');"
+                        type="button"  style=" background:white;color: #adadad;width:150px;height:30px;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Roboto;border:1px solid #ccc;margin-bottom:10px" >
                                     FICHE CONTACT
                                 </button>
 

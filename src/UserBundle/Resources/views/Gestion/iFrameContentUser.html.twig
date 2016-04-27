@@ -829,32 +829,68 @@
                                         <label class="list-group-item" style="height: 60px;vertical-align: top;" >Langues :</label>
                                         <div id="LanguesContainer" style="display: inline-block;">
                                             {% if User.getInfo.getLangue1 %}
+                                                {% set langue = User.getInfo.getLangue1|split(',') %}
                                                 <div id="langue1">
-                                                    <input title="" value="{{ User.getInfo.getLangue1 }}" name="_Langue[]" type="text" class="champ form-control" >
+                                                    <input title="" value="{{ langue[0] }}" name="_Langue[]" type="text" class="champ form-control" >
+                                                    <select   class="champ form-control" title="" id="Niveau"  name="_Niveau[]">
+                                                        <option {% if langue[1]== "Débutant" %}selected{% endif %} value="Débutant" >Débutant.</option>
+                                                        <option {% if langue[1]== "Intermédiaire" %}selected{% endif %} value="Intermédiaire">Intermédiaire.</option>
+                                                        <option {% if langue[1]== "Courant" %}selected{% endif %} value="Courant">Courant.</option>
+                                                        <option {% if langue[1]== "Langue maternelle" %}selected{% endif %} value="Langue maternelle">Langue maternelle.</option>
+                                                    </select>
                                                     <img  onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
                                                 </div>
                                             {% endif %}
                                             {% if User.getInfo.getLangue2 %}
+                                                {% set langue = User.getInfo.getLangue2|split(',') %}
                                                 <div id="langue2">
-                                                    <input title="" value="{{ User.getInfo.getLangue2 }}" name="_Langue[]" type="text"  class="champ form-control" >
+                                                    <input title="" value="{{ langue[0] }}" name="_Langue[]" type="text"  class="champ form-control" >
+                                                    <select   class="champ form-control" title="" id="Niveau"  name="_Niveau[]">
+
+                                                        <option {% if langue[1]== "Débutant" %}selected{% endif %} value="Débutant" >Débutant.</option>
+                                                        <option {% if langue[1]== "Intermédiaire" %}selected{% endif %} value="Intermédiaire">Intermédiaire.</option>
+                                                        <option {% if langue[1]== "Courant" %}selected{% endif %} value="Courant">Courant.</option>
+                                                        <option {% if langue[1]== "Langue maternelle" %}selected{% endif %} value="Langue maternelle">Langue maternelle.</option>
+                                                    </select>
                                                     <img  onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
                                                 </div>
                                             {% endif %}
                                             {% if User.getInfo.getLangue3 %}
+                                                {% set langue = User.getInfo.getLangue3|split(',') %}
                                                 <div id="langue3">
-                                                    <input title="" value="{{ User.getInfo.getLangue3 }}" name="_Langue[]" type="text"  class="champ form-control" >
+                                                    <input title="" value="{{ langue[0] }}" name="_Langue[]" type="text"  class="champ form-control" >
+                                                    <select   class="champ form-control" title="" id="Niveau"  name="_Niveau[]">
+                                                        <option {% if langue[1]== "Débutant" %}selected{% endif %} value="Débutant" >Débutant.</option>
+                                                        <option {% if langue[1]== "Intermédiaire" %}selected{% endif %} value="Intermédiaire">Intermédiaire.</option>
+                                                        <option {% if langue[1]== "Courant" %}selected{% endif %} value="Courant">Courant.</option>
+                                                        <option {% if langue[1]== "Langue maternelle" %}selected{% endif %} value="Langue maternelle">Langue maternelle.</option>
+                                                    </select>
                                                     <img  onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
                                                 </div>
                                             {% endif %}
                                             {% if User.getInfo.getLangue4 %}
+                                                {% set langue = User.getInfo.getLangue4|split(',') %}
                                                 <div id="langue4">
-                                                    <input title="" value="{{ User.getInfo.getLangue4 }}" name="_Langue[]" type="text"  class="champ form-control" >
+                                                    <input title="" value="{{ langue[0] }}" name="_Langue[]" type="text"  class="champ form-control" >
+                                                    <select   class="champ form-control" title="" id="Niveau"  name="_Niveau[]">
+                                                        <option {% if langue[1]== "Débutant" %}selected{% endif %} value="Débutant" >Débutant.</option>
+                                                        <option {% if langue[1]== "Intermédiaire" %}selected{% endif %} value="Intermédiaire">Intermédiaire.</option>
+                                                        <option {% if langue[1]== "Courant" %}selected{% endif %} value="Courant">Courant.</option>
+                                                        <option {% if langue[1]== "Langue maternelle" %}selected{% endif %} value="Langue maternelle">Langue maternelle.</option>
+                                                    </select>
                                                     <img  onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
                                                 </div>
                                             {% endif %}
                                             {% if User.getInfo.getLangue5 %}
+                                                {% set langue = User.getInfo.getLangue5|split(',') %}
                                                 <div id="langue5">
-                                                    <input title="" value="{{ User.getInfo.getLangue5 }}" name="_Langue[]" type="text"  class="champ form-control" >
+                                                    <input title="" value="{{ langue[0] }}" name="_Langue[]" type="text"  class="champ form-control" >
+                                                    <select   class="champ form-control" title="" id="Niveau"  name="_Niveau[]">
+                                                        <option {% if langue[1]== "Débutant" %}selected{% endif %} value="Débutant" >Débutant.</option>
+                                                        <option {% if langue[1]== "Intermédiaire" %}selected{% endif %} value="Intermédiaire">Intermédiaire.</option>
+                                                        <option {% if langue[1]== "Courant" %}selected{% endif %} value="Courant">Courant.</option>
+                                                        <option {% if langue[1]== "Langue maternelle" %}selected{% endif %} value="Langue maternelle">Langue maternelle.</option>
+                                                    </select>
                                                     <img  onclick="supprimerLangue(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
                                                 </div>
                                             {% endif %}
@@ -1591,15 +1627,49 @@
     function ajouterLangue(){
 
         if(document.getElementsByName('_Langue[]').length < 5){
-            var newHobby = document.createElement('input');
-            newHobby.setAttribute('name','_Langue[]');
-            newHobby.setAttribute('type','text');
-            newHobby.className = 'champ form-control';
-            newHobby.setAttribute('style','display :block !important');
-            document.getElementById('LanguesContainer').appendChild(newHobby);
+
+            var newLangue = document.createElement('input');
+            newLangue.setAttribute('name','_Langue[]');
+            newLangue.setAttribute('type','text');
+            newLangue.className = 'champ form-control';
+            newLangue.setAttribute('style','display :block !important');
+            document.getElementById('LanguesContainer').appendChild(newLangue);
+
+            var SelectNiveau = document.createElement('select');
+            SelectNiveau.setAttribute("name","_Niveau[]");
+            SelectNiveau.className = 'champ form-control';
+
+            var OptionNiveauDeb = document.createElement('option');
+            OptionNiveauDeb.setAttribute('value','Débutant');
+            OptionNiveauDeb.text = "Débutant";
+            SelectNiveau.add(OptionNiveauDeb);
+
+            var OptionNiveauInt = document.createElement('option');
+            OptionNiveauInt.setAttribute('value','Intermédiaire');
+            OptionNiveauInt.text = "Intermédiaire";
+            SelectNiveau.add(OptionNiveauInt);
+
+            var OptionNiveauCourant = document.createElement('option');
+            OptionNiveauCourant.setAttribute('value','Courant');
+            OptionNiveauCourant.text="Courant";
+            SelectNiveau.add(OptionNiveauCourant);
+
+            var OptionNiveauMat = document.createElement('option');
+            OptionNiveauMat.setAttribute('value','Langue maternelle');
+            OptionNiveauMat.text="Langue maternelle";
+            SelectNiveau.add(OptionNiveauMat);
+
+            SelectNiveau.appendChild(OptionNiveauDeb);
+            SelectNiveau.appendChild(OptionNiveauInt);
+            SelectNiveau.appendChild(OptionNiveauCourant);
+            SelectNiveau.appendChild(OptionNiveauMat);
+
+            document.getElementById('LanguesContainer').appendChild(SelectNiveau);
+
+
         }
         else {
-            alert('5 hobby maximum');
+            alert('5 langues maximum');
         }
 
 
