@@ -278,9 +278,13 @@
                         <label style="font:18px Roboto;margin-top: 40px" > {{ msg.getDate|date('d M') }} </label>
                     </div>
 
-                    <div class="col-xs-6" style="margin-top:10px;text-align: left">
+                    <div class="col-xs-4" style="margin-top:10px;text-align: left">
                         <label style="font:18px arial ;margin-top: 20px;float:left;width: 100%" > {{ msg.getMessage|raw }} </label><br>
                         <label style="font:16px arial;float:left;width: 100%" > {{ msg.getMission.getIntitule }} - <label style="font:18px arial;color:#2A76CC" > {{ msg.getMission.etablissement.tier.raisonsoc }}</label> </label>
+                    </div>
+
+                    <div class="col-xs-2" style="margin-top:20px;text-align: left">
+                        <label  style="font:16px Roboto;float:left;margin: auto;text-overflow: ellipsis;overflow: hidden;" title="{{ msg.getExpediteur.getCivilite }} {{ msg.getExpediteur.getNom }} {{ msg.getExpediteur.getPrenom }}">{{ msg.getExpediteur.getCivilite }} {{ msg.getExpediteur.getNom }} {{ msg.getExpediteur.getPrenom }} - <label style="font:18px Roboto;color:#2A76CC;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;" title="{{ msg.getExpediteur.getEmail }}"> {{ msg.getExpediteur.getEmail }}</label></label>
                     </div>
 
                     <div class="col-xs-offset-1 col-xs-1" style="margin-top:10px;">

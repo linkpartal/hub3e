@@ -46,3 +46,7 @@
 .buttonInfoApprenant{
     text-align : center;
 }
+
+input::-webkit-calendar-picker-indicator {
+    opacity: 100;
+}
