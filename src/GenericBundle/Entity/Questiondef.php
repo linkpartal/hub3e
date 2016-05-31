@@ -36,7 +36,7 @@ class Questiondef
     private $ordre;
 
     /**
-     * @var \Qcmdef
+     * @var \GenericBundle\Entity\Qcmdef
      *
      * @ORM\ManyToOne(targetEntity="Qcmdef")
      * @ORM\JoinColumns({
@@ -112,7 +112,7 @@ class Questiondef
      *
      * @return Questiondef
      */
-    public function setQcmdef(\GenericBundle\Entity\Qcmdef $qcmdef = null)
+    public function setQcmdef(Qcmdef $qcmdef = null)
     {
         $this->qcmdef = $qcmdef;
 
@@ -129,7 +129,7 @@ class Questiondef
         return $this->qcmdef;
     }
 
-    static function sort_questions_by_order(\GenericBundle\Entity\Questiondef $a,\GenericBundle\Entity\Questiondef $b) {
+    static function sort_questions_by_order(Questiondef $a,Questiondef $b) {
         if($a->getOrdre() == $b->getOrdre()){ return 0 ; }
         return ($a->getOrdre()< $b->getOrdre()) ? -1 : 1;
     }

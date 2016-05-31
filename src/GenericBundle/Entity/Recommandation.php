@@ -57,9 +57,9 @@ class Recommandation
     private $telephone;
 
     /**
-     * @var \User
+     * @var \GenericBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="users_id", referencedColumnName="id")
      * })
@@ -69,7 +69,7 @@ class Recommandation
     /**
      * @var \GenericBundle\Entity\ImportCandidat
      *
-     * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\ImportCandidat")
+     * @ORM\ManyToOne(targetEntity="ImportCandidat", cascade={"remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
      * })
@@ -215,7 +215,7 @@ class Recommandation
      *
      * @return Recommandation
      */
-    public function setUser(\GenericBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -239,7 +239,7 @@ class Recommandation
      *
      * @return Recommandation
      */
-    public function setImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat = null)
+    public function setImportCandidat(ImportCandidat $importCandidat = null)
     {
         $this->importCandidat = $importCandidat;
 

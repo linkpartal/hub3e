@@ -30,21 +30,21 @@ class Diffusion
     private $statut;
 
     /**
-     * @var \Formation
+     * @var \GenericBundle\Entity\Formation
      *
      * @ORM\ManyToOne(targetEntity="Formation")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="formation_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="formation_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $formation;
 
     /**
-     * @var \Mission
+     * @var \GenericBundle\Entity\Mission
      *
      * @ORM\ManyToOne(targetEntity="Mission")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="mission_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="mission_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $mission;
@@ -106,7 +106,7 @@ class Diffusion
      *
      * @return Diffusion
      */
-    public function setFormation(\GenericBundle\Entity\Formation $formation)
+    public function setFormation(Formation $formation)
     {
         $this->formation = $formation;
 
@@ -130,7 +130,7 @@ class Diffusion
      *
      * @return Diffusion
      */
-    public function setMission(\GenericBundle\Entity\Mission $mission)
+    public function setMission(Mission $mission)
     {
         $this->mission = $mission;
 

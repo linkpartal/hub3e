@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
     {% block CSS %}{% endblock %}
 
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
@@ -39,7 +40,7 @@
     </div>
 
 </div>
-<script src="//code.jquery.com/jquery.min.js"></script>
+<script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 </body>
 </html>

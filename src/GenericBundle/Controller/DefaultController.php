@@ -5,8 +5,6 @@ namespace GenericBundle\Controller;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints\Date;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 class DefaultController extends Controller
 {
@@ -22,7 +20,7 @@ class DefaultController extends Controller
 
         if (!$user) {
 
-            return $this->forward('GenericBundle:Default:loadlogin');
+            return $this->render('GenericBundle:Security:login.html.twig',array('error'=>'cet utilisateur n\'est pas enregistré!'));
 
         }
         $factory = $this->get('security.encoder_factory');
@@ -56,6 +54,10 @@ class DefaultController extends Controller
             {
                 return $this->redirect($this->generateUrl('ecole_recruteur',array('ecole'=>$user->getEtablissement()->getTier()->getRaisonSoc())));
             }
+            elseif(true == $this->get('security.authorization_checker')->isGranted('ROLE_TUTEUR'))
+            {
+                return $this->redirect($this->generateUrl('societe_tuteur',array('societe'=>$user->getEtablissement()->getTier()->getRaisonSoc())));
+            }
             elseif(true === $this->get('security.authorization_checker')->isGranted('ROLE_APPRENANT'))
             {
                return $this->redirect($this->generateUrl('ecole_apprenant',array('apprenant'=>$user)));
@@ -69,7 +71,7 @@ class DefaultController extends Controller
         }
         else
         {
-            return $this->forward('GenericBundle:Default:loadlogin');
+            return $this->render('GenericBundle:Security:login.html.twig',array('error'=>'mot de passe erroné!'));
         }
 
 
@@ -78,6 +80,33 @@ class DefaultController extends Controller
     }
 
     public function loadloginAction(){
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN'))
+        {
+            return $this->redirect('admin');
+        }
+        elseif($this->get('security.authorization_checker')->isGranted('ROLE_ADMINECOLE'))
+        {
+            return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$user->getTier()->getRaisonSoc())));
+        }
+        elseif($this->get('security.authorization_checker')->isGranted('ROLE_ADMINSOC'))
+        {
+            return $this->redirect($this->generateUrl('societe_admin',array('societe'=>$user->getTier()->getRaisonSoc())));
+        }
+        elseif($this->get('security.authorization_checker')->isGranted('ROLE_RECRUTEUR'))
+        {
+            return $this->redirect($this->generateUrl('ecole_recruteur',array('ecole'=>$user->getEtablissement()->getTier()->getRaisonSoc())));
+        }
+        elseif(true == $this->get('security.authorization_checker')->isGranted('ROLE_TUTEUR'))
+        {
+            return $this->redirect($this->generateUrl('societe_tuteur',array('societe'=>$user->getEtablissement()->getTier()->getRaisonSoc())));
+        }
+        elseif($this->get('security.authorization_checker')->isGranted('ROLE_APPRENANT'))
+        {
+            return $this->redirect($this->generateUrl('ecole_apprenant',array('apprenant'=>$user)));
+
+        }
         return $this->redirect('login');
     }
 
@@ -109,6 +138,10 @@ class DefaultController extends Controller
 
         return $this->redirect('login');
 
+    }
+
+    public function reloadParentAction(){
+        return $this->render('GenericBundle::ReloadParent.html.twig');
     }
 
 

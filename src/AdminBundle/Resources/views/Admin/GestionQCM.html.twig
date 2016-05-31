@@ -13,22 +13,22 @@
         <br>
         <div name="21456dddd">
             <label class="list-group-item" style=";">Reponse :</label>
-            <textarea title="question" style="resize: none;overflow: hidden" class="champ " placeholder="Ajouter Reponse" onkeyup="if(event.keyCode==13){AjouterReponse(this);}" id="NewReponse" required maxlength="255"></textarea>
+            <input type="text" title="question" class="champ " placeholder="Ajouter Reponse" onkeyup="if(event.keyCode==13){AjouterReponse(this);}" id="NewReponse" maxlength="255">
             <label class="list-group-item" style="height: 60px;">Score :</label>
-            <textarea title="score" style="resize: none;overflow: hidden" class="champ " placeholder="Ajouter Score" onkeyup="if(event.keyCode==13){AjouterReponse(this.previousElementSibling.previousElementSibling);}" id="score" required maxlength="2"></textarea>
+            <input type="text" title="score" class="champ " placeholder="Ajouter Score" onkeyup="handleChange(this);if(event.keyCode==13){AjouterReponse(this.previousElementSibling.previousElementSibling);}" id="score" maxlength="2">
         </div>
     </div>
     <div id="reponse" style="display: none;">
         <input type="hidden" id="inputrep" >
         <input type="hidden" id="idScore" >
-        <input type="radio" value="1"   >
+        <input type="radio" value="1"    title="radiorepond">
         <label style="font: 14px Roboto black; "></label>
 
 
 
 
 
-        <img align="rigth" src="{{ asset('image/vide.gif') }}" width="30px" , height="0px" />
+        <img align="rigth" src="{{ asset('image/vide.gif') }}" width="30px"  height="0px" />
         <img src="{{ asset('image/up_x18.png') }}" alt="Monter" title="Monter" onclick="monter(this.parentNode)"  />
         <img src="{{ asset('image/down_x18.png') }}" alt="Descendre" title="Descendre"  onclick="descendre(this.parentNode)"   />
         <img src="{{ asset('image/imgSupprimer.png') }}" alt="Supprimer Question" title="Supprimer Question"  onclick="supprimer(this.parentNode)" />
@@ -48,12 +48,12 @@
                                 <label class="list-group-item" style="height: 60px;" for="QCM">Nom du Questionnaire :</label>
                                 <input type="text" class="champ " id="QCM" name="_Nom" value="{{ QCM.getNom }}" required maxlength="45"><br>
                                 {% if QCM.getAffinite %}
-                                    <input type="radio" name="_affinite" value="1" style="margin:10px 5px 10px 0" checked> Test d'affinité
-                                    <input type="radio" name="_affinite" value="0" style="margin:10px 5px 10px 10px"> Test de formation
+                                    <input type="radio" name="_affinite" value="1" style="margin:10px 5px 10px 0" checked title="testAffinite"> Test d'affinité
+                                    <input type="radio" name="_affinite" value="0" style="margin:10px 5px 10px 10px" title="testFormation"> Test de formation
 
                                 {% else %}
-                                    <input type="radio" name="_affinite" value="1" style="margin:10px 5px 10px 0" > Test d'affinité
-                                    <input type="radio" name="_affinite" value="0" style="margin:10px 5px 10px 10px" checked> Test de formation
+                                    <input type="radio" name="_affinite" value="1" style="margin:10px 5px 10px 0" title="testAffinite"> Test d'affinité
+                                    <input type="radio" name="_affinite" value="0" style="margin:10px 5px 10px 10px" title="testFormation" checked> Test de formation
 
                                 {% endif %}
                             </div>
@@ -77,8 +77,8 @@
                                                             <div>
                                                                 <input type="hidden" name="reponse[{{ i }}][]" value="{{ rep.getReponse }}" style="margin:10px 5px 10px 0" id="inputrep" >
                                                                 <input type="hidden" name="score[{{ i }}][]" value="{{ rep.getScore }}" style="margin:10px 5px 10px 0" id="idScore" >
-                                                                <input type="radio" value="1"   ><label style="font: 14px Roboto black; ">{{ rep.getReponse }}</label>
-                                                                <img  src="{{ asset('image/vide.gif') }}" width="30px" , height="0px" />
+                                                                <input type="radio" value="1"  title="ReponseTrue"><label style="font: 14px Roboto black; ">{{ rep.getReponse }}</label>
+                                                                <img  src="{{ asset('image/vide.gif') }}" style="width:30px;height:0;" />
                                                                 <img src="{{ asset('image/up_x18.png') }}" alt="Monter" title="Monter" onclick="monter(this.parentNode)"  />
                                                                 <img src="{{ asset('image/down_x18.png') }}" alt="Descendre" title="Descendre"  onclick="descendre(this.parentNode)"   />
                                                                 <img src="{{ asset('image/imgSupprimer.png') }}" alt="Supprimer Question" title="Supprimer Question"  onclick="supprimer(this.parentNode)" />
@@ -92,9 +92,9 @@
                                         {% endif %}
                                         <div name="21456dddd" >
                                             <label class="list-group-item" style="height: 60px;">Reponse :</label>
-                                            <textarea title="question" style="resize: none;overflow: hidden" class="champ " placeholder="Ajouter Reponse" onkeyup="if(event.keyCode==13){AjouterReponse(this);}" id="NewReponse" required maxlength="255"></textarea>
+                                            <input type="text" title="question" class="champ " placeholder="Ajouter Reponse" onkeyup="if(event.keyCode==13){AjouterReponse(this);}" id="NewReponse" maxlength="255">
                                             <label class="list-group-item" style="height: 60px;">Score :</label>
-                                            <textarea title="score" style="resize: none;overflow: hidden" class="champ " placeholder="Ajouter Score" onkeyup="if(event.keyCode==13){AjouterReponse(this.previousElementSibling.previousElementSibling);}" id="score" required maxlength="2"></textarea>
+                                            <input type="text" title="score" class="champ " placeholder="Ajouter Score" onkeyup="handleChange(this);if(event.keyCode==13){AjouterReponse(this.previousElementSibling.previousElementSibling);}" id="score" maxlength="2">
                                         </div>
                                     </div>
 
@@ -104,7 +104,7 @@
                             {% endif %}
 
                             <div id="button_container" name="21456dddd">
-                                <textarea onkeyup="if(event.keyCode==13){dupliquer(this);}" style="resize: none;overflow: hidden;vertical-align: bottom" class="champ " placeholder="Ajouter Question"></textarea>
+                                <input type="text" onkeyup="if(event.keyCode==13){dupliquer(this);}" style="vertical-align: bottom" class="champ " placeholder="Ajouter Question">
                                 <button onclick="check()" type="button" style="vertical-align: bottom">Valider le QCM</button>
                             </div>
                         </form>
@@ -115,12 +115,11 @@
                  style="background: rgb(238, 241, 246); height: 100%;">
                 <div class="list-group"
                      style="margin: 30px 0 0 30px;height: 100%; background-color: white;">
-                    <button type="button" class="list-group-item rightMenu" style="background-color: limegreen">
-                        <div class="col-xs-12" style="display: inline-table;color: white;">Active</div>
+                    <button type="button" class="list-group-item rightMenu" style="background-color: limegreen;color: white;">
+                        Active
                     </button>
-                    <button onclick="if(confirm('Voulez-vous supprimer le QCM ?')){window.location.assign('{{ path('supprimerQCM',{'nom':QCM.getNom }) }}')}" type="button" class="list-group-item rightMenu" style="background-color: #2A76CC">
-                        <div class="col-xs-12"  style="display: inline-table;color: white;">Supprimer le QCM</div>
-
+                    <button onclick="if(confirm('Voulez-vous supprimer le QCM ?')){window.location.assign('{{ path('supprimerQCM',{'nom':QCM.getNom }) }}')}" type="button" class="list-group-item rightMenu" style="background-color: #2A76CC;color: white;">
+                        Supprimer le QCM
                     </button>
 
                 </div>
@@ -129,29 +128,20 @@
     {% else %}
         <div class="row" style="margin: 0;overflow-y: auto;height: 100%">
 
-            <div class="col-xs-12"
-                 style="background: rgb(238, 241, 246); height: 100%;">
-
+            <div class="col-xs-12" style="background: rgb(238, 241, 246); height: 100%;">
                 <div class="col-xs-12">
-                    <div class="list-group"
-                         style="background: #1B2024; margin: 30px; padding: 0 0; border-left: 20px solid white; border-right: 20px solid white !important; text-align: left;">
-
-
+                    <div class="list-group"  style="background: #1B2024; margin: 30px; padding: 0 0; border-left: 20px solid white; border-right: 20px solid white !important; text-align: left;">
                         <form class="formulaire" id="form" action="{{ path('Add_QCM') }}" method="post">
-
                             <div class="inputcontainer" name="21456dddd">
                                 <label class="list-group-item" style="height: 60px;">Nom du Questionnaire :</label>
                                 <input type="text" class="champ " id="QCM" name="_Nom" required maxlength="45" ><br>
-                                <input type="radio" name="_affinite" value="1" style="margin:10px 5px 10px 0" checked> Test d'affinité
-                                <input type="radio" name="_affinite" value="0" style="margin:10px 5px 10px 10px"> Test de formation
+                                <input type="radio" name="_affinite" value="1" title="affiniteTrue" style="margin:10px 5px 10px 0" checked> Test d'affinité
+                                <input type="radio" name="_affinite" value="0" style="margin:10px 5px 10px 10px" title="affiniteFalse"> Test de formation
                             </div>
-
-
                             <div id="button_container" name="21456dddd">
-                                <textarea onkeyup="if(event.keyCode==13){dupliquer(this);}" style="resize: none;overflow: hidden;vertical-align: bottom" class="champ" placeholder="Ajouter Question"></textarea>
+                                <input type="text" onkeyup="if(event.keyCode==13){dupliquer(this);}" style="resize: none;overflow: hidden;vertical-align: bottom" class="champ" placeholder="Ajouter Question">
                                 <button onclick="check()" type="button" style="vertical-align: bottom">Valider le QCM</button>
                             </div>
-
                         </form>
 
 
@@ -160,20 +150,20 @@
             </div>
         </div>
     {% endif %}
-    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
     <script language="JavaScript">
         function dupliquer(me) {
             var dup = document.getElementById('question');
             var clone = dup.cloneNode(true);
             if(me.value.trim()=='')
             {
-                alert('remplisser le champs question');
+                alert('remplisser le champ question');
                 me.value ='';
                 return;
             }
                 var idDiv = document.getElementsByName("question").length - 1;
 
-                clone.setAttribute("id",idDiv);
+                clone.setAttribute("id",idDiv.toString());
                 clone.style.display = 'table';
                 clone.getElementsByTagName("input")[0].setAttribute("name","questions[]");
             clone.getElementsByTagName("input")[0].setAttribute('value',me.value.trim());
@@ -187,14 +177,12 @@
 
             if(me.value.trim() =='')
             {
-                alert('remplisser le champs reponse');
-                me.value='';
+                alert('remplisser le champ réponse');
                 return;
             }
             if(me.nextElementSibling.nextElementSibling.value.trim() =='')
             {
-                alert('remplisser le champs score');
-                me.value='';
+                alert('remplisser le champ score');
                 return;
             }
             //me.parentNode.getAttribute('id')
@@ -209,72 +197,21 @@
             me.nextElementSibling.nextElementSibling.value='';
         }
         function descendre(champs){
-            if(champs === champs.parentNode.lastChild)
+            if(champs.nextElementSibling.getAttribute('name')=='21456dddd')
             {
-                alert('le champs ne peut plus decsendre d avantage');
+                return;
             }
-            else
-            {
-                if(champs.nextSibling.hasChildNodes())
-                {
-                    if(champs.nextSibling.getAttribute('name')=='21456dddd')
-                    {return;}
-                    champs.parentNode.insertBefore(champs.nextSibling, champs);
-                }
-                else
-                {
-                    if(champs.nextSibling.nextSibling.getAttribute('name')=='21456dddd')
-                    {return;}
-                    champs.parentNode.insertBefore(champs.nextSibling.nextSibling, champs);
-                }
-            }
-
+            champs.parentNode.insertBefore(champs.nextElementSibling, champs);
         }
         function monter(champs){
-            if( champs === champs.parentNode.getElementsByTagName('div')[0] )
+            if(champs.previousElementSibling.getAttribute('name')=='21456dddd')
             {
-                alert('le champs ne peut plus montrer d avantage');
+                return;
             }
-            else
-            {
-                if(champs.previousSibling.hasChildNodes())
-                {
-                    if(champs.previousSibling.getAttribute('name')=='21456dddd')
-                    {return;}
-                    champs.parentNode.insertBefore(champs, champs.previousSibling);
-                }
-                else
-                {
-                    if(champs.previousSibling.previousSibling.getAttribute('name')=='21456dddd')
-                    {return;}
-                    champs.parentNode.insertBefore(champs, champs.previousSibling.previousSibling);
-                }
-            }
-
+            champs.parentNode.insertBefore(champs, champs.previousElementSibling);
         }
         function check(){
-            var inputs = document.getElementById("form").getElementsByTagName("input");
-            for(var i = 0; i < inputs.length+1; i++)
-            {
-                if(i==inputs.length)
-                {
-                    document.getElementById("form").submit();
-                    window.parent.location.reload();
-                    break;
-                }
-                if(!inputs[i].value)
-                {
-                    inputs[i].style.backgroundColor = 'red';
-                    alert('Un champ est vide');
-                    break;
-                }
-                else
-                {
-                    inputs[i].style.backgroundColor = '#D3D3D3';
-                }
-
-            }
-
+            document.getElementById("form").submit();
         }
         function supprimer(champs){
             var route = '{{path('supprimer_QCM',{'rep':"reponse",'qst':"question",'qcm':"QCMHolder" })}}';
@@ -309,6 +246,12 @@
 
             champs.remove('div.editfield');
         }
+        function handleChange(input) {
+            var newval = input.value.replace(/[^0-9.]/g, "");
 
+            if (newval < 0) input.value = 0;
+            if (newval > 100) input.value = 100;
+            if (newval >= 0 && newval <=100) input.value = newval;
+        }
     </script>
 {% endblock %}

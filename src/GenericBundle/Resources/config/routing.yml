@@ -16,3 +16,7 @@ password_changed:
 
 logout:
     path:   /logout
+
+reloadParent:
+    path: /reloadparent
+    defaults: {_controller: GenericBundle:Default:reloadParent }

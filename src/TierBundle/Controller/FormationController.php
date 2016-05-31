@@ -81,7 +81,7 @@ class FormationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $formation = $em->getRepository('GenericBundle:Formation')->find($idformation);
         $qcm = $em->getRepository('GenericBundle:Qcmdef')->find($idqcm);
-        $qcm->addFormationformation($formation);
+        $qcm->addFormation($formation);
         $em->persist($qcm);
         $em->flush();
 

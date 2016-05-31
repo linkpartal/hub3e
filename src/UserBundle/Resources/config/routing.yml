@@ -18,10 +18,6 @@ supprimerUtilisateur:
     path : /admin/supprimeruser/id={id}
     defaults: { _controller: UserBundle:Default:supprimeruser}
 
-modifierUser:
-    path: /admin/modifierUtilisateur/{id}
-    defaults: { _controller: UserBundle:Default:modifier}
-
 import:
     path: /admin/import
     defaults: { _controller: UserBundle:Default:import}
@@ -39,11 +35,11 @@ afficher_duplica:
     defaults: { _controller: UserBundle:Default:afficherDuplica}
 
 importer_candidat:
-    path: /admin/importer_candidat/{id}
-    defaults: { _controller: UserBundle:Default:ImportCandidat}
+    path: /admin/importer_SAStoUser/{id}
+    defaults: { _controller: UserBundle:Default:SAStoUser}
 
 fusionner_apprenant:
-    path: /admin/fusion_apprenant/id_sas={sas}/id_user={user}
+    path: /admin/fusion_apprenant/id_sas={sas}
     defaults: { _controller: UserBundle:Default:Fusionner}
 
 afficher_profil:
@@ -74,11 +70,6 @@ experience_added:
     path: /AjouterExperience
     defaults: { _controller: UserBundle:Default:AjouterExperience }
 
-
-Afficher_Sas:
-    path: /affichageUerSAS/id={id}
-    defaults: { _controller: UserBundle:SAS:affichageUserSAS}
-
 supprimer_Recommandation:
     path: /suppRecommandation/id={id}
     defaults: { _controller: UserBundle:Default:suppRecommandation}
@@ -104,7 +95,7 @@ Document_added:
     defaults: { _controller: UserBundle:Default:AjouterDocument}
 
 modifierStatut:
-    path: /modifierStatutCandidature/id={id}/statut={statut}/mail={mail}/formation={formation}
+    path: /modifierStatutCandidature/id={id}/statut={statut}
     defaults: { _controller: UserBundle:Default:modifierStatutCandidature}
 
 supprimer_Candidature:
@@ -145,54 +136,38 @@ Postuler_Messagerie:
     path: /Messagerie/postuler/msg={idmessage}
     defaults: { _controller: UserBundle:MiseEnRelation:PostulerMessagerie }
 
-SASModif:
-    path: /SASModif
-    defaults: { _controller: UserBundle:SAS:SASModif}
-
-ajouter_Hobbie_SAS:
-    path : /ajouterHobbieSAS/id={id}/IdUser={IdImport}
-    defaults: { _controller: UserBundle:SAS:ajouterHobbieSAS}
-
-supprimer_HobbieSAS:
-    path : /supprimerHobbieSAS/id={id}/IdUser={IdImport}
-    defaults: { _controller: UserBundle:SAS:supprimerHobbieSAS}
-
-ajouter_LangueSAS:
-    path : /ajouterLangueSAS/id={id}/IdNiveau={IdNiveau}/IdUser={IdImport}
-    defaults: { _controller: UserBundle:SAS:ajouterLangueSAS}
-
-supprimer_LangueSAS:
-    path : /supprimerLangueSAS/id={id}/IdUser={IdImport}
-    defaults: { _controller: UserBundle:SAS:supprimerLangueSAS}
-
-Candidature_addedSAS:
-    path: /AjouterCandidatureSAS
-    defaults: { _controller: UserBundle:SAS:AjouterCandidatureSAS}
-
-parent_addedSAS:
-    path: /AjouterParentSAS
-    defaults: { _controller: UserBundle:SAS:AjouterParentSAS}
-
-experience_addedSAS:
-    path: /AjouterExperienceSAS
-    defaults: { _controller: UserBundle:SAS:AjouterExperienceSAS }
-
-recommandation_addedSAS:
-    path: /AjouterRecommandationSAS
-    defaults: { _controller: UserBundle:SAS:AjouterRecommandationSAS}
-
-diplome_addedSAS:
-    path: /AjouterDiplomeSAS
-    defaults: { _controller: UserBundle:SAS:AjouterDiplomeSAS}
-
-Document_addedSAS:
-    path: /AjouterDocumentSAS
-    defaults: { _controller: UserBundle:SAS:AjouterDocumentSAS}
-
-supprimerUtilisateurSAS:
-    path : /supprimeruserSAS/id={id}
-    defaults: { _controller: UserBundle:SAS:supprimeruserSAS}
-
 apprenant_added:
     path: /ajouterApprenant
     defaults: { _controller: UserBundle:Default:ajouterApprenant}
+
+show_Document:
+    path: /DownloadDoc/iddoc={id}
+    defaults: { _controller: UserBundle:Default:DownloadDoc}
+
+Mise_En_Relation:
+    resource: "@UserBundle/Resources/config/MiseEnRelationRouting.yml"
+    prefix:   /MiseEnRelation
+
+CompleterProfil:
+    path: /CompleterProfil/IdUser={IdUser}
+    defaults: {_controller: UserBundle:Default:CompleterProfil}
+
+ChangerStatutApprenant:
+    path: /ChangerStatutApprenant/IdUser={idUser}/statut={statut}
+    defaults: {_controller: UserBundle:Default:ChangerStatutApprenant}
+
+OrdreCompleterCR:
+    path: /EmailRemplirCR/IdUser={idUser}/rdv={idRDV}
+    defaults: {_controller: UserBundle:MiseEnRelation:envoiMailRemplirCR}
+
+ConsulterCR:
+    path: /ConsulterCR/rdv={idRDV}
+    defaults: {_controller: UserBundle:MiseEnRelation:ConsulterCompteRendu}
+
+ChangementRole:
+    path: /ChangementRole/id={idUser}
+    defaults: {_controller: UserBundle:Default:ChangementRole}
+
+ModifAppSas:
+    path: /ModifAppSas
+    defaults: { _controller: UserBundle:Default:ModifAppSas}

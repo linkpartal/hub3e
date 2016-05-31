@@ -1,0 +1,43 @@
+body{
+    font: 14px Roboto !important;
+}
+.SASPaginate{
+    border: 1px solid rgba(148, 148, 148,0.2);
+    height:94px;
+    display: inline-flex;
+    background-color: rgba(230, 230, 230,0.2);
+    font: 14px Roboto;
+    color: rgb(77, 83, 90);
+}
+.customepaginate li
+{
+    list-style:none;
+    background:white;
+    border:1px solid #ccc;
+    height:40px;
+    width: 40px;
+    line-height: 40px;
+    color:#257ef0;
+    float:left;
+    text-align:center;
+    cursor:pointer;
+}
+
+.customepaginate li:hover
+{
+    background-color: white;
+    border:1px solid black;
+    color: black;
+}
+
+.customepaginate ul
+{
+    border: none;
+    padding: 0;
+}
+
+.customepaginate .active-class
+{
+    background-color: #257ef0 !important;
+    color: white !important;
+}

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: KAMAL
- * Date: 17/02/2016
- * Time: 16:35
- */
 
 namespace GenericBundle\Entity;
 
@@ -43,31 +37,31 @@ class Candidature
     private $datecandidature;
 
     /**
-     * @var \Formation
+     * @var \GenericBundle\Entity\Formation
      *
      * @ORM\ManyToOne(targetEntity="Formation")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="formation_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="formation_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $formation;
 
     /**
-     * @var \Users
+     * @var \GenericBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="users_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="users_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $user;
 
     /**
-     * @var \ImportCandidat
+     * @var \GenericBundle\Entity\ImportCandidat
      *
      * @ORM\ManyToOne(targetEntity="ImportCandidat")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $importcandidat;
@@ -114,7 +108,7 @@ class Candidature
      *
      * @return Candidature
      */
-    public function setFormation(\GenericBundle\Entity\Formation $formation = null)
+    public function setFormation(Formation $formation = null)
     {
         $this->formation = $formation;
 
@@ -138,7 +132,7 @@ class Candidature
      *
      * @return Candidature
      */
-    public function setUser(\GenericBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -162,7 +156,7 @@ class Candidature
      *
      * @return Candidature
      */
-    public function setImportcandidat(\GenericBundle\Entity\ImportCandidat $importcandidat = null)
+    public function setImportcandidat(ImportCandidat $importcandidat = null)
     {
         $this->importcandidat = $importcandidat;
         return $this;

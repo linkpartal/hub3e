@@ -44,31 +44,31 @@ class Message
     private $statut;
 
     /**
-     * @var \User
+     * @var \GenericBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="expediteur", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="expediteur", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $expediteur;
 
     /**
-     * @var \User
+     * @var \GenericBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="destinataire", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="destinataire", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $destinataire;
 
     /**
-     * @var \Mission
+     * @var \GenericBundle\Entity\Mission
      *
-     * @ORM\ManyToOne(targetEntity="Mission")
+     * @ORM\ManyToOne(targetEntity="Mission", cascade={"remove"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="mission", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="mission", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $mission;
@@ -128,7 +128,7 @@ class Message
      *
      * @return Message
      */
-    public function setExpediteur(\GenericBundle\Entity\User $expediteur)
+    public function setExpediteur(User $expediteur)
     {
         $this->expediteur = $expediteur;
 
@@ -152,7 +152,7 @@ class Message
      *
      * @return Message
      */
-    public function setDestinataire(\GenericBundle\Entity\User $destinataire)
+    public function setDestinataire(User $destinataire)
     {
         $this->destinataire = $destinataire;
 
@@ -186,7 +186,7 @@ class Message
      *
      * @return Message
      */
-    public function setMission(\GenericBundle\Entity\Mission $mission = null)
+    public function setMission(Mission $mission = null)
     {
         $this->mission = $mission;
 

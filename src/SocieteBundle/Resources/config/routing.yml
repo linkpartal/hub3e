@@ -1,0 +1,9 @@
+societe_admin:
+    path:     /admin/Home/{societe}
+    defaults: { _controller: SocieteBundle:Default:loadAdmin }
+
+societe_tuteur:
+    path:     /tuteur/Home/{societe}
+    defaults: { _controller: SocieteBundle:Tuteur:loadTuteur }
+
+

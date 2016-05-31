@@ -5,7 +5,6 @@ namespace AdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use GenericBundle\Entity\Mission;
-use \JMS\Serializer\SerializerBuilder;
 
 
 class DefaultController extends Controller
@@ -13,15 +12,15 @@ class DefaultController extends Controller
     public function loadAction(){
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        if($user->getPhotos())
+        if($user->getPhotos() and !is_string($user->getPhotos()))
         {
             $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
         }
 
-        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
-
+        /*$notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
+        $serializer = $this->get('jms_serializer');
+        $jsonContent = $serializer->serialize($notifications, 'json');*/
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAll();
-
         $ecoles = array();
         $societes = array();
         foreach($etablissement as $item)
@@ -48,12 +47,20 @@ class DefaultController extends Controller
             }
         }
 
-        $import_apprenant = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$user));
         $licences = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
-        $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array(),array('date'=>'DESC'));
+
+        $messages = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user));
+        $messageNonLu = 0;
+        foreach($messages as $message){
+            if(!$message->getStatut()==1 and !$message->getStatut()==-1){
+                $messageNonLu++;
+            }
+        }
+
+        $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array(),array('datecreation'=>'DESC'));
+
+        $diffusionEnSuspend = $this->getDoctrine()->getRepository('GenericBundle:Diffusion')->findBy(array('statut'=>1));
         $qcms = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findAll();
-        $serializer = $this->get('jms_serializer');
-        $jsonContent = $serializer->serialize($notifications, 'json');
 
         //modele
         $modeles = array();
@@ -73,7 +80,7 @@ class DefaultController extends Controller
 
             while (false !== ($entry = readdir($handle))) {
 
-                if ($entry != "." && $entry != "..") {
+                if ($entry != "." && $entry != ".." && $entry!="README.txt") {
 
                     array_push($modeles,$entry);
                 }
@@ -82,8 +89,8 @@ class DefaultController extends Controller
             closedir($handle);
         }
 
-        return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$notapprenant,'modeles'=>$modeles,
-            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'missions'=>$missions,'apprenants'=>$apprenants,'import_apprenants'=>$import_apprenant,'image'=>$user->getPhotos()));
+        return $this->render('AdminBundle::AdminHome.html.twig',array('ecoles'=>$ecoles,/*'notifications'=>$jsonContent ,*/'users'=>$notapprenant,'modeles'=>$modeles,
+            'AllLicences'=>$licences,'societes'=>$societes,'qcms'=>$qcms,'missions'=>$missions,'DiffusionEnSuspend'=>$diffusionEnSuspend,'apprenants'=>$apprenants,'image'=>$user->getPhotos(),'messages'=>$messageNonLu));
     }
 
     public function loadiframeAction()

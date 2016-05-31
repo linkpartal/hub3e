@@ -3,11 +3,12 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * Postulation
  *
- * @ORM\Table(name="postulation")
+ * @ORM\Table(name="postulation",uniqueConstraints={@UniqueConstraint(name="unique_Postulation", columns={"mission_id","users_id"})})
  * @ORM\Entity
  */
 class Postulation
@@ -29,21 +30,21 @@ class Postulation
     private $statut;
 
     /**
-     * @var \Mission
+     * @var \GenericBundle\Entity\Mission
      *
-     * @ORM\ManyToOne(targetEntity="Mission")
+     * @ORM\ManyToOne(targetEntity="Mission", cascade={"remove"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="mission_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="mission_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $mission;
 
     /**
-     * @var \User
+     * @var \GenericBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="users_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="users_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $user;
@@ -105,7 +106,7 @@ class Postulation
      *
      * @return Postulation
      */
-    public function setMission(\GenericBundle\Entity\Mission $mission)
+    public function setMission(Mission $mission)
     {
         $this->mission = $mission;
 
@@ -129,7 +130,7 @@ class Postulation
      *
      * @return Postulation
      */
-    public function setUser(\GenericBundle\Entity\User $user)
+    public function setUser(User $user)
     {
         $this->user = $user;
 

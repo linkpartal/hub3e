@@ -3,6 +3,7 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Tier
@@ -31,16 +32,23 @@ class Tier
     /**
      * @var string
      *
-     * @ORM\Column(name="raisonSoc", type="string", length=45, nullable=true)
+     * @ORM\Column(name="axe", type="string", length=45, nullable=true)
      */
-    private $raisonsoc;
+    private $axe;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="activite", type="string", length=45, nullable=true)
+     * @ORM\Column(name="avantage", type="string", length=45, nullable=true)
      */
-    private $activite;
+    private $avantage;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="raisonSoc", type="string", length=45, nullable=true)
+     */
+    private $raisonsoc;
 
     /**
      * @var string
@@ -66,13 +74,13 @@ class Tier
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Tier", inversedBy="tier")
+     * @ORM\ManyToMany(targetEntity="Tier", inversedBy="tier", cascade={"remove"})
      * @ORM\JoinTable(name="tier_has_tier",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="tier_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="tier_id", referencedColumnName="id", onDelete="CASCADE")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="tier_id1", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="tier_id1", referencedColumnName="id", onDelete="CASCADE")
      *   }
      * )
      */
@@ -83,7 +91,7 @@ class Tier
      */
     public function __construct()
     {
-        $this->tier1 = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tier1 = new ArrayCollection();
     }
 
     /**
@@ -223,7 +231,7 @@ class Tier
      *
      * @return Tier
      */
-    public function addTier1(\GenericBundle\Entity\Tier $tier1)
+    public function addTier1(Tier $tier1)
     {
         $this->tier1[] = $tier1;
 
@@ -235,7 +243,7 @@ class Tier
      *
      * @param \GenericBundle\Entity\Tier $tier1
      */
-    public function removeTier1(\GenericBundle\Entity\Tier $tier1)
+    public function removeTier1(Tier $tier1)
     {
         $this->tier1->removeElement($tier1);
     }
@@ -251,27 +259,50 @@ class Tier
     }
 
     /**
-     * Set activite
+     * Set axe
      *
-     * @param string $activite
+     * @param string $axe
      *
      * @return Tier
      */
-    public function setActivite($activite)
+    public function setAxe($axe)
     {
-        $this->activite = $activite;
+        $this->axe = $axe;
 
         return $this;
     }
 
     /**
-     * Get activite
+     * Get axe
      *
      * @return string
      */
-    public function getActivite()
+    public function getAxe()
     {
-        return $this->activite;
+        return $this->axe;
     }
 
+    /**
+     * Set avantage
+     *
+     * @param string $avantage
+     *
+     * @return Tier
+     */
+    public function setAvantage($avantage)
+    {
+        $this->avantage = $avantage;
+
+        return $this;
+    }
+
+    /**
+     * Get avantage
+     *
+     * @return string
+     */
+    public function getAvantage()
+    {
+        return $this->avantage;
+    }
 }

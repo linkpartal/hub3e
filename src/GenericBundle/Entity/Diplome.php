@@ -41,13 +41,19 @@ class Diplome
      * @ORM\Column(name="ecole", type="string", length=45, nullable=true)
      */
     private $ecole;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="niveau", type="string", length=45, nullable=true)
+     */
+    private $niveau;
 
     /**
-     * @var \User
+     * @var \GenericBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="users_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="users_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $user;
@@ -57,7 +63,7 @@ class Diplome
      *
      * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\ImportCandidat")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $importCandidat;
@@ -151,7 +157,7 @@ class Diplome
      *
      * @return Diplome
      */
-    public function setUser(\GenericBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -175,7 +181,7 @@ class Diplome
      *
      * @return Diplome
      */
-    public function setImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat = null)
+    public function setImportCandidat(ImportCandidat $importCandidat = null)
     {
         $this->importCandidat = $importCandidat;
 
@@ -202,5 +208,29 @@ class Diplome
         {
             return false;
         }
+    }
+
+    /**
+     * Set niveau
+     *
+     * @param string $niveau
+     *
+     * @return Diplome
+     */
+    public function setNiveau($niveau)
+    {
+        $this->niveau = $niveau;
+
+        return $this;
+    }
+
+    /**
+     * Get niveau
+     *
+     * @return string
+     */
+    public function getNiveau()
+    {
+        return $this->niveau;
     }
 }

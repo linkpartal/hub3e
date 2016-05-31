@@ -52,7 +52,7 @@ class Parents
     /**
      * @var string
      *
-     * @ORM\Column(name="adresse", type="string", length=45, nullable=true)
+     * @ORM\Column(name="adresse", type="string", length=255, nullable=true)
      */
     private $adresse;
 
@@ -87,14 +87,14 @@ class Parents
     /**
      * @var string
      *
-     * @ORM\Column(name="metier", type="string", length=45, nullable=true)
+     * @ORM\Column(name="statut", type="string", length=45, nullable=true)
      */
-    private $metier;
+    private $statut;
 
     /**
-     * @var \User
+     * @var \GenericBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="users_id", referencedColumnName="id")
      * })
@@ -104,7 +104,7 @@ class Parents
     /**
      * @var \GenericBundle\Entity\ImportCandidat
      *
-     * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\ImportCandidat")
+     * @ORM\ManyToOne(targetEntity="ImportCandidat", cascade={"remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
      * })
@@ -316,27 +316,27 @@ class Parents
     }
 
     /**
-     * Set metier
+     * Set statut
      *
-     * @param string $metier
+     * @param string $statut
      *
      * @return Parents
      */
-    public function setMetier($metier)
+    public function setStatut($statut)
     {
-        $this->metier = $metier;
+        $this->statut = $statut;
 
         return $this;
     }
 
     /**
-     * Get metier
+     * Get statut
      *
      * @return string
      */
-    public function getMetier()
+    public function getStatut()
     {
-        return $this->metier;
+        return $this->statut;
     }
 
     /**
@@ -346,7 +346,7 @@ class Parents
      *
      * @return Parents
      */
-    public function setUser(\GenericBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -370,7 +370,7 @@ class Parents
      *
      * @return Parents
      */
-    public function setImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat = null)
+    public function setImportCandidat(ImportCandidat $importCandidat = null)
     {
         $this->importCandidat = $importCandidat;
 

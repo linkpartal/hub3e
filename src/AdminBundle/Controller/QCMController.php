@@ -8,6 +8,7 @@ use GenericBundle\Entity\Reponsedef;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class QCMController extends Controller
 {
@@ -117,7 +118,7 @@ class QCMController extends Controller
 
         }
 
-        return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
+        return $this->redirect($_SERVER['HTTP_REFERER']) ;
     }
 
     public function supprimerAction($rep,$qst,$qcm)

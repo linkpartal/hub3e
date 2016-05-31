@@ -3,6 +3,7 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Infocomplementaire
@@ -22,13 +23,6 @@ class Infocomplementaire
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="insee", type="string", length=45, nullable=true,unique=true)
-     */
-    private $insee;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="dateNaissance", type="date", nullable=true)
@@ -41,6 +35,20 @@ class Infocomplementaire
      * @ORM\Column(name="daterecup", type="date", nullable=true)
      */
     private $daterecup;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datecreation", type="datetime", nullable=true)
+     */
+    private $datecreation;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datemodification", type="datetime", nullable=true)
+     */
+    private $datemodification;
 
     /**
      * @var string
@@ -59,9 +67,30 @@ class Infocomplementaire
     /**
      * @var string
      *
-     * @ORM\Column(name="adresse", type="string", length=45, nullable=true)
+     * @ORM\Column(name="adresse", type="string", length=100, nullable=true)
      */
     private $adresse;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="portable", type="string", length=45, nullable=true)
+     */
+    private $portable;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="handicape", type="boolean", length=45, nullable=true)
+     */
+    private $handicape;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="entrepreneur", type="boolean", length=45, nullable=true)
+     */
+    private $entrepreneur;
 
     /**
      * @var string
@@ -73,23 +102,35 @@ class Infocomplementaire
     /**
      * @var string
      *
-     * @ORM\Column(name="facebook", type="string", length=45, nullable=true)
+     * @ORM\Column(name="Lienexterne1", type="string", length=45, nullable=true)
      */
-    private $facebook;
+    private $Lienexterne1;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Lienexterne2", type="string", length=45, nullable=true)
+     */
+    private $Lienexterne2;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Lienexterne3", type="string", length=45, nullable=true)
+     */
+    private $Lienexterne3;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="linkedin", type="string", length=45, nullable=true)
+     * @ORM\Column(name="formationactuelle", type="string", length=45, nullable=true)
      */
-    private $linkedin;
+    private $formationactuelle;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="viadeo", type="string", length=45, nullable=true)
+     * @ORM\Column(name="dernierDiplome", type="string", length=45, nullable=true)
      */
-    private $viadeo;
+    private $dernierDiplome;
 
     /**
      * @var integer
@@ -97,6 +138,13 @@ class Infocomplementaire
      * @ORM\Column(name="mobilite", type="integer", nullable=true)
      */
     private $mobilite;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="profilcomplet", type="smallint", nullable=true)
+     */
+    private $profilcomplet = 0;
 
     /**
      * @var integer
@@ -108,7 +156,7 @@ class Infocomplementaire
     /**
      * @var boolean
      *
-     * @ORM\Column(name="permis", type="boolean", nullable=true)
+     * @ORM\Column(name="permis", type="smallint", nullable=true)
      */
     private $permis;
 
@@ -126,12 +174,14 @@ class Infocomplementaire
      */
     private $villesFranceFreeVille;
 
+
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->villesFranceFreeVille = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->villesFranceFreeVille = new ArrayCollection();
     }
 
 
@@ -243,76 +293,66 @@ class Infocomplementaire
     }
 
     /**
-     * Set facebook
+     * @var string
      *
-     * @param string $facebook
-     *
-     * @return Infocomplementaire
+     * @ORM\Column(name="langue1", type="string", length=45, nullable=true)
      */
-    public function setFacebook($facebook)
-    {
-        $this->facebook = $facebook;
-
-        return $this;
-    }
+    private $langue1;
 
     /**
-     * Get facebook
+     * @var string
      *
-     * @return string
+     * @ORM\Column(name="langue2", type="string", length=45, nullable=true)
      */
-    public function getFacebook()
-    {
-        return $this->facebook;
-    }
-
+    private $langue2;
     /**
-     * Set linkedin
+     * @var string
      *
-     * @param string $linkedin
-     *
-     * @return Infocomplementaire
+     * @ORM\Column(name="langue3", type="string", length=45, nullable=true)
      */
-    public function setLinkedin($linkedin)
-    {
-        $this->linkedin = $linkedin;
-
-        return $this;
-    }
-
+    private $langue3;
     /**
-     * Get linkedin
+     * @var string
      *
-     * @return string
+     * @ORM\Column(name="langue4", type="string", length=45, nullable=true)
      */
-    public function getLinkedin()
-    {
-        return $this->linkedin;
-    }
-
+    private $langue4;
     /**
-     * Set viadeo
+     * @var string
      *
-     * @param string $viadeo
-     *
-     * @return Infocomplementaire
+     * @ORM\Column(name="langue5", type="string", length=45, nullable=true)
      */
-    public function setViadeo($viadeo)
-    {
-        $this->viadeo = $viadeo;
-
-        return $this;
-    }
-
+    private $langue5;
     /**
-     * Get viadeo
+     * @var string
      *
-     * @return string
+     * @ORM\Column(name="hobbie1", type="string", length=45, nullable=true)
      */
-    public function getViadeo()
-    {
-        return $this->viadeo;
-    }
+    private $hobbie1;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hobbie2", type="string", length=45, nullable=true)
+     */
+    private $hobbie2;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hobbie3", type="string", length=45, nullable=true)
+     */
+    private $hobbie3;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hobbie4", type="string", length=45, nullable=true)
+     */
+    private $hobbie4;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hobbie5", type="string", length=45, nullable=true)
+     */
+    private $hobbie5;
 
     /**
      * Set mobilite
@@ -369,7 +409,7 @@ class Infocomplementaire
      *
      * @return Infocomplementaire
      */
-    public function addVillesFranceFreeVille(\GenericBundle\Entity\VillesFranceFree $villesFranceFreeVille)
+    public function addVillesFranceFreeVille(VillesFranceFree $villesFranceFreeVille)
     {
         $this->villesFranceFreeVille[] = $villesFranceFreeVille;
 
@@ -381,7 +421,7 @@ class Infocomplementaire
      *
      * @param \GenericBundle\Entity\VillesFranceFree $villesFranceFreeVille
      */
-    public function removeVillesFranceFreeVille(\GenericBundle\Entity\VillesFranceFree $villesFranceFreeVille)
+    public function removeVillesFranceFreeVille(VillesFranceFree $villesFranceFreeVille)
     {
         $this->villesFranceFreeVille->removeElement($villesFranceFreeVille);
     }
@@ -493,26 +533,506 @@ class Infocomplementaire
     }
 
     /**
-     * Set insee
+     * Set datecreation
      *
-     * @param string $insee
+     * @param \DateTime $datecreation
      *
      * @return Infocomplementaire
      */
-    public function setInsee($insee)
+    public function setDatecreation($datecreation)
     {
-        $this->insee = $insee;
+        $this->datecreation = $datecreation;
 
         return $this;
     }
 
     /**
-     * Get insee
+     * Get datecreation
+     *
+     * @return \DateTime
+     */
+    public function getDatecreation()
+    {
+        return $this->datecreation;
+    }
+
+    /**
+     * Set datemodification
+     *
+     * @param \DateTime $datemodification
+     *
+     * @return Infocomplementaire
+     */
+    public function setDatemodification($datemodification)
+    {
+        $this->datemodification = $datemodification;
+
+        return $this;
+    }
+
+    /**
+     * Get datemodification
+     *
+     * @return \DateTime
+     */
+    public function getDatemodification()
+    {
+        return $this->datemodification;
+    }
+
+    /**
+     * Set profilcomplet
+     *
+     * @param int $profilcomplet
+     *
+     * @return Infocomplementaire
+     */
+    public function setProfilcomplet($profilcomplet)
+    {
+        $this->profilcomplet = $profilcomplet;
+
+        return $this;
+    }
+
+    /**
+     * Get profilcomplet
+     *
+     * @return int
+     */
+    public function getProfilcomplet()
+    {
+        return $this->profilcomplet;
+    }
+
+    /**
+     * Set portable
+     *
+     * @param string $portable
+     *
+     * @return Infocomplementaire
+     */
+    public function setPortable($portable)
+    {
+        $this->portable = $portable;
+
+        return $this;
+    }
+
+    /**
+     * Get portable
      *
      * @return string
      */
-    public function getInsee()
+    public function getPortable()
     {
-        return $this->insee;
+        return $this->portable;
+    }
+
+    /**
+     * Set handicape
+     *
+     * @param boolean $handicape
+     *
+     * @return Infocomplementaire
+     */
+    public function setHandicape($handicape)
+    {
+        $this->handicape = $handicape;
+
+        return $this;
+    }
+
+    /**
+     * Get handicape
+     *
+     * @return boolean
+     */
+    public function getHandicape()
+    {
+        return $this->handicape;
+    }
+
+    /**
+     * Set entrepreneur
+     *
+     * @param boolean $entrepreneur
+     *
+     * @return Infocomplementaire
+     */
+    public function setEntrepreneur($entrepreneur)
+    {
+        $this->entrepreneur = $entrepreneur;
+
+        return $this;
+    }
+
+    /**
+     * Get entrepreneur
+     *
+     * @return boolean
+     */
+    public function getEntrepreneur()
+    {
+        return $this->entrepreneur;
+    }
+
+    /**
+     * Set formationactuelle
+     *
+     * @param string $formationactuelle
+     *
+     * @return Infocomplementaire
+     */
+    public function setFormationactuelle($formationactuelle)
+    {
+        $this->formationactuelle = $formationactuelle;
+
+        return $this;
+    }
+
+    /**
+     * Get formationactuelle
+     *
+     * @return string
+     */
+    public function getFormationactuelle()
+    {
+        return $this->formationactuelle;
+    }
+
+    /**
+     * Set dernierDiplome
+     *
+     * @param string $dernierDiplome
+     *
+     * @return Infocomplementaire
+     */
+    public function setDernierDiplome($dernierDiplome)
+    {
+        $this->dernierDiplome = $dernierDiplome;
+
+        return $this;
+    }
+
+    /**
+     * Get dernierDiplome
+     *
+     * @return string
+     */
+    public function getDernierDiplome()
+    {
+        return $this->dernierDiplome;
+    }
+
+    /**
+     * Set langue1
+     *
+     * @param string $langue1
+     *
+     * @return Infocomplementaire
+     */
+    public function setLangue1($langue1)
+    {
+        $this->langue1 = $langue1;
+
+        return $this;
+    }
+
+    /**
+     * Get langue1
+     *
+     * @return string
+     */
+    public function getLangue1()
+    {
+        return $this->langue1;
+    }
+
+    /**
+     * Set langue2
+     *
+     * @param string $langue2
+     *
+     * @return Infocomplementaire
+     */
+    public function setLangue2($langue2)
+    {
+        $this->langue2 = $langue2;
+
+        return $this;
+    }
+
+    /**
+     * Get langue2
+     *
+     * @return string
+     */
+    public function getLangue2()
+    {
+        return $this->langue2;
+    }
+
+    /**
+     * Set langue3
+     *
+     * @param string $langue3
+     *
+     * @return Infocomplementaire
+     */
+    public function setLangue3($langue3)
+    {
+        $this->langue3 = $langue3;
+
+        return $this;
+    }
+
+    /**
+     * Get langue3
+     *
+     * @return string
+     */
+    public function getLangue3()
+    {
+        return $this->langue3;
+    }
+
+    /**
+     * Set langue4
+     *
+     * @param string $langue4
+     *
+     * @return Infocomplementaire
+     */
+    public function setLangue4($langue4)
+    {
+        $this->langue4 = $langue4;
+
+        return $this;
+    }
+
+    /**
+     * Get langue4
+     *
+     * @return string
+     */
+    public function getLangue4()
+    {
+        return $this->langue4;
+    }
+
+    /**
+     * Set langue5
+     *
+     * @param string $langue5
+     *
+     * @return Infocomplementaire
+     */
+    public function setLangue5($langue5)
+    {
+        $this->langue5 = $langue5;
+
+        return $this;
+    }
+
+    /**
+     * Get langue5
+     *
+     * @return string
+     */
+    public function getLangue5()
+    {
+        return $this->langue5;
+    }
+
+    /**
+     * Set hobbie1
+     *
+     * @param string $hobbie1
+     *
+     * @return Infocomplementaire
+     */
+    public function setHobbie1($hobbie1)
+    {
+        $this->hobbie1 = $hobbie1;
+
+        return $this;
+    }
+
+    /**
+     * Get hobbie1
+     *
+     * @return string
+     */
+    public function getHobbie1()
+    {
+        return $this->hobbie1;
+    }
+
+    /**
+     * Set hobbie2
+     *
+     * @param string $hobbie2
+     *
+     * @return Infocomplementaire
+     */
+    public function setHobbie2($hobbie2)
+    {
+        $this->hobbie2 = $hobbie2;
+
+        return $this;
+    }
+
+    /**
+     * Get hobbie2
+     *
+     * @return string
+     */
+    public function getHobbie2()
+    {
+        return $this->hobbie2;
+    }
+
+    /**
+     * Set hobbie3
+     *
+     * @param string $hobbie3
+     *
+     * @return Infocomplementaire
+     */
+    public function setHobbie3($hobbie3)
+    {
+        $this->hobbie3 = $hobbie3;
+
+        return $this;
+    }
+
+    /**
+     * Get hobbie3
+     *
+     * @return string
+     */
+    public function getHobbie3()
+    {
+        return $this->hobbie3;
+    }
+
+    /**
+     * Set hobbie4
+     *
+     * @param string $hobbie4
+     *
+     * @return Infocomplementaire
+     */
+    public function setHobbie4($hobbie4)
+    {
+        $this->hobbie4 = $hobbie4;
+
+        return $this;
+    }
+
+    /**
+     * Get hobbie4
+     *
+     * @return string
+     */
+    public function getHobbie4()
+    {
+        return $this->hobbie4;
+    }
+
+    /**
+     * Set hobbie5
+     *
+     * @param string $hobbie5
+     *
+     * @return Infocomplementaire
+     */
+    public function setHobbie5($hobbie5)
+    {
+        $this->hobbie5 = $hobbie5;
+
+        return $this;
+    }
+
+    /**
+     * Get hobbie5
+     *
+     * @return string
+     */
+    public function getHobbie5()
+    {
+        return $this->hobbie5;
+    }
+
+    /**
+     * Set lienexterne1
+     *
+     * @param string $lienexterne1
+     *
+     * @return Infocomplementaire
+     */
+    public function setLienexterne1($lienexterne1)
+    {
+        $this->Lienexterne1 = $lienexterne1;
+
+        return $this;
+    }
+
+    /**
+     * Get lienexterne1
+     *
+     * @return string
+     */
+    public function getLienexterne1()
+    {
+        return $this->Lienexterne1;
+    }
+
+    /**
+     * Set lienexterne2
+     *
+     * @param string $lienexterne2
+     *
+     * @return Infocomplementaire
+     */
+    public function setLienexterne2($lienexterne2)
+    {
+        $this->Lienexterne2 = $lienexterne2;
+
+        return $this;
+    }
+
+    /**
+     * Get lienexterne2
+     *
+     * @return string
+     */
+    public function getLienexterne2()
+    {
+        return $this->Lienexterne2;
+    }
+
+    /**
+     * Set lienexterne3
+     *
+     * @param string $lienexterne3
+     *
+     * @return Infocomplementaire
+     */
+    public function setLienexterne3($lienexterne3)
+    {
+        $this->Lienexterne3 = $lienexterne3;
+
+        return $this;
+    }
+
+    /**
+     * Get lienexterne3
+     *
+     * @return string
+     */
+    public function getLienexterne3()
+    {
+        return $this->Lienexterne3;
     }
 }

@@ -52,23 +52,30 @@ class Experience
     /**
      * @var integer
      *
-     * @ORM\Column(name="nbreAnnee", type="integer", nullable=true)
+     * @ORM\Column(name="Debut", type="date", nullable=true)
      */
-    private $nbreannee;
+    private $debut;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="fin", type="date", nullable=true)
+     */
+    private $fin;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=45, nullable=true)
+     * @ORM\Column(name="description", type="string", length=300, nullable=true)
      */
     private $description;
 
     /**
-     * @var \User
+     * @var \GenericBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="users_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="users_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $user;
@@ -78,7 +85,7 @@ class Experience
      *
      * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\ImportCandidat")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="import_candidat_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $importCandidat;
@@ -192,30 +199,6 @@ class Experience
     }
 
     /**
-     * Set nbreannee
-     *
-     * @param integer $nbreannee
-     *
-     * @return Experience
-     */
-    public function setNbreannee($nbreannee)
-    {
-        $this->nbreannee = $nbreannee;
-
-        return $this;
-    }
-
-    /**
-     * Get nbreannee
-     *
-     * @return integer
-     */
-    public function getNbreannee()
-    {
-        return $this->nbreannee;
-    }
-
-    /**
      * Set description
      *
      * @param string $description
@@ -246,7 +229,7 @@ class Experience
      *
      * @return Experience
      */
-    public function setUser(\GenericBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -266,11 +249,11 @@ class Experience
     /**
      * Set importCandidat
      *
-     * @param \GenericBundle\Entity\ImportCandidat $importCandidat
+     * @param \GenericBundle\Entity\ImportCandidat importCandidat
      *
      * @return Experience
      */
-    public function setImportCandidat(\GenericBundle\Entity\ImportCandidat $importCandidat = null)
+    public function setImportCandidat(ImportCandidat $importCandidat = null)
     {
         $this->importCandidat = $importCandidat;
 
@@ -297,5 +280,53 @@ class Experience
         else{
             return false;
         }
+    }
+
+    /**
+     * Set debut
+     *
+     * @param \DateTime $debut
+     *
+     * @return Experience
+     */
+    public function setDebut($debut)
+    {
+        $this->debut = $debut;
+
+        return $this;
+    }
+
+    /**
+     * Get debut
+     *
+     * @return \DateTime
+     */
+    public function getDebut()
+    {
+        return $this->debut;
+    }
+
+    /**
+     * Set fin
+     *
+     * @param \DateTime $fin
+     *
+     * @return Experience
+     */
+    public function setFin($fin)
+    {
+        $this->fin = $fin;
+
+        return $this;
+    }
+
+    /**
+     * Get fin
+     *
+     * @return \DateTime
+     */
+    public function getFin()
+    {
+        return $this->fin;
     }
 }

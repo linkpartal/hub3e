@@ -3,7 +3,6 @@
 namespace TierBundle\Controller;
 
 use GenericBundle\Entity\Etablissement;
-use GenericBundle\Entity\ImportCandidat;
 use GenericBundle\Entity\Qcmdef;
 use GenericBundle\Entity\Notification;
 use GenericBundle\Entity\Tier;
@@ -24,6 +23,9 @@ class DefaultController extends Controller
 
 
         if ($tier) {
+            if($tier->getEcole()){
+                return $reponse->setData(array('status'=>'is_ecole'));
+            }
             for($i = 0; $i< count($request->get('_SIRET'));$i++) {
                 $etablissement = $em->getRepository('GenericBundle:Etablissement')->findOneBy(array('siret'=>$request->get('_SIRET')[$i]));
                 if($etablissement)
@@ -51,11 +53,14 @@ class DefaultController extends Controller
             $newtier->setSiren($request->get('_SIREN'));
             $newtier->setRaisonsoc($request->get('_RaisonSoc'));
             $newtier->setEcole(intval($request->get('_Ecole')));
-            if($_FILES && $_FILES['_Logo']['size'] >0)
+            $newtier->setAxe($request->get('_Axe'));
+            $newtier->setAvantage($request->get('_Avantages'));
+            if(isset($_FILES['_Logo']) && $_FILES['_Logo']['size'] >0)
             {
                 $newtier->setLogo(file_get_contents($_FILES['_Logo']['tmp_name']));
             }
-            if($_FILES && $_FILES['_image']['size'] >0)
+
+            if(isset($_FILES['_image']) && $_FILES['_image']['size'] >0)
             {
                 $newtier->setFondecran(file_get_contents($_FILES['_image']['tmp_name']));
             }
@@ -75,29 +80,28 @@ class DefaultController extends Controller
             $etablissement->setTelephone($request->get('_Tel')[$i]);
             $etablissement->setFax($request->get('_Fax')[$i]);
             $etablissement->setVille($request->get('_Ville')[$i]);
-            $etablissement->setResponsable($request->get('_Resp')[$i]);
+            $etablissement->setNomResp($request->get('_Resp')[$i]);
+            $etablissement->setPrenomResp($request->get('_RespPrenom')[$i]);
             $etablissement->setTelResponsable($request->get('_TelResp')[$i]);
             $etablissement->setMailResponsable($request->get('_MailResp')[$i]);
             $etablissement->setSite($request->get('_Site')[$i]);
+            $etablissement->setType($request->get('_TypeSoc')[$i]);
+            $etablissement->setTaille($request->get('_Taille')[$i]);
+            $etablissement->setSecteur($request->get('_Secteur')[$i]);
             $etablissement->addUser($this->get('security.token_storage')->getToken()->getUser());
             $etablissement->setTier($tier);
 
             $em->persist($etablissement);
             $em->flush();
+            if($tier->getEcole()){
+                $em->getRepository('GenericBundle:Qcmdef')->findOneBy(array('nom'=>'QCMparDéfault'))->addEtablissement($etablissement) ;
+                $em->flush();
+            }
         }
 
         $em->flush();
 
-        if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_SUPER_ADMIN'))
-        {
-            return $this->redirect($this->generateUrl('metier_user_admin'));
-        }
-        elseif($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_ADMINECOLE'))
-        {
-            return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$this->get('security.token_storage')->getToken()->getUser()->getTier()->getRaisonsoc())));
-        }
-
-
+        return $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function affichageAction($id)
@@ -106,24 +110,28 @@ class DefaultController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         // LicenceDef pour peupler le select de l'instanciation de la licence
         $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
-        // Recuperation des differents QCM
-        $qcmstest = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findBy(array('affinite'=>false));
-        $qcmsaffinite = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findBy(array('affinite'=>true));
+
         // Etablissement à afficher
         $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
 
-        // séparer les QCMs affinité deja associer à l'etablissement des autres
-        $QcmNotEtab = array();
-        foreach($qcmsaffinite as $item)
+        // chargement des images
+        if($etablissement->getTier()->getLogo() and !is_string($etablissement->getTier()->getLogo()))
         {
-            if(!in_array ($item,$etablissement->getQcmdef()->toArray()))
-            {
-                array_push($QcmNotEtab,$item);
-            }
+            $etablissement->getTier()->setLogo(base64_encode(stream_get_contents($etablissement->getTier()->getLogo())));
+        }
+        if($etablissement->getTier()->getFondecran() and !is_string($etablissement->getTier()->getFondecran()))
+        {
+            $etablissement->getTier()->setFondecran(base64_encode(stream_get_contents($etablissement->getTier()->getFondecran())));
         }
 
-        // Tout les tuteurs existant
-        $userMiss = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_TUTEUR');
+        // Recup des licences associer au tier de l'etablissement.
+        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier(),'suspendu'=>false ));
+
+        // Les utilisateurs de l'etablissement et du tier auquel il est lié
+        $users = array();
+        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
+        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
+
         //Suppression de la notification de l'utilisateur connecté concernant l'etablissement affiché
         if($etablissement->getTier()->getEcole())
         {
@@ -139,55 +147,92 @@ class DefaultController extends Controller
             $this->getDoctrine()->getEntityManager()->flush();
         }
 
-        // chargement des images
-        if($etablissement->getTier()->getLogo() and !is_string($etablissement->getTier()->getLogo()))
-        {
-            $etablissement->getTier()->setLogo(base64_encode(stream_get_contents($etablissement->getTier()->getLogo())));
-        }
-        if($etablissement->getTier()->getFondecran() and !is_string($etablissement->getTier()->getFondecran()))
-        {
-            $etablissement->getTier()->setFondecran(base64_encode(stream_get_contents($etablissement->getTier()->getFondecran())));
-        }
+        if($etablissement->getTier()->getEcole()){
+            // Recuperation des differents QCM
+            $qcmstest = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findBy(array('affinite'=>false));
 
-        // Recup des licences associer au tier de l'etablissement.
-        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier() ));
+            $qcmsaffinite = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findBy(array('affinite'=>true));
 
-
-        // les formation de l'etablissement
-        $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$etablissement ));
-
-
-
-        $hobbie = $this->getDoctrine()->getRepository('GenericBundle:Hobbies')->findAll();
-
-        // Les utilisateurs de l'etablissement et du tier auquel il est lié
-        $users = array();
-        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
-        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
-
-        // les tiers pour peuplé l'association d'ecole
-        $alltiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAllExcept($etablissement->getId());
-        $tiers = array();
-        foreach ( $alltiers as $tier)
-        {
-            if(!in_array($tier,$etablissement->getTier()->getTier1()->toArray()))
+            // séparer les QCMs affinité deja associer à l'etablissement des autres
+            $QcmNotEtab = array();
+            foreach($qcmsaffinite as $item)
             {
-                array_push($tiers,$tier);
+                if(!in_array ($item,$etablissement->getQcmdef()->toArray()))
+                {
+                    array_push($QcmNotEtab,$item);
+                }
             }
-        }
 
-        $etablisementlier=array();
-        foreach ($etablissement->getTier()->getTier1() as $value ){
-            array_push($etablisementlier ,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$value)));
+            // les formation de l'etablissement
+            $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$etablissement ));
+
+            // les tiers pour peuplé l'association d'ecole
+            $alltiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAllExcept($etablissement->getTier()->getId());
+            $tiers = array();
+            foreach ( $alltiers as $tier)
+            {
+                if(!in_array($tier,$etablissement->getTier()->getTier1()->toArray()))
+                {
+                    array_push($tiers,$tier);
+                }
+            }
+
+            //
+            $etablisementlier=array();
+            foreach ($etablissement->getTier()->getTier1() as $value ){
+                array_push($etablisementlier ,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$value)));
+            }
+            return $this->render('TierBundle::iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,'tiers'=>$tiers,'users'=>$users,
+                'formations'=>$formation,'libs'=>$licences,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab,'etablissementslier'=>$etablisementlier));
+        }
+        else{
+            // missions non suspendu
+            if($user->hasRole('ROLE_SUPER_ADMIN')){
+                $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('etablissement'=>$etablissement,'suspendu'=>false),array('datecreation' => 'DESC'));
+            }
+            else{
+                $missions_etablissement = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('etablissement'=>$etablissement,'suspendu'=>false),array('datecreation' => 'DESC'));
+                $missions = array();
+                foreach($missions_etablissement as $mis){
+                    foreach($this->getDoctrine()->getRepository('GenericBundle:Diffusion')->findBy(array('mission'=>$mis)) as $diffusion ){
+                        if($user->getTier()){
+                            if((($diffusion->getFormation()->getEtablissement()->getTier() == $user->getTier() or $diffusion->getFormation()->getEtablissement() == $user->getEtablissement())  or $user->getTier() == $mis->getTier()
+                                or $user->getTier()==$mis->getEtablissement()->getTier()) and !in_array($mis,$missions)){
+                                array_push($missions,$mis);
+                            }
+                        }
+                        else if($user->getEtablissement()){
+                            if((($diffusion->getFormation()->getEtablissement()->getTier() == $user->getTier() or $diffusion->getFormation()->getEtablissement() == $user->getEtablissement()  or $user->getEtablissement()->getTier() == $mis->getTier()
+                                or $user->getEtablissement()->getTier()==$mis->getEtablissement()->getTier()) and !in_array($mis,$missions))){
+                                array_push($missions,$mis);
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            // QCM pour la création des mission
+            $qcm = null;
+            $questions = null;
+            $reponses = null;
+
+            $qcm = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findOneBy(array('nom'=>'QCMparDéfault'));
+            $questions = $this->getDoctrine()->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef' => $qcm));
+            usort($questions, array('\GenericBundle\Entity\Questiondef', 'sort_questions_by_order'));
+            $reponses = array();
+
+            foreach ($questions as $keyqst => $qst) {
+                $reps = $this->getDoctrine()->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef' => $qst));
+                usort($reps, array('\GenericBundle\Entity\Reponsedef', 'sort_reponses_by_order'));
+                $reponses[$keyqst] = $reps;
+            }
+
+            return $this->render('TierBundle::iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,'users'=>$users,
+                'libs'=>$licences, 'missions'=>$missions ,'QCMs' => $qcm, 'Questions' => $questions,
+                'reponses' => $reponses,'formations'=>$this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll()));
         }
         //$licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier(),'suspendu'=>false ));
-
-        // missions non suspendu
-        $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date' => 'DESC'));
-
-        return $this->render('TierBundle::iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,'tiers'=>$tiers,'users'=>$users,'formations'=>$formation,'hobbies' =>$hobbie,
-            'libs'=>$licences, 'missions'=>$missions ,'usermis'=>$userMiss,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab,'etablissementslier'=>$etablisementlier,
-            'formation_mission'=>$this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll()));
     }
 
     public function supprimeretabAction($id)
@@ -195,14 +240,17 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $etab = $em->getRepository('GenericBundle:Etablissement')->find($id);
 
-        if(!$etab)
-        {
-            throw new Exception('Aucune école ne posséde l\'id ' . $id);
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if($user->hasRole('ROLE_SUPER_ADMIN')){
+            $etab->setSuspendu(true);
+            $em->flush();
+        }
+        elseif($user->hasRole('ROLE_ADMINECOLE') or $user->hasRole('ROLE_RECRUTEUR')){
+            $etab->removeUser($user);
+            $em->flush();
         }
 
-        $etab->setSuspendu(true);
-        $em->flush();
-        return $this->render('AdminBundle:Admin:iFrameContent.html.twig');
+        return $this->render('GenericBundle::ReloadParent.html.twig',array('clear'=>true));
     }
 
     public function ecolesassociatedAction($id, Request $request)
@@ -230,53 +278,6 @@ class DefaultController extends Controller
         return $this->redirect($this->generateUrl('affiche_etab',array('id'=>$id)) );
     }
 
-    public function modifierAction($id)
-    {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $modeles = $this->getDoctrine()->getRepository('GenericBundle:Modele')->findBy(array('user'=>$user));
-        $licencedef = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
-        $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($id);
-
-        if($etablissement->getTier()->getEcole())
-        {
-            $type = 'Ecole';
-        }
-        else{
-            $type = 'Societe';
-        }
-        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('user'=>$user,'entite'=>$etablissement->getId(),'type'=>$type));
-        if($notifications)
-        {
-            $this->getDoctrine()->getEntityManager()->remove($notifications);
-            $this->getDoctrine()->getEntityManager()->flush();
-        }
-
-        if($etablissement->getTier()->getLogo() and !is_string($etablissement->getTier()->getLogo()))
-        {
-            $etablissement->getTier()->setLogo(base64_encode(stream_get_contents($etablissement->getTier()->getLogo())));
-        }
-        if($etablissement->getTier()->getFondecran() and !is_string($etablissement->getTier()->getFondecran()))
-        {
-            $etablissement->getTier()->setFondecran(base64_encode(stream_get_contents($etablissement->getTier()->getFondecran())));
-        }
-        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier() ));
-
-
-
-
-        $formation = array();
-
-        $formation = array_merge($formation,$this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$etablissement )));
-
-
-        $users = array();
-        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
-        $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
-        $tiers = $this->getDoctrine()->getRepository('GenericBundle:Tier')->findAll();
-        return $this->render('TierBundle::modifierEtablissement.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,
-            'libs'=>$licences,'tiers'=>$tiers,'users'=>$users,'modeles'=>$modeles,'formations'=>$formation));
-    }
-
     public function etabModifAction(Request $request){
 
         $em = $this->getDoctrine()->getManager();
@@ -288,13 +289,14 @@ class DefaultController extends Controller
         $etablissement->setTelephone($request->get('_Tel'));
         $etablissement->setFax($request->get('_Fax'));
         $etablissement->setVille($request->get('_Ville'));
-        $etablissement->setResponsable($request->get('_Resp'));
+        $etablissement->setNomResp($request->get('_Resp'));
+        $etablissement->setPrenomResp($request->get('_prenomResp'));
         $etablissement->setTelResponsable($request->get('_TelResp'));
         $etablissement->setMailResponsable($request->get('_MailResp'));
         $etablissement->setSite($request->get('_Site'));
 
-        $etablissement->getTier()->setRaisonsoc($request->get('_RaisonSoc'));
 
+        $etablissement->getTier()->setRaisonsoc($request->get('_RaisonSoc'));
         if($_FILES && $_FILES['_Logo']['size'] >0)
         {
             $etablissement->getTier()->setLogo(file_get_contents($_FILES['_Logo']['tmp_name']));
@@ -346,7 +348,7 @@ class DefaultController extends Controller
     public function etablissementQcmAction($id){
         $em = $this->getDoctrine()->getEntityManager();
         $etablissement = $em->getRepository('GenericBundle:Etablissement')->find($id);
-        $serializer = SerializerBuilder::create()->build();
+        $serializer = $this->get('jms_serializer');
         $jsonContent = $serializer->serialize($etablissement->getQcmdef(), 'json');
         $reponse = new JsonResponse();
 
@@ -387,7 +389,7 @@ class DefaultController extends Controller
             $etablissement->addUser($user);
             $em->flush();
         }
-        return $this->redirect($this->generateUrl('ecole_admin',array('ecole'=>$user->getTier()->getRaisonsoc())));
+        return $this->redirect($_SERVER['HTTP_REFERER']);
 
     }
 
@@ -412,4 +414,10 @@ class DefaultController extends Controller
         $reponse = new JsonResponse();
         return $reponse->setData(array('Status'=>'Licence correctement supprimer'));
     }
+
+
+
+
+
+    //jjjjjjjjjjjjjjjjjjjjjjjjjj
 }

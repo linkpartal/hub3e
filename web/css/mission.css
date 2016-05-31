@@ -1,5 +1,6 @@
 @CHARSET "utf-8";
-@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css");
+/*noinspection CssUnknownTarget*/
+@import url('//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css');
 
 [class*="col-"] {
     text-align: center;
@@ -14,7 +15,7 @@ html {
 
 body {
     height: 100%;
-    font-family: Roboto;
+    font: 14px Roboto !important;
     /* force the BODY element to match the height of the HTML element */
 }
 
@@ -30,16 +31,10 @@ body {
 
 .rightMenu{
     height: 46px;
-    padding: 0 !important;
-    display: block !important;
-    border:solid 1px #d2d2d2 !important;
-    border-radius: 0  !important;
+    text-transform: uppercase;
+    border:solid 1px #d2d2d2;
     background-color: #E4E4E4;
     color: #868686;
-    font : 10px arial;
-    margin: 0 !important;
-    line-height: 250%;
-
 }
 
 .rightMenu input{
@@ -72,7 +67,7 @@ textarea{
     border-radius: 0 !important;
     border-bottom: 1px solid #7F7F7F !important;
     color: #7F7F7F !important;
-    font : 20px arial;
+    font : 20px Roboto;
     margin: 0 !important;
     line-height: 200%;
 }
@@ -108,7 +103,7 @@ button:focus{
 
 .infobox {
     background-color: #232d37;
-    box-shadow: 0px 6px 4px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 4px 0 rgba(0, 0, 0, 0.25);
     width: 152px;
     height: 204px;
     margin-bottom: 8px;
@@ -116,7 +111,7 @@ button:focus{
 }
 
 .infobox:after{
-    font-family: 'Glyphicons Halflings';
+    font-family: 'Glyphicons Halflings', serif;
     content:"\e252";
     font-size: 2em;
     position: relative;
@@ -187,7 +182,7 @@ button:focus{
     border: none !important;
     border-radius: 0 !important;
     color: #7F7F7F !important;
-    font : 20px arial;
+    font : 20px Roboto;
     margin: 0 !important;
 }
 
@@ -201,17 +196,17 @@ button:focus{
 }
 
 .Liste .row .cell .button.collapsed:before{
-    font-family: 'Glyphicons Halflings';
+    font-family: 'Glyphicons Halflings', serif;
     content:" \e252";
 }
 
 .Liste .row .cell .button:before{
-    font-family: 'Glyphicons Halflings';
+    font-family: 'Glyphicons Halflings', serif;
     content:" \e253";
 }
 
 .Liste .row .cell .button:before{
-    font-family: 'Glyphicons Halflings';
+    font-family: 'Glyphicons Halflings', serif;
     content:" \e253";
 }
 

@@ -3,6 +3,7 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use \Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Mission
@@ -38,7 +39,7 @@ class Mission
     /**
      * @var string
      *
-     * @ORM\Column(name="TypeContrat", type="string", length=45, nullable=true)
+     * @ORM\Column(name="TypeContrat", type="string", length=255, nullable=true)
      */
     private $typecontrat;
 
@@ -76,6 +77,12 @@ class Mission
      * @ORM\Column(name="EmailContact", type="string", length=45, nullable=true)
      */
     private $emailcontact;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Commentaire", type="string", length=255, nullable=true)
+     */
+    private $commentaire;
 
     /**
      * @var string
@@ -97,13 +104,35 @@ class Mission
      * @ORM\Column(name="Domaine", type="string", length=45, nullable=true)
      */
     private $domaine;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="statut", type="integer", nullable=true)
+     */
+    private $statut;
+    /**
+     * @var \GenericBundle\Entity\Tier
+     *
+     * @ORM\ManyToOne(targetEntity="Tier")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_TierCreation", referencedColumnName="id")
+     * })
+     */
+    private $tier;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Date", type="datetime", nullable=true)
+     * @ORM\Column(name="Datecreation", type="datetime", nullable=true)
      */
-    private $date;
+    private $datecreation;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="Datemodification", type="datetime", nullable=true)
+     */
+    private $datemodification;
 
     /**
      * @var string
@@ -136,6 +165,13 @@ class Mission
     /**
      * @var string
      *
+     * @ORM\Column(name="NbrePoste", type="integer", nullable=true)
+     */
+    private $nbreposte;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="Horaire", type="string", length=45, nullable=true)
      */
     private $horaire;
@@ -148,7 +184,7 @@ class Mission
     private $suspendu= false;
 
     /**
-     * @var \Etablissement
+     * @var \GenericBundle\Entity\Etablissement
      *
      * @ORM\ManyToOne(targetEntity="Etablissement")
      * @ORM\JoinColumns({
@@ -158,7 +194,7 @@ class Mission
     private $etablissement;
 
     /**
-     * @var \Users
+     * @var \GenericBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
@@ -168,7 +204,7 @@ class Mission
     private $tuteur;
 
     /**
-     * @var \Users
+     * @var \GenericBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
@@ -178,17 +214,18 @@ class Mission
     private $apprentit;
 
     /**
-     * Set id
+     * @var \Doctrine\Common\Collections\Collection
      *
-     * @param integer $id
-     *
-     * @return Mission
+     * @ORM\ManyToMany(targetEntity="Reponsedef", mappedBy="missions")
      */
-    public function setId($id)
-    {
-        $this->id = $id;
+    private $reponsedef;
 
-        return $this;
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reponsedef = new ArrayCollection();
     }
 
     /**
@@ -271,270 +308,6 @@ class Mission
     public function getTypecontrat()
     {
         return $this->typecontrat;
-    }
-
-    /**
-     * Set tuteur
-     *
-     * @param \GenericBundle\Entity\User $tuteur
-     *
-     * @return Mission
-     */
-    public function setTuteur(\GenericBundle\Entity\User $tuteur)
-    {
-        $this->tuteur = $tuteur;
-
-        return $this;
-    }
-
-    /**
-     * Get tuteur
-     *
-     * @return \GenericBundle\Entity\User
-     */
-    public function getTuteur()
-    {
-        return $this->tuteur;
-    }
-
-    /**
-     * Set intitule
-     *
-     * @param string $intitule
-     *
-     * @return Mission
-     */
-    public function setIntitule($intitule)
-    {
-        $this->intitule = $intitule;
-
-        return $this;
-    }
-
-    /**
-     * Get intitule
-     *
-     * @return string
-     */
-    public function getIntitule()
-    {
-        return $this->intitule;
-    }
-
-    /**
-     * Set codemission
-     *
-     * @param string $codemission
-     *
-     * @return Mission
-     */
-    public function setCodemission($codemission)
-    {
-        $this->codemission = $codemission;
-
-        return $this;
-    }
-
-    /**
-     * Get codemission
-     *
-     * @return string
-     */
-    public function getCodemission()
-    {
-        return $this->codemission;
-    }
-
-    /**
-     * Set domaine
-     *
-     * @param string $domaine
-     *
-     * @return Mission
-     */
-    public function setDomaine($domaine)
-    {
-        $this->domaine = $domaine;
-
-        return $this;
-    }
-
-    /**
-     * Get domaine
-     *
-     * @return string
-     */
-    public function getDomaine()
-    {
-        return $this->domaine;
-    }
-
-    /**
-     * Add formation
-     *
-     * @param \GenericBundle\Entity\Formation $formation
-     *
-     * @return Mission
-     */
-    public function addFormation(\GenericBundle\Entity\Formation $formation)
-    {
-        $this->formation[] = $formation;
-
-        return $this;
-    }
-
-    /**
-     * Remove formation
-     *
-     * @param \GenericBundle\Entity\Formation $formation
-     */
-    public function removeFormation(\GenericBundle\Entity\Formation $formation)
-    {
-        $this->formation->removeElement($formation);
-    }
-
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Date", type="date")
-     */
-    public function setDate(\DateTime $date)
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    /**
-     * Get date
-     *
-     * @return \DateTime
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    /**
-     * Set remuneration
-     *
-     * @param integer $remuneration
-     *
-     * @return Mission
-     */
-    public function setRemuneration($remuneration)
-    {
-        $this->remuneration = $remuneration;
-
-        return $this;
-    }
-
-    /**
-     * Get remuneration
-     *
-     * @return integer
-     */
-    public function getRemuneration()
-    {
-        return $this->remuneration;
-    }
-
-    /**
-     * Set horaire
-     *
-     * @param string $horaire
-     *
-     * @return Mission
-     */
-    public function setHoraire($horaire)
-    {
-        $this->horaire = $horaire;
-
-        return $this;
-    }
-
-    /**
-     * Get horaire
-     *
-     * @return string
-     */
-    public function getHoraire()
-    {
-        return $this->horaire;
-    }
-
-    /**
-     * Set datedebut
-     *
-     * @param \DateTime $datedebut
-     *
-     * @return Mission
-     */
-    public function setDatedebut($datedebut)
-    {
-        $this->datedebut = $datedebut;
-
-        return $this;
-    }
-
-    /**
-     * Get datedebut
-     *
-     * @return \DateTime
-     */
-    public function getDatedebut()
-    {
-        return $this->datedebut;
-    }
-
-    /**
-     * Set datefin
-     *
-     * @param \DateTime $datefin
-     *
-     * @return Mission
-     */
-    public function setDatefin($datefin)
-    {
-        $this->datefin = $datefin;
-
-        return $this;
-    }
-
-    /**
-     * Get datefin
-     *
-     * @return \DateTime
-     */
-    public function getDatefin()
-    {
-        return $this->datefin;
-    }
-
-    /**
-     * Set emploi
-     *
-     * @param boolean $emploi
-     *
-     * @return Mission
-     */
-    public function setEmploi($emploi)
-    {
-        $this->emploi = $emploi;
-
-        return $this;
-    }
-
-    /**
-     * Get emploi
-     *
-     * @return boolean
-     */
-    public function getEmploi()
-    {
-        return $this->emploi;
     }
 
     /**
@@ -658,13 +431,277 @@ class Mission
     }
 
     /**
-     * Set etablissement
+     * Set intitule
      *
-     * @param \GenericBundle\Entity\Etablissement $etablissement
+     * @param string $intitule
      *
      * @return Mission
      */
-    public function setEtablissement(\GenericBundle\Entity\Etablissement $etablissement = null)
+    public function setIntitule($intitule)
+    {
+        $this->intitule = $intitule;
+
+        return $this;
+    }
+
+    /**
+     * Get intitule
+     *
+     * @return string
+     */
+    public function getIntitule()
+    {
+        return $this->intitule;
+    }
+
+    /**
+     * Set codemission
+     *
+     * @param string $codemission
+     *
+     * @return Mission
+     */
+    public function setCodemission($codemission)
+    {
+        $this->codemission = $codemission;
+
+        return $this;
+    }
+
+    /**
+     * Get codemission
+     *
+     * @return string
+     */
+    public function getCodemission()
+    {
+        return $this->codemission;
+    }
+
+    /**
+     * Set domaine
+     *
+     * @param string $domaine
+     *
+     * @return Mission
+     */
+    public function setDomaine($domaine)
+    {
+        $this->domaine = $domaine;
+
+        return $this;
+    }
+
+    /**
+     * Get domaine
+     *
+     * @return string
+     */
+    public function getDomaine()
+    {
+        return $this->domaine;
+    }
+
+    /**
+     * Set datecreation
+     *
+     * @param \DateTime $datecreation
+     *
+     * @return Mission
+     */
+    public function setDatecreation($datecreation)
+    {
+        $this->datecreation = $datecreation;
+
+        return $this;
+    }
+
+    /**
+     * Get datecreation
+     *
+     * @return \DateTime
+     */
+    public function getDatecreation()
+    {
+        return $this->datecreation;
+    }
+
+    /**
+     * Set datemodification
+     *
+     * @param \DateTime $datemodification
+     *
+     * @return Mission
+     */
+    public function setDatemodification($datemodification)
+    {
+        $this->datemodification = $datemodification;
+
+        return $this;
+    }
+
+    /**
+     * Get datemodification
+     *
+     * @return \DateTime
+     */
+    public function getDatemodification()
+    {
+        return $this->datemodification;
+    }
+
+    /**
+     * Set datedebut
+     *
+     * @param \DateTime $datedebut
+     *
+     * @return Mission
+     */
+    public function setDatedebut($datedebut)
+    {
+        $this->datedebut = $datedebut;
+
+        return $this;
+    }
+
+    /**
+     * Get datedebut
+     *
+     * @return \DateTime
+     */
+    public function getDatedebut()
+    {
+        return $this->datedebut;
+    }
+
+    /**
+     * Set datefin
+     *
+     * @param \DateTime $datefin
+     *
+     * @return Mission
+     */
+    public function setDatefin($datefin)
+    {
+        $this->datefin = $datefin;
+
+        return $this;
+    }
+
+    /**
+     * Get datefin
+     *
+     * @return \DateTime
+     */
+    public function getDatefin()
+    {
+        return $this->datefin;
+    }
+
+    /**
+     * Set emploi
+     *
+     * @param boolean $emploi
+     *
+     * @return Mission
+     */
+    public function setEmploi($emploi)
+    {
+        $this->emploi = $emploi;
+
+        return $this;
+    }
+
+    /**
+     * Get emploi
+     *
+     * @return boolean
+     */
+    public function getEmploi()
+    {
+        return $this->emploi;
+    }
+
+    /**
+     * Set remuneration
+     *
+     * @param integer $remuneration
+     *
+     * @return Mission
+     */
+    public function setRemuneration($remuneration)
+    {
+        $this->remuneration = $remuneration;
+
+        return $this;
+    }
+
+    /**
+     * Get remuneration
+     *
+     * @return integer
+     */
+    public function getRemuneration()
+    {
+        return $this->remuneration;
+    }
+
+    /**
+     * Set horaire
+     *
+     * @param string $horaire
+     *
+     * @return Mission
+     */
+    public function setHoraire($horaire)
+    {
+        $this->horaire = $horaire;
+
+        return $this;
+    }
+
+    /**
+     * Get horaire
+     *
+     * @return string
+     */
+    public function getHoraire()
+    {
+        return $this->horaire;
+    }
+
+    /**
+     * Set suspendu
+     *
+     * @param boolean $suspendu
+     *
+     * @return Mission
+     */
+    public function setSuspendu($suspendu)
+    {
+        $this->suspendu = $suspendu;
+
+        return $this;
+    }
+
+    /**
+     * Get suspendu
+     *
+     * @return boolean
+     */
+    public function getSuspendu()
+    {
+        return $this->suspendu;
+    }
+
+    /**
+     * Set etablissement
+     *
+     * @param Etablissement $etablissement
+     *
+     * @return Mission
+     */
+    public function setEtablissement(Etablissement $etablissement = null)
     {
         $this->etablissement = $etablissement;
 
@@ -679,6 +716,54 @@ class Mission
     public function getEtablissement()
     {
         return $this->etablissement;
+    }
+
+    /**
+     * Set tuteur
+     *
+     * @param \GenericBundle\Entity\User $tuteur
+     *
+     * @return Mission
+     */
+    public function setTuteur(User $tuteur = null)
+    {
+        $this->tuteur = $tuteur;
+
+        return $this;
+    }
+
+    /**
+     * Get tuteur
+     *
+     * @return \GenericBundle\Entity\User
+     */
+    public function getTuteur()
+    {
+        return $this->tuteur;
+    }
+
+    /**
+     * Set apprentit
+     *
+     * @param \GenericBundle\Entity\User $apprentit
+     *
+     * @return Mission
+     */
+    public function setApprentit(User $apprentit = null)
+    {
+        $this->apprentit = $apprentit;
+
+        return $this;
+    }
+
+    /**
+     * Get apprentit
+     *
+     * @return \GenericBundle\Entity\User
+     */
+    public function getApprentit()
+    {
+        return $this->apprentit;
     }
 
     /*
@@ -707,50 +792,137 @@ class Mission
     }
 
     /**
-     * Set suspendu
+     * Add reponsedef
      *
-     * @param boolean $suspendu
+     * @param \GenericBundle\Entity\Reponsedef $reponsedef
      *
      * @return Mission
      */
-    public function setSuspendu($suspendu)
+    public function addReponsedef(Reponsedef $reponsedef)
     {
-        $this->suspendu = $suspendu;
+        $this->reponsedef[] = $reponsedef;
 
         return $this;
     }
 
     /**
-     * Get suspendu
+     * Remove reponsedef
      *
-     * @return boolean
+     * @param \GenericBundle\Entity\Reponsedef $reponsedef
      */
-    public function getSuspendu()
+    public function removeReponsedef(Reponsedef $reponsedef)
     {
-        return $this->suspendu;
+        $this->reponsedef->removeElement($reponsedef);
     }
 
     /**
-     * Set apprentit
+     * Get reponsedef
      *
-     * @param \GenericBundle\Entity\User $apprentit
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReponsedef()
+    {
+        return $this->reponsedef;
+    }
+
+    /**
+     * Set nbreposte
+     *
+     * @param integer $nbreposte
      *
      * @return Mission
      */
-    public function setApprentit(\GenericBundle\Entity\User $apprentit = null)
+    public function setNbreposte($nbreposte)
     {
-        $this->apprentit = $apprentit;
+        $this->nbreposte = $nbreposte;
 
         return $this;
     }
 
     /**
-     * Get apprentit
+     * Get nbreposte
      *
-     * @return \GenericBundle\Entity\User
+     * @return integer
      */
-    public function getApprentit()
+    public function getNbreposte()
     {
-        return $this->apprentit;
+        return $this->nbreposte;
+    }
+
+    public function __toString() {
+        return $this->codemission;
+    }
+
+    /**
+     * Set commentaire
+     *
+     * @param string $commentaire
+     *
+     * @return Mission
+     */
+    public function setCommentaire($commentaire)
+    {
+        $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    /**
+     * Get commentaire
+     *
+     * @return string
+     */
+    public function getCommentaire()
+    {
+        return $this->commentaire;
+    }
+
+    /**
+     * Set statut
+     *
+     * @param integer $statut
+     *
+     * @return Mission
+     */
+    public function setStatut($statut)
+    {
+        $this->statut = $statut;
+
+        return $this;
+    }
+
+    /**
+     * Get statut
+     *
+     * @return integer
+     */
+    public function getStatut()
+    {
+        return $this->statut;
+    }
+
+
+    /**
+     * Set tier
+     *
+     * @param \GenericBundle\Entity\Tier $tier
+     *
+     * @return Mission
+     */
+    public function setTier(\GenericBundle\Entity\Tier $tier = null)
+    {
+        $this->tier = $tier;
+
+        return $this;
+    }
+
+    /**
+     * Get tier
+     *
+     * @return \GenericBundle\Entity\Tier
+     */
+    public function getTier()
+    {
+        return $this->tier;
     }
 }

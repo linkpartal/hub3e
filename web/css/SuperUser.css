@@ -1,4 +1,5 @@
 @CHARSET "utf-8";
+/*noinspection CssUnknownTarget*/
 @import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css");
 
 [class*="col-"] {
@@ -14,6 +15,7 @@ html {
 
 body {
     height: 100%;
+    font: 14px Roboto !important;
     /* force the BODY element to match the height of the HTML element */
 }
 
@@ -29,14 +31,14 @@ body {
 
 .butonLigne {
     padding: 10px 0 10px 0 !important;
-    height: 41px !important;
+    height: 46px !important;
     border: none !important;
     border-left: 15px solid #1B2024 !important;
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 98%,
     #7F7F7F 2%) !important;
     color: #7F7F7F !important;
     border-right: 15px solid #1B2024 !important;
-    font : 10px arial;
+    font : 11px Roboto;
 }
 
 .butonLigne:focus{
@@ -46,6 +48,7 @@ body {
 
 .butonLigne .part {
     height: 15px;
+    max-height: 15px;
     text-align: left;
     display: inline-block;
     white-space: nowrap;
@@ -56,7 +59,7 @@ body {
 .butonLigne .part .badge {
     background: red !important;
     color: white !important;
-    font: 7px Arial !important;
+    font: 7px Roboto !important;
 }
 
 .butonLigne .part .active {
@@ -98,16 +101,10 @@ body {
 
 .rightMenu{
     height: 46px;
-    padding: 0 !important;
-    display: block !important;
-    border:solid 1px #d2d2d2 !important;
-    border-radius: 0  !important;
+    text-transform: uppercase;
+    border:solid 1px #d2d2d2;
     background-color: #E4E4E4;
     color: #868686;
-    font : 10px arial;
-    margin: 0 !important;
-    line-height: 250%;
-
 }
 
 .info{
@@ -118,7 +115,7 @@ body {
     border-radius: 0 !important;
     border-bottom: 1px solid #7F7F7F !important;
     color: #7F7F7F !important;
-    font : 20px arial;
+    font : 20px Roboto;
     margin: 0 !important;
     line-height: 200%;
 }
@@ -178,7 +175,7 @@ iframe{
 }
 
 #leftselect, #select_info{
-    font:20px arial;
+    font:16px Roboto;
     width: 100%;
     height: 40px;
     border-radius: 0;
@@ -188,7 +185,6 @@ iframe{
 }
 
 .affichage{
-    background: #1B2024;
     margin: 15px 0 0 15px;
     padding: 0 0;
     border-left: 10px solid white;
@@ -208,7 +204,7 @@ iframe{
 
 .Liste {
     background: white;
-    margin: 15px 0 0 15px;
+    margin: 15px 0 0 10px;
     padding: 0 0;
     text-align: left;
     display: table;
@@ -217,7 +213,7 @@ iframe{
 }
 
 .Liste .row{
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #EEE;
     border-left: 15px solid white;
     border-right: 15px solid white;
     display: table-row
@@ -231,7 +227,7 @@ iframe{
     border: none !important;
     border-radius: 0 !important;
     color: #7F7F7F !important;
-    font : 20px arial;
+    font : 20px Roboto;
     margin: 0 !important;
 }
 
@@ -245,17 +241,17 @@ iframe{
 }
 
 .Liste .row .cell .button.collapsed:before{
-    font-family: 'Glyphicons Halflings';
+    font-family: 'Glyphicons Halflings', serif;
     content:" \e252";
 }
 
 .Liste .row .cell .button:before{
-    font-family: 'Glyphicons Halflings';
+    font-family: 'Glyphicons Halflings', serif;
     content:" \e253";
 }
 
 .Liste .row .cell .button:before {
-    font-family: 'Glyphicons Halflings';
+    font-family: 'Glyphicons Halflings', serif;
     content:" \e253";
 }
 
@@ -267,4 +263,34 @@ iframe{
     overflow: hidden;
     display: table-row-group;
 .transition(height .35s ease);
+}
+
+.NavButtonIframe {
+    font:14px Roboto;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 0;
+    background: #d2d2d2 ;
+    border: 0;
+    color: #337AB7 ;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+}
+.NavButtonIframe.active {
+    background-color: #1abc9c !important;
+    color: black !important;
+
+}
+.StatutMission {
+    position: absolute;
+    right: 0;
+    z-index: 10;
+    top:0;
+    color: #2975cb;
+    background: white;
+    border-radius: 2px;
+    margin: 0;
 }

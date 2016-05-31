@@ -1,9 +1,13 @@
 @CHARSET "utf-8";
 
+body{
+    font: 14px Roboto !important;
+}
+
 .popup{
-    position: absolute;
+    position: fixed;
     display: none;
-    z-index: 5;
+    z-index: 5000000;
     height: 100%;
     overflow-y: auto;
     width: 100%;
@@ -14,16 +18,26 @@
 {
     height: 100%;
     width: 100%;
-    position: absolute;
+    position: fixed;
 }
 
+.popup .formContainer
+{
+    padding: 0;
+    border:10px solid white;
+    display: block;
+    overflow:hidden;
+    background-color: white;
+    margin-bottom: 40px;
+}
 .popup .nav
 {
     border: 1px solid rgb(230, 230, 230);
     background-color: rgb(61, 138, 212);
     height: 79px;
-    font-size: 16px; width: 100%;border-radius: 0;
-    font-family: Roboto;
+    font: 16px Roboto;
+    width: 100%;
+    border-radius: 0;
     color: white;
     text-transform: uppercase;
     line-height: 4;
@@ -51,9 +65,8 @@
 .popup .div_form .input
 {
     width: 100%;
-    font-size: 18px;
+    font: 18px Roboto;
     height: 40px;
-    font-family: Roboto;
     color: rgb(75, 75, 75);
     float: left;
     text-align: left;
@@ -64,10 +77,10 @@
 
 .popup .div_form .date
 {
-    width: 100%;
-    font-size: 18px;
+    width: calc(100% - 10px);
+    font: 18px Roboto;
+    float: left;
     height: 40px;
-    font-family: Roboto;
     color: rgb(75, 75, 75);
     text-align: left;
     border: 1px solid rgb(230, 230, 230);
@@ -78,9 +91,8 @@
 #IE .popup .div_form .date
 {
     width: 300%;
-    font-size: 18px;
+    font: 18px Roboto;
     height: 40px;
-    font-family: Roboto;
     color: rgb(75, 75, 75);
     text-align: left;
     border: 1px solid rgb(230, 230, 230);
@@ -91,8 +103,7 @@
 .popup .div_button .blue
 {
     border: 0;
-    font-size: 18px;
-    font-family: Roboto;
+    font: 18px Roboto;
     color: white;
     text-align: left;
     background-color: rgb(61, 138, 212);
@@ -104,8 +115,7 @@
 .form .info_formation .blue
 {
     border: 0;
-    font-size: 18px;
-    font-family: Roboto;
+    font: 18px Roboto;
     color: white;
     text-align: left;
     background-color: rgb(61, 138, 212);
@@ -124,7 +134,25 @@
     border: 0;
     width: 300px;
     text-align: center;
-    align:center;
 }
 
+form .NavBarTier
+{
+    height: 54px;
+}
 
+form .NavBarTier button
+{
+    height: 100%;
+    font: 20px Roboto;
+    color: rgb(98, 98, 98);
+    text-transform: uppercase;
+    background-color: rgb(248, 248, 248);
+    border: none;
+}
+
+form .NavBarTier button.active
+{
+    color: white  !important;
+    background-color: #337AB7  !important;
+}

@@ -3,6 +3,7 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Reponsedef
@@ -38,13 +39,13 @@ class Reponsedef
     /**
      * @var string
      *
-     * @ORM\Column(name="Score", type="string", length=45, nullable=true)
+     * @ORM\Column(name="Score", type="integer", length=45, nullable=true)
      */
 
     private $score;
 
     /**
-     * @var \Questiondef
+     * @var \GenericBundle\Entity\Questiondef
      *
      * @ORM\ManyToOne(targetEntity="Questiondef")
      * @ORM\JoinColumns({
@@ -56,7 +57,7 @@ class Reponsedef
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="reponsedef")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="reponsedef", cascade={"remove"})
      * @ORM\JoinTable(name="reponsedef_has_users",
      *   joinColumns={
      *     @ORM\JoinColumn(name="reponsedef_id", referencedColumnName="id")
@@ -68,10 +69,26 @@ class Reponsedef
      */
     private $users;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Mission", inversedBy="reponsedef")
+     * @ORM\JoinTable(name="reponsedef_Mission",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="reponsedef_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="mission_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $missions;
+
 
     public function __construct()
     {
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->missions = new ArrayCollection();
     }
 
 
@@ -140,7 +157,7 @@ class Reponsedef
     /**
      * Set score
      *
-     * @param string $score
+     * @param integer $score
      *
      * @return Reponsedef
      */
@@ -154,7 +171,7 @@ class Reponsedef
     /**
      * Get score
      *
-     * @return string
+     * @return integer
      */
     public function getScore()
     {
@@ -170,7 +187,7 @@ class Reponsedef
      *
      * @return Reponsedef
      */
-    public function setQuestiondef(\GenericBundle\Entity\Questiondef $questiondef = null)
+    public function setQuestiondef(Questiondef $questiondef = null)
     {
         $this->questiondef = $questiondef;
 
@@ -187,7 +204,7 @@ class Reponsedef
         return $this->questiondef;
     }
 
-    static function sort_reponses_by_order(\GenericBundle\Entity\Reponsedef $a,\GenericBundle\Entity\Reponsedef $b) {
+    static function sort_reponses_by_order(Reponsedef $a,Reponsedef $b) {
         if($a->getOrdre() == $b->getOrdre()){ return 0 ; }
         return ($a->getOrdre()< $b->getOrdre()) ? -1 : 1;
     }
@@ -199,7 +216,7 @@ class Reponsedef
      *
      * @return Reponsedef
      */
-    public function addUser(\GenericBundle\Entity\User $user)
+    public function addUser(User $user)
     {
         $this->users[] = $user;
 
@@ -211,7 +228,7 @@ class Reponsedef
      *
      * @param \GenericBundle\Entity\User $user
      */
-    public function removeUser(\GenericBundle\Entity\User $user)
+    public function removeUser(User $user)
     {
         $this->users->removeElement($user);
     }
@@ -224,5 +241,43 @@ class Reponsedef
     public function getUsers()
     {
         return $this->users;
+    }
+
+    public function __toString() {
+        return $this->id.' '. $this->reponse;
+    }
+
+    /**
+     * Add mission
+     *
+     * @param \GenericBundle\Entity\Mission $mission
+     *
+     * @return Reponsedef
+     */
+    public function addMission(Mission $mission)
+    {
+        $this->missions[] = $mission;
+
+        return $this;
+    }
+
+    /**
+     * Remove mission
+     *
+     * @param \GenericBundle\Entity\Mission $mission
+     */
+    public function removeMission(Mission $mission)
+    {
+        $this->missions->removeElement($mission);
+    }
+
+    /**
+     * Get missions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMissions()
+    {
+        return $this->missions;
     }
 }

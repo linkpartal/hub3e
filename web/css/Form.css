@@ -1,0 +1,52 @@
+.container .Liste .cell label{
+    color: black;
+    font-size: 14px;
+    font-weight: normal;;
+}
+
+.container .Liste .cell, .inputcontainer label, .inputcontainer .champ {
+    font-size: 14px;
+    padding: 14px 0 10px 0 !important;
+}
+
+.inputcontainer .champ{
+    padding-left: 8px !important;
+}
+
+.container .NavButtonIframe.active {
+    background-color: #337AB7 !important;
+    color: #fff !important;
+}
+
+.NavButtonIframe {
+    line-height: 37px;
+}
+
+#user .butonLigne .part {
+    font-size: 14px;
+}
+
+.container .inputcontainer .champ {
+    background-color: #efefef;
+}
+
+.addButton{
+
+}
+
+.BtnText{
+
+}
+
+.addButton .topbaradd{
+    height: 26px;
+    border-radius: 0;
+}
+
+.buttonInfoApprenant{
+    text-align : center;
+}
+
+input::-webkit-calendar-picker-indicator {
+    opacity: 100;
+}

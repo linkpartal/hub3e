@@ -1,7 +1,3 @@
-admin_afficheMission:
-    path: /affichageMission/id={id}
-    defaults: { _controller: MissionBundle:Default:affichageMission}
-
 supprimer_Mission:
     path:  /suppMission/{id}
     defaults: {_controller: MissionBundle:Default:suppMission}
@@ -30,5 +26,19 @@ Valider_Diffusion:
 postuler_Mission:
     path: /postuler/id={id}
     defaults: { _controller: MissionBundle:Default:Postuler}
+
+Assigner_tuteur:
+    path: /assignertuteur/id={id}
+    defaults: { _controller: MissionBundle:Default:AssignerTuteur}
+
+admin_afficheMission:
+    path: /affichageMissionForm/id={id}/idFor={idFor}
+    defaults: { _controller: MissionBundle:Default:affichageMissionForm}
+
+ModifierStatutMission:
+    path: /ModifStatutMission/id={id}/statut={statut}
+    defaults: { _controller: MissionBundle:Default:ModifStatutMission}
+
+
 
 

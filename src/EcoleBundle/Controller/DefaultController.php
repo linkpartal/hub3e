@@ -12,15 +12,21 @@ class DefaultController extends Controller
 
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        if($user->getPhotos())
+        if($user->getPhotos() and !is_string($user->getPhotos()))
         {
             $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
         }
 
-
-        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
+        $messages = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user));
+        $messageNonLu = 0;
+        foreach($messages as $msg){
+            if(!$msg->getStatut()==1 and !$msg->getStatut()==-1){
+                $messageNonLu++;
+            }
+        }
+        /*$notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
         $serializer = $this->get('jms_serializer');
-        $jsonContent = $serializer->serialize($notifications, 'json');
+        $jsonContent = $serializer->serialize($notifications, 'json');*/
 
         $ecoles = array();
         $ecoles = array_merge($ecoles,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findAdressesOfEcole($user->getTier()->getId()));
@@ -47,13 +53,17 @@ class DefaultController extends Controller
                 $diffusions = $this->getDoctrine()->getRepository('GenericBundle:Diffusion')->findBy(array('formation'=>$formation));
                 foreach($diffusions as $diffusion)
                 {
-                    if($diffusion->getStatut()==5)
-                    {
-                       array_push($mes_missions,$diffusion->getMission());
+                    if((($diffusion->getMission()->getStatut() == 1 or $diffusion->getMission()->getStatut() == 2) and $diffusion->getMission()->getTier() == $user->getTier())
+                        or ($diffusion->getMission()->getStatut() == 2 and in_array($user->getTier(),$diffusion->getMission()->getTier()->getTier1()->toArray()) ) or $diffusion->getMission()->getStatut() == 3){
+                        if($diffusion->getStatut()==5 and !in_array($diffusion->getMission(), $mes_missions))
+                        {
+                            array_push($mes_missions,$diffusion->getMission());
+                        }
+                        elseif($diffusion->getStatut()==1 and !in_array($diffusion->getMission(), $mes_missions)){
+                            array_push($missions_propose,$diffusion->getMission());
+                        }
                     }
-                    elseif($diffusion->getStatut()==1){
-                        array_push($missions_propose,$diffusion->getMission());
-                    }
+
                 }
             }
         }
@@ -63,7 +73,7 @@ class DefaultController extends Controller
         $notapprenant = array();
         foreach($users as $userd)
         {
-            if($user->hasRole('ROLE_APPRENANT'))
+            if($userd->hasRole('ROLE_APPRENANT'))
             {
                 array_push($apprenants,$userd);
             }
@@ -71,19 +81,14 @@ class DefaultController extends Controller
                 array_push($notapprenant,$userd);
             }
         }
-        $import_apprenant = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser()));
-        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$user->getTier()));
+
+        $licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$user->getTier(),'suspendu'=>false));
         //$missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date'=>'DESC'));
 
 
 
-        return $this->render('EcoleBundle:Adminecole:index.html.twig', array('ecoles'=>$ecoles,'notifications'=>$jsonContent ,'users'=>$notapprenant,
-            'AllLicences'=>$licences,'societes'=>$user->getReferenciel(),'missions'=>$mes_missions,'missions_propose'=>$missions_propose,'apprenants'=>$apprenants,'import_apprenants'=>$import_apprenant,'image'=>$user->getPhotos()));
-    }
-
-    public function loadiframeAction()
-    {
-        return $this->render('EcoleBundle:Adminecole:index.html.twig');
+        return $this->render('EcoleBundle:Adminecole:index.html.twig', array('ecoles'=>$ecoles,/*'notifications'=>$jsonContent ,*/'users'=>$notapprenant,'AllLicences'=>$licences,
+            'societes'=>$user->getReferenciel(),'missions'=>$mes_missions,'missions_propose'=>$missions_propose,'apprenants'=>$apprenants,'image'=>$user->getPhotos(),'messages'=>$messageNonLu));
     }
 
     public function affichageLicenceAction($id)

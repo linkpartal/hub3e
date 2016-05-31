@@ -10,26 +10,39 @@ class DefaultController extends Controller
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
+        /*$notifications = $this->getDoctrine()->getRepository('GenericBundle:Notification')->findBy(array('user'=>$user));
         $serializer = $this->get('jms_serializer');
-        $jsonContent = $serializer->serialize($notifications, 'json');
+        $jsonContent = $serializer->serialize($notifications, 'json');*/
 
-        $societes = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findSocietes();
-        foreach($societes as $key => $societe)
-        {
-            if($societe->getSuspendu())
-            {
-                unset($societes[$key]);
-            }
-        }
-
-        if($user->getPhotos())
+        if($user->getPhotos() and !is_string($user->getPhotos()))
         {
             $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
         }
 
-        $missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date'=>'DESC'));
 
-        return $this->render('ApprenantBundle:Default:index.html.twig', array('notifications'=>$jsonContent ,'societes'=>$societes,'missions'=>$missions,'image'=>$user->getPhotos()));
+        $messages = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user));
+        $messageNonLu = 0;
+        foreach($messages as $msg){
+            if(!$msg->getStatut()==1 and !$msg->getStatut()==-1){
+                $messageNonLu++;
+            }
+        }
+
+
+        $societes = array();
+        $missions = array();
+        foreach($this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user)) as $message){
+
+            if(!$message->getMission()->getEtablissement()->getSuspendu())
+            {
+                array_push($missions,$message->getMission());
+                array_push($societes,$message->getMission()->getEtablissement());
+
+            }
+
+        }
+
+
+        return $this->render('ApprenantBundle:Default:index.html.twig', array(/*'notifications'=>$jsonContent ,*/'societes'=>$societes,'missions'=>$missions,'image'=>$user->getPhotos(),'messages'=>$messageNonLu));
     }
 }

@@ -3,12 +3,13 @@
 namespace GenericBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * ImportCandidat
  *
  * @ORM\Table(name="import_candidat")
- * @ORM\Entity(repositoryClass="GenericBundle\Repository\ImportCandidatRepository")
+ * @ORM\Entity
  */
 class ImportCandidat
 {
@@ -75,7 +76,7 @@ class ImportCandidat
      *
      * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $user;
@@ -85,7 +86,7 @@ class ImportCandidat
      *
      * @ORM\ManyToOne(targetEntity="GenericBundle\Entity\Etablissement")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="etablissement_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="etablissement_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $etablissement;
@@ -99,29 +100,6 @@ class ImportCandidat
      * })
      */
     private $info;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\Hobbies", mappedBy="importCandidat")
-     */
-    private $hobbies;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="GenericBundle\Entity\Langue", mappedBy="importCandidat")
-     */
-    private $langue;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->hobbies = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->langue = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Get id
@@ -284,7 +262,7 @@ class ImportCandidat
      *
      * @return ImportCandidat
      */
-    public function setUser(\GenericBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -308,7 +286,7 @@ class ImportCandidat
      *
      * @return ImportCandidat
      */
-    public function setEtablissement(\GenericBundle\Entity\Etablissement $etablissement = null)
+    public function setEtablissement(Etablissement $etablissement = null)
     {
         $this->etablissement = $etablissement;
 
@@ -332,7 +310,7 @@ class ImportCandidat
      *
      * @return ImportCandidat
      */
-    public function setInfo(\GenericBundle\Entity\Infocomplementaire $info = null)
+    public function setInfo(Infocomplementaire $info = null)
     {
         $this->info = $info;
 
@@ -347,74 +325,6 @@ class ImportCandidat
     public function getInfo()
     {
         return $this->info;
-    }
-
-    /**
-     * Add hobby
-     *
-     * @param \GenericBundle\Entity\Hobbies $hobby
-     *
-     * @return ImportCandidat
-     */
-    public function addHobby(\GenericBundle\Entity\Hobbies $hobby)
-    {
-        $this->hobbies[] = $hobby;
-
-        return $this;
-    }
-
-    /**
-     * Remove hobby
-     *
-     * @param \GenericBundle\Entity\Hobbies $hobby
-     */
-    public function removeHobby(\GenericBundle\Entity\Hobbies $hobby)
-    {
-        $this->hobbies->removeElement($hobby);
-    }
-
-    /**
-     * Get hobbies
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getHobbies()
-    {
-        return $this->hobbies;
-    }
-
-    /**
-     * Add langue
-     *
-     * @param \GenericBundle\Entity\Langue $langue
-     *
-     * @return ImportCandidat
-     */
-    public function addLangue(\GenericBundle\Entity\Langue $langue)
-    {
-        $this->langue[] = $langue;
-
-        return $this;
-    }
-
-    /**
-     * Remove langue
-     *
-     * @param \GenericBundle\Entity\Langue $langue
-     */
-    public function removeLangue(\GenericBundle\Entity\Langue $langue)
-    {
-        $this->langue->removeElement($langue);
-    }
-
-    /**
-     * Get langue
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getLangue()
-    {
-        return $this->langue;
     }
 
     /**

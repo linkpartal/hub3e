@@ -6,6 +6,7 @@ namespace GenericBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Etablissement
@@ -76,9 +77,16 @@ class Etablissement
     /**
      * @var string
      *
-     * @ORM\Column(name="responsable", type="string", length=45, nullable=true)
+     * @ORM\Column(name="nomResp", type="string", length=45, nullable=true)
      */
-    private $responsable;
+    private $nomResp;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="prenomResp", type="string", length=45, nullable=true)
+     */
+    private $prenomResp;
 
     /**
      * @var string
@@ -102,6 +110,27 @@ class Etablissement
     private $site;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=45, nullable=true)
+     */
+    private $type;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="taille", type="string", length=45, nullable=true)
+     */
+    private $taille;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="secteur", type="string", length=45, nullable=true)
+     */
+    private $secteur;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
@@ -116,11 +145,11 @@ class Etablissement
     private $suspendu = false;
 
     /**
-     * @var \Tier
+     * @var \GenericBundle\Entity\Tier
      *
      * @ORM\ManyToOne(targetEntity="Tier")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="tier_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="tier_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $tier;
@@ -131,10 +160,10 @@ class Etablissement
      * @ORM\ManyToMany(targetEntity="Qcmdef", inversedBy="etablissement")
      * @ORM\JoinTable(name="etablissement_has_qcmdef",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="etablissement_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="etablissement_id", referencedColumnName="id", onDelete="CASCADE")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="qcmdef_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="qcmdef_id", referencedColumnName="id", onDelete="CASCADE")
      *   }
      * )
      */
@@ -143,13 +172,13 @@ class Etablissement
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="etablissement")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="etablissement", cascade={"remove"})
      * @ORM\JoinTable(name="referentiel",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="referentiel_etablissement_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="referentiel_etablissement_id", referencedColumnName="id", onDelete="CASCADE")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="users_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="users_id", referencedColumnName="id", onDelete="CASCADE")
      *   }
      * )
      */
@@ -160,8 +189,8 @@ class Etablissement
      */
     public function __construct()
     {
-        $this->qcmdef = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->qcmdef = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     /**
@@ -343,30 +372,6 @@ class Etablissement
     }
 
     /**
-     * Set responsable
-     *
-     * @param string $responsable
-     *
-     * @return Etablissement
-     */
-    public function setResponsable($responsable)
-    {
-        $this->responsable = $responsable;
-
-        return $this;
-    }
-
-    /**
-     * Get responsable
-     *
-     * @return string
-     */
-    public function getResponsable()
-    {
-        return $this->responsable;
-    }
-
-    /**
      * Set telresponsable
      *
      * @param string $telresponsable
@@ -445,7 +450,7 @@ class Etablissement
      *
      * @return Etablissement
      */
-    public function setTier(\GenericBundle\Entity\Tier $tier = null)
+    public function setTier(Tier $tier = null)
     {
         $this->tier = $tier;
 
@@ -469,7 +474,7 @@ class Etablissement
      *
      * @return Etablissement
      */
-    public function addQcmdef(\GenericBundle\Entity\Qcmdef $qcmdef)
+    public function addQcmdef(Qcmdef $qcmdef)
     {
         $this->qcmdef[] = $qcmdef;
 
@@ -481,7 +486,7 @@ class Etablissement
      *
      * @param \GenericBundle\Entity\Qcmdef $qcmdef
      */
-    public function removeQcmdef(\GenericBundle\Entity\Qcmdef $qcmdef)
+    public function removeQcmdef(Qcmdef $qcmdef)
     {
         $this->qcmdef->removeElement($qcmdef);
     }
@@ -551,7 +556,7 @@ class Etablissement
      *
      * @return Etablissement
      */
-    public function addUser(\GenericBundle\Entity\User $user)
+    public function addUser(User $user)
     {
         $this->users[] = $user;
 
@@ -563,7 +568,7 @@ class Etablissement
      *
      * @param \GenericBundle\Entity\User $user
      */
-    public function removeUser(\GenericBundle\Entity\User $user)
+    public function removeUser(User $user)
     {
         $this->users->removeElement($user);
     }
@@ -576,5 +581,129 @@ class Etablissement
     public function getUsers()
     {
         return $this->users;
+    }
+
+    public function __toString() {
+        return $this->siret;
+    }
+
+    /**
+     * Set nomResp
+     *
+     * @param string $nomResp
+     *
+     * @return Etablissement
+     */
+    public function setNomResp($nomResp)
+    {
+        $this->nomResp = $nomResp;
+
+        return $this;
+    }
+
+    /**
+     * Get nomResp
+     *
+     * @return string
+     */
+    public function getNomResp()
+    {
+        return $this->nomResp;
+    }
+
+    /**
+     * Set prenomResp
+     *
+     * @param string $prenomResp
+     *
+     * @return Etablissement
+     */
+    public function setPrenomResp($prenomResp)
+    {
+        $this->prenomResp = $prenomResp;
+
+        return $this;
+    }
+
+    /**
+     * Get prenomResp
+     *
+     * @return string
+     */
+    public function getPrenomResp()
+    {
+        return $this->prenomResp;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return Etablissement
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set taille
+     *
+     * @param string $taille
+     *
+     * @return Etablissement
+     */
+    public function setTaille($taille)
+    {
+        $this->taille = $taille;
+
+        return $this;
+    }
+
+    /**
+     * Get taille
+     *
+     * @return string
+     */
+    public function getTaille()
+    {
+        return $this->taille;
+    }
+
+    /**
+     * Set secteur
+     *
+     * @param string $secteur
+     *
+     * @return Etablissement
+     */
+    public function setSecteur($secteur)
+    {
+        $this->secteur = $secteur;
+
+        return $this;
+    }
+
+    /**
+     * Get secteur
+     *
+     * @return string
+     */
+    public function getSecteur()
+    {
+        return $this->secteur;
     }
 }

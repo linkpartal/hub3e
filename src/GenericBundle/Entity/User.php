@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\AttributeOverrides;
 use Doctrine\ORM\Mapping\AttributeOverride;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="GenericBundle\Repository\UserRepository")
@@ -58,7 +59,7 @@ class User extends BaseUser
     /**
      * @var string
      *
-     * @ORM\Column(name="telephone", type="string", length=45, nullable=true)
+     * @ORM\Column(name="telephone", type="string", length=20, nullable=true)
      */
     private $telephone;
 
@@ -70,7 +71,7 @@ class User extends BaseUser
     private $photos;
 
     /**
-     * @var \Tier
+     * @var \GenericBundle\Entity\Tier
      *
      * @ORM\ManyToOne(targetEntity="Tier")
      * @ORM\JoinColumns({
@@ -80,7 +81,7 @@ class User extends BaseUser
     private $tier;
 
     /**
-     * @var \Etablissement
+     * @var \GenericBundle\Entity\Etablissement
      *
      * @ORM\ManyToOne(targetEntity="Etablissement")
      * @ORM\JoinColumns({
@@ -92,26 +93,12 @@ class User extends BaseUser
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Hobbies", mappedBy="users")
-     */
-    private $hobbies;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Etablissement", mappedBy="users")
+     * @ORM\ManyToMany(targetEntity="Etablissement", mappedBy="users", cascade={"remove"})
      */
     private $referenciel;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Langue", mappedBy="users")
-     */
-    private $langue;
-
-    /**
-     * @var \Infocomplementaire
+     * @var \GenericBundle\Entity\Infocomplementaire
      *
      * @ORM\ManyToOne(targetEntity="Infocomplementaire")
      * @ORM\JoinColumns({
@@ -133,10 +120,8 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
-        $this->langue = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->referenciel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->hobbies = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->reponsedef = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->referenciel = new ArrayCollection();
+        $this->reponsedef = new ArrayCollection();
     }
 
     /**
@@ -266,7 +251,7 @@ class User extends BaseUser
      *
      * @return User
      */
-    public function setTier(\GenericBundle\Entity\Tier $tier = null)
+    public function setTier(Tier $tier = null)
     {
         $this->tier = $tier;
 
@@ -290,7 +275,7 @@ class User extends BaseUser
      *
      * @return User
      */
-    public function setEtablissement(\GenericBundle\Entity\Etablissement $etablissement = null)
+    public function setEtablissement(Etablissement $etablissement = null)
     {
         $this->etablissement = $etablissement;
 
@@ -308,47 +293,13 @@ class User extends BaseUser
     }
 
     /**
-     * Add hobby
-     *
-     * @param \GenericBundle\Entity\Hobbies $hobby
-     *
-     * @return User
-     */
-    public function addHobby(\GenericBundle\Entity\Hobbies $hobby)
-    {
-        $this->hobbies[] = $hobby;
-
-        return $this;
-    }
-
-    /**
-     * Remove hobby
-     *
-     * @param \GenericBundle\Entity\Hobbies $hobby
-     */
-    public function removeHobby(\GenericBundle\Entity\Hobbies $hobby)
-    {
-        $this->hobbies->removeElement($hobby);
-    }
-
-    /**
-     * Get hobbies
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getHobbies()
-    {
-        return $this->hobbies;
-    }
-
-    /**
      * Add referenciel
      *
      * @param \GenericBundle\Entity\Etablissement $referenciel
      *
      * @return User
      */
-    public function addReferenciel(\GenericBundle\Entity\Etablissement $referenciel)
+    public function addReferenciel(Etablissement $referenciel)
     {
         $this->referenciel[] = $referenciel;
 
@@ -360,7 +311,7 @@ class User extends BaseUser
      *
      * @param \GenericBundle\Entity\Etablissement $referenciel
      */
-    public function removeReferenciel(\GenericBundle\Entity\Etablissement $referenciel)
+    public function removeReferenciel(Etablissement $referenciel)
     {
         $this->referenciel->removeElement($referenciel);
     }
@@ -376,47 +327,13 @@ class User extends BaseUser
     }
 
     /**
-     * Add langue
-     *
-     * @param \GenericBundle\Entity\Langue $langue
-     *
-     * @return User
-     */
-    public function addLangue(\GenericBundle\Entity\Langue $langue)
-    {
-        $this->langue[] = $langue;
-
-        return $this;
-    }
-
-    /**
-     * Remove langue
-     *
-     * @param \GenericBundle\Entity\Langue $langue
-     */
-    public function removeLangue(\GenericBundle\Entity\Langue $langue)
-    {
-        $this->langue->removeElement($langue);
-    }
-
-    /**
-     * Get langue
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getLangue()
-    {
-        return $this->langue;
-    }
-
-    /**
      * Set info
      *
      * @param \GenericBundle\Entity\Infocomplementaire $info
      *
      * @return User
      */
-    public function setInfo(\GenericBundle\Entity\Infocomplementaire $info = null)
+    public function setInfo(Infocomplementaire $info = null)
     {
         $this->info = $info;
 
@@ -445,7 +362,7 @@ class User extends BaseUser
      *
      * @return User
      */
-    public function addReponsedef(\GenericBundle\Entity\Reponsedef $reponsedef)
+    public function addReponsedef(Reponsedef $reponsedef)
     {
         $this->reponsedef[] = $reponsedef;
 
@@ -457,7 +374,7 @@ class User extends BaseUser
      *
      * @param \GenericBundle\Entity\Reponsedef $reponsedef
      */
-    public function removeReponsedef(\GenericBundle\Entity\Reponsedef $reponsedef)
+    public function removeReponsedef(Reponsedef $reponsedef)
     {
         $this->reponsedef->removeElement($reponsedef);
     }
