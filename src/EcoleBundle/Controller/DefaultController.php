@@ -128,5 +128,108 @@ class DefaultController extends Controller
             return $this->render('EcoleBundle:Adminecole:LoadQCM.html.twig', array('QCM'=>$qcm ,'Questions'=>$questions,'reponses'=>$reponses));
         }
 
+    public function affichageTableauBordAction()
+    {
+        $userid = $this->get('security.token_storage')->getToken()->getUser();
+        $etablissement=$userid->getEtablissement();
+        $apprenants = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement));
+        $Allapprenants =array();
+        $Importcandidat = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findAll();
+
+        foreach($apprenants as $userd)
+        {
+            if($userd->hasRole('ROLE_APPRENANT'))
+            {
+                array_push($Allapprenants,$userd);
+            }
+
+        }
+        $Myapprenantplacer=$Allapprenants;
+        foreach($Importcandidat as $userd)
+        {
+                array_push($Allapprenants,$userd);
+
+        }
+
+        // Postulation en cours
+        $Postulation = $this->getDoctrine()->getRepository('GenericBundle:Postulation')->findAll();
+        $MyPostulation =array();
+        foreach($Postulation as $postul)
+        {
+            if( in_array($postul->getuser(),$Allapprenants)  )
+            {
+                array_push($MyPostulation,$postul);
+            }
+
+        }
+        $PostulationEnCours=round((count($MyPostulation)*100)/count($Allapprenants), 2);
+
+       // formation à valider
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $sql="SELECT C FROM GenericBundle:Candidature C WHERE C.statut=:statut and C.user is not null GROUP BY C.user,C.statut " ;
+        $query = $em->createQuery($sql);
+        $query->setParameter('statut', '2');
+        $FormationCandidature = $query->getResult(); // array of ForumUser objects
+
+        $MyFormationAvalider =array();
+        foreach($FormationCandidature as $formation)
+        {
+            if( in_array($formation->getuser(),$Allapprenants)  )
+            {
+                array_push($MyFormationAvalider,$formation);
+            }
+
+        }
+
+        $FormationAvalider=round((count($MyFormationAvalider)*100)/count($Allapprenants), 2);
+
+       // apprenants à placer
+
+        $MyapprenantAplacer=$Importcandidat;
+        $ApprenantAplacer=round((count($Importcandidat)*100)/count($Allapprenants), 2);
+
+
+       // Apprenants mis en relation
+
+        $sql="SELECT M FROM GenericBundle:Message M   GROUP BY M.destinataire " ;
+        $query =$em->createQuery($sql);
+
+        $ApprenantMiseRelation = $query->getResult();
+
+        $MyApprenantRelation=array();
+        foreach($ApprenantMiseRelation as $appMise)
+        {
+            if( in_array($appMise->getDestinataire(),$Allapprenants)  )
+            {
+                array_push($MyApprenantRelation,$appMise);
+            }
+
+        }
+
+
+        $ApprenantRelation=round((count($MyApprenantRelation)*100)/count($Allapprenants), 2);
+
+
+
+        //Apprenants placés
+        $Myapprenantplacer=$Myapprenantplacer;
+        $Apprenantplacer=round((count($Myapprenantplacer)*100)/count($Allapprenants), 2);
+
+
+       //var_dump($FormationAvalider);die;
+
+
+        return $this->render('EcoleBundle:Recruteur:TableauBord.html.twig', array(
+            'PostulationEnCours'=>$PostulationEnCours,'MyPostulation'=>$MyPostulation,
+            'FormationAvalider'=>$FormationAvalider,'MyFormationAvalider'=>$MyFormationAvalider,
+            'ApprenantAplacer'=>$ApprenantAplacer,'MyapprenantAplacer'=>$MyapprenantAplacer,
+            'ApprenantRelation'=>$ApprenantRelation,'MyApprenantRelation'=>$MyApprenantRelation,
+            'Apprenantplacer'=>$Apprenantplacer,'Myapprenantplacer'=>$Myapprenantplacer
+
+        ));
+
+    }
+
 
 }

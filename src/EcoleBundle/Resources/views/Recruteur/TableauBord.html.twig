@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/mission.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/ajout.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}" />
+
+    <link rel="stylesheet" href="{{ asset('css/Form.css') }}" />
+
+
+    <title>Tableau de Bord</title>
+</head>
+<body>
+<label style="font-size: 40px ;font-family:roboto">Tableau de bord</label>
+
+<br/><br/>
+
+<div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="Import" class="col-xs-10 col-xs-offset-1 SASPaginate" >
+
+    <div class="col-xs-1" style="text-align: left;margin-left: 10px;">
+
+        <label style="font-size: 20px;font-weight: bold ;font:xx-large Roboto;">Missions</label>
+    </div>
+
+
+    <div id="Nom" title="" class="col-xs-2" style="text-align: center;margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+
+    </div>
+
+</div>
+<div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="Import" class="col-xs-10 col-xs-offset-1 SASPaginate" >
+
+    <div class="col-xs-1" style="text-align: left;margin-left: 10px;">
+
+        <label style="font-size: 20px;font-weight: bold ;font:xx-large Roboto;">Apprenants</label>
+    </div>
+
+
+    <div id="Nom" title="" class="col-xs-2" style="text-align: center;margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+
+    </div>
+
+</div>
+<div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="Import" class="col-xs-10 col-xs-offset-1 SASPaginate" >
+
+    <div class="col-xs-1" style="text-align: left;margin-left: 10px; width: 50%">
+
+        <label style="font:large Roboto;">Missions à pouvoir</label>
+    </div>
+
+
+    <div id="Nom" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
+        <div style="border: 1px solid #66b3f4;" class="graphe">
+            <strong class="barre" style="background: #66b3f4;width: 36%;">36%</strong>
+        </div>
+    </div>
+
+</div>
+<div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="Import" class="col-xs-10 col-xs-offset-1 SASPaginate" >
+
+    <div class="col-xs-1" style="text-align: left;margin-left: 10px; width: 50%">
+
+        <label style="font:large Roboto;">Postulation en cours</label>
+    </div>
+
+
+    <div id="Nom" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
+        <div style="border: 1px solid #fcb552;" class="graphe">
+            {%  if PostulationEnCours is defined %} <strong class="barre" style="background: #fcb552;width: {{ PostulationEnCours }}%;">{{ PostulationEnCours }}%</strong> {% endif %}
+
+        </div>
+    </div>
+
+
+</div>
+<div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="Import" class="col-xs-10 col-xs-offset-1 SASPaginate" >
+
+    <div class="col-xs-1" style="text-align: left;margin-left: 10px;; width: 50%">
+
+        <label style="font:large Roboto;">Missions pourvues</label>
+    </div>
+
+
+    <div id="Nom" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
+        <div style="border: 1px solid #81c785;" class="graphe">
+            <strong class="barre" style="background:#81c785;width: 36%;">36%</strong>
+        </div>
+    </div>
+
+</div>
+<div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="Import" class="col-xs-10 col-xs-offset-1 SASPaginate" >
+
+    <div class="col-xs-1" style="text-align: left;margin-left: 10px; width: 50%">
+
+        <label style="font:large Roboto;">Formation à valider</label>
+    </div>
+
+
+    <div id="Nom" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
+        <div style="border: 1px solid #ec6494;" class="graphe">
+
+            {%  if FormationAvalider is defined %} <strong class="barre" style="background: #ec6494;width: {{ FormationAvalider }}%;">{{ FormationAvalider }}%</strong> {% endif %}
+        </div>
+    </div>
+
+</div>
+<div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="Import" class="col-xs-10 col-xs-offset-1 SASPaginate" >
+
+    <div class="col-xs-1" style="text-align: left;margin-left: 10px; width: 50%">
+
+        <label style="font:large Roboto;">Missions sans formations</label>
+    </div>
+
+
+    <div id="Nom" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
+        <div style="border: 1px solid #feb450;" class="graphe">
+            <strong class="barre" style="background:#feb450;width: 36%;">36%</strong>
+
+
+        </div>
+    </div>
+
+</div>
+<div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="Import" class="col-xs-10 col-xs-offset-1 SASPaginate" >
+
+    <div class="col-xs-1" style="text-align: left;margin-left: 10px; width: 50%">
+
+        <label style="font:large Roboto;">Apprenants à placer</label>
+
+    </div>
+
+
+    <div id="Nom" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
+        <div style="border: 1px solid #e77379;" class="graphe">
+
+            {%  if FormationAvalider is defined %} <strong class="barre" style="background: #e77379;width: {{ ApprenantAplacer }}%;">{{ ApprenantAplacer }}%</strong> {% endif %}
+        </div>
+    </div>
+
+</div>
+<div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="Import" class="col-xs-10 col-xs-offset-1 SASPaginate" >
+
+    <div class="col-xs-1" style="text-align: left;margin-left: 10px; width: 50%">
+
+        <label style="font:large Roboto;">Missions sans tuteurs</label>
+    </div>
+
+
+    <div id="Nom" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
+        <div style="border: 1px solid #e77379;" class="graphe">
+            <strong class="barre" style="background:#e77379;width: 36%;">36%</strong>
+        </div>
+    </div>
+
+</div>
+<div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="Import" class="col-xs-10 col-xs-offset-1 SASPaginate" >
+
+    <div class="col-xs-1" style="text-align: left;margin-left: 10px; width: 50%">
+
+        <label style="font:large Roboto;">Apprenants mis en relation</label>
+    </div>
+
+
+    <div id="Nom" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
+        <div style="border: 1px solid #64b5f4;" class="graphe">
+
+            {%  if FormationAvalider is defined %} <strong class="barre" style="background: #64b5f4;width: {{ ApprenantRelation }}%;">{{ ApprenantRelation }}%</strong> {% endif %}
+
+        </div>
+    </div>
+
+</div>
+<div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="Import" class="col-xs-10 col-xs-offset-1 SASPaginate" >
+
+    <div class="col-xs-1" style="text-align: left;margin-left: 10px; width: 50%">
+
+        <label style="font:large Roboto;">Missions sans QCM affinité</label>
+    </div>
+
+
+    <div id="Nom" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
+        <div style="border: 1px solid #ef6192;" class="graphe">
+            <strong class="barre" style="background:#ef6192;width: 36%;">36%</strong>
+        </div>
+    </div>
+
+</div>
+<div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="Import" class="col-xs-10 col-xs-offset-1 SASPaginate" >
+
+    <div class="col-xs-1" style="text-align: left;margin-left: 10px; width: 50%">
+
+        <label style="font:large Roboto;">Apprenants placés</label>
+    </div>
+
+
+    <div id="Nom" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
+
+        <div style="border: 1px solid #80c681;" class="graphe">
+
+            {%  if FormationAvalider is defined %} <strong class="barre" style="background: #80c681;width: {{ Apprenantplacer }}%;">{{ Apprenantplacer }}%</strong> {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+<div  style="text-align:left;margin-left:5px;width:48%; height: 70px;align-items: center" id="Import" class="col-xs-10 col-xs-offset-1 SASPaginate" >
+
+    <div class="col-xs-1" style="text-align: center; width: 100%">
+
+        <button   style="width:200px;height:40px;background:#3ea8f8;color:white;border:1px solid #ccc;" type="button" >CRÉER UNE MISSION   +</button>
+
+    </div>
+
+
+
+
+</div>
+<div  style="text-align:left;margin-left:5px;width:48%; height: 70px;align-items: center" id="Import" class="col-xs-10 col-xs-offset-1 SASPaginate" >
+
+    <div class="col-xs-1" style="text-align: center; width: 100%">
+
+        {#<button  onclick="show('apprenant')" style="width:200px;height:40px;background:#3ea8f8;color:white;border:1px solid #ccc;" type="button" >CRÉER UN APPRENANT   +</button>#}
+        <button  onclick="showDiv('apprenant');" style="width:200px;height:40px;background:#3ea8f8;color:white;border:1px solid #ccc;" type="button" >CRÉER UN APPRENANT   +</button>
+
+    </div>
+
+
+
+
+</div>
+
+
+
+<script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+<script src="{{ asset('js/PopUp.js') }}"></script>
+<script src="http://maps.googleapis.com/maps/api/js"></script>
+<script language="JavaScript">
+
+
+
+function showDiv(div){
+    var popup = window.parent.document.getElementById(div);
+    popup.style.display = 'block';
+
+}
+
+</script>
+</body>
+</html>

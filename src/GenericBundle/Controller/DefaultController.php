@@ -52,6 +52,8 @@ class DefaultController extends Controller
             }
             elseif(true === $this->get('security.authorization_checker')->isGranted('ROLE_RECRUTEUR'))
             {
+
+               // return $this->redirect($this->generateUrl('ecole_recruteur',array('ecole'=>$user->getEtablissement()->getTier()->getRaisonSoc())));
                 return $this->redirect($this->generateUrl('ecole_recruteur',array('ecole'=>$user->getEtablissement()->getTier()->getRaisonSoc())));
             }
             elseif(true == $this->get('security.authorization_checker')->isGranted('ROLE_TUTEUR'))

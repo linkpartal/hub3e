@@ -57,3 +57,23 @@ body{
     background-color: #257ef0 !important;
     color: white !important;
 }
+.graphe {
+    position: relative; /* IE hack */
+    width: 150px;
+
+    padding: 2px;
+    margin: 30% ;
+    height: 20px;
+    background: #E6E6E6;
+
+}
+
+.graphe .barre {
+    display: block;
+    position: relative;
+
+    text-align: center;
+    color: #333;
+    height: 1em;
+    line-height: 1em;
+}

@@ -14,4 +14,8 @@ ecole_recruteur:
     path:     /recruteur/Home/{ecole}
     defaults: { _controller: EcoleBundle:Recruteur:loadRecruteur }
 
+afficher_TableauBord:
+    path: /affichageTableauBord
+    defaults: { _controller: EcoleBundle:Default:affichageTableauBord}
+
 
