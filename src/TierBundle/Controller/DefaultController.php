@@ -415,9 +415,4 @@ class DefaultController extends Controller
         return $reponse->setData(array('Status'=>'Licence correctement supprimer'));
     }
 
-
-
-
-
-    //jjjjjjjjjjjjjjjjjjjjjjjjjj
 }

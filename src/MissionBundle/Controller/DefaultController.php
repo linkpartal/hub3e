@@ -241,11 +241,58 @@ class DefaultController extends Controller
         $miseEnrelation = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('mission'=>$mission));
 
 
-        // var_dump($mission);die;
+       // $Messages = $this->getDoctrine()->getRepository('GenericBundle:Message')->findAll();
+
+
+        $sql="SELECT Max(M.id) FROM GenericBundle:Message M  GROUP BY M.destinataire,M.mission order by M.id  " ;
+        $query = $em->createQuery($sql);
+        $max= $query->getResult();
+
+      // implode($max);
+
+
+
+
+
+
+       // $Messages = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('id'=>$max));
+
+        if(substr($this->array2string($max), 0, -1)==''){
+
+            $Messages = $this->getDoctrine()->getRepository('GenericBundle:Message')->findAll();
+        }else{
+
+            $sql="SELECT M FROM GenericBundle:Message M  WHERE M.id in (".substr($this->array2string($max), 0, -1).")  " ;
+            $query = $em->createQuery($sql);
+            $Messages = $query->getResult();
+        }
+
+
+
+        /*$CountMessions = array();
+        foreach($users as $apprenant)
+        {
+
+            array_push($CountMessions,$apprenant);
+        }
+
+
+         var_dump($CountMessions);die;*/
+        //var_dump($Messages);die;
+
         return $this->render('MissionBundle::afficheMission.html.twig',array('mission'=>$mission,'users'=>$users,'formations_prop'=>$formations_prop,'informations_maps'=>$informations_maps,
-            'tuteur_etablissement'=>$tuteurs,'scores'=>$scores,'Diffusions'=>$Diffusion,'miseEnrelation'=>$miseEnrelation));
+            'tuteur_etablissement'=>$tuteurs,'scores'=>$scores,'Diffusions'=>$Diffusion,'miseEnrelation'=>$miseEnrelation,'Messages'=>$Messages));
 
 
+    }
+
+    public function array2string($data){
+        $log_a = "";
+        foreach ($data as $key => $value) {
+            if(is_array($value))    $log_a .=  $this->array2string($value);
+            else                    $log_a .= "'".$value."',";
+        }
+        return $log_a;
     }
 
     public function ModifStatutMissionAction($id,$statut)
@@ -452,6 +499,7 @@ class DefaultController extends Controller
         return $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
+
     function cmp($a, $b)
     {
         return strcmp(mb_strtoupper($a->getPrenom()), mb_strtoupper($b->getPrenom()));
@@ -460,4 +508,8 @@ class DefaultController extends Controller
         return strcmp(mb_strtoupper($c->getPrenom().' '. $c->getNom()), mb_strtoupper($d->getPrenom().' '.$d->getNom()));
     }
 
+
+
 }
+
+

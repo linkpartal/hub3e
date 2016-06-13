@@ -1,4 +1,7 @@
 services:
-#    generic.example:
-#        class: GenericBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    HUB3E.globalTwig:
+        class: GenericBundle\Twig\globalExtension
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        tags:
+            - { name: twig.extension }

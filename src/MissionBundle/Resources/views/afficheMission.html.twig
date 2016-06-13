@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/Form.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
     {% block CSS %}
         <style>
@@ -130,13 +131,18 @@
 
                 <div class="row" style=" margin-bottom: 20px">
                     <div class="row" >
-                        <button onclick="document.getElementById('info_apprenant').style.display ='block';document.getElementById('Localisation').style.display ='none';"
-                                class="col-xs-4 onglet"  type="button" style="margin-left: 20px;width: 50%"> FICHE APPRENANT</button>
-                        <button onclick="document.getElementById('Localisation').style.display ='block';document.getElementById('info_apprenant').style.display ='none';
+                        <button onclick="document.getElementById('info_apprenant').style.display ='block';document.getElementById('Localisation').style.display ='none';document.getElementById('MissionsProposes').style.display ='none';"
+                                class="col-xs-4 onglet"  type="button" style="margin-left: 10px;width: 33%"> FICHE APPRENANT</button>
+
+
+                        <button onclick="document.getElementById('Localisation').style.display ='block';document.getElementById('info_apprenant').style.display ='none';document.getElementById('MissionsProposes').style.display ='none';
                         var center = map_localisation.getCenter();
                         google.maps.event.trigger(map_localisation, 'resize');
                         map_localisation.setCenter(center);"
-                                class="col-xs-4 onglet"  type="button" style="width: calc(50% - 50px)" >LOCALISATION</button>
+                                class="col-xs-4 onglet"  type="button" style="width: calc(33% - 33px)" >LOCALISATION</button>
+
+                        <button onclick="document.getElementById('MissionsProposes').style.display ='block';document.getElementById('Localisation').style.display ='none';document.getElementById('info_apprenant').style.display ='none';"
+                                class="col-xs-4 onglet"  type="button" style=" margin-right: 10px;width: 33%"> MISSIONS PROPOSEES</button>
 
                     </div>
 
@@ -178,6 +184,117 @@
                     </div>
                     <div id="Localisation"  style="border-top: 1px solid #B0B0B0;margin: 0;height: 281px;width: 100%;display:none;">
 
+
+                    </div>
+                    <div id="MissionsProposes" style="height: 281px;border-top: 1px solid #B0B0B0;margin: 0;overflow-y: auto;width: 100%;display:none">
+                        <div class="col-xs-12 Liste" >
+
+
+                            <div id="MissionsListe" class="col-xs-12" style="margin-bottom: 10px;height: 100%;">
+
+                                <div  name="_Mission" class="col-xs-10 col-xs-offset-1 listMission" style="height: auto;">
+
+                                    <div  title="Mission" class="col-xs-1" title="id" style="text-align: center;margin: auto;width:20%;">
+                                        Mission
+                                    </div>
+                                    <div  title="société" class="col-xs-2" style="text-align: center;margin: auto; width:20%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+
+                                        Société
+                                    </div>
+                                    <div  title="Date de mise en relation" class="col-xs-2" style="text-align: center;margin: auto;width:30%; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                        Date de mise en relation
+                                    </div>
+                                    <div   class="col-xs-2" style="text-align: center;margin: auto;width:20%; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                        Actions
+                                    </div>
+
+                                </div>
+
+                                {% if Messages is defined %}
+                                    {% set i = 0 %}
+                                    {% for mission in Messages %}
+
+
+                                    <div id="Mission{{ i }}" name="_Mission{{ mission.getDestinataire.getId() }}" class="col-xs-10 col-xs-offset-1 SASPaginate" style="height: auto;">
+
+                                        <div id="Nom" title="Mission" class="col-xs-1" title="id" style="text-align: center;margin: auto;width:20%;">
+                                            {{ mission.getMission.getCodemission() }}
+                                        </div>
+                                        <div id="societe" title="société" class="col-xs-2" style="text-align: center;margin: auto; width:20%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+
+                                            {{ mission.getMission.getEtablissement.getTier.getRaisonsoc() }}
+                                        </div>
+                                        <div id="DateMis" title="Date de mise en relation" class="col-xs-2" style="text-align: center;margin: auto;width:30%; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                            {{ mission.getDate()|date('d/m/Y H:i') }}
+                                        </div>
+                                        <div id="action"  class="col-xs-2" style="text-align: center;margin: auto;width:20%; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                             <input id="submitAnnuler" onclick="OpenUrl({{mission.getMission.getId()}},'-1');" class="blue" style="color:#666666;border:1px solid #ccc;float: left;margin-left: 5px;width:90px" type="button" value="Voir Mission">
+                                            <input id="submitAnnuler" onclick="afficher({{ i }});" class="blue" style="color:#666666;border:1px solid #ccc;float: left;margin-left: 5px ; width:90px" type="button" value="Retour RDV">
+
+                                        </div>
+
+
+                                    </div>
+                                    <div id="DivRDV{{ i }}"  class="col-xs-10 col-xs-offset-1 SASPaginate" style="text-align:left;height: auto;">
+
+
+
+                                        {% if mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut=='1' %}
+
+                                                <div class="col-xs-12" style="height: auto;horiz-align: center; text-align: center; font: small Roboto;">
+
+                                                    <textarea style="color:#2975cb;" rows="4" disabled cols="50" name="comment" id="comment">
+                                                        {{ mission.getMessage }}
+
+                                                    </textarea>
+
+
+
+                                                </div>
+
+
+                                        {% elseif not mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut is null %}
+                                            <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
+                                                        à l'attente d'une réponse de la part de l'apprenant
+
+                                             </textarea>
+
+                                        {% elseif not mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut=='1' %}
+                                            <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
+                                                        à l'attente d'une réponse de la part du tuteur
+
+                                             </textarea>
+
+
+                                        {% elseif  mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut=='-1' %}
+                                            <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
+                                                        offre déclinée par le tuteur
+
+                                             </textarea>
+
+                                        {% elseif  not mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut=='-1' %}
+                                            <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
+                                                        offre déclinée par l'apprenant
+
+                                             </textarea>
+
+                                        {% endif %}
+                                        <input id="submitAnnuler" onclick="cacher({{ i }});" class="blue" style="color:#666666;border:1px solid #ccc;float: right;margin-right: 5px" type="button" value="Annuler">
+
+
+                                    </div>
+
+                                        {% set i = i + 1 %}
+                                   {% endfor %}
+
+                                {% endif %}
+
+
+
+                            </div>
+
+
+                        </div>
                     </div>
 
 
@@ -190,14 +307,14 @@
             </div>
 
             <div class="div_button" id="buttonInformationApprenant" style="display: block;">
-                <input id="submitAnnuler" onclick="this.parentNode.parentNode.parentNode.parentNode.style.display='none';" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Annuler">
+                <input id="submitAnnuler" onclick="this.parentNode.parentNode.parentNode.parentNode.style.display='none';" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left;margin-left: 5px" type="button" value="Annuler">
                 <input id="submitMettreEnRelation"
                         {% if mission.tuteur %}
                             onclick="Show_MettreEnRelation();"
                         {% else %}
                             onclick="alert('Aucun Tuteur n\'est affecté à cette mission. Vous devez affecter un tuteur avant de pouvoir mettre en relation.')"
                         {% endif %}
-                       class="blue" type="button"  style="margin-left: 390px" value="Mettre en relation">
+                       class="blue" type="button"  style="float: right; margin-right: 5px;margin-bottom: 5px" value="Mettre en relation">
             </div>
 
 
@@ -472,11 +589,11 @@
                                     <img src="{{ asset('image/bookmark50.png') }}">
                                 </div>
 
-                                <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font: small Roboto;">RECHERCHE : DEVELOPPEMENT INFORMATIQUE </div>
-                                <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font:small Roboto;">CONTRAT : CONTRAT PRO/STAGE/TEMPS PLEIN</div>
+                                <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font: small Roboto;"><label style="color:#2975cb">Mis en relation sur {{ CountMission(user.getId) }} mission(s)</label></div>
+                                <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font:small Roboto;">Recherche : CONTRAT PRO/STAGE/TEMPS PLEIN</div>
 
 
-                                <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font:small Roboto;">STATUT : <label style="color:#2975cb">3 MISES EN RELATION</label></div>
+                                {# <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font:small Roboto;">STATUT : <label style="color:#2975cb">3 MISES EN RELATION</label></div>#}
 
 
                             </div>
@@ -488,20 +605,20 @@
                                         {% else %}
                                             onclick="alert('Aucun Tuteur n\'est affecté à cette mission. Vous devez affecter un tuteur avant de pouvoir mettre en relation.')"
                                         {% endif %}
-                                        type="button"  style=" width:150px;color: white;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;background:#2975cb;font:bold 13px Roboto;margin-bottom:10px;margin-top: 20px">
+                                        type="button"  style=" width:150px;color: white;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;background:#2975cb;font:bold 13px Roboto;margin-bottom:10px;margin-top: 20px;margin-left: -100%">
                                     METTRE EN RELATION
-                                </button>
+                                </button><br>
 
                                 <button onclick="
                                         informationApprenant({{ user.id }},'{{user.getPhotos}}','{{ user.getCivilite }}','{{ user.getNom }}','{{ user.getPrenom }}','{{ user.getEmail }}',
                                         '{{ user.getTelephone }}','{{ user.getInfo.getDateNaissance|date("d/m/Y") }}','{{ user.getInfo.getCpNaissance }}','{{ user.getInfo.getLieunaissance }}',
                                         '{{ user.getInfo.getAdresse }}','{{ scores[i] }}');show('FicheApprenant');"
-                        type="button"  style=" background:white;color: #adadad;width:150px;height:30px;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Roboto;border:1px solid #ccc;margin-bottom:10px" >
+                        type="button"  style=" background:white;color: #adadad;width:150px;height:30px;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Roboto;border:1px solid #ccc;margin-bottom:10px ;margin-left: -100%" >
                                     FICHE CONTACT
-                                </button>
+                                </button><br>
 
                                 <button type="button" style="background-color: white ;width:150px;height: 30px;
-                                padding:6px 0 6px 0;border-radius:8px;font:bold 13px Roboto;color: #adadad;border:1px solid #ccc;display: none;" >PLUS</button>
+                                padding:6px 0 6px 0;border-radius:8px;font:bold 13px Roboto;color: #adadad;border:1px solid #ccc;display: none;margin-left: -100%" >PLUS</button>
 
                             </div>
 
@@ -611,6 +728,15 @@
         show('MettreEnRelation');
     }
 
+    function OpenUrl(id,idfor){
+       var route='{{ path('admin_afficheMission',{'id': '_id','idFor':'_idFor' }) }}';
+           route=route.replace('_id',id);
+        route=route.replace('_idFor',idfor);
+        window.location=route
+       // alert(route);
+
+    }
+
     function FermerPopupMettreEnRelation(){
         document.getElementById('mettreEnRelationApprenant').style.display = 'none';
         document.getElementById('buttonMettreEnRelation').style.display = 'none';
@@ -660,6 +786,18 @@
             parent.appendChild(toSort[t]);
         }
     }*/
+
+    function afficher(id){
+    var iddiv= "DivRDV"+id
+
+        document.getElementById(iddiv).style.display= 'block';
+
+    }
+    function cacher(id){
+        var iddiv= "DivRDV"+id
+        document.getElementById(iddiv).style.display= 'none';
+    }
+
     function modifierStatutMission(value,idmis) {
         var route = '{{ path('ModifierStatutMission',{'id':"_idMission",'statut':"_value"}) }}';
         route = route.replace('_idMission', idmis);
@@ -776,8 +914,34 @@
         document.getElementById('Information_Apprenant_titree').innerHTML= nom +' '+ prenom;
         document.getElementById('Information_Apprenant_titre_adressee').innerHTML = adresse;
 
+
     }
     function informationApprenant(id,image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse,score) {
+
+        var NameDivUser = '_Mission'+id;
+        var i=0;
+        var IdDivUser=''
+        var ClassDivUser='col-xs-10 col-xs-offset-1 SASPaginate';
+       for(i=0 ; i < document.getElementsByName(NameDivUser).length;i++)
+        {
+
+            IdDivUser=IdDivUser+"|;|"+document.getElementsByName(NameDivUser)[i].id+"|;|"
+
+        };
+
+
+        for(i=0 ; i < document.getElementsByClassName(ClassDivUser).length;i++)
+        {
+            if ( !(IdDivUser.includes('|;|'+document.getElementsByClassName(ClassDivUser)[i].id+'|;|'))){
+
+                document.getElementById(document.getElementsByClassName(ClassDivUser)[i].id).style.display='none';
+            }else{
+                document.getElementById(document.getElementsByClassName(ClassDivUser)[i].id).style.display='block';
+
+            }
+
+        };
+        // mon javascript ici
         if(image != ''){
             document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
         }

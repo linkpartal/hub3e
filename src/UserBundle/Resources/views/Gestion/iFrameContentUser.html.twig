@@ -1145,10 +1145,9 @@
                                                         {% if candidature.statut == 1 or candidature.statut == 2 %}
 
                                                             <span class="glyphicon glyphicon-remove" style="color:red" aria-hidden="true" name="modification" title="Refuser" onclick="modifierStatutCandidature(this,99,'{{ candidature.id }}')"></span>
-                                                            +                                                            <span class="glyphicon glyphicon-ok" style="color:green" aria-hidden="true" name="modification"title="Valider"  onclick="modifierStatutCandidature(this,3,'{{ candidature.id }}')"></span>
+                                                    <label> + </label><span class="glyphicon glyphicon-ok" style="color:green" aria-hidden="true" name="modification"title="Valider"  onclick="modifierStatutCandidature(this,3,'{{ candidature.id }}')"></span>
                                                             {#<img style="width:25px;"  alt="Refusé"  title="Refusé" onclick="modifierStatutCandidature(this,99,'{{ candidature.id }}')" src="{{ asset('image/stop_x18.png') }}">
                                                             <img  alt="Validé" title="Validé"  onclick="modifierStatutCandidature(this,3,'{{ candidature.id }}')" src="{{ asset('image/imgValide.png') }}">#}
-
 
                                                         {% endif %}
 
@@ -1404,6 +1403,9 @@
                     {
                         div.parentNode.getElementsByTagName('img')[i].style.display = 'none';
                     }
+                    div.style.display='none';
+                    div.previousElementSibling.style.display='none';
+                    div.previousElementSibling.previousElementSibling.style.display='none';
                     document.getElementById('STATUT_APPRENANT').style.backgroundColor = "#94C400";
                     window.parent.document.getElementById('activeUser{{ User.id }}').style.backgroundColor = "#94C400";
 
@@ -1415,6 +1417,9 @@
                     {
                         div.parentNode.getElementsByTagName('img')[i].style.display = 'none';
                     }
+                    div.style.display='none';
+                    div.nextElementSibling.style.display='none';
+                    div.nextElementSibling.nextElementSibling.style.display='none';
                     document.getElementById('STATUT_APPRENANT').style.backgroundColor = "red";
                     window.parent.document.getElementById('activeUser{{ User.id }}').style.backgroundColor = "red";
                 }

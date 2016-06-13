@@ -28,13 +28,40 @@ class ImportCandidat
      * @ORM\Column(name="civilite", type="string", length=20)
      */
     private $civilite;
-
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ville", type="string", length=45, nullable=true)
+     */
+    private $ville;
     /**
      * @var string
      *
      * @ORM\Column(name="nom", type="string", length=45)
      */
     private $nom;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=45)
+     */
+    private $type;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateNaissance", type="date", nullable=true)
+     */
+    private $dateNaissance;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateCreation", type="date", nullable=true)
+     */
+    private $dateCreation;
+
 
     /**
      * @var string
@@ -349,5 +376,101 @@ class ImportCandidat
     public function getPhotos()
     {
         return $this->photos;
+    }
+
+    /**
+     * Set ville
+     *
+     * @param string $ville
+     *
+     * @return ImportCandidat
+     */
+    public function setVille($ville)
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    /**
+     * Get ville
+     *
+     * @return string
+     */
+    public function getVille()
+    {
+        return $this->ville;
+    }
+
+    /**
+     * Set dateNaissance
+     *
+     * @param \DateTime $dateNaissance
+     *
+     * @return ImportCandidat
+     */
+    public function setDateNaissance($dateNaissance)
+    {
+        $this->dateNaissance = $dateNaissance;
+
+        return $this;
+    }
+
+    /**
+     * Get dateNaissance
+     *
+     * @return \DateTime
+     */
+    public function getDateNaissance()
+    {
+        return $this->dateNaissance;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return ImportCandidat
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     *
+     * @return ImportCandidat
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
     }
 }

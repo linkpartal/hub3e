@@ -17,7 +17,7 @@
 <body onload="loading();putbadged()">
 <div id="addtier" class="popup col-xs-3">
 
-    <div onclick="document.getElementById('submittier').click();hide(this)" class="close"></div>
+    <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-3 col-xs-6 formContainer">
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
@@ -85,6 +85,7 @@
                     <option value="Secondaire">Secondaire</option>
                     <option value="Tertiaire">Tertiaire</option>
                     <option value="Quaternaire">Quaternaire</option>
+
                 </select>
 
                 <input type="hidden" class="form-control" id="Geocode" name="_Geocode[]" required>
@@ -165,7 +166,8 @@
                             <input class="input" type="tel" id="TelResp" name="_TelResp[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="20" required>
                             <input class="input" type="email" id="MailResp" name="_MailResp[]" style="width: 50%;" maxlength="45" required>
                             <!----------------------------------------------------------------------------------------------------------------------------------------------->
-                            <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Société</label>
+                            <div id="InfoAddsociete">
+                            <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Société </label>
                             <label for="TypeSoc" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Type d'entreprise</label>
                             <label for="Taille" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Taille de la socété</label>
                             <select class="input" id="TypeSoc" name="_TypeSoc[]" style="width: calc(50% - 10px);margin-right: 10px" required>
@@ -190,7 +192,8 @@
                                 <option value="Tertiaire">Tertiaire</option>
                                 <option value="Quaternaire">Quaternaire</option>
                             </select>
-
+                            </div>
+                            <!----------------------------------------------------------------------------------------------------------------------------------------------->
                             <input type="hidden" class="form-control" id="Geocode" name="_Geocode[]" required>
 
                         </div>
@@ -341,7 +344,7 @@
             <a href="{{ path('metier_user_login') }}" ><img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 100%" >   </a>
         </div>
         <div class="input-group col-xs-1" style="margin-left: 10px;border: 0;padding: 4px;height: 21px;float: left;">
-            <button onclick="show('addtier',1)" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+            <button onclick="show('addtier',1);ecole();" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                     ></button>
             <button id="ecoletop" class="BtnText"  style="color:white;white-space: nowrap;overflow: hidden; ">{% if ecoles is defined %}{{ ecoles|length }} {% endif %}Ecoles</button>
         </div>
@@ -374,8 +377,8 @@
 
             <button onclick="document.getElementById('iframe').src='{{ path('afficher_import') }}'"
                     style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">SAS Admissions</button>
-
         </div>
+
 
 
 
@@ -753,6 +756,15 @@
         {% endif %}
     }
 
+    function ecole(){
+
+
+       // document.getElementsByTagName('_TypeSoc[]').style.display='none';
+
+        //alert('kanoun');
+
+    }
+
     {#function modifierStatutMission(value,idmis) {
         ShowWaiter();
         var route = '{{ path('ModifStatutMission',{'id':"_idMission",'statut':"_value"}) }}';
@@ -849,6 +861,9 @@
             var address = document.getElementsByName('_Adresse[]')[i].value +' ' +document.getElementsByName('_Ville[]')[i].value + ' ' + document.getElementsByName('_CodeP[]')[i].value  ;
             var geocoder = new google.maps.Geocoder();
             geocoder.geocode({'address': address}, function (results, status) {
+
+
+
                 if (status === google.maps.GeocoderStatus.OK) {
                     result_input.push(results[0].geometry.location);
                     if(result_input.length == geocodes.length - 1)
@@ -861,8 +876,11 @@
                         submitAjaxForm(check,'formTier');
                     }
                 } else {
+
                     alert('Pas de géocodage trouvé pour l\'adresse spécifiée');
+
                     document.getElementById('submittier').disabled=false;
+
                 }
             });
         }

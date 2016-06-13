@@ -16,6 +16,15 @@ function show(div,hiddenval){
     {
         document.getElementById("EcoleBool").setAttribute("value",hiddenval);
     }
+    if(div =='addtier' & hiddenval =='1')
+    {
+        document.getElementById("InfoAddsociete").style.display ='none';
+    }
+    if(div =='addtier' & hiddenval =='0')
+    {
+        document.getElementById("InfoAddsociete").style.display ='block';
+    }
+
 }
 
 function stringWith (str, prefix) {

@@ -141,31 +141,108 @@
 
 </div>
 <div class="col-xs-offset-1 col-xs-10" style="margin-top:10px;margin-bottom:10px;"  >
-    <div class="col-xs-1" style="height: 100%;margin-right: 40px">
-        <button type="button" class="btn btn-default dropdown-toggle"
-                data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false"
-                style="padding:0;width: 100%; height: 40px;border: 1px solid rgb(187, 187, 187);">
-            Filtres
-        </button>
-        <ul id="profil" class="dropdown-menu" aria-labelledby="dropdownMenu1" style="color:white;background: #2975cb;">
-            <li><button style="background: transparent;border:transparent;width:100%">PROFIL</button></li>
-            <li><button style="background: transparent;border:transparent;width:100%">MESSAGERIE</button></li>
-            <li><a style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">LOGOUT</button> </a></li>
-        </ul>
 
-    </div>
-    <div class="col-xs-2" style="margin-left: 20px;height:40px;display: flex;">
-        <span class="glyphicon glyphicon-search " id="basic-addon1" style="width: 30px;height: 30px;padding: 7px;float: left;border: none;background-color: transparent;border-bottom: 1px solid #CCCCCC;margin: auto 0;"></span>
-        <input type="text" aria-describedby="basic-addon1" onkeyup="search(this.value)" style="height: 31px;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;" placeholder="Recherche ...">
-    </div>
+
+
     <div id="paginationContainer" class="customepaginate" style="max-width: 240px;float: right;display: flex;">
         <button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px;float: right;" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
     </div>
 
 </div>
+<div class="col-xs-offset-1 col-xs-10" style="margin-top:10px;margin-bottom:10px;" >
+    <label style="color: rgb(75, 75, 75);margin-left: 5px;text-align: left;float:left;" >Nom : </label><input style="float:left;" placeholder="Nom" class="input" type="text" id="Nom" name="_Nom" maxlength="45" {% if  NomRech is defined   %} {% if NomRech=="|||"  %}  {% else %} value={{ NomRech }} {% endif %}{% endif %} >
+    <label style="color: rgb(75, 75, 75);margin-left: 5px;text-align: left;float:left;" >Age : </label><input style="float:left;" class="input" type="number"  min="1" max="999" placeholder="Age" id="Age" name="_Age" required maxlength="3" {% if  AgeRech is defined   %} {% if AgeRech=="|||"  %}  {% else %} value={{ AgeRech }} {% endif %}{% endif %}>
+    <label style="color: rgb(75, 75, 75);margin-left: 5px;text-align: left;float:left;" >Ville : </label><input style="float:left;" placeholder="Ville" class="input" type="text" id="Ville" name="_Ville" maxlength="45" {% if  VilleRech is defined   %}  {% if VilleRech=="|||"  %}  {% else %} value={{ VilleRech }} {% endif %}{% endif %}>
+    <label style="color: rgb(75, 75, 75);margin-left: 5px;text-align: left;float:left;" >Type : </label>
+    <select name="_Type" id="TypeApp"   style="float:left;">
+        {% if  TypeRech is defined   %}
+            {% if TypeRech=="|||"  %}
+                <option value="" selected></option>
+                <option value="import">Apprenants importés</option>
+                <option value="ajout" >Apprenants ajoutés</option>
+            {% elseif TypeRech=="import" %}
+                <option value="" ></option>
+                <option value="import" selected>Apprenants importés</option>
+                <option value="ajout" >Apprenants ajoutés</option>
+            {% elseif TypeRech=="ajout" %}
+                <option value="" ></option>
+                <option value="import" >Apprenants importés</option>
+                <option value="ajout" selected>Apprenants ajoutés</option>
+            {% endif %}
+        {% else %}
+            <option value="" selected></option>
+            <option value="import">Apprenants importés</option>
+            <option value="ajout" >Apprenants ajoutés</option>
+        {% endif %}
+
+
+    </select>
+    <label style="color: rgb(75, 75, 75);margin-left: 5px;text-align: left;float:left;" >Date d'inscription : </label>
+    <select name="_DateInscrip" id="DateInscrip"   style="float:left;">
+
+
+        {% if  DateInscrip is defined   %}
+            {% if DateInscrip=="0"  %}
+                <option value="0" selected></option>
+                <option value="1">Aujourd'hui</option>
+                <option value="2" >Hier</option>
+                <option value="3" >Cette semaine</option>
+                <option value="4" >Ce mois</option>
+            {% elseif DateInscrip=="1" %}
+                <option value="0" ></option>
+                <option value="1" selected>Aujourd'hui</option>
+                <option value="2" >Hier</option>
+                <option value="3" >Cette semaine</option>
+                <option value="4" >Ce mois</option>
+            {% elseif DateInscrip=="2" %}
+                <option value="0" ></option>
+                <option value="1" >Aujourd'hui</option>
+                <option value="2" selected>Hier</option>
+                <option value="3" >Cette semaine</option>
+                <option value="4" >Ce mois</option>
+            {% elseif DateInscrip=="3" %}
+                <option value="0" ></option>
+                <option value="1" >Aujourd'hui</option>
+                <option value="2" >Hier</option>
+                <option value="3" selected>Cette semaine</option>
+                <option value="4" >Ce mois</option>
+            {% elseif DateInscrip=="4" %}
+                <option value="0" ></option>
+                <option value="1" >Aujourd'hui</option>
+                <option value="2" >Hier</option>
+                <option value="3" >Cette semaine</option>
+                <option value="4" selected >Ce mois</option>
+            {% endif %}
+        {% else %}
+            <option value="0" selected></option>
+            <option value="1">Aujourd'hui</option>
+            <option value="2" >Hier</option>
+            <option value="3" >Cette semaine</option>
+            <option value="4" >Ce mois</option>
+        {% endif %}
+
+
+
+    </select>
+    {#
+    <label style="color: rgb(75, 75, 75);text-align: left;" >Apprenants importés  : </label><input placeholder="AppImporte" class="input" type="text" id="AppImporte" name="_AppImporte" maxlength="45" >
+    <label style="color: rgb(75, 75, 75);text-align: left;" >Apprenants ajoutés  : </label><input placeholder="AppAjout" class="input" type="text" id="AppAjout" name="_AppAjout" maxlength="45" >
+
+    <button class="btn btn-primary" style="background-color: #247ef0;float:left; height: 25px;margin-left: 5px;vertical-align: middle ;" onclick="AjoutMulti()" type="button" title="rechercher" >
+        rechercher
+    </button>
+    #}
+    <button class="col-xs-3"  title="Lancer la recherche" type="button" onclick="Rechercher()" style="height: 100%;background-color: transparent;border: none;margin-left: 5px;float:left;">
+        <span class="glyphicon glyphicon-search" style="color: #1C5AA5" style="margin-left: 5px;float:left;"></span>
+    </button>
+
+    <button class="btn btn-primary" style="background-color: #247ef0;float:right;" onclick="AjoutMulti()" type="button" title="Ajout Multiple" >
+    Ajout Multiple
+</button>
+</div>
 <div id="SASListe" class="col-xs-12" style="margin-bottom: 40px;height: 100%;">
 {% for import in imports %}
+
     <div id="Import{{ import.getId }}" class="col-xs-10 col-xs-offset-1 SASPaginate" >
         <div name="Recherche" style="display: none;">{{ import.nom }},{{ import.prenom }},{{ import.email }},{% if import.info %}{{ import.info.adresse }},{{ import.info.cp }} {% endif %},{% if import.etablissement %}{{ import.etablissement.siret }}{% endif %}</div>
         <div class="col-xs-1" style="text-align: center;margin: auto;">
@@ -206,17 +283,24 @@
                     <span class="glyphicon glyphicon-plus"></span>
                 </button>
             {% endif %}
-            <button class="col-xs-3" title="Supprimer" onclick="supprimerLigne('{{ path('supprimer_import',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
+            <button class="col-xs-3"  title="Supprimer" onclick="supprimerLigne('{{ path('supprimer_import',{'id': import.getId}) }}',this)" type="button" style="height: 100%;background-color: transparent;border: none">
                 <span class="glyphicon glyphicon-remove"></span>
             </button>
             {% if import.erreur %}
                 <button class="col-xs-3" type="button" style="height: 100%;background-color: transparent;border: none">
                     <span class="glyphicon glyphicon-alert" style="color: red" title="{{ import.erreur }}"></span>
                 </button>
+            {% else %}
+                <button class="col-xs-3" type="button" style="height: 100%;background-color: transparent;border: none">
+
+                    <input type="checkbox" onchange="AjoutAuxMulti({{ import.getId }})" name="chk" id="choix{{ import.getId }}" value="{{ import.getId }}">
+                </button>
             {% endif %}
         </div>
     </div>
+
 {% endfor %}
+    <input type="hidden" id="Multiselect" name="Multiselect" value="">
 </div>
 <script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
@@ -234,6 +318,107 @@
             itemsToPaginate : ".SASPaginate",
             activeClass : "active-class"
         });
+
+    }
+
+    function Rechercher(){
+
+        var route
+        var nom=document.getElementById('Nom').value
+        var ville=document.getElementById('Ville').value
+        var age=document.getElementById('Age').value
+        var type=document.getElementById('TypeApp').value
+        var dateinscri=document.getElementById('DateInscrip').value
+        if(nom == ""){
+            nom="|||";
+        }
+        if(ville == ""){
+            ville="|||";
+        }
+        if(age == ""){
+            age="|||";
+        }
+        if(type == ""){
+            type="|||";
+        }
+
+
+
+        route = '{{path('afficher_import_rech',{'NomRech':"_Nom",'VilleRech':"_Ville",'AgeRech':"_Age",'TypeRech':"_Type",'DateInscrip':"_DateInscrip" })}}';
+
+        route=route.replace('_Nom',nom)
+        route=route.replace('_Ville',ville)
+        route=route.replace('_Age',age)
+        route=route.replace('_Type',type)
+        route=route.replace('_DateInscrip',dateinscri)
+
+        window.parent.document.getElementById('iframe').src=route;
+    }
+    function AjoutMulti() {
+        var cases=document.getElementById('Multiselect').value;
+
+        //alert(cases);
+        if(cases>""){
+            tableau = cases.split(';');
+
+            ShowWaiter();
+            //alert(tableau);
+            for (var i = 0; i < tableau.length; i++) {
+                var champs
+                var idChamp
+
+                idChamp='choix'+tableau[i]
+                champs=document.getElementById(idChamp)
+                champs.parentNode.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode.parentNode);
+                var route = '{{ path('importer_candidat',{'id': 'idimport'}) }}';
+                route = route.replace('idimport',tableau[i]);
+                $.ajax({
+                    type: 'get',
+                    url: route,
+                    error: function (response) {
+                        console.log(response);
+                        alert('Une erreur s\'est produite veuillez réessayer ultérieurement');
+
+                    },
+                    success: function(data){
+
+                        if(data['Ajout']=='1')
+                        {
+                            //champs.parentNode.parentNode.parentNode.removeChild(champs.parentNode.parentNode);
+
+
+                        }
+
+                    }
+                });
+
+            }
+            DeleteWaiter();
+            alert('Ajout correctement effectué');
+        }
+        else {
+            alert('Vous devez au moins sélectionner un candidat')
+        }
+
+
+
+    }
+    function AjoutAuxMulti(id){
+        var idchecked = 'choix'+id
+        if(document.getElementById(idchecked).checked == true){
+            if (document.getElementById('Multiselect').value==""){
+
+
+                document.getElementById('Multiselect').value=document.getElementById('Multiselect').value+id;
+            }
+            else{
+                document.getElementById('Multiselect').value=document.getElementById('Multiselect').value+';'+id;
+            }
+
+        }
+        else{
+            document.getElementById('Multiselect').value=document.getElementById('Multiselect').value.replace(';'+id,'')
+        }
 
     }
     function supprimerLigne(route,champs) {
@@ -426,6 +611,7 @@
         //button.value="valider";
         button.setAttribute("type","submit");
     }
+
     function search(mot){
         var mots = mot.toUpperCase().trim().split(/ +/g);
         var Recherches = document.getElementsByName('Recherche');

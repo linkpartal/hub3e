@@ -9,6 +9,22 @@ body{
     font: 14px Roboto;
     color: rgb(77, 83, 90);
 }
+.DivRDV{
+    border: 1px solid rgba(148, 148, 148,0.2);
+    height:94px;
+    display: inline-flex;
+    background-color: rgba(230, 230, 230,0.2);
+    font: 14px Roboto;
+    color: rgb(77, 83, 90);
+}
+.listMission{
+    border: 1px solid rgba(148, 148, 148,0.2);
+    height:94px;
+    display: inline-flex;
+    background-color: #247ef0;
+    font: 14px Roboto;
+    color: white;
+}
 .customepaginate li
 {
     list-style:none;

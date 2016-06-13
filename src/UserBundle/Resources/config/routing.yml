@@ -171,3 +171,7 @@ ChangementRole:
 ModifAppSas:
     path: /ModifAppSas
     defaults: { _controller: UserBundle:Default:ModifAppSas}
+
+afficher_import_rech:
+    path: /afficher_import_rech/Nom={NomRech}/Ville={VilleRech}/Age={AgeRech}/Type={TypeRech}/Date={DateInscrip}
+    defaults: { _controller: UserBundle:Default:afficherImportsRech}

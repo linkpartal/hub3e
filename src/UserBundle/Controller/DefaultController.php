@@ -325,11 +325,18 @@ class DefaultController extends Controller
         $newuser->setPassword($hash);
 
 
-        if($request->get('_role')=='ROLE_ADMINSOC' || $request->get('_role')=='ROLE_ADMINECOLE')
+        if($request->get('_role')=='ROLE_ADMINSOC')
         {
             $etab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_id'));
             $newuser->setTier($etab->getTier());
         }
+        if( $request->get('_role')=='ROLE_ADMINECOLE')
+        {
+            $etab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_id'));
+            $newuser->setTier($etab->getTier());
+            $newuser->setEtablissement($etab);
+        }
+
         if($request->get('_role')=='ROLE_RECRUTEUR' || $request->get('_role')=='ROLE_TUTEUR')
         {
             $etab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_id'));
@@ -436,6 +443,12 @@ class DefaultController extends Controller
         $apprenant->setPrenom($request->get('_Prenom'));
         $apprenant->setEmail($request->get('_Email'));
         $apprenant->setTelephone($request->get('_Telephone'));
+        $apprenant->setVille($request->get('_Ville'));
+        $apprenant->setDatenaissance(date_create_from_format('d/m/Y',$request->get('_Datenaissance')) );
+
+        $apprenant->setType('ajout');
+        $apprenant->setdateCreation(date_create());
+
         $apprenant->setInfo($InfoComp);
 
         $em->persist($apprenant);
@@ -1022,6 +1035,7 @@ class DefaultController extends Controller
                     }
                 }
                 $candidat = new ImportCandidat();
+                $datephp = ($row[4] - 25569) * 86400;
                 $candidat->setCivilite(mb_convert_encoding($row[1],'UTF-8','auto'));
                 $candidat->setNom(mb_convert_encoding($row[2],'UTF-8','auto'));
                 $candidat->setPrenom(mb_convert_encoding($row[3],'UTF-8','auto'));
@@ -1031,11 +1045,14 @@ class DefaultController extends Controller
                 $candidat->setEtablissement($etablissement);
                 $candidat->setUser($this->get('security.token_storage')->getToken()->getUser());
                 $candidat->setErreur($erreur);
-
+                $candidat->setVille(mb_convert_encoding($row[10],'UTF-8','auto'));
+                $candidat->setDatenaissance(date_create(gmdate("d-m-Y H:i:s", $datephp)));
+                $candidat->setType('import');
+                $candidat->setdateCreation(date_create());
 
                 // infocomplementaire
                 $infocomp = new Infocomplementaire();
-                $datephp = ($row[4] - 25569) * 86400;
+
                 $infocomp->setDatenaissance(date_create(gmdate("d-m-Y H:i:s", $datephp)));
                 $infocomp->setCPNaissance(mb_convert_encoding($row[5],'UTF-8','auto'));
                 $infocomp->setAdresse(mb_convert_encoding($row[8],'UTF-8','auto'));
@@ -1211,7 +1228,13 @@ class DefaultController extends Controller
 
     public function afficherImportsAction()
     {
-        $imports =$this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser()));
+  //var_dump($this->get('security.token_storage')->getToken()->getUser()->getTier()->getId());die;
+        if ($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_SUPER_ADMIN')){
+
+            $imports =$this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findAll();
+        }else{
+            $imports =$this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('etablissement'=>$this->get('security.token_storage')->getToken()->getUser()->getEtablissement()));
+        }
 
         $array_candidature = array();
         foreach($imports as $import){
@@ -1243,6 +1266,172 @@ class DefaultController extends Controller
         return $this->render('UserBundle:Gestion:Import.html.twig',array('imports'=>$imports,'candidatures'=>$array_candidature));
     }
 
+
+
+    public function afficherImportsRechAction($NomRech,$VilleRech,$AgeRech,$TypeRech,$DateInscrip)
+    {
+         //var_dump(date('Y-m-d',mktime(0,0,0,date('m')+1,0,date('Y'))),date('Y-m-d',mktime(0,0,0,date('m'),1,date('Y'))));die;
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+
+
+        if ($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
+            $sql = "SELECT i FROM GenericBundle:ImportCandidat i ";
+        }else{
+
+            $sql = "SELECT i FROM GenericBundle:ImportCandidat i WHERE i.etablissement=:etablissement ";
+        }
+
+
+            if ($NomRech != "|||") {
+                if ($sql=="SELECT i FROM GenericBundle:ImportCandidat i "){
+                    $sql .= " WHERE i.nom LIKE :nom";
+                }else{
+
+                    $sql .= " AND i.nom LIKE :nom";
+                }
+
+            }
+            if ($VilleRech != "|||") {
+                if ($sql=="SELECT i FROM GenericBundle:ImportCandidat i "){
+
+                    $sql .= " WHERE i.ville LIKE :ville";
+                }else{
+
+                    $sql .= " AND i.ville LIKE :ville";
+                }
+
+
+            }
+            if ($TypeRech != "|||") {
+                if ($sql=="SELECT i FROM GenericBundle:ImportCandidat i "){
+                    $sql .= " WHERE i.type = :type";
+                }else{
+
+                    $sql .= " AND i.type = :type";
+                }
+
+            }
+            if ($DateInscrip > "0") {
+                if ($sql=="SELECT i FROM GenericBundle:ImportCandidat i "){
+                    $sql .= " WHERE ( i.dateCreation BETWEEN :debut AND :fin )";
+                }else{
+                    $sql .= " AND ( i.dateCreation BETWEEN :debut AND :fin )";
+                }
+            }
+
+
+            $query = $em->createQuery($sql);
+        if ($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
+
+        }else{
+            $query->setParameter('etablissement', $this->getUser()->getEtablissement()->getId());
+        }
+
+
+            if ($NomRech != "|||") {
+                $query->setParameter('nom', '%' . $NomRech . '%');
+            }
+            if ($VilleRech != "|||") {
+                $query->setParameter('ville', '%' . $VilleRech . '%');
+            }
+            if ($TypeRech != "|||") {
+                $query->setParameter('type', $TypeRech);
+            }
+
+            if ($DateInscrip == "1") {
+                $debut = date_create()->format('Y-m-d');
+                $fin = date_create()->format('Y-m-d');
+                $query->setParameter('debut', $debut);
+                $query->setParameter('fin', $fin);
+            }
+
+            if ($DateInscrip == "2") {
+                $debut = date_create()->format('Y-m-d');
+                $fin = date_create()->format('Y-m-d');
+                $debut = date('Y-m-d', strtotime($debut . ' - 1 DAY'));
+                $fin = date('Y-m-d', strtotime($fin . ' - 1 DAY'));
+                $query->setParameter('debut', $debut);
+                $query->setParameter('fin', $fin);
+            }
+
+            if ($DateInscrip == "3") {
+                $debut = date_create()->format('Y-m-d');
+                $fin = date_create()->format('Y-m-d');
+                if (date('w', mktime(0, 0, 0, date('m'), date('d'), date('Y'))) == '1') {
+
+                    $debut = Date('Y-m-d', strtotime('monday', strtotime($debut)));
+                } else {
+
+                    $debut = Date('Y-m-d', strtotime('previous monday', strtotime($debut)));
+                }
+                $fin = Date('Y-m-d', strtotime('next sunday', strtotime($fin)));
+                $query->setParameter('debut', $debut);
+                $query->setParameter('fin', $fin);
+            }
+
+            if ($DateInscrip == "4") {
+                $debut = date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y')));
+                $fin = date('Y-m-d', mktime(0, 0, 0, date('m') + 1, 0, date('Y')));
+
+                $query->setParameter('debut', $debut);
+                $query->setParameter('fin', $fin);
+            }
+
+
+            $importsAll = $query->getResult(); // array of ForumUser objects
+
+        $array_candidature = array();
+        $imports = array();
+        foreach($importsAll as $import){
+
+            if($import->getPhotos() and !is_string($import->getPhotos()))
+            {
+                $import->setPhotos(base64_encode(stream_get_contents($import->getPhotos())));
+            }
+
+            $jsonstring = '[';
+            $first =true;
+            foreach($this->getDoctrine()->getRepository('GenericBundle:Candidature')->findBy(array('importcandidat'=>$import)) as $candidature){
+
+                if($first){
+                    $first = false;
+                    $jsonstring = $jsonstring . '{"NomeFormation":"'.$candidature->getFormation()->getNom().'","Adresse":"'.$candidature->getFormation()->getEtablissement()->getAdresse().'","NomEcole":"'.$candidature->getFormation()->getEtablissement()->getTier()->getRaisonsoc().'","statut":'.$candidature->getStatut().'}';
+                }else{
+                    $jsonstring = $jsonstring . ',{"NomeFormation":"'.$candidature->getFormation()->getNom().'","Adresse":"'.$candidature->getFormation()->getEtablissement()->getAdresse().'","NomEcole":"'.$candidature->getFormation()->getEtablissement()->getTier()->getRaisonsoc().'","statut":'.$candidature->getStatut().'}';
+                }
+
+            }
+
+            $jsonstring = $jsonstring . ']';
+
+            array_push($array_candidature,$jsonstring);
+
+            if ($AgeRech != "|||" ) {
+
+                if ($this->GetAgeImport($import->getDateNaissance()->format('Y-m-d H:i:s T')) == $AgeRech) {
+                    array_push($imports, $import);
+                }
+            }
+            else
+            {
+
+                array_push($imports,$import);
+            }
+
+
+
+        }
+
+
+        return $this->render('UserBundle:Gestion:Import.html.twig',array('imports'=>$imports,'candidatures'=>$array_candidature,'NomRech'=>$NomRech,'AgeRech'=>$AgeRech,'VilleRech'=>$VilleRech,'TypeRech'=>$TypeRech,'DateInscrip'=>$DateInscrip));
+    }
+
+    public function GetAgeImport($date)
+    {
+        return (int) ((time() - strtotime($date)) / 3600 / 24 / 365);
+    }
     public function supprimerImportsAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
