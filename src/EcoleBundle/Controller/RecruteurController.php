@@ -9,7 +9,7 @@ class RecruteurController extends Controller
     public function loadRecruteurAction()
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
-
+        $etablissement=$user->getEtablissement();
         if($user->getPhotos() and !is_string($user->getPhotos()))
         {
             $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
@@ -77,7 +77,7 @@ class RecruteurController extends Controller
         $uniquesocietes = array_unique($societes);
 
         return $this->render('EcoleBundle:Recruteur:index.html.twig', array(/*'notifications'=>$jsonContent ,*/'apprenants'=>$apprenants,'societes'=>$uniquesocietes,'missions'=>$mes_missions,
-            'image'=>$user->getPhotos(),'formations'=>$formations,'messages'=>$messageNonLu));
+            'image'=>$user->getPhotos(),'formations'=>$formations,'messages'=>$messageNonLu,'etablissement'=>$etablissement,'formations'=>$formations,));
     }
 
 

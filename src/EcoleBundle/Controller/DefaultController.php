@@ -133,6 +133,7 @@ class DefaultController extends Controller
         $userid = $this->get('security.token_storage')->getToken()->getUser();
         $etablissement=$userid->getEtablissement();
         $apprenants = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement));
+        $formations = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$etablissement));
         $Allapprenants =array();
         $Importcandidat = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findAll();
 
@@ -221,6 +222,8 @@ class DefaultController extends Controller
 
 
         return $this->render('EcoleBundle:Recruteur:TableauBord.html.twig', array(
+            'etablissement'=>$etablissement,
+            'formations'=>$formations,
             'PostulationEnCours'=>$PostulationEnCours,'MyPostulation'=>$MyPostulation,
             'FormationAvalider'=>$FormationAvalider,'MyFormationAvalider'=>$MyFormationAvalider,
             'ApprenantAplacer'=>$ApprenantAplacer,'MyapprenantAplacer'=>$MyapprenantAplacer,

@@ -1544,6 +1544,22 @@
             });
         }
 
+        $('#NavBarAddMission').find('button').on('click',function(){
+
+            if($(this).attr('id')=="BoutonOnlgetCandidatMission"){
+                $('#submitaddmission').val("envoyer");
+            }
+            else if($(this).attr('id')=="BoutonOnlgetFormationMission"){
+                $('#submitaddmission').val("suivant");
+            }
+            else if($(this).attr('id')=="BoutonOnlgetContactMission"){
+                $('#submitaddmission').val("suivant");
+            }
+            else if($(this).attr('id')=="BoutonOnlgetDonnéesMission"){
+                $('#submitaddmission').val("suivant");
+            }
+        });
+
         $('#submitaddmission').on('click',function(){
             var id = $('#NavBarAddMission').find('.active')[0].id;
             if(id=="BoutonOnlgetCandidatMission"){
@@ -1564,7 +1580,7 @@
                         }).length != 0){
                     document.getElementById('BoutonOnlgetDonnéesMission').click();
                 }
-                    $('#hiddenSubmitMission').click();
+                $('#hiddenSubmitMission').click();
             }
             else if(id=="BoutonOnlgetContactMission"){
                 $('#BoutonOnlgetCandidatMission').click();
@@ -1576,22 +1592,6 @@
             }
             else if(id=="BoutonOnlgetFormationMission"){
                 $('#BoutonOnlgetContactMission').click();
-            }
-        });
-
-        $('#NavBarAddMission').find('button').on('click',function(){
-
-            if($(this).attr('id')=="BoutonOnlgetCandidatMission"){
-                $('#submitaddmission').val("envoyer");
-            }
-            else if($(this).attr('id')=="BoutonOnlgetFormationMission"){
-                $('#submitaddmission').val("suivant");
-            }
-            else if($(this).attr('id')=="BoutonOnlgetContactMission"){
-                $('#submitaddmission').val("suivant");
-            }
-            else if($(this).attr('id')=="BoutonOnlgetDonnéesMission"){
-                $('#submitaddmission').val("suivant");
             }
         });
 
