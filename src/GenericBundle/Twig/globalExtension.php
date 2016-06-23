@@ -47,6 +47,7 @@ class globalExtension extends \Twig_Extension{
             'affichageProfil' => new \Twig_Function_Method($this, 'affichageProfil'),
             'GetStatutTuteurRDV' => new \Twig_Function_Method($this, 'GetStatutTuteurRDV'),
             'GetFormationCommun' => new \Twig_Function_Method($this, 'GetFormationCommun'),
+            'GetMissionSansformation' => new \Twig_Function_Method($this, 'GetMissionSansformation'),
 
 
 
@@ -55,6 +56,35 @@ class globalExtension extends \Twig_Extension{
         );
     }
 
+    function GetMissionSansformation($Tier)
+    {
+
+        $Allmissions = $this->em->getRepository('GenericBundle:Mission')->findBy(array('tier'=>$Tier));
+        $Mymissionssansformations=array();
+
+        foreach($Allmissions as $missionsf)
+        {
+            $sql="SELECT C.statut FROM GenericBundle:Diffusion C WHERE C.mission=:mission ";
+            $query = $this->em->createQuery($sql);
+            $query->setParameter('mission', $missionsf->getId());
+            $Statut = $query->getResult(); // array of ForumUser object
+
+            if(!($Allmissions))
+            {
+            }else{
+                if (!$Statut)
+                {
+
+                    // var_dump(count($missionsf));die;
+
+                    array_push($Mymissionssansformations,$missionsf);
+
+                }
+            }
+
+        }
+        return array('mission'=>$Mymissionssansformations);
+    }
 
     function GetFormationCommun($idapp,$idMission){
 

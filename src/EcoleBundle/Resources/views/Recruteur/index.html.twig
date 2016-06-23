@@ -586,9 +586,9 @@
     </div>
 </div>
 
+{# PARTIE DE CODE DE ABDELLAH SUR POSTULATION EN COURS ET ???? COMMENTE SUITE A MA REPRISE DE CETTE PARTIE #}
 
-
-<div id="PostulationEnCours" class="popup" >
+{# <div id="PostulationEnCours" class="popup" >
     <div onclick="document.getElementById('PostulationEnCours').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-9 formContainer">
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
@@ -617,7 +617,8 @@
                                 Actions
                             </div>
 
-                        </div>
+                        </div> 
+#}
 
                         {#{% if Messages is defined %}
                              {% set i = 0 %}
@@ -700,7 +701,7 @@
 
 
 
-                    </div>
+{#                     </div>
 
 
                 </div>
@@ -708,7 +709,7 @@
         </form>
 
     </div>
-</div>
+</div> #}
 
 
 
@@ -913,6 +914,423 @@
         {% endblock %}
     </div>
 
+</div>
+
+{# POPUP MISSIONS A POURVOIR #}
+{# RECOPIER LINK VERS MISSIONS / PROFIL APPRENANTS DANS LES AUTRES BLOCS #}
+
+<div id="MissionAPourvoir" class="popup" >
+    <div onclick="document.getElementById('MissionAPourvoir').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+            <div> <p> MISSIONS A POURVOIR </p></div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead>
+                    <tr>
+                        <th> INTITULE </th>
+                        <th> SOCIETE </th>
+                        <th> DATE DEPOT </th>
+                        <th> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if missions is defined %}
+                        {% for m in missions %}
+                            {% if m.statut != 2 %}
+                                <tr>
+                                    <td> {{ m.intitule }} </td>
+                                    <td> {{ m.etablissement.tier.raisonsoc }} </td>
+                                    <td> {{ m.datecreation | date ('m/Y') }} </td>
+                                    <td> 
+                                        <button class= "btn btn-default btn-xs"> 
+                                            <a href="{{ path('admin_afficheMission',{'id': m.getId,'idFor': "-1" } ) }}" target="_blank">
+                                                <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
+                                            </a>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endif %}  
+                        {% endfor %}
+                    {% endif %}
+                </tbody>    
+            </table>
+    </div>
+</div>
+
+{# POPUP MISSIONS POURVUES A REGLER QUAND LE PROCESSUS SERA TERMINE#}
+
+<div id="MissionPourvues" class="popup" >
+    <div onclick="document.getElementById('MissionPourvues').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+            <div> <p> MISSIONS POURVUES </p></div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead>
+                    <tr>
+                        <th> INTITULE </th>
+                        <th> SOCIETE </th>
+                        <th> DATE DEPOT </th>
+                        <th> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if missions is defined %}
+                        {% for m in missions %}
+                            {% if m.getStatut() == 999 %}
+                                <tr>
+                                    <td> {{ m.intitule }} </td>
+                                    <td> {{ m.etablissement.tier.raisonsoc }} </td>
+                                    <td> {{ m.datecreation | date ('m/Y') }} </td>
+                                    <td> 
+                                        <button class= "btn btn-default btn-xs"> 
+                                            <a href="{{ path('admin_afficheMission',{'id': m.getId,'idFor': "-1" } ) }}" target="_blank">
+                                                <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
+                                            </a>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </tbody>    
+            </table>
+    </div>
+</div>
+
+{# POPUP MISSIONS SANS FORMATIONS #}
+
+<div id="MissionSansFormations" class="popup" >
+    <div onclick="document.getElementById('MissionSansFormations').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+            <div> <p> MISSIONS SANS FORMATIONS </p> </div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead>
+                    <tr>
+                        <th> INTITULE </th>
+                        <th> SOCIETE </th>
+                        <th> DATE DEPOT </th>
+                        <th> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                {% set MesMissionsSansFormation=GetMissionSansformation(etablissement.getTier.getId) %}
+                    {% for m in MesMissionsSansFormation.mission %}
+                        <tr>
+                            <td> {{ m.intitule }} </td>
+                            <td> {{ m.etablissement.tier.raisonsoc }} </td>
+                            <td> {{ m.datecreation | date ('m/Y') }} </td>
+                            <td> 
+                                <button class= "btn btn-default btn-xs"> 
+                                    <a href="{{ path('admin_afficheMission',{'id': m.getId,'idFor': "-1" } ) }}" target="_blank">
+                                        <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
+                                    </a>
+                                </button>
+                            </td>
+                        </tr>                          
+                    {% endfor %}
+
+                </tbody>    
+            </table>
+    </div>
+</div>
+
+{# POPUP MISSIONS SANS TUTEUR #}
+
+<div id="MissionSansTuteur" class="popup" >
+    <div onclick="document.getElementById('MissionSansTuteur').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+            <div> <p> MISSIONS SANS TUTEUR </p></div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead>
+                    <tr>
+                        <th> INTITULE </th>
+                        <th> SOCIETE </th>
+                        <th> DATE DEPOT </th>
+                        <th> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if missions is defined %}
+                        {% for m in missions %}
+                            {% if not m.getTuteur()%} 
+                                <tr>
+                                    <td> {{ m.intitule }} </td>
+                                    <td> {{ m.etablissement.tier.raisonsoc }} </td>
+                                    <td> {{ m.datecreation | date ('m/Y') }} </td>
+                                    <td> 
+                                        <button class= "btn btn-default btn-xs"> 
+                                            <a href="{{ path('admin_afficheMission',{'id': m.getId,'idFor': "-1" } ) }}" target="_blank">
+                                                <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
+                                            </a>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </tbody>    
+            </table>
+    </div>
+</div>
+
+{# POPUP MISSIONS SANS QCM ( Manque comment est lié le qcm à la mission #}
+
+<div id="MissionSansQCM" class="popup" >
+    <div onclick="document.getElementById('MissionSansQCM').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+            <div> <p> MISSIONS SANS QCM </p></div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead>
+                    <tr>
+                        <th> INTITULE </th>
+                        <th> SOCIETE </th>
+                        <th> DATE DEPOT </th>
+                        <th> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if missions is defined %}
+                        {% if formation is defined %}
+                            {% if Qcmdef is defined %}    
+                                {% for m in missions %}
+                                    {# {% if m. ( comment trouver le qcm relié à la mission %}  #}
+                                        <tr>
+                                            <td> {{ m.intitule }} </td>
+                                            <td> {{ m.etablissement.tier.raisonsoc }} </td>
+                                            <td> {{ m.datecreation | date ('m/Y') }} </td>
+                                            <td> 
+                                                <button class= "btn btn-default btn-xs"> 
+                                                    <a href="{{ path('admin_afficheMission',{'id': m.getId,'idFor': "-1" } ) }}" target="_blank">
+                                                        <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
+                                                    </a>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    {# {% endif %} #}
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                </tbody>    
+            </table>
+    </div>
+</div>
+
+{# POPUP POSTULATIONS EN COURS #}
+{# POPUP EN COURS D'AVANCEMENT POUR POUVOIR ENCHAINER SUR LES AUTRES #}
+
+<div id="PostulationEnCours" class="popup" >
+    <div onclick="document.getElementById('PostulationEnCours').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+            <div> <p> POSTULATIONS EN COURS </p></div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead>
+                    <tr>
+                        <th> NOM PRENOM </th>
+                        <th> DATE DE CREATION </th>
+                        <th> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if apprenants is defined %}   
+                        {% for user in apprenants %}
+                                <tr>
+                                    <td> {{ user.getPhotos }} {{ user.getNom }} {{ user.getPrenom }} </td>
+                                    <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
+                                    
+                                    <td> 
+                                        <button class= "btn btn-default btn-xs"> 
+                                                <a href="{{ path('metier_user_afficheUser',{'id': user.getId} ) }}" target="_blank">
+                                                    <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
+                                                </a>
+                                        </button>
+                                    </td>
+                                </tr> 
+                        {% endfor %}
+                    {% endif %}
+                </tbody>    
+            </table>
+    </div>
+</div>
+
+{# POPUP FORMATION A VALIDER #}
+{# RESTE A REGLER LES SOUCIS CONCERNANT LA DATE DE CREATION #}
+
+<div id="FormationAValider" class="popup" >
+    <div onclick="document.getElementById('FormationAValider').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+            <div> <p> FORMATION A VALIDER </p></div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead>
+                    <tr>
+                        <th> NOM PRENOM </th>
+                        <th> DATE CREATION </th>
+                        <th> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+{#                   {% set MesFormationsAvalider=GetFormationAValider(etablissement.getTier.getId) %}
+                    {% for user in MesFormationsAvalider.user %} #}
+                    {% if apprenants is defined %}
+                        {% if candidature is defined %}    
+                            {% for user in apprenants %}
+                                {% if user.Candidature.getStatut(2) %}
+                                    <tr>
+                                        <td> {{ user.getPhotos }} {{ user.getNom }} {{ user.getPrenom }} </td>
+                                        <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
+                                        <td> 
+                                            <button class= "btn btn-default btn-xs"> 
+                                                    <a href="{{ path('metier_user_afficheUser',{'id': user.getId} ) }}" target="_blank">
+                                                        <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
+                                                    </a>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}   
+                    {% endif %}
+                </tbody>    
+            </table>
+    </div>
+</div>
+
+{# POPUP APPRENANTS A PLACER #}
+{# RESTE A REGLER LES SOUCIS CONCERNANT LA DATE DE CREATION #}
+
+<div id="ApprenantsAPlacer" class="popup" >
+    <div onclick="document.getElementById('ApprenantsAPlacer').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+            <div> <p> APPRENANTS A PLACER </p></div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead>
+                    <tr>
+                        <th> NOM PRENOM </th>
+                        <th> DATE CREATION </th>
+                        <th> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if apprenants is defined %}
+                        {% if candidature is defined %}    
+                            {% for user in apprenants %}
+                                {% if user.candidature.getStatut(3) %}
+                                    <tr>
+                                        <td> {{ user.getPhotos }} {{ user.getNom }} {{ user.getPrenom }} </td>
+                                        <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
+                                        <td> 
+                                            <button class= "btn btn-default btn-xs"> 
+                                                    <a href="{{ path('metier_user_afficheUser',{'id': user.getId} ) }}" target="_blank">
+                                                        <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
+                                                    </a>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}   
+                    {% endif %}
+                </tbody>    
+            </table>
+    </div>
+</div>
+
+{# POPUP APPRENANTS MIS EN RELATION quelle variable gère le fait qu'un apprenant est mis en relation #}
+
+<div id="ApprenantsMisEnRelation" class="popup" >
+    <div onclick="document.getElementById('ApprenantsMisEnRelation').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+            <div> <p> APPRENANTS MIS EN RELATION </p></div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead>
+                    <tr>
+                        <th> NOM PRENOM </th>
+                        <th> DATE CREATION </th>
+                        <th> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if apprenants is defined %} 
+                        {% if candidature is defined %}  
+                            {% for user in apprenants %}
+                                {# {% if %} #}
+                                    <tr>
+                                        <td> {{ user.getPhotos }} {{ user.getNom }} {{ user.getPrenom }} </td>
+                                        <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
+                                        <td> 
+                                            <button class= "btn btn-default btn-xs"> 
+                                                    <a href="{{ path('metier_user_afficheUser',{'id': user.getId} ) }}" target="_blank">
+                                                        <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
+                                                    </a>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {# {% endif %} #}
+                            {% endfor %}
+                        {% endif %}    
+                    {% endif %}
+                </tbody>    
+            </table>
+    </div>
+</div>
+
+
+{# POPUP APPRENANTS PLACES RESTE A MODIF LA REQUETE UNE FOIS QUE LE PROCESSUS SERA COMPLET SUR LA PLATEFORME#}
+
+<div id="ApprenantsPlaces" class="popup" >
+    <div onclick="document.getElementById('ApprenantsPlaces').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+            <div> <p> APPRENANTS PLACES </p></div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead>
+                    <tr>
+                        <th> NOM PRENOM </th>
+                        <th> DATE CREATION </th>
+                        <th> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if apprenants is defined %} 
+                        {% if candidature is defined %}   
+                            {% for user in apprenants %}
+                                {% if user.candidature.getStatut(999) %}  
+                                    <tr>
+                                        <td> {{ user.getPhotos }} {{ user.getNom }} {{ user.getPrenom }} </td>
+                                        <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
+                                        <td> 
+                                            <button class= "btn btn-default btn-xs"> 
+                                                    <a href="{{ path('metier_user_afficheUser',{'id': user.getId} ) }}" target="_blank">
+                                                        <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
+                                                    </a>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endif %} 
+                            {% endfor %}
+                        {% endif %}    
+                    {% endif %}
+                </tbody>    
+            </table>
+    </div>
 </div>
 
 
