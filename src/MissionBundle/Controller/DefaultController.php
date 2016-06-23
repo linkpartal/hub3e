@@ -447,6 +447,7 @@ class DefaultController extends Controller
             $postulation->setUser($this->get('security.token_storage')->getToken()->getUser());
             $postulation->setMission($mission);
             $postulation->setStatut(1);
+            //$postulation->setAction('Postuler');
             $em->persist($postulation);
             $em->flush();
 

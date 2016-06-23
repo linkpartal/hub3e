@@ -240,44 +240,27 @@
 
 
                                         {% if mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut=='1' %}
-
                                                 <div class="col-xs-12" style="height: auto;horiz-align: center; text-align: center; font: small Roboto;">
-
                                                     <textarea style="color:#2975cb;" rows="4" disabled cols="50" name="comment" id="comment">
                                                         {{ mission.getMessage }}
-
                                                     </textarea>
-
-
-
                                                 </div>
-
-
                                         {% elseif not mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut is null %}
                                             <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
                                                         à l'attente d'une réponse de la part de l'apprenant
-
                                              </textarea>
-
                                         {% elseif not mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut=='1' %}
                                             <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
                                                         à l'attente d'une réponse de la part du tuteur
-
                                              </textarea>
-
-
                                         {% elseif  mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut=='-1' %}
                                             <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
                                                         offre déclinée par le tuteur
-
                                              </textarea>
-
                                         {% elseif  not mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut=='-1' %}
                                             <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
                                                         offre déclinée par l'apprenant
-
                                              </textarea>
-
                                         {% endif %}
                                         <input id="submitAnnuler" onclick="cacher({{ i }});" class="blue" style="color:#666666;border:1px solid #ccc;float: right;margin-right: 5px" type="button" value="Annuler">
 

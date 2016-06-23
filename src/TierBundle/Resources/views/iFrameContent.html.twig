@@ -317,6 +317,8 @@
                                         {% set y = 0 %}
                                         {% for question in Questions %}
                                             <div class="inputcontainer" >
+
+                                                {{ question.question  }}
                                                 <label title="{{ question.question  }}"  style="float: left;text-overflow: ellipsis;overflow: hidden;height:40px;" >{{ question.question  }} :</label>
                                                 <div >
                                                 {% for reponse in reponses[y] %}

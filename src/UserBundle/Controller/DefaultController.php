@@ -107,6 +107,8 @@ class DefaultController extends Controller
                     }
                 }
 
+                //var_dump($userid->getEtablissement()->getId());die;
+
 
                 return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig', array('User' => $userid,
                     'Infocomplementaire' => $info, 'Parents' => $Parents, 'Experience' => $Experience, 'Recommandation' => $Recommandation, 'Diplome' => $Diplome, 'Document' => $Document,
@@ -296,6 +298,9 @@ class DefaultController extends Controller
         }
         return  $this->render('UserBundle:messagerie:Rendezvous.html.twig',array('rendezvous'=>$rendezvous));
     }
+
+
+
 
     public function UserAddedAction(Request $request)
     {
@@ -2105,6 +2110,102 @@ class DefaultController extends Controller
         }
 
         return $response->setData("Error");
+
+    }
+
+
+    public function affichageMiseEnRelationAction(){
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $MiseEnRelation= null;
+
+        $apprenants = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$user->getEtablissement()));
+
+        foreach($apprenants as $key => $value)
+        {
+            if(!$value->hasRole('ROLE_APPRENANT'))
+            {
+                unset($apprenants[$key]);
+            }
+        }
+        $MiseEnRelation = array();
+        foreach($apprenants as $apprenant){
+           // var_dump( $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$apprenant ),array('id' => 'desc')));die;
+            $MiseEnRelation = array_merge($MiseEnRelation, $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$apprenant ),array('id' => 'desc'),array('mission' => 'desc')));
+        }
+
+       //var_dump($MiseEnRelation);die;
+
+
+
+
+
+
+        $AllMiseEnRelation=$this->getDoctrine()->getRepository('GenericBundle:Message')->findAll();
+        return  $this->render('UserBundle:MiseEnRelation:MiseEnRelation.html.twig',array('MiseEnRelation'=>$MiseEnRelation,'AllMiseEnRelation'=>$AllMiseEnRelation));
+    }
+
+    public function affichageMissionProposeAction(){
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $AllMiseEnRelation=$this->getDoctrine()->getRepository('GenericBundle:Message')->findAll();
+
+        $sql="SELECT M FROM GenericBundle:Message M  WHERE M.destinataire=:destinataire GROUP BY M.destinataire,M.mission " ;
+        $query = $em->createQuery($sql);
+        $query->setParameter('destinataire', $user);
+
+        $MiseEnRelation  = $query->getResult(); // array of ForumUser objects
+
+      /*  $missions=$this->getDoctrine()->getRepository('GenericBundle:Mission')->findAll();
+        $formation =$this->getDoctrine()->getRepository('GenericBundle:Formation')->find('-1');
+        if($formation){
+            $diffusions = $em->getRepository('GenericBundle:Diffusion')->findBy(array('mission'=>$mission,'formation'=>$formation));
+        }
+        else{
+            $diffusions = $em->getRepository('GenericBundle:Diffusion')->findBy(array('mission'=>$mission));
+        }*/
+
+
+
+
+
+
+      // var_dump($MiseEnRelation);die;
+
+
+        return  $this->render('UserBundle:MiseEnRelation:MissionPropose.html.twig',array('MiseEnRelation'=>$MiseEnRelation,'AllMiseEnRelation'=>$AllMiseEnRelation));
+    }
+
+    public function affichageApprenantProposeAction(){
+
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $AllMiseEnRelation=$this->getDoctrine()->getRepository('GenericBundle:Message')->findAll();
+
+        $sql="SELECT M FROM GenericBundle:Message M  WHERE M.destinataire=:destinataire GROUP BY M.destinataire,M.mission,M.expediteur " ;
+        $query = $em->createQuery($sql);
+        $query->setParameter('destinataire', $user);
+
+        $MiseEnRelation  = $query->getResult(); // array of ForumUser objects
+
+        /*  $missions=$this->getDoctrine()->getRepository('GenericBundle:Mission')->findAll();
+          $formation =$this->getDoctrine()->getRepository('GenericBundle:Formation')->find('-1');
+          if($formation){
+              $diffusions = $em->getRepository('GenericBundle:Diffusion')->findBy(array('mission'=>$mission,'formation'=>$formation));
+          }
+          else{
+              $diffusions = $em->getRepository('GenericBundle:Diffusion')->findBy(array('mission'=>$mission));
+          }*/
+
+        // var_dump($MiseEnRelation);die;
+
+
+        return  $this->render('UserBundle:MiseEnRelation:ApprenantsPropose.html.twig',array('MiseEnRelation'=>$MiseEnRelation,'AllMiseEnRelation'=>$AllMiseEnRelation));
 
     }
 }
