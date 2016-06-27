@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/mission.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
+    {% block CSS %}{% endblock %}
+    <style>
+        .hidden{display: none !important;}
+        .ui-widget-header{color:black;}
+
+
+
+        .col-md-2, .col-md-10{
+            padding:0;
+        }
+        .panel{
+            margin-bottom: 0px;
+            background-color: #66afe9;
+        }
+        .chat-window{
+            bottom:0;
+
+
+            margin-left:10px;
+        }
+        .chat-window > div > .panel{
+            border-radius: 5px 5px 0 0;
+        }
+        .icon_minim{
+            padding:2px 10px;
+        }
+        .msg_container_base{
+            background: #e5e5e5;
+
+            margin: 0;
+            padding: 0 10px 10px;
+            max-height:300px;
+            overflow-x:hidden;
+        }
+        .top-bar {
+            background: #666;
+            color: white;
+            padding: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        .msg_receive{
+
+            padding-bottom:20px !important;
+            margin-right:0;
+
+        }
+        .msg_receive > time{
+            float: left;
+        }
+        .msg_sent{
+            padding-bottom:20px !important;
+            margin-right:0;
+        }
+        .messages {
+            background: lightgoldenrodyellow;
+
+            padding: 10px;
+            border-radius: 2px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            max-width:100%;
+        }
+
+        .messages > p {
+            font-size: 13px;
+            margin: 0 0 0.2rem 0;
+        }
+        .messages > time {
+            font-size: 11px;
+            color: grey;
+        }
+        .msg_container {
+            padding: 10px;
+
+            display: flex;
+        }
+        img {
+            display: block;
+            width: 100%;
+        }
+        .avatar {
+            position: relative;
+        }
+
+
+        .base_sent {
+            justify-content: flex-end;
+            align-items: flex-end;
+
+        }
+
+
+        .msg_sent > time{
+            float: right;
+        }
+
+
+
+
+
+        .msg_container_base::-webkit-scrollbar-track
+        {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            background-color: #F5F5F5;
+        }
+
+        .msg_container_base::-webkit-scrollbar
+        {
+            width: 12px;
+            background-color: #F5F5F5;
+        }
+
+        .msg_container_base::-webkit-scrollbar-thumb
+        {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #555;
+        }
+
+        .btn-group.dropup{
+            position:fixed;
+            left:0px;
+            bottom:0;
+        }
+    </style>
+    <title>HUB3E - {% block title %}Home{% endblock %}</title>
+
+</head>
+<body onunload="window.parent.document.getElementById('iframe').style.position ='static';window.parent.document.getElementById('iframe').style.height ='calc(100% - 72px)';">
+
+<div id="CompteRendu" class="popup" >
+    <div onclick="fermeture();hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-7" style="background-color: white;padding: 0;border:20px solid white;display: block; margin-left: 20%; ">
+
+        <form id="PopUpCompteRendu" class="formulaire" method="post">
+
+
+            <div class="div_form" id="Assister" style="display: none">
+                <div class="row" style=" margin-bottom: 20px;">
+
+                    <div class="col-xs-12" >
+                        <textarea style="height: 200px;resize: none;" class="input" name="CompteRendu" placeholder="Compte rendu" required ></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="div_form" id="Absence" style="display: none" >
+
+                <div class="row" style=" margin-bottom: 20px;">
+                    <textarea name="CompteRenduAbsent" style="height: 200px;resize: none;" class="input"  placeholder="Quelles en sont les raisons?" required ></textarea>
+                </div>
+
+            </div>
+
+
+            <div id="OUI_NON_button" class="div_button">
+                <label class="col-xs-12">Avez-vous pu assister au rendez-vous?</label>
+                <input class="blue col-xs-3 col-xs-offset-3" style="right: 10px;text-align: center"
+                       onclick="document.getElementById('Assister').style.display = 'block';document.getElementById('Assister_button').style.display = 'block';this.parentElement.style.display = 'none'"
+                       type="button" value="OUI">
+                <input class="blue col-xs-3" style="left: 10px;text-align: center"
+                       onclick="document.getElementById('Absence').style.display = 'block';document.getElementById('Absence_button').style.display = 'block';this.parentElement.style.display = 'none'"
+                       type="button"   value="NON">
+            </div>
+            <div id="Absence_button" class="div_button" style="display: none">
+                <input onclick="fermeture()" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Annuler">
+                <input class="blue" type="button" onclick="EnvoyerCompteRendu('Absence')"  style="margin-left: 390px" value="Envoyer">
+            </div>
+            <div id="Assister_button" class="div_button" style="display: none">
+                <input class="blue" onclick="fermeture()" style="background:white;color:#666666;border:1px solid #ccc;float: left;text-align: center ;width: 120px;height:50px" type="button" value="Annuler">
+                <input class="blue" type="button" onclick="EnvoyerCompteRendu('Assister')" style="margin-left: 300px;text-align:center;width: 120px;height:50px"  value="Envoyer">
+            </div>
+
+        </form>
+
+    </div>
+
+
+</div>
+<div id="ConsultationCompteRendu" class="popup" >
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-7" style="background-color: white;padding: 0;border:20px solid white;display: block; margin-left: 20%; ">
+        <div id="ComptesRenduContainer"></div>
+    </div>
+</div>
+<div id="ajounerPopUp" class="popup" >
+    <div onclick="fermeture();hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-7" style="background-color: white;padding: 0;border:20px solid white;display: block; margin-left: 20%; ">
+
+        <form id="PopUpAjournement" class="formulaire" method="post">
+
+
+            <div class="div_form" id="Assister">
+                <button type="button" onclick="AddDateTimeDiv(this)">+</button>
+                <div class="col-xs-4 col-xs-offset-4">
+                    <label class="col-xs-1">Le : </label><input title="Date du rendez-vous" name="dateRDV[]" type="text" class="col-xs-4" required>
+                    <label class="col-xs-1"> à </label><input title="Heure du rendez-vous" name="timeRDV[]" class="col-xs-4" type="text" required>
+                    <button type="button" class="col-xs-offset-1 col-xs-1" onclick="if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}">-</button>
+                </div>
+            </div>
+
+            <div id="Assister_button" class="div_button">
+                <input class="blue" onclick="fermeture()" style="background:white;color:#666666;border:1px solid #ccc;float: left;text-align: center ;width: 120px;height:50px" type="button" value="Annuler">
+                <input class="blue" type="button" onclick="Ajournement()" style="margin-left: 300px;text-align:center;width: 120px;height:50px"  value="Envoyer">
+            </div>
+
+        </form>
+
+    </div>
+
+
+</div>
+
+<div id="MiseEnRelationPopup" class="popup" >
+
+    <div onclick="fermeture();hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-7" style="background-color: white;padding: 0;border:20px solid white;display: block; margin-left: 20%; ">
+        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+
+            <div class="row chat-window col-xs-5 col-md-3" id="chat_window_1" style="width:90%;margin-left:10px;background-color: #66afe9">
+                <div style="height: 120px ">
+                    <img id="imgSociete" style="margin-top:10px;float:left;margin-left: 20px;height:70px;width:70px;margin:15px 40px;border-radius: 100%" src="{{ asset('image/entreprise.jpg') }}">
+                    <label id="lblSociete" style="margin-top:10px;float:left;margin-left: 20px"></label>
+
+                    <img id="imgApp" style="margin-top:10px;float:right;margin-right: 20px;height:70px;width:70px;margin:15px 40px;border-radius: 100%" src="">
+                    <label id="lblApp"style="margin-top:10px;float:right;" ></label>
+                </div>
+                <div class="col-xs-12 col-md-12">
+
+                    <div class="panel panel-default">
+
+        {% if AllMiseEnRelation is defined %}
+            {% set i=0 %}
+        {% for mise in AllMiseEnRelation %}
+            {% if mise.expediteur.hasrole('ROLE_APPRENANT') %}
+
+                <div id="Msg{{ i }}" class="row msg_container base_receive" style="margin-right: 1px;margin-left: 50px" name="App{{ mise.expediteur.getId() }}_Mission{{mise.mission.getId()}}">
+                    <div class="col-md-10 col-xs-10">
+                        <div class="messages msg_sent" style="background: #F5F6CE";>
+
+                            <p style="width: 70%">{{ mise.getMessage }}</p>
+
+                            <time style="margin-top: -20px;" ><label style="text-transform :uppercase;color:{{ mise.couleur }};font-size:15px">{{ mise.getAction }}</label><br>{{ mise.getDate|date('d-m-Y à H:i') }}</time>
+
+                        </div>
+                    </div>
+                    <div class="col-md-10 col-xs-10">
+
+                    </div>
+                    <div class="col-md-2 col-xs-2 avatar">
+                        {% if mise.expediteur.getPhotos %}
+                            <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="data:image/jpg;base64,{{GetMyPhoto(mise.expediteur.getId())}}">
+                        {% elseif mise.expediteur.getCivilite == 'Mme' or mise.expediteur.getCivilite == 'Madame' or mise.expediteur.getCivilite == 'Mademoiselle' %}
+                            <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/femme.jpg') }}">
+                        {% else %}
+                            <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/homme.jpg') }}">
+                        {% endif %}
+
+
+                    </div>
+                </div>
+            {% else %}
+
+
+
+                <div id="Msg{{ i }}" class="row msg_container base_sent"  style="margin-right: 50px;margin-left: -45px"  name="App{{ mise.destinataire.getId() }}_Mission{{mise.mission.getId()}}">
+                    <div class="col-md-2 col-xs-2 avatar">
+                        <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/Entreprise.jpg') }}">
+
+                    </div>
+                    <div class="col-md-10 col-xs-10">
+                        <div class="messages msg_receive" style="background: #CEECF5;">
+                            <p style="width: 70%;margin-left: 30%">{{ mise.getMessage }}
+
+                            {% if mise.getAction=='Propose rdv' %}
+                                <br/>
+                                {{ GetDateRDV(mise.destinataire.getId(),mise.mission.getId()) }}
+
+                            {% endif %}
+                            </p>
+
+                            <time style="margin-top: -20px;" ><label style="text-transform :uppercase;color:{{ mise.couleur }};font-size:15px ">{{ mise.getAction }}</label><br>{{ mise.getDate|date('d-m-Y à H:i') }}</time>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            {% set i = i + 1 %}
+        {% endfor %}
+        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+
+
+
+    </div>
+
+
+
+
+</div>
+<div style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;height: 100%;padding-bottom: 40px;overflow: hidden;">
+
+    <div class="col-xs-10 col-xs-offset-1" style="margin-top: 10px;">
+       {# <select class="input col-xs-2" title="messages" style="height:40px;">
+            <option value="les messages">Tous les rendez-vous</option>
+        </select>#}
+        <div class="col-xs-2" style="margin-left: 20px;height:40px;display: flex;">
+            <span class="glyphicon glyphicon-search col-xs-2" id="basic-addon1" style="height: 30px;padding: 7px;float: left;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;background-color: transparent;"></span>
+            <input class="col-xs-10" type="text" onkeyup="search(this.value)" aria-describedby="basic-addon1" style="height: 31px;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;background-color: transparent;" placeholder="Recherche ...">
+        </div>
+        <div id="paginationContainer" class="customepaginate" style="max-width: 240px;float: right;display: flex;">
+            <button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px;float: right;" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
+        </div>
+
+    </div>
+
+    <div id="ListeMiseEnRelation"  class="col-xs-10 col-xs-offset-1">
+        {% if MiseEnRelation is defined %}
+            {% for mise in MiseEnRelation %}
+
+                <div id="{{ mise.id }}" class="Liste" style="border: 1px solid #ddd;margin: 0;height:100px;width: 100%;" >
+                   {# <div name="Recherche" style="display: none;">{{ rdv.destinataire.nom }},{{ rdv.destinataire.prenom }},{{ rdv.destinataire.email }},{{ rdv.tuteur.nom }},{{ rdv.tuteur.prenom }},{{ rdv.tuteur.email }},{% if rdv.mission %}{{ rdv.mission.intitule }},{{ rdv.mission.codemission }},{{ rdv.mission.descriptif }},{{ rdv.mission.domaine }},{% if rdv.mission.etablissement %}{{ rdv.mission.etablissement.siret }},{{ rdv.mission.etablissement.adresse }},{{ rdv.mission.etablissement.secteur }},{{ rdv.mission.etablissement.tier.raisonsoc }}{% endif %}{% endif %}</div>#}
+
+                        <div class="col-xs-2" style="width:20%;" >
+                            <div style="border: 15px solid transparent">
+                                {% if mise.destinataire.getPhotos  %}
+                                    <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="data:image/jpg;base64,{{GetMyPhoto(mise.destinataire.getId())}}">
+
+
+                                {% elseif mise.destinataire.getCivilite == 'Mme' or mise.destinataire.getCivilite == 'Madame' or mise.destinataire.getCivilite == 'Mademoiselle' %}
+                                    <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/femme.jpg') }}">
+                                {% else %}
+                                    <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/homme.jpg') }}">
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    <div id="date{{ mise.id }}" class="col-xs-2" style="width:20%;-webkit-flex-wrap: wrap;flex-wrap: wrap;display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;;display:flex;height: 100px;text-align: left; ">
+
+                        <label style="font:18px Roboto;margin: auto;" > {{ mise.destinataire.getNom }}<br/>{{ mise.destinataire.getPrenom }}</label><br/>
+
+
+                    </div>
+
+                    <div id="date{{ mise.id }}" class="col-xs-2" style="width:20%;-webkit-flex-wrap: wrap;flex-wrap: wrap;display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;;display:flex;height: 100px;text-align: left; ">
+
+                        <label style="font:18px Roboto;margin: auto;" > {{ mise.mission.getEtablissement.getTier.getRaisonsoc }}<br/>{{ mise.mission.intitule }}<br/></label><br/>
+
+
+                    </div>
+
+                    <div id="date{{ mise.id }}" class="col-xs-2" style="width:20%;-webkit-flex-wrap: wrap;flex-wrap: wrap;display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;;display:flex;height: 100px;text-align: left; ">
+
+                        <label style="font:18px Roboto;margin: auto;" > {{ mise.getDate|date('d-m-Y à H:i') }}</label>
+
+                    </div>
+
+                    <div class="col-xs-2" style="width:20%;">
+                        <div style="border: 15px solid transparent">
+
+                            {% if mise.destinataire.getPhotos %}
+
+                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" onclick="AfficherChat('{{ mise.destinataire.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc }}<br/>{{ mise.mission.intitule }}','{{ mise.destinataire.getNom }}<br/>{{ mise.destinataire.getPrenom }}','data:image/jpg;base64,{{ mise.destinataire.getPhotos }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
+
+                            {% elseif mise.destinataire.getCivilite == 'Mme' or mise.destinataire.getCivilite == 'Madame' or mise.destinataire.getCivilite == 'Mademoiselle' %}
+
+
+                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" onclick="AfficherChat('{{ mise.destinataire.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc }}<br/>{{ mise.mission.intitule }}','{{ mise.destinataire.getNom }}<br/>{{ mise.destinataire.getPrenom }}','{{ asset('image/femme.jpg') }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
+                            {% else %}
+
+                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" onclick="AfficherChat('{{ mise.destinataire.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc }}<br/>{{ mise.mission.intitule }}','{{ mise.destinataire.getNom }}<br/>{{ mise.destinataire.getPrenom }}','{{ asset('image/homme.jpg') }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
+                            {% endif %}
+
+
+
+
+
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+
+<script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
+<script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/PopUp.js') }}"></script>
+<script src="{{ asset('js/paginate.js') }}"></script>
+<script language="JavaScript">
+    var rendezvousSelectionne;
+    function AddDateTimeDiv(button){
+        if(button.parentElement.children.length < 4) {
+            var divContainer = document.createElement('div');
+            divContainer.className = 'col-xs-4 col-xs-offset-4';
+            //label DATE
+            var LabelDate = document.createElement('label');
+            LabelDate.className = 'col-xs-1';
+            LabelDate.innerHTML = 'Le : ';
+            //INPUT DATE
+            var inputDate = document.createElement('input');
+            inputDate.setAttribute('name','dateRDV[]');
+            inputDate.setAttribute('id',button.nextElementSibling.firstElementChild.id +'_'+button.parentElement.children.length);
+            inputDate.setAttribute('type','text');
+            inputDate.className = "col-xs-4";
+            //label DATE
+            var LabelTime = document.createElement('label');
+            LabelTime.className = 'col-xs-1';
+            LabelTime.innerHTML = ' à ';
+            //INPUT TIME
+            var inputTime = document.createElement('input');
+            inputTime.setAttribute('name','timeRDV[]');
+            inputTime.setAttribute('id',button.nextElementSibling.children[1].id +'_'+button.parentElement.children.length);
+            inputTime.setAttribute('type','text');
+            inputTime.className = "col-xs-4";
+            //delete button
+            var deleteButton = document.createElement('button');
+            deleteButton.setAttribute('onclick','if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}');
+            deleteButton.setAttribute('type','button');
+            deleteButton.className = "col-xs-offset-1 col-xs-1";
+            deleteButton.innerHTML = '-';
+
+            //append
+            divContainer.appendChild(LabelDate);
+            divContainer.appendChild(inputDate);
+            divContainer.appendChild(LabelTime);
+            divContainer.appendChild(inputTime);
+            divContainer.appendChild(deleteButton);
+
+            button.parentNode.appendChild(divContainer);
+        }
+    }
+    $(document).on( "focus", "input[name='dateRDV[]']:not(.hasDatepicker)", function() {
+        //toastr.info( "Initializing " + this.id );
+
+        $( this ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            dateFormat: 'dd/mm/yy',
+            monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+            monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+            onClose: function(dateText, inst) {
+                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+            }
+        });
+    });
+
+    $(document).ready(function(){
+        window.parent.document.getElementById('iframe').style.left ='0';
+        window.parent.document.getElementById('iframe').style.top ='32px';
+        window.parent.document.getElementById('iframe').style.height ='calc(100% - 32px)';
+        window.parent.document.getElementById('iframe').style.position ='fixed';
+        window.parent.document.getElementById('iframe').style.visibility ='visible';
+        $("#paginationContainer").customPaginate({
+            itemsToPaginate : ".Liste",
+            activeClass : "active-class"
+        });
+
+    });
+
+    function AfficherChat(idApp,idMission,Societe,Appre,ImgApp){
+
+        //alert(idApp+' / '+idMission);
+
+      document.getElementById('lblSociete').innerHTML=Societe;
+        document.getElementById('lblApp').innerHTML=Appre;
+        document.getElementById('imgApp').src=ImgApp;
+
+        var NameDivMsg = 'App'+idApp+'_Mission'+idMission;
+
+        var i=0;
+        var IdDivMsg=''
+        var ClassDivSent='row msg_container base_sent';
+        var ClassDivReceive='row msg_container base_receive';
+       //class="row msg_container base_receive
+        //class="row msg_container base_sent
+        for(i=0 ; i < document.getElementsByName(NameDivMsg).length;i++)
+        {
+
+            IdDivMsg=IdDivMsg+"|;|"+document.getElementsByName(NameDivMsg)[i].id+"|;|"
+
+        };
+
+
+        for(i=0 ; i < document.getElementsByClassName(ClassDivSent).length;i++)
+        {
+            if ( !(IdDivMsg.includes('|;|'+document.getElementsByClassName(ClassDivSent)[i].id+'|;|'))){
+
+                document.getElementById(document.getElementsByClassName(ClassDivSent)[i].id).style.display='none';
+            }else{
+                document.getElementById(document.getElementsByClassName(ClassDivSent)[i].id).style.display='block';
+
+            }
+
+        };
+
+        for(i=0 ; i < document.getElementsByClassName(ClassDivReceive).length;i++)
+        {
+            if ( !(IdDivMsg.includes('|;|'+document.getElementsByClassName(ClassDivReceive)[i].id+'|;|'))){
+
+                document.getElementById(document.getElementsByClassName(ClassDivReceive)[i].id).style.display='none';
+            }else{
+                document.getElementById(document.getElementsByClassName(ClassDivReceive)[i].id).style.display='block';
+
+            }
+
+        };
+        // mon javascript ici
+
+    }
+
+
+    function ChoisirDate(id,date,button){
+        if(confirm('Confirmez-vous votre choix?')){
+            ShowWaiter();
+            var route = '{{ path('DateRDV',{'id':'_ID','numero':'_NUMERO'}) }}';
+            route = route.replace('_ID',id);
+            route= route.replace('_NUMERO',date);
+
+            $.ajax({
+                url: route,
+                type:'POST',
+                error: function(){
+                    DeleteWaiter();
+                    alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+                },
+                success: function(data){
+                    if(data===1){
+                        var j = 0;
+                        var lenght = button.parentElement.parentElement.children.length;
+                        for(var i =0; i < lenght; i++)
+                        {
+                            if(button.parentElement.parentElement.children[i - j]!=button.parentElement){
+                                console.log(button.parentElement.parentElement.children[i - j]);
+                                button.parentElement.parentElement.removeChild(button.parentElement.parentElement.children[i - j]);
+                                j++;
+                            }
+                        }
+                        button.parentNode.removeChild(button);
+                    }
+                    DeleteWaiter();
+                }
+            });
+        }
+
+    }
+    function AnnulerRDV(id){
+        if(confirm('Confirmez-vous l\'annulation du rendez-vous?')){
+            ShowWaiter();
+            var route = '{{ path('AnnulerRDV',{'id':'_ID'}) }}';
+            route = route.replace('_ID',id);
+
+            $.ajax({
+                url: route,
+                type:'POST',
+                error: function(){
+                    DeleteWaiter();
+                    alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+                },
+                success: function(data){
+                    if(data===1){
+                        document.getElementById('statut'+id).innerHTML = 'Annulé';
+                        document.getElementById('statut'+id).style.color = 'red';
+                        document.getElementById('date'+id).innerHTML = '';
+                        document.getElementById('menuRDV'+id).innerHTML ='<li><button style="height: 100%;width: 100%;background-color: transparent;border: none;"'+
+                                'onclick="show(\'ajounerPopUp\');rendezvousSelectionne = '+id+'">Proposez des rendez-vous</button></li>';
+                    }
+                    DeleteWaiter();
+                }
+            });
+        }
+    }
+    function fermeture(){
+        var form = document.getElementById('PopUpCompteRendu');
+        for(var i = 0; i< form.childElementCount; i++){
+            form.children[i].style.display = 'none';
+        }
+        document.getElementById('OUI_NON_button').style.display = 'block';
+    }
+    function EnvoyerCompteRendu(part){
+        ShowWaiter();
+        var route = '{{ path('CompteRenduSaisie',{'id':'_ID'}) }}';
+        route = route.replace('_ID',rendezvousSelectionne);
+        $.ajax({
+            url: route,
+            type:'get',
+            data: $('#'+part+' textarea').serialize(),
+            error: function(){
+                DeleteWaiter();
+                alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+            },
+            success: function(data){
+                if(data===1){
+                    alert('Compte rendu envoyé');
+                    document.getElementById('CompteRendu').style.display = 'none';
+                    fermeture();
+                }
+                DeleteWaiter();
+            }
+        });
+    }
+    function Ajournement(){
+
+        var inputTimes = document.getElementsByName('timeRDV[]');
+        for(var k = 0; k < inputTimes.length; k++){
+            var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(inputTimes[k].value);
+
+            if (!isValid) {
+                alert('verifiez que les heure respect le format HH:MM');
+                return;
+            }
+        }
+        ShowWaiter();
+        var route = '{{ path('AjournementRDV',{'id':'_ID'}) }}';
+        route = route.replace('_ID',rendezvousSelectionne);
+        $.ajax({
+            url: route,
+            type:'POST',
+            data: $('#PopUpAjournement').serialize(),
+            error: function(){
+                DeleteWaiter();
+                alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+            },
+            success: function(data){
+                document.getElementById('statut'+rendezvousSelectionne).innerHTML = 'Ajouné';
+                document.getElementById('statut'+rendezvousSelectionne).style.color = 'orangered';
+                var innerhtmldate='';
+                for(var i=0; i< data.length; i++){
+                    innerhtmldate =innerhtmldate + '<label class="col-xs-12" style="font:18px Roboto;margin:auto;" > '+data[i]+ '</label>';
+                }
+                document.getElementById('date'+rendezvousSelectionne).innerHTML = innerhtmldate;
+                document.getElementById('menuRDV'+rendezvousSelectionne).innerHTML ='<li><button type="button" style="height:100%;width:100%;background-color:transparent;border:none;" onclick="AnnulerRDV('+ rendezvousSelectionne+')">Annulé</button></li>';
+                document.getElementById('ajounerPopUp').style.display = 'none';
+                DeleteWaiter();
+            }
+        })
+    }
+    function OrdreDeRemplirCR(id,rdv){
+        ShowWaiter();
+        var route = '{{ path('OrdreCompleterCR',{'idUser':'_IDUSER','idRDV':'_IDRDV'}) }}';
+        route = route.replace('_IDUSER',id);
+        route = route.replace('_IDRDV',rdv);
+        $.ajax({
+            type:'post',
+            url: route,
+            error: function(){
+                DeleteWaiter();
+                alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+            },
+            success:function(data){
+                if(data==1){
+                    alert('le message a été envoyé correctement!')
+                }
+                else{
+                    console.log(data);
+                }
+                DeleteWaiter();
+            },
+            error:function(){
+                alert('Une erreur s\'est produite sur le serveur');
+                DeleteWaiter();
+            }
+        })
+    }
+    function ConsulterCR(id){
+        ShowWaiter();
+        var route = '{{ path('ConsulterCR',{'idRDV':'_IDRDV'}) }}';
+        route = route.replace('_IDRDV',id);
+        $.ajax({
+            type: 'post',
+            url: route,
+            error: function(){
+                DeleteWaiter();
+                alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+            },
+            success:function(data){
+                var container = document.getElementById('ComptesRenduContainer');
+                container.innerHTML = '';
+
+                for(var i = 0; i < data.length; i++){
+                    var label = document.createElement('label');
+                    label.style.color = '#2A76CC';
+                    label.style.textTransform = 'uppercase';
+                    label.style.float = 'left';
+                    label.innerHTML = data[i][0] + ' - ' + data[i][2];
+
+                    var textarea = document.createElement('textarea');
+                    textarea.style.backgroundColor = '#e4b9b9';
+                    textarea.innerHTML = data[i][1];
+
+                    var divCompteRendu = document.createElement('div');
+                    divCompteRendu.style.marginBottom = "20px";
+                    divCompteRendu.appendChild(label);
+                    divCompteRendu.appendChild(textarea);
+
+                    container.appendChild(divCompteRendu);
+                }
+                show('ConsultationCompteRendu');
+                DeleteWaiter();
+            },
+            error:function(){
+                alert('Une erreur s\'est produite sur le serveur');
+            }
+        })
+    }
+    function search(mot){
+        var mots = mot.toUpperCase().trim().split(/ +/g);
+        var Recherches = document.getElementsByName('Recherche');
+        for(var i = 0; i < Recherches.length; i++)
+        {
+            var score = 0;
+            Recherches[i].parentNode.classList.remove('hidden');
+            var recherchermot = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g);
+            for(var k = 0; k< recherchermot.length; k++)
+            {
+                for(var j = 0; j< mots.length;j++)
+                {
+                    if (stringWith(recherchermot[k], mots[j])) {
+                        score++;
+                    }
+                }
+            }
+            if(score === 0 ){
+                Recherches[i].parentNode.classList.add('hidden');
+            }
+        }
+        $(".Liste").show();
+        $("#paginationContainer").html('<button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px;float: right;" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>').customPaginate({
+            itemsToPaginate : ".Liste:not(.hidden)",
+            activeClass : "active-class"
+        });
+    }
+</script>
+</body>
+</html>

@@ -2,6 +2,18 @@ afficher_rendezvous:
     path: /afficher_rendezvous
     defaults: { _controller: UserBundle:Default:afficher_rendezvous }
 
+afficher_MiseEnRelation:
+    path: /afficher_MiseEnRelation
+    defaults: { _controller: UserBundle:Default:affichageMiseEnRelation }
+
+afficher_MissionPropose:
+    path: /afficher_MissionPropose
+    defaults: { _controller: UserBundle:Default:affichageMissionPropose }
+
+afficher_ApprenantPropose:
+    path: /afficher_ApprenantPropose
+    defaults: { _controller: UserBundle:Default:affichageApprenantPropose }
+
 DateRDV:
     path: /choix_Date_RDV/idrdv={id}/{numero}
     defaults: { _controller: UserBundle:MiseEnRelation:choixDate }

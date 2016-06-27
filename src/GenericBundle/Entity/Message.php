@@ -44,6 +44,20 @@ class Message
     private $statut;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="action", type="string", length=45, nullable=true)
+     */
+    private $action;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="couleur", type="string", length=45, nullable=true)
+     */
+    private $couleur;
+
+    /**
      * @var \GenericBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="User", cascade={"remove"})
@@ -225,5 +239,55 @@ class Message
     public function getStatut()
     {
         return $this->statut;
+    }
+
+
+
+    /**
+     * Set action
+     *
+     * @param string $action
+     *
+     * @return Message
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
+    /**
+     * Get action
+     *
+     * @return string
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
+     * Set couleur
+     *
+     * @param string $couleur
+     *
+     * @return Message
+     */
+    public function setCouleur($couleur)
+    {
+        $this->couleur = $couleur;
+
+        return $this;
+    }
+
+    /**
+     * Get couleur
+     *
+     * @return string
+     */
+    public function getCouleur()
+    {
+        return $this->couleur;
     }
 }

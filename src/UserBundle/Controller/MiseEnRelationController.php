@@ -31,6 +31,8 @@ class MiseEnRelationController extends Controller
             $message->setExpediteur($expediteur);
             $message->setDestinataire($destinataire);
             $message->setMission($mission);
+            $message->setAction('Propose mission');
+            $message->setCouleur('green');
             $em->persist($message);
             $em->flush();
 
@@ -42,6 +44,8 @@ class MiseEnRelationController extends Controller
             $messageRetour->setDestinataire($expediteur);
             $messageRetour->setMission($mission);
             $messageRetour->setStatut(2);
+            $messageRetour->setAction('En attente');
+            $messageRetour->setCouleur('green');
             $em->persist($messageRetour);
             $em->flush();
         }
@@ -83,6 +87,8 @@ class MiseEnRelationController extends Controller
             if($request->get('MessageRefus')){
                 $message->setMessage($request->get('MessageRefus'));
                 $message->setStatut(-1);
+                $message->setAction('Decliner profil');
+                $message->setCouleur('red');
                 $messagereponse->setStatut(-1);
                 $em->persist($message);
                 $em->flush();
@@ -98,6 +104,8 @@ class MiseEnRelationController extends Controller
                 }
 
                 $message->setStatut(1);
+                $message->setAction('Propose rdv');
+                $message->setCouleur('green');
                 $messagereponse->setStatut(1);
                 $em->persist($message);
                 $em->flush();
@@ -110,6 +118,8 @@ class MiseEnRelationController extends Controller
                 $messageDup->setMessage($request->get('MessageRefus'));
                 $messageDup->setStatut(-1);
                 $messagereponse->setStatut(-1);
+                $messageDup->setAction('A décliner');
+                $messageDup->setCouleur('red');
                 $em->flush();
             }
             elseif($request->get('MessageAcceptation')) {
@@ -124,6 +134,8 @@ class MiseEnRelationController extends Controller
 
                 $messageDup->setStatut(1);
                 $messagereponse->setStatut(1);
+                $messageDup->setAction('Propose rdv');
+                $messageDup->setCouleur('green');
                 $em->flush();
             }
             $message = $messageDup;
@@ -223,6 +235,8 @@ class MiseEnRelationController extends Controller
             $messageTuteur->setDestinataire($messagereponse->getMission()->getTuteur());
             $messageTuteur->setMission($messagereponse->getMission());
             $messageTuteur->setMessage('Cet apprenant correspond au profil demandé');
+            $messageTuteur->setAction('A Postuler');
+            $messageTuteur->setCouleur('green');
             $messagereponse->setStatut(1);
             $em->persist($messageTuteur);
             $em->flush();
@@ -230,6 +244,8 @@ class MiseEnRelationController extends Controller
         }
         else{
             $messagedup->setMessage('Cet apprenant correspond au profil demandé');
+            $messagedup->setAction('A Postuler');
+            $messagedup->setCouleur('green');
             $messagedup->setStatut(1);
             $messagereponse->setStatut(1);
             $em->flush();
@@ -261,21 +277,60 @@ class MiseEnRelationController extends Controller
     }
 
     public function choixDateAction($id,$numero){
-        $em = $this->getDoctrine()->getManager();
-        $rdv = $em->getRepository('GenericBundle:RDV')->find($id);
         $rep = new JsonResponse();
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $rdv = $em->getRepository('GenericBundle:RDV')->find($id);
+
+
+
+
+
 
         if($rdv)
         {
+
+
+            $message = new Message();
+
+            $date = new \DateTime();
+            if($numero==2){
+
+                $message->setMessage('Confirmation du rdv le : '.date_format($rdv->getDate2(),'d-m-Y à H:i'));
+            }elseif($numero==3){
+
+                $message->setMessage('Confirmation du rdv le : '.date_format($rdv->getDate3(),'d-m-Y à H:i'));
+            }else{
+                $message->setMessage('Confirmation du rdv le : '.date_format($rdv->getDate1(),'d-m-Y à H:i'));
+            }
+
+            $message->setDate($date);
+            $message->setExpediteur($rdv->getApprenant());
+            $message->setDestinataire($rdv->getTuteur());
+            $message->setMission($rdv->getMission());
+            $message->setAction('Accepter RDV');
+            $message->setCouleur('green');
+            $message->setStatut(1);
+            $em->persist($message);
+            $em->flush();
+
+
             $rdv->setStatut(1);
             if($numero==2){
                 $rdv->setDate1($rdv->getDate2());
+
             }elseif($numero==3){
                 $rdv->setDate1($rdv->getDate3());
+
             }
+
+
             $rdv->setDate2(null);
             $rdv->setDate3(null);
             $em->flush();
+
+
+
             return $rep->setData(1);
         }
         else{
@@ -293,7 +348,24 @@ class MiseEnRelationController extends Controller
             $rdv->setDate3(null);
             $rdv->setStatut(-2);
             $em->flush();
+
+
+            $message = new Message();
+
+            $date = new \DateTime();
+            $message->setMessage('Annulation du rdv');
+            $message->setDate($date);
+            $message->setExpediteur($rdv->getApprenant());
+            $message->setDestinataire($rdv->getTuteur());
+            $message->setMission($rdv->getMission());
+            $message->setAction('Annuler RDV');
+            $message->setCouleur('red');
+            $em->persist($message);
+            $em->flush();
+
+
             return $rep->setData(1);
+
         }
         else{
             return $rep->setData(-1);
@@ -364,6 +436,46 @@ class MiseEnRelationController extends Controller
             }
             $rdv->setStatut(-1);
             $em->flush();
+            $message = new Message();
+
+            $date = new \DateTime();
+            $msg='Reporter le rdv pour : ';
+
+            for( $i = 0; $i < count($request->get('dateRDV')) and $i<3;$i++)
+            {
+                $datetimeRDV = $request->get('dateRDV')[$i].' à '.$request->get('timeRDV')[$i];
+
+                if($i == 0){
+
+                    $msg=$msg.' '.$datetimeRDV;
+                }
+                if($i == 1){
+                    $msg=$msg.' ou '.$datetimeRDV;
+                }
+                if($i == 2){
+                    $msg=$msg.' ou '.$datetimeRDV;
+                }
+            }
+
+            $message->setDate($date);
+            $message->setExpediteur($rdv->getApprenant());
+            $message->setDestinataire($rdv->getTuteur());
+            $message->setMission($rdv->getMission());
+            $message->setAction('Reporter le RDV');
+            $message->setCouleur('red');
+            $message->setStatut(1);
+            $message->setMessage($msg);
+            $em->persist($message);
+            $em->flush();
+
+
+
+
+
+
+
+
+
             return $rep->setData($date);
         }
         return $rep->setdata(0);
