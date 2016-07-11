@@ -336,7 +336,7 @@ class DefaultController extends Controller
         $MissionsSansQcm=round((count($Mymissionssansformations)*100)/count($Allmissions),2); 
 
         $CountLesMissions=count($Allmissions);   
-        $CountLesApprenants=count($TousLesApprenants);
+        $CountLesApprenants=count($TousLesApprenants)+count($Importcandidat);
 
         return $this->render('EcoleBundle:Recruteur:TableauBord.html.twig', array(
             'etablissement'=>$etablissement,

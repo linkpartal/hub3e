@@ -55,8 +55,7 @@
             <div id="addparent" class="popup" >
                 <div onclick="document.getElementById('submitaddparent').click();hide(this)" class="close" ></div>
                 <div class="col-xs-offset-1 col-xs-7 formContainer" >
-                    <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
                     <form id="formaddparent" class="formulaire" action="{{ path("parent_added") }}" onsubmit="document.getElementById('submitaddparent').disabled=true;ShowWaiter();" enctype="multipart/form-data" method="post" >
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
 
@@ -117,8 +116,7 @@
             <div id="addExperience" class="popup">
                 <div onclick="document.getElementById('submitaddExperience').click();hide(this)" class="close"></div>
                 <div class="col-xs-offset-1 col-xs-7 formContainer" >
-                    <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
                     <form id="formaddExperience" class="formulaire" action="{{ path("experience_added") }}" onsubmit="document.getElementById('submitaddExperience').disabled=true;ShowWaiter();"  method="post" enctype="multipart/form-data">
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
 
@@ -159,8 +157,7 @@
             <div id="addRecommandation" class="popup">
                 <div onclick="document.getElementById('submitaddRecommandation').click();hide(this)" class="close"></div>
                 <div class="col-xs-offset-1 col-xs-7 formContainer" >
-                    <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
                     <form id="formaddRecommandation" class="formulaire" action="{{ path("recommandation_added") }}" onsubmit="document.getElementById('submitaddRecommandation').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data">
 
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
@@ -202,8 +199,7 @@
             <div id="addDiplome" class="popup">
                 <div onclick="document.getElementById('submitaddDiplome').click();hide(this)" class="close"></div>
                 <div class="col-xs-offset-1 col-xs-7 formContainer" >
-                    <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
                     <form id="formaddDiplome" class="formulaire" action="{{ path("diplome_added") }}" onsubmit="document.getElementById('submitaddDiplome').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data">
 
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
@@ -242,8 +238,7 @@
             <div id="addDocument" class="popup">
                 <div onclick="document.getElementById('submitaddDocument').click();hide(this)" class="close"></div>
                 <div class="col-xs-offset-1 col-xs-7 formContainer" >
-                    <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
                     <form id="formaddDocument" class="formulaire" action="{{ path("Document_added") }}" onsubmit="document.getElementById('submitaddDocument').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data">
 
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
@@ -279,8 +274,7 @@
             <div id="addFormation" class="popup">
                 <div onclick="document.getElementById('submitaddFormation').click();hide(this)" class="close"></div>
                 <div class="col-xs-offset-1 col-xs-7 formContainer" >
-                    <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
 
                     <form id="formaddFormation" class="formulaire" action="{{ path("Candidature_added") }}" onsubmit="document.getElementById('submitaddFormation').disabled=true;ShowWaiter();" method="post" >
 
@@ -402,7 +396,6 @@
                             {% if not QCMs is defined or QCMs|length == 0 %}
                                         style="background-color: #d2d2d2; color:red;" {% endif %} class="NavButtonIframe" title="Ma société rêvée" onclick="NaviguerOnglet('OngletApprenant','QCM_Affinite',this);">Ma société rêvée </button>
 
-
                                 <button id="Button_Test"
                             {% if not QCMtest is defined or QCMtest|length == 0  %}
                                         style="background-color: #d2d2d2; color:red;" {% endif %} class="NavButtonIframe" title="Tests " onclick="NaviguerOnglet('OngletApprenant','QCM_Test',this);">Tests  </button>
@@ -422,41 +415,32 @@
                                 <input type="hidden" value="{{ User.getId }}" id="id" name="_ID">
 
                                 <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" for="civilite">Civilité :</label>
+                                    <div class="col-xs-6" style="text-align:left"> 
+                                        <label class="list-group-item" style="height: 60px;" for="civilite">Civilité :</label>
 
-                                    <select   class="List-invisible" title="" id="civilite"  name="_Civilite">
-                                        {% if User.getCivilite == 'Mr' %}
-                                            <option selected="selected" value="Mr">Mr.</option>
-                                        {% else %}
-                                            <option value="Mr">Mr.</option>
-                                        {% endif %}
+                                        <select  class="champ form-control" title="" id="civilite"  name="_Civilite">
+                                            {% if User.getCivilite == 'Mr' %}
+                                                <option selected="selected" value="Mr">Mr.</option>
+                                            {% else %}
+                                                <option value="Mr">Mr.</option>
+                                            {% endif %}
 
-                                        {% if User.getCivilite == 'Mme' %}
-                                            <option selected="selected" value="Mme">Mme.</option>
-                                        {% else %}
-                                            <option value="Mme">Mme.</option>
-                                        {% endif %}
+                                            {% if User.getCivilite == 'Mme' %}
+                                                <option selected="selected" value="Mme">Mme.</option>
+                                            {% else %}
+                                                <option value="Mme">Mme.</option>
+                                            {% endif %}
 
-                                        {% if User.getCivilite == 'Mlle' %}
-                                            <option selected="selected" value="Mlle">Mlle.</option>
-                                        {% else %}
-                                            <option value="Mlle">Mlle.</option>
-                                        {% endif %}
-                                    </select>
-                                </div>
+                                            {% if User.getCivilite == 'Mlle' %}
+                                                <option selected="selected" value="Mlle">Mlle.</option>
+                                            {% else %}
+                                                <option value="Mlle">Mlle.</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
 
-                                <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" for="Nom">Nom :</label>
-                                    <input value="{{User.getNom}}" type="text" class="champ form-control" id="Nom" name="_Nom" maxlength="45"  >
-                                </div>
-
-                                <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" for="Prenom">Prénom :</label>
-                                    <input value="{{User.getPrenom}}" type="text" class="champ form-control" id="Prenom" name="_Prenom" maxlength="45">
-                                </div>
-
-                                <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 40px;" for="Photos">Photo :
+                                    <div class="col-xs-6" style="text-align:left"> 
+                                        <label class="list-group-item" style="height: 40px;" for="Photos">Photo :
                                         {% if User.getPhotos %}
                                             <img id="Photosimg" alt="Photos" style="height:40px" src="data:image/jpg;base64,{{ User.getPhotos }}">
                                         {% elseif User.getCivilite == 'Mme' or User.getCivilite == 'Madame' or User.getCivilite == 'Mademoiselle' %}
@@ -464,32 +448,80 @@
                                         {% else %}
                                             <img id="Photosimg" alt="Photos" style="height:40px" src="{{ asset('image/homme.jpg') }}">
                                         {% endif %}
-                                    </label>
-                                    <input onchange="readURL(this,'Photosimg');" accept="image/*" type="file" class="champ form-control" id="Photos" name="_Photos" style="display: none !important;">
+                                        </label>
+                                        <input onchange="readURL(this,'Photosimg');" accept="image/*" type="file" class="champ form-control" id="Photos" name="_Photos" style="display: none !important;" >
+                                        <label><i>Pour modifier votre avatar cliquez sur l'icône</i></label>
+                                    </div>
+                                </div>
 
 
+                                <div class="inputcontainer">
+                                    <div class="col-xs-6" style="text-align:left"> 
+                                        <label class="list-group-item" style="height: 60px;" for="Nom">Nom :</label>
+                                        <input value="{{User.getNom}}" type="text" class="champ form-control" id="Nom" name="_Nom" maxlength="45" >
+                                    </div>
+                                    <div class="col-xs-6" style="text-align:left"> 
+                                        <label class="list-group-item" style="height: 60px;" for="Prenom">Prénom :</label>
+                                        <input value="{{User.getPrenom}}" type="text" class="champ form-control" id="Prenom" name="_Prenom" maxlength="45" >
+                                    </div>
                                 </div>
 
                                 <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" for="Tel">Téléphone :</label>
-                                    <input value="{{User.getTelephone}}" type="text" class="champ form-control" id="Tel" name="_Tel" maxlength="45" >
+                                    <div class="col-xs-6" style="text-align:left">
+                                        <label class="list-group-item" style="height: 60px;" for="Tel">Téléphone : </label>
+                                        <input value="{{User.getTelephone}}" type="tel" class="champ form-control"   id="Tel" name="_Tel" maxlength="20" >
+                                    </div>
+                                    <div class="col-xs-6" style="text-align:left">
+                                        <label class="list-group-item" style="height: 60px;" for="Mail">E-mail :</label>
+                                        <input value="{{User.getEmail}}" type="text" class="champ form-control" id="Mail" name="_Mail" maxlength="255" >                                      
+                                    </div> 
                                 </div>
 
-                                <div class="inputcontainer">
+{#                                 <div class="inputcontainer">
+                                    <div class="col-xs-6" style="text-align:left">
+                                    <label class="list-group-item" style="height: 60px;" for="Adresse">Adresse : </label>
+                                    <input value="{{User.getInfo.getAdresse}}" type="text" class="champ form-control" minlength="40" id="Adresse" name="_Adresse" maxlength="100" >
+                                    </div>
+                                    <div class="col-xs-6" style="text-align:left">
+                                    <label class="list-group-item" style="height: 60px;" for="Codepostal">Code postal :</label>
+                                    <input value="{{User.getInfo.getCp}}" type="text" class="champ form-control" id="Codepostal" name="_Codepostal" maxlength="45" >
+                                    </div>
+                                </div> #}
+
+{#                                 <div class="inputcontainer">
+                                    <div class="col-xs-6" style="text-align:left">
+                                        <label class="list-group-item" style="height: 60px;" for="Datenaissance">Date de naissance : </label>
+                                        <input value="{{User.getInfo.getDatenaissance|date('d/m/Y') }}" type="text" class="champ form-control" id="Datenaissance" name="_Datenaissance" maxlength="45" required >
+                                    </div>
+
+                                    <div class="col-xs-6" style="text-align:left">
+                                        <label class="list-group-item" style="height: 60px;" for="Lieunaissance">Lieu de naissance:</label>
+                                        <input value="{{User.getInfo.getLieunaissance}}" type="text" class="champ form-control" id="Lieunaissance" name="_Lieunaissance" maxlength="45" required >
+                                    </div>
+                                </div> #}
+
+                                {# LE PSEUDO EST IL UTILE ? #}
+                                {#  <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="UserName">Pseudo :</label>
                                     <input value="{{User.getUserName}}" type="text" class="champ form-control" id="UserName" name="_Username" maxlength="255" >
-                                </div>
+                                </div>  #}
 
                                 <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" for="Mail">E-mail :</label>
-                                    <input value="{{User.getEmail}}" type="text" class="champ form-control" id="Mail" name="_Mail" maxlength="255" >
-                                </div>
+                                    <div class="col-xs-6" style="text-align:left">
+                                         {% if User.getEtablissement %}
+                                            {% if User.getEtablissement.getTier.getEcole == 0 %}
+                                                <label class="list-group-item "style="height: 60px;" >Société  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
 
-                                <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" >Dernière connexion :</label><label style="color:black" >{{User.getLastLogin|date('d/m/Y')}}</label>
-
+                                            {% elseif User.getEtablissement.getTier.getEcole == 1 %}
+                                                <label class="list-group-item "style="height: 60px;" >Ecole  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
+                                            {% endif %}
+                                        {% endif %}     
+                                    </div>
+                                    <div class="col-xs-6" style="text-align:left">
+                                    <label class="list-group-item" style="height: 60px;" >Dernière connexion : </label><label style="color:black" > {{User.getLastLogin|date('d/m/Y')}}</label>
+                                    </div>
                                 </div>
-                                <div class="inputcontainer">
+{#                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" >Expiré le : </label>
                                     <label style="color:black" >
 
@@ -503,7 +535,7 @@
                                     </label>
 
 
-                                </div>
+                                </div> #}
                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;">Roles :
                                         {% for role in User.getRoles %}
@@ -522,22 +554,14 @@
                                             {% endif %}
                                         {% endfor %}
                                     </label>
-
-
                                 </div>
-                                <div class="inputcontainer">
-                                    {% if User.getEtablissement %}
-                                        {% if User.getEtablissement.getTier.getEcole == 0 %}
-                                            <label class="list-group-item info" >Société  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
 
-                                        {% elseif User.getEtablissement.getTier.getEcole == 1 %}
-                                            <label class="list-group-item info" >Ecole  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
-                                        {% endif %}
-                                    {% endif %}
-                                </div>
                                 <input id="formUserSubmit" type="submit" style="display: none;">
+
                             </form>
+
                         </div>
+
                         {# MODIF A FAIRE PROFIL VUE IF NOT APPRENANT #}
                     {% else %}
                         <div id="info_Apprenant" class="list-group affichage">
@@ -551,42 +575,32 @@
                                 </div> #}
 
                                 <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" for="civilite">Civilité :</label>
+                                    <div class="col-xs-6" style="text-align:left"> 
+                                        <label class="list-group-item" style="height: 60px;" for="civilite">Civilité :</label>
 
-                                    <select   class="champ form-control" title="" id="civilite"  name="_Civilite">
-                                        {% if User.getCivilite == 'Mr' %}
-                                            <option selected="selected" value="Mr">Mr.</option>
-                                        {% else %}
-                                            <option value="Mr">Mr.</option>
-                                        {% endif %}
+                                        <select  class="champ form-control" title="" id="civilite"  name="_Civilite">
+                                            {% if User.getCivilite == 'Mr' %}
+                                                <option selected="selected" value="Mr">Mr.</option>
+                                            {% else %}
+                                                <option value="Mr">Mr.</option>
+                                            {% endif %}
 
-                                        {% if User.getCivilite == 'Mme' %}
-                                            <option selected="selected" value="Mme">Mme.</option>
-                                        {% else %}
-                                            <option value="Mme">Mme.</option>
-                                        {% endif %}
+                                            {% if User.getCivilite == 'Mme' %}
+                                                <option selected="selected" value="Mme">Mme.</option>
+                                            {% else %}
+                                                <option value="Mme">Mme.</option>
+                                            {% endif %}
 
-                                        {% if User.getCivilite == 'Mlle' %}
-                                            <option selected="selected" value="Mlle">Mlle.</option>
-                                        {% else %}
-                                            <option value="Mlle">Mlle.</option>
-                                        {% endif %}
-                                    </select>
-                                </div>
+                                            {% if User.getCivilite == 'Mlle' %}
+                                                <option selected="selected" value="Mlle">Mlle.</option>
+                                            {% else %}
+                                                <option value="Mlle">Mlle.</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
 
-
-                                <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" for="Nom">Nom :</label>
-                                    <input value="{{User.getNom}}" type="text" class="champ form-control" id="Nom" name="_Nom" maxlength="45" >
-                                </div>
-
-                                <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" for="Prenom">Prénom :</label>
-                                    <input value="{{User.getPrenom}}" type="text" class="champ form-control" id="Prenom" name="_Prenom" maxlength="45" >
-                                </div>
-
-                                <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 40px;" for="Photos">Photo :
+                                    <div class="col-xs-6" style="text-align:left"> 
+                                        <label class="list-group-item" style="height: 40px;" for="Photos">Photo :
                                         {% if User.getPhotos %}
                                             <img id="Photosimg" alt="Photos" style="height:40px" src="data:image/jpg;base64,{{ User.getPhotos }}">
                                         {% elseif User.getCivilite == 'Mme' or User.getCivilite == 'Madame' or User.getCivilite == 'Mademoiselle' %}
@@ -594,59 +608,90 @@
                                         {% else %}
                                             <img id="Photosimg" alt="Photos" style="height:40px" src="{{ asset('image/homme.jpg') }}">
                                         {% endif %}
-                                    </label>
-                                    <input onchange="readURL(this,'Photosimg');" accept="image/*" type="file" class="champ form-control" id="Photos" name="_Photos" style="display: none !important;" >
-                                    <label><i>Pour modifier votre avatar cliquez sur l'icône</i></label>
+                                        </label>
+                                        <input onchange="readURL(this,'Photosimg');" accept="image/*" type="file" class="champ form-control" id="Photos" name="_Photos" style="display: none !important;" >
+                                        <label><i>Pour modifier votre avatar cliquez sur l'icône</i></label>
+                                    </div>
+                                </div>
 
+
+                                <div class="inputcontainer">
+                                    <div class="col-xs-6" style="text-align:left"> 
+                                        <label class="list-group-item" style="height: 60px;" for="Nom">Nom :</label>
+                                        <input value="{{User.getNom}}" type="text" class="champ form-control" id="Nom" name="_Nom" maxlength="45" >
+                                    </div>
+                                    <div class="col-xs-6" style="text-align:left"> 
+                                        <label class="list-group-item" style="height: 60px;" for="Prenom">Prénom :</label>
+                                        <input value="{{User.getPrenom}}" type="text" class="champ form-control" id="Prenom" name="_Prenom" maxlength="45" >
+                                    </div>
                                 </div>
 
                                 <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" for="Tel">Téléphone : </label>
-                                    <input value="{{User.getTelephone}}" type="tel" class="champ form-control"   id="Tel" name="_Tel" maxlength="20" >
+                                    <div class="col-xs-6" style="text-align:left">
+                                        <label class="list-group-item" style="height: 60px;" for="Tel">Téléphone : </label>
+                                        <input value="{{User.getTelephone}}" type="tel" class="champ form-control"   id="Tel" name="_Tel" maxlength="20" >
+                                    </div>
+                                    <div class="col-xs-6" style="text-align:left">
+                                        <label class="list-group-item" style="height: 60px;" for="Portable">Téléphone portable : </label>
+                                        <input value="{{User.getInfo.getPortable}}" type="tel" class="champ form-control" id="Portable" name="_Portable" maxlength="20" >
+                                    </div>
                                 </div>
 
                                 <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" for="Portable">Téléphone portable : </label>
-                                    <input value="{{User.getInfo.getPortable}}" type="tel" class="champ form-control" id="Portable" name="_Portable" maxlength="20" >
-                                </div>
-
-                                <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" for="Datenaissance">Date de naissance : </label>
-                                    <input value="{{User.getInfo.getDatenaissance|date('d/m/Y') }}" type="text" class="champ form-control" id="Datenaissance" name="_Datenaissance" maxlength="45" required >
-                                </div>
-                                <div class="inputcontainer">
+                                    <div class="col-xs-6" style="text-align:left">
                                     <label class="list-group-item" style="height: 60px;" for="Adresse">Adresse : </label>
                                     <input value="{{User.getInfo.getAdresse}}" type="text" class="champ form-control" minlength="40" id="Adresse" name="_Adresse" maxlength="100" >
-                                </div>
-                                <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" for="Cpnaissance">Cp de naissance  :</label>
-                                    <input value="{{User.getInfo.getCpnaissance}}" type="text" class="champ form-control" id="Cpnaissance" name="_Cpnaissance" maxlength="45" required >
-
-                                </div>
-                                <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" for="Lieunaissance">Lieu de naissance:</label>
-                                    <input value="{{User.getInfo.getLieunaissance}}" type="text" class="champ form-control" id="Lieunaissance" name="_Lieunaissance" maxlength="45" required >
-                                </div>
-
-                                <div class="inputcontainer">
+                                    </div>
+                                    <div class="col-xs-6" style="text-align:left">
                                     <label class="list-group-item" style="height: 60px;" for="Codepostal">Code postal :</label>
                                     <input value="{{User.getInfo.getCp}}" type="text" class="champ form-control" id="Codepostal" name="_Codepostal" maxlength="45" >
+                                    </div>
                                 </div>
 
                                 <div class="inputcontainer">
+                                    <div class="col-xs-6" style="text-align:left">
+                                        <label class="list-group-item" style="height: 60px;" for="Datenaissance">Date de naissance : </label>
+                                        <input value="{{User.getInfo.getDatenaissance|date('d/m/Y') }}" type="text" class="champ form-control" id="Datenaissance" name="_Datenaissance" maxlength="45" required >
+                                    </div>
+
+                                    <div class="col-xs-6" style="text-align:left">
+                                        <label class="list-group-item" style="height: 60px;" for="Lieunaissance">Lieu de naissance:</label>
+                                        <input value="{{User.getInfo.getLieunaissance}}" type="text" class="champ form-control" id="Lieunaissance" name="_Lieunaissance" maxlength="45" required >
+                                    </div>
+                                </div>
+                                <div class="inputcontainer">
+                                     <div class="col-xs-6" style="text-align:left">
+                                        <label class="list-group-item" style="height: 60px;" for="Cpnaissance">Cp de naissance  :</label>
+                                        <input value="{{User.getInfo.getCpnaissance}}" type="text" class="champ form-control" id="Cpnaissance" name="_Cpnaissance" maxlength="45" required >
+                                    </div>
+                                    <div class="col-xs-6" style="text-align:left">
+                                        <label class="list-group-item" style="height: 60px;" for="Mail">E-mail :</label>
+                                        <input value="{{User.getEmail}}" type="text" class="champ form-control" id="Mail" name="_Mail" maxlength="255" >                                      
+                                    </div>                                   
+                                </div>
+                                {# LE PSEUDO EST IL UTILE ? #}
+                                {#  <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="UserName">Pseudo :</label>
                                     <input value="{{User.getUserName}}" type="text" class="champ form-control" id="UserName" name="_Username" maxlength="255" >
-                                </div>
+                                </div>  #}
 
                                 <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" for="Mail">E-mail :</label>
-                                    <input value="{{User.getEmail}}" type="text" class="champ form-control" id="Mail" name="_Mail" maxlength="255" >
+                                    <div class="col-xs-6" style="text-align:left">
+                                         {% if User.getEtablissement %}
+                                            {% if User.getEtablissement.getTier.getEcole == 0 %}
+                                                <label class="list-group-item "style="height: 60px;" >Société  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
+
+                                            {% elseif User.getEtablissement.getTier.getEcole == 1 %}
+                                                <label class="list-group-item "style="height: 60px;" >Ecole  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
+                                            {% endif %}
+                                        {% endif %}     
+                                    </div>
+                                    <div class="col-xs-6" style="text-align:left">
+                                    <label class="list-group-item" style="height: 60px;" >Dernière connexion : </label><label style="color:black" > {{User.getLastLogin|date('d/m/Y')}}</label>
+                                    </div>
                                 </div>
 
-                                <div class="inputcontainer">
-                                    <label class="list-group-item" style="height: 60px;" >Dernière connexion :</label><label style="color:black" >{{User.getLastLogin|date('d/m/Y')}}</label>
 
-                                </div>
                               <!--  <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" >Expiré le : </label>
                                     <label style="color:black" >
@@ -683,40 +728,34 @@
 
 
                                 </div>-->
-                                <div class="inputcontainer">
-                                    {% if User.getEtablissement %}
-                                        {% if User.getEtablissement.getTier.getEcole == 0 %}
-                                            <label class="list-group-item info" >Société  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
-
-                                        {% elseif User.getEtablissement.getTier.getEcole == 1 %}
-                                            <label class="list-group-item info" >Ecole  : <label style="color:black" >{{User.getEtablissement.getTier.getRaisonSoc}}</label></label>
-                                        {% endif %}
-                                    {% endif %}
-                                </div>
                                 <input id="formUserSubmit" type="submit" style="display: none;">
 
                                 {% if User.GetInfo  %}
                                     <input type="hidden" value="{{ User.GetInfo.getId }}" id="id" name="_IdInfo">
                                     <div class="inputcontainer">
+                                        <div class="col-xs-6" style="text-align:left">
                                         <input value="1"  type="checkbox" id="handicap" {% if User.getInfo.getHandicape  %}checked{% endif %} name="_handicap" >&nbsp<label for="handicap">Handicap</label><br>
+                                        </div>
+                                        <div class="col-xs-6" style="text-align:left">
                                         <input value="1" type="checkbox" id="entrepreneur" {% if User.getInfo.getEntrepreneur  %}checked{% endif %} name="_entrepreneur" >&nbsp<label for="entrepreneur">Entrepreneurs</label>
+                                        </div>
                                     </div>
 
                                     <div class="inputcontainer">
+                                        <div class="col-xs-6" style="text-align:left">
                                         <label>Permis  :  </label>
 
                                         <input title="oui" value="1" type="radio" {% if User.getInfo.getPermis == '1' %} checked {% endif %} name="_Permis"  ><label>oui</label>
                                         <input title="non" value="-1" type="radio" {% if User.getInfo.getPermis == '-1' %} checked {% endif %}  name="_Permis" ><label>non</label>
                                         <input title="en cours" value="0" type="radio" {% if User.getInfo.getPermis == '0' %} checked {% endif %}  name="_Permis" ><label>en cours</label>
+                                        </div>
 
-
-                                    </div>
-                                    <div class="inputcontainer">
+                                        <div class="col-xs-6" style="text-align:left">
                                         <label>Véhicule  :  </label>
 
                                         <input title="oui" value="1" {% if User.getInfo.getVehicule == '1'%}checked{% endif %} type="radio" name="_Vehicule" ><label>oui</label>
                                         <input title="non" value="0" {% if User.getInfo.getVehicule == '0'%}checked{% endif %} type="radio" name="_Vehicule"  ><label>non</label>
-
+                                        </div>
                                     </div>
 
                                    {#  <div class="inputcontainer">
@@ -762,6 +801,7 @@
                                     </div>
 
                                     <div class="inputcontainer">
+                                        <div class="col-xs-6" style="text-align:left">
                                         <label class="list-group-item" style="height: 60px;" for="Mobilite">Mobilité      :</label>
                                         <select class="champ form-control" title="" id="Mobilite"  name="_Mobilite" >
                                             {% if User.getInfo.getMobilite == '10' %}
@@ -781,11 +821,11 @@
                                             {% endif %}
 
                                         </select>
-                                    </div>
-                                    <div class="inputcontainer">
-                                        <label class="list-group-item" style="height: 60px;" for="Fratrie">Nombre de frère et sœur : </label>
-                                        <input value="{{User.getInfo.getFratrie}}" type="number" class="champ form-control" id="Fratrie" min="0" name="_Fratrie" maxlength="45" >
-
+                                        </div>
+                                        <div class="col-xs-6" style="text-align:left">
+                                            <label class="list-group-item" style="height: 60px;" for="Fratrie">Nombre de frère et sœur : </label>
+                                            <input value="{{User.getInfo.getFratrie}}" type="number" class="champ form-control" id="Fratrie" min="0" name="_Fratrie" maxlength="45" >
+                                        </div>
                                     </div>
 
                                     <div class="inputcontainer">

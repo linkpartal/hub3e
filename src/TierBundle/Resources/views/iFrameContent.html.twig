@@ -31,8 +31,7 @@
                 <div onclick="document.getElementById('submitInstanceLicence').click();hide(this)" class="close"></div>
                 <div class="col-xs-offset-3 col-xs-4" style="padding: 0;border:20px solid white;display: block">
 
-                    <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
 
                     <!--div class="btn-group" style="width: 100%">
                 <button type="button" class="btn btn-default dropdown-toggle nav"
@@ -75,8 +74,7 @@
                 </div>
                 <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block">
 
-                <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+                <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
 
                     <form id="formadduser" class="formulaire" action="{{ path("user_added") }}" onsubmit="document.getElementById('submitadduser').disabled=true;ShowWaiter();" method="post">
                         <input type="hidden" id="id" name="_id" value="{{ etablissement.getId }}">
@@ -128,8 +126,7 @@
                 <div id="addmission" class="popup" >
                     <div onclick="document.getElementById('submitaddmission').click();hide(this)" class="close"></div>
                     <div class="col-xs-offset-1 col-xs-9 formContainer">
-                        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
                         <form id="formaddmission" class="formulaire" action= "{{ path("mission_added") }}" onsubmit="document.getElementById('submitaddmission').disabled=true;ShowWaiter();" method="post">
 
                             <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
@@ -349,8 +346,7 @@
                 <div id="ajouterformation" class="popup">
                     <div onclick="document.getElementById('submitaddformation').click();hideAjouterForm(this);" class="close"></div>
                     <div class="col-xs-offset-3 col-xs-4 formContainer" >
-                        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
                         <form  class="formulaire" id="formAjouterformation" action="{{ path('addFormation') }}" onsubmit="document.getElementById('submitaddformation').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data">
                             <div class="div_form"  id="document_formation">
                                 <input type="hidden" id="idetab" name="_idetab" value="{{etablissement.getId}}">
@@ -374,8 +370,7 @@
                 <div id="addQCM" class="popup" >
                     <div onclick="hide(this)" class="close"></div>
                     <div class="col-xs-offset-1 col-xs-9 formContainer" >
-                        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
                         <div id="formaddQCM" class="formulaire" style="text-align: center" >
                             <label style="display:none" id="idformation"></label>
                             <div class="div_form" style="text-align: center" >
@@ -424,8 +419,7 @@
                 <div id="addQCMAff" class="popup" >
                     <div onclick="hide(this)" class="close"></div>
                     <div class="col-xs-offset-1 col-xs-9 formContainer" >
-                        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
                         <div id="formaddQCMAff" class="formulaire" style="text-align: center" >
                             <div class="div_form" style="text-align: center" >
                                 <section style="text-align: center" >
@@ -474,8 +468,7 @@
                 <div id="apprenant" class="popup" >
                     <div onclick="document.getElementById('submitaddapprenant').click();hide(this)" class="close"></div>
                     <div class="col-xs-offset-1 col-xs-9 formContainer" >
-                        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
 
                         <form class="formulaire" id="formApprenant" action="{{ path("apprenant_added") }}" onsubmit="document.getElementById('submitaddapprenant').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data" style="margin-top: 50px"   >
                             <input type="hidden" id="idEtab" name="_idEtab" value="{{ etablissement.getId }}">
@@ -589,8 +582,8 @@
                 <div id="associerecole" class="popup">
                     <div onclick="document.getElementById('submitassocierecole').click();hide(this)" class="close"></div>
                     <div class="col-xs-offset-4 col-xs-4 formContainer" >
-                        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+                        
                         <form class="formulaire" id="formAssiation" action="{{ path("ecoles_assiciated",{'id':etablissement.getId}) }}" onsubmit="document.getElementById('submitassocierecole').disabled=true;ShowWaiter();" method="post">
                             <div class="div_form">
                                 <select class="input" title="" style="height: 100px" name="ecoles[]" multiple required>

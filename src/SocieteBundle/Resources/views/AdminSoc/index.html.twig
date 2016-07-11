@@ -18,8 +18,7 @@
 <div id="import" class="popup col-xs-3">
     <div onclick="document.getElementById('submitimport').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-9 formContainer">
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
         <form id="form" action="{{ path('import') }}" onsubmit="document.getElementById('submitimport').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data">
             <div class="div_form">
 
