@@ -9,11 +9,16 @@
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
     {% block CSS %}{% endblock %}
+
     <style>
-        .hidden{display: none !important;}
-        .ui-widget-header{color:black;}
 
+        .hidden{
+            display: none !important;
+        }
 
+        .ui-widget-header{
+            color:black;
+        }
 
         .col-md-2, .col-md-10{
             padding:0;
@@ -24,9 +29,7 @@
         }
         .chat-window{
             bottom:0;
-
-
-            margin-left:10px;
+            margin-left:0px;
         }
         .chat-window > div > .panel{
             border-radius: 5px 5px 0 0;
@@ -92,21 +95,14 @@
             position: relative;
         }
 
-
         .base_sent {
             justify-content: flex-end;
             align-items: flex-end;
-
         }
-
 
         .msg_sent > time{
             float: right;
         }
-
-
-
-
 
         .msg_container_base::-webkit-scrollbar-track
         {
@@ -131,7 +127,9 @@
             left:0px;
             bottom:0;
         }
+
     </style>
+
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
 
 </head>
@@ -224,16 +222,15 @@
 
     <div onclick="fermeture();hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-7" style="background-color: white;padding: 0;border:20px solid white;display: block; margin-left: 20%; ">
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
 
-            <div class="row chat-window col-xs-5 col-md-3" id="chat_window_1" style="width:90%;margin-left:10px;background-color: #66afe9">
-                <div style="height: 120px ">
-                    <img id="imgSociete" style="margin-top:10px;float:left;margin-left: 20px;height:70px;width:70px;margin:15px 40px;border-radius: 100%" src="{{ asset('image/entreprise.jpg') }}">
-                    <label id="lblSociete" style="margin-top:10px;float:left;margin-left: 20px"></label>
+            <div class="row chat-window col-xs-5 col-md-3" id="chat_window_1" style="width:100%;background-color: #66afe9">
+                <div style="height: 80px ">
+                    <img id="imgSociete" style="margin-top:10px;float:left;margin-left: 20px;height:50px;width:50px;margin:15px 40px;border-radius: 100%" src="{{ asset('image/entreprise.jpg') }}">
+                    <label id="lblSociete" style="margin-top:20px;float:left;margin-left: 20px"></label>
 
-                    <img id="imgApp" style="margin-top:10px;float:right;margin-right: 20px;height:70px;width:70px;margin:15px 40px;border-radius: 100%" src="">
-                    <label id="lblApp"style="margin-top:10px;float:right;" ></label>
+                    <img id="imgApp" style="margin-top:10px;float:right;margin-right: 20px;height:50px;width:50px;margin:15px 40px;border-radius: 100%" src="">
+                    <label id="lblApp"style="margin-top:20px;float:right;" ></label>
                 </div>
                 <div class="col-xs-12 col-md-12">
 
@@ -244,7 +241,7 @@
         {% for mise in AllMiseEnRelation %}
             {% if mise.expediteur.hasrole('ROLE_APPRENANT') %}
 
-                <div id="Msg{{ i }}" class="row msg_container base_receive" style="margin-right: 1px;margin-left: 50px" name="App{{ mise.expediteur.getId() }}_Mission{{mise.mission.getId()}}">
+                <div id="Msg{{ i }}" class="row msg_container base_receive" style="margin-right: -45px;margin-left: 50px" name="App{{ mise.expediteur.getId() }}_Mission{{mise.mission.getId()}}">
                     <div class="col-md-10 col-xs-10">
                         <div class="messages msg_sent" style="background: #F5F6CE";>
 
@@ -254,16 +251,13 @@
 
                         </div>
                     </div>
-                    <div class="col-md-10 col-xs-10">
-
-                    </div>
                     <div class="col-md-2 col-xs-2 avatar">
                         {% if mise.expediteur.getPhotos %}
-                            <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="data:image/jpg;base64,{{GetMyPhoto(mise.expediteur.getId())}}">
+                            <img style="height:50px;width:50px;margin:0 40px;border-radius: 100%; float:right" src="data:image/jpg;base64,{{GetMyPhoto(mise.expediteur.getId())}}">
                         {% elseif mise.expediteur.getCivilite == 'Mme' or mise.expediteur.getCivilite == 'Madame' or mise.expediteur.getCivilite == 'Mademoiselle' %}
-                            <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/femme.jpg') }}">
+                            <img style="height:50px;width:50px;margin:0 40px;border-radius: 100%; float:right" src="{{ asset('image/femme.jpg') }}">
                         {% else %}
-                            <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/homme.jpg') }}">
+                            <img style="height:50px;width:50px;margin:0 40px;border-radius: 100%; float:right" src="{{ asset('image/homme.jpg') }}">
                         {% endif %}
 
 
@@ -275,10 +269,10 @@
 
                 <div id="Msg{{ i }}" class="row msg_container base_sent"  style="margin-right: 50px;margin-left: -45px"  name="App{{ mise.destinataire.getId() }}_Mission{{mise.mission.getId()}}">
                     <div class="col-md-2 col-xs-2 avatar">
-                        <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/Entreprise.jpg') }}">
+                        <img style="height:50px;width:50px;margin:0 40px;border-radius: 100%" src="{{ asset('image/Entreprise.jpg') }}">
 
                     </div>
-                    <div class="col-md-10 col-xs-10">
+                    <div class="col-md-10 col-xs-10" style="padding-top:10px">
                         <div class="messages msg_receive" style="background: #CEECF5;">
                             <p style="width: 70%;margin-left: 30%">{{ mise.getMessage }}
 

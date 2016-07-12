@@ -25,8 +25,7 @@
     <div id="MettreEnRelation" class="popup" >
         <div onclick="document.getElementById('submitMettreEnRelation').click();hide(this)" class="close"></div>
         <div class="col-xs-offset-3 col-xs-6 formContainer">
-            <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
             <form id="formMettreEnRelation" class="formulaire" action="" onsubmit="document.getElementById('submitMettreEnRelation').disabled=true;ShowWaiter();" method="post">
 
                 <div class="div_form" style="border-bottom:1px solid #adadad;display: inline-table;">
@@ -61,8 +60,7 @@
     <div id="Assigner_Tuteur" class="popup">
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-4 col-xs-4 formContainer">
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
         <form id="formAssignTuteur" action="{{ path('Assigner_tuteur',{'id':mission.id}) }}" onsubmit="this.disabled = true;ShowWaiter();" class="formulaire" method="post">
             <div class="div_form" style="display: block">
                 <select id="SelectTuteur" style="width: 100%; overflow-x: auto;margin-top: 30px;margin-bottom: 30px;" title="" class="row" name="tuteur">
@@ -80,8 +78,7 @@
     <div id="Diffusion_formation" class="popup">
         <div onclick="document.getElementById('submitDiffusion8598').click();hide(this)" class="close"></div>
         <div class="col-xs-offset-3 col-xs-4 formContainer">
-            <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
             <input class="row" style="width: 100%" type="text" placeholder="Recherche" onkeyup="if(event.keyCode==13){if(confirm('Voulez-vous envoyer?')){document.getElementById('submitDiffusion8598').click();}}else{rechercheformation(this.value);}">
             <form id="formDiffusion" class="formulaire" onsubmit="ShowWaiter();" method="post">
                 <div class="div_form" style="display: block">
@@ -112,8 +109,7 @@
 <div id="FicheApprenant" class="popup">
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-7 formContainer" style="border:20px;">
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
         <form id="formFicheApprenant" class="formulaire"  onsubmit="ShowWaiter();"  method="post">
 
 

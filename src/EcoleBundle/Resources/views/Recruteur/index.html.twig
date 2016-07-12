@@ -25,8 +25,7 @@
 
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-3 col-xs-6 formContainer" >
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+         <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
 
         <div id="div_adresse" name="ajouterAdresse" style="border-bottom: 10px;display: none;">
             <button class="toggle" type="button" data-toggle="collapse" style="background-color: rgb(215,215,215);height: 40px;border: none;margin-top: 40px;" data-target="#demo"></button>
@@ -109,7 +108,7 @@
                     {# JE RECUPERE CETTE SECTION EN TITRE DE POPUP PLUS HAUT
                     <label style="text-transform: uppercase;font: 16px Roboto;color: rgb(75, 75, 75);font-weight: bold;text-align: left;" class="col-xs-12">Informations générales</label>
                     #}
-
+            
                     <div class="col-xs-6 input-colonne">
                         <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Siren *</label>
                         <input type="text" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" title="siren" required>
@@ -239,8 +238,7 @@
 <div id="apprenant" class="popup" >
     <div onclick="document.getElementById('submitaddapprenant').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-9 formContainer">
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
 
         <form class="formulaire" id="formApprenant" action="{{ path("apprenant_added") }}" onsubmit="document.getElementById('submitaddapprenant').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data" style="margin-top: 50px"   >
             <input type="hidden" id="idEtab" name="_idEtab" value="{{ app.user.etablissement.getId }}">
@@ -279,7 +277,7 @@
                     <div class="col-xs-6 input-colonne">
                         <input placeholder="CP Naissance" style="font:16px Roboto;" class="input" type="text" id="Cpnaissance" name="_Cpnaissance" maxlength="45" required >
                         <input placeholder="Ville Naissance" style="font: 16px Roboto;" class="input" type="text" id="Lieunaissance" name="_Lieunaissance" maxlength="45" required >
-                        <input placeholder="Date de Naissance" style="font: 16px Roboto;" type="text" class="date" id="Datenaissance" name="_Datenaissance" title="Date de Naissance" required >
+                        <input placeholder="Date de Naissance" style="font: 16px Roboto;" type="text" class="date" id="Datenaissance" name="_Datenaissance" title="Date de Naissance" maxlength="45" required >
                         <input placeholder="Diplômes  obtenus" style="font: 16px Roboto;" class="input" id="Diplome" name="_Diplome" type="text" maxlength="45"   >
                         <input placeholder="Format.ou en cours" style="font: 16px Roboto;" class="input" id="FormationCours" name="_FormationCours" type="text" >
                         <div class="col-xs-12">
@@ -372,8 +370,7 @@
 <div id="addmission" class="popup" >
     <div onclick="document.getElementById('submitaddmission').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-9 formContainer">
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
         <form id="formaddmission" class="formulaire" action= "{{ path("mission_added") }}" onsubmit="document.getElementById('submitaddmission').disabled=true;ShowWaiter();" method="post">
 
             <input type="hidden" id="idetab" name="_idetab" value="{{ etablissement.getId }}">
@@ -591,8 +588,8 @@
 {# <div id="PostulationEnCours" class="popup" >
     <div onclick="document.getElementById('PostulationEnCours').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-9 formContainer">
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+
         <form id="postulation">
 
             <div id="Postulation"  style="height: 281px;border-top: 1px solid #B0B0B0;margin: 0;overflow-y: auto;width: 100%;">
@@ -719,7 +716,7 @@
             <div class="col-xs-1 col-sm-1 col-md-1 col-xs-1" style="height: 100%;">
                 <a href="{{ path('metier_user_login') }}" >     <img src="{{ asset('image/Logo_Hub_3e.png') }}" style="height: 100%" >        </a>
             </div>
-            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="display: inline; margin-left: 10px;border: 0;padding: 4px;height: 21px;float: left;">
+            <div class="input-group col-xs-1 col-sm-1 col-md-1 col-xs-1" style="display: inline; margin-left: 10px;border: 0;padding: 5px;height: 21px;float: left;">
                 <button onclick="show('apprenant')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                 ></button>
 
@@ -922,11 +919,10 @@
 <div id="MissionAPourvoir" class="popup" >
     <div onclick="document.getElementById('MissionAPourvoir').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-2 col-xs-8 formContainer">
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-            <div> <p> MISSIONS A POURVOIR </p></div>
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3>MISSIONS A POURVOIR </h3> </p> </div>
             <table class="table table-bordered table-hover table-responsive">
-                <thead>
+                <thead style="background-color:#3988d7">
                     <tr>
                         <th> INTITULE </th>
                         <th> SOCIETE </th>
@@ -963,11 +959,10 @@
 <div id="MissionPourvues" class="popup" >
     <div onclick="document.getElementById('MissionPourvues').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-2 col-xs-8 formContainer">
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-            <div> <p> MISSIONS POURVUES </p></div>
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3> MISSIONS POURVUES </h3> </p></div>
             <table class="table table-bordered table-hover table-responsive">
-                <thead>
+                <thead style="background-color:#3988d7">
                     <tr>
                         <th> INTITULE </th>
                         <th> SOCIETE </th>
@@ -1004,11 +999,10 @@
 <div id="MissionSansFormations" class="popup" >
     <div onclick="document.getElementById('MissionSansFormations').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-2 col-xs-8 formContainer">
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-            <div> <p> MISSIONS SANS FORMATIONS </p> </div>
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3>MISSIONS SANS FORMATIONS </h3> </p> </div>
             <table class="table table-bordered table-hover table-responsive">
-                <thead>
+                <thead style="background-color:#3988d7">
                     <tr>
                         <th> INTITULE </th>
                         <th> SOCIETE </th>
@@ -1044,11 +1038,10 @@
 <div id="MissionSansTuteur" class="popup" >
     <div onclick="document.getElementById('MissionSansTuteur').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-2 col-xs-8 formContainer">
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-            <div> <p> MISSIONS SANS TUTEUR </p></div>
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p><h3> MISSIONS SANS TUTEUR  </h3></p></div>
             <table class="table table-bordered table-hover table-responsive">
-                <thead>
+                <thead style="background-color:#3988d7">
                     <tr>
                         <th> INTITULE </th>
                         <th> SOCIETE </th>
@@ -1080,16 +1073,15 @@
     </div>
 </div>
 
-{# POPUP MISSIONS SANS QCM ( Manque comment est lié le qcm à la mission #}
+{# POPUP MISSIONS SANS QCM ( remplacer la méthode mesmissionssansformation par la futur methode mesmissionssansqcm #}
 
 <div id="MissionSansQCM" class="popup" >
     <div onclick="document.getElementById('MissionSansQCM').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-2 col-xs-8 formContainer">
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-            <div> <p> MISSIONS SANS QCM </p></div>
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3>MISSIONS SANS QCM</h3> </p></div>
             <table class="table table-bordered table-hover table-responsive">
-                <thead>
+                <thead style="background-color:#3988d7">
                     <tr>
                         <th> INTITULE </th>
                         <th> SOCIETE </th>
@@ -1098,28 +1090,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% if missions is defined %}
-                        {% if formation is defined %}
-                            {% if Qcmdef is defined %}    
-                                {% for m in missions %}
-                                    {# {% if m. ( comment trouver le qcm relié à la mission %}  #}
-                                        <tr>
-                                            <td> {{ m.intitule }} </td>
-                                            <td> {{ m.etablissement.tier.raisonsoc }} </td>
-                                            <td> {{ m.datecreation | date ('m/Y') }} </td>
-                                            <td> 
-                                                <button class= "btn btn-default btn-xs"> 
-                                                    <a href="{{ path('admin_afficheMission',{'id': m.getId,'idFor': "-1" } ) }}" target="_blank">
-                                                        <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
-                                                    </a>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    {# {% endif %} #}
-                                {% endfor %}
-                            {% endif %}
-                        {% endif %}
-                    {% endif %}
+                {% set MesMissionsSansFormation=GetMissionSansformation(etablissement.getTier.getId) %}
+                    {% for m in MesMissionsSansFormation.mission %}
+                        <tr>
+                            <td> {{ m.intitule }} </td>
+                            <td> {{ m.etablissement.tier.raisonsoc }} </td>
+                            <td> {{ m.datecreation | date ('m/Y') }} </td>
+                            <td> 
+                                <button class= "btn btn-default btn-xs"> 
+                                    <a href="{{ path('admin_afficheMission',{'id': m.getId,'idFor': "-1" } ) }}" target="_blank">
+                                        <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
+                                    </a>
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>    
             </table>
     </div>
@@ -1131,11 +1116,10 @@
 <div id="PostulationEnCours" class="popup" >
     <div onclick="document.getElementById('PostulationEnCours').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-2 col-xs-8 formContainer">
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-            <div> <p> POSTULATIONS EN COURS </p></div>
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3>POSTULATIONS EN COURS</h3> </p></div>
             <table class="table table-bordered table-hover table-responsive">
-                <thead>
+                <thead style="background-color:#3988d7">
                     <tr>
                         <th> NOM PRENOM </th>
                         <th> DATE DE CREATION </th>
@@ -1170,11 +1154,10 @@
 <div id="FormationAValider" class="popup" >
     <div onclick="document.getElementById('FormationAValider').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-2 col-xs-8 formContainer">
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-            <div> <p> FORMATION A VALIDER </p></div>
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3>FORMATION A VALIDER </h3></p></div>
             <table class="table table-bordered table-hover table-responsive">
-                <thead>
+                <thead style="background-color:#3988d7">
                     <tr>
                         <th> NOM PRENOM </th>
                         <th> DATE CREATION </th>
@@ -1182,12 +1165,10 @@
                     </tr>
                 </thead>
                 <tbody>
-{#                   {% set MesFormationsAvalider=GetFormationAValider(etablissement.getTier.getId) %}
-                    {% for user in MesFormationsAvalider.user %} #}
-                    {% if apprenants is defined %}
-                        {% if candidature is defined %}    
-                            {% for user in apprenants %}
-                                {% if user.Candidature.getStatut(2) %}
+                    {% if apprenants is defined %}   
+                        {% for user in apprenants %}
+                            {% if user.info %}
+                                {% if user.info.profilcomplet == 2 %}
                                     <tr>
                                         <td> {{ user.getPhotos }} {{ user.getNom }} {{ user.getPrenom }} </td>
                                         <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
@@ -1200,8 +1181,8 @@
                                         </td>
                                     </tr>
                                 {% endif %}
-                            {% endfor %}
-                        {% endif %}   
+                            {% endif %} 
+                        {% endfor %} 
                     {% endif %}
                 </tbody>    
             </table>
@@ -1214,11 +1195,10 @@
 <div id="ApprenantsAPlacer" class="popup" >
     <div onclick="document.getElementById('ApprenantsAPlacer').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-2 col-xs-8 formContainer">
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-            <div> <p> APPRENANTS A PLACER </p></div>
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3> APPRENANTS A PLACER </h3></p></div>
             <table class="table table-bordered table-hover table-responsive">
-                <thead>
+                <thead style="background-color:#3988d7">
                     <tr>
                         <th> NOM PRENOM </th>
                         <th> DATE CREATION </th>
@@ -1226,10 +1206,50 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% if apprenants is defined %}
-                        {% if candidature is defined %}    
+                    {% if apprenants is defined %}   
+                        {% for user in apprenants %}
+                            {% if user.info %}
+                            {% if user.info.profilcomplet == 3 %}
+                                <tr>
+                                    <td> {{ user.getPhotos }} {{ user.getNom }} {{ user.getPrenom }} </td>
+                                    <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
+                                    <td> 
+                                        <button class= "btn btn-default btn-xs"> 
+                                                <a href="{{ path('metier_user_afficheUser',{'id': user.getId} ) }}" target="_blank">
+                                                    <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
+                                                </a>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            {% endif %}
+                        {% endfor %}   
+                    {% endif %}
+                </tbody>    
+            </table>
+    </div>
+</div>
+
+{# POPUP APPRENANTS MIS EN RELATION quelle variable gère le fait qu'un apprenant est mis en relation #}
+
+<div id="ApprenantsMisEnRelation" class="popup" >
+    <div onclick="document.getElementById('ApprenantsMisEnRelation').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3> APPRENANTS MIS EN RELATION</h3> </p></div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead style="background-color:#3988d7">
+                    <tr>
+                        <th> NOM PRENOM </th>
+                        <th> DATE CREATION </th>
+                        <th> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if apprenants is defined %} 
+                        {% if message is defined %}  
                             {% for user in apprenants %}
-                                {% if user.candidature.getStatut(3) %}
+                                 {% if user.message.getDestinataire()%} 
                                     <tr>
                                         <td> {{ user.getPhotos }} {{ user.getNom }} {{ user.getPrenom }} </td>
                                         <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
@@ -1242,47 +1262,6 @@
                                         </td>
                                     </tr>
                                 {% endif %}
-                            {% endfor %}
-                        {% endif %}   
-                    {% endif %}
-                </tbody>    
-            </table>
-    </div>
-</div>
-
-{# POPUP APPRENANTS MIS EN RELATION quelle variable gère le fait qu'un apprenant est mis en relation #}
-
-<div id="ApprenantsMisEnRelation" class="popup" >
-    <div onclick="document.getElementById('ApprenantsMisEnRelation').click();hide(this)" class="close"></div>
-    <div class="col-xs-offset-2 col-xs-8 formContainer">
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-            <div> <p> APPRENANTS MIS EN RELATION </p></div>
-            <table class="table table-bordered table-hover table-responsive">
-                <thead>
-                    <tr>
-                        <th> NOM PRENOM </th>
-                        <th> DATE CREATION </th>
-                        <th> ACTION </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if apprenants is defined %} 
-                        {% if candidature is defined %}  
-                            {% for user in apprenants %}
-                                {# {% if %} #}
-                                    <tr>
-                                        <td> {{ user.getPhotos }} {{ user.getNom }} {{ user.getPrenom }} </td>
-                                        <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
-                                        <td> 
-                                            <button class= "btn btn-default btn-xs"> 
-                                                    <a href="{{ path('metier_user_afficheUser',{'id': user.getId} ) }}" target="_blank">
-                                                        <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
-                                                    </a>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                {# {% endif %} #}
                             {% endfor %}
                         {% endif %}    
                     {% endif %}
@@ -1297,11 +1276,10 @@
 <div id="ApprenantsPlaces" class="popup" >
     <div onclick="document.getElementById('ApprenantsPlaces').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-2 col-xs-8 formContainer">
-        <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
-            <div> <p> APPRENANTS PLACES </p></div>
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3>APPRENANTS PLACES</h3> </p></div>
             <table class="table table-bordered table-hover table-responsive">
-                <thead>
+                <thead style="background-color:#3988d7">
                     <tr>
                         <th> NOM PRENOM </th>
                         <th> DATE CREATION </th>

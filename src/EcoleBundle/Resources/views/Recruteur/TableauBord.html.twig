@@ -19,16 +19,15 @@
     <title>Tableau de Bord</title>
 </head>
 <body>
-<label style="font-size: 40px ;font-family:roboto">Tableau de bord</label>
+<div style="text-align:center; margin-top:5px"><label style="font-size: 40px ;font-family:roboto">Tableau de bord</label></div>
 
 <br/><br/>
 
-<div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="Mission" class="col-xs-10 col-xs-offset-1 SASPaginate" >
+<div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items:center; background-color:#d2d2d2" id="Mission" class="col-xs-10 col-xs-offset-1 SASPaginate" >
 
-    <div class="col-xs-1" style="text-align: left;margin-left: 10px;">
-
-        <label style="font-size: 20px;font-weight: bold ;font:xx-large Roboto;">
-            {%  if CountLesMissions is defined %} Missions({{ CountLesMissions }}) {% endif %}
+    <div class="col-xs-1" style="text-align:center;margin-left: 10px;">
+        <label style="font-size: 20px;font-weight: bold ;font:x-large Roboto;">
+            {%  if CountLesMissions is defined %} MISSIONS({{ CountLesMissions }}) {% endif %}
         </label>
     </div>
 
@@ -38,12 +37,12 @@
     </div>
 
 </div>
-<div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="apprenanat" class="col-xs-10 col-xs-offset-1 SASPaginate" >
+<div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items:center; background-color:#d2d2d2" id="apprenanat" class="col-xs-10 col-xs-offset-1 SASPaginate" >
 
     <div class="col-xs-1" style="text-align: left;margin-left: 10px;">
 
-        <label style="font-size: 20px;font-weight: bold ;font:xx-large Roboto;">
-            {%  if CountLesApprenants is defined %} Apprenants({{ CountLesApprenants }}) {% endif %}
+        <label style="font-size: 20px;font-weight: bold ;font:x-large Roboto;">
+            {%  if CountLesApprenants is defined %} APPRENANTS({{ CountLesApprenants }}) {% endif %}
         </label>
     </div>
 
@@ -55,16 +54,13 @@
 </div>
 <div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="Mission1" class="col-xs-10 col-xs-offset-1 SASPaginate">
 
-    <div class="col-xs-1" style="text-align: left;margin-left: 10px; width: 50%" onclick="showDiv('MissionAPourvoir')">
-
-        
-            <label style="font:large Roboto;">Missions à pourvoir</label>
-        
+    <div class="col-xs-1" style="text-align: left;margin-left: 10px; width: 50%" onclick="showDiv('MissionAPourvoir')">       
+            <label style="font:large Roboto;">Missions à pourvoir</label>       
     </div>
 
 
     <div id="Nom96" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
-        <div style="border: 1px solid #66b3f4;" class="graphe">
+        <div onclick="showDiv('MissionAPourvoir')" style="border: 1px solid #66b3f4;" class="graphe">
             {# <strong class="barre" style="background: #66b3f4;width: 36%;">36%</strong> #}
             {%  if MissionAPourvoir is defined %} <strong class="barre"  style="background: #66b3f4;width: {{ MissionAPourvoir }}%;">{{ MissionAPourvoir }}%</strong> {% endif %}
         </div>
@@ -74,30 +70,27 @@
 <div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="apprenanat1" class="col-xs-10 col-xs-offset-1 SASPaginate" >
 
     <div class="col-xs-1" style="text-align: left;margin-left: 10px; width: 50%" onclick="showDiv('PostulationEnCours')">
-
         <label style="font:large Roboto;">Postulation en cours </label>
     </div>
 
 
     <div id="Nomapprenanat1" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
-        <div  style="border: 1px solid #fcb552;" class="graphe">
+        <div onclick="showDiv('PostulationEnCours')" style="border: 1px solid #fcb552;" class="graphe">
             {%  if PostulationEnCours is defined %} <strong class="barre"  style="background: #fcb552;width: {{ PostulationEnCours }}%;">{{ PostulationEnCours }}%</strong> {% endif %}
 
         </div>
     </div>
 
-
 </div>
 <div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="Mission2" class="col-xs-10 col-xs-offset-1 SASPaginate" >
 
     <div class="col-xs-1" style="text-align: left;margin-left: 10px;; width: 50%" onclick="showDiv('MissionPourvues')">
-
         <a href="#"><label style="font:large Roboto;">Missions pourvues</label></a>
     </div>
 
 
     <div id="Nomapprenanat12" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
-        <div style="border: 1px solid #81c785;" class="graphe">
+        <div onclick="showDiv('MissionPourvues')" style="border: 1px solid #81c785;" class="graphe">
             {%  if MissionsPourvues is defined %} <strong class="barre"  style="background: #fcb552;width: {{ MissionsPourvues }}%;">{{ MissionsPourvues }}%</strong> {% endif %}
         </div>
     </div>
@@ -112,8 +105,7 @@
 
 
     <div id="Nomapprenanat3" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
-        <div style="border: 1px solid #ec6494;" class="graphe">
-
+        <div onclick="showDiv('FormationAValider')" style="border: 1px solid #ec6494;" class="graphe">
             {%  if FormationAvalider is defined %} <strong class="barre" style="background: #ec6494;width: {{ FormationAvalider }}%;">{{ FormationAvalider }}%</strong> {% endif %}
         </div>
     </div>
@@ -122,13 +114,11 @@
 <div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="Mission3" class="col-xs-10 col-xs-offset-1 SASPaginate" >
 
     <div class="col-xs-1" style="text-align: left;margin-left: 10px; width: 50%" onclick="showDiv('MissionSansFormations')">
-
         <a href="#"><label style="font:large Roboto;">Missions sans formations</label></a>
     </div>
 
-
     <div id="Nomapprenanat4" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
-        <div style="border: 1px solid #feb450;" class="graphe">
+        <div onclick="showDiv('MissionSansFormations')" style="border: 1px solid #feb450;" class="graphe">
             {%  if MissionsSansFormations is defined %} <strong class="barre"  style="background: #fcb552;width: {{ MissionsSansFormations }}%;">{{ MissionsSansFormations }}%</strong> {% endif %}
         </div>
     </div>
@@ -137,36 +127,31 @@
 <div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="apprenanat3" class="col-xs-10 col-xs-offset-1 SASPaginate" >
 
     <div class="col-xs-1" style="text-align: left;margin-left: 10px; width: 50%" onclick="showDiv('ApprenantsAPlacer')">
-
         <a href="#"><label style="font:large Roboto;">Apprenants à placer</label></a>
-
     </div>
 
-
     <div id="Nomapprenanat5" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
-
-        <div style="border: 1px solid #e77379;" class="graphe">
-
+        <div onclick="showDiv('ApprenantsAPlacer')" style="border: 1px solid #e77379;" class="graphe">
             {%  if ApprenantAplacer is defined %} <strong class="barre" style="background: #e77379;width: {{ ApprenantAplacer }}%;">{{ ApprenantAplacer }}%</strong> {% endif %}
         </div>
     </div>
 
 </div>
+
 <div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="Mission4" class="col-xs-10 col-xs-offset-1 SASPaginate" >
 
     <div class="col-xs-1" style="text-align: left;margin-left: 10px; width: 50%" onclick="showDiv('MissionSansTuteur')">
-
         <a href="#"><label style="font:large Roboto;">Missions sans tuteur</label></a>
     </div>
 
-
     <div id="Nomapprenanat6" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
-        <div style="border: 1px solid #e77379;" class="graphe">
+        <div onclick="showDiv('MissionSansTuteur')" style="border: 1px solid #e77379;" class="graphe">
             {%  if MissionsSansTuteur is defined %} <strong class="barre"  style="background: #e77379;width: {{ MissionsSansTuteur }}%;">{{ MissionsSansTuteur }}%</strong> {% endif %}
         </div>
     </div>
 
 </div>
+
 <div  style="text-align:left;margin-left:5px;width:48%; height: 50px;align-items: center" id="apprenanat4" class="col-xs-10 col-xs-offset-1 SASPaginate" >
 
     <div class="col-xs-1" style="text-align: left;margin-left: 10px; width: 50%" onclick="showDiv('ApprenantsMisEnRelation')">
@@ -176,11 +161,8 @@
 
 
     <div id="Nom85" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
-        <div onclick="showDiv('PostulationEnCours')" style="border: 1px solid #64b5f4;" class="graphe">
-
+        <div onclick="showDiv('ApprenantsMisEnRelation')" style="border: 1px solid #64b5f4;" class="graphe">
             {%  if ApprenantRelation is defined %} <strong  class="barre" style="background: #64b5f4;width: {{ ApprenantRelation }}%;">{{ ApprenantRelation }}%</strong> {% endif %}
-
-
         </div>
     </div>
 
@@ -194,7 +176,7 @@
 
 
     <div id="Nom" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%;">
-        <div style="border: 1px solid #ef6192;" class="graphe">
+        <div onclick="showDiv('MissionSansQCM')" style="border: 1px solid #ef6192;" class="graphe">
             {%  if MissionsSansQcm is defined %} <strong class="barre"  style="background: #ef6192;width: {{ MissionsSansQcm }}%;">{{ MissionsSansQcm }}%</strong> {% endif %}
         </div>
     </div>
@@ -208,7 +190,7 @@
     </div>
 
     <div id="Nom84" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
-        <div  onclick="showDiv('PostulationEnCours')" style="border: 1px solid #80c681;text-align:right"  class="graphe">
+        <div  onclick="showDiv('ApprenantsPlaces')" style="border: 1px solid #80c681;text-align:right"  class="graphe">
             {%  if Apprenantplacer is defined %} <strong   class="barre" style="background: #80c681;width: {{ Apprenantplacer }}%;">{{ Apprenantplacer }}%</strong> {% endif %}
 
         </div>
@@ -219,9 +201,10 @@
 <div  style="text-align:left;margin-left:5px;width:48%; height: 70px;align-items: center" id="MissionBtn" class="col-xs-10 col-xs-offset-1 SASPaginate" >
 
     <div class="col-xs-1" style="text-align: center; width: 100%">
-
-        <button onclick="showDiv('addmission')"  style="width:200px;height:40px;background:#3ea8f8;color:white;border:1px solid #ccc;" type="button" >CRÉER UNE MISSION   <label style="font-size:large;"> +</label></button>
-
+        {# Button disabled pour le moment #}
+        <button onclick="showDiv('addmission')"  class="btn btn-primary" type="button" disabled="disabled">
+            CRÉER UNE MISSION
+        </button>
     </div>
 
 
@@ -231,19 +214,12 @@
 <div  style="text-align:left;margin-left:5px;width:48%; height: 70px;align-items: center" id="apprenanatBtn" class="col-xs-10 col-xs-offset-1 SASPaginate" >
 
     <div class="col-xs-1" style="text-align: center; width: 100%">
-
-        <button  onclick="showDiv('apprenant');" style="width:200px;height:40px;background:#3ea8f8;color:white;border:1px solid #ccc;" type="button" >CRÉER UN APPRENANT   <label style="font-size:large;"> +</label></button>
-
+        <button  onclick="showDiv('apprenant');" class="btn btn-primary" type="button">
+            CRÉER UN APPRENANT
+        </button>
     </div>
 
-
-
-
 </div>
-
-
-
-
 
 
 
