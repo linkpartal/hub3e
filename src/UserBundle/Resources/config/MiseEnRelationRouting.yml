@@ -15,7 +15,7 @@ afficher_ApprenantPropose:
     defaults: { _controller: UserBundle:Default:affichageApprenantPropose }
 
 DateRDV:
-    path: /choix_Date_RDV/idrdv={id}/{numero}
+    path: /choix_Date_RDV/idrdv={id}/numeroDate={numero}/textRDV={textmessage}
     defaults: { _controller: UserBundle:MiseEnRelation:choixDate }
 
 AnnulerRDV:

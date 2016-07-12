@@ -48,6 +48,7 @@ class globalExtension extends \Twig_Extension{
             'GetStatutTuteurRDV' => new \Twig_Function_Method($this, 'GetStatutTuteurRDV'),
             'GetFormationCommun' => new \Twig_Function_Method($this, 'GetFormationCommun'),
             'GetMissionSansformation' => new \Twig_Function_Method($this, 'GetMissionSansformation'),
+            'GetRDV' => new \Twig_Function_Method($this, 'GetRDV'),
 
 
 
@@ -151,6 +152,14 @@ class globalExtension extends \Twig_Extension{
             $Dates=$Dates.' ou '.$rdv->getDate3()->format('Y-m-d à H:i');
         }
         return $Dates;
+    }
+
+    function GetRDV($idapp,$idMission){
+
+        $rdv = $this->em->getRepository('GenericBundle:RDV')->findOneBy(array('apprenant'=>$idapp,'mission'=>$idMission));
+
+        return $rdv;
+        return array('RDV'=>$rdv);
     }
 
     function CountMission($destinataire){

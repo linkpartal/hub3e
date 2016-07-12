@@ -8,7 +8,12 @@
     <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
+
     {% block CSS %}{% endblock %}
+    <style>
+        .hidden{display: none !important;}
+        .ui-widget-header{color:black;}
+    </style>
     <style>
         .hidden{display: none !important;}
         .ui-widget-header{color:black;}
@@ -286,14 +291,81 @@
                                                     <br/>
                                                     {{ GetDateRDV(mise.destinataire.getId(),mise.mission.getId()) }}
 
+
+
                                                 {% endif %}
                                             </p>
 
+
+
                                             <time style="margin-top: -20px;" ><label style="text-transform :uppercase;color:{{ mise.couleur }};font-size:15px ">{{ mise.getAction }}</label><br>{{ mise.getDate|date('d-m-Y à H:i') }}</time>
                                         </div>
+
                                     </div>
+                                    {% if mise.getAction=='Propose rdv' %}
+                                        {% set rdv=GetRDV(mise.destinataire.getId(),mise.mission.getId()) %}
+
+                                        {% if not rdv.getStatut  %}
+                                     <div  id="DivConfirmationRDV{{ rdv.id }}">
+                                         <br/>
+                                         <label>Action :</label>
+                                         <select id="Action_rdv{{ rdv.id }}" onchange="EnableControle(this.selectedIndex,{{ rdv.id }});" title="Actions" style="height:40px;">
+                                             <option value="Accepter">Accepter RDV</option>
+                                             <option value="Reporter">Reporter RDV</option>
+                                             <option value="Annuler">Annuler RDV</option>
+                                         </select>
+                                         <br/>
+                                         <br/>
+
+                                         <div id="dates_rdv{{ rdv.id }}" >
+
+
+                                         {% if rdv.date1 %}
+                                             <label  > {{ rdv.getDate1|date('d-m-Y à H:i') }}
+                                                 {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+
+                                                     <input type="radio" id="r1{{ rdv.id }}" name="RadioDate" value="1">
+                                                 {% endif %}
+                                             </label>
+                                         {% endif %}
+                                         <br/>
+                                         {% if rdv.date2 %}
+                                             <label  > {{ rdv.getDate2|date('d-m-Y à H:i') }}
+                                                 {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                                     <input type="radio" id="r2{{ rdv.id }}" name="RadioDate" value="2">
+                                                 {% endif %}
+                                             </label>
+                                         {% endif %}
+                                         <br/>
+                                         {% if rdv.date3 %}
+                                             <label  > {{ rdv.getDate3|date('d-m-Y à H:i') }}
+                                                 {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                                     <input type="radio"  id="r3{{ rdv.id }}" name="RadioDate" value="3">
+                                                 {% endif %}
+                                             </label>
+                                         {% endif %}
+
+
+                                         </div>
+
+
+
+                                            <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 100px;background-color:wheat;width:80%;height: 100px;resize: none;" class="input" name="Message" placeholder="Saisissez votre message ici" required ></textarea>
+
+                                            <input class="blue" type="button" onclick="EnvoyerRDV({{ rdv.id }})"  style="margin-left: 100px" value="Envoyer">
+
+                                     </div>
+                                        {% endif %}
+
+
+
+
+
+                                    {% endif %}
+
                                 </div>
                             {% endif %}
+
                             {% set i = i + 1 %}
                         {% endfor %}
                     {% endif %}
@@ -701,6 +773,107 @@ function Afficher(idMission){
     document.getElementById('Div_'+idMission).style.display='block';
 }
 
+function EnableControle(index,idRDV){
+
+
+   var idDate="dates_rdv".concat(idRDV);
+    if (index=='0'){
+
+        document.getElementById(idDate).style.display="block";
+    }else{
+
+        document.getElementById(idDate).style.display="none";
+    }
+
+}
+
+function EnvoyerRDV(IdRdv)
+{
+
+    var DateSelect;
+    var Message;
+    var Action;
+    //var idMessageDiv="Message_rdv"+"1";
+    //var idActionRdv="Action_rdv"+"1";
+    Message=document.getElementById('Message_rdv'+IdRdv).value;
+    Action=document.getElementById('Action_rdv'+IdRdv).value;
+    var radios = document.getElementsByName("RadioDate")
+    alert(Message);
+    for (var i=0, len=radios.length; i<len; i++) {
+        if ( radios[i].checked ) {
+            DateSelect = radios[i].value;
+            break;
+        }
+    }
+    if (Action=='Accepter' ){
+
+        if (DateSelect==null){
+
+            alert('Veuillez cocher une date du RDV');
+
+        }else{
+         // ici l'acceptation du RDV
+
+
+                ShowWaiter();
+                var route = '{{ path('DateRDV',{'id':'_ID','numero':'_NUMERO','textmessage':'_TEXTMESSAGE'}) }}';
+                route = route.replace('_ID',IdRdv);
+                route= route.replace('_NUMERO',DateSelect);
+                route= route.replace('_TEXTMESSAGE',Message);
+
+            var idDivRDV='DivConfirmationRDV'+IdRdv;
+                $.ajax({
+                    url: route,
+                    type:'POST',
+                    error: function(){
+                        DeleteWaiter();
+                        alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+                    },
+                    success: function(data){
+                       if(data===1){
+                            /*var j = 0;
+                            var lenght = button.parentElement.parentElement.children.length;
+                            for(var i =0; i < lenght; i++)
+                            {
+                                if(button.parentElement.parentElement.children[i - j]!=button.parentElement){
+                                    console.log(button.parentElement.parentElement.children[i - j]);
+                                    button.parentElement.parentElement.removeChild(button.parentElement.parentElement.children[i - j]);
+                                    j++;
+                                }
+                            }
+                            button.parentNode.removeChild(button);*/
+
+                           document.getElementById(idDivRDV).style.display="none";
+
+                        }
+                        DeleteWaiter();
+                    }
+                });
+
+
+
+        }
+
+    }else if (Action=='Reporter'){
+     // ici reportation RDV
+
+    }else{
+     // ici annulation RDV
+
+    }
+
+
+
+
+
+   //alert(Message);
+    //alert(IdRdv);
+    //alert(DateSelect);
+
+
+
+
+}
 function AfficherChat(idApp,idMission,Societe,Appre,ImgApp){
 
 //alert(idApp+' / '+idMission);
@@ -753,40 +926,7 @@ document.getElementById(document.getElementsByClassName(ClassDivReceive)[i].id).
 }
 
 
-function ChoisirDate(id,date,button){
-if(confirm('Confirmez-vous votre choix?')){
-ShowWaiter();
-var route = '{{ path('DateRDV',{'id':'_ID','numero':'_NUMERO'}) }}';
-route = route.replace('_ID',id);
-route= route.replace('_NUMERO',date);
 
-$.ajax({
-url: route,
-type:'POST',
-error: function(){
-DeleteWaiter();
-alert('une erreur s\'est produite, veuillez réessayer plus tard!');
-},
-success: function(data){
-if(data===1){
-var j = 0;
-var lenght = button.parentElement.parentElement.children.length;
-for(var i =0; i < lenght; i++)
-{
-if(button.parentElement.parentElement.children[i - j]!=button.parentElement){
- console.log(button.parentElement.parentElement.children[i - j]);
- button.parentElement.parentElement.removeChild(button.parentElement.parentElement.children[i - j]);
- j++;
-}
-}
-button.parentNode.removeChild(button);
-}
-DeleteWaiter();
-}
-});
-}
-
-}
 function AnnulerRDV(id){
 if(confirm('Confirmez-vous l\'annulation du rendez-vous?')){
 ShowWaiter();

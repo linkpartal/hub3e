@@ -276,16 +276,11 @@ class MiseEnRelationController extends Controller
 
     }
 
-    public function choixDateAction($id,$numero){
+    public function choixDateAction($id,$numero,$textmessage){
         $rep = new JsonResponse();
         $em = $this->getDoctrine()->getEntityManager();
 
         $rdv = $em->getRepository('GenericBundle:RDV')->find($id);
-
-
-
-
-
 
         if($rdv)
         {
@@ -294,15 +289,16 @@ class MiseEnRelationController extends Controller
             $message = new Message();
 
             $date = new \DateTime();
-            if($numero==2){
+           if($numero==2){
 
-                $message->setMessage('Confirmation du rdv le : '.date_format($rdv->getDate2(),'d-m-Y à H:i'));
+                $message->setMessage('Confirmation du rdv le : '.date_format($rdv->getDate2(),'d-m-Y à H:i').' '.$textmessage);
             }elseif($numero==3){
 
-                $message->setMessage('Confirmation du rdv le : '.date_format($rdv->getDate3(),'d-m-Y à H:i'));
+                $message->setMessage('Confirmation du rdv le : '.date_format($rdv->getDate3(),'d-m-Y à H:i').' '.$textmessage);
             }else{
-                $message->setMessage('Confirmation du rdv le : '.date_format($rdv->getDate1(),'d-m-Y à H:i'));
+                $message->setMessage('Confirmation du rdv le : '.date_format($rdv->getDate1(),'d-m-Y à H:i').' '.$textmessage);
             }
+            //$message->setMessage($textmessage);
 
             $message->setDate($date);
             $message->setExpediteur($rdv->getApprenant());
