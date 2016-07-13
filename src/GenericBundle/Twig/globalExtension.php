@@ -51,6 +51,7 @@ class globalExtension extends \Twig_Extension{
             'GetFormationCommun' => new \Twig_Function_Method($this, 'GetFormationCommun'),
             'GetMissionSansformation' => new \Twig_Function_Method($this, 'GetMissionSansformation'),
             'GetRDV' => new \Twig_Function_Method($this, 'GetRDV'),
+            'GetIdTopOfMessges' => new \Twig_Function_Method($this, 'GetIdTopOfMessges'),
 
         );
     }
@@ -506,6 +507,15 @@ class globalExtension extends \Twig_Extension{
 
         return array('User'=>$userid);
 
+    }
+
+   public function GetIdTopOfMessges($idDestinataire,$idMission){
+
+
+        $Messages = $this->em->getRepository('GenericBundle:Message')->findBy(array('mission'=>$idMission,'destinataire'=>$idDestinataire));
+
+
+        return $Messages[count($Messages)-1]->getId();
     }
 
     public function getName()

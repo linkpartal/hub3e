@@ -247,6 +247,7 @@
 
                     {% if AllMiseEnRelation is defined %}
                         {% set i=0 %}
+
                         {% for mise in AllMiseEnRelation %}
                             {% if mise.expediteur.hasrole('ROLE_APPRENANT') %}
 
@@ -274,6 +275,87 @@
 
 
                                     </div>
+
+
+                                    {% if (mise.getAction=='Propose rdv' or mise.getAction=='Reporter le RDV') and mise.getId==GetIdTopOfMessges(mise.destinataire,mise.mission)  %}
+
+
+                                        {% set rdv=GetRDV(mise.expediteur.getId(),mise.mission.getId()) %}
+                                        {% if rdv.getStatut()=='1' or rdv.getStatut()=='-1'  %}
+                                            <br/><br/>
+
+                                            <div  id="DivConfirmationRDV{{ rdv.id }}">
+
+                                                <label>Action :</label>
+                                                <select id="Action_rdv{{ rdv.id }}" onchange="EnableControle(this.selectedIndex,{{ rdv.id }});" title="Actions" >
+                                                    <option value="Accepter">Accepter RDV</option>
+                                                    <option value="Reporter">Reporter RDV</option>
+                                                    <option value="Annuler">Annuler RDV</option>
+                                                </select>
+                                                <br/>
+                                                <br/>
+
+                                                <div id="dates_rdv{{ rdv.id }}" >
+
+
+                                                    {% if rdv.date1 %}
+                                                        <label  > {{ rdv.getDate1|date('d-m-Y à H:i') }}
+                                                            {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+
+                                                                <input type="radio" id="r1{{ rdv.id }}" name="RadioDate" value="1">
+                                                            {% endif %}
+                                                        </label>
+                                                    {% endif %}
+                                                    <br/>
+                                                    {% if rdv.date2 %}
+                                                        <label  > {{ rdv.getDate2|date('d-m-Y à H:i') }}
+                                                            {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                                                <input type="radio" id="r2{{ rdv.id }}" name="RadioDate" value="2">
+                                                            {% endif %}
+                                                        </label>
+                                                    {% endif %}
+                                                    <br/>
+                                                    {% if rdv.date3 %}
+                                                        <label  > {{ rdv.getDate3|date('d-m-Y à H:i') }}
+                                                            {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                                                <input type="radio"  id="r3{{ rdv.id }}" name="RadioDate" value="3">
+                                                            {% endif %}
+                                                        </label>
+                                                    {% endif %}
+
+                                                    <br/>
+                                                    <br/>
+                                                </div>
+                                                <div id="Reporter_rdv{{ rdv.id }}" style="display:none;">
+
+                                                    <button type="button" onclick="AddDateTimeDiv(this,{{ rdv.id }})">+</button>
+                                                    <div class="col-xs-4 col-xs-offset-4">
+                                                        <label class="col-xs-1">Le </label><input title="Date du rendez-vous" name="dateRDV[]" type="text" class="col-xs-4" required>
+                                                        <label class="col-xs-1"> à </label><input title="Heure du rendez-vous" name="timeRDV[]{{ rdv.id }}" class="col-xs-4" type="text" required>
+                                                        <button type="button" class="col-xs-offset-1 col-xs-1" onclick="if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}">-</button>
+                                                    </div>
+
+                                                </div>
+
+
+                                                <br/><br/>
+
+
+
+                                                 <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 100px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="Message" placeholder="Saisissez votre message ici" required ></textarea>
+                                                <br/>
+                                                <br/>
+
+                                                <input  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;" type="button" onclick="EnvoyerRDV({{ rdv.id }})"  style="margin-left: 100px" value="Envoyer">
+
+                                            </div>
+                                        {% endif %}
+
+
+
+
+
+                                    {% endif %}
                                 </div>
                             {% else %}
 
@@ -404,7 +486,7 @@
                                 <img style="height:70px;width:70px;float:left;border-radius: 100%" onclick="AfficherChat('{{ mise.expediteur.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc }}<br/>{{ mise.mission.intitule }}','{{ mise.expediteur.getNom }}<br/>{{ mise.expediteur.getPrenom }}','{{ asset('image/homme.jpg') }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
                             {% endif %}
 
-                            {% if not mise.getStatut or not  GetStatutTuteurRDV(mise.expediteur.getId(),mise.mission.getId())  %}
+                            {% if not mise.getStatut  or not  GetStatutTuteurRDV(mise.expediteur.getId(),mise.mission.getId())  %}
                                 <img style="height:70px;width:70px;float:left;" onclick="" src="{{ asset('image/avirtissement.png') }}">
                             {% endif %}
 
@@ -821,38 +903,38 @@
 <script src="{{ asset('js/paginate.js') }}"></script>
 <script language="JavaScript">
     var rendezvousSelectionne;
-    function AddDateTimeDiv(button){
+    function AddDateTimeDiv(button,idRdv){
         if(button.parentElement.children.length < 4) {
             var divContainer = document.createElement('div');
             divContainer.className = 'col-xs-4 col-xs-offset-4';
-//label DATE
+            //label DATE
             var LabelDate = document.createElement('label');
             LabelDate.className = 'col-xs-1';
-            LabelDate.innerHTML = 'Le : ';
-//INPUT DATE
+            LabelDate.innerHTML = 'Le ';
+            //INPUT DATE
             var inputDate = document.createElement('input');
             inputDate.setAttribute('name','dateRDV[]');
             inputDate.setAttribute('id',button.nextElementSibling.firstElementChild.id +'_'+button.parentElement.children.length);
             inputDate.setAttribute('type','text');
             inputDate.className = "col-xs-4";
-//label DATE
+            //label DATE
             var LabelTime = document.createElement('label');
             LabelTime.className = 'col-xs-1';
             LabelTime.innerHTML = ' à ';
-//INPUT TIME
+            //INPUT TIME
             var inputTime = document.createElement('input');
-            inputTime.setAttribute('name','timeRDV[]');
+            inputTime.setAttribute('name','timeRDV[]'+idRdv);
             inputTime.setAttribute('id',button.nextElementSibling.children[1].id +'_'+button.parentElement.children.length);
             inputTime.setAttribute('type','text');
             inputTime.className = "col-xs-4";
-//delete button
+            //delete button
             var deleteButton = document.createElement('button');
             deleteButton.setAttribute('onclick','if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}');
             deleteButton.setAttribute('type','button');
             deleteButton.className = "col-xs-offset-1 col-xs-1";
             deleteButton.innerHTML = '-';
 
-//append
+            //append
             divContainer.appendChild(LabelDate);
             divContainer.appendChild(inputDate);
             divContainer.appendChild(LabelTime);
@@ -963,65 +1045,151 @@
     }
 
 
-    function ChoisirDate(id,date,button){
-        if(confirm('Confirmez-vous votre choix?')){
-            ShowWaiter();
-            var route = '{{ path('DateRDV',{'id':'_ID','numero':'_NUMERO'}) }}';
-            route = route.replace('_ID',id);
-            route= route.replace('_NUMERO',date);
+    function EnvoyerRDV(IdRdv)
+    {
 
-            $.ajax({
-                url: route,
-                type:'POST',
-                error: function(){
-                    DeleteWaiter();
-                    alert('une erreur s\'est produite, veuillez réessayer plus tard!');
-                },
-                success: function(data){
-                    if(data===1){
-                        var j = 0;
-                        var lenght = button.parentElement.parentElement.children.length;
-                        for(var i =0; i < lenght; i++)
-                        {
-                            if(button.parentElement.parentElement.children[i - j]!=button.parentElement){
-                                console.log(button.parentElement.parentElement.children[i - j]);
-                                button.parentElement.parentElement.removeChild(button.parentElement.parentElement.children[i - j]);
-                                j++;
-                            }
+        var DateSelect;
+        var Message;
+        var Action;
+        var idDivRDV='DivConfirmationRDV'+IdRdv;
+        Message=document.getElementById('Message_rdv'+IdRdv).value;
+        Action=document.getElementById('Action_rdv'+IdRdv).value;
+        var radios = document.getElementsByName("RadioDate")
+
+        for (var i=0, len=radios.length; i<len; i++) {
+            if ( radios[i].checked ) {
+                DateSelect = radios[i].value;
+                break;
+            }
+        }
+        if (Action=='Accepter' ){
+
+
+                // ici l'acceptation du RDV
+
+
+                ShowWaiter();
+                var route = '{{ path('AcceptRDVTuteur',{'id':'_ID','numero':'_NUMERO','textmessage':'_TEXTMESSAGE'}) }}';
+                route = route.replace('_ID',IdRdv);
+                route= route.replace('_NUMERO',DateSelect);
+                route= route.replace('_TEXTMESSAGE',Message);
+
+
+                $.ajax({
+                    url: route,
+                    type:'POST',
+                    error: function(){
+                        DeleteWaiter();
+                        alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+                    },
+                    success: function(data){
+                        if(data===1){
+
+
+                            document.getElementById(idDivRDV).style.display="none";
+
                         }
-                        button.parentNode.removeChild(button);
+                        DeleteWaiter();
                     }
-                    DeleteWaiter();
-                }
-            });
-        }
+                });
 
-    }
-    function AnnulerRDV(id){
-        if(confirm('Confirmez-vous l\'annulation du rendez-vous?')){
+
+
+
+
+        }else if (Action=='Reporter'){
+            // ici reportation RDV
+
+            var inputTimes = document.getElementsByName('timeRDV[]'+IdRdv);
+            var DateTimeRdv
+            for(var k = 0; k < inputTimes.length; k++){
+                var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(inputTimes[k].value);
+
+
+
+
+                if (!isValid) {
+                    alert('verifiez que les heure respect le format HH:MM');
+                    return;
+                }else{
+                    if(DateTimeRdv == null){
+                        DateTimeRdv=inputTimes[k].previousElementSibling.previousElementSibling.value+' '+inputTimes[k].value+';'
+                    }else{
+                        DateTimeRdv=DateTimeRdv+inputTimes[k].previousElementSibling.previousElementSibling.value+' '+inputTimes[k].value+';'
+                    }
+                }
+            }
             ShowWaiter();
-            var route = '{{ path('AnnulerRDV',{'id':'_ID'}) }}';
-            route = route.replace('_ID',id);
+            var route = '{{ path('AjournementRDVTuteur',{'id':'_ID','DateTimeRdv':'_DateTimeRdv','MessageTexte':'_MessageTexte'}) }}';
+
+            DateTimeRdv=replaceAll(DateTimeRdv, '/', '££');
+            Message=replaceAll(Message, '/', '££');
+            route = route.replace('_ID',IdRdv);
+            route = route.replace('_DateTimeRdv',DateTimeRdv);
+            route = route.replace('_MessageTexte',Message);
+
 
             $.ajax({
                 url: route,
                 type:'POST',
+                data: $('#PopUpAjournement').serialize(),
                 error: function(){
                     DeleteWaiter();
                     alert('une erreur s\'est produite, veuillez réessayer plus tard!');
                 },
                 success: function(data){
-                    if(data===1){
-                        document.getElementById('statut'+id).innerHTML = 'Annulé';
-                        document.getElementById('statut'+id).style.color = 'red';
-                        document.getElementById('date'+id).innerHTML = '';
-                        document.getElementById('menuRDV'+id).innerHTML ='<li><button style="height: 100%;width: 100%;background-color: transparent;border: none;"'+
-                                'onclick="show(\'ajounerPopUp\');rendezvousSelectionne = '+id+'">Proposez des rendez-vous</button></li>';
-                    }
+                    //document.getElementById(idDivRDV).style.display="none";
+                    //alert(idDivRDV);
+                    document.getElementById(idDivRDV).style.display="none";
                     DeleteWaiter();
                 }
+
+
+
             });
+
+
+
+        }else{
+            // ici annulation RDV
+
+            if(confirm('Confirmez-vous l\'annulation du rendez-vous?')){
+                ShowWaiter();
+                var route = '{{ path('AnnulerRDVTuteur',{'id':'_ID','MessageTexte':'_MessageTexte'}) }}';
+                Message=replaceAll(Message, '/', '££');
+                route = route.replace('_ID',IdRdv);
+                route = route.replace('_MessageTexte',Message);
+                alert(route);
+                $.ajax({
+                    url: route,
+                    type:'POST',
+                    error: function(){
+                        DeleteWaiter();
+                        alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+                    },
+                    success: function(data){
+                        if(data===1){
+
+                            document.getElementById(idDivRDV).style.display="none";
+                        }
+                        DeleteWaiter();
+                    }
+                });
+            }
+
         }
+
+
+
+
+
+        //alert(Message);
+        //alert(IdRdv);
+        //alert(DateSelect);
+
+
+
+
     }
     function fermeture(){
         var form = document.getElementById('PopUpCompteRendu');
@@ -1052,42 +1220,7 @@
             }
         });
     }
-    function Ajournement(){
 
-        var inputTimes = document.getElementsByName('timeRDV[]');
-        for(var k = 0; k < inputTimes.length; k++){
-            var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(inputTimes[k].value);
-
-            if (!isValid) {
-                alert('verifiez que les heure respect le format HH:MM');
-                return;
-            }
-        }
-        ShowWaiter();
-        var route = '{{ path('AjournementRDV',{'id':'_ID'}) }}';
-        route = route.replace('_ID',rendezvousSelectionne);
-        $.ajax({
-            url: route,
-            type:'POST',
-            data: $('#PopUpAjournement').serialize(),
-            error: function(){
-                DeleteWaiter();
-                alert('une erreur s\'est produite, veuillez réessayer plus tard!');
-            },
-            success: function(data){
-                document.getElementById('statut'+rendezvousSelectionne).innerHTML = 'Ajouné';
-                document.getElementById('statut'+rendezvousSelectionne).style.color = 'orangered';
-                var innerhtmldate='';
-                for(var i=0; i< data.length; i++){
-                    innerhtmldate =innerhtmldate + '<label class="col-xs-12" style="font:18px Roboto;margin:auto;" > '+data[i]+ '</label>';
-                }
-                document.getElementById('date'+rendezvousSelectionne).innerHTML = innerhtmldate;
-                document.getElementById('menuRDV'+rendezvousSelectionne).innerHTML ='<li><button type="button" style="height:100%;width:100%;background-color:transparent;border:none;" onclick="AnnulerRDV('+ rendezvousSelectionne+')">Annulé</button></li>';
-                document.getElementById('ajounerPopUp').style.display = 'none';
-                DeleteWaiter();
-            }
-        })
-    }
     function OrdreDeRemplirCR(id,rdv){
         ShowWaiter();
         var route = '{{ path('OrdreCompleterCR',{'idUser':'_IDUSER','idRDV':'_IDRDV'}) }}';
@@ -1115,6 +1248,7 @@
             }
         })
     }
+
     function ConsulterCR(id){
         ShowWaiter();
         var route = '{{ path('ConsulterCR',{'idRDV':'_IDRDV'}) }}';
@@ -1306,6 +1440,27 @@
         }
         google.maps.event.addDomListener(window, 'load', initialize);
 
+    }
+    function EnableControle(index,idRDV){
+
+
+        var idDate="dates_rdv".concat(idRDV);
+        if (index=='0'){
+
+            document.getElementById(idDate).style.display="block";
+            document.getElementById('Reporter_rdv'+idRDV).style.display="none";
+        } else if (index=='1')
+        {
+            document.getElementById('Reporter_rdv'+idRDV).style.display="block";
+            document.getElementById(idDate).style.display="none";
+        }else{
+            document.getElementById('Reporter_rdv'+idRDV).style.display="none";
+            document.getElementById(idDate).style.display="none";
+        }
+
+    }
+    function replaceAll(machaine, chaineARemaplacer, chaineDeRemplacement) {
+        return machaine.replace(new RegExp(chaineARemaplacer, 'g'),chaineDeRemplacement);
     }
 </script>
 </body>

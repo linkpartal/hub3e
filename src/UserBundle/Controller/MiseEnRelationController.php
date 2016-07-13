@@ -334,10 +334,11 @@ class MiseEnRelationController extends Controller
         }
     }
 
-    public function annulerRDVAction($id){
+    public function annulerRDVAction($id,$MessageTexte){
         $em = $this->getDoctrine()->getManager();
         $rdv = $em->getRepository('GenericBundle:RDV')->find($id);
         $rep = new JsonResponse();
+        $MessageTexte = str_replace('££', '/', $MessageTexte);
         if($rdv)
         {
             $rdv->setDate2(null);
@@ -349,7 +350,7 @@ class MiseEnRelationController extends Controller
             $message = new Message();
 
             $date = new \DateTime();
-            $message->setMessage('Annulation du rdv');
+            $message->setMessage('Annulation du rdv: '.'" '.$MessageTexte.' "');
             $message->setDate($date);
             $message->setExpediteur($rdv->getApprenant());
             $message->setDestinataire($rdv->getTuteur());
@@ -401,16 +402,27 @@ class MiseEnRelationController extends Controller
         }
     }
 
-    public function AjournementAction($id,Request $request){
+    public function AjournementAction($id,$DateTimeRdv,$MessageTexte){
         $rep = new JsonResponse();
         $em = $this->getDoctrine()->getManager();
         $rdv = $em->getRepository('GenericBundle:RDV')->find($id);
         $date = array();
+        //$Dates=  array('31/12/2016 20:00','31/12/2016 20:00','31/12/2016 20:00');
+        $Dates= array();
+
+        $DateTimeRdv = str_replace('££', '/', $DateTimeRdv);
+        $MessageTexte = str_replace('££', '/', $MessageTexte);
+        $Dates=explode( ";", $DateTimeRdv,-1) ;
+       // list($date1, $date2, $date3) =$Dates;
+
 
         if($rdv){
-            for( $i = 0; $i < count($request->get('dateRDV')) and $i<3;$i++)
+            $rdv->setDate1(null);
+            $rdv->setDate2(null);
+            $rdv->setDate3(null);
+          for( $i = 0; $i < count($Dates) and $i<3;$i++)
             {
-                $datetimeRDV = $request->get('dateRDV')[$i].' '.$request->get('timeRDV')[$i];
+                $datetimeRDV = $Dates[$i];
 
                 if($i == 0){
                     $rdv->setDate1(date_create_from_format('d/m/Y H:i',$datetimeRDV));
@@ -430,6 +442,7 @@ class MiseEnRelationController extends Controller
             else{
                 $rdv->setChoixApprenant(true);
             }
+
             $rdv->setStatut(-1);
             $em->flush();
             $message = new Message();
@@ -437,9 +450,9 @@ class MiseEnRelationController extends Controller
             $date = new \DateTime();
             $msg='Reporter le rdv pour : ';
 
-            for( $i = 0; $i < count($request->get('dateRDV')) and $i<3;$i++)
+            for( $i = 0; $i < count($Dates) and $i<3;$i++)
             {
-                $datetimeRDV = $request->get('dateRDV')[$i].' à '.$request->get('timeRDV')[$i];
+                $datetimeRDV = $Dates[$i];
 
                 if($i == 0){
 
@@ -452,6 +465,8 @@ class MiseEnRelationController extends Controller
                     $msg=$msg.' ou '.$datetimeRDV;
                 }
             }
+            $msg=$msg.':  " '.$MessageTexte.' "';
+
 
             $message->setDate($date);
             $message->setExpediteur($rdv->getApprenant());
@@ -463,14 +478,6 @@ class MiseEnRelationController extends Controller
             $message->setMessage($msg);
             $em->persist($message);
             $em->flush();
-
-
-
-
-
-
-
-
 
             return $rep->setData($date);
         }
@@ -520,4 +527,181 @@ class MiseEnRelationController extends Controller
         }
         return $rep->setData($Arraycomptes);
     }
+
+
+    public function AcceptRDVTuteurAction($id,$numero,$textmessage){
+        $rep = new JsonResponse();
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $rdv = $em->getRepository('GenericBundle:RDV')->find($id);
+
+        if($rdv)
+        {
+
+
+            $message = new Message();
+
+            $date = new \DateTime();
+            if($numero==2){
+
+                $message->setMessage('Confirmation du rdv le : '.date_format($rdv->getDate2(),'d-m-Y à H:i').' '.$textmessage);
+            }elseif($numero==3){
+
+                $message->setMessage('Confirmation du rdv le : '.date_format($rdv->getDate3(),'d-m-Y à H:i').' '.$textmessage);
+            }else{
+                $message->setMessage('Confirmation du rdv le : '.date_format($rdv->getDate1(),'d-m-Y à H:i').' '.$textmessage);
+            }
+            //$message->setMessage($textmessage);
+
+            $message->setDate($date);
+            $message->setExpediteur($rdv->getTuteur());
+            $message->setDestinataire($rdv->getApprenant());
+            $message->setMission($rdv->getMission());
+            $message->setAction('Accepter RDV');
+            $message->setCouleur('green');
+            $message->setStatut(1);
+            $em->persist($message);
+            $em->flush();
+
+
+            $rdv->setStatut(99);
+            if($numero==2){
+                $rdv->setDate1($rdv->getDate2());
+
+            }elseif($numero==3){
+                $rdv->setDate1($rdv->getDate3());
+
+            }
+
+
+            $rdv->setDate2(null);
+            $rdv->setDate3(null);
+            $em->flush();
+
+
+
+            return $rep->setData(1);
+        }
+        else{
+            return $rep->setData(-1);
+        }
+    }
+
+    public function AjournementTuteurAction($id,$DateTimeRdv,$MessageTexte){
+        $rep = new JsonResponse();
+        $em = $this->getDoctrine()->getManager();
+        $rdv = $em->getRepository('GenericBundle:RDV')->find($id);
+        $date = array();
+        //$Dates=  array('31/12/2016 20:00','31/12/2016 20:00','31/12/2016 20:00');
+        $Dates= array();
+
+        $DateTimeRdv = str_replace('££', '/', $DateTimeRdv);
+        $MessageTexte = str_replace('££', '/', $MessageTexte);
+        $Dates=explode( ";", $DateTimeRdv,-1) ;
+        // list($date1, $date2, $date3) =$Dates;
+
+
+        if($rdv){
+            $rdv->setDate1(null);
+            $rdv->setDate2(null);
+            $rdv->setDate3(null);
+            for( $i = 0; $i < count($Dates) and $i<3;$i++)
+            {
+                $datetimeRDV = $Dates[$i];
+
+                if($i == 0){
+                    $rdv->setDate1(date_create_from_format('d/m/Y H:i',$datetimeRDV));
+                }
+                if($i == 1){
+                    $rdv->setDate2(date_create_from_format('d/m/Y H:i',$datetimeRDV));
+                }
+                if($i == 2){
+                    $rdv->setDate3(date_create_from_format('d/m/Y H:i',$datetimeRDV));
+                }
+
+                array_push($date,$datetimeRDV);
+            }
+            if($this->get('security.token_storage')->getToken()->getUser() == $rdv->getApprenant()){
+                $rdv->setChoixApprenant(false);
+            }
+            else{
+                $rdv->setChoixApprenant(true);
+            }
+
+            $rdv->setStatut(-1);
+            $em->flush();
+            $message = new Message();
+
+            $date = new \DateTime();
+            $msg='Reporter le rdv pour : ';
+
+            for( $i = 0; $i < count($Dates) and $i<3;$i++)
+            {
+                $datetimeRDV = $Dates[$i];
+
+                if($i == 0){
+
+                    $msg=$msg.' '.$datetimeRDV;
+                }
+                if($i == 1){
+                    $msg=$msg.' ou '.$datetimeRDV;
+                }
+                if($i == 2){
+                    $msg=$msg.' ou '.$datetimeRDV;
+                }
+            }
+            $msg=$msg.':  " '.$MessageTexte.' "';
+
+
+            $message->setDate($date);
+            $message->setExpediteur($rdv->getTuteur());
+            $message->setDestinataire($rdv->getApprenant());
+            $message->setMission($rdv->getMission());
+            $message->setAction('Reporter le RDV');
+            $message->setCouleur('red');
+            $message->setStatut(1);
+            $message->setMessage($msg);
+            $em->persist($message);
+            $em->flush();
+
+            return $rep->setData($date);
+        }
+        return $rep->setdata(0);
+    }
+
+
+   public function annulerRDVTuteurAction($id,$MessageTexte){
+    $em = $this->getDoctrine()->getManager();
+    $rdv = $em->getRepository('GenericBundle:RDV')->find($id);
+    $rep = new JsonResponse();
+    $MessageTexte = str_replace('££', '/', $MessageTexte);
+    if($rdv)
+    {
+        $rdv->setDate2(null);
+        $rdv->setDate3(null);
+        $rdv->setStatut(-2);
+        $em->flush();
+
+
+        $message = new Message();
+
+        $date = new \DateTime();
+        $message->setMessage('Annulation du rdv: '.'" '.$MessageTexte.' "');
+        $message->setDate($date);
+        $message->setExpediteur($rdv->getTuteur());
+        $message->setDestinataire($rdv->getApprenant());
+        $message->setMission($rdv->getMission());
+        $message->setAction('Annuler RDV');
+        $message->setCouleur('red');
+        $em->persist($message);
+        $em->flush();
+
+
+        return $rep->setData(1);
+
+    }
+    else{
+        return $rep->setData(-1);
+    }
+}
 }

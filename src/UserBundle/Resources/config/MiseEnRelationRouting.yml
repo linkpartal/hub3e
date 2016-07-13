@@ -19,7 +19,7 @@ DateRDV:
     defaults: { _controller: UserBundle:MiseEnRelation:choixDate }
 
 AnnulerRDV:
-    path: /AnnulerRDV/idrdv={id}
+    path: /AnnulerRDV/idrdv={id}/{MessageTexte}
     defaults: { _controller: UserBundle:MiseEnRelation:annulerRDV }
 
 CompteRenduSaisie:
@@ -27,5 +27,17 @@ CompteRenduSaisie:
     defaults: { _controller: UserBundle:MiseEnRelation:CompteRenduSaisie }
 
 AjournementRDV:
-    path: /Ajournement/idrdv={id}
+    path: /Ajournement/idrdv={id}/{DateTimeRdv}/{MessageTexte}
     defaults: { _controller: UserBundle:MiseEnRelation:Ajournement }
+
+AcceptRDVTuteur:
+    path: /accept_tuteur_RDV/idrdv={id}/numeroDate={numero}/textRDV={textmessage}
+    defaults: { _controller: UserBundle:MiseEnRelation:AcceptRDVTuteur }
+
+AjournementRDVTuteur:
+    path: /AjournementTuteur/idrdv={id}/{DateTimeRdv}/{MessageTexte}
+    defaults: { _controller: UserBundle:MiseEnRelation:AjournementTuteur }
+
+AnnulerRDVTuteur:
+    path: /AnnulerRDV/idrdv={id}/{MessageTexte}
+    defaults: { _controller: UserBundle:MiseEnRelation:annulerRDVTuteur }
