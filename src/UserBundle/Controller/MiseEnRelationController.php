@@ -357,6 +357,7 @@ class MiseEnRelationController extends Controller
             $message->setMission($rdv->getMission());
             $message->setAction('Annuler RDV');
             $message->setCouleur('red');
+            $message->setStatut(-1);
             $em->persist($message);
             $em->flush();
 
@@ -369,7 +370,7 @@ class MiseEnRelationController extends Controller
         }
     }
 
-    public function CompteRenduSaisieAction($id,Request $request){
+    public function CompteRenduSaisieAction($id,$MessageTexte,$Type){
         $rep = new JsonResponse();
         $em = $this->getDoctrine()->getManager();
         $rdv = $em->getRepository('GenericBundle:RDV')->find($id);
@@ -380,12 +381,8 @@ class MiseEnRelationController extends Controller
             $compterendu->setDate(date_create());
             $compterendu->setAuteur($user);
             $compterendu->setRendezvous($rdv);
-            if($request->get('CompteRenduAbsent')){
-                $compterendu->setCompterendu($request->get('CompteRenduAbsent'));
-                $compterendu->setHonorer(false);
-            }
-            elseif($request->get('CompteRendu')){
-                $compterendu->setCompterendu($request->get('CompteRendu'));
+            if($MessageTexte){
+                $compterendu->setCompterendu($MessageTexte);
                 $compterendu->setHonorer(true);
             }
             else{
@@ -394,6 +391,26 @@ class MiseEnRelationController extends Controller
             //return $rep->setData(array($request->get('CompteRendu'),$request->get('CompteRenduAbsent')));
             $em->persist($compterendu);
             $rdv->setStatut(2);
+            $em->flush();
+            $message = new Message();
+
+            $date = new \DateTime();
+            $message->setMessage('Retour du rdv: '.'" '.$MessageTexte.' "');
+            $message->setDate($date);
+            if ($Type=='app'){
+                $message->setExpediteur($rdv->getApprenant());
+                $message->setDestinataire($rdv->getTuteur());
+            }else{
+
+                $message->setExpediteur($rdv->getTuteur());
+                $message->setDestinataire($rdv->getApprenant());
+            }
+
+            $message->setMission($rdv->getMission());
+            $message->setAction('Retour RDV');
+            $message->setCouleur('green');
+            $message->setStatut(1);
+            $em->persist($message);
             $em->flush();
             return $rep->setData(1);
         }
@@ -564,7 +581,7 @@ class MiseEnRelationController extends Controller
             $em->flush();
 
 
-            $rdv->setStatut(99);
+            $rdv->setStatut(1);
             if($numero==2){
                 $rdv->setDate1($rdv->getDate2());
 
@@ -693,6 +710,7 @@ class MiseEnRelationController extends Controller
         $message->setMission($rdv->getMission());
         $message->setAction('Annuler RDV');
         $message->setCouleur('red');
+        $message->setStatut(-1);
         $em->persist($message);
         $em->flush();
 

@@ -524,66 +524,8 @@
     }
 
 
-    function ChoisirDate(id,date,button){
-        if(confirm('Confirmez-vous votre choix?')){
-            ShowWaiter();
-            var route = '{{ path('DateRDV',{'id':'_ID','numero':'_NUMERO'}) }}';
-            route = route.replace('_ID',id);
-            route= route.replace('_NUMERO',date);
 
-            $.ajax({
-                url: route,
-                type:'POST',
-                error: function(){
-                    DeleteWaiter();
-                    alert('une erreur s\'est produite, veuillez réessayer plus tard!');
-                },
-                success: function(data){
-                    if(data===1){
-                        var j = 0;
-                        var lenght = button.parentElement.parentElement.children.length;
-                        for(var i =0; i < lenght; i++)
-                        {
-                            if(button.parentElement.parentElement.children[i - j]!=button.parentElement){
-                                console.log(button.parentElement.parentElement.children[i - j]);
-                                button.parentElement.parentElement.removeChild(button.parentElement.parentElement.children[i - j]);
-                                j++;
-                            }
-                        }
-                        button.parentNode.removeChild(button);
-                    }
-                    DeleteWaiter();
-                }
-            });
-        }
 
-    }
-    function AnnulerRDV(id){
-        if(confirm('Confirmez-vous l\'annulation du rendez-vous?')){
-            ShowWaiter();
-            var route = '{{ path('AnnulerRDV',{'id':'_ID'}) }}';
-            route = route.replace('_ID',id);
-
-            $.ajax({
-                url: route,
-                type:'POST',
-                error: function(){
-                    DeleteWaiter();
-                    alert('une erreur s\'est produite, veuillez réessayer plus tard!');
-                },
-                success: function(data){
-                    if(data===1){
-                        document.getElementById('statut'+id).innerHTML = 'Annulé';
-                        document.getElementById('statut'+id).style.color = 'red';
-                        document.getElementById('date'+id).innerHTML = '';
-                        document.getElementById('menuRDV'+id).innerHTML ='<li><button style="height: 100%;width: 100%;background-color: transparent;border: none;"'+
-                                'onclick="show(\'ajounerPopUp\');rendezvousSelectionne = '+id+'">Proposez des rendez-vous</button></li>';
-                    }
-                    DeleteWaiter();
-                }
-            });
-        }
-    }
     function fermeture(){
         var form = document.getElementById('PopUpCompteRendu');
         for(var i = 0; i< form.childElementCount; i++){
@@ -591,64 +533,8 @@
         }
         document.getElementById('OUI_NON_button').style.display = 'block';
     }
-    function EnvoyerCompteRendu(part){
-        ShowWaiter();
-        var route = '{{ path('CompteRenduSaisie',{'id':'_ID'}) }}';
-        route = route.replace('_ID',rendezvousSelectionne);
-        $.ajax({
-            url: route,
-            type:'get',
-            data: $('#'+part+' textarea').serialize(),
-            error: function(){
-                DeleteWaiter();
-                alert('une erreur s\'est produite, veuillez réessayer plus tard!');
-            },
-            success: function(data){
-                if(data===1){
-                    alert('Compte rendu envoyé');
-                    document.getElementById('CompteRendu').style.display = 'none';
-                    fermeture();
-                }
-                DeleteWaiter();
-            }
-        });
-    }
-    function Ajournement(){
 
-        var inputTimes = document.getElementsByName('timeRDV[]');
-        for(var k = 0; k < inputTimes.length; k++){
-            var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(inputTimes[k].value);
 
-            if (!isValid) {
-                alert('verifiez que les heure respect le format HH:MM');
-                return;
-            }
-        }
-        ShowWaiter();
-        var route = '{{ path('AjournementRDV',{'id':'_ID'}) }}';
-        route = route.replace('_ID',rendezvousSelectionne);
-        $.ajax({
-            url: route,
-            type:'POST',
-            data: $('#PopUpAjournement').serialize(),
-            error: function(){
-                DeleteWaiter();
-                alert('une erreur s\'est produite, veuillez réessayer plus tard!');
-            },
-            success: function(data){
-                document.getElementById('statut'+rendezvousSelectionne).innerHTML = 'Ajouné';
-                document.getElementById('statut'+rendezvousSelectionne).style.color = 'orangered';
-                var innerhtmldate='';
-                for(var i=0; i< data.length; i++){
-                    innerhtmldate =innerhtmldate + '<label class="col-xs-12" style="font:18px Roboto;margin:auto;" > '+data[i]+ '</label>';
-                }
-                document.getElementById('date'+rendezvousSelectionne).innerHTML = innerhtmldate;
-                document.getElementById('menuRDV'+rendezvousSelectionne).innerHTML ='<li><button type="button" style="height:100%;width:100%;background-color:transparent;border:none;" onclick="AnnulerRDV('+ rendezvousSelectionne+')">Annulé</button></li>';
-                document.getElementById('ajounerPopUp').style.display = 'none';
-                DeleteWaiter();
-            }
-        })
-    }
     function OrdreDeRemplirCR(id,rdv){
         ShowWaiter();
         var route = '{{ path('OrdreCompleterCR',{'idUser':'_IDUSER','idRDV':'_IDRDV'}) }}';

@@ -52,6 +52,7 @@ class globalExtension extends \Twig_Extension{
             'GetMissionSansformation' => new \Twig_Function_Method($this, 'GetMissionSansformation'),
             'GetRDV' => new \Twig_Function_Method($this, 'GetRDV'),
             'GetIdTopOfMessges' => new \Twig_Function_Method($this, 'GetIdTopOfMessges'),
+            'GetCompteRendu' => new \Twig_Function_Method($this, 'GetCompteRendu'),
 
         );
     }
@@ -516,6 +517,20 @@ class globalExtension extends \Twig_Extension{
 
 
         return $Messages[count($Messages)-1]->getId();
+    }
+
+
+    function GetCompteRendu($idRdv,$idActeur){
+
+        $CompteRendu = $this->em->getRepository('GenericBundle:CompteRendu')->findOneBy(array('auteur'=>$idActeur,'rendezvous'=>$idRdv));
+
+       if (count($CompteRendu)>0){
+           $retour=true;
+       }else{
+
+           $retour=false;
+       }
+        return $retour;
     }
 
     public function getName()

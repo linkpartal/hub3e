@@ -23,7 +23,7 @@ AnnulerRDV:
     defaults: { _controller: UserBundle:MiseEnRelation:annulerRDV }
 
 CompteRenduSaisie:
-    path: /CompteRendu/idrdv={id}
+    path: /CompteRendu/idrdv={id}/{MessageTexte}/{Type}
     defaults: { _controller: UserBundle:MiseEnRelation:CompteRenduSaisie }
 
 AjournementRDV:
@@ -39,5 +39,5 @@ AjournementRDVTuteur:
     defaults: { _controller: UserBundle:MiseEnRelation:AjournementTuteur }
 
 AnnulerRDVTuteur:
-    path: /AnnulerRDV/idrdv={id}/{MessageTexte}
+    path: /AnnulerRDVTuteur/idrdv={id}/{MessageTexte}
     defaults: { _controller: UserBundle:MiseEnRelation:annulerRDVTuteur }
