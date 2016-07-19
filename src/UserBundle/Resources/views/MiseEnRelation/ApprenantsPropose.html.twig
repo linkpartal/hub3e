@@ -356,7 +356,7 @@
                                     {% endif %}
                                     {% set rdv=GetRDV(mise.expediteur.getId(),mise.mission.getId()) %}
                                 {% if rdv %}
-                                    {% if  (rdv.getStatut=='1' or rdv.getStatut=='2' ) and rdv.getChoixApprenant=='0' and mise.getId==GetIdTopOfMessges(mise.destinataire,mise.mission) and (mise.getAction!='En attente' )and (not GetCompteRendu( rdv.id ,mise.destinataire)) and (GetIdTopOfMessges(mise.destinataire,mise.mission)>GetIdTopOfMessges(mise.expediteur,mise.mission))%}
+                                    {% if  (rdv.getStatut=='1' or rdv.getStatut=='2' ) and mise.getId==GetIdTopOfMessges(mise.destinataire,mise.mission) and (mise.getAction!='En attente' )and (not GetCompteRendu( rdv.id ,mise.destinataire)) and (GetIdTopOfMessges(mise.destinataire,mise.mission)>GetIdTopOfMessges(mise.expediteur,mise.mission))%}
                                         {#ici le RETOUR du RDV#}
 
 
@@ -472,7 +472,7 @@
 
                                 {% set rdv=GetRDV(mise.destinataire.getId(),mise.mission.getId()) %}
                                 {% if rdv %}
-                                {% if  (rdv.getStatut=='1' or rdv.getStatut=='2' ) and rdv.getChoixApprenant=='0' and mise.getId==GetIdTopOfMessges(mise.destinataire,mise.mission) and (mise.getAction!='En attente' )and (not GetCompteRendu( rdv.id ,mise.expediteur)) and (GetIdTopOfMessges(mise.destinataire,mise.mission)>GetIdTopOfMessges(mise.expediteur,mise.mission))%}
+                                {% if  (rdv.getStatut=='1' or rdv.getStatut=='2' )  and mise.getId==GetIdTopOfMessges(mise.destinataire,mise.mission) and (mise.getAction!='En attente' )and (not GetCompteRendu( rdv.id ,mise.expediteur)) and (GetIdTopOfMessges(mise.destinataire,mise.mission)>GetIdTopOfMessges(mise.expediteur,mise.mission))%}
                                     {#ici le RETOUR du RDV#}
 
 
@@ -664,7 +664,7 @@
                                 <img style="height:70px;width:70px;float:left;border-radius: 100%" onclick="AfficherChat('{{ mise.expediteur.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc }}<br/>{{ mise.mission.intitule }}','{{ mise.expediteur.getNom }}<br/>{{ mise.expediteur.getPrenom }}','{{ asset('image/homme.jpg') }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
                             {% endif %}
 
-                            {% if not mise.getStatut  or not  GetStatutTuteurRDV(mise.expediteur.getId(),mise.mission.getId())  %}
+                            {% if   GetStatut(mise.expediteur)=='1' or ( GetStatut(mise.expediteur)=='2' and "now"|date('d-m-Y à H:i')  > GetDateTimeRDV(mise.expediteur,mise.mission)|date('d-m-Y à H:i'))  %}
                                 <img style="height:70px;width:70px;float:left;" onclick="" src="{{ asset('image/avirtissement.png') }}">
                             {% endif %}
 
@@ -1300,8 +1300,8 @@
             ShowWaiter();
             var route = '{{ path('AjournementRDVTuteur',{'id':'_ID','DateTimeRdv':'_DateTimeRdv','MessageTexte':'_MessageTexte'}) }}';
 
-            DateTimeRdv=replaceAll(DateTimeRdv, '/', '££');
-            Message=replaceAll(Message, '/', '££');
+            DateTimeRdv=replaceAll(DateTimeRdv, '/', '|||');
+            Message=replaceAll(Message, '/', '|||');
             route = route.replace('_ID',IdRdv);
             route = route.replace('_DateTimeRdv',DateTimeRdv);
             route = route.replace('_MessageTexte',Message);
@@ -1334,7 +1334,7 @@
             if(confirm('Confirmez-vous l\'annulation du rendez-vous ?')){
                 ShowWaiter();
                 var route = '{{ path('AnnulerRDVTuteur',{'id':'_ID','MessageTexte':'_MessageTexte'}) }}';
-                Message=replaceAll(Message, '/', '££');
+                Message=replaceAll(Message, '/', '|||');
                 route = route.replace('_ID',IdRdv);
                 route = route.replace('_MessageTexte',Message);
 
@@ -1408,8 +1408,8 @@
            ShowWaiter();
            var route = '{{ path('AjournementRDVTuteur',{'id':'_ID','DateTimeRdv':'_DateTimeRdv','MessageTexte':'_MessageTexte'}) }}';
 
-           DateTimeRdv=replaceAll(DateTimeRdv, '/', '££');
-           Message=replaceAll(Message, '/', '££');
+           DateTimeRdv=replaceAll(DateTimeRdv, '/', '|||');
+           Message=replaceAll(Message, '/', '|||');
            route = route.replace('_ID',IdRdv);
            route = route.replace('_DateTimeRdv',DateTimeRdv);
            route = route.replace('_MessageTexte',Message);
@@ -1441,7 +1441,7 @@
            if(confirm('Confirmez-vous l\'annulation du rendez-vous ?')){
                ShowWaiter();
                var route = '{{ path('AnnulerRDVTuteur',{'id':'_ID','MessageTexte':'_MessageTexte'}) }}';
-               Message=replaceAll(Message, '/', '££');
+               Message=replaceAll(Message, '/', '|||');
                route = route.replace('_ID',IdRdv);
                route = route.replace('_MessageTexte',Message);
                alert(route);
@@ -1473,7 +1473,7 @@
            ShowWaiter();
            var route = '{{ path('CompteRenduSaisie',{'id':'_ID','MessageTexte':'_MessageTexte','Type':'_Type'}) }}';
            var Type='tuteur';
-           Message=replaceAll(Message, '/', '££');
+           Message=replaceAll(Message, '/', '|||');
            route = route.replace('_ID',IdRdv);
            route = route.replace('_MessageTexte',Message);
            route = route.replace('_Type',Type);

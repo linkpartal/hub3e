@@ -88,6 +88,13 @@ class Message
     private $mission;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="statutaction", type="integer", nullable=true)
+     */
+    private $statutaction;
+
+    /**
      * Set date
      *
      * @param \DateTime $date
@@ -289,5 +296,29 @@ class Message
     public function getCouleur()
     {
         return $this->couleur;
+    }
+
+    /**
+     * Set statutaction
+     *
+     * @param integer $statutaction
+     *
+     * @return Message
+     */
+    public function setStatutaction($statutaction)
+    {
+        $this->statutaction = $statutaction;
+
+        return $this;
+    }
+
+    /**
+     * Get statutaction
+     *
+     * @return integer
+     */
+    public function getStatutaction()
+    {
+        return $this->statutaction;
     }
 }

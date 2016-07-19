@@ -53,6 +53,11 @@ class globalExtension extends \Twig_Extension{
             'GetRDV' => new \Twig_Function_Method($this, 'GetRDV'),
             'GetIdTopOfMessges' => new \Twig_Function_Method($this, 'GetIdTopOfMessges'),
             'GetCompteRendu' => new \Twig_Function_Method($this, 'GetCompteRendu'),
+            'GetStatut' => new \Twig_Function_Method($this, 'GetStatut'),
+            'GetDateTimeRDV' => new \Twig_Function_Method($this, 'GetDateTimeRDV'),
+            'GetIdRDV' => new \Twig_Function_Method($this, 'GetIdRDV'),
+            'EstRefuse' => new \Twig_Function_Method($this, 'EstRefuse'),
+
 
         );
     }
@@ -520,7 +525,7 @@ class globalExtension extends \Twig_Extension{
     }
 
 
-    function GetCompteRendu($idRdv,$idActeur){
+    public function GetCompteRendu($idRdv,$idActeur){
 
         $CompteRendu = $this->em->getRepository('GenericBundle:CompteRendu')->findOneBy(array('auteur'=>$idActeur,'rendezvous'=>$idRdv));
 
@@ -532,6 +537,43 @@ class globalExtension extends \Twig_Extension{
        }
         return $retour;
     }
+    public function GetStatut($id){
+        $sql="SELECT  M  FROM GenericBundle:Message M  WHERE M.expediteur=:expediteur or M.destinataire=:destinataire" ;
+        $query = $this->em->createQuery($sql);
+        $query->setParameter('destinataire', $id);
+        $query->setParameter('expediteur', $id);
+
+        $Messages = $query->getResult();; // array of ForumUser objects
+        return $Messages[count($Messages)-1]->getStatutaction();
+    }
+
+    function GetDateTimeRDV($idapp,$idMission){
+
+        $rdv = $this->em->getRepository('GenericBundle:RDV')->findOneBy(array('apprenant'=>$idapp,'mission'=>$idMission));
+
+        return $rdv->getDate1();
+    }
+
+    function GetIdRDV($idapp,$idTuteur,$idMission){
+
+        $rdv = $this->em->getRepository('GenericBundle:RDV')->findOneBy(array('apprenant'=>$idapp,'tuteur'=>$idTuteur,'mission'=>$idMission));
+
+        return $rdv->getId();
+
+    }
+    function EstRefuse($idapp,$idMission){
+
+        $blacklist = $this->em->getRepository('GenericBundle:Blacklist')->findOneBy(array('apprenant'=>$idapp,'mission'=>$idMission));
+        if (count($blacklist)>0){
+            $rep=true;
+        }else{
+            $rep=false;
+        }
+
+        return $rep;
+    }
+
+
 
     public function getName()
     {

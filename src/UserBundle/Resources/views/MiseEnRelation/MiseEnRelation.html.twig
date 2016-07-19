@@ -238,6 +238,7 @@
 
         {% if AllMiseEnRelation is defined %}
             {% set i=0 %}
+            {% set LastMise="" %}
         {% for mise in AllMiseEnRelation %}
             {% if mise.expediteur.hasrole('ROLE_APPRENANT') %}
 
@@ -288,8 +289,88 @@
                     </div>
                 </div>
             {% endif %}
+            {% set LastMise=mise %}
+
+
+
+
+
             {% set i = i + 1 %}
         {% endfor %}
+            <div id="Absence_button" >
+                {% if   GetStatut(LastMise.destinataire.getId()) =='0'  %}
+
+                   {% if LastMise.action=='Retour RDV' %}
+
+                       {% if LastMise.expediteur.hasrole('ROLE_APPRENANT') %}
+
+                           {% set idRdv=GetIdRDV(LastMise.expediteur,LastMise.destinataire,LastMise.mission) %}
+                           <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.expediteur.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR APP">
+                       {% else %}
+
+                           {% set idRdv=GetIdRDV(LastMise.destinataire,LastMise.expediteur,LastMise.mission) %}
+                           <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.destinataire.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR APP">
+                       {% endif %}
+
+
+                   {% else %}
+
+                           {% if LastMise.statut=='2'  %}
+                               <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RelancerApp({{ LastMise.expediteur.getId()}},{{ LastMise.mission.getId() }} )"  style="margin-left: 390px" value="RELANCER">
+                           {% else %}
+                               <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RelancerApp({{ LastMise.destinataire.getId()}},{{ LastMise.mission.getId() }} )"  style="margin-left: 390px" value="RELANCER">
+                           {% endif %}
+                    {% endif %}
+
+
+
+                {% elseif GetStatut(LastMise.destinataire.getId()) =='1' %}
+                    {% if LastMise.action=='Retour RDV' %}
+                        {% if LastMise.expediteur.hasrole('ROLE_APPRENANT') %}
+
+                            {% set idRdv=GetIdRDV(LastMise.expediteur,LastMise.destinataire,LastMise.mission) %}
+                            <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.destinataire.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR TUTEUR">
+                        {% else %}
+
+                            {% set idRdv=GetIdRDV(LastMise.destinataire,LastMise.expediteur,LastMise.mission) %}
+                            <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.expediteur.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR TUTEUR">
+                        {% endif %}
+
+                    {% else %}
+                        <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RelancerTuteur({{ LastMise.destinataire.getId()}},{{ LastMise.mission.getId() }},{{ LastMise.expediteur.getId()}} )"  style="margin-left: 390px" value="RELANCER">
+                    {% endif %}
+                 {% elseif GetStatut(LastMise.destinataire.getId()) =='2' %}
+
+                    {% if LastMise.expediteur.hasrole('ROLE_APPRENANT') %}
+
+                        {% set idRdv=GetIdRDV(LastMise.expediteur,LastMise.destinataire,LastMise.mission) %}
+                    {% else %}
+
+                        {% set idRdv=GetIdRDV(LastMise.destinataire,LastMise.expediteur,LastMise.mission) %}
+                    {% endif %}
+
+                    <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCR({{ LastMise.expediteur.getId()}},{{ LastMise.destinataire.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR 2">
+                {% endif %}
+
+                {% if LastMise.expediteur.hasrole('ROLE_APPRENANT') %}
+                    {% if LastMise.expediteur.getPlace()!='1' %}
+                        <input style="border: 0;font: 18px Roboto;color: green;text-align: left;background-color: white;height: 40px" type="button" onclick="AccepterApp({{ LastMise.expediteur.getId() }},{{ LastMise.mission.getId() }})"  style="margin-left: 390px" value="ACCEPTER">
+
+                    {% endif %}
+                    {#refusé#}
+                    <input style="border: 0;font: 18px Roboto;color: red;text-align: left;background-color: white;height: 40px" type="button" onclick="RefuserApp({{ LastMise.expediteur.getId() }},{{ LastMise.mission.getId() }})"  style="margin-left: 390px" value="REFUSER"><br/>
+                {% else %}
+                    {% if LastMise.destinataire.getPlace()!='1' %}
+                    <input style="border: 0;font: 18px Roboto;color: green;text-align: left;background-color: white;height: 40px" type="button" onclick="AccepterApp({{ LastMise.destinataire.getId() }},{{ LastMise.mission.getId() }})"  style="margin-left: 390px" value="ACCEPTER">
+                    {% endif %}
+
+                    {#refusé#}
+                    <input style="border: 0;font: 18px Roboto;color: red;text-align: left;background-color: white;height: 40px" type="button" onclick="RefuserApp({{ LastMise.destinataire.getId() }},{{ LastMise.mission.getId() }})"  style="margin-left: 390px" value="REFUSER"><br/>
+
+                {% endif %}
+
+            </div>
+            <br/>
         {% endif %}
 
                     </div>
@@ -630,6 +711,197 @@
             activeClass : "active-class"
         });
     }
+    function RelancerApp(idApp,idMission){
+
+
+
+        var route= '{{ path('RelancerApp',{'idApp':'_idApp','idMission':'_idMission'}) }}';
+        route=route.replace('_idApp',idApp);
+
+        route=route.replace('_idMission',idMission);
+        ShowWaiter();
+        $.ajax({
+            type: 'get',
+            url: route,
+            error: function (response) {
+                console.log(response);
+            },
+            success: function(){alert("le message a été envoyé à l'apprenant.");DeleteWaiter();}
+        });
+
+
+    }
+    function RelancerTuteur (idTuteur,idMission,idApp){
+
+        var route= '{{ path('Relancer_Tuteur',{'idTuteur':'_idTuteur','idMission':'_idMission','idApp':'_idApp'}) }}';
+        route=route.replace('_idApp',idApp);
+        route=route.replace('_idTuteur',idTuteur);
+
+        route=route.replace('_idMission',idMission);
+        ShowWaiter();
+        $.ajax({
+            type: 'get',
+            url: route,
+            error: function (response) {
+                console.log(response);
+            },
+
+            success: function(){alert('le message a été envoyé au tuteur.');DeleteWaiter();}
+
+        });
+
+
+    }
+
+    function RemplirCR(idUser1,idUser2,idRdv){
+
+
+
+        ShowWaiter();
+        var route = '{{ path('OrdreCompleterCR',{'idUser':'_IDUSER','idRDV':'_IDRDV'}) }}';
+        route = route.replace('_IDUSER',idUser1);
+        route = route.replace('_IDRDV',idRdv);
+        $.ajax({
+            type:'post',
+            url: route,
+            error: function(){
+                DeleteWaiter();
+                alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+            },
+            success:function(data){
+                if(data==1){
+
+                }
+                else{
+                    console.log(data);
+                }
+                DeleteWaiter();
+            },
+            error:function(){
+                alert('Une erreur s\'est produite sur le serveur');
+                DeleteWaiter();
+            }
+        })
+
+        var route2 = '{{ path('OrdreCompleterCR',{'idUser':'_IDUSER','idRDV':'_IDRDV'}) }}';
+        route2 = route2.replace('_IDUSER',idUser2);
+        route2 = route2.replace('_IDRDV',idRdv);
+        $.ajax({
+            type:'post',
+            url: route2,
+            error: function(){
+                DeleteWaiter();
+                alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+            },
+            success:function(data){
+                if(data==1){
+
+                }
+                else{
+                    console.log(data);
+                }
+                DeleteWaiter();
+            },
+            error:function(){
+                alert('Une erreur s\'est produite sur le serveur');
+                DeleteWaiter();
+            }
+        })
+
+
+    }
+
+    function RemplirCRUser(idUser,idRdv){
+
+        ShowWaiter();
+        var route = '{{ path('OrdreCompleterCR',{'idUser':'_IDUSER','idRDV':'_IDRDV'}) }}';
+        route = route.replace('_IDUSER',idUser);
+        route = route.replace('_IDRDV',idRdv);
+        $.ajax({
+            type:'post',
+            url: route,
+            error: function(){
+                DeleteWaiter();
+                alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+            },
+            success:function(data){
+                if(data==1){
+                    alert('le message a été envoyé correctement!');
+                }
+                else{
+                    console.log(data);
+                }
+                DeleteWaiter();
+            },
+            error:function(){
+                alert('Une erreur s\'est produite sur le serveur');
+                DeleteWaiter();
+            }
+        })
+
+    }
+    function AccepterApp(idApp,idMission){
+
+
+        ShowWaiter();
+        var route = '{{ path('AccepterApp',{'idApp':'_IDAPP','idMission':'_IDMISSION'}) }}';
+        route = route.replace('_IDAPP',idApp);
+        route = route.replace('_IDMISSION',idMission);
+        $.ajax({
+            type:'post',
+            url: route,
+            error: function(){
+                DeleteWaiter();
+                alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+            },
+            success:function(data){
+                if(data==1){
+                    alert('Traitement effecuté !');
+                }
+                else{
+                    console.log(data);
+                }
+                DeleteWaiter();
+            },
+            error:function(){
+                alert('Une erreur s\'est produite sur le serveur');
+                DeleteWaiter();
+            }
+        })
+
+    }
+
+    function RefuserApp(idApp,idMission){
+
+        ShowWaiter();
+        var route = '{{ path('RefuserApp',{'idApp':'_IDAPP','idMission':'_IDMISSION'}) }}';
+        route = route.replace('_IDAPP',idApp);
+        route = route.replace('_IDMISSION',idMission);
+
+        $.ajax({
+            type:'post',
+            url: route,
+            error: function(){
+                DeleteWaiter();
+                alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+            },
+            success:function(data){
+                if(data==1){
+                    alert('Traitement effecuté !');
+                }
+                else{
+                    console.log(data);
+                }
+                DeleteWaiter();
+            },
+            error:function(){
+                alert('Une erreur s\'est produite sur le serveur');
+                DeleteWaiter();
+            }
+        })
+
+    }
+
 </script>
 </body>
 </html>

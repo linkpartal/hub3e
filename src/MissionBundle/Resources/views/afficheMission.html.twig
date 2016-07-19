@@ -578,15 +578,26 @@
                             </div>
                             <div class="col-xs-offset-5 col-xs-1">
 
-                                <button
-                                        {% if mission.tuteur %}
-                                            onclick="show('MettreEnRelation'); idMRDestinataire = {{ user.id }};"
-                                        {% else %}
-                                            onclick="alert('Aucun Tuteur n\'est affecté à cette mission. Vous devez affecter un tuteur avant de pouvoir mettre en relation.')"
-                                        {% endif %}
-                                        type="button"  style=" width:150px;color: white;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;background:#2975cb;font:bold 13px Roboto;margin-bottom:10px;margin-top: 20px;margin-left: -100%">
-                                    METTRE EN RELATION
-                                </button><br>
+
+                                {% if  EstRefuse( user.getId() , mission.getId() ) %}
+
+                                    <button
+
+                                            type="button"  style=" width:150px;color: white;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;background:red;font:bold 13px Roboto;margin-bottom:10px;margin-top: 20px;margin-left: -100%">
+                                        REFUSÉ
+                                    </button><br>
+
+                                {% else %}
+                                        <button
+                                                {% if mission.tuteur %}
+                                                    onclick="show('MettreEnRelation'); idMRDestinataire = {{ user.id }};"
+                                                {% else %}
+                                                    onclick="alert('Aucun Tuteur n\'est affecté à cette mission. Vous devez affecter un tuteur avant de pouvoir mettre en relation.')"
+                                                {% endif %}
+                                                type="button"  style=" width:150px;color: white;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;background:#2975cb;font:bold 13px Roboto;margin-bottom:10px;margin-top: 20px;margin-left: -100%">
+                                            METTRE EN RELATION
+                                        </button><br>
+                                {% endif %}
 
                                 <button onclick="
                                         informationApprenant({{ user.id }},'{{user.getPhotos}}','{{ user.getCivilite }}','{{ user.getNom }}','{{ user.getPrenom }}','{{ user.getEmail }}',

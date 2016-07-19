@@ -41,3 +41,19 @@ AjournementRDVTuteur:
 AnnulerRDVTuteur:
     path: /AnnulerRDVTuteur/idrdv={id}/{MessageTexte}
     defaults: { _controller: UserBundle:MiseEnRelation:annulerRDVTuteur }
+
+RelancerApp:
+    path: /RelancerApprenant/idApp={idApp}/idMission={idMission}
+    defaults: { _controller: UserBundle:MiseEnRelation:RelancerApprenant }
+
+Relancer_Tuteur:
+    path: /RelancerTuteur/idTuteur={idTuteur}/idMission={idMission}/idApp={idApp}
+    defaults: { _controller: UserBundle:MiseEnRelation:RelancerTuteur }
+
+AccepterApp:
+    path: /AccepterApprenant/idApp={idApp}idMission={idMission}
+    defaults: { _controller: UserBundle:MiseEnRelation:AccepterApprenant }
+
+RefuserApp:
+    path: /RefuserApprenant/idApp={idApp}idMission={idMission}
+    defaults: { _controller: UserBundle:MiseEnRelation:RefuserApprenant }

@@ -110,6 +110,15 @@ class Mission
      * @ORM\Column(name="statut", type="integer", nullable=true)
      */
     private $statut;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="pourvue", type="integer", nullable=true)
+     */
+    private $pourvue;
+
     /**
      * @var \GenericBundle\Entity\Tier
      *
@@ -924,5 +933,29 @@ class Mission
     public function getTier()
     {
         return $this->tier;
+    }
+
+    /**
+     * Set pourvue
+     *
+     * @param integer $pourvue
+     *
+     * @return Mission
+     */
+    public function setPourvue($pourvue)
+    {
+        $this->pourvue = $pourvue;
+
+        return $this;
+    }
+
+    /**
+     * Get pourvue
+     *
+     * @return integer
+     */
+    public function getPourvue()
+    {
+        return $this->pourvue;
     }
 }

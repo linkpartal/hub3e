@@ -6,6 +6,7 @@ use GenericBundle\Entity\CompteRendu;
 use GenericBundle\Entity\Message;
 use GenericBundle\Entity\Postulation;
 use GenericBundle\Entity\RDV;
+use GenericBundle\Entity\Blacklist;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,11 +34,13 @@ class MiseEnRelationController extends Controller
             $message->setMission($mission);
             $message->setAction('Propose mission');
             $message->setCouleur('green');
+            $message->setStatutaction(0);
             $em->persist($message);
             $em->flush();
 
             $messageRetour = new Message();
             $messageRetour->setMessage("En attente d'une réponse");
+            $messageRetour->setStatutaction(0);
             $date = new \DateTime();
             $messageRetour->setDate($date);
             $messageRetour->setExpediteur($destinataire);
@@ -105,6 +108,7 @@ class MiseEnRelationController extends Controller
 
                 $message->setStatut(1);
                 $message->setAction('Propose rdv');
+                $message->setStatutaction(0);
                 $message->setCouleur('green');
                 $messagereponse->setStatut(1);
                 $em->persist($message);
@@ -135,6 +139,7 @@ class MiseEnRelationController extends Controller
                 $messageDup->setStatut(1);
                 $messagereponse->setStatut(1);
                 $messageDup->setAction('Propose rdv');
+                $messageDup->setStatutaction(0);
                 $messageDup->setCouleur('green');
                 $em->flush();
             }
@@ -236,6 +241,7 @@ class MiseEnRelationController extends Controller
             $messageTuteur->setMission($messagereponse->getMission());
             $messageTuteur->setMessage('Cet apprenant correspond au profil demandé');
             $messageTuteur->setAction('A Postuler');
+            $messageTuteur->setStatutaction(1);
             $messageTuteur->setCouleur('green');
             $messagereponse->setStatut(1);
             $em->persist($messageTuteur);
@@ -245,6 +251,7 @@ class MiseEnRelationController extends Controller
         else{
             $messagedup->setMessage('Cet apprenant correspond au profil demandé');
             $messagedup->setAction('A Postuler');
+            $messagedup->setStatutaction(1);
             $messagedup->setCouleur('green');
             $messagedup->setStatut(1);
             $messagereponse->setStatut(1);
@@ -305,6 +312,7 @@ class MiseEnRelationController extends Controller
             $message->setDestinataire($rdv->getTuteur());
             $message->setMission($rdv->getMission());
             $message->setAction('Accepter RDV');
+            $message->setStatutaction(2);
             $message->setCouleur('green');
             $message->setStatut(1);
             $em->persist($message);
@@ -338,7 +346,7 @@ class MiseEnRelationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $rdv = $em->getRepository('GenericBundle:RDV')->find($id);
         $rep = new JsonResponse();
-        $MessageTexte = str_replace('££', '/', $MessageTexte);
+        $MessageTexte = str_replace('|||', '/', $MessageTexte);
         if($rdv)
         {
             $rdv->setDate2(null);
@@ -375,7 +383,7 @@ class MiseEnRelationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $rdv = $em->getRepository('GenericBundle:RDV')->find($id);
         $user = $this->get('security.token_storage')->getToken()->getUser();
-
+        $MessageTexte = str_replace('|||', '/', $MessageTexte);
         if($rdv){
             $compterendu = new CompteRendu();
             $compterendu->setDate(date_create());
@@ -400,10 +408,12 @@ class MiseEnRelationController extends Controller
             if ($Type=='app'){
                 $message->setExpediteur($rdv->getApprenant());
                 $message->setDestinataire($rdv->getTuteur());
+                $message->setStatutaction(3);
             }else{
 
                 $message->setExpediteur($rdv->getTuteur());
                 $message->setDestinataire($rdv->getApprenant());
+                $message->setStatutaction(3);
             }
 
             $message->setMission($rdv->getMission());
@@ -427,8 +437,8 @@ class MiseEnRelationController extends Controller
         //$Dates=  array('31/12/2016 20:00','31/12/2016 20:00','31/12/2016 20:00');
         $Dates= array();
 
-        $DateTimeRdv = str_replace('££', '/', $DateTimeRdv);
-        $MessageTexte = str_replace('££', '/', $MessageTexte);
+        $DateTimeRdv = str_replace('|||', '/', $DateTimeRdv);
+        $MessageTexte = str_replace('|||', '/', $MessageTexte);
         $Dates=explode( ";", $DateTimeRdv,-1) ;
        // list($date1, $date2, $date3) =$Dates;
 
@@ -492,6 +502,7 @@ class MiseEnRelationController extends Controller
             $message->setAction('Reporter le RDV');
             $message->setCouleur('red');
             $message->setStatut(1);
+            $message->setStatutaction(1);
             $message->setMessage($msg);
             $em->persist($message);
             $em->flush();
@@ -575,6 +586,7 @@ class MiseEnRelationController extends Controller
             $message->setDestinataire($rdv->getApprenant());
             $message->setMission($rdv->getMission());
             $message->setAction('Accepter RDV');
+            $message->setStatutaction(2);
             $message->setCouleur('green');
             $message->setStatut(1);
             $em->persist($message);
@@ -612,8 +624,8 @@ class MiseEnRelationController extends Controller
         //$Dates=  array('31/12/2016 20:00','31/12/2016 20:00','31/12/2016 20:00');
         $Dates= array();
 
-        $DateTimeRdv = str_replace('££', '/', $DateTimeRdv);
-        $MessageTexte = str_replace('££', '/', $MessageTexte);
+        $DateTimeRdv = str_replace('|||', '/', $DateTimeRdv);
+        $MessageTexte = str_replace('|||', '/', $MessageTexte);
         $Dates=explode( ";", $DateTimeRdv,-1) ;
         // list($date1, $date2, $date3) =$Dates;
 
@@ -677,6 +689,7 @@ class MiseEnRelationController extends Controller
             $message->setAction('Reporter le RDV');
             $message->setCouleur('red');
             $message->setStatut(1);
+            $message->setStatutaction(0);
             $message->setMessage($msg);
             $em->persist($message);
             $em->flush();
@@ -691,7 +704,7 @@ class MiseEnRelationController extends Controller
     $em = $this->getDoctrine()->getManager();
     $rdv = $em->getRepository('GenericBundle:RDV')->find($id);
     $rep = new JsonResponse();
-    $MessageTexte = str_replace('££', '/', $MessageTexte);
+    $MessageTexte = str_replace('|||', '/', $MessageTexte);
     if($rdv)
     {
         $rdv->setDate2(null);
@@ -722,4 +735,104 @@ class MiseEnRelationController extends Controller
         return $rep->setData(-1);
     }
 }
+
+
+    public function RelancerApprenantAction($idApp,$idMission){
+    $em = $this->getDoctrine()->getManager();
+    $Apprenant = $em->getRepository('GenericBundle:User')->find($idApp);
+    $mail = $Apprenant->getEmail();
+    $Mission = $em->getRepository('GenericBundle:Mission')->find($idMission);
+
+        if($mail){
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Completez le processus de la mise en relation')
+                ->setFrom(array('ne-pas-repondre-svp@atpmg.com'=>"HUB3E"))
+                ->setTo($mail)
+                ->setBody($this->renderView('GenericBundle:Mail:EmailCompleterMiseEnRelationApprenanat.html.twig',array('apprenant'=>$Apprenant,'mission'=>$Mission))
+                    ,'text/html'
+                );
+            $this->get('mailer')->send($message);
+        }
+
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('success'=>$mail));
+
+
+
+
+}
+
+    public function RelancerTuteurAction($idTuteur,$idMission,$idApp){
+        $em = $this->getDoctrine()->getManager();
+        $Tuteur = $em->getRepository('GenericBundle:User')->find($idTuteur);
+        $apprenant = $em->getRepository('GenericBundle:User')->find($idApp);
+        $mail = $Tuteur->getEmail();
+        $Mission = $em->getRepository('GenericBundle:Mission')->find($idMission);
+
+        if($mail){
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Completez le processus de la mise en relation')
+                ->setFrom(array('ne-pas-repondre-svp@atpmg.com'=>"HUB3E"))
+                ->setTo($mail)
+                ->setBody($this->renderView('GenericBundle:Mail:EmailCompleterMiseEnRelationTuteur.html.twig',array('tuteur'=>$Tuteur,'mission'=>$Mission,'apprenant'=>$apprenant))
+                    ,'text/html'
+                );
+            $this->get('mailer')->send($message);
+        }
+
+        $reponse = new JsonResponse();
+        return $reponse->setData(array('success'=>$mail));
+
+
+
+
+    }
+
+    public function AccepterApprenantAction($idApp,$idMission){
+    $em = $this->getDoctrine()->getManager();
+    $apprenant = $em->getRepository('GenericBundle:User')->find($idApp);
+    $apprenant->setPlace(1);
+    $em->flush();
+
+
+    $Mission = $em->getRepository('GenericBundle:Mission')->find($idMission);
+    if ($Mission->getNbrePoste()<=1) {
+        $Mission->setNbrePoste(0);
+        $Mission->setPourvue(1);
+
+    }else{
+        $Mission->setNbrePoste($Mission->getNbrePoste()-1);
+    }
+
+    $em->flush();
+
+
+    $reponse = new JsonResponse();
+    $reponse->setData(1);
+    return $reponse;
+
+    }
+    public function RefuserApprenantAction($idApp,$idMission){
+        $em = $this->getDoctrine()->getManager();
+
+
+        $apprenant = $em->getRepository('GenericBundle:User')->find($idApp);
+        $Mission = $em->getRepository('GenericBundle:Mission')->find($idMission);
+
+        $blacklist = new Blacklist();
+        $blacklist->setMission($Mission);
+        $blacklist->setApprenant($apprenant);
+
+        $em->persist($blacklist);
+        $em->flush();
+
+
+        $reponse = new JsonResponse();
+        $reponse->setData(1);
+        return $reponse;
+
+    }
+
+
+
 }
