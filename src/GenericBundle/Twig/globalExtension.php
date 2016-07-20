@@ -19,6 +19,9 @@ use GenericBundle\Entity\Postulation;
 use GenericBundle\Entity\RDV;
 use GenericBundle\Entity\Etablissement;
 use GenericBundle\Entity\Tier;
+use GenericBundle\Entity\Reponsedef;
+use GenericBundle\Entity\Questiondef;
+use GenericBundle\Entity\Qcmdef;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,6 +63,9 @@ class globalExtension extends \Twig_Extension{
             'GetIdRDV' => new \Twig_Function_Method($this, 'GetIdRDV'),
             'EstRefuse' => new \Twig_Function_Method($this, 'EstRefuse'),
             'EstAccepte' => new \Twig_Function_Method($this, 'EstAccepte'),
+            'GetTypeContrat' => new \Twig_Function_Method($this, 'GetTypeContrat'),
+
+
 
 
         );
@@ -607,6 +613,25 @@ public function EstAccepte($idapp,$idMission){
     }
 
     return $rep;
+    }
+
+    public function GetTypeContrat($IdUser)
+    {
+
+        $user = $this->em->getRepository('GenericBundle:User')->find($IdUser);
+        $QcmDef = $this->em->getRepository('GenericBundle:Qcmdef')->findOneBy(array('nom'=>'QCMparDéfault'));
+        $QuestionDef = $this->em->getRepository('GenericBundle:Questiondef')->findOneBy(array('ordre'=>'7','qcmdef'=>$QcmDef));
+        $TypeContrat=null;
+        foreach($this->em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef'=>$QuestionDef)) as $rep)
+        {
+            if(in_array($rep,$user->getReponsedef()->toArray()))
+            {
+                $TypeContrat=$rep->getReponse();
+            }
+        }
+
+     return $TypeContrat;
+
     }
 
 

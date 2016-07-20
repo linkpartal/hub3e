@@ -280,6 +280,22 @@ class DefaultController extends Controller
          var_dump($CountMessions);die;*/
         //var_dump($Messages);die;
 
+        /*$user = $this->getDoctrine()->getRepository('GenericBundle:User')->find('5');
+        $QcmDef = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findOneBy(array('nom'=>'QCMparDéfault'));
+        $QuestionDef = $this->getDoctrine()->getRepository('GenericBundle:Questiondef')->findOneBy(array('ordre'=>'7','qcmdef'=>$QcmDef));
+        $TypeContrat=null;
+        foreach($em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef'=>$QuestionDef)) as $rep)
+        {
+            if(in_array($rep,$user->getReponsedef()->toArray()))
+            {
+                $TypeContrat=$rep->getReponse();
+            }
+        }
+
+        var_dump($TypeContrat);die;*/
+
+
+
         return $this->render('MissionBundle::afficheMission.html.twig',array('mission'=>$mission,'users'=>$users,'formations_prop'=>$formations_prop,'informations_maps'=>$informations_maps,
             'tuteur_etablissement'=>$tuteurs,'scores'=>$scores,'Diffusions'=>$Diffusion,'miseEnrelation'=>$miseEnrelation,'Messages'=>$Messages));
 

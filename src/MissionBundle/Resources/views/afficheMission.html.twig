@@ -569,7 +569,8 @@
                                 </div>
 
                                 <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font: small Roboto;"><label style="color:#2975cb">Mis en relation sur {{ CountMission(user.getId) }} mission(s)</label></div>
-                                <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font:small Roboto;">Recherche : CONTRAT PRO/STAGE/TEMPS PLEIN</div>
+                                <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font:small Roboto;">Recherche : {{ GetTypeContrat(user.getId) }}</div>
+
 
 
                                 {# <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font:small Roboto;">STATUT : <label style="color:#2975cb">3 MISES EN RELATION</label></div>#}
@@ -594,12 +595,15 @@
                                             {% else %}
                                                 onclick="alert('Aucun Tuteur n\'est affecté à cette mission. Vous devez affecter un tuteur avant de pouvoir mettre en relation.')"
                                             {% endif %}
-                                            type="button"  style=" width:150px;color: white;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;background:#2975cb;font:bold 13px Roboto;margin-bottom:10px;margin-top: 20px;margin-left: -100%">
-                                        METTRE EN RELATION
+                                            type="button"  style=" width:150px;color: white;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;background:green;font:bold 13px Roboto;margin-bottom:10px;margin-top: 20px;margin-left: -100%">
+                                        ACCEPTÉ
                                     </button><br>
 
                                 {% else %}
                                         <button
+                                                {% if  not mission.getNbrePoste() or (mission.getNbrePoste()==0)%}
+                                                disabled="disabled" class="btn btn-primary"
+                                                {% endif %}
                                                 {% if mission.tuteur %}
                                                     onclick="show('MettreEnRelation'); idMRDestinataire = {{ user.id }};"
                                                 {% else %}
