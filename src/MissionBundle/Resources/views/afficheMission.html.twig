@@ -580,11 +580,22 @@
 
 
                                 {% if  EstRefuse( user.getId() , mission.getId() ) %}
-
-                                    <button
+                                {#  l'apprenant a été refusé sur cette mission #}
+                                    <button disabled="disabled" class="btn btn-primary"
 
                                             type="button"  style=" width:150px;color: white;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;background:red;font:bold 13px Roboto;margin-bottom:10px;margin-top: 20px;margin-left: -100%">
                                         REFUSÉ
+                                    </button><br>
+                                {% elseif EstAccepte( user.getId() , mission.getId() ) %}
+                                {#  l'apprenant a été accepté pour cette mission #}
+                                    <button disabled="disabled" class="btn btn-primary"
+                                            {% if mission.tuteur %}
+                                                onclick="show('MettreEnRelation'); idMRDestinataire = {{ user.id }};"
+                                            {% else %}
+                                                onclick="alert('Aucun Tuteur n\'est affecté à cette mission. Vous devez affecter un tuteur avant de pouvoir mettre en relation.')"
+                                            {% endif %}
+                                            type="button"  style=" width:150px;color: white;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;background:#2975cb;font:bold 13px Roboto;margin-bottom:10px;margin-top: 20px;margin-left: -100%">
+                                        METTRE EN RELATION
                                     </button><br>
 
                                 {% else %}

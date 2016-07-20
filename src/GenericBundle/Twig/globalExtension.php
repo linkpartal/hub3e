@@ -15,6 +15,8 @@ use GenericBundle\Entity\Mission;
 use GenericBundle\Entity\Parents;
 use GenericBundle\Entity\Recommandation;
 use GenericBundle\Entity\User;
+use GenericBundle\Entity\Postulation;
+use GenericBundle\Entity\RDV;
 use GenericBundle\Entity\Etablissement;
 use GenericBundle\Entity\Tier;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -57,6 +59,7 @@ class globalExtension extends \Twig_Extension{
             'GetDateTimeRDV' => new \Twig_Function_Method($this, 'GetDateTimeRDV'),
             'GetIdRDV' => new \Twig_Function_Method($this, 'GetIdRDV'),
             'EstRefuse' => new \Twig_Function_Method($this, 'EstRefuse'),
+            'EstAccepte' => new \Twig_Function_Method($this, 'EstAccepte'),
 
 
         );
@@ -561,16 +564,49 @@ class globalExtension extends \Twig_Extension{
         return $rdv->getId();
 
     }
-    function EstRefuse($idapp,$idMission){
+public function EstRefuse($idapp,$idMission){
 
-        $blacklist = $this->em->getRepository('GenericBundle:Blacklist')->findOneBy(array('apprenant'=>$idapp,'mission'=>$idMission));
-        if (count($blacklist)>0){
+        $user = $this->em->getRepository('GenericBundle:User')->find($idapp);
+        $Mission = $this->em->getRepository('GenericBundle:Mission')->find($idMission);
+        $postulation = $this->em->getRepository('GenericBundle:Postulation')->findOneBy(array('user'=>$user,'mission'=>$Mission));
+        if($postulation){
+            if ($postulation->getStatut()==-99){
+                $rep=true;
+            }else{
+                $rep=false;
+            }
+
+        }else{
+
+            $rep=false;
+        }
+
+        return $rep;
+
+
+
+
+
+    }
+
+public function EstAccepte($idapp,$idMission){
+
+    $user = $this->em->getRepository('GenericBundle:User')->find($idapp);
+    $Mission = $this->em->getRepository('GenericBundle:Mission')->find($idMission);
+    $postulation = $this->em->getRepository('GenericBundle:Postulation')->findOneBy(array('user'=>$user,'mission'=>$Mission));
+    if($postulation){
+        if ($postulation->getStatut()==99){
             $rep=true;
         }else{
             $rep=false;
         }
 
-        return $rep;
+    }else{
+
+        $rep=false;
+    }
+
+    return $rep;
     }
 
 

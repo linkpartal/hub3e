@@ -803,9 +803,11 @@ class MiseEnRelationController extends Controller
     }else{
         $Mission->setNbrePoste($Mission->getNbrePoste()-1);
     }
-
     $em->flush();
 
+    $postulation = $em->getRepository('GenericBundle:Postulation')->findOneBy(array('user'=>$idApp,'mission'=>$idMission));
+    $postulation->setStatut(99);
+    $em->flush();
 
     $reponse = new JsonResponse();
     $reponse->setData(1);
@@ -816,14 +818,11 @@ class MiseEnRelationController extends Controller
         $em = $this->getDoctrine()->getManager();
 
 
-        $apprenant = $em->getRepository('GenericBundle:User')->find($idApp);
+        $user = $em->getRepository('GenericBundle:User')->find($idApp);
         $Mission = $em->getRepository('GenericBundle:Mission')->find($idMission);
 
-        $blacklist = new Blacklist();
-        $blacklist->setMission($Mission);
-        $blacklist->setApprenant($apprenant);
-
-        $em->persist($blacklist);
+        $postulation = $em->getRepository('GenericBundle:Postulation')->findOneBy(array('user'=>$user,'mission'=>$Mission));
+        $postulation->setStatut(-99);
         $em->flush();
 
 
