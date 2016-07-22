@@ -64,8 +64,19 @@ class globalExtension extends \Twig_Extension{
             'EstRefuse' => new \Twig_Function_Method($this, 'EstRefuse'),
             'EstAccepte' => new \Twig_Function_Method($this, 'EstAccepte'),
             'GetTypeContrat' => new \Twig_Function_Method($this, 'GetTypeContrat'),
+            'SetMessageText' => new \Twig_Function_Method($this, 'SetMessageText'),
+            'GetMessageText' => new \Twig_Function_Method($this, 'GetMessageText'),
+            'GetCandidatureApp' => new \Twig_Function_Method($this, 'GetCandidatureApp'),
+            'GetExperienceApp' => new \Twig_Function_Method($this, 'GetExperienceApp'),
+            'GetRecommandationApp' => new \Twig_Function_Method($this, 'GetRecommandationApp'),
+            'GetDiplomeApp' => new \Twig_Function_Method($this, 'GetDiplomeApp'),
+            'GetDocumentApp' => new \Twig_Function_Method($this, 'GetDocumentApp'),
+            'GetQuestionsApp' => new \Twig_Function_Method($this, 'GetQuestionsApp'),
+            'GetReponsesApp' => new \Twig_Function_Method($this, 'GetReponsesApp'),
 
-
+            'GetQuestionsTestApp' => new \Twig_Function_Method($this, 'GetQuestionsTestApp'),
+            'GetReponsesTestApp' => new \Twig_Function_Method($this, 'GetReponsesTestApp'),
+            'GetScoresApp' => new \Twig_Function_Method($this, 'GetScoresApp'),
 
 
         );
@@ -524,7 +535,7 @@ class globalExtension extends \Twig_Extension{
 
     }
 
-   public function GetIdTopOfMessges($idDestinataire,$idMission){
+    public function GetIdTopOfMessges($idDestinataire,$idMission){
 
 
         $Messages = $this->em->getRepository('GenericBundle:Message')->findBy(array('mission'=>$idMission,'destinataire'=>$idDestinataire));
@@ -570,7 +581,7 @@ class globalExtension extends \Twig_Extension{
         return $rdv->getId();
 
     }
-public function EstRefuse($idapp,$idMission){
+    public function EstRefuse($idapp,$idMission){
 
         $user = $this->em->getRepository('GenericBundle:User')->find($idapp);
         $Mission = $this->em->getRepository('GenericBundle:Mission')->find($idMission);
@@ -595,7 +606,7 @@ public function EstRefuse($idapp,$idMission){
 
     }
 
-public function EstAccepte($idapp,$idMission){
+    public function EstAccepte($idapp,$idMission){
 
     $user = $this->em->getRepository('GenericBundle:User')->find($idapp);
     $Mission = $this->em->getRepository('GenericBundle:Mission')->find($idMission);
@@ -633,6 +644,304 @@ public function EstAccepte($idapp,$idMission){
      return $TypeContrat;
 
     }
+
+    public function SetMessageText($Message){
+
+        $_SESSION['texte'] = $Message;
+
+
+    }
+    public function GetMessageText( ){
+        return $_SESSION['texte'];
+    }
+
+    public function GetCandidatureApp($IdUser)
+    {
+        $candidatures =  $this->em->getRepository('GenericBundle:Candidature')->findBy(array('user'=>$IdUser));
+
+
+
+        return $candidatures;
+
+    }
+    public function GetExperienceApp($IdUser)
+    {
+        $Experience =  $this->em->getRepository('GenericBundle:Experience')->findBy(array('user'=>$IdUser));
+
+
+
+        return $Experience;
+
+    }
+
+    public function GetRecommandationApp($IdUser)
+    {
+        $Recommandation =  $this->em->getRepository('GenericBundle:Recommandation')->findBy(array('user'=>$IdUser));
+
+
+
+        return $Recommandation;
+
+    }
+    public function GetDiplomeApp($IdUser)
+    {
+        $Diplome =  $this->em->getRepository('GenericBundle:Diplome')->findBy(array('user'=>$IdUser));
+
+
+
+        return $Diplome;
+
+    }
+    public function GetDocumentApp($IdUser)
+    {
+        $Document =  $this->em->getRepository('GenericBundle:Document')->findBy(array('user'=>$IdUser));
+
+
+
+        return $Document;
+
+    }
+    public function GetQuestionsApp($IdUser)
+    {
+
+        $questions = array();
+        $reponses = array();
+        $user = $this->em->getRepository('GenericBundle:User')->find( $IdUser);
+        if ($user->getEtablissement()) {
+            $candidatures = $this->em->getRepository('GenericBundle:Candidature')->findBy(array('user' => $IdUser));
+
+            foreach ($user->getEtablissement()->getQcmdef() as $key => $qcm) {
+
+                $questions[$key] = $this->em->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef' => $qcm));
+                usort($questions[$key], array('\GenericBundle\Entity\Questiondef', 'sort_questions_by_order'));
+                foreach ($questions[$key] as $keyqst => $qst) {
+                    $reps = $this->em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef' => $qst));
+                    usort($reps, array('\GenericBundle\Entity\Reponsedef', 'sort_reponses_by_order'));
+                    $reponses[$key][$keyqst] = $reps;
+                }
+
+            }
+
+
+            $questionsTest = array();
+            $reponsesTest = array();
+            $QCMtest = array();
+            foreach ($candidatures as $cand) {
+                $QCMtest = array_merge($QCMtest, $cand->getFormation()->getQcmdef()->toArray());
+            }
+
+            $QCMtest = array_unique($QCMtest);
+
+
+            $index = 0;
+            foreach ($QCMtest as $qcm) {
+                $questionsTest[$index] = $this->em->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef' => $qcm));
+                usort($questionsTest[$index], array('\GenericBundle\Entity\Questiondef', 'sort_questions_by_order'));
+                foreach ($questionsTest[$index] as $keyqst => $qst) {
+                    $reps = $this->em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef' => $qst));
+                    usort($reps, array('\GenericBundle\Entity\Reponsedef', 'sort_reponses_by_order'));
+                    $reponsesTest[$index][$keyqst] = $reps;
+                }
+                $index++;
+            }
+        }
+
+
+        return $questions;
+
+    }
+
+    public function GetReponsesApp($IdUser)
+    {
+
+        $questions = array();
+        $reponses = array();
+        $user = $this->em->getRepository('GenericBundle:User')->find( $IdUser);
+        if ($user->getEtablissement()) {
+            $candidatures = $this->em->getRepository('GenericBundle:Candidature')->findBy(array('user' => $IdUser));
+
+            foreach ($user->getEtablissement()->getQcmdef() as $key => $qcm) {
+
+                $questions[$key] = $this->em->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef' => $qcm));
+                usort($questions[$key], array('\GenericBundle\Entity\Questiondef', 'sort_questions_by_order'));
+                foreach ($questions[$key] as $keyqst => $qst) {
+                    $reps = $this->em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef' => $qst));
+                    usort($reps, array('\GenericBundle\Entity\Reponsedef', 'sort_reponses_by_order'));
+                    $reponses[$key][$keyqst] = $reps;
+                }
+
+            }
+
+
+            $questionsTest = array();
+            $reponsesTest = array();
+            $QCMtest = array();
+            foreach ($candidatures as $cand) {
+                $QCMtest = array_merge($QCMtest, $cand->getFormation()->getQcmdef()->toArray());
+            }
+
+            $QCMtest = array_unique($QCMtest);
+
+
+            $index = 0;
+            foreach ($QCMtest as $qcm) {
+                $questionsTest[$index] = $this->em->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef' => $qcm));
+                usort($questionsTest[$index], array('\GenericBundle\Entity\Questiondef', 'sort_questions_by_order'));
+                foreach ($questionsTest[$index] as $keyqst => $qst) {
+                    $reps = $this->em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef' => $qst));
+                    usort($reps, array('\GenericBundle\Entity\Reponsedef', 'sort_reponses_by_order'));
+                    $reponsesTest[$index][$keyqst] = $reps;
+                }
+                $index++;
+            }
+        }
+
+
+        return $reponses;
+
+    }
+
+    public function GetQuestionsTestApp($IdUser)
+    {
+
+        $questions = array();
+        $reponses = array();
+        $user = $this->em->getRepository('GenericBundle:User')->find( $IdUser);
+        if ($user->getEtablissement()) {
+            $candidatures = $this->em->getRepository('GenericBundle:Candidature')->findBy(array('user' => $IdUser));
+
+            foreach ($user->getEtablissement()->getQcmdef() as $key => $qcm) {
+
+                $questions[$key] = $this->em->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef' => $qcm));
+                usort($questions[$key], array('\GenericBundle\Entity\Questiondef', 'sort_questions_by_order'));
+                foreach ($questions[$key] as $keyqst => $qst) {
+                    $reps = $this->em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef' => $qst));
+                    usort($reps, array('\GenericBundle\Entity\Reponsedef', 'sort_reponses_by_order'));
+                    $reponses[$key][$keyqst] = $reps;
+                }
+
+            }
+
+
+            $questionsTest = array();
+            $reponsesTest = array();
+            $QCMtest = array();
+            foreach ($candidatures as $cand) {
+                $QCMtest = array_merge($QCMtest, $cand->getFormation()->getQcmdef()->toArray());
+            }
+
+            $QCMtest = array_unique($QCMtest);
+
+
+            $index = 0;
+            foreach ($QCMtest as $qcm) {
+                $questionsTest[$index] = $this->em->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef' => $qcm));
+                usort($questionsTest[$index], array('\GenericBundle\Entity\Questiondef', 'sort_questions_by_order'));
+                foreach ($questionsTest[$index] as $keyqst => $qst) {
+                    $reps = $this->em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef' => $qst));
+                    usort($reps, array('\GenericBundle\Entity\Reponsedef', 'sort_reponses_by_order'));
+                    $reponsesTest[$index][$keyqst] = $reps;
+                }
+                $index++;
+            }
+        }
+
+
+        return $questionsTest;
+
+    }
+
+    public function GetReponsesTestApp($IdUser)
+    {
+
+        $questions = array();
+        $reponses = array();
+        $user = $this->em->getRepository('GenericBundle:User')->find( $IdUser);
+        if ($user->getEtablissement()) {
+            $candidatures = $this->em->getRepository('GenericBundle:Candidature')->findBy(array('user' => $IdUser));
+
+            foreach ($user->getEtablissement()->getQcmdef() as $key => $qcm) {
+
+                $questions[$key] = $this->em->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef' => $qcm));
+                usort($questions[$key], array('\GenericBundle\Entity\Questiondef', 'sort_questions_by_order'));
+                foreach ($questions[$key] as $keyqst => $qst) {
+                    $reps = $this->em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef' => $qst));
+                    usort($reps, array('\GenericBundle\Entity\Reponsedef', 'sort_reponses_by_order'));
+                    $reponses[$key][$keyqst] = $reps;
+                }
+
+            }
+
+
+            $questionsTest = array();
+            $reponsesTest = array();
+            $QCMtest = array();
+            foreach ($candidatures as $cand) {
+                $QCMtest = array_merge($QCMtest, $cand->getFormation()->getQcmdef()->toArray());
+            }
+
+            $QCMtest = array_unique($QCMtest);
+
+
+            $index = 0;
+            foreach ($QCMtest as $qcm) {
+                $questionsTest[$index] = $this->em->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef' => $qcm));
+                usort($questionsTest[$index], array('\GenericBundle\Entity\Questiondef', 'sort_questions_by_order'));
+                foreach ($questionsTest[$index] as $keyqst => $qst) {
+                    $reps = $this->em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef' => $qst));
+                    usort($reps, array('\GenericBundle\Entity\Reponsedef', 'sort_reponses_by_order'));
+                    $reponsesTest[$index][$keyqst] = $reps;
+                }
+                $index++;
+            }
+        }
+
+
+        return $reponsesTest;
+
+    }
+
+    Public function GetScoresApp($IdUser){
+
+
+
+        $message = $this->em->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$IdUser ),array('date'=>'desc'));
+        $scores = array();
+        foreach($message as $msg)
+        {
+            if($msg->getExpediteur()->getPhotos() and !is_string($msg->getExpediteur()->getPhotos()))
+            {
+                $msg->getExpediteur()->setPhotos(base64_encode(stream_get_contents($msg->getExpediteur()->getPhotos())));
+            }
+            if($msg->getMission()->getEtablissement()->getTier()->getLogo() and !is_string($msg->getMission()->getEtablissement()->getTier()->getLogo())){
+                $msg->getMission()->getEtablissement()->getTier()->setLogo(base64_encode(stream_get_contents($msg->getMission()->getEtablissement()->getTier()->getLogo())));
+            }
+
+            $apprenant = null;
+            if($msg->getExpediteur()->hasRole('ROLE_APPRENANT')){
+                $apprenant = $msg->getExpediteur();
+            }
+            elseif($msg->getDestinataire()->hasRole('ROLE_APPRENANT')){
+                $apprenant = $msg->getDestinataire();
+            }
+            else{
+                continue;
+            }
+            $scoreapprenant = 0;
+
+            foreach($msg->getMission()->getReponsedef() as $rep){
+                if(in_array($rep,$apprenant->getReponsedef()->toArray())){
+
+                    $scoreapprenant = $scoreapprenant + $rep->getScore();
+                }
+                else{$scoreapprenant++;}
+            }
+            array_push($scores,$scoreapprenant);
+        }
+
+        return $scores;
+    }
+
 
 
 

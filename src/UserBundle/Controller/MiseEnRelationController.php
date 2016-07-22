@@ -347,6 +347,7 @@ class MiseEnRelationController extends Controller
         $rdv = $em->getRepository('GenericBundle:RDV')->find($id);
         $rep = new JsonResponse();
         $MessageTexte = str_replace('|||', '/', $MessageTexte);
+        $MessageTexte = html_entity_decode($MessageTexte);
         if($rdv)
         {
             $rdv->setDate2(null);
@@ -439,6 +440,7 @@ class MiseEnRelationController extends Controller
 
         $DateTimeRdv = str_replace('|||', '/', $DateTimeRdv);
         $MessageTexte = str_replace('|||', '/', $MessageTexte);
+
         $Dates=explode( ";", $DateTimeRdv,-1) ;
        // list($date1, $date2, $date3) =$Dates;
 

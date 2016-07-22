@@ -2195,16 +2195,7 @@ class DefaultController extends Controller
 
         $MiseEnRelation  = $query->getResult(); // array of ForumUser objects
 
-        /*  $missions=$this->getDoctrine()->getRepository('GenericBundle:Mission')->findAll();
-          $formation =$this->getDoctrine()->getRepository('GenericBundle:Formation')->find('-1');
-          if($formation){
-              $diffusions = $em->getRepository('GenericBundle:Diffusion')->findBy(array('mission'=>$mission,'formation'=>$formation));
-          }
-          else{
-              $diffusions = $em->getRepository('GenericBundle:Diffusion')->findBy(array('mission'=>$mission));
-          }*/
 
-        // var_dump($MiseEnRelation);die;
 
 
         return  $this->render('UserBundle:MiseEnRelation:ApprenantsPropose.html.twig',array('MiseEnRelation'=>$MiseEnRelation,'AllMiseEnRelation'=>$AllMiseEnRelation));

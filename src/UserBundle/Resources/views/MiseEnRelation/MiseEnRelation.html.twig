@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
     {% block CSS %}{% endblock %}
 
     <style>
@@ -403,6 +405,8 @@
 
     <div id="ListeMiseEnRelation"  class="col-xs-10 col-xs-offset-1">
         {% if MiseEnRelation is defined %}
+            {% set i = 0 %}
+            {% set nbreNull = 0 %}
             {% for mise in MiseEnRelation %}
 
                 <div id="{{ mise.id }}" class="Liste" style="border: 1px solid #ddd;margin: 0;height:100px;width: 100%;" >
@@ -427,6 +431,18 @@
                         <label style="font:18px Roboto;margin: auto;" > {{ mise.destinataire.getNom }}<br/>{{ mise.destinataire.getPrenom }}</label><br/>
 
 
+                        <img  style="height:30px;width:30px;float:right;margin: auto;"
+
+                                {% set scores=GetScoresApp(mise.destinataire) %}
+                              onclick="informationApprenant('{{mise.destinataire.getPhotos|escape('js')}}','{{ mise.destinataire.getCivilite|escape('js') }}','{{ mise.destinataire.getNom|escape('js') }}','{{ mise.destinataire.getPrenom|escape('js') }}',
+                                      '{{ mise.destinataire.getEmail|escape('js') }}','{{ mise.destinataire.getTelephone|escape('js') }}','{{ mise.destinataire.getInfo.getDateNaissance|date("d/m/Y") }}',
+                                      '{{ mise.destinataire.getInfo.getCpNaissance|escape('js') }}','{{ mise.destinataire.getInfo.getLieunaissance|escape('js') }}','{{ mise.destinataire.getInfo.getAdresse|escape('js') }}','{{ mise.message|escape('js') }}',
+                                      '{{ mise.statut|escape('js') }}','{{ scores[i-nbreNull] }}');
+                                      show('FicheApprenant');idMessage={{ mise.id|e('js') }};"
+                              title="Localiser l'apprenant"
+                              src="{{ asset('image/geolocalisation.jpg') }}">
+
+
                     </div>
 
                     <div id="date{{ mise.id }}" class="col-xs-2" style="width:20%;-webkit-flex-wrap: wrap;flex-wrap: wrap;display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;;display:flex;height: 100px;text-align: left; ">
@@ -447,15 +463,15 @@
 
                             {% if mise.destinataire.getPhotos %}
 
-                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" onclick="AfficherChat('{{ mise.destinataire.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc }}<br/>{{ mise.mission.intitule }}','{{ mise.destinataire.getNom }}<br/>{{ mise.destinataire.getPrenom }}','data:image/jpg;base64,{{ mise.destinataire.getPhotos }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
+                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" onclick="AfficherChat('{{ mise.destinataire.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc|replace({"'": "\\'"}) }}<br/>{{ mise.mission.intitule|replace({"'": "\\'"}) }}','{{ mise.destinataire.getNom|replace({"'": "\\'"}) }}<br/>{{ mise.destinataire.getPrenom|replace({"'": "\\'"}) }}','data:image/jpg;base64,{{ mise.destinataire.getPhotos }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
 
                             {% elseif mise.destinataire.getCivilite == 'Mme' or mise.destinataire.getCivilite == 'Madame' or mise.destinataire.getCivilite == 'Mademoiselle' %}
 
 
-                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" onclick="AfficherChat('{{ mise.destinataire.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc }}<br/>{{ mise.mission.intitule }}','{{ mise.destinataire.getNom }}<br/>{{ mise.destinataire.getPrenom }}','{{ asset('image/femme.jpg') }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
+                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" onclick="AfficherChat('{{ mise.destinataire.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc|replace({"'": "\\'"}) }}<br/>{{ mise.mission.intitule|replace({"'": "\\'"}) }}','{{ mise.destinataire.getNom|replace({"'": "\\'"}) }}<br/>{{ mise.destinataire.getPrenom|replace({"'": "\\'"}) }}','{{ asset('image/femme.jpg') }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
                             {% else %}
 
-                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" onclick="AfficherChat('{{ mise.destinataire.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc }}<br/>{{ mise.mission.intitule }}','{{ mise.destinataire.getNom }}<br/>{{ mise.destinataire.getPrenom }}','{{ asset('image/homme.jpg') }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
+                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" onclick="AfficherChat('{{ mise.destinataire.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc|replace({"'": "\\'"}) }}<br/>{{ mise.mission.intitule|replace({"'": "\\'"}) }}','{{ mise.destinataire.getNom|replace({"'": "\\'"}) }}<br/>{{ mise.destinataire.getPrenom|replace({"'": "\\'"}) }}','{{ asset('image/homme.jpg') }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
                             {% endif %}
 
 
@@ -473,8 +489,111 @@
             {% endfor %}
         {% endif %}
     </div>
+    <div id="FicheApprenant" class="popup" >
+        <div onclick="hide(this)" class="close"></div>
+        <div class="col-xs-offset-1 col-xs-7" style="background-color: white;padding: 0;border:20px solid white;display: block; margin-left: 20%; ">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+
+            <form id="formFicheApprenant" class="formulaire"   method="post">
+                <div>
+                    <div class="col-lg-12" >
+                        <img src="" style="border-radius:50%; width:50px; height:50px" >
+                    </div>
+                    <div class="col-lg-12">
+                        <label id="Information_Apprenant_titre" style="color:black" ></label>
+                    </div>
+                    <div id="Information_Apprenant_titre_adresse" class="col-xs-12" style="height: 20px;color: #666666;font:medium Roboto;margin-bottom: 40px"></div>
+                </div>
+
+
+
+                <div class="div_form"  id="information_apprenant" >
+                    <div class="row" style=" margin-bottom: 20px">
+
+
+
+                        <div class="row" >
+                            <button onclick="document.getElementById('info_apprenant').style.display ='block';document.getElementById('Localisation').style.display ='none';"
+                                    class="col-xs-4 onglet"  type="button" style="margin-left: 20px;width: 50%"> FICHE APPRENANT</button>
+                            <button onclick="document.getElementById('Localisation').style.display ='block';document.getElementById('info_apprenant').style.display ='none';
+                        var center = map_localisation.getCenter();
+                        google.maps.event.trigger(map_localisation, 'resize');
+                        map_localisation.setCenter(center);"
+                                    class="col-xs-4 onglet"  type="button" style="width: calc(50% - 50px)" >LOCALISATION</button>
+
+                        </div>
+
+                        <div id="info_apprenant" style="height: 281px;border-top: 1px solid #B0B0B0;margin: 0;overflow-y: auto;width: 100%;">
+                            <div class="col-xs-12" >
+
+                                <div class="col-xs-12" >
+                                    <label class="cell"  style="float:left;">Civilité : <label id="Information_Apprenant_Civilite"></label></label>
+                                </div>
+                                <div class="col-xs-10 ">
+                                    <label class="cell" style="float:left;">Nom : <label id="Information_Apprenant_Nom"></label> </label>
+                                </div>
+                                <div class="col-xs-10">
+                                    <label class="cell" style="float:left;">Prenom : <label id="Information_Apprenant_Prenom"></label></label>
+
+                                </div>
+                                <div class="col-xs-10">
+                                    <label class="cell" style="float:left;">Email  : <label id="Information_Apprenant_Email"></label></label>
+                                </div>
+                                <div class="col-xs-10">
+                                    <label class="cell" style="float:left;">Téléphone : <label id="Information_Apprenant_Telephone"></label></label>
+
+                                </div>
+                                <div class="col-xs-10">
+                                    <label class="cell" style="float:left;">Date naissance : <label id="Information_Apprenant_DateNaissance"  ></label></label>
+                                </div>
+                                <div class="col-xs-10">
+                                    <label class="cell" style="float:left;">Cp naissance  : <label id="Information_Apprenant_CpNaissance" ></label></label>
+
+                                </div>
+
+                                <div class="col-xs-10">
+                                    <label class="cell" style="float:left;">Lieu naissance: <label id="Information_Apprenant_LieuNaissance" ></label></label>
+                                </div>
+                                <div class="col-xs-10">
+                                    <label class="cell" style="float:left;">Adresse       : <label id="Information_Apprenant_Adresse" ></label></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="Localisation"  style="border-top: 1px solid #B0B0B0;margin: 0;height: 281px;width: 100%;display:none;">
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+
+
+
+
+                <div id="information_button" class="div_button" style="display: block;">
+                    <input  onclick="show_formapprenant()" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left" type="button" value="Décliner">
+                    <input id="submitReception" class="blue" type="button" onclick="this.parentNode.parentNode.parentNode.parentNode.style.display='none';" style="margin-left: 250px"  value="Répondre plus tard">
+                    <input onclick="show_formapprenantproposer()"  class="blue" type="button"   value="Proposer un rendez-vous">
+                </div>
+
+
+
+            </form>
+
+        </div>
+
+
+    </div>
 </div>
 
+
+
+<script type="text/javascript" src="http://maps.google.com/maps/api/js"></script>
+
+<script src="{{ asset('js/OverlappingMarkerSpiderfier.min.js') }}"></script>
+<script src="{{ asset('js/infobox.js') }}"></script>
 
 <script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
 <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
@@ -483,6 +602,7 @@
 <script src="{{ asset('js/paginate.js') }}"></script>
 <script language="JavaScript">
     var rendezvousSelectionne;
+    var marker,map_localisation,map_mission,marker_societe,idMessage;
     function AddDateTimeDiv(button){
         if(button.parentElement.children.length < 4) {
             var divContainer = document.createElement('div');
@@ -710,6 +830,32 @@
             itemsToPaginate : ".Liste:not(.hidden)",
             activeClass : "active-class"
         });
+
+        var locations =[];
+        var loc, map, map_localisation, marker, infobox;
+        var idMRDestinataire;
+
+        $(".slide").click(function(){
+            document.getElementById('info_mission').style.visibility= 'hidden';
+            {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
+            document.getElementById('apprenants_mission').style.visibility= 'hidden';
+            {% endif %}
+            document.getElementById('map').style.visibility= 'hidden';
+            document.getElementById($(this).attr("data-show")).style.visibility= 'visible';
+
+            for(var i = 0; i < infoWindows.length ; i++){
+                infoWindows[i].close();
+            }
+            var target = $(this).offset();
+
+            $("#baronglet").animate({left: "+="+(target.left - $("#baronglet").offset().left)},500)
+            sessionStorage.setItem('OngletMission',$(this).attr('id'));
+
+        });
+
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+
     }
     function RelancerApp(idApp,idMission){
 
@@ -901,6 +1047,75 @@
         })
 
     }
+
+    function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse,message,Msgstatut,score) {
+
+        if(image != ''){
+            document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
+        }
+        else if( civilite == 'Mme' || civilite =='Madame' || civilite == 'Mademoiselle'){
+            document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='{{ asset('image/femme.jpg') }}';
+        }
+        else{
+            document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='{{ asset('image/homme.jpg') }}';
+        }
+
+
+        document.getElementById('Information_Apprenant_Civilite').innerHTML = civilite;
+        document.getElementById('Information_Apprenant_Nom').innerHTML = nom;
+        document.getElementById('Information_Apprenant_Prenom').innerHTML= prenom;
+        document.getElementById('Information_Apprenant_Email').innerHTML = email;
+        document.getElementById('Information_Apprenant_Telephone').innerHTML =telephone;
+        document.getElementById('Information_Apprenant_DateNaissance').innerHTML =Datenaissance;
+        document.getElementById('Information_Apprenant_CpNaissance').innerHTML =cpnaissance;
+        document.getElementById('Information_Apprenant_LieuNaissance').innerHTML =lieuNaissance;
+        document.getElementById('Information_Apprenant_Adresse').innerHTML =adresse;
+        document.getElementById('Information_Apprenant_titre').innerHTML= nom +' '+ prenom;
+        document.getElementById('Information_Apprenant_titre_adresse').innerHTML = adresse;
+
+
+
+        if(Msgstatut == 1 || Msgstatut == -1 || Msgstatut == 2 ){
+            document.getElementById('information_button').style.display = 'none';
+        }else{
+            document.getElementById('information_button').style.display = 'block';
+        }
+
+
+
+        if(marker)
+        {
+            marker.setMap(null);
+        }
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({'address': adresse }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                marker = new google.maps.Marker({
+                    map: map_localisation,
+                    position: results[0].geometry.location,
+                    visible: true,
+                    //icon: '{{ asset('image/highscore_marker.png') }}'
+                    icon: '{{ asset('image/') }}scores/'+score+'.png'
+                });
+                map_localisation.setCenter(results[0].geometry.location);
+            }
+            else {
+                alert('Nous n\'avons pas réussi à localiser l\'adresse l\'apprenant qui est : ' + adresse);
+            }
+        });
+
+    }
+    function initialize() {
+        map_localisation = new google.maps.Map(document.getElementById("Localisation"), {
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        map_mission = new google.maps.Map(document.getElementById("Localisationmission"), {
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
 
 </script>
 </body>

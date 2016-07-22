@@ -302,11 +302,12 @@
                         {% endif %}
                     </div>
                     <div
+
                             onclick="informationApprenant('{{msg.getExpediteur.getPhotos|escape('js')}}','{{ msg.getExpediteur.getCivilite|escape('js') }}','{{ msg.getExpediteur.getNom|escape('js') }}','{{ msg.getExpediteur.getPrenom|escape('js') }}',
                                     '{{ msg.getExpediteur.getEmail|escape('js') }}','{{ msg.getExpediteur.getTelephone|escape('js') }}','{{ msg.getExpediteur.getInfo.getDateNaissance|date("d/m/Y") }}',
                                     '{{ msg.getExpediteur.getInfo.getCpNaissance|escape('js') }}','{{ msg.getExpediteur.getInfo.getLieunaissance|escape('js') }}','{{ msg.getExpediteur.getInfo.getAdresse|escape('js') }}','{{ msg.message|escape('js') }}',
                                     '{{ msg.statut|escape('js') }}','{{ scores[i-nbreNull] }}');
-                            show('FicheApprenant');idMessage={{ msg.id|e('js') }};"
+                                    show('FicheApprenant');idMessage={{ msg.id|e('js') }};"
 
                             class="col-xs-1" style="height: 100%">
                         <span class="glyphicon glyphicon-option-vertical" style="margin-top:40px;height:20px;color:#8c8c8c"></span>
