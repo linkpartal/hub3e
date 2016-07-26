@@ -348,10 +348,22 @@
 
                                 {% elseif mise.getStatut()=='2' %}
                                     {#postulation#}
+                    <form id="formMise" action="{{ path('Postuler_Messagerie',{'idmessage':mise.getId()-1}) }}" onsubmit="ShowWaiter();" method="post" enctype="multipart/form-data">
+                        <div class="col-xs-12" >
+                            <input id="hidden" type="hidden" name="_input" value="">
+                            <textarea  style="margin-top: -10px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
+                            <br/><br/>
+                        </div>
 
 
-                                        <input   onclick="envoyerReponse({{ mise.getId()-1 }},false)"   style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"   type="button"  value="Décliner">
-                                        <input  onclick="postuler({{ mise.getId()-1 }},this)"  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"   type="button"   value="Postuler">
+
+                        <input onclick="document.getElementById('hidden').value='decliner';"    style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"   type="submit"  value="Décliner">
+
+                        <input onclick="document.getElementById('hidden').value='postuler';"  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"  class="blue" type="submit" style="margin-left: 270px"  value="Postuler">
+                    </form>
+
+
+
                                     <br/><br/>
 
 
@@ -652,8 +664,7 @@
                                 <img style="height:70px;width:70px;float:left;border-radius: 100%" onclick="AfficherChat('{{ mise.destinataire.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc|replace({"'": "\\'"}) }}<br/>{{ mise.mission.intitule|replace({"'": "\\'"}) }}','{{ mise.destinataire.getNom|replace({"'": "\\'"}) }}<br/>{{ mise.destinataire.getPrenom|replace({"'": "\\'"}) }}','{{ asset('image/homme.jpg') }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
                             {% endif %}
 
-
-                            {% if   GetStatut(mise.destinataire) =='0' or ( GetStatut(mise.destinataire)=='2' and "now"|date('d-m-Y à H:i')  > GetDateTimeRDV(mise.destinataire,mise.mission)|date('d-m-Y à H:i')) %}
+                            {% if   GetStatut(mise.destinataire) =='0'  or ( GetStatut(mise.destinataire)=='2' and "now"|date('d-m-Y à H:i')  > GetDateTimeRDV(mise.destinataire,mise.mission)|date('d-m-Y à H:i')) %}
                                 <img style="height:70px;width:70px;float:left;" onclick="" src="{{ asset('image/avirtissement.png') }}">
                             {% endif %}
 

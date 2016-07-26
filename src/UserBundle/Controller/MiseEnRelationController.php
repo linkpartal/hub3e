@@ -221,65 +221,113 @@ class MiseEnRelationController extends Controller
 
     }
 
-    public function PostulerMessagerieAction($idmessage){
-        $reponsejson = new JsonResponse();
-        $em = $this->getDoctrine()->getEntityManager();
-        $messagereponse = $em->getRepository('GenericBundle:Message')->find($idmessage);
-        $messagedup = $em->getRepository('GenericBundle:Message')->findOneBy(array('destinataire'=>$messagereponse->getMission()->getTuteur(),'expediteur'=>$this->get('security.token_storage')->getToken()->getUser(),'mission'=>$messagereponse->getMission()));
-        if(!$messagedup) {
-            //Message RP
-            $messageRP = $em->getRepository('GenericBundle:Message')->findOneBy(array('expediteur'=>$this->get('security.token_storage')->getToken()->getUser(),'destinataire'=>$messagereponse->getExpediteur(),'mission'=>$messagereponse->getMission()));
-            $messageRP->setStatut(1);
-            $messageRP->getMessage("L'apprenant a donné suite à votre mise en relation");
-            $em->flush();
-            //Message au Tuteur
-            $messageTuteur = new Message();
+    public function PostulerMessagerieAction($idmessage,Request $request){
+        $action=$request->get('_input');
+        if ($action=='postuler'){
+            $reponsejson = new JsonResponse();
+            $em = $this->getDoctrine()->getEntityManager();
+            $messagereponse = $em->getRepository('GenericBundle:Message')->find($idmessage);
+            $messagedup = $em->getRepository('GenericBundle:Message')->findOneBy(array('destinataire'=>$messagereponse->getMission()->getTuteur(),'expediteur'=>$this->get('security.token_storage')->getToken()->getUser(),'mission'=>$messagereponse->getMission()));
+            if(!$messagedup) {
+                //Message RP
+                $messageRP = $em->getRepository('GenericBundle:Message')->findOneBy(array('expediteur'=>$this->get('security.token_storage')->getToken()->getUser(),'destinataire'=>$messagereponse->getExpediteur(),'mission'=>$messagereponse->getMission()));
+                $messageRP->setStatut(1);
+                $messageRP->getMessage("L'apprenant a donné suite à votre mise en relation");
+                $em->flush();
+                //Message au Tuteur
+                $messageTuteur = new Message();
+                $date = new \DateTime();
+                $messageTuteur->setDate($date);
+                $messageTuteur->setExpediteur($this->get('security.token_storage')->getToken()->getUser());
+                $messageTuteur->setDestinataire($messagereponse->getMission()->getTuteur());
+                $messageTuteur->setMission($messagereponse->getMission());
+                $messageTuteur->setMessage($request->get('_Message'));
+                $messageTuteur->setAction('A Postuler');
+                $messageTuteur->setStatutaction(1);
+                $messageTuteur->setCouleur('green');
+                $messagereponse->setStatut(1);
+                $em->persist($messageTuteur);
+                $em->flush();
+                $messagedup = $messageTuteur;
+            }
+            else{
+                $messagedup->setMessage($request->get('_Message'));
+                $messagedup->setAction('A Postuler');
+                $messagedup->setStatutaction(1);
+                $messagedup->setCouleur('green');
+                $messagedup->setStatut(1);
+                $messagereponse->setStatut(1);
+                $em->flush();
+            }
+            $postdup = $em->getRepository('GenericBundle:Postulation')->findOneBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser(),'mission'=>$messagereponse->getMission()));
+            if(!$postdup) {
+                //Creation de la postulation
+                $postulation = new Postulation();
+                $postulation->setUser($this->get('security.token_storage')->getToken()->getUser());
+                $postulation->setMission($messagereponse->getMission());
+                $postulation->setStatut(1);
+                $em->persist($postulation);
+                $em->flush();
+
+                if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT')){
+                    $mail = \Swift_Message::newInstance()
+                        ->setSubject('Postulation')
+                        ->setFrom(array('ne-pas-repondre-svp@atpmg.com'=>"HUB3E"))
+                        ->setTo($messagereponse->getMission()->getTuteur()->getEmail())
+                        ->setCc($messagereponse->getExpediteur()->getEmail())
+                        ->setBody($this->renderView('GenericBundle:Mail:PostulationMessage.html.twig',array('message'=>$messagedup->getMessage(),'apprenant'=>$messagedup->getExpediteur(),'mission'=>$messagedup->getMission()))
+                            ,'text/html'
+                        );
+                    $this->get('mailer')->send($mail);
+                }
+            }
+
+
+
+        }else
+        {
+            $em = $this->getDoctrine()->getEntityManager();
+            $userConnecte = $this->get('security.token_storage')->getToken()->getUser();
+            $messagereponse = $em->getRepository('GenericBundle:Message')->find($idmessage);
+            $messageDup = $em->getRepository('GenericBundle:Message')->findOneBy(array('expediteur'=>$userConnecte,'destinataire'=>$messagereponse->getExpediteur(),'mission'=>$messagereponse->getMission()));
+
+
+
+
+
+
+
+
             $date = new \DateTime();
-            $messageTuteur->setDate($date);
-            $messageTuteur->setExpediteur($this->get('security.token_storage')->getToken()->getUser());
-            $messageTuteur->setDestinataire($messagereponse->getMission()->getTuteur());
-            $messageTuteur->setMission($messagereponse->getMission());
-            $messageTuteur->setMessage('Cet apprenant correspond au profil demandé');
-            $messageTuteur->setAction('A Postuler');
-            $messageTuteur->setStatutaction(1);
-            $messageTuteur->setCouleur('green');
-            $messagereponse->setStatut(1);
-            $em->persist($messageTuteur);
-            $em->flush();
-            $messagedup = $messageTuteur;
-        }
-        else{
-            $messagedup->setMessage('Cet apprenant correspond au profil demandé');
-            $messagedup->setAction('A Postuler');
-            $messagedup->setStatutaction(1);
-            $messagedup->setCouleur('green');
-            $messagedup->setStatut(1);
-            $messagereponse->setStatut(1);
-            $em->flush();
-        }
-        $postdup = $em->getRepository('GenericBundle:Postulation')->findOneBy(array('user'=>$this->get('security.token_storage')->getToken()->getUser(),'mission'=>$messagereponse->getMission()));
-        if(!$postdup) {
-            //Creation de la postulation
-            $postulation = new Postulation();
-            $postulation->setUser($this->get('security.token_storage')->getToken()->getUser());
-            $postulation->setMission($messagereponse->getMission());
-            $postulation->setStatut(1);
-            $em->persist($postulation);
+            $messageDup->setDate($date);
+
+                $messageDup->setMessage($request->get('_Message'));
+                $messageDup->setStatut(-1);
+                $messageDup->setStatutaction(-1);
+                $messagereponse->setStatut(-1);
+                $messagereponse->setStatutaction(-1);
+                $messageDup->setAction('A décliner');
+                $messageDup->setCouleur('red');
+                $em->flush();
+
+            $message = $messageDup;
             $em->flush();
 
-            if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT')){
+            if($this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT')) {
                 $mail = \Swift_Message::newInstance()
-                    ->setSubject('Postulation')
-                    ->setFrom(array('ne-pas-repondre-svp@atpmg.com'=>"HUB3E"))
-                    ->setTo($messagereponse->getMission()->getTuteur()->getEmail())
-                    ->setCc($messagereponse->getExpediteur()->getEmail())
-                    ->setBody($this->renderView('GenericBundle:Mail:PostulationMessage.html.twig',array('message'=>$messagedup->getMessage(),'apprenant'=>$messagedup->getExpediteur(),'mission'=>$messagedup->getMission()))
-                        ,'text/html'
+                    ->setSubject('Refus RDV')
+                    ->setFrom(array('ne-pas-repondre-svp@atpmg.com' => "HUB3E"))
+                    ->setTo($messagereponse->getExpediteur()->getEmail())
+                    ->setBody($this->renderView('GenericBundle:Mail:RefusMissionApprenant.html.twig', array('message' => $message->getMessage(), 'apprenant' => $message->getExpediteur(), 'mission' => $message->getMission()))
+                        , 'text/html'
                     );
                 $this->get('mailer')->send($mail);
+
+
             }
         }
-        return $reponsejson->setData(1);
+
+        return $this->redirect($_SERVER['HTTP_REFERER']);
 
     }
 
