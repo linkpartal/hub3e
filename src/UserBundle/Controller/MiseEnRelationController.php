@@ -88,7 +88,7 @@ class MiseEnRelationController extends Controller
             $message->setDestinataire($messagereponse->getExpediteur());
             $message->setMission($messagereponse->getMission());
             if($request->get('MessageRefus')){
-                $message->setMessage($request->get('MessageRefus'));
+                $message->setMessage('je veux pas cette mission du tout');
                 $message->setStatut(-1);
                 $message->setAction('Decliner profil');
                 $message->setCouleur('red');
