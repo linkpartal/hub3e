@@ -41,6 +41,16 @@
 
             </div>
 
+            <div id="Comp" style="display: none;" >
+                <input type="hidden" id="inputCompetence" >
+
+                <label class="champ form-control" style="width: 150px;" for="competence"></label>
+
+                <img   onclick="supprimerCompetence(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/><br>
+
+
+            </div>
+
             <div id="DivNewLangue" style="display: none;" >
                 <input type="hidden" id="inputLangue" >
                 <input type="hidden" id="inputNiveau" >
@@ -501,10 +511,10 @@
                                 </div> #}
 
                                 {# LE PSEUDO EST IL UTILE ? #}
-                                {#  <div class="inputcontainer">
+                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="UserName">Pseudo :</label>
                                     <input value="{{User.getUserName}}" type="text" class="champ form-control" id="UserName" name="_Username" maxlength="255" >
-                                </div>  #}
+                                </div> 
 
                                 <div class="inputcontainer">
                                     <div class="col-xs-6" style="text-align:left">
@@ -670,10 +680,10 @@
                                     </div>                                   
                                 </div>
                                 {# LE PSEUDO EST IL UTILE ? #}
-                                {#  <div class="inputcontainer">
+                                 <div class="inputcontainer">
                                     <label class="list-group-item" style="height: 60px;" for="UserName">Pseudo :</label>
                                     <input value="{{User.getUserName}}" type="text" class="champ form-control" id="UserName" name="_Username" maxlength="255" >
-                                </div>  #}
+                                </div> 
 
                                 <div class="inputcontainer">
                                     <div class="col-xs-6" style="text-align:left">
@@ -828,45 +838,47 @@
                                         </div>
                                     </div>
 
+
+{# COMPETENCES #}
                                     <div class="inputcontainer">
-                                        <label class="list-group-item" style="height: 60px;vertical-align: top;" for="Hobbies">Hobbies :</label>
-                                        <div id="HobbiesContainer" style="display: inline-block;">
-                                            {% if  User.getInfo.getHobbie1  %}
-                                                <div id="hobbie" >
-                                                    <input title="" value="{{ User.getInfo.getHobbie1 }}" name="_hobbie[]" type="text"  class="champ form-control" >
-                                                    <img  onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                        <label class="list-group-item" style="height: 60px;vertical-align: top;" for="Competences">Compétences :</label>
+                                        <div id="CompetencesContainer" style="display: inline-block;">
+                                            {% if  User.getInfo.getCompetence1  %}
+                                                <div id="competence" >
+                                                    <input title="" value="{{ User.getInfo.getCompetence1 }}" name="_competence[]" type="text"  class="champ form-control" >
+                                                    <img  onclick="supprimerCompetence(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
                                                 </div>
                                             {% endif %}
-                                            {% if User.getInfo.getHobbie2 %}
-                                                <div id="hobbie1"  >
-                                                    <input title="" value="{{ User.getInfo.getHobbie2 }}" name="_hobbie[]" type="text" class="champ form-control" >
-                                                    <img   onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                            {% if User.getInfo.getCompetence2 %}
+                                                <div id="competence1"  >
+                                                    <input title="" value="{{ User.getInfo.getCompetence2 }}" name="_competence[]" type="text" class="champ form-control" >
+                                                    <img   onclick="supprimerCompetence(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
                                                 </div>
                                             {% endif %}
-                                            {% if User.getInfo.getHobbie3 %}
-                                                <div id="hobbie2" >
-                                                    <input title="" value="{{ User.getInfo.getHobbie3 }}" name="_hobbie[]" type="text" class="champ form-control" >
-                                                    <img onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                            {% if User.getInfo.getCompetence3 %}
+                                                <div id="competence2" >
+                                                    <input title="" value="{{ User.getInfo.getCompetence3 }}" name="_competence[]" type="text" class="champ form-control" >
+                                                    <img onclick="supprimerCompetence(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
                                                 </div>
                                             {% endif %}
-                                            {% if User.getInfo.getHobbie4 %}
-                                                <div id="hobbie3" >
-                                                    <input title="" value="{{ User.getInfo.getHobbie4 }}" name="_hobbie[]" type="text" class="champ form-control" >
-                                                    <img onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                            {% if User.getInfo.getCompetence4 %}
+                                                <div id="competence3" >
+                                                    <input title="" value="{{ User.getInfo.getCompetence4 }}" name="_competence[]" type="text" class="champ form-control" >
+                                                    <img onclick="supprimerCompetence(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
                                                 </div>
                                             {% endif %}
-                                            {% if User.getInfo.getHobbie5 %}
-                                                <div id="hobbie4" >
-                                                    <input title="" value="{{ User.getInfo.getHobbie5 }}" name="_hobbie[]" type="text" class="champ form-control" >
-                                                    <img  onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                            {% if User.getInfo.getCompetence5 %}
+                                                <div id="competence4" >
+                                                    <input title="" value="{{ User.getInfo.getCompetence5 }}" name="_competence[]" type="text" class="champ form-control" >
+                                                    <img onclick="supprimerCompetence(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
                                                 </div>
                                             {% endif %}
                                         </div>
-                                        <span class="glyphicon glyphicon-plus" style="color:green;vertical-align: top;float: right;margin: 9px;" aria-hidden="true" name="modification" title="Ajouter" OnClick="ajouterHobbie()"></span>
-                                        {#<img  OnClick="ajouterHobbie()" style="vertical-align: top;float: right;margin: 9px;"  src="{{ asset('image/add_x30.png') }}"/>#}
+                                        <span class="glyphicon glyphicon-plus" style="color:green;vertical-align: top;float: right;margin: 9px;" aria-hidden="true" name="modification" title="Ajouter" OnClick="ajouterCompetence()"></span>
+                                        {#<img  OnClick="ajouterCompetence()" style="vertical-align: top;float: right;margin: 9px;"  src="{{ asset('image/add_x30.png') }}"/>#}
                                     </div>
 
-
+{# END COMPETENCES  #}                                                                       
 
                                     <div class="inputcontainer">
                                         <label class="list-group-item" style="height: 60px;vertical-align: top;" >Langues :</label>
@@ -942,6 +954,44 @@
                                         <span class="glyphicon glyphicon-plus" style="color:green;vertical-align: top;float: right;margin: 9px;" aria-hidden="true" name="modification" title="Ajouter" onclick="ajouterLangue()"></span>
                                         {#<img onclick="ajouterLangue()" style="vertical-align: top;float: right;margin: 9px;" src="{{ asset('image/add_x30.png') }}"/><br>#}
                                     </div>
+
+                                    <div class="inputcontainer">
+                                        <label class="list-group-item" style="height: 60px;vertical-align: top;" for="Hobbies">Hobbies :</label>
+                                        <div id="HobbiesContainer" style="display: inline-block;">
+                                            {% if  User.getInfo.getHobbie1  %}
+                                                <div id="hobbie" >
+                                                    <input title="" value="{{ User.getInfo.getHobbie1 }}" name="_hobbie[]" type="text"  class="champ form-control" >
+                                                    <img  onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getHobbie2 %}
+                                                <div id="hobbie1"  >
+                                                    <input title="" value="{{ User.getInfo.getHobbie2 }}" name="_hobbie[]" type="text" class="champ form-control" >
+                                                    <img   onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getHobbie3 %}
+                                                <div id="hobbie2" >
+                                                    <input title="" value="{{ User.getInfo.getHobbie3 }}" name="_hobbie[]" type="text" class="champ form-control" >
+                                                    <img onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getHobbie4 %}
+                                                <div id="hobbie3" >
+                                                    <input title="" value="{{ User.getInfo.getHobbie4 }}" name="_hobbie[]" type="text" class="champ form-control" >
+                                                    <img onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+                                            {% if User.getInfo.getHobbie5 %}
+                                                <div id="hobbie4" >
+                                                    <input title="" value="{{ User.getInfo.getHobbie5 }}" name="_hobbie[]" type="text" class="champ form-control" >
+                                                    <img  onclick="supprimerHobbie(this.parentNode)" src="{{ asset('image/imgSupprimer.png') }}"/>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <span class="glyphicon glyphicon-plus" style="color:green;vertical-align: top;float: right;margin: 9px;" aria-hidden="true" name="modification" title="Ajouter" OnClick="ajouterHobbie()"></span>
+                                        {#<img  OnClick="ajouterHobbie()" style="vertical-align: top;float: right;margin: 9px;"  src="{{ asset('image/add_x30.png') }}"/>#}
+                                    </div>                                    
 
                                 {% endif %}
                             </form>
@@ -1579,6 +1629,12 @@
 
     }
 
+    function supprimerCompetence(div){
+        var input = div.getElementsByTagName("input")[0];
+        div.parentNode.removeChild(div);
+
+    }
+
     function supprimerLien(div){
         var input = div.getElementsByTagName("input")[0];
         div.parentNode.removeChild(div);
@@ -1680,6 +1736,20 @@
         }
         else{
             alert('5 hobby maximum');
+        }
+    }
+
+    function ajouterCompetence(){
+        if(document.getElementsByName('_competence[]').length < 5){
+            var newComp = document.createElement('input');
+            newComp.setAttribute('name','_competence[]');
+            newComp.setAttribute('type','text');
+            newComp.className = 'champ form-control';
+            newComp.setAttribute('style','display :block !important');
+            document.getElementById('CompetencesContainer').appendChild(newComp);
+        }
+        else{
+            alert('5 Compétences maximum');
         }
     }
 

@@ -355,6 +355,41 @@ class Infocomplementaire
     private $hobbie5;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="competence1", type="string", length=45, nullable=true)
+     */
+    private $competence1;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="competence2", type="string", length=45, nullable=true)
+     */
+    private $competence2;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="competence3", type="string", length=45, nullable=true)
+     */
+    private $competence3;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="competence4", type="string", length=45, nullable=true)
+     */
+    private $competence4;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="competence5", type="string", length=45, nullable=true)
+     */
+    private $competence5;
+
+    /**
      * Set mobilite
      *
      * @param integer $mobilite
@@ -1034,5 +1069,125 @@ class Infocomplementaire
     public function getLienexterne3()
     {
         return $this->Lienexterne3;
+    }
+
+    /**
+     * Set competence1
+     *
+     * @param string $competence1
+     *
+     * @return Infocomplementaire
+     */
+    public function setCompetence1($competence1)
+    {
+        $this->competence1 = $competence1;
+
+        return $this;
+    }
+
+    /**
+     * Get competence1
+     *
+     * @return string
+     */
+    public function getCompetence1()
+    {
+        return $this->competence1;
+    }
+
+    /**
+     * Set competence2
+     *
+     * @param string $competence2
+     *
+     * @return Infocomplementaire
+     */
+    public function setCompetence2($competence2)
+    {
+        $this->competence2 = $competence2;
+
+        return $this;
+    }
+
+    /**
+     * Get competence2
+     *
+     * @return string
+     */
+    public function getCompetence2()
+    {
+        return $this->competence2;
+    }
+
+    /**
+     * Set competence3
+     *
+     * @param string $competence3
+     *
+     * @return Infocomplementaire
+     */
+    public function setCompetence3($competence3)
+    {
+        $this->competence3 = $competence3;
+
+        return $this;
+    }
+
+    /**
+     * Get competence3
+     *
+     * @return string
+     */
+    public function getCompetence3()
+    {
+        return $this->competence3;
+    }
+
+    /**
+     * Set competence4
+     *
+     * @param string $competence4
+     *
+     * @return Infocomplementaire
+     */
+    public function setCompetence4($competence4)
+    {
+        $this->competence4 = $competence4;
+
+        return $this;
+    }
+
+    /**
+     * Get competence4
+     *
+     * @return string
+     */
+    public function getCompetence4()
+    {
+        return $this->competence4;
+    }
+
+    /**
+     * Set competence5
+     *
+     * @param string $competence5
+     *
+     * @return Infocomplementaire
+     */
+    public function setCompetence5($competence5)
+    {
+        $this->competence5 = $competence5;
+
+        return $this;
+    }
+
+    /**
+     * Get competence5
+     *
+     * @return string
+     */
+    public function getCompetence5()
+    {
+        return $this->competence5;
     }
 }
