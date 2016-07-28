@@ -331,7 +331,7 @@ class MiseEnRelationController extends Controller
 
     }
 
-    public function choixDateAction($id,$numero,$textmessage){
+    public function choixDateAction($id,$numero,Request $request){
         $rep = new JsonResponse();
         $em = $this->getDoctrine()->getEntityManager();
 
@@ -346,14 +346,13 @@ class MiseEnRelationController extends Controller
             $date = new \DateTime();
            if($numero==2){
 
-                $message->setMessage('Confirmation du rdv le : '.date_format($rdv->getDate2(),'d-m-Y à H:i').' '.$textmessage);
+                $message->setMessage('Confirmation du rdv le : '.date_format($rdv->getDate2(),'d-m-Y à H:i').' '.$request->get('_Message'));
             }elseif($numero==3){
 
-                $message->setMessage('Confirmation du rdv le : '.date_format($rdv->getDate3(),'d-m-Y à H:i').' '.$textmessage);
+                $message->setMessage('Confirmation du rdv le : '.date_format($rdv->getDate3(),'d-m-Y à H:i').' '.$request->get('_Message'));
             }else{
-                $message->setMessage('Confirmation du rdv le : '.date_format($rdv->getDate1(),'d-m-Y à H:i').' '.$textmessage);
+                $message->setMessage('Confirmation du rdv le : '.date_format($rdv->getDate1(),'d-m-Y à H:i').' '.$request->get('_Message'));
             }
-            //$message->setMessage($textmessage);
 
             $message->setDate($date);
             $message->setExpediteur($rdv->getApprenant());
@@ -382,20 +381,21 @@ class MiseEnRelationController extends Controller
             $em->flush();
 
 
-
-            return $rep->setData(1);
+            return $rep->setData($_SERVER['HTTP_REFERER']);
+            //return $rep->setData(1);
         }
         else{
             return $rep->setData(-1);
         }
     }
 
-    public function annulerRDVAction($id,$MessageTexte){
+    public function annulerRDVAction($id,Request $request){
         $em = $this->getDoctrine()->getManager();
         $rdv = $em->getRepository('GenericBundle:RDV')->find($id);
         $rep = new JsonResponse();
-        $MessageTexte = str_replace('|||', '/', $MessageTexte);
-        $MessageTexte = html_entity_decode($MessageTexte);
+        $textMsg=$request->get('_Message');
+
+
         if($rdv)
         {
             $rdv->setDate2(null);
@@ -407,7 +407,7 @@ class MiseEnRelationController extends Controller
             $message = new Message();
 
             $date = new \DateTime();
-            $message->setMessage('Annulation du rdv: '.'" '.$MessageTexte.' "');
+            $message->setMessage('Annulation du rdv: '.'" '.$textMsg.' "');
             $message->setDate($date);
             $message->setExpediteur($rdv->getApprenant());
             $message->setDestinataire($rdv->getTuteur());
@@ -419,7 +419,7 @@ class MiseEnRelationController extends Controller
             $em->flush();
 
 
-            return $rep->setData(1);
+            return $rep->setData($_SERVER['HTTP_REFERER']);
 
         }
         else{
@@ -427,19 +427,19 @@ class MiseEnRelationController extends Controller
         }
     }
 
-    public function CompteRenduSaisieAction($id,$MessageTexte,$Type){
+    public function CompteRenduSaisieAction($id,$Type,Request $request){
         $rep = new JsonResponse();
         $em = $this->getDoctrine()->getManager();
         $rdv = $em->getRepository('GenericBundle:RDV')->find($id);
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $MessageTexte = str_replace('|||', '/', $MessageTexte);
+
         if($rdv){
             $compterendu = new CompteRendu();
             $compterendu->setDate(date_create());
             $compterendu->setAuteur($user);
             $compterendu->setRendezvous($rdv);
-            if($MessageTexte){
-                $compterendu->setCompterendu($MessageTexte);
+            if($request->get('_Message')){
+                $compterendu->setCompterendu($request->get('_Message'));
                 $compterendu->setHonorer(true);
             }
             else{
@@ -452,7 +452,7 @@ class MiseEnRelationController extends Controller
             $message = new Message();
 
             $date = new \DateTime();
-            $message->setMessage('Retour du rdv: '.'" '.$MessageTexte.' "');
+            $message->setMessage('Retour du rdv: '.'" '.$request->get('_Message').' "');
             $message->setDate($date);
             if ($Type=='app'){
                 $message->setExpediteur($rdv->getApprenant());
@@ -471,14 +471,14 @@ class MiseEnRelationController extends Controller
             $message->setStatut(1);
             $em->persist($message);
             $em->flush();
-            return $rep->setData(1);
+            return $rep->setData($_SERVER['HTTP_REFERER']);
         }
         else{
             return $rep->setData(0);
         }
     }
 
-    public function AjournementAction($id,$DateTimeRdv,$MessageTexte){
+    public function AjournementAction($id,$DateTimeRdv,Request $request){
         $rep = new JsonResponse();
         $em = $this->getDoctrine()->getManager();
         $rdv = $em->getRepository('GenericBundle:RDV')->find($id);
@@ -487,7 +487,8 @@ class MiseEnRelationController extends Controller
         $Dates= array();
 
         $DateTimeRdv = str_replace('|||', '/', $DateTimeRdv);
-        $MessageTexte = str_replace('|||', '/', $MessageTexte);
+
+
 
         $Dates=explode( ";", $DateTimeRdv,-1) ;
        // list($date1, $date2, $date3) =$Dates;
@@ -542,7 +543,8 @@ class MiseEnRelationController extends Controller
                     $msg=$msg.' ou '.$datetimeRDV;
                 }
             }
-            $msg=$msg.':  " '.$MessageTexte.' "';
+            $textMsg=$request->get('_Message');
+            $msg=$msg.':  " '.$textMsg.' "';
 
 
             $message->setDate($date);
@@ -557,9 +559,11 @@ class MiseEnRelationController extends Controller
             $em->persist($message);
             $em->flush();
 
-            return $rep->setData($date);
+            //return $rep->setData($date);
+            return $rep->setData($_SERVER['HTTP_REFERER']);
         }
         return $rep->setdata(0);
+
     }
 
     public function envoiMailRemplirCRAction($idUser,$idRDV){
@@ -666,7 +670,7 @@ class MiseEnRelationController extends Controller
         }
     }
 
-    public function AjournementTuteurAction($id,$DateTimeRdv,$MessageTexte){
+    public function AjournementTuteurAction($id,$DateTimeRdv,Request $request){
         $rep = new JsonResponse();
         $em = $this->getDoctrine()->getManager();
         $rdv = $em->getRepository('GenericBundle:RDV')->find($id);
@@ -675,7 +679,7 @@ class MiseEnRelationController extends Controller
         $Dates= array();
 
         $DateTimeRdv = str_replace('|||', '/', $DateTimeRdv);
-        $MessageTexte = str_replace('|||', '/', $MessageTexte);
+
         $Dates=explode( ";", $DateTimeRdv,-1) ;
         // list($date1, $date2, $date3) =$Dates;
 
@@ -729,7 +733,7 @@ class MiseEnRelationController extends Controller
                     $msg=$msg.' ou '.$datetimeRDV;
                 }
             }
-            $msg=$msg.':  " '.$MessageTexte.' "';
+            $msg=$msg.':  " '.$request->get('_Message').' "';
 
 
             $message->setDate($date);
@@ -744,17 +748,17 @@ class MiseEnRelationController extends Controller
             $em->persist($message);
             $em->flush();
 
-            return $rep->setData($date);
+            return $rep->setData($_SERVER['HTTP_REFERER']);
         }
         return $rep->setdata(0);
     }
 
 
-   public function annulerRDVTuteurAction($id,$MessageTexte){
+   public function annulerRDVTuteurAction($id,Request $request){
     $em = $this->getDoctrine()->getManager();
     $rdv = $em->getRepository('GenericBundle:RDV')->find($id);
     $rep = new JsonResponse();
-    $MessageTexte = str_replace('|||', '/', $MessageTexte);
+
     if($rdv)
     {
         $rdv->setDate2(null);
@@ -766,7 +770,7 @@ class MiseEnRelationController extends Controller
         $message = new Message();
 
         $date = new \DateTime();
-        $message->setMessage('Annulation du rdv: '.'" '.$MessageTexte.' "');
+        $message->setMessage('Annulation du rdv: '.'" '.$request->get('_Message').' "');
         $message->setDate($date);
         $message->setExpediteur($rdv->getTuteur());
         $message->setDestinataire($rdv->getApprenant());
@@ -777,8 +781,8 @@ class MiseEnRelationController extends Controller
         $em->persist($message);
         $em->flush();
 
-
-        return $rep->setData(1);
+        return $rep->setData($_SERVER['HTTP_REFERER']);
+        //return $rep->setData(1);
 
     }
     else{
@@ -879,6 +883,125 @@ class MiseEnRelationController extends Controller
         $reponse = new JsonResponse();
         $reponse->setData(1);
         return $reponse;
+
+    }
+
+
+
+    public function ProposeRDVAction($idmessage,Request $request){
+        $reponsejson = new JsonResponse();
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $userConnecte = $this->get('security.token_storage')->getToken()->getUser();
+        $messagereponse = $em->getRepository('GenericBundle:Message')->find($idmessage);
+        $messageDup = $em->getRepository('GenericBundle:Message')->findOneBy(array('expediteur'=>$userConnecte,'destinataire'=>$messagereponse->getExpediteur(),'mission'=>$messagereponse->getMission()));
+
+        if(!$messageDup){
+            $message = new Message();
+            $date = new \DateTime();
+            $message->setDate($date);
+            $message->setExpediteur($userConnecte);
+            $message->setDestinataire($messagereponse->getExpediteur());
+            $message->setMission($messagereponse->getMission());
+            if($request->get('MessageRefus')){
+                $message->setMessage($request->get('MessageRefus'));
+                $message->setStatut(-1);
+                $message->setAction('Decliner profil');
+                $message->setCouleur('red');
+                $messagereponse->setStatut(-1);
+                $em->persist($message);
+                $em->flush();
+            }
+            elseif($request->get('_MessagePro')) {
+                if ($request->get('LienDoodle')) {
+                    $lien = '<a href="' . $request->get('LienDoodle') . '" target="_blank">' . $request->get('LienDoodle') . '</a>';
+                    if ($request->get('_MessagePro')) {
+                        $message->setMessage($request->get('_MessagePro') . ' Rendez-vous sur : ' . $lien);
+                    }
+                } else {
+                    $message->setMessage($request->get('_MessagePro'));
+                }
+
+                $message->setStatut(1);
+                $message->setAction('Propose rdv');
+                $message->setStatutaction(0);
+                $message->setCouleur('green');
+                $messagereponse->setStatut(1);
+                $em->persist($message);
+                $em->flush();
+            }
+        }
+
+
+        if($request->get('MessageRefus')){
+
+
+                $mail = \Swift_Message::newInstance()
+                    ->setSubject('Postulation')
+                    ->setFrom(array('ne-pas-repondre-svp@atpmg.com'=>"HUB3E"))
+                    ->setTo($messagereponse->getExpediteur()->getEmail())
+                    ->setBody($this->renderView('GenericBundle:Mail:ApprenantRefuser.html.twig',array('message'=>$message->getMessage(),'mission'=>$message->getMission()))
+                     ,'text/html'
+                    );
+                $this->get('mailer')->send($mail);
+
+            return $reponsejson->setData($_SERVER['HTTP_REFERER']);
+
+
+            
+           //  return $reponsejson->setData(-1);
+        }
+        elseif($request->get('_MessagePro')){
+            $rdv = $em->getRepository('GenericBundle:RDV')->findOneBy(array('mission'=>$messagereponse->getMission(),'tuteur'=>$messagereponse->getMission()->getTuteur(),'apprenant'=>$messagereponse->getExpediteur()));
+            if($rdv)
+            {
+                for( $i = 0; $i < count($request->get('dateRDV')) and $i<3;$i++)
+                {
+                    $datetimeRDV = $request->get('dateRDV')[$i].' '.$request->get('timeRDV')[$i];
+                    if($i == 2){$rdv->setDate1(date_create_from_format('d/m/Y H:i',$datetimeRDV));}
+                    if($i == 1){$rdv->setDate2(date_create_from_format('d/m/Y H:i',$datetimeRDV));}
+                    if($i == 0){$rdv->setDate3(date_create_from_format('d/m/Y H:i',$datetimeRDV));}
+                }
+                $em->flush();
+            }
+            else{
+                $rdv = new RDV();
+                $rdv->setMission($messagereponse->getMission());
+                $rdv->setTuteur($messagereponse->getMission()->getTuteur());
+                $rdv->setApprenant($messagereponse->getExpediteur());
+                $rdv->setChoixApprenant(true);
+                for( $i = 0; $i < count($request->get('dateRDV')) and $i<3;$i++)
+                {
+                    $datetimeRDV = $request->get('dateRDV')[$i].' '.$request->get('timeRDV')[$i];
+                    if($i == 0){$rdv->setDate1(date_create_from_format('d/m/Y H:i',$datetimeRDV));}
+                    if($i == 1){$rdv->setDate2(date_create_from_format('d/m/Y H:i',$datetimeRDV));}
+                    if($i == 2){$rdv->setDate3(date_create_from_format('d/m/Y H:i',$datetimeRDV));}
+
+                }
+                $em->persist($rdv);
+                $em->flush();
+            }
+
+            if(!$this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_APPRENANT')){
+                $mail = \Swift_Message::newInstance()
+                    ->setSubject('Postulation')
+                    ->setFrom(array('ne-pas-repondre-svp@atpmg.com'=>"HUB3E"))
+                    ->setTo($messagereponse->getExpediteur()->getEmail())
+                    ->setBody($this->renderView('GenericBundle:Mail:ProposezRDV.html.twig',array('message'=>$message->getMessage(),'mission'=>$message->getMission(),'rdv'=>$rdv))
+                        ,'text/html'
+                    );
+                $this->get('mailer')->send($mail);
+            }
+            return $reponsejson->setData($_SERVER['HTTP_REFERER']);
+
+          //  return $reponsejson->setData(1);
+
+
+        }
+        else{
+            return $reponsejson->setData(99);
+
+        }
 
     }
 
