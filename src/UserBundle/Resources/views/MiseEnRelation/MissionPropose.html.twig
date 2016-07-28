@@ -1087,7 +1087,6 @@
         ShowWaiter();
         var route = '{{ path('Reponse_Messagerie',{'idmessage':'_IDMESSAGE'}) }}';
         route = route.replace('_IDMESSAGE',idMsg);
-        alert(route);
         $.ajax({
             type: 'POST',
             url: route,
@@ -1226,8 +1225,7 @@
         ShowWaiter();
         var route = '{{ path('Postuler_Messagerie',{'idmessage':'_IDMESSAGE'}) }}';
         route = route.replace('_IDMESSAGE',idMsg);
-        alert(idMsg);
-        alert(route);
+
         $.ajax({
             type: 'POST',
             url: route,
@@ -1387,7 +1385,7 @@ function EnvoyerRDV(IdRdv,div)
 
     }else{
      // ici annulation RDV
-     alert('annuler');
+
         if(confirm('Confirmez-vous l\'annulation du rendez-vous?')){
             ShowWaiter();
             var route = '{{ path('AnnulerRDV',{'id':'_ID'}) }}';
@@ -1446,7 +1444,7 @@ function RetourRDV(IdRdv,div)
 
     if (Action=='Reporter'){
         // ici reportation RDV
-alert('ici reportation');
+
         var inputTimes = document.getElementsByName('timeRDV[]');
         var DateTimeRdv
         for(var k = 0; k < inputTimes.length; k++){
@@ -1530,7 +1528,7 @@ alert('ici reportation');
     }else{
 
         // ici Compte rendu
-        alert('saisi compte rendu');
+
 
         ShowWaiter();
         var route = '{{ path('CompteRenduSaisie',{'id':'_ID','Type':'_Type'}) }}';

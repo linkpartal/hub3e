@@ -241,8 +241,9 @@
 
         {% if AllMiseEnRelation is defined %}
             {% set i=0 %}
-            {% set LastMise="" %}
-        {% for mise in AllMiseEnRelation %}
+
+            {#{% set LastMise="" %}#}
+            {% for mise in AllMiseEnRelation %}
             {% if mise.expediteur.hasrole('ROLE_APPRENANT') %}
 
                 <div id="Msg{{ i }}" class="row msg_container base_receive" style="margin-right: -45px;margin-left: 50px" name="App{{ mise.expediteur.getId() }}_Mission{{mise.mission.getId()}}">
@@ -292,89 +293,206 @@
                     </div>
                 </div>
             {% endif %}
-            {% set LastMise=mise %}
-
-
+           {#{% set LastMise=mise %}#}
 
 
 
             {% set i = i + 1 %}
         {% endfor %}
-            <div id="Absence_button" >
-                {% if LastMise.destinataire is defined %}
-                {% if   GetStatut(LastMise.destinataire.getId()) =='0'  %}
 
-                   {% if LastMise.action=='Retour RDV' %}
+                        {% if MiseEnRelation is defined %}
+                            {% for miseEn in MiseEnRelation %}
+                            {% set LastMise=GetLastMise(miseEn.destinataire.getId()) %}
 
-                       {% if LastMise.expediteur.hasrole('ROLE_APPRENANT') %}
+                        {% if miseEn.expediteur.hasrole('ROLE_APPRENANT') %}
+                            <div class="row msg_container base_receive"  style="display:none;" id="Absence_button_APP_{{ miseEn.destinataire.getId() }}_Mission{{miseEn.mission.getId()}}" name="App{{ miseEn.destinataire.getId() }}_Mission{{miseEn.mission.getId()}}" >
+                                {% if LastMise.destinataire is defined %}
+                                    {% if   GetStatut(LastMise.destinataire.getId()) =='0'  %}
 
-                           {% set idRdv=GetIdRDV(LastMise.expediteur,LastMise.destinataire,LastMise.mission) %}
-                           <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.expediteur.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR APP">
-                       {% else %}
+                                        {% if LastMise.action=='Retour RDV' %}
 
-                           {% set idRdv=GetIdRDV(LastMise.destinataire,LastMise.expediteur,LastMise.mission) %}
-                           <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.destinataire.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR APP">
-                       {% endif %}
+                                            {% if LastMise.expediteur.hasrole('ROLE_APPRENANT') %}
+
+                                                {% set idRdv=GetIdRDV(LastMise.expediteur,LastMise.destinataire,LastMise.mission) %}
+                                                <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.expediteur.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="RLANCER">
+                                                {#  relancer l'apprenanat
+                                                <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.expediteur.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR APP">
+                                            #}
+                                            {% else %}
+
+                                                {% set idRdv=GetIdRDV(LastMise.destinataire,LastMise.expediteur,LastMise.mission) %}
+                                                {#  relancer l'apprenanat
+                                                <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.expediteur.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR APP">
+                                            #}
+                                                <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.destinataire.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="RELANCER">
+                                            {% endif %}
 
 
-                   {% else %}
+                                        {% else %}
 
-                           {% if LastMise.statut=='2'  %}
-                               <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RelancerApp({{ LastMise.expediteur.getId()}},{{ LastMise.mission.getId() }} )"  style="margin-left: 390px" value="RELANCER">
-                           {% else %}
-                               <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RelancerApp({{ LastMise.destinataire.getId()}},{{ LastMise.mission.getId() }} )"  style="margin-left: 390px" value="RELANCER">
-                           {% endif %}
-                    {% endif %}
+                                            {% if LastMise.statut=='2'  %}
+                                                <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RelancerApp({{ LastMise.expediteur.getId()}},{{ LastMise.mission.getId() }} )"  style="margin-left: 390px" value="RELANCER">
+                                            {% else %}
+                                                <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RelancerApp({{ LastMise.destinataire.getId()}},{{ LastMise.mission.getId() }} )"  style="margin-left: 390px" value="RELANCER">
+                                            {% endif %}
+                                        {% endif %}
 
 
 
-                {% elseif GetStatut(LastMise.destinataire.getId()) =='1' %}
-                    {% if LastMise.action=='Retour RDV' %}
-                        {% if LastMise.expediteur.hasrole('ROLE_APPRENANT') %}
+                                    {% elseif GetStatut(LastMise.destinataire.getId()) =='1' %}
+                                        {% if LastMise.action=='Retour RDV' %}
+                                            {% if LastMise.expediteur.hasrole('ROLE_APPRENANT') %}
 
-                            {% set idRdv=GetIdRDV(LastMise.expediteur,LastMise.destinataire,LastMise.mission) %}
-                            <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.destinataire.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR TUTEUR">
+                                                {% set idRdv=GetIdRDV(LastMise.expediteur,LastMise.destinataire,LastMise.mission) %}
+                                                {#  relancer TUTEUR
+                                             <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.destinataire.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR TUTEUR">
+                                             #}
+                                                <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.destinataire.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="RELANCER">
+                                            {% else %}
+
+                                                {% set idRdv=GetIdRDV(LastMise.destinataire,LastMise.expediteur,LastMise.mission) %}
+
+                                                {#  relancer TUTEUR
+                                           <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.destinataire.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR TUTEUR">
+                                           #}
+                                                <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.expediteur.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="RELANCER">
+                                            {% endif %}
+
+                                        {% else %}
+                                            <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RelancerTuteur({{ LastMise.destinataire.getId()}},{{ LastMise.mission.getId() }},{{ LastMise.expediteur.getId()}} )"  style="margin-left: 390px" value="RELANCER">
+                                        {% endif %}
+                                    {% elseif GetStatut(LastMise.destinataire.getId()) =='2'  %}
+
+                                        {% if LastMise.expediteur.hasrole('ROLE_APPRENANT') %}
+
+                                            {% set idRdv=GetIdRDV(LastMise.expediteur,LastMise.destinataire,LastMise.mission) %}
+                                        {% else %}
+
+                                            {% set idRdv=GetIdRDV(LastMise.destinataire,LastMise.expediteur,LastMise.mission) %}
+                                        {% endif %}
+                                        {#  relancer LES DEUX
+                                             <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCR({{ LastMise.expediteur.getId()}},{{ LastMise.destinataire.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR 2">
+                                    #}
+
+                                        <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCR({{ LastMise.expediteur.getId()}},{{ LastMise.destinataire.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="RELANCER">
+                                    {% endif %}
+
+                                    {% if LastMise.expediteur.hasrole('ROLE_APPRENANT') %}
+                                        {% if LastMise.expediteur.getPlace()!='1' %}
+                                            <input style="border: 0;font: 18px Roboto;color: green;text-align: left;background-color: white;height: 40px" type="button" onclick="AccepterApp({{ LastMise.expediteur.getId() }},{{ LastMise.mission.getId() }})"  style="margin-left: 390px" value="ACCEPTER">
+
+                                        {% endif %}
+                                        {#refusé#}
+                                        <input style="border: 0;font: 18px Roboto;color: red;text-align: left;background-color: white;height: 40px" type="button" onclick="RefuserApp({{ LastMise.expediteur.getId() }},{{ LastMise.mission.getId() }})"  style="margin-left: 390px" value="REFUSER"><br/>
+                                    {% else %}
+                                        {% if LastMise.destinataire.getPlace()!='1' %}
+                                            <input style="border: 0;font: 18px Roboto;color: green;text-align: left;background-color: white;height: 40px" type="button" onclick="AccepterApp({{ LastMise.destinataire.getId() }},{{ LastMise.mission.getId() }})"  style="margin-left: 390px" value="ACCEPTER">
+                                        {% endif %}
+
+                                        {#refusé#}
+                                        <input style="border: 0;font: 18px Roboto;color: red;text-align: left;background-color: white;height: 40px" type="button" onclick="RefuserApp({{ LastMise.destinataire.getId() }},{{ LastMise.mission.getId() }})"  style="margin-left: 390px" value="REFUSER"><br/>
+
+                                    {% endif %}
+                                {% endif %}
+
+                            </div>
+
                         {% else %}
+                            <div class="row msg_container base_sent"  style="display:none;" id="Absence_button_APP_{{ miseEn.destinataire.getId() }}_Mission{{miseEn.mission.getId()}}" name="App{{ miseEn.destinataire.getId() }}_Mission{{miseEn.mission.getId()}}" >
+                                {% if LastMise.destinataire is defined %}
+                                    {% if   GetStatut(LastMise.destinataire.getId()) =='0'  %}
 
-                            {% set idRdv=GetIdRDV(LastMise.destinataire,LastMise.expediteur,LastMise.mission) %}
-                            <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.expediteur.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR TUTEUR">
+                                        {% if LastMise.action=='Retour RDV' %}
+
+                                            {% if LastMise.expediteur.hasrole('ROLE_APPRENANT') %}
+
+                                                {% set idRdv=GetIdRDV(LastMise.expediteur,LastMise.destinataire,LastMise.mission) %}
+                                                {#  relancer l'apprenanat
+                                                <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.expediteur.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR APP">
+                                            #}
+                                                <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.expediteur.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="RELANCER">
+                                            {% else %}
+
+                                                {% set idRdv=GetIdRDV(LastMise.destinataire,LastMise.expediteur,LastMise.mission) %}
+                                                {#  relancer l'apprenanat
+                                                <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.expediteur.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR APP">
+                                            #}
+                                                <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.destinataire.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="RELANCER">
+                                            {% endif %}
+
+
+                                        {% else %}
+
+                                            {% if LastMise.statut=='2'  %}
+                                                <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RelancerApp({{ LastMise.expediteur.getId()}},{{ LastMise.mission.getId() }} )"  style="margin-left: 390px" value="RELANCER">
+                                            {% else %}
+                                                <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RelancerApp({{ LastMise.destinataire.getId()}},{{ LastMise.mission.getId() }} )"  style="margin-left: 390px" value="RELANCER">
+                                            {% endif %}
+                                        {% endif %}
+
+
+
+                                    {% elseif GetStatut(LastMise.destinataire.getId()) =='1' %}
+                                        {% if LastMise.action=='Retour RDV' %}
+                                            {% if LastMise.expediteur.hasrole('ROLE_APPRENANT') %}
+
+                                                {% set idRdv=GetIdRDV(LastMise.expediteur,LastMise.destinataire,LastMise.mission) %}
+                                                {#  relancer TUTEUR
+                                           <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.destinataire.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR TUTEUR">
+                                           #}
+                                                <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.destinataire.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="RELANCER">
+                                            {% else %}
+
+                                                {% set idRdv=GetIdRDV(LastMise.destinataire,LastMise.expediteur,LastMise.mission) %}
+                                                {#  relancer TUTEUR
+                                           <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.destinataire.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR TUTEUR">
+                                           #}
+                                                <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCRUser({{ LastMise.expediteur.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="RELANCER">
+                                            {% endif %}
+
+                                        {% else %}
+                                            <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RelancerTuteur({{ LastMise.destinataire.getId()}},{{ LastMise.mission.getId() }},{{ LastMise.expediteur.getId()}} )"  style="margin-left: 390px" value="RELANCER">
+                                        {% endif %}
+                                    {% elseif GetStatut(LastMise.destinataire.getId()) =='2'  %}
+
+                                        {% if LastMise.expediteur.hasrole('ROLE_APPRENANT') %}
+
+                                            {% set idRdv=GetIdRDV(LastMise.expediteur,LastMise.destinataire,LastMise.mission) %}
+                                        {% else %}
+
+                                            {% set idRdv=GetIdRDV(LastMise.destinataire,LastMise.expediteur,LastMise.mission) %}
+                                        {% endif %}
+                                        {#  relancer LES DEUX
+                                                                                    <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCR({{ LastMise.expediteur.getId()}},{{ LastMise.destinataire.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR 2">
+                                                                           #}
+                                        <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCR({{ LastMise.expediteur.getId()}},{{ LastMise.destinataire.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="RELANCER">
+                                    {% endif %}
+
+                                    {% if LastMise.expediteur.hasrole('ROLE_APPRENANT') %}
+                                        {% if LastMise.expediteur.getPlace()!='1' %}
+                                            <input style="border: 0;font: 18px Roboto;color: green;text-align: left;background-color: white;height: 40px" type="button" onclick="AccepterApp({{ LastMise.expediteur.getId() }},{{ LastMise.mission.getId() }})"  style="margin-left: 390px" value="ACCEPTER">
+
+                                        {% endif %}
+                                        {#refusé#}
+                                        <input style="border: 0;font: 18px Roboto;color: red;text-align: left;background-color: white;height: 40px" type="button" onclick="RefuserApp({{ LastMise.expediteur.getId() }},{{ LastMise.mission.getId() }})"  style="margin-left: 390px" value="REFUSER"><br/>
+                                    {% else %}
+                                        {% if LastMise.destinataire.getPlace()!='1' %}
+                                            <input style="border: 0;font: 18px Roboto;color: green;text-align: left;background-color: white;height: 40px" type="button" onclick="AccepterApp({{ LastMise.destinataire.getId() }},{{ LastMise.mission.getId() }})"  style="margin-left: 390px" value="ACCEPTER">
+                                        {% endif %}
+
+                                        {#refusé#}
+                                        <input style="border: 0;font: 18px Roboto;color: red;text-align: left;background-color: white;height: 40px" type="button" onclick="RefuserApp({{ LastMise.destinataire.getId() }},{{ LastMise.mission.getId() }})"  style="margin-left: 390px" value="REFUSER"><br/>
+
+                                    {% endif %}
+                                {% endif %}
+
+                            </div>
+
+                        {% endif %}
+                            {% endfor %}
                         {% endif %}
 
-                    {% else %}
-                        <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RelancerTuteur({{ LastMise.destinataire.getId()}},{{ LastMise.mission.getId() }},{{ LastMise.expediteur.getId()}} )"  style="margin-left: 390px" value="RELANCER">
-                    {% endif %}
-                 {% elseif GetStatut(LastMise.destinataire.getId()) =='2' %}
 
-                    {% if LastMise.expediteur.hasrole('ROLE_APPRENANT') %}
-
-                        {% set idRdv=GetIdRDV(LastMise.expediteur,LastMise.destinataire,LastMise.mission) %}
-                    {% else %}
-
-                        {% set idRdv=GetIdRDV(LastMise.destinataire,LastMise.expediteur,LastMise.mission) %}
-                    {% endif %}
-
-                    <input style="border: 0;font: 18px Roboto;color: darkorange;text-align: left;background-color: white;height: 40px" type="button" onclick="RemplirCR({{ LastMise.expediteur.getId()}},{{ LastMise.destinataire.getId()}},{{ idRdv }} )"  style="margin-left: 390px" value="REMPLIR CR 2">
-                {% endif %}
-
-                {% if LastMise.expediteur.hasrole('ROLE_APPRENANT') %}
-                    {% if LastMise.expediteur.getPlace()!='1' %}
-                        <input style="border: 0;font: 18px Roboto;color: green;text-align: left;background-color: white;height: 40px" type="button" onclick="AccepterApp({{ LastMise.expediteur.getId() }},{{ LastMise.mission.getId() }})"  style="margin-left: 390px" value="ACCEPTER">
-
-                    {% endif %}
-                    {#refusé#}
-                    <input style="border: 0;font: 18px Roboto;color: red;text-align: left;background-color: white;height: 40px" type="button" onclick="RefuserApp({{ LastMise.expediteur.getId() }},{{ LastMise.mission.getId() }})"  style="margin-left: 390px" value="REFUSER"><br/>
-                {% else %}
-                    {% if LastMise.destinataire.getPlace()!='1' %}
-                    <input style="border: 0;font: 18px Roboto;color: green;text-align: left;background-color: white;height: 40px" type="button" onclick="AccepterApp({{ LastMise.destinataire.getId() }},{{ LastMise.mission.getId() }})"  style="margin-left: 390px" value="ACCEPTER">
-                    {% endif %}
-
-                    {#refusé#}
-                    <input style="border: 0;font: 18px Roboto;color: red;text-align: left;background-color: white;height: 40px" type="button" onclick="RefuserApp({{ LastMise.destinataire.getId() }},{{ LastMise.mission.getId() }})"  style="margin-left: 390px" value="REFUSER"><br/>
-
-                {% endif %}
-                {% endif %}
-
-            </div>
             <br/>
         {% endif %}
 

@@ -77,6 +77,7 @@ class globalExtension extends \Twig_Extension{
             'GetQuestionsTestApp' => new \Twig_Function_Method($this, 'GetQuestionsTestApp'),
             'GetReponsesTestApp' => new \Twig_Function_Method($this, 'GetReponsesTestApp'),
             'GetScoresApp' => new \Twig_Function_Method($this, 'GetScoresApp'),
+            'GetLastMise' => new \Twig_Function_Method($this, 'GetLastMise'),
 
 
         );
@@ -941,6 +942,21 @@ class globalExtension extends \Twig_Extension{
 
         return $scores;
     }
+
+    public function GetLastMise($userid){
+
+        $sql="SELECT  M FROM GenericBundle:Message M  WHERE M.expediteur=:expediteur or M.destinataire=:destinataire  ORDER BY M.id desc " ;
+        $query = $this->em->createQuery($sql);
+        $query->setParameter('destinataire', $userid);
+        $query->setParameter('expediteur', $userid);
+
+
+        $Messages = $query->getResult();; // array of ForumUser objects
+        return $Messages[0];
+    }
+
+
+
 
 
 

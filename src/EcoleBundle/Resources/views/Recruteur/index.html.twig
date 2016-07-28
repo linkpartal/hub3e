@@ -865,23 +865,42 @@
                     {% if apprenants is defined %}
                         {% for u in apprenants %}
                             <button onclick="postiframe('{{ path('metier_user_afficheUser',{'id': u.getId} ) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
-                                <div name="Recherche" style="display: none;">{{ u.nom }},{{ u.getUsername }},{{ u.prenom }},{{ u.email }},{% if u.info %}{{ u.info.adresse }},{{ u.info.cp }}{% endif %},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
+
+                                {% if  u.getPlace!=1   %}
+
+                                    {% set place=2 %}
+
+                                {% else %}
+                                    {% set place=u.getPlace %}
+                                {% endif %}
+                                <div name="Recherche" style="display: none;">{{ place }},{{ u.nom }},{{ u.getUsername }},{{ u.prenom }},{{ u.email }},{% if u.info %}{{ u.info.adresse }},{{ u.info.cp }}{% endif %},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
                                 <div style="display: none;"></div>
                                 <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
+
                                 <div class="col-xs-12 part"
                                      style="height: 31px; text-align: left;">
+
                                     <div class="col-xs-9 part" title="{{u.getEmail}}">{{ u.getEmail }}</div>
+                                    <label class="StatutApp">
+                                        {% if u.getPlace == 1 %}
+                                            Placé
+                                        {% else %}
+                                            A placer
+
+                                        {% endif %}
+                                    </label>
                                     {% if u.info %}
-                                    {% if u.info.profilcomplet == 3 %}
-                                        <div class="col-xs-1 active" id="activeUser{{ u.getId }}"></div>
-                                    {% elseif u.info.profilcomplet == 2 %}
-                                        <div class="col-xs-1 inactive" id="activeUser{{ u.getId }}"></div>
-                                    {% elseif u.info.profilcomplet == 1 %}
-                                        <div class="col-xs-1" style="background: #2A76CC;height:9px;border-radius: 100%;margin: 3px 0;width: 9px;float: right;" id="activeUser{{ u.getId }}"></div>
-                                    {% else %}
-                                        <div class="col-xs-1" style="background: orangered;height:9px;border-radius: 100%;margin: 3px 0;width: 9px;float: right;" id="activeUser{{ u.getId }}"></div>
+                                        {% if u.info.profilcomplet == 3 %}
+                                            <div class="col-xs-1 active" id="activeUser{{ u.getId }}"></div>
+                                        {% elseif u.info.profilcomplet == 2 %}
+                                            <div class="col-xs-1 inactive" id="activeUser{{ u.getId }}"></div>
+                                        {% elseif u.info.profilcomplet == 1 %}
+                                            <div class="col-xs-1" style="background: #2A76CC;height:9px;border-radius: 100%;margin: 3px 0;width: 9px;float: right;" id="activeUser{{ u.getId }}"></div>
+                                        {% else %}
+                                            <div class="col-xs-1" style="background: orangered;height:9px;border-radius: 100%;margin: 3px 0;width: 9px;float: right;" id="activeUser{{ u.getId }}"></div>
+                                        {% endif %}
                                     {% endif %}
-                                    {% endif %}
+
                                 </div>
                             </button>
                         {% endfor %}
@@ -902,19 +921,36 @@
                            style="height: 27px;">
                 </div>
 
-                <div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px;">
+                <div id="divfiltreMission"  class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px;visibility: hidden;">
+                    {# FILTRE Caché#}
                     <button type="button" class="btn btn-default dropdown-toggle"
                             data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false"
-                            style="font:20px Roboto; width: 100%; height: 20px; border-radius: 0; background: none; border: 0;color: white">
-                        Filtres<span class="glyphicon glyphicon-menu-down"
+                            style="font:17px Roboto; width: 100%; height: 20px; border-radius: 0; background: none; border: 0;color: white">
+                        Filtres <span class="glyphicon glyphicon-menu-down"
                                       aria-hidden="true"></span>
                     </button>
                     <ul id="filtre" class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li data-rec="0">Tous</li>
-                        <li data-rec="1">Privée</li>
-                        <li data-rec="2">Semi-public</li>
-                        <li data-rec="3">Public</li>
+                        <li data-rec="0">Toutes les mission</li>
+                        <li data-rec="1">Missions privées</li>
+                        <li data-rec="2">Missions semi-public</li>
+                        <li data-rec="3">Missions publiques</li>
+                    </ul>
+                </div>
+                <div id="divfiltreApp" class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px;margin-top: -20px;visibility: hidden;">
+                    {# FILTRE Caché#}
+                    <button type="button" class="btn btn-default dropdown-toggle"
+                            data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"
+                            style="font:17px Roboto; width: 100%; height: 20px; border-radius: 0; background: none; border: 0;color: white">
+                        Filtres <span class="glyphicon glyphicon-menu-down"
+                                      aria-hidden="true"></span>
+                    </button>
+                    <ul id="filtreApp" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li data-rec="0">Tous les apprenants</li>
+                        <li data-rec="1">Apprenants placés</li>
+                        <li data-rec="2">Apprenants à placer</li>
+
                     </ul>
                 </div>
             </div>
@@ -1535,12 +1571,26 @@
 
     document.getElementById("leftselect").onchange = function(){
         var x = document.getElementById("leftselect").value;
+        if(x=='mission'){
+            document.getElementById('divfiltreApp').style.visibility= 'hidden';
+            document.getElementById('divfiltreMission').style.visibility='visible';
+
+
+        }else if(x=='user'){
+            document.getElementById('divfiltreMission').style.visibility= 'hidden';
+            document.getElementById('divfiltreApp').style.visibility='visible';
+        }else {
+
+            document.getElementById('divfiltreMission').style.visibility= 'hidden';
+            document.getElementById('divfiltreApp').style.visibility='hidden';
+        }
         document.getElementById('mission').style.visibility= 'hidden';
         document.getElementById('societe').style.visibility= 'hidden';
         document.getElementById('user').style.visibility= 'hidden';
         document.getElementById(x).style.visibility='visible';
         sessionStorage.setItem('leftonglet',x);
     };
+
     {# $('#submitaddapprenant').on('click', function(){
         if($("#SelectMultipleFormation").find("option:selected").length == 0){
             document.getElementById('BoutonOnlgetFormationApprenant').click();
@@ -1848,15 +1898,26 @@
         var Recherches = $('#mission').find('div[name="Recherche"]');
         for(var i = 0; i < Recherches.length; i++)
         {
-
             Recherches[i].parentNode.style.display="";
             var recherchermot = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g)[0];
 
-            //console.log(Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g)[0]);
             if(recherchermot != $(this).attr("data-rec") && $(this).attr("data-rec") != "0" ){
                 Recherches[i].parentNode.style.display="none";
             }
+        }
+    })
 
+    $('#filtreApp').find('li').on('click',function(){
+
+        var Recherches = $('#user').find('div[name="Recherche"]');
+        for(var i = 0; i < Recherches.length; i++)
+        {
+            Recherches[i].parentNode.style.display="";
+            var recherchermot = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g)[0];
+
+            if(recherchermot != $(this).attr("data-rec") && $(this).attr("data-rec") != "0" ){
+                Recherches[i].parentNode.style.display="none";
+            }
         }
     })
 

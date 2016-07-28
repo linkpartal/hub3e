@@ -514,7 +514,14 @@
                     {% if apprenants is defined %}
                         {% for u in apprenants %}
                             <button onclick="postiframe('{{ path('metier_user_afficheUser',{'id': u.getId }) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
-                                <div name="Recherche" style="display: none;">{{ u.place }},{{ u.nom }},{{ u.getUsername }},{{ u.prenom }},{{ u.email }},{% if u.info %}{{ u.info.adresse }},{{ u.info.cp }}{% endif %},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
+                                {% if  u.getPlace!=1   %}
+
+                                    {% set place=2 %}
+
+                                {% else %}
+                                    {% set place=u.getPlace %}
+                                {% endif %}
+                                <div name="Recherche" style="display: none;">{{ place }},{{ u.nom }},{{ u.getUsername }},{{ u.prenom }},{{ u.email }},{% if u.info %}{{ u.info.adresse }},{{ u.info.cp }}{% endif %},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
                                 <div style="display: none;"></div>
                                 <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
 
