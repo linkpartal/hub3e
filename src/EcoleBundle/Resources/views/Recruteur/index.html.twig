@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
@@ -254,6 +255,7 @@
                             <select class="input "  title="" name="_Civilite" style="font:16px Roboto;" required>
                                 <option value="Monsieur">Mr.</option>
                                 <option value="Madame">Mme.</option>
+                                <option value="Madame">Mlle.</option>
                             </select>
                         </div>
                         <div class="col-xs-6 input-colonne" style="border: 0">
@@ -737,6 +739,22 @@
                 <button onclick="document.getElementById('iframe').src='{{ path('affiche_etab',{'id':app.user.etablissement.id }) }}'" style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">Votre  Ecole </button>
             </div>
 
+{# BOUTON TABLEAU DE BORD #}
+            <div class="input-group col-xs-1" style="margin-left: 10px;border: 0;padding: 5px;height: 21px;float: left;">
+                <a href="{{ path('metier_user_login') }}" >     
+                    <button style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">
+                        Tableau de bord 
+                    </button>       
+                </a>
+            </div>
+
+ {# BOUTON RECHERCHE AVANCEE #}
+{#             <div class="input-group col-xs-1" style="margin-left: 10px;border: 0;padding: 5px;height: 21px;float: left;">
+                <button onclick="show('RechercheAvancee')" style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">
+                    Recherche Avancée 
+                </button>
+            </div> #}
+
             <div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px; float: right; margin-right: 40px;">
                 <button type="button" class="btn btn-default dropdown-toggle"
                         data-toggle="dropdown" aria-haspopup="true"
@@ -764,7 +782,7 @@
                     <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_messagerie') }}';" style="background: transparent;border:transparent;width:100%">MESSAGERIE</button></li>
                     {#<li><button onclick="document.getElementById('iframe').src='{{ path('afficher_rendezvous') }}';" style="background: transparent;border:transparent;width:100%">RENDEZ-VOUS</button></li>#}
                     <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_MiseEnRelation') }}';" style="background: transparent;border:transparent;width:100%">MISES EN RELATION</button></li>
-                    <li><a onclick="sessionStorage.clear()" href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">LOGOUT</button> </a></li>
+                    <li><a onclick="sessionStorage.clear()" href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">DECONNEXION</button> </a></li>
 
 
 
@@ -1130,7 +1148,11 @@
                     {% if apprenants is defined %}   
                         {% for user in apprenants %}
                                 <tr>
-                                    <td> {{ user.getPhotos }} {{ user.getNom }} {{ user.getPrenom }} </td>
+                                    <td> 
+                                        <img src="{{ user.getPhotos }} " style="height: 100%" >
+                                        {{ user.getNom }} 
+                                        {{ user.getPrenom }} 
+                                    </td>
                                     <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
                                     
                                     <td> 
@@ -1170,7 +1192,11 @@
                             {% if user.info %}
                                 {% if user.info.profilcomplet == 2 %}
                                     <tr>
-                                        <td> {{ user.getPhotos }} {{ user.getNom }} {{ user.getPrenom }} </td>
+                                        <td> 
+                                            <img src="{{ user.getPhotos }} " style="height: 100%" >
+                                            {{ user.getNom }} 
+                                            {{ user.getPrenom }} 
+                                        </td>
                                         <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
                                         <td> 
                                             <button class= "btn btn-default btn-xs"> 
@@ -1206,12 +1232,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% if apprenants is defined %}   
+                    {% if apprenants is defined %} 
                         {% for user in apprenants %}
                             {% if user.info %}
                             {% if user.info.profilcomplet == 3 %}
                                 <tr>
-                                    <td> {{ user.getPhotos }} {{ user.getNom }} {{ user.getPrenom }} </td>
+                                    <td> 
+                                        <img src="{{ user.getPhotos }} " style="height: 100%" > 
+                                        {{ user.getNom }} 
+                                        {{ user.getPrenom }} 
+                                    </td>
                                     <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
                                     <td> 
                                         <button class= "btn btn-default btn-xs"> 
@@ -1251,7 +1281,11 @@
                             {% for user in apprenants %}
                                  {% if user.message.getDestinataire()%} 
                                     <tr>
-                                        <td> {{ user.getPhotos }} {{ user.getNom }} {{ user.getPrenom }} </td>
+                                        <td> 
+                                            <img src="{{ user.getPhotos }} " style="height: 100%" > 
+                                            {{ user.getNom }} 
+                                            {{ user.getPrenom }} 
+                                        </td>
                                         <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
                                         <td> 
                                             <button class= "btn btn-default btn-xs"> 
@@ -1292,7 +1326,11 @@
                             {% for user in apprenants %}
                                 {% if user.candidature.getStatut(999) %}  
                                     <tr>
-                                        <td> {{ user.getPhotos }} {{ user.getNom }} {{ user.getPrenom }} </td>
+                                        <td> 
+                                            <img src="{{ user.getPhotos }} " style="height: 100%" >
+                                            {{ user.getNom }} 
+                                            {{ user.getPrenom }} 
+                                        </td>
                                         <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
                                         <td> 
                                             <button class= "btn btn-default btn-xs"> 
@@ -1311,7 +1349,169 @@
     </div>
 </div>
 
+{# POPUPS RECHERCHE AVANCEE #}
 
+<div id="RechercheAvancee" class="popup" >
+    <div onclick="document.getElementById('RechercheAvancee').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3> RESULTAT DE LA RECHERCHE </h3> </p> </div>
+            <div class="col-xs-offset-3 col-xs-6">
+                    <table class="table table-bordered table-hover table-responsive">
+                        <thead style="background-color:#3988d7">
+                            <tr>
+                                <th style="text-align:center"> NOM PRENOM </th>
+                                <th style="text-align:center"> DATE CREATION </th>
+                                <th style="text-align:center"> ACTION </th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+                            {% if apprenants is defined %} 
+                                {% for user in apprenants %}
+                                    <tr id="RowApp{{user.getId}}"> 
+                                        <input type="hidden" class="RechercherAppClass" id="{{user.getId}}" 
+
+                                        value="
+                                            {{user.getNom()}};
+                                            {{user.getPrenom()}};
+                                            {{user.getEmail()}};
+                                            {{user.info.getAdresse()}};
+                                            {{user.info.getCp()}};
+                                            {{user.info.getHandicape()}};
+                                            {{user.info.getEntrepreneur()}};
+                                            {{user.info.getFormationactuelle()}};
+                                            {{user.info.getLangue1()}};
+                                            {{user.info.getLangue2()}};
+                                            {{user.info.getLangue3()}};
+                                            {{user.info.getLangue4()}};
+                                            {{user.info.getLangue5()}};
+                                            {{user.info.getCompetence1()}};
+                                            {{user.info.getCompetence2()}};
+                                            {{user.info.getCompetence3()}};
+                                            {{user.info.getCompetence4()}};
+                                            {{user.info.getCompetence5()}};
+                                        " >
+                                        <td> 
+                                            <img src="{{ user.getPhotos }} " style="height: 100%" > 
+                                            {{ user.getNom }} 
+                                            {{ user.getPrenom }} 
+                                        </td>
+                                        <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
+                                        <td> 
+                                            <button class= "btn btn-default btn-xs"> 
+                                             <a href="{{ path('metier_user_afficheUser',{'id': user.getId} ) }}" target="_blank">
+                                                    <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
+                                                </a>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}      
+                        </tbody>    
+                    </table> 
+            </div>
+    </div>
+</div>
+
+<div id="RechercheMission" class="popup" >
+    <div onclick="document.getElementById('RechercheMission').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3> RESULTAT DE LA RECHERCHE </h3> </p> </div>
+            <div class="col-xs-offset-3 col-xs-6">
+                    <table class="table table-bordered table-hover table-responsive">
+                        <thead style="background-color:#3988d7">
+                            <tr>
+                                <th style="text-align:center"> INTITULE </th>
+                                <th style="text-align:center"> SOCIETE </th>
+                                <th style="text-align:center"> DATE DEPOT </th>
+                                <th style="text-align:center"> ACTION </th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+                            {% if missions is defined %} 
+                                {% for m in missions %}
+                                    <tr id="RowMis{{m.getId}}"> 
+                                        <input type="hidden" class="RechercherMisClass" id="{{m.getId}}" 
+
+                                        value="
+                                            {{m.getIntitule()}};
+                                            {{m.getDomaine()}};
+                                            {{m.getEmploi()}};
+                                            {{m.getEtablissement()}};
+                                            {{m.getTuteur()}}; {# A CHANGER EN GETCONTACT ET ADD MAILCONTACT #}
+                                            {{m.getCommentaire()}};
+                                            {{m.getDescriptif()}};
+                                            {# RAJOUTER PROFIL RECHERCHE #}
+                                        " >
+                                    <td> {{ m.intitule }} </td>
+                                    <td> {{ m.etablissement.tier.raisonsoc }} </td>
+                                    <td> {{ m.datecreation | date ('m/Y') }} </td>
+                                    <td> 
+                                        <button class= "btn btn-default btn-xs"> 
+                                            <a href="{{ path('admin_afficheMission',{'id': m.getId,'idFor': "-1" } ) }}" target="_blank">
+                                                <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
+                                            </a>
+                                        </button>
+                                    </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}      
+                        </tbody>    
+                    </table> 
+            </div>
+    </div>
+</div>
+
+<div id="RechercheSociete" class="popup" >
+    <div onclick="document.getElementById('RechercheSociete').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3> RESULTAT DE LA RECHERCHE </h3> </p> </div>
+            <div class="col-xs-offset-3 col-xs-6">
+                    <table class="table table-bordered table-hover table-responsive">
+                        <thead style="background-color:#3988d7">
+                            <tr>
+                                <th style="text-align:center"> RAISON SOCIALE </th>
+                                <th style="text-align:center"> CODE POSTAL </th>
+                                <th style="text-align:center"> VILLE </th>
+                                <th style="text-align:center"> ACTION </th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+                            {% if societes is defined %} 
+                                {% for s in societes %}
+                                    <tr id="RowSoc{{s.getId}}"> 
+                                        <input type="hidden" class="RechercherSocClass" id="{{s.getId}}" 
+
+                                        value="
+                                            {{s.getTier.getRaisonSoc()}};
+                                            {{s.getSiret()}};
+                                            {{s.getAdresse()}};
+                                            {{s.getCodepostal()}};
+                                            {{s.getVille()}};
+                                            {# AJOUTER CONTACT QUAND ON AURA CHANGER USER EN CONTACT #}
+                                        " >
+                                        <td> {{ s.getTier.getRaisonsoc }}  </td>
+                                        <td> {{ s.getCodepostal }} </td>
+                                        <td> {{ s.getVille }}</td>
+                                        <td> 
+                                            <button class= "btn btn-default btn-xs"> 
+                                             <a href="{{ path('affiche_etab',{'id': s.getId }) }}" target="_blank">
+                                                    <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
+                                                </a>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}      
+                        </tbody>    
+                    </table> 
+            </div>
+    </div>
+</div>
+
+{# FIN POPUPS RECHERCHE AVANCEE #}
 
 
 <script src="{{ asset('js/jquery-1.11.3.js') }}"></script>

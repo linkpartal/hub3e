@@ -760,6 +760,30 @@ class DefaultController extends Controller
 
                 }
 
+                $info->setCompetence1(null);
+                $info->setCompetence2(null);
+                $info->setCompetence3(null);
+                $info->setCompetence4(null);
+                $info->setCompetence5(null);
+                for($i = 0; $i < count($request->get('_competence')); $i++){
+                    if($i == 0 and !$request->get('_competence')[0]==''){
+                        $info->setCompetence1($request->get('_competence')[0]);
+                    }
+                    if($i == 1 and !$request->get('_competence')[1]==''){
+                        $info->setCompetence2($request->get('_competence')[1]);
+                    }
+                    if($i == 2 and !$request->get('_competence')[2]==''){
+                        $info->setCompetence3($request->get('_competence')[2]);
+                    }
+                    if($i == 3 and !$request->get('_competence')[3]==''){
+                        $info->setCompetence4($request->get('_competence')[3]);
+                    }
+                    if($i == 4 and !$request->get('_competence')[4]==''){
+                        $info->setCompetence5($request->get('_competence')[4]);
+                    }
+
+                }
+
                 $info->setLangue1(null);
                 $info->setLangue2(null);
                 $info->setLangue3(null);
@@ -860,6 +884,30 @@ class DefaultController extends Controller
                     }
                     if($i == 4 and !$request->get('_hobbie')[4]==''){
                         $info->setHobbie5($request->get('_hobbie')[4]);
+                    }
+
+                }
+
+                $info->setCompetence1(null);
+                $info->setCompetence2(null);
+                $info->setCompetence3(null);
+                $info->setCompetence4(null);
+                $info->setCompetence5(null);
+                for($i = 0; $i < count($request->get('_competence')); $i++){
+                    if($i == 0 and !$request->get('_competence')[0]==''){
+                        $info->setCompetence1($request->get('_competence')[0]);
+                    }
+                    if($i == 1 and !$request->get('_competence')[1]==''){
+                        $info->setCompetence2($request->get('_competence')[1]);
+                    }
+                    if($i == 2 and !$request->get('_competence')[2]==''){
+                        $info->setCompetence3($request->get('_competence')[2]);
+                    }
+                    if($i == 3 and !$request->get('_competence')[3]==''){
+                        $info->setCompetence4($request->get('_competence')[3]);
+                    }
+                    if($i == 4 and !$request->get('_competence')[4]==''){
+                        $info->setCompetence5($request->get('_competence')[4]);
                     }
 
                 }
@@ -1575,6 +1623,13 @@ class DefaultController extends Controller
                 $newuser->addHobby($hobby);
                 $em->flush();
             }
+
+            foreach($import->getCompetences() as $comp)
+            {
+                $newuser->addComp($comp);
+                $em->flush();
+            }
+
             foreach($import->getLangue() as $langue)
             {
                 $newuser->addLangue($langue);
