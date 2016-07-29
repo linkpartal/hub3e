@@ -15,7 +15,7 @@ afficher_ApprenantPropose:
     defaults: { _controller: UserBundle:Default:affichageApprenantPropose }
 
 DateRDV:
-    path: /choix_Date_RDV/idrdv={id}/numeroDate={numero}/textRDV={textmessage}
+    path: /choix_Date_RDV/idrdv={id}/numeroDate={numero}}
     defaults: { _controller: UserBundle:MiseEnRelation:choixDate }
 
 AnnulerRDV:
@@ -23,9 +23,37 @@ AnnulerRDV:
     defaults: { _controller: UserBundle:MiseEnRelation:annulerRDV }
 
 CompteRenduSaisie:
-    path: /CompteRendu/idrdv={id}
+    path: /CompteRendu/idrdv={id}/{Type}
     defaults: { _controller: UserBundle:MiseEnRelation:CompteRenduSaisie }
 
 AjournementRDV:
-    path: /Ajournement/idrdv={id}
+    path: /Ajournement/idrdv={id}/{DateTimeRdv}
     defaults: { _controller: UserBundle:MiseEnRelation:Ajournement }
+
+AcceptRDVTuteur:
+    path: /accept_tuteur_RDV/idrdv={id}/numeroDate={numero}/textRDV={textmessage}
+    defaults: { _controller: UserBundle:MiseEnRelation:AcceptRDVTuteur }
+
+AjournementRDVTuteur:
+    path: /AjournementTuteur/idrdv={id}/{DateTimeRdv}
+    defaults: { _controller: UserBundle:MiseEnRelation:AjournementTuteur }
+
+AnnulerRDVTuteur:
+    path: /AnnulerRDVTuteur/idrdv={id}
+    defaults: { _controller: UserBundle:MiseEnRelation:annulerRDVTuteur }
+
+RelancerApp:
+    path: /RelancerApprenant/idApp={idApp}/idMission={idMission}
+    defaults: { _controller: UserBundle:MiseEnRelation:RelancerApprenant }
+
+Relancer_Tuteur:
+    path: /RelancerTuteur/idTuteur={idTuteur}/idMission={idMission}/idApp={idApp}
+    defaults: { _controller: UserBundle:MiseEnRelation:RelancerTuteur }
+
+AccepterApp:
+    path: /AccepterApprenant/idApp={idApp}idMission={idMission}
+    defaults: { _controller: UserBundle:MiseEnRelation:AccepterApprenant }
+
+RefuserApp:
+    path: /RefuserApprenant/idApp={idApp}idMission={idMission}
+    defaults: { _controller: UserBundle:MiseEnRelation:RefuserApprenant }

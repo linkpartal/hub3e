@@ -115,6 +115,13 @@ class User extends BaseUser
     private $reponsedef;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="place", type="integer", nullable=true)
+     */
+    private $place;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -387,5 +394,29 @@ class User extends BaseUser
     public function getReponsedef()
     {
         return $this->reponsedef;
+    }
+
+    /**
+     * Set place
+     *
+     * @param integer $pourvue
+     *
+     * @return Mission
+     */
+    public function setPlace($place)
+    {
+        $this->place = $place;
+
+        return $this;
+    }
+
+    /**
+     * Get place
+     *
+     * @return integer
+     */
+    public function getPlace()
+    {
+        return $this->place;
     }
 }

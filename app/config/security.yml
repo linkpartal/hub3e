@@ -11,6 +11,7 @@ security:
         ROLE_ADMINSOC:    ROLE_TUTEUR
         ROLE_SUPER_ADMIN: [ROLE_ADMINECOLE, ROLE_ADMINSOC]
 
+
     providers:
         fos_userbundle:
             entity:

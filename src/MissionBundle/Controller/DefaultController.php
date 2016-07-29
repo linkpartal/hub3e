@@ -167,7 +167,7 @@ class DefaultController extends Controller
 
                 }
             }
-            elseif($Userconnecte->hasRole('ROLE_ADMINECOLE') and $Userconnecte->getTier() == $diffusion->getFormation()->getEtablissement()->getTier()){
+            elseif(($Userconnecte->hasRole('ROLE_ADMINECOLE') or $Userconnecte->hasRole('ROLE_TUTEUR')) and $Userconnecte->getTier() == $diffusion->getFormation()->getEtablissement()->getTier()){
                 foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
                 {
                     if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3 ){
@@ -279,6 +279,22 @@ class DefaultController extends Controller
 
          var_dump($CountMessions);die;*/
         //var_dump($Messages);die;
+
+        /*$user = $this->getDoctrine()->getRepository('GenericBundle:User')->find('5');
+        $QcmDef = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findOneBy(array('nom'=>'QCMparDéfault'));
+        $QuestionDef = $this->getDoctrine()->getRepository('GenericBundle:Questiondef')->findOneBy(array('ordre'=>'7','qcmdef'=>$QcmDef));
+        $TypeContrat=null;
+        foreach($em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef'=>$QuestionDef)) as $rep)
+        {
+            if(in_array($rep,$user->getReponsedef()->toArray()))
+            {
+                $TypeContrat=$rep->getReponse();
+            }
+        }
+
+        var_dump($TypeContrat);die;*/
+
+         // var_dump(count($users));die;
 
         return $this->render('MissionBundle::afficheMission.html.twig',array('mission'=>$mission,'users'=>$users,'formations_prop'=>$formations_prop,'informations_maps'=>$informations_maps,
             'tuteur_etablissement'=>$tuteurs,'scores'=>$scores,'Diffusions'=>$Diffusion,'miseEnrelation'=>$miseEnrelation,'Messages'=>$Messages));

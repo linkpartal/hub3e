@@ -302,11 +302,12 @@
                         {% endif %}
                     </div>
                     <div
+
                             onclick="informationApprenant('{{msg.getExpediteur.getPhotos|escape('js')}}','{{ msg.getExpediteur.getCivilite|escape('js') }}','{{ msg.getExpediteur.getNom|escape('js') }}','{{ msg.getExpediteur.getPrenom|escape('js') }}',
                                     '{{ msg.getExpediteur.getEmail|escape('js') }}','{{ msg.getExpediteur.getTelephone|escape('js') }}','{{ msg.getExpediteur.getInfo.getDateNaissance|date("d/m/Y") }}',
                                     '{{ msg.getExpediteur.getInfo.getCpNaissance|escape('js') }}','{{ msg.getExpediteur.getInfo.getLieunaissance|escape('js') }}','{{ msg.getExpediteur.getInfo.getAdresse|escape('js') }}','{{ msg.message|escape('js') }}',
                                     '{{ msg.statut|escape('js') }}','{{ scores[i-nbreNull] }}');
-                            show('FicheApprenant');idMessage={{ msg.id|e('js') }};"
+                                    show('FicheApprenant');idMessage={{ msg.id|e('js') }};"
 
                             class="col-xs-1" style="height: 100%">
                         <span class="glyphicon glyphicon-option-vertical" style="margin-top:40px;height:20px;color:#8c8c8c"></span>
@@ -465,78 +466,7 @@
             activeClass : "active-class"
         });
     }
-    function postuler(){
-        ShowWaiter();
-        var route = '{{ path('Postuler_Messagerie',{'idmessage':'_IDMESSAGE'}) }}';
-        route = route.replace('_IDMESSAGE',idMessage);
-        $.ajax({
-            type: 'POST',
-            url: route,
-            error: function(errorMessage){
-                DeleteWaiter();
-                console.log(errorMessage);
-                document.getElementById('FicheMission').style.display = 'none';
-            },
-            success: function(data){
-                document.getElementById('FicheMission').style.display = 'none';
-                if(data===1)
-                {
-                    document.getElementById('statut'+idMessage).style.color = 'green';
-                    document.getElementById('statut'+idMessage).innerHTML = 'Valider';
-                }
-                DeleteWaiter();
-            }
-        });
-    }
-    function envoyerReponse(div,checkDate){
 
-        if(typeof checkDate !== 'undefined' && checkDate){
-            var inputTimes = document.getElementsByName('timeRDV[]');
-            for(var k = 0; k < inputTimes.length; k++){
-                var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(inputTimes[k].value);
-
-                if (!isValid) {
-                    alert('verifiez que les heure respect le format HH:MM');
-                    return;
-                }
-            }
-        }
-        ShowWaiter();
-        var route = '{{ path('Reponse_Messagerie',{'idmessage':'_IDMESSAGE'}) }}';
-        route = route.replace('_IDMESSAGE',idMessage);
-        $.ajax({
-            type: 'POST',
-            url: route,
-            data: $('#'+div).serialize(),
-            error: DeleteWaiter(),
-            success: function(data){
-                if(data===-1)
-                {
-                    document.getElementById(div).parentNode.parentNode.style.display = 'none';
-                    document.getElementById(div).reset();
-                    document.getElementById('statut'+idMessage).style.color = 'red';
-                    document.getElementById('statut'+idMessage).innerHTML = 'Décliner';
-                    document.getElementById('statut'+idMessage).parentNode.nextElementSibling.setAttribute('onclick','');
-                }
-                else if(data===1)
-                {
-                    document.getElementById(div).parentNode.parentNode.style.display = 'none';
-                    document.getElementById(div).reset();
-                    document.getElementById('statut'+idMessage).style.color = 'green';
-                    document.getElementById('statut'+idMessage).innerHTML = 'Valider';
-                    document.getElementById('statut'+idMessage).parentNode.nextElementSibling.setAttribute('onclick','');
-                }
-                else
-                {
-                    alert('Verifier que vous avez bien rempli votre message');
-                    console.log(data);
-                }
-
-                DeleteWaiter();
-
-            }
-        });
-    }
     function show_formapprenant() {
         document.getElementById('information_apprenant').style.display= 'none';
         document.getElementById('declinerApprenant').style.display= 'block';
@@ -670,6 +600,81 @@
         });
     }
     google.maps.event.addDomListener(window, 'load', initialize);
+
+    function postuler(){
+        ShowWaiter();
+        var route = '{{ path('Postuler_Messagerie',{'idmessage':'_IDMESSAGE'}) }}';
+        route = route.replace('_IDMESSAGE',idMessage);
+        alert(idMessage);
+        alert(route);
+        $.ajax({
+            type: 'POST',
+            url: route,
+            error: function(errorMessage){
+                DeleteWaiter();
+                console.log(errorMessage);
+                document.getElementById('FicheMission').style.display = 'none';
+            },
+            success: function(data){
+                document.getElementById('FicheMission').style.display = 'none';
+                if(data===1)
+                {
+                    document.getElementById('statut'+idMessage).style.color = 'green';
+                    document.getElementById('statut'+idMessage).innerHTML = 'Valider';
+                }
+                DeleteWaiter();
+            }
+        });
+    }
+    function envoyerReponse(div,checkDate){
+
+        if(typeof checkDate !== 'undefined' && checkDate){
+            var inputTimes = document.getElementsByName('timeRDV[]');
+            for(var k = 0; k < inputTimes.length; k++){
+                var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(inputTimes[k].value);
+
+                if (!isValid) {
+                    alert('verifiez que les heure respect le format HH:MM');
+                    return;
+                }
+            }
+        }
+        ShowWaiter();
+        var route = '{{ path('Reponse_Messagerie',{'idmessage':'_IDMESSAGE'}) }}';
+        route = route.replace('_IDMESSAGE',idMessage);
+        $.ajax({
+            type: 'POST',
+            url: route,
+            data: $('#'+div).serialize(),
+            error: DeleteWaiter(),
+            success: function(data){
+                if(data===-1)
+                {
+                    document.getElementById(div).parentNode.parentNode.style.display = 'none';
+                    document.getElementById(div).reset();
+                    document.getElementById('statut'+idMessage).style.color = 'red';
+                    document.getElementById('statut'+idMessage).innerHTML = 'Décliner';
+                    document.getElementById('statut'+idMessage).parentNode.nextElementSibling.setAttribute('onclick','');
+                }
+                else if(data===1)
+                {
+                    document.getElementById(div).parentNode.parentNode.style.display = 'none';
+                    document.getElementById(div).reset();
+                    document.getElementById('statut'+idMessage).style.color = 'green';
+                    document.getElementById('statut'+idMessage).innerHTML = 'Valider';
+                    document.getElementById('statut'+idMessage).parentNode.nextElementSibling.setAttribute('onclick','');
+                }
+                else
+                {
+                    alert('Verifier que vous avez bien rempli votre message');
+                    console.log(data);
+                }
+
+                DeleteWaiter();
+
+            }
+        });
+    }
 </script>
 </body>
 </html>

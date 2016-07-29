@@ -138,7 +138,7 @@ class DefaultController extends Controller
         $apprenants = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement));
         $formations = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$etablissement));
         $Allapprenants =array();
-        $Importcandidat = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findAll();
+        $Importcandidat = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('etablissement'=>$etablissement));
         // var_dump($etablissement->getId());die;
 
         foreach($apprenants as $userd)
@@ -337,6 +337,8 @@ class DefaultController extends Controller
 
         $CountLesMissions=count($Allmissions);   
         $CountLesApprenants=count($TousLesApprenants)+count($Importcandidat);
+
+
 
         return $this->render('EcoleBundle:Recruteur:TableauBord.html.twig', array(
             'etablissement'=>$etablissement,
