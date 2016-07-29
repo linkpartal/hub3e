@@ -257,6 +257,7 @@
 
                                 </div>
                                 {% set rdv=GetRDV(mise.expediteur.getId(),mise.mission.getId()) %}
+
                                 {% if rdv %}
 
                                     {% if  (rdv.getStatut=='1' or rdv.getStatut=='2' )  and mise.getId==GetIdTopOfMessges(mise.destinataire,mise.mission) and (not GetCompteRendu( rdv.id ,mise.expediteur)) and (GetIdTopOfMessges(mise.destinataire,mise.mission)>GetIdTopOfMessges(mise.expediteur,mise.mission)) %}
@@ -266,9 +267,10 @@
                                         <br/><br/>
                                         {#ici form retour#}
                     <form id="formRetourRDV"    method="post">
+                                        {% if mise.expediteur.hasrole('ROLE_APPRENANT') %}
+                                        <div  id="DivConfirmationRDV{{ rdv.id }}" class="row msg_container base_receive" name="App{{ mise.expediteur.getId() }}_Mission{{mise.mission.getId()}}">
 
-                                        <div  id="DivConfirmationRDV{{ rdv.id }}">
-
+                                       {% endif %}
 
 
 
@@ -349,9 +351,12 @@
 
                                     {% endif %}
 
-                                {% elseif mise.getStatut()=='2' %}
+                          {% elseif mise.getStatut()=='2' %}
                                     {#postulation#}
+                              {% if mise.expediteur.hasrole('ROLE_APPRENANT') %}
                     <form id="formMise" action="{{ path('Postuler_Messagerie',{'idmessage':mise.getId()-1}) }}" onsubmit="ShowWaiter();" method="post" enctype="multipart/form-data">
+
+                        <div id="postulation{{ mise.getId }}" class="row msg_container base_receive" name="App{{ mise.expediteur.getId() }}_Mission{{mise.mission.getId()}}">
                         <div class="col-xs-12" >
                             <input id="hidden" type="hidden" name="_input" value="">
                             <textarea  style="margin-top: -10px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
@@ -363,6 +368,8 @@
                         <input onclick="document.getElementById('hidden').value='decliner';"    style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"   type="submit"  value="Décliner">
 
                         <input onclick="document.getElementById('hidden').value='postuler';"  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"  class="blue" type="submit" style="margin-left: 270px"  value="Postuler">
+                            </div>
+                              {% endif %}
                     </form>
 
 
