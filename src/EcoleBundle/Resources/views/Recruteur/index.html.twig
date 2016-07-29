@@ -966,6 +966,8 @@
                                 </tr>
                             {% endif %}  
                         {% endfor %}
+                        {% elseif missions == null %}
+                        <tr> Aucunes Missions à afficher </tr>
                     {% endif %}
                 </tbody>    
             </table>
@@ -1006,6 +1008,8 @@
                                 </tr>
                             {% endif %}
                         {% endfor %}
+                        {% elseif missions == null %}
+                        <tr> Aucunes Missions à afficher </tr>
                     {% endif %}
                 </tbody>    
             </table>
@@ -1031,6 +1035,9 @@
                 <tbody>
 
                 {% set MesMissionsSansFormation=GetMissionSansformation(etablissement.getTier.getId) %}
+                    {% if MesMissionsSansFormation == null %}
+                        <tr> Aucunes Missions à afficher </tr>
+                    {% endif %}    
                     {% for m in MesMissionsSansFormation.mission %}
                         <tr>
                             <td> {{ m.intitule }} </td>
@@ -1085,6 +1092,8 @@
                                 </tr>
                             {% endif %}
                         {% endfor %}
+                        {% elseif missions == null %}
+                        <tr> Aucunes Missions à afficher </tr>
                     {% endif %}
                 </tbody>    
             </table>
@@ -1109,6 +1118,9 @@
                 </thead>
                 <tbody>
                 {% set MesMissionsSansFormation=GetMissionSansformation(etablissement.getTier.getId) %}
+                    {% if MesMissionsSansFormation == null %}
+                        <tr> Aucunes Missions à afficher </tr>
+                    {% endif %} 
                     {% for m in MesMissionsSansFormation.mission %}
                         <tr>
                             <td> {{ m.intitule }} </td>
@@ -1164,6 +1176,8 @@
                                     </td>
                                 </tr> 
                         {% endfor %}
+                        {% elseif apprenants == null %}
+                        <tr> Aucuns Apprenants à afficher </tr>
                     {% endif %}
                 </tbody>    
             </table>
@@ -1208,7 +1222,9 @@
                                     </tr>
                                 {% endif %}
                             {% endif %} 
-                        {% endfor %} 
+                        {% endfor %}
+                        {% elseif apprenants == null %}
+                        <tr> Aucuns Apprenants à afficher </tr> 
                     {% endif %}
                 </tbody>    
             </table>
@@ -1253,7 +1269,9 @@
                                 </tr>
                             {% endif %}
                             {% endif %}
-                        {% endfor %}   
+                        {% endfor %}
+                        {% elseif apprenants == null %}
+                        <tr> Aucuns Apprenants à afficher </tr>   
                     {% endif %}
                 </tbody>    
             </table>
@@ -1297,7 +1315,9 @@
                                     </tr>
                                 {% endif %}
                             {% endfor %}
-                        {% endif %}    
+                        {% endif %}
+                        {% elseif apprenants == null %}
+                        <tr> Aucuns Apprenants à afficher </tr>    
                     {% endif %}
                 </tbody>    
             </table>
@@ -1342,7 +1362,9 @@
                                     </tr>
                                 {% endif %} 
                             {% endfor %}
-                        {% endif %}    
+                        {% endif %}
+                        {% elseif apprenants == null %}
+                        <tr> Aucuns Apprenants à afficher </tr>    
                     {% endif %}
                 </tbody>    
             </table>
@@ -1406,6 +1428,8 @@
                                         </td>
                                     </tr>
                                 {% endfor %}
+                                {% elseif apprenants == null %}
+                                <tr> Aucuns Apprenants à afficher </tr>
                             {% endif %}      
                         </tbody>    
                     </table> 
@@ -1456,6 +1480,8 @@
                                     </td>
                                     </tr>
                                 {% endfor %}
+                                {% elseif missions == null %}
+                                <tr> Aucunes Missions à afficher </tr>
                             {% endif %}      
                         </tbody>    
                     </table> 
@@ -1504,6 +1530,8 @@
                                         </td>
                                     </tr>
                                 {% endfor %}
+                                {% elseif societes == null %}
+                                <tr> Aucunes Sociétés à afficher </tr>
                             {% endif %}      
                         </tbody>    
                     </table> 
