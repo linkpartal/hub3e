@@ -1029,7 +1029,7 @@
                 <tbody>
                     {% if missions is defined %}
                         {% for m in missions %}
-                            {% if m.getStatut() == 999 %}
+                            {% if m.getPourvue() == 1 %}
                                 <tr>
                                     <td> {{ m.intitule }} </td>
                                     <td> {{ m.etablissement.tier.raisonsoc }} </td>
@@ -1042,10 +1042,10 @@
                                         </button>
                                     </td>
                                 </tr>
+                            {% elseif m.getPourvue() == null %}
+                                <tr> Aucunes Missions à afficher </tr>
                             {% endif %}
                         {% endfor %}
-                        {% elseif missions == null %}
-                        <tr> Aucunes Missions à afficher </tr>
                     {% endif %}
                 </tbody>    
             </table>
@@ -1377,30 +1377,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% if apprenants is defined %} 
-                        {% if candidature is defined %}   
-                            {% for user in apprenants %}
-                                {% if user.candidature.getStatut(999) %}  
-                                    <tr>
-                                        <td> 
-                                            <img src="{{ user.getPhotos }} " style="height: 100%" >
-                                            {{ user.getNom }} 
-                                            {{ user.getPrenom }} 
-                                        </td>
-                                        <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
-                                        <td> 
-                                            <button class= "btn btn-default btn-xs"> 
-                                                    <a href="{{ path('metier_user_afficheUser',{'id': user.getId} ) }}" target="_blank">
-                                                        <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
-                                                    </a>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                {% endif %} 
-                            {% endfor %}
-                        {% endif %}
-                        {% elseif apprenants == null %}
-                        <tr> Aucuns Apprenants à afficher </tr>    
+                    {% if apprenants is defined %}    
+                        {% for user in apprenants %}
+                            {% if user.getPlace() == 1 %}  
+                                <tr>
+                                    <td> 
+                                        <img src="{{ user.getPhotos }} " style="height: 100%" >
+                                        {{ user.getNom }} 
+                                        {{ user.getPrenom }} 
+                                    </td>
+                                    <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
+                                    <td> 
+                                        <button class= "btn btn-default btn-xs"> 
+                                                <a href="{{ path('metier_user_afficheUser',{'id': user.getId} ) }}" target="_blank">
+                                                    <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
+                                                </a>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% elseif user.getPlace() == null %}
+                                <tr> Aucuns Apprenants à afficher </tr>
+                            {% endif %} 
+                        {% endfor %}    
                     {% endif %}
                 </tbody>    
             </table>

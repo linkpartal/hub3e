@@ -222,9 +222,26 @@ class DefaultController extends Controller
 
        //Apprenants placés refaire le calcul une fois le process terminé sur la plateforme 
 
-        $Myapprenantplacer=$Myapprenantplacer;
+        // $sql = "SELECT U FROM GenericBundle:User U WHERE U.place=:place and U.place is not NULL  GROUP BY U.nom ";
+        // $query =$em->createQuery($sql);
+        // $MyApprenantPlacer = $query->getResult();
+
+        // $ApprenantPlacerY=array();
+        // foreach ($MyApprenantPlacer as $AP) 
+        // {
+        //     if(!($AllApprenants))
+        //     {
+        //     }else{
+        //         array_push($ApprenantPlacerY, $AP);
+        //     }    
+        // }
+        // var_dump($ApprenantPlacerY);
+        // die;
+        
+        // $Apprenantplacer=round((count($ApprenantPlacerY)*100)/count($Allappprenants),2);
+
+        // $MyApprenantPlacer=$MyApprenantPlacer;
         $Apprenantplacer='0';
-        // $Apprenantplacer=round((count($Myapprenantplacer)*100)/count($Allapprenants), 2);
 
 
        // Missions à pourvoir ( RESTE A REGLER CETTE PUTIN DE VARIABLE $ETABLISSEMENT QUI REND FOU)
