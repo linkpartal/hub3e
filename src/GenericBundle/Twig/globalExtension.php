@@ -536,10 +536,10 @@ class globalExtension extends \Twig_Extension{
 
     }
 
-    public function GetIdTopOfMessges($idDestinataire,$idMission){
+    public function GetIdTopOfMessges($idDestinataire,$expediteur,$idMission){
 
 
-        $Messages = $this->em->getRepository('GenericBundle:Message')->findBy(array('mission'=>$idMission,'destinataire'=>$idDestinataire));
+        $Messages = $this->em->getRepository('GenericBundle:Message')->findBy(array('mission'=>$idMission,'destinataire'=>$idDestinataire,'expediteur'=>$expediteur));
 
 
         return $Messages[count($Messages)-1]->getId();

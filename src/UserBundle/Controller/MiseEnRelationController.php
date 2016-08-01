@@ -443,7 +443,9 @@ class MiseEnRelationController extends Controller
                 $compterendu->setHonorer(true);
             }
             else{
+
                 return $rep->setData(2);
+
             }
             //return $rep->setData(array($request->get('CompteRendu'),$request->get('CompteRenduAbsent')));
             $em->persist($compterendu);
@@ -472,6 +474,7 @@ class MiseEnRelationController extends Controller
             $em->persist($message);
             $em->flush();
             return $rep->setData($_SERVER['HTTP_REFERER']);
+            //return $rep->setData($request->get('_Message'));
         }
         else{
             return $rep->setData(0);

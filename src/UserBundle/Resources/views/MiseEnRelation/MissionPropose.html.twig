@@ -260,117 +260,117 @@
 
                                 {% if rdv %}
 
-                                    {% if  (rdv.getStatut=='1' or rdv.getStatut=='2' )  and mise.getId==GetIdTopOfMessges(mise.destinataire,mise.mission) and (not GetCompteRendu( rdv.id ,mise.expediteur)) and (GetIdTopOfMessges(mise.destinataire,mise.mission)>GetIdTopOfMessges(mise.expediteur,mise.mission)) %}
+                                    {% if  (rdv.getStatut=='1' or rdv.getStatut=='2' )   and mise.getAction!='En attente' and mise.getId==GetIdTopOfMessges(mise.destinataire,mise.expediteur,mise.mission) and (not GetCompteRendu( rdv.id ,mise.expediteur)) and (GetIdTopOfMessges(mise.destinataire,mise.expediteur,mise.mission)>GetIdTopOfMessges(mise.expediteur,mise.destinataire,mise.mission)) %}
                                         {#ici le RETOUR du RDV#}
 
 
                                         <br/><br/>
                                         {#ici form retour#}
-                    <form id="formRetourRDV"    method="post">
-                                        {% if mise.expediteur.hasrole('ROLE_APPRENANT') %}
-                                        <div  id="DivConfirmationRDV{{ rdv.id }}" class="row msg_container base_receive" name="App{{ mise.expediteur.getId() }}_Mission{{mise.mission.getId()}}">
+                                        <form id="formRetourRDV{{ rdv.id }}"    method="post">
+                                            {% if mise.expediteur.hasrole('ROLE_APPRENANT') %}
+                                            <div  id="DivConfirmationRDV{{ rdv.id }}" class="row msg_container base_receive" name="App{{ mise.expediteur.getId() }}_Mission{{mise.mission.getId()}}">
 
-                                       {% endif %}
-
-
-
-                                            {% if "now"|date('d-m-Y à H:i')  > rdv.getDate1|date('d-m-Y à H:i') %}
-                                                <label>Saisissez le compte rendu du rendez-vous</label>
-                                                <select id="Action_rdv{{ rdv.id }}" style="display: none;" title="Actions" >
-
-                                                    <option value="Compte rendu">Compte rendu</option>
+                                                {% endif %}
 
 
-                                                </select>
-                                            {% else %}
-                                                <label>Action :</label>
-                                                <select id="Action_rdv{{ rdv.id }}" onchange="EnableControle(this.selectedIndex,{{ rdv.id }});" title="Actions" >
 
-                                                    <option value="Retour RDV">--?--</option>
-                                                    <option value="Reporter">Reporter RDV</option>
-                                                    <option value="Annuler">Annuler RDV</option>
+                                                {% if "now"|date('YmdHi')  > rdv.getDate1|date('YmdHi') %}
+                                                    <label>Saisissez le compte rendu du rendez-vous</label>
+                                                    <select id="Action_rdv{{ rdv.id }}" style="display: none;" title="Actions" >
 
-                                                </select>
-                                                <div id="dates_rdv{{ rdv.id }}" >
+                                                        <option value="Compte rendu">Compte rendu</option>
 
 
-                                                    {% if rdv.date1 %}
-                                                        <label  > Rendez-vous fixé pour le {{ rdv.getDate1|date('d-m-Y à H:i') }}
+                                                    </select>
+                                                {% else %}
+                                                    <label>Action :</label>
+                                                    <select id="Action_rdv{{ rdv.id }}" onchange="EnableControle(this.selectedIndex,{{ rdv.id }});" title="Actions" >
 
-                                                        </label>
-                                                    {% endif %}
-                                                    {#<br/>
-                                                    {% if rdv.date2 %}
-                                                        <label  > {{ rdv.getDate2|date('d-m-Y à H:i') }}
-                                                            {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
-                                                                <input type="radio" id="r2{{ rdv.id }}" name="RadioDate" value="2">
-                                                            {% endif %}
-                                                        </label>
-                                                    {% endif %}
-                                                    <br/>
-                                                    {% if rdv.date3 %}
-                                                        <label  > {{ rdv.getDate3|date('d-m-Y à H:i') }}
-                                                            {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
-                                                                <input type="radio"  id="r3{{ rdv.id }}" name="RadioDate" value="3">
-                                                            {% endif %}
-                                                        </label>
-                                                    {% endif %}#}
+                                                        <option value="Retour RDV">--?--</option>
+                                                        <option value="Reporter">Reporter RDV</option>
+                                                        <option value="Annuler">Annuler RDV</option>
 
-                                                    <br/>
-                                                    <br/>
+                                                    </select>
+                                                    <div id="dates_rdv{{ rdv.id }}" >
+
+
+                                                        {% if rdv.date1 %}
+                                                            <label  > Rendez-vous fixé pour le {{ rdv.getDate1|date('d-m-Y à H:i') }}
+
+                                                            </label>
+                                                        {% endif %}
+                                                        {#<br/>
+                                                        {% if rdv.date2 %}
+                                                            <label  > {{ rdv.getDate2|date('d-m-Y à H:i') }}
+                                                                {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                                                    <input type="radio" id="r2{{ rdv.id }}" name="RadioDate" value="2">
+                                                                {% endif %}
+                                                            </label>
+                                                        {% endif %}
+                                                        <br/>
+                                                        {% if rdv.date3 %}
+                                                            <label  > {{ rdv.getDate3|date('d-m-Y à H:i') }}
+                                                                {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                                                    <input type="radio"  id="r3{{ rdv.id }}" name="RadioDate" value="3">
+                                                                {% endif %}
+                                                            </label>
+                                                        {% endif %}#}
+
+                                                        <br/>
+                                                        <br/>
+                                                    </div>
+                                                {% endif %}
+                                                <br/>
+                                                <br/>
+
+
+                                                <div id="Reporter_rdv{{ rdv.id }}" style="display:none;">
+
+                                                    <button type="button" onclick="AddDateTimeDiv(this)">+</button>
+                                                    <div class="col-xs-4 col-xs-offset-4">
+                                                        <label class="col-xs-1">Le </label><input title="Date du rendez-vous" name="dateRDV[]" type="text" class="col-xs-4" required>
+                                                        <label class="col-xs-1"> à </label><input title="Heure du rendez-vous" name="timeRDV[]" class="col-xs-4" type="text" required>
+                                                        <button type="button" class="col-xs-offset-1 col-xs-1" onclick="if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}">-</button>
+                                                    </div>
+
                                                 </div>
-                                            {% endif %}
-                                            <br/>
-                                            <br/>
 
 
-                                            <div id="Reporter_rdv{{ rdv.id }}" style="display:none;">
+                                                <br/><br/>
 
-                                                <button type="button" onclick="AddDateTimeDiv(this)">+</button>
-                                                <div class="col-xs-4 col-xs-offset-4">
-                                                    <label class="col-xs-1">Le </label><input title="Date du rendez-vous" name="dateRDV[]" type="text" class="col-xs-4" required>
-                                                    <label class="col-xs-1"> à </label><input title="Heure du rendez-vous" name="timeRDV[]" class="col-xs-4" type="text" required>
-                                                    <button type="button" class="col-xs-offset-1 col-xs-1" onclick="if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}">-</button>
-                                                </div>
+
+
+                                                <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 100px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
+                                                <br/>
+                                                <br/>
+
+                                                <input  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;" type="button" onclick="RetourRDV({{ rdv.id }},'formRetourRDV{{ rdv.id }}')"  style="margin-left: 100px" value="Envoyer">
 
                                             </div>
-
-
-                                            <br/><br/>
-
-
-
-                                            <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 100px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
-                                            <br/>
-                                            <br/>
-
-                                            <input  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;" type="button" onclick="RetourRDV({{ rdv.id }},'formRetourRDV')"  style="margin-left: 100px" value="Envoyer">
-
-                                        </div>
-                        </form>
+                                        </form>
 
                                     {% endif %}
 
-                          {% elseif mise.getStatut()=='2' %}
+                                {% elseif mise.getStatut()=='2' %}
                                     {#postulation#}
-                              {% if mise.expediteur.hasrole('ROLE_APPRENANT') %}
-                    <form id="formMise" action="{{ path('Postuler_Messagerie',{'idmessage':mise.getId()-1}) }}" onsubmit="ShowWaiter();" method="post" enctype="multipart/form-data">
+                                    {% if mise.expediteur.hasrole('ROLE_APPRENANT') %}
+                                        <form id="formMise" action="{{ path('Postuler_Messagerie',{'idmessage':mise.getId()-1}) }}" onsubmit="ShowWaiter();" method="post" enctype="multipart/form-data">
 
-                        <div id="postulation{{ mise.getId }}" class="row msg_container base_receive" name="App{{ mise.expediteur.getId() }}_Mission{{mise.mission.getId()}}">
-                        <div class="col-xs-12" >
-                            <input id="hidden" type="hidden" name="_input" value="">
-                            <textarea  style="margin-top: -10px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
-                            <br/><br/>
-                        </div>
+                                        <div id="postulation{{ mise.getId }}" class="row msg_container base_receive" name="App{{ mise.expediteur.getId() }}_Mission{{mise.mission.getId()}}">
+                                            <div class="col-xs-12" >
+                                                <input id="hidden" type="hidden" name="_input" value="">
+                                                <textarea  style="margin-top: -10px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
+                                                <br/><br/>
+                                            </div>
 
 
 
-                        <input onclick="document.getElementById('hidden').value='decliner';"    style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"   type="submit"  value="Décliner">
+                                            <input onclick="document.getElementById('hidden').value='decliner';"    style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"   type="submit"  value="Décliner">
 
-                        <input onclick="document.getElementById('hidden').value='postuler';"  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"  class="blue" type="submit" style="margin-left: 270px"  value="Postuler">
-                            </div>
-                              {% endif %}
-                    </form>
+                                            <input onclick="document.getElementById('hidden').value='postuler';"  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"  class="blue" type="submit" style="margin-left: 270px"  value="Postuler">
+                                        </div>
+                                    {% endif %}
+                                    </form>
 
 
 
@@ -412,174 +412,174 @@
                                     {% set rdv=GetRDV(mise.destinataire.getId(),mise.mission.getId()) %}
                                     {% if rdv %}
 
-                                    {% if  (rdv.getStatut=='1' or rdv.getStatut=='2' )  and mise.getId==GetIdTopOfMessges(mise.destinataire,mise.mission) and (not GetCompteRendu( rdv.id ,mise.destinataire)) and (GetIdTopOfMessges(mise.destinataire,mise.mission)>GetIdTopOfMessges(mise.expediteur,mise.mission)) %}
-                                        {#ici le RETOUR du RDV#}
-
-
-                                        <br/><br/>
-
-                                        <div  id="DivConfirmationRDV{{ rdv.id }}">
-
-
-
-
-                                            {% if "now"|date('d-m-Y à H:i')  > rdv.getDate1|date('d-m-Y à H:i') %}
-                                                <label>Saisissez le compte rendu du rendez-vous</label>
-                                                <select id="Action_rdv{{ rdv.id }}" style="display: none;" title="Actions" >
-
-                                                    <option value="Compte rendu">Compte rendu</option>
-
-
-                                                </select>
-                                            {% else %}
-                                                <label>Action :</label>
-                                                <select id="Action_rdv{{ rdv.id }}" onchange="EnableControle(this.selectedIndex,{{ rdv.id }});" title="Actions" >
-
-                                                    <option value="Retour RDV">--?--</option>
-                                                    <option value="Reporter">Reporter RDV</option>
-                                                    <option value="Annuler">Annuler RDV</option>
-
-                                                </select>
-                                                <div id="dates_rdv{{ rdv.id }}" >
-
-
-                                                    {% if rdv.date1 %}
-                                                        <label  > Rendez-vous fixé pour le {{ rdv.getDate1|date('d-m-Y à H:i') }}
-
-                                                        </label>
-                                                    {% endif %}
-                                                    {#<br/>
-                                                    {% if rdv.date2 %}
-                                                        <label  > {{ rdv.getDate2|date('d-m-Y à H:i') }}
-                                                            {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
-                                                                <input type="radio" id="r2{{ rdv.id }}" name="RadioDate" value="2">
-                                                            {% endif %}
-                                                        </label>
-                                                    {% endif %}
-                                                    <br/>
-                                                    {% if rdv.date3 %}
-                                                        <label  > {{ rdv.getDate3|date('d-m-Y à H:i') }}
-                                                            {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
-                                                                <input type="radio"  id="r3{{ rdv.id }}" name="RadioDate" value="3">
-                                                            {% endif %}
-                                                        </label>
-                                                    {% endif %}#}
-
-                                                    <br/>
-                                                    <br/>
-                                                </div>
-                                            {% endif %}
-                                            <br/>
-                                            <br/>
-
-
-                                            <div id="Reporter_rdv{{ rdv.id }}" style="display:none;">
-
-                                                <button type="button" onclick="AddDateTimeDiv(this,{{ rdv.id }})">+</button>
-                                                <div class="col-xs-4 col-xs-offset-4">
-                                                    <label class="col-xs-1">Le </label><input title="Date du rendez-vous" name="dateRDV[]" type="text" class="col-xs-4" required>
-                                                    <label class="col-xs-1"> à </label><input title="Heure du rendez-vous" name="timeRDV[]{{ rdv.id }}" class="col-xs-4" type="text" required>
-                                                    <button type="button" class="col-xs-offset-1 col-xs-1" onclick="if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}">-</button>
-                                                </div>
-
-                                            </div>
+                                        {% if  (rdv.getStatut=='1' or rdv.getStatut=='2' ) and mise.getAction!='En attente'  and mise.getId==GetIdTopOfMessges(mise.destinataire,mise.expediteur,mise.mission) and (not GetCompteRendu( rdv.id ,mise.destinataire)) and (GetIdTopOfMessges(mise.destinataire,mise.expediteur,mise.mission)>GetIdTopOfMessges(mise.expediteur,mise.destinataire,mise.mission)) %}
+                                            {#ici le RETOUR du RDV#}
 
 
                                             <br/><br/>
+                                    <form id="formRetourRDV{{ rdv.id }}"    method="post">
+                                            <div  id="DivConfirmationRDV{{ rdv.id }}">
 
 
 
-                                            <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 100px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
-                                            <br/>
-                                            <br/>
 
-                                            <input  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;" type="button" onclick="RetourRDV({{ rdv.id }})"  style="margin-left: 100px" value="Envoyer">
+                                                {% if "now"|date('YmdHi')  > rdv.getDate1|date('YmdHi') %}
+                                                    <label>Saisissez le compte rendu du rendez-vous</label>
+                                                    <select id="Action_rdv{{ rdv.id }}" style="display: none;" title="Actions" >
 
-                                        </div>
-
-                                    {% endif %}
-                                    {% endif %}
-                                    {% set rdv=GetRDV(mise.destinataire.getId(),mise.mission.getId()) %}
-                                {% if rdv %}
-                                    {% if (mise.getAction=='Propose rdv' or mise.getAction=='Reporter le RDV') and  mise.getId==GetIdTopOfMessges(mise.destinataire,mise.mission)  and (GetIdTopOfMessges(mise.destinataire,mise.mission)>GetIdTopOfMessges(mise.expediteur,mise.mission))  %}
+                                                        <option value="Compte rendu">Compte rendu</option>
 
 
-                                        {% if not rdv.getStatut or  (rdv.getStatut=='-1' and mise.getAction=='Reporter le RDV')  %}
-                                    <form id="formconfirmationRDV"    method="post">
-                                     <div  id="DivConfirmationRDV{{ rdv.id }}">
+                                                    </select>
+                                                {% else %}
+                                                    <label>Action :</label>
+                                                    <select id="Action_rdv{{ rdv.id }}" onchange="EnableControle(this.selectedIndex,{{ rdv.id }});" title="Actions" >
 
-                                         <label>Action :</label>
-                                         <select id="Action_rdv{{ rdv.id }}" onchange="EnableControle(this.selectedIndex,{{ rdv.id }});" title="Actions" >
-                                             <option value="Accepter">Accepter RDV</option>
-                                             <option value="Reporter">Reporter RDV</option>
-                                             <option value="Annuler">Annuler RDV</option>
-                                         </select>
-                                         <br/>
-                                         <br/>
+                                                        <option value="Retour RDV">--?--</option>
+                                                        <option value="Reporter">Reporter RDV</option>
+                                                        <option value="Annuler">Annuler RDV</option>
 
-                                         <div id="dates_rdv{{ rdv.id }}" >
+                                                    </select>
+                                                    <div id="dates_rdv{{ rdv.id }}" >
 
 
-                                         {% if rdv.date1 %}
-                                             <label  > {{ rdv.getDate1|date('d-m-Y à H:i') }}
-                                                 {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                                        {% if rdv.date1 %}
+                                                            <label  > Rendez-vous fixé pour le {{ rdv.getDate1|date('d-m-Y à H:i') }}
 
-                                                     <input type="radio" id="r1{{ rdv.id }}" name="RadioDate" value="1">
-                                                 {% endif %}
-                                             </label>
-                                         {% endif %}
-                                         <br/>
-                                         {% if rdv.date2 %}
-                                             <label  > {{ rdv.getDate2|date('d-m-Y à H:i') }}
-                                                 {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
-                                                     <input type="radio" id="r2{{ rdv.id }}" name="RadioDate" value="2">
-                                                 {% endif %}
-                                             </label>
-                                         {% endif %}
-                                         <br/>
-                                         {% if rdv.date3 %}
-                                             <label  > {{ rdv.getDate3|date('d-m-Y à H:i') }}
-                                                 {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
-                                                     <input type="radio"  id="r3{{ rdv.id }}" name="RadioDate" value="3">
-                                                 {% endif %}
-                                             </label>
-                                         {% endif %}
+                                                            </label>
+                                                        {% endif %}
+                                                        {#<br/>
+                                                        {% if rdv.date2 %}
+                                                            <label  > {{ rdv.getDate2|date('d-m-Y à H:i') }}
+                                                                {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                                                    <input type="radio" id="r2{{ rdv.id }}" name="RadioDate" value="2">
+                                                                {% endif %}
+                                                            </label>
+                                                        {% endif %}
+                                                        <br/>
+                                                        {% if rdv.date3 %}
+                                                            <label  > {{ rdv.getDate3|date('d-m-Y à H:i') }}
+                                                                {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                                                    <input type="radio"  id="r3{{ rdv.id }}" name="RadioDate" value="3">
+                                                                {% endif %}
+                                                            </label>
+                                                        {% endif %}#}
 
-                                             <br/>
-                                             <br/>
-                                         </div>
-                                         <div id="Reporter_rdv{{ rdv.id }}" style="display:none;">
-
-                                             <button type="button" onclick="AddDateTimeDiv(this,{{ rdv.id }})">+</button>
-                                             <div class="col-xs-4 col-xs-offset-4">
-                                                 <label class="col-xs-1">Le </label><input title="Date du rendez-vous" name="dateRDV[]" type="text" class="col-xs-4" required>
-                                                 <label class="col-xs-1"> à </label><input title="Heure du rendez-vous" name="timeRDV[]" class="col-xs-4" type="text" required>
-                                                 <button type="button" class="col-xs-offset-1 col-xs-1" onclick="if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}">-</button>
-                                             </div>
-
-                                         </div>
+                                                        <br/>
+                                                        <br/>
+                                                    </div>
+                                                {% endif %}
+                                                <br/>
+                                                <br/>
 
 
-                                        <br/><br/>
+                                                <div id="Reporter_rdv{{ rdv.id }}" style="display:none;">
+
+                                                    <button type="button" onclick="AddDateTimeDivPro(this,{{ rdv.id }})">+</button>
+                                                    <div class="col-xs-4 col-xs-offset-4">
+                                                        <label class="col-xs-1">Le </label><input title="Date du rendez-vous" name="dateRDV[]" type="text" class="col-xs-4" required>
+                                                        <label class="col-xs-1"> à </label><input title="Heure du rendez-vous" name="timeRDV[]{{ rdv.id }}" class="col-xs-4" type="text" required>
+                                                        <button type="button" class="col-xs-offset-1 col-xs-1" onclick="if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}">-</button>
+                                                    </div>
+
+                                                </div>
+
+
+                                                <br/><br/>
 
 
 
-                                            <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 100px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
-                                         <br/>
-                                         <br/>
+                                                <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 100px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
+                                                <br/>
+                                                <br/>
 
-                                            <input  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;" type="button" onclick="EnvoyerRDV({{ rdv.id }},'formconfirmationRDV')"  style="margin-left: 100px" value="Envoyer">
+                                                <input  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;" type="button" onclick="RetourRDV({{ rdv.id }},'formRetourRDV{{ rdv.id }}')"  style="margin-left: 100px" value="Envoyer">
 
-                                     </div>
+                                            </div>
                                     </form>
                                         {% endif %}
-
-
-
-
-
                                     {% endif %}
-                                {% endif %}
+                                    {% set rdv=GetRDV(mise.destinataire.getId(),mise.mission.getId()) %}
+                                    {% if rdv %}
+                                        {% if (mise.getAction=='Propose rdv' or mise.getAction=='Reporter le RDV') and  mise.getId==GetIdTopOfMessges(mise.destinataire,mise.expediteur,mise.mission)  and (GetIdTopOfMessges(mise.destinataire,mise.expediteur,mise.mission)>GetIdTopOfMessges(mise.expediteur,mise.destinataire,mise.mission))  %}
+
+
+                                            {% if not rdv.getStatut or  (rdv.getStatut=='-1' and mise.getAction=='Reporter le RDV')  %}
+                                                <form id="formconfirmationRDV"    method="post">
+                                                    <div  id="DivConfirmationRDV{{ rdv.id }}">
+
+                                                        <label>Action :</label>
+                                                        <select id="Action_rdv{{ rdv.id }}" onchange="EnableControle(this.selectedIndex,{{ rdv.id }});" title="Actions" >
+                                                            <option value="Accepter">Accepter RDV</option>
+                                                            <option value="Reporter">Reporter RDV</option>
+                                                            <option value="Annuler">Annuler RDV</option>
+                                                        </select>
+                                                        <br/>
+                                                        <br/>
+
+                                                        <div id="dates_rdv{{ rdv.id }}" >
+
+
+                                                            {% if rdv.date1 %}
+                                                                <label  > {{ rdv.getDate1|date('d-m-Y à H:i') }}
+                                                                    {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+
+                                                                        <input type="radio" id="r1{{ rdv.id }}" name="RadioDate" value="1">
+                                                                    {% endif %}
+                                                                </label>
+                                                            {% endif %}
+                                                            <br/>
+                                                            {% if rdv.date2 %}
+                                                                <label  > {{ rdv.getDate2|date('d-m-Y à H:i') }}
+                                                                    {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                                                        <input type="radio" id="r2{{ rdv.id }}" name="RadioDate" value="2">
+                                                                    {% endif %}
+                                                                </label>
+                                                            {% endif %}
+                                                            <br/>
+                                                            {% if rdv.date3 %}
+                                                                <label  > {{ rdv.getDate3|date('d-m-Y à H:i') }}
+                                                                    {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                                                        <input type="radio"  id="r3{{ rdv.id }}" name="RadioDate" value="3">
+                                                                    {% endif %}
+                                                                </label>
+                                                            {% endif %}
+
+                                                            <br/>
+                                                            <br/>
+                                                        </div>
+                                                        <div id="Reporter_rdv{{ rdv.id }}" style="display:none;">
+
+                                                            <button type="button" onclick="AddDateTimeDivPro(this,{{ rdv.id }})">+</button>
+                                                            <div class="col-xs-4 col-xs-offset-4">
+                                                                <label class="col-xs-1">Le </label><input title="Date du rendez-vous" name="dateRDV[]" type="text" class="col-xs-4" required>
+                                                                <label class="col-xs-1"> à </label><input title="Heure du rendez-vous" name="timeRDV[]" class="col-xs-4" type="text" required>
+                                                                <button type="button" class="col-xs-offset-1 col-xs-1" onclick="if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}">-</button>
+                                                            </div>
+
+                                                        </div>
+
+
+                                                        <br/><br/>
+
+
+
+                                                        <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 100px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
+                                                        <br/>
+                                                        <br/>
+
+                                                        <input  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;" type="button" onclick="EnvoyerRDV({{ rdv.id }},'formconfirmationRDV')"  style="margin-left: 100px" value="Envoyer">
+
+                                                    </div>
+                                                </form>
+                                            {% endif %}
+
+
+
+
+
+                                        {% endif %}
+                                    {% endif %}
                                 </div>
                             {% endif %}
 
@@ -623,7 +623,7 @@
                     <div class="col-xs-2" style="width:20%;" >
                         <div style="border: 15px solid transparent">
 
-                                <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/Entreprise.jpg') }}">
+                            <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/Entreprise.jpg') }}">
 
                         </div>
                     </div>
@@ -661,7 +661,7 @@
 
                     <div class="col-xs-2" style="width:20%;">
                         <div style="border: 15px solid transparent">
-                           <img style="height:70px;width:70px;float:left;" onclick="Afficher({{ mise.mission.getId }});show('MissionPopup');" src="{{ asset('image/loupe.jpg') }}">
+                            <img style="height:70px;width:70px;float:left;" onclick="Afficher({{ mise.mission.getId }});show('MissionPopup');" src="{{ asset('image/loupe.jpg') }}">
 
                             {% if mise.destinataire.getPhotos %}
 
@@ -675,7 +675,7 @@
                                 <img style="height:70px;width:70px;float:left;border-radius: 100%" onclick="AfficherChat('{{ mise.destinataire.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc|replace({"'": "\\'"}) }}<br/>{{ mise.mission.intitule|replace({"'": "\\'"}) }}','{{ mise.destinataire.getNom|replace({"'": "\\'"}) }}<br/>{{ mise.destinataire.getPrenom|replace({"'": "\\'"}) }}','{{ asset('image/homme.jpg') }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
                             {% endif %}
 
-                            {% if   GetStatut(mise.destinataire) =='0'  or ( GetStatut(mise.destinataire)=='2' and "now"|date('d-m-Y à H:i')  > GetDateTimeRDV(mise.destinataire,mise.mission)|date('d-m-Y à H:i')) %}
+                            {% if   GetStatut(mise.destinataire) =='0'  or ( GetStatut(mise.destinataire)=='2' and "now"|date('YmdHi')  > GetDateTimeRDV(mise.destinataire,mise.mission)|date('YmdHi')) %}
                                 <img style="height:70px;width:70px;float:left;" onclick="" src="{{ asset('image/avirtissement.png') }}">
                             {% endif %}
 
@@ -685,11 +685,11 @@
 
 
 
-</div>
+                </div>
 
-{% endfor %}
-{% endif %}
-</div>
+            {% endfor %}
+        {% endif %}
+    </div>
 
     <div id="MissionPopup" class="popup" >
 
@@ -699,155 +699,155 @@
             {% set i=0 %}
             {% for mise in MiseEnRelation %}
 
-                {% set MyMission =affichageMission(mise.mission.getId(),'-1',app.user.id) %}
+            {% set MyMission =affichageMission(mise.mission.getId(),'-1',app.user.id) %}
 
 
-                <div class="divMissionPopup" id="Div_{{MyMission.mission.getId}}" style="padding: 0;display:none">
+            <div class="divMissionPopup" id="Div_{{MyMission.mission.getId}}" style="padding: 0;display:none">
 
 
-                    <div class="row" style="margin: 0;">
+                <div class="row" style="margin: 0;">
 
-                        <img class="col-xs-1" src="data:image/jpg;base64,{{ MyMission.mission.getEtablissement.getTier.getLogo }}" style="height: 60px;width: 60px;border: 5px solid transparent;">
-                        <div class="col-xs-4">
-                            <div class="col-xs-12" style="height: 35px;text-align: left; ">
-                                <label style="font:large Roboto;color:black;text-align: left;margin:15px 0 0 20px;" >{{ MyMission.mission.getIntitule }} - </label>
-                                <label style="font:large Roboto;color:#2A76CC;text-align: left;margin-top:15px" > {{ MyMission.mission.getEtablissement.getTier.getRaisonsoc }}</label>
-                            </div>
-                            <div class="col-xs-12" style="height: 35px;text-align: left;font:medium Roboto;  margin:0 0 0 20px;">
-                                {{MyMission.mission.getEtablissement.getAdresse }}, {{ MyMission.mission.getEtablissement.getCodePostal }} {{ MyMission.mission.getEtablissement.getVille }}
+                    <img class="col-xs-1" src="data:image/jpg;base64,{{ MyMission.mission.getEtablissement.getTier.getLogo }}" style="height: 60px;width: 60px;border: 5px solid transparent;">
+                    <div class="col-xs-4">
+                        <div class="col-xs-12" style="height: 35px;text-align: left; ">
+                            <label style="font:large Roboto;color:black;text-align: left;margin:15px 0 0 20px;" >{{ MyMission.mission.getIntitule }} - </label>
+                            <label style="font:large Roboto;color:#2A76CC;text-align: left;margin-top:15px" > {{ MyMission.mission.getEtablissement.getTier.getRaisonsoc }}</label>
+                        </div>
+                        <div class="col-xs-12" style="height: 35px;text-align: left;font:medium Roboto;  margin:0 0 0 20px;">
+                            {{MyMission.mission.getEtablissement.getAdresse }}, {{ MyMission.mission.getEtablissement.getCodePostal }} {{ MyMission.mission.getEtablissement.getVille }}
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+
+
+
+                <div class="row" style="margin: 0;">
+
+                    <button id="ButtonInfoMission" style="width: 100%;" class="col-xs-6 onglet slide"  type="button" data-show="info_mission{{ i }}"> FICHE MISSION</button>
+
+                    <div id="baronglet" class="col-xs-6" style="height: 5px;background-color: #257ef0; z-index: 60;width: 100%;"></div>
+
+                </div>
+
+
+
+                <div id="info_mission{{ i }}" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;">
+                    <form id="formMission" action="{{ path('missionModif') }}" onsubmit="ShowWaiter();" method="post" enctype="multipart/form-data">
+                        <input type="hidden" value="{{ MyMission.mission.getId }}" id="id" name="_ID">
+                        <div class="col-xs-9" style="width:65%;background: rgb(238, 241, 246); height: 100%;">
+
+                            <div class="col-xs-12" style="margin-bottom: 50px">
+                                <div class="list-group affichage">
+
+                                    <label class="list-group-item mission" >LA MISSION : <br/>
+                                        <textarea id="Descriptif" name="_Descriptif" maxlength="255"  style="height:60px;color:black; font-weight: lighter" readonly >{{MyMission.mission.getDescriptif}}</textarea>
+                                    </label>
+
+                                    <label class="list-group-item mission" >LE PROFIL RECHERCHE :<br/>
+                                        <textarea style="height:60px;color:black; font-weight: lighter" id="Profil" name="_Profil" required maxlength="255" readonly >{{MyMission.mission.getProfil}}</textarea>
+                                    </label>
+
+
+                                    <label class="list-group-item mission">Domaine : <br/>
+                                        <input style="color:black; font-weight: lighter" value="{{MyMission.mission.getDomaine}}" type="text" id="Domaine" name="_Domaine" maxlength="45" readonly>
+                                    </label>
+                                    <label class="list-group-item mission">Contact Mission: </br>
+                                        <label > Nom :</label> <label style="color:black;font-weight: lighter;margin-right: 30px;">{{ MyMission.mission.getNomcontact }}</label>
+                                        <label > Prenom :</label> <label style="color:black;font-weight: lighter;margin-right: 30px;">{{ MyMission.mission.getPrenomcontact }}</label>
+                                        <label > Fonction :</label>  <label style="color:black;font-weight: lighter;margin-right: 30px;" >{{ MyMission.mission.getFonctioncontact }}</label>
+                                        <label > Tel :</label>  <label style="color:black;font-weight: lighter;margin-right: 30px;">{{ MyMission.mission.getTelcontact }}</label>
+                                        <label > Mail : </label><label style="color:black;font-weight: lighter;margin-right: 30px;">{{ MyMission.mission.getEmailcontact }}</label>
+                                    </label>
+
+                                    <label class="list-group-item mission">Formation Ciblées: </br>
+
+                                        {% for Diffusion in MyMission.Diffusions %}
+                                            <div class="row" style="width:100%">
+                                                <label style="color: black;font-weight: lighter;float: left;line-height:40px;margin-right: 40px;">{{ Diffusion.formation.nom }} - {{ Diffusion.formation.etablissement.tier.raisonsoc }} - {{ Diffusion.formation.etablissement.adresse }} </label>
+
+                                                {% if Diffusion.formation.nomDoc %}
+                                                    <label class="cell" style="height: 40px;">Document : <a target="_blank" href="{{ asset('formation_pdf/'~ Diffusion.formation.getId ~'.pdf') }}" >
+                                                            <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px " alt="fichier de formation" >
+                                                        </a>
+                                                    </label>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+
+                                    </label>
+
+                                    <label class="list-group-item mission" >Commentaire :<br/>
+                                        <textarea style="color:black;height: 100px; font-weight: lighter" id="Commentaire" name="_Commentaire"  maxlength="255" readonly >{{MyMission.mission.getCommentaire}}</textarea>
+                                    </label>
+
+                                </div>
                             </div>
                         </div>
-
-
-
-                    </div>
-
-
-
-
-                    <div class="row" style="margin: 0;">
-
-                        <button id="ButtonInfoMission" style="width: 100%;" class="col-xs-6 onglet slide"  type="button" data-show="info_mission{{ i }}"> FICHE MISSION</button>
-
-                        <div id="baronglet" class="col-xs-6" style="height: 5px;background-color: #257ef0; z-index: 60;width: 100%;"></div>
-
-                    </div>
-
-
-
-                    <div id="info_mission{{ i }}" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;">
-                        <form id="formMission" action="{{ path('missionModif') }}" onsubmit="ShowWaiter();" method="post" enctype="multipart/form-data">
-                            <input type="hidden" value="{{ MyMission.mission.getId }}" id="id" name="_ID">
-                            <div class="col-xs-9" style="width:65%;background: rgb(238, 241, 246); height: 100%;">
-
-                                <div class="col-xs-12" style="margin-bottom: 50px">
-                                    <div class="list-group affichage">
-
-                                        <label class="list-group-item mission" >LA MISSION : <br/>
-                                            <textarea id="Descriptif" name="_Descriptif" maxlength="255"  style="height:60px;color:black; font-weight: lighter" readonly >{{MyMission.mission.getDescriptif}}</textarea>
-                                        </label>
-
-                                        <label class="list-group-item mission" >LE PROFIL RECHERCHE :<br/>
-                                            <textarea style="height:60px;color:black; font-weight: lighter" id="Profil" name="_Profil" required maxlength="255" readonly >{{MyMission.mission.getProfil}}</textarea>
-                                        </label>
-
-
-                                        <label class="list-group-item mission">Domaine : <br/>
-                                            <input style="color:black; font-weight: lighter" value="{{MyMission.mission.getDomaine}}" type="text" id="Domaine" name="_Domaine" maxlength="45" readonly>
-                                        </label>
-                                        <label class="list-group-item mission">Contact Mission: </br>
-                                            <label > Nom :</label> <label style="color:black;font-weight: lighter;margin-right: 30px;">{{ MyMission.mission.getNomcontact }}</label>
-                                            <label > Prenom :</label> <label style="color:black;font-weight: lighter;margin-right: 30px;">{{ MyMission.mission.getPrenomcontact }}</label>
-                                            <label > Fonction :</label>  <label style="color:black;font-weight: lighter;margin-right: 30px;" >{{ MyMission.mission.getFonctioncontact }}</label>
-                                            <label > Tel :</label>  <label style="color:black;font-weight: lighter;margin-right: 30px;">{{ MyMission.mission.getTelcontact }}</label>
-                                            <label > Mail : </label><label style="color:black;font-weight: lighter;margin-right: 30px;">{{ MyMission.mission.getEmailcontact }}</label>
-                                        </label>
-
-                                        <label class="list-group-item mission">Formation Ciblées: </br>
-
-                                            {% for Diffusion in MyMission.Diffusions %}
-                                                <div class="row" style="width:100%">
-                                                    <label style="color: black;font-weight: lighter;float: left;line-height:40px;margin-right: 40px;">{{ Diffusion.formation.nom }} - {{ Diffusion.formation.etablissement.tier.raisonsoc }} - {{ Diffusion.formation.etablissement.adresse }} </label>
-
-                                                    {% if Diffusion.formation.nomDoc %}
-                                                        <label class="cell" style="height: 40px;">Document : <a target="_blank" href="{{ asset('formation_pdf/'~ Diffusion.formation.getId ~'.pdf') }}" >
-                                                                <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px " alt="fichier de formation" >
-                                                            </a>
-                                                        </label>
-                                                    {% endif %}
-                                                </div>
-                                            {% endfor %}
-
-                                        </label>
-
-                                        <label class="list-group-item mission" >Commentaire :<br/>
-                                            <textarea style="color:black;height: 100px; font-weight: lighter" id="Commentaire" name="_Commentaire"  maxlength="255" readonly >{{MyMission.mission.getCommentaire}}</textarea>
-                                        </label>
-
-                                    </div>
+                        <div class="col-xs-3"
+                             style="height: 100%;width: 35%">
+                            <div class="list-group"
+                                 style="margin:15px 0 0 5px;height: 100%; background-color: white;">
+                                <div  class="rightMenu" style="padding: 8px !important;" >
+                                    <span class="glyphicon glyphicon-time" aria-hidden="true" style="float: left;"></span>
+                                    <label>Date creation :</label><input  value="{{MyMission.mission.getDatecreation|date('d/m/Y')}}" title="DateCreation" disabled>
                                 </div>
-                            </div>
-                            <div class="col-xs-3"
-                                 style="height: 100%;width: 35%">
-                                <div class="list-group"
-                                     style="margin:15px 0 0 5px;height: 100%; background-color: white;">
-                                    <div  class="rightMenu" style="padding: 8px !important;" >
-                                        <span class="glyphicon glyphicon-time" aria-hidden="true" style="float: left;"></span>
-                                        <label>Date creation :</label><input  value="{{MyMission.mission.getDatecreation|date('d/m/Y')}}" title="DateCreation" disabled>
-                                    </div>
-                                    <div class="rightMenu" style="padding: 8px !important;" >
-                                        <span class="glyphicon glyphicon-user" aria-hidden="true" style="float: left;" ></span>
-                                        <label style="margin-right: 65px;">Nom :</label> <input value="{{ MyMission.mission.nomcontact }} {{ MyMission.mission.prenomcontact }}" title="prenomContact" disabled>
-                                    </div>
-                                    <div class="rightMenu" style="padding: 8px !important;">
-                                        <span class="glyphicon glyphicon-envelope" aria-hidden="true" style="float: left;"></span>
-                                        <label style="margin-right: 60px;">Email :</label><input value="{{MyMission.mission.getEmailcontact}}" type="email" name="_Emailcontact" title="Emailcontact" maxlength="45" readonly>
-                                    </div>
-                                    <div class="rightMenu" style="padding: 8px !important;">
-                                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true" style="float: left;"></span>
-                                        <label style="margin-right: 5px">Type contrat :</label><input value="{{MyMission.mission.getTypecontrat}}" type="text" id="TypeContrat" name="_TypeContrat" title="TypeContrat" maxlength="45" readonly>
-                                    </div>
-                                    <div class="rightMenu" style="padding: 8px !important;">
-                                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true" style="float: left;"></span>
-                                        <label style="margin-right: 35px;">Fonction :</label><input value="{{MyMission.mission.getFonctioncontact}}" type="text" id="Fonctioncontact" name="_Fonctioncontact" title="getFonctioncontact" maxlength="45" readonly>
-                                    </div>
-                                    <div  class="rightMenu " style="padding: 8px !important;">
-                                        <span class="glyphicon glyphicon-calendar" aria-hidden="true" style="float: left;"></span>
-                                        <label style="margin-right: 25px;" >Date debut :</label><input value="{{MyMission.mission.getDatedebut|date('d/m/Y')}}" type="text"  id="Datedebut" name="_Datedebut" title="datedebut" readonly>
-                                    </div>
-                                    <div  class="rightMenu " style="padding: 8px !important;">
-                                        <span class="glyphicon glyphicon-calendar" aria-hidden="true" style="float: left;"></span>
-                                        <label style="margin-right: 45px;">Date fin :</label><input value="{{MyMission.mission.getDatefin|date('d/m/Y')}}" type="text"  id="Datefin" name="_Datefin" title="dateFin" readonly>
-                                    </div>
-                                    <div class="rightMenu" style="padding: 8px !important;" >
-                                        <span class="glyphicon glyphicon-eur" aria-hidden="true" style="float: left;"></span>
-                                        <label style="margin-right: 40px;">Nb poste :</label><input value="{{MyMission.mission.getNbreposte}}" type="number" id="Nbreposte" name="_Nbreposte" title="Nbreposte" maxlength="5" readonly>
-                                    </div>
-                                    <div class="rightMenu" style="padding: 8px !important;" >
-                                        <span class="glyphicon glyphicon-eur" aria-hidden="true" style="float: left;"></span>
-                                        <label>Remuneration :</label><input value="{{MyMission.mission.getRemuneration}}" type="number" id="Remuneration" name="_Remuneration" title="Remuneration" maxlength="5" readonly>
-                                    </div>
-                                    <div class="rightMenu" style="padding: 8px !important;">
-                                        <span class="glyphicon glyphicon-qrcode" aria-hidden="true" style="float:left;"></span>
-                                        <label style="margin-right: 10px;">code mission :</label><input placeholder="Code mission"  value="{{MyMission.mission.getCodemission}}" name="_Codemission" title="Code mission" required maxlength="9" type="text" readonly>
-                                    </div>
-
-                                    {#  {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_ADMINSOC') %} #}
-                                    {% set modif = false %}
-                                    {% if is_granted('ROLE_SUPER_ADMIN') or (MyMission.mission.tier == app.user.tier and (is_granted('ROLE_ADMINSOC') or is_granted('ROLE_ADMINECOLE'))) %}
-                                        {% set modif = true %}
-                                    {% elseif app.user.etablissement and MyMission.mission.tier == app.user.etablissement.tier and is_granted('ROLE_RECRUTEUR') %}
-                                        {% set modif = true %}
-                                    {% endif %}
-
-
+                                <div class="rightMenu" style="padding: 8px !important;" >
+                                    <span class="glyphicon glyphicon-user" aria-hidden="true" style="float: left;" ></span>
+                                    <label style="margin-right: 65px;">Nom :</label> <input value="{{ MyMission.mission.nomcontact }} {{ MyMission.mission.prenomcontact }}" title="prenomContact" disabled>
+                                </div>
+                                <div class="rightMenu" style="padding: 8px !important;">
+                                    <span class="glyphicon glyphicon-envelope" aria-hidden="true" style="float: left;"></span>
+                                    <label style="margin-right: 60px;">Email :</label><input value="{{MyMission.mission.getEmailcontact}}" type="email" name="_Emailcontact" title="Emailcontact" maxlength="45" readonly>
+                                </div>
+                                <div class="rightMenu" style="padding: 8px !important;">
+                                    <span class="glyphicon glyphicon-list-alt" aria-hidden="true" style="float: left;"></span>
+                                    <label style="margin-right: 5px">Type contrat :</label><input value="{{MyMission.mission.getTypecontrat}}" type="text" id="TypeContrat" name="_TypeContrat" title="TypeContrat" maxlength="45" readonly>
+                                </div>
+                                <div class="rightMenu" style="padding: 8px !important;">
+                                    <span class="glyphicon glyphicon-list-alt" aria-hidden="true" style="float: left;"></span>
+                                    <label style="margin-right: 35px;">Fonction :</label><input value="{{MyMission.mission.getFonctioncontact}}" type="text" id="Fonctioncontact" name="_Fonctioncontact" title="getFonctioncontact" maxlength="45" readonly>
+                                </div>
+                                <div  class="rightMenu " style="padding: 8px !important;">
+                                    <span class="glyphicon glyphicon-calendar" aria-hidden="true" style="float: left;"></span>
+                                    <label style="margin-right: 25px;" >Date debut :</label><input value="{{MyMission.mission.getDatedebut|date('d/m/Y')}}" type="text"  id="Datedebut" name="_Datedebut" title="datedebut" readonly>
+                                </div>
+                                <div  class="rightMenu " style="padding: 8px !important;">
+                                    <span class="glyphicon glyphicon-calendar" aria-hidden="true" style="float: left;"></span>
+                                    <label style="margin-right: 45px;">Date fin :</label><input value="{{MyMission.mission.getDatefin|date('d/m/Y')}}" type="text"  id="Datefin" name="_Datefin" title="dateFin" readonly>
+                                </div>
+                                <div class="rightMenu" style="padding: 8px !important;" >
+                                    <span class="glyphicon glyphicon-eur" aria-hidden="true" style="float: left;"></span>
+                                    <label style="margin-right: 40px;">Nb poste :</label><input value="{{MyMission.mission.getNbreposte}}" type="number" id="Nbreposte" name="_Nbreposte" title="Nbreposte" maxlength="5" readonly>
+                                </div>
+                                <div class="rightMenu" style="padding: 8px !important;" >
+                                    <span class="glyphicon glyphicon-eur" aria-hidden="true" style="float: left;"></span>
+                                    <label>Remuneration :</label><input value="{{MyMission.mission.getRemuneration}}" type="number" id="Remuneration" name="_Remuneration" title="Remuneration" maxlength="5" readonly>
+                                </div>
+                                <div class="rightMenu" style="padding: 8px !important;">
+                                    <span class="glyphicon glyphicon-qrcode" aria-hidden="true" style="float:left;"></span>
+                                    <label style="margin-right: 10px;">code mission :</label><input placeholder="Code mission"  value="{{MyMission.mission.getCodemission}}" name="_Codemission" title="Code mission" required maxlength="9" type="text" readonly>
                                 </div>
 
+                                {#  {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_ADMINSOC') %} #}
+                                {% set modif = false %}
+                                {% if is_granted('ROLE_SUPER_ADMIN') or (MyMission.mission.tier == app.user.tier and (is_granted('ROLE_ADMINSOC') or is_granted('ROLE_ADMINECOLE'))) %}
+                                    {% set modif = true %}
+                                {% elseif app.user.etablissement and MyMission.mission.tier == app.user.etablissement.tier and is_granted('ROLE_RECRUTEUR') %}
+                                    {% set modif = true %}
+                                {% endif %}
+
+
                             </div>
-                        </form>
+
+                        </div>
+                    </form>
 
 
-                    </div>
+                </div>
 
 
 
@@ -856,15 +856,15 @@
 
                 {% set i=i+1 %}
 
-            {% endfor %}
+                {% endfor %}
+
+            </div>
+
+
+
 
         </div>
-
-
-
-
     </div>
-</div>
     <div id="FicheMission" class="popup">
         <div onclick="hide(this)" class="close"></div>
         <div class="col-xs-offset-1 col-xs-7" style="background-color: white;padding: 0;border:20px solid white;display: block; margin-left: 20%; ">
@@ -949,366 +949,464 @@
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('js/PopUp.js') }}"></script>
 
-<script language="JavaScript">
-    var marker,map_localisation,map_mission,marker_societe,idMessage;
-    function AddDateTimeDiv(button){
-        if(button.parentElement.children.length < 4) {
-            var divContainer = document.createElement('div');
-            divContainer.className = 'col-xs-4 col-xs-offset-4';
-            //label DATE
-            var LabelDate = document.createElement('label');
-            LabelDate.className = 'col-xs-1';
-            LabelDate.innerHTML = 'Le ';
-            //INPUT DATE
-            var inputDate = document.createElement('input');
-            inputDate.setAttribute('name','dateRDV[]');
-            inputDate.setAttribute('id',button.nextElementSibling.firstElementChild.id +'_'+button.parentElement.children.length);
-            inputDate.setAttribute('type','text');
-            inputDate.className = "col-xs-4";
-            //label DATE
-            var LabelTime = document.createElement('label');
-            LabelTime.className = 'col-xs-1';
-            LabelTime.innerHTML = ' à ';
-            //INPUT TIME
-            var inputTime = document.createElement('input');
-            inputTime.setAttribute('name','timeRDV[]');
-            inputTime.setAttribute('id',button.nextElementSibling.children[1].id +'_'+button.parentElement.children.length);
-            inputTime.setAttribute('type','text');
-            inputTime.className = "col-xs-4";
-            //delete button
-            var deleteButton = document.createElement('button');
-            deleteButton.setAttribute('onclick','if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}');
-            deleteButton.setAttribute('type','button');
-            deleteButton.className = "col-xs-offset-1 col-xs-1";
-            deleteButton.innerHTML = '-';
+    <script language="JavaScript">
+        var marker,map_localisation,map_mission,marker_societe,idMessage;
+        function AddDateTimeDiv(button){
+            if(button.parentElement.children.length < 4) {
+                var divContainer = document.createElement('div');
+                divContainer.className = 'col-xs-4 col-xs-offset-4';
+                //label DATE
+                var LabelDate = document.createElement('label');
+                LabelDate.className = 'col-xs-1';
+                LabelDate.innerHTML = 'Le ';
+                //INPUT DATE
+                var inputDate = document.createElement('input');
+                inputDate.setAttribute('name','dateRDV[]');
+                inputDate.setAttribute('id',button.nextElementSibling.firstElementChild.id +'_'+button.parentElement.children.length);
+                inputDate.setAttribute('type','text');
+                inputDate.className = "col-xs-4";
+                //label DATE
+                var LabelTime = document.createElement('label');
+                LabelTime.className = 'col-xs-1';
+                LabelTime.innerHTML = ' à ';
+                //INPUT TIME
+                var inputTime = document.createElement('input');
+                inputTime.setAttribute('name','timeRDV[]');
+                inputTime.setAttribute('id',button.nextElementSibling.children[1].id +'_'+button.parentElement.children.length);
+                inputTime.setAttribute('type','text');
+                inputTime.className = "col-xs-4";
+                //delete button
+                var deleteButton = document.createElement('button');
+                deleteButton.setAttribute('onclick','if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}');
+                deleteButton.setAttribute('type','button');
+                deleteButton.className = "col-xs-offset-1 col-xs-1";
+                deleteButton.innerHTML = '-';
 
-            //append
-            divContainer.appendChild(LabelDate);
-            divContainer.appendChild(inputDate);
-            divContainer.appendChild(LabelTime);
-            divContainer.appendChild(inputTime);
-            divContainer.appendChild(deleteButton);
+                //append
+                divContainer.appendChild(LabelDate);
+                divContainer.appendChild(inputDate);
+                divContainer.appendChild(LabelTime);
+                divContainer.appendChild(inputTime);
+                divContainer.appendChild(deleteButton);
 
-            button.parentNode.appendChild(divContainer);
-        }
-    }
-    $(document).on( "focus", "input[name='dateRDV[]']:not(.hasDatepicker)", function() {
-        //toastr.info( "Initializing " + this.id );
-
-        $( this ).datepicker({
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            dateFormat: 'dd/mm/yy',
-            monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
-            monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
-            onClose: function(dateText, inst) {
-                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+                button.parentNode.appendChild(divContainer);
             }
-        });
-    });
-    $(document).ready(function(){
-        window.parent.document.getElementById('iframe').style.left ='0';
-        window.parent.document.getElementById('iframe').style.top ='32px';
-        window.parent.document.getElementById('iframe').style.height ='calc(100% - 32px)';
-        window.parent.document.getElementById('iframe').style.position ='fixed';
-        window.parent.document.getElementById('iframe').style.visibility ='visible';
-        $("#paginationContainer").customPaginate({
-            itemsToPaginate : ".Liste",
-            activeClass : "active-class"
-        });
+        }
 
-    });
-    function search(mot){
-        var mots = mot.toUpperCase().trim().split(/ +/g);
-        var Recherches = document.getElementsByName('Recherche');
-        for(var i = 0; i < Recherches.length; i++)
-        {
-            var score = 0;
-            Recherches[i].parentNode.classList.remove('hidden');
-            var recherchermot = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g);
-            for(var k = 0; k< recherchermot.length; k++)
+        function AddDateTimeDivPro(button,idRDV){
+            if(button.parentElement.children.length < 4) {
+                var divContainer = document.createElement('div');
+                divContainer.className = 'col-xs-4 col-xs-offset-4';
+                //label DATE
+                var LabelDate = document.createElement('label');
+                LabelDate.className = 'col-xs-1';
+                LabelDate.innerHTML = 'Le ';
+                //INPUT DATE
+                var inputDate = document.createElement('input');
+                inputDate.setAttribute('name','dateRDV[]');
+                inputDate.setAttribute('id',button.nextElementSibling.firstElementChild.id +'_'+button.parentElement.children.length);
+                inputDate.setAttribute('type','text');
+                inputDate.className = "col-xs-4";
+                //label DATE
+                var LabelTime = document.createElement('label');
+                LabelTime.className = 'col-xs-1';
+                LabelTime.innerHTML = ' à ';
+                //INPUT TIME
+                var inputTime = document.createElement('input');
+                inputTime.setAttribute('name','timeRDV[]'+idRDV);
+                inputTime.setAttribute('id',button.nextElementSibling.children[1].id +'_'+button.parentElement.children.length);
+                inputTime.setAttribute('type','text');
+                inputTime.className = "col-xs-4";
+                //delete button
+                var deleteButton = document.createElement('button');
+                deleteButton.setAttribute('onclick','if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}');
+                deleteButton.setAttribute('type','button');
+                deleteButton.className = "col-xs-offset-1 col-xs-1";
+                deleteButton.innerHTML = '-';
+
+                //append
+                divContainer.appendChild(LabelDate);
+                divContainer.appendChild(inputDate);
+                divContainer.appendChild(LabelTime);
+                divContainer.appendChild(inputTime);
+                divContainer.appendChild(deleteButton);
+
+                button.parentNode.appendChild(divContainer);
+            }
+        }
+        $(document).on( "focus", "input[name='dateRDV[]']:not(.hasDatepicker)", function() {
+            //toastr.info( "Initializing " + this.id );
+
+            $( this ).datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                dateFormat: 'dd/mm/yy',
+                monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+                monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+                onClose: function(dateText, inst) {
+                    $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+                }
+            });
+        });
+        $(document).ready(function(){
+            window.parent.document.getElementById('iframe').style.left ='0';
+            window.parent.document.getElementById('iframe').style.top ='32px';
+            window.parent.document.getElementById('iframe').style.height ='calc(100% - 32px)';
+            window.parent.document.getElementById('iframe').style.position ='fixed';
+            window.parent.document.getElementById('iframe').style.visibility ='visible';
+            $("#paginationContainer").customPaginate({
+                itemsToPaginate : ".Liste",
+                activeClass : "active-class"
+            });
+
+        });
+        function search(mot){
+            var mots = mot.toUpperCase().trim().split(/ +/g);
+            var Recherches = document.getElementsByName('Recherche');
+            for(var i = 0; i < Recherches.length; i++)
             {
-                for(var j = 0; j< mots.length;j++)
+                var score = 0;
+                Recherches[i].parentNode.classList.remove('hidden');
+                var recherchermot = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g);
+                for(var k = 0; k< recherchermot.length; k++)
                 {
-                    if (stringWith(recherchermot[k], mots[j])) {
-                        score++;
+                    for(var j = 0; j< mots.length;j++)
+                    {
+                        if (stringWith(recherchermot[k], mots[j])) {
+                            score++;
+                        }
+                    }
+                }
+                if(score === 0 ){
+                    Recherches[i].parentNode.classList.add('hidden');
+                }
+            }
+            $(".Liste").show();
+            $("#paginationContainer").html('<button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px;float: right;" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>').customPaginate({
+                itemsToPaginate : ".Liste:not(.hidden)",
+                activeClass : "active-class"
+            });
+        }
+
+        function show_formapprenant() {
+            document.getElementById('information_apprenant').style.display= 'none';
+            document.getElementById('declinerApprenant').style.display= 'block';
+            document.getElementById('information_button').style.display= 'none';
+            document.getElementById('decliner_button').style.display= 'block';
+        }
+        function show_formapprenantproposer() {
+            document.getElementById('information_apprenant').style.display= 'none';
+            document.getElementById('proposerApprenant').style.display= 'block';
+            document.getElementById('information_button').style.display= 'none';
+            document.getElementById('proposer_button').style.display= 'block';
+        }
+        function show_formmission() {
+            document.getElementById('information_mission').style.display= 'none';
+            document.getElementById('declinerMission').style.display= 'inline-block';
+            document.getElementById('mission_button').style.display= 'none';
+            document.getElementById('declinerMission_button').style.display= 'block';
+        }
+        function FermerPopup(){
+            document.getElementById('information_apprenant').style.display= 'block';
+            document.getElementById('information_button').style.display= 'block';
+            document.getElementById('information_mission').style.display= 'block';
+            document.getElementById('mission_button').style.display= 'block';
+            document.getElementById('proposerApprenant').style.display= 'none';
+            document.getElementById('proposer_button').style.display= 'none';
+            document.getElementById('declinerApprenant').style.display= 'none';
+            document.getElementById('decliner_button').style.display= 'none';
+            document.getElementById('declinerMission').style.display= 'none';
+            document.getElementById('declinerMission_button').style.display= 'none';
+        }
+
+        function envoyerReponse(idMsg,checkDate){
+
+            if(typeof checkDate !== 'undefined' && checkDate){
+                var inputTimes = document.getElementsByName('timeRDV[]');
+                for(var k = 0; k < inputTimes.length; k++){
+                    var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(inputTimes[k].value);
+
+                    if (!isValid) {
+                        alert('verifiez que les heure respect le format HH:MM');
+                        return;
                     }
                 }
             }
-            if(score === 0 ){
-                Recherches[i].parentNode.classList.add('hidden');
-            }
+            ShowWaiter();
+            var route = '{{ path('Reponse_Messagerie',{'idmessage':'_IDMESSAGE'}) }}';
+            route = route.replace('_IDMESSAGE',idMsg);
+            $.ajax({
+                type: 'POST',
+                url: route,
+                data: $().serialize(),
+                error: DeleteWaiter(),
+                success: function(data){
+                    if(data===-1)
+                    {
+
+
+                    }
+                    else if(data===1)
+                    {
+
+                    }
+                    else
+                    {
+                        alert('Verifier que vous avez bien rempli votre message');
+                        console.log(data);
+                    }
+
+                    DeleteWaiter();
+
+                }
+            });
         }
-        $(".Liste").show();
-        $("#paginationContainer").html('<button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px;float: right;" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>').customPaginate({
-            itemsToPaginate : ".Liste:not(.hidden)",
-            activeClass : "active-class"
-        });
-    }
 
-    function show_formapprenant() {
-        document.getElementById('information_apprenant').style.display= 'none';
-        document.getElementById('declinerApprenant').style.display= 'block';
-        document.getElementById('information_button').style.display= 'none';
-        document.getElementById('decliner_button').style.display= 'block';
-    }
-    function show_formapprenantproposer() {
-        document.getElementById('information_apprenant').style.display= 'none';
-        document.getElementById('proposerApprenant').style.display= 'block';
-        document.getElementById('information_button').style.display= 'none';
-        document.getElementById('proposer_button').style.display= 'block';
-    }
-    function show_formmission() {
-        document.getElementById('information_mission').style.display= 'none';
-        document.getElementById('declinerMission').style.display= 'inline-block';
-        document.getElementById('mission_button').style.display= 'none';
-        document.getElementById('declinerMission_button').style.display= 'block';
-    }
-    function FermerPopup(){
-        document.getElementById('information_apprenant').style.display= 'block';
-        document.getElementById('information_button').style.display= 'block';
-        document.getElementById('information_mission').style.display= 'block';
-        document.getElementById('mission_button').style.display= 'block';
-        document.getElementById('proposerApprenant').style.display= 'none';
-        document.getElementById('proposer_button').style.display= 'none';
-        document.getElementById('declinerApprenant').style.display= 'none';
-        document.getElementById('decliner_button').style.display= 'none';
-        document.getElementById('declinerMission').style.display= 'none';
-        document.getElementById('declinerMission_button').style.display= 'none';
-    }
+        function informationMission(image,intitule,raisonsoc,descriptif,codemission,adresse,ville,cp,message,Msgstatut) {
+            document.getElementById('FicheMission').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
+            document.getElementById('Information_Mission_Descriptif').innerHTML = descriptif;
+            document.getElementById('Information_Mission_Intitule').innerHTML= intitule;
+            document.getElementById('Information_Mission_titre_raisonsoc').innerHTML= raisonsoc;
+            document.getElementById('Information_Mission_code').innerHTML= codemission;
+            document.getElementById('Information_Mission_titre_adresse').innerHTML = adresse +', '+ cp +' '+ ville;
+            // document.getElementById('Information_Mission_Message').innerHTML = message;
+            /* if(Msgstatut == 1 || Msgstatut == -1 || Msgstatut == 2 ){
 
-    function envoyerReponse(idMsg,checkDate){
+             document.getElementById('mission_button').style.display = 'none';
+             }
+             else{
 
-        if(typeof checkDate !== 'undefined' && checkDate){
-            var inputTimes = document.getElementsByName('timeRDV[]');
-            for(var k = 0; k < inputTimes.length; k++){
-                var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(inputTimes[k].value);
-
-                if (!isValid) {
-                    alert('verifiez que les heure respect le format HH:MM');
-                    return;
-                }
+             document.getElementById('mission_button').style.display = 'block';
+             }*/
+            if(marker_societe)
+            {
+                marker_societe.setMap(null);
             }
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({'address': adresse }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    marker_societe = new google.maps.Marker({
+                        map: map_mission,
+                        position: results[0].geometry.location,
+                        visible: true,
+                        icon: '{{ asset('image/societe.png') }}'
+                    });
+                    map_mission.setCenter(results[0].geometry.location);
+                }
+                else {
+                    alert('Nous n\'avons pas réussi à localiser l\'adresse l\'apprenant qui est : ' + adresse);
+                }
+            });
         }
-        ShowWaiter();
-        var route = '{{ path('Reponse_Messagerie',{'idmessage':'_IDMESSAGE'}) }}';
-        route = route.replace('_IDMESSAGE',idMsg);
-        $.ajax({
-            type: 'POST',
-            url: route,
-            data: $().serialize(),
-            error: DeleteWaiter(),
-            success: function(data){
-                if(data===-1)
-                {
+        function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse,message,Msgstatut,score) {
 
-
-                }
-                else if(data===1)
-                {
-
-                }
-                else
-                {
-                    alert('Verifier que vous avez bien rempli votre message');
-                    console.log(data);
-                }
-
-                DeleteWaiter();
-
+            if(image != ''){
+                document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
             }
-        });
-    }
+            else if( civilite == 'Mme' || civilite =='Madame' || civilite == 'Mademoiselle'){
+                document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='{{ asset('image/femme.jpg') }}';
+            }
+            else{
+                document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='{{ asset('image/homme.jpg') }}';
+            }
 
-    function informationMission(image,intitule,raisonsoc,descriptif,codemission,adresse,ville,cp,message,Msgstatut) {
-        document.getElementById('FicheMission').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
-        document.getElementById('Information_Mission_Descriptif').innerHTML = descriptif;
-        document.getElementById('Information_Mission_Intitule').innerHTML= intitule;
-        document.getElementById('Information_Mission_titre_raisonsoc').innerHTML= raisonsoc;
-        document.getElementById('Information_Mission_code').innerHTML= codemission;
-        document.getElementById('Information_Mission_titre_adresse').innerHTML = adresse +', '+ cp +' '+ ville;
-       // document.getElementById('Information_Mission_Message').innerHTML = message;
-       /* if(Msgstatut == 1 || Msgstatut == -1 || Msgstatut == 2 ){
 
-            document.getElementById('mission_button').style.display = 'none';
+            document.getElementById('Information_Apprenant_Civilite').innerHTML = civilite;
+            document.getElementById('Information_Apprenant_Nom').innerHTML = nom;
+            document.getElementById('Information_Apprenant_Prenom').innerHTML= prenom;
+            document.getElementById('Information_Apprenant_Email').innerHTML = email;
+            document.getElementById('Information_Apprenant_Telephone').innerHTML =telephone;
+            document.getElementById('Information_Apprenant_DateNaissance').innerHTML =Datenaissance;
+            document.getElementById('Information_Apprenant_CpNaissance').innerHTML =cpnaissance;
+            document.getElementById('Information_Apprenant_LieuNaissance').innerHTML =lieuNaissance;
+            document.getElementById('Information_Apprenant_Adresse').innerHTML =adresse;
+            document.getElementById('Information_Apprenant_titre').innerHTML= nom +' '+ prenom;
+            document.getElementById('Information_Apprenant_titre_adresse').innerHTML = adresse;
+            document.getElementById('Information_Apprenant_Message').innerHTML = message;
+
+            if(Msgstatut == 1 || Msgstatut == -1 || Msgstatut == 2 ){
+                document.getElementById('information_button').style.display = 'none';
+            }else{
+                document.getElementById('information_button').style.display = 'block';
+            }
+
+
+
+            if(marker)
+            {
+                marker.setMap(null);
+            }
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({'address': adresse }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    marker = new google.maps.Marker({
+                        map: map_localisation,
+                        position: results[0].geometry.location,
+                        visible: true,
+                        //icon: '{{ asset('image/highscore_marker.png') }}'
+                        icon: '{{ asset('image/') }}scores/'+score+'.png'
+                    });
+                    map_localisation.setCenter(results[0].geometry.location);
+                }
+                else {
+                    alert('Nous n\'avons pas réussi à localiser l\'adresse l\'apprenant qui est : ' + adresse);
+                }
+            });
         }
-        else{
+        function initialize() {
+            map_localisation = new google.maps.Map(document.getElementById("Localisation"), {
+                zoom: 15,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+            map_mission = new google.maps.Map(document.getElementById("Localisationmission"), {
+                zoom: 15,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
 
-            document.getElementById('mission_button').style.display = 'block';
-        }*/
-        if(marker_societe)
+
+
+        function postuler(idMsg,bouton){
+            bouton.style.display="none";
+            bouton.previousElementSibling.style.display="none";
+            ShowWaiter();
+            var route = '{{ path('Postuler_Messagerie',{'idmessage':'_IDMESSAGE'}) }}';
+            route = route.replace('_IDMESSAGE',idMsg);
+
+            $.ajax({
+                type: 'POST',
+                url: route,
+                error: function(errorMessage){
+                    DeleteWaiter();
+                    console.log(errorMessage);
+
+                },
+                success: function(data){
+
+                    if(data===1)
+                    {
+
+                    }
+                    DeleteWaiter();
+                }
+            });
+        }
+
+        function Afficher(idMission){
+            for(i=0 ; i < document.getElementsByClassName('divMissionPopup').length;i++)
+            {
+                document.getElementById(document.getElementsByClassName('divMissionPopup')[i].id).style.display='none';
+            }
+            document.getElementById('Div_'+idMission).style.display='block';
+        }
+
+        function EnableControle(index,idRDV){
+
+
+            var idDate="dates_rdv".concat(idRDV);
+            if (index=='0'){
+
+                document.getElementById(idDate).style.display="block";
+                document.getElementById('Reporter_rdv'+idRDV).style.display="none";
+            } else if (index=='1')
+            {
+                document.getElementById('Reporter_rdv'+idRDV).style.display="block";
+                document.getElementById(idDate).style.display="none";
+            }else{
+                document.getElementById('Reporter_rdv'+idRDV).style.display="none";
+                document.getElementById(idDate).style.display="none";
+            }
+
+        }
+
+        function EnvoyerRDV(IdRdv,div)
         {
-            marker_societe.setMap(null);
-        }
-        var geocoder = new google.maps.Geocoder();
-        geocoder.geocode({'address': adresse }, function (results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                marker_societe = new google.maps.Marker({
-                    map: map_mission,
-                    position: results[0].geometry.location,
-                    visible: true,
-                    icon: '{{ asset('image/societe.png') }}'
-                });
-                map_mission.setCenter(results[0].geometry.location);
+
+            var DateSelect;
+            var Message;
+            var Action;
+            var idDivRDV='DivConfirmationRDV'+IdRdv;
+            // Message=document.getElementById('Message_rdv'+IdRdv).value;
+            Action=document.getElementById('Action_rdv'+IdRdv).value;
+            var radios = document.getElementsByName("RadioDate")
+
+            for (var i=0, len=radios.length; i<len; i++) {
+                if ( radios[i].checked ) {
+                    DateSelect = radios[i].value;
+                    break;
+                }
             }
-            else {
-                alert('Nous n\'avons pas réussi à localiser l\'adresse l\'apprenant qui est : ' + adresse);
-            }
-        });
-    }
-    function informationApprenant(image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse,message,Msgstatut,score) {
+            if (Action=='Accepter' ){
 
-        if(image != ''){
-            document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='data:image/jpg;base64,' + image;
-        }
-        else if( civilite == 'Mme' || civilite =='Madame' || civilite == 'Mademoiselle'){
-            document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='{{ asset('image/femme.jpg') }}';
-        }
-        else{
-            document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='{{ asset('image/homme.jpg') }}';
-        }
+                if (DateSelect==null){
 
+                    alert('Veuillez cocher une date de RDV');
 
-        document.getElementById('Information_Apprenant_Civilite').innerHTML = civilite;
-        document.getElementById('Information_Apprenant_Nom').innerHTML = nom;
-        document.getElementById('Information_Apprenant_Prenom').innerHTML= prenom;
-        document.getElementById('Information_Apprenant_Email').innerHTML = email;
-        document.getElementById('Information_Apprenant_Telephone').innerHTML =telephone;
-        document.getElementById('Information_Apprenant_DateNaissance').innerHTML =Datenaissance;
-        document.getElementById('Information_Apprenant_CpNaissance').innerHTML =cpnaissance;
-        document.getElementById('Information_Apprenant_LieuNaissance').innerHTML =lieuNaissance;
-        document.getElementById('Information_Apprenant_Adresse').innerHTML =adresse;
-        document.getElementById('Information_Apprenant_titre').innerHTML= nom +' '+ prenom;
-        document.getElementById('Information_Apprenant_titre_adresse').innerHTML = adresse;
-        document.getElementById('Information_Apprenant_Message').innerHTML = message;
+                }else{
+                    // ici l'acceptation du RDV
 
-        if(Msgstatut == 1 || Msgstatut == -1 || Msgstatut == 2 ){
-            document.getElementById('information_button').style.display = 'none';
-        }else{
-            document.getElementById('information_button').style.display = 'block';
-        }
+                    ShowWaiter();
+                    var route = '{{ path('DateRDV',{'id':'_ID','numero':'_NUMERO'}) }}';
+                    route = route.replace('_ID',IdRdv);
+                    route= route.replace('_NUMERO',DateSelect);
 
 
 
-        if(marker)
-        {
-            marker.setMap(null);
-        }
-        var geocoder = new google.maps.Geocoder();
-        geocoder.geocode({'address': adresse }, function (results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                marker = new google.maps.Marker({
-                    map: map_localisation,
-                    position: results[0].geometry.location,
-                    visible: true,
-                    //icon: '{{ asset('image/highscore_marker.png') }}'
-                    icon: '{{ asset('image/') }}scores/'+score+'.png'
-                });
-                map_localisation.setCenter(results[0].geometry.location);
-            }
-            else {
-                alert('Nous n\'avons pas réussi à localiser l\'adresse l\'apprenant qui est : ' + adresse);
-            }
-        });
-    }
-    function initialize() {
-        map_localisation = new google.maps.Map(document.getElementById("Localisation"), {
-            zoom: 15,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        });
-        map_mission = new google.maps.Map(document.getElementById("Localisationmission"), {
-            zoom: 15,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        });
-    }
-    google.maps.event.addDomListener(window, 'load', initialize);
+                    $.ajax({
+                        url: route,
+                        type:'POST',
+                        data: $('#'+div).serialize(),
+                        error: function(){
+                            DeleteWaiter();
+                            alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+                        },
+                        success: function(data){
 
 
 
-    function postuler(idMsg,bouton){
-        bouton.style.display="none";
-        bouton.previousElementSibling.style.display="none";
-        ShowWaiter();
-        var route = '{{ path('Postuler_Messagerie',{'idmessage':'_IDMESSAGE'}) }}';
-        route = route.replace('_IDMESSAGE',idMsg);
+                            document.getElementById(idDivRDV).style.display="none";
+                            window.location.href=data;
 
-        $.ajax({
-            type: 'POST',
-            url: route,
-            error: function(errorMessage){
-                DeleteWaiter();
-                console.log(errorMessage);
 
-            },
-            success: function(data){
+                            DeleteWaiter();
+                        }
+                    });
 
-                if(data===1)
-                {
+
 
                 }
-                DeleteWaiter();
-            }
-        });
-    }
 
-function Afficher(idMission){
-    for(i=0 ; i < document.getElementsByClassName('divMissionPopup').length;i++)
-    {
-            document.getElementById(document.getElementsByClassName('divMissionPopup')[i].id).style.display='none';
-    }
-    document.getElementById('Div_'+idMission).style.display='block';
-}
+            }else if (Action=='Reporter'){
+                // ici reportation RDV
 
-function EnableControle(index,idRDV){
+                var inputTimes = document.getElementsByName('timeRDV[]');
+                var DateTimeRdv
+                for(var k = 0; k < inputTimes.length; k++){
+                    var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(inputTimes[k].value);
 
-
-    var idDate="dates_rdv".concat(idRDV);
-    if (index=='0'){
-
-        document.getElementById(idDate).style.display="block";
-        document.getElementById('Reporter_rdv'+idRDV).style.display="none";
-    } else if (index=='1')
-    {
-        document.getElementById('Reporter_rdv'+idRDV).style.display="block";
-        document.getElementById(idDate).style.display="none";
-    }else{
-        document.getElementById('Reporter_rdv'+idRDV).style.display="none";
-        document.getElementById(idDate).style.display="none";
-    }
-
-}
-
-function EnvoyerRDV(IdRdv,div)
-{
-
-    var DateSelect;
-    var Message;
-    var Action;
-    var idDivRDV='DivConfirmationRDV'+IdRdv;
-   // Message=document.getElementById('Message_rdv'+IdRdv).value;
-    Action=document.getElementById('Action_rdv'+IdRdv).value;
-    var radios = document.getElementsByName("RadioDate")
-
-    for (var i=0, len=radios.length; i<len; i++) {
-        if ( radios[i].checked ) {
-            DateSelect = radios[i].value;
-            break;
-        }
-    }
-    if (Action=='Accepter' ){
-
-        if (DateSelect==null){
-
-            alert('Veuillez cocher une date de RDV');
-
-        }else{
-         // ici l'acceptation du RDV
-
+                    if (!isValid) {
+                        alert('verifiez que les heure respect le format HH:MM');
+                        return;
+                    }else{
+                        if(DateTimeRdv == null){
+                            DateTimeRdv=inputTimes[k].previousElementSibling.previousElementSibling.value+' '+inputTimes[k].value+';'
+                        }else{
+                            DateTimeRdv=DateTimeRdv+inputTimes[k].previousElementSibling.previousElementSibling.value+' '+inputTimes[k].value+';'
+                        }
+                    }
+                }
                 ShowWaiter();
-                var route = '{{ path('DateRDV',{'id':'_ID','numero':'_NUMERO'}) }}';
+                var route = '{{ path('AjournementRDV',{'id':'_ID','DateTimeRdv':'_DateTimeRdv'}) }}';
+                //DateTimeRdv=DateTimeRdv.replace("/","|||");
+
+                DateTimeRdv=replaceAll(DateTimeRdv, '/', '|||');
+
+
                 route = route.replace('_ID',IdRdv);
-                route= route.replace('_NUMERO',DateSelect);
+                route = route.replace('_DateTimeRdv',DateTimeRdv);
+
 
 
 
@@ -1321,397 +1419,343 @@ function EnvoyerRDV(IdRdv,div)
                         alert('une erreur s\'est produite, veuillez réessayer plus tard!');
                     },
                     success: function(data){
-
-
-
-                           document.getElementById(idDivRDV).style.display="none";
-                           window.location.href=data;
-
-
+                        //document.getElementById(idDivRDV).style.display="none";
+                        //alert(idDivRDV);
+                        //document.getElementById(idDivRDV).style.display="none";
+                        window.location.href=data;
                         DeleteWaiter();
                     }
+
+
+
                 });
 
 
 
-        }
-
-    }else if (Action=='Reporter'){
-     // ici reportation RDV
-
-        var inputTimes = document.getElementsByName('timeRDV[]');
-        var DateTimeRdv
-        for(var k = 0; k < inputTimes.length; k++){
-            var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(inputTimes[k].value);
-
-            if (!isValid) {
-                alert('verifiez que les heure respect le format HH:MM');
-                return;
             }else{
-                if(DateTimeRdv == null){
-                    DateTimeRdv=inputTimes[k].previousElementSibling.previousElementSibling.value+' '+inputTimes[k].value+';'
-                }else{
-                    DateTimeRdv=DateTimeRdv+inputTimes[k].previousElementSibling.previousElementSibling.value+' '+inputTimes[k].value+';'
+                // ici annulation RDV
+
+                if(confirm('Confirmez-vous l\'annulation du rendez-vous?')){
+                    ShowWaiter();
+                    var route = '{{ path('AnnulerRDV',{'id':'_ID'}) }}';
+
+
+                    route = route.replace('_ID',IdRdv);
+
+
+
+                    $.ajax({
+                        url: route,
+                        type:'POST',
+                        data: $('#'+div).serialize(),
+                        error: function(){
+                            DeleteWaiter();
+                            alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+                        },
+                        success: function(data){
+
+
+                            // document.getElementById(idDivRDV).style.display="none";
+                            window.location.href=data;
+
+                            DeleteWaiter();
+                        }
+                    });
                 }
+
             }
+
+
+
+
+
+
+            //alert(Message);
+            //alert(IdRdv);
+            //alert(DateSelect);
+
+
+
+
         }
-        ShowWaiter();
-        var route = '{{ path('AjournementRDV',{'id':'_ID','DateTimeRdv':'_DateTimeRdv'}) }}';
-        //DateTimeRdv=DateTimeRdv.replace("/","|||");
+        function RetourRDV(IdRdv,div)
+        {
 
-        DateTimeRdv=replaceAll(DateTimeRdv, '/', '|||');
-
-
-        route = route.replace('_ID',IdRdv);
-        route = route.replace('_DateTimeRdv',DateTimeRdv);
-
-
-
-
-        $.ajax({
-            url: route,
-            type:'POST',
-            data: $('#'+div).serialize(),
-            error: function(){
-                DeleteWaiter();
-                alert('une erreur s\'est produite, veuillez réessayer plus tard!');
-            },
-            success: function(data){
-                //document.getElementById(idDivRDV).style.display="none";
-                //alert(idDivRDV);
-                //document.getElementById(idDivRDV).style.display="none";
-                window.location.href=data;
-                DeleteWaiter();
-            }
+            var DateSelect;
+            var Message;
+            var Action;
+            var idDivRDV='DivConfirmationRDV'+IdRdv;
+            Message=document.getElementById('Message_rdv'+IdRdv).value;
+            Action=document.getElementById('Action_rdv'+IdRdv).value;
 
 
 
-        });
+
+            if (Action=='Reporter'){
+                // ici reportation RDV
+
+                var inputTimes = document.getElementsByName('timeRDV[]');
+                var DateTimeRdv
+                for(var k = 0; k < inputTimes.length; k++){
+                    var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(inputTimes[k].value);
 
 
 
-    }else{
-     // ici annulation RDV
 
-        if(confirm('Confirmez-vous l\'annulation du rendez-vous?')){
-            ShowWaiter();
-            var route = '{{ path('AnnulerRDV',{'id':'_ID'}) }}';
+                    if (!isValid) {
+                        alert('verifiez que les heure respect le format HH:MM');
+                        return;
+                    }else{
+                        if(DateTimeRdv == null){
+                            DateTimeRdv=inputTimes[k].previousElementSibling.previousElementSibling.value+' '+inputTimes[k].value+';'
+                        }else{
+                            DateTimeRdv=DateTimeRdv+inputTimes[k].previousElementSibling.previousElementSibling.value+' '+inputTimes[k].value+';'
+                        }
+                    }
+                }
+                ShowWaiter();
+                var route = '{{ path('AjournementRDV',{'id':'_ID','DateTimeRdv':'_DateTimeRdv'}) }}';
 
+                DateTimeRdv=replaceAll(DateTimeRdv, '/', '|||');
 
-            route = route.replace('_ID',IdRdv);
-
-
-
-            $.ajax({
-                url: route,
-                type:'POST',
-                data: $('#'+div).serialize(),
-                error: function(){
-                    DeleteWaiter();
-                    alert('une erreur s\'est produite, veuillez réessayer plus tard!');
-                },
-                success: function(data){
+                route = route.replace('_ID',IdRdv);
+                route = route.replace('_DateTimeRdv',DateTimeRdv);
 
 
-                       // document.getElementById(idDivRDV).style.display="none";
+
+                $.ajax({
+                    url: route,
+                    type:'POST',
+                    data: $('#'+div).serialize(),
+                    error: function(){
+                        DeleteWaiter();
+                        alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+                    },
+                    success: function(data){
+                        //document.getElementById(idDivRDV).style.display="none";
+                        //alert(idDivRDV);
                         window.location.href=data;
+                        //document.getElementById(idDivRDV).style.display="none";
+                        DeleteWaiter();
+                    }
 
-                    DeleteWaiter();
+
+
+                });
+
+
+            }else if  (Action=='Annuler'){
+                // ici annulation RDV
+
+                if(confirm('Confirmez-vous l\'annulation du rendez-vous ?')){
+                    ShowWaiter();
+                    var route = '{{ path('AnnulerRDV',{'id':'_ID'}) }}';
+
+                    route = route.replace('_ID',IdRdv);
+
+
+                    $.ajax({
+                        url: route,
+                        type:'POST',
+                        data: $('#'+div).serialize(),
+                        error: function(){
+                            DeleteWaiter();
+                            alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+                        },
+                        success: function(data){
+
+                            window.location.href=data;
+                            DeleteWaiter();
+                        }
+                    });
                 }
-            });
-        }
 
-    }
-
+            }else if  (Action=='Retour RDV'){
+                alert('Veuillez sélectionner une action');
 
 
-
-
-
-   //alert(Message);
-    //alert(IdRdv);
-    //alert(DateSelect);
-
-
-
-
-}
-function RetourRDV(IdRdv,div)
-{
-
-    var DateSelect;
-    var Message;
-    var Action;
-    var idDivRDV='DivConfirmationRDV'+IdRdv;
-    Message=document.getElementById('Message_rdv'+IdRdv).value;
-    Action=document.getElementById('Action_rdv'+IdRdv).value;
-
-
-
-
-    if (Action=='Reporter'){
-        // ici reportation RDV
-
-        var inputTimes = document.getElementsByName('timeRDV[]');
-        var DateTimeRdv
-        for(var k = 0; k < inputTimes.length; k++){
-            var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(inputTimes[k].value);
-
-
-
-
-            if (!isValid) {
-                alert('verifiez que les heure respect le format HH:MM');
-                return;
             }else{
-                if(DateTimeRdv == null){
-                    DateTimeRdv=inputTimes[k].previousElementSibling.previousElementSibling.value+' '+inputTimes[k].value+';'
-                }else{
-                    DateTimeRdv=DateTimeRdv+inputTimes[k].previousElementSibling.previousElementSibling.value+' '+inputTimes[k].value+';'
-                }
+
+                // ici Compte rendu
+
+
+                ShowWaiter();
+                var route = '{{ path('CompteRenduSaisie',{'id':'_ID','Type':'_Type'}) }}';
+                var Type='app'
+                Message=replaceAll(Message, '/', '|||');
+                route = route.replace('_ID',IdRdv);
+
+                route = route.replace('_Type',Type);
+                $.ajax({
+                    url: route,
+                    type:'get',
+                    data: $('#'+div).serialize(),
+
+                    error: function(){
+                        DeleteWaiter();
+                        alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+                    },
+                    success: function(data){
+
+
+                        // document.getElementById(idDivRDV).style.display="none";
+                        window.location.href=data;
+                        /* document.getElementById('CompteRendu').style.display = 'none';
+                         fermeture();*/
+
+                       // alert(data);
+
+                        DeleteWaiter();
+                    }
+                });
             }
+
+
+
+
+
+
+            //alert(Message);
+            //alert(IdRdv);
+            //alert(DateSelect);
+
+
+
+
         }
-        ShowWaiter();
-        var route = '{{ path('AjournementRDV',{'id':'_ID','DateTimeRdv':'_DateTimeRdv'}) }}';
-
-        DateTimeRdv=replaceAll(DateTimeRdv, '/', '|||');
-
-        route = route.replace('_ID',IdRdv);
-        route = route.replace('_DateTimeRdv',DateTimeRdv);
-
-
-
-        $.ajax({
-            url: route,
-            type:'POST',
-            data: $('#'+div).serialize(),
-            error: function(){
-                DeleteWaiter();
-                alert('une erreur s\'est produite, veuillez réessayer plus tard!');
-            },
-            success: function(data){
-                //document.getElementById(idDivRDV).style.display="none";
-                //alert(idDivRDV);
-                window.location.href=data;
-                //document.getElementById(idDivRDV).style.display="none";
-                DeleteWaiter();
-            }
-
-
-
-        });
-
-
-    }else if  (Action=='Annuler'){
-        // ici annulation RDV
-
-        if(confirm('Confirmez-vous l\'annulation du rendez-vous ?')){
-            ShowWaiter();
-            var route = '{{ path('AnnulerRDV',{'id':'_ID'}) }}';
-
-            route = route.replace('_ID',IdRdv);
-
-
-            $.ajax({
-                url: route,
-                type:'POST',
-                data: $('#'+div).serialize(),
-                error: function(){
-                    DeleteWaiter();
-                    alert('une erreur s\'est produite, veuillez réessayer plus tard!');
-                },
-                success: function(data){
-
-                    window.location.href=data;
-                    DeleteWaiter();
-                }
-            });
+        function replaceAll(machaine, chaineARemaplacer, chaineDeRemplacement) {
+            return machaine.replace(new RegExp(chaineARemaplacer, 'g'),chaineDeRemplacement);
         }
-
-    }else if  (Action=='Retour RDV'){
-        alert('Veuillez sélectionner une action');
-
-
-    }else{
-
-        // ici Compte rendu
-
-
-        ShowWaiter();
-        var route = '{{ path('CompteRenduSaisie',{'id':'_ID','Type':'_Type'}) }}';
-        var Type='app'
-        Message=replaceAll(Message, '/', '|||');
-        route = route.replace('_ID',IdRdv);
-
-        route = route.replace('_Type',Type);
-        $.ajax({
-            url: route,
-            type:'get',
-            data: $('#'+div).serialize(),
-
-            error: function(){
-                DeleteWaiter();
-                alert('une erreur s\'est produite, veuillez réessayer plus tard!');
-            },
-            success: function(data){
-
-
-                   // document.getElementById(idDivRDV).style.display="none";
-                    window.location.href=data;
-                    /* document.getElementById('CompteRendu').style.display = 'none';
-                     fermeture();*/
-
-                DeleteWaiter();
-            }
-        });
-    }
-
-
-
-
-
-
-    //alert(Message);
-    //alert(IdRdv);
-    //alert(DateSelect);
-
-
-
-
-}
-function replaceAll(machaine, chaineARemaplacer, chaineDeRemplacement) {
-    return machaine.replace(new RegExp(chaineARemaplacer, 'g'),chaineDeRemplacement);
-}
-function AfficherChat(idApp,idMission,Societe,Appre,ImgApp){
+        function AfficherChat(idApp,idMission,Societe,Appre,ImgApp){
 
 //alert(idApp+' / '+idMission);
 
-document.getElementById('lblSociete').innerHTML=Societe;
-document.getElementById('lblApp').innerHTML=Appre;
-document.getElementById('imgApp').src=ImgApp;
+            document.getElementById('lblSociete').innerHTML=Societe;
+            document.getElementById('lblApp').innerHTML=Appre;
+            document.getElementById('imgApp').src=ImgApp;
 
-var NameDivMsg = 'App'+idApp+'_Mission'+idMission;
+            var NameDivMsg = 'App'+idApp+'_Mission'+idMission;
 
-var i=0;
-var IdDivMsg=''
-var ClassDivSent='row msg_container base_sent';
-var ClassDivReceive='row msg_container base_receive';
+            var i=0;
+            var IdDivMsg=''
+            var ClassDivSent='row msg_container base_sent';
+            var ClassDivReceive='row msg_container base_receive';
 //class="row msg_container base_receive
 //class="row msg_container base_sent
-for(i=0 ; i < document.getElementsByName(NameDivMsg).length;i++)
-{
+            for(i=0 ; i < document.getElementsByName(NameDivMsg).length;i++)
+            {
 
-IdDivMsg=IdDivMsg+"|;|"+document.getElementsByName(NameDivMsg)[i].id+"|;|"
+                IdDivMsg=IdDivMsg+"|;|"+document.getElementsByName(NameDivMsg)[i].id+"|;|"
 
-};
+            };
 
 
-for(i=0 ; i < document.getElementsByClassName(ClassDivSent).length;i++)
-{
-if ( !(IdDivMsg.includes('|;|'+document.getElementsByClassName(ClassDivSent)[i].id+'|;|'))){
+            for(i=0 ; i < document.getElementsByClassName(ClassDivSent).length;i++)
+            {
+                if ( !(IdDivMsg.includes('|;|'+document.getElementsByClassName(ClassDivSent)[i].id+'|;|'))){
 
-document.getElementById(document.getElementsByClassName(ClassDivSent)[i].id).style.display='none';
-}else{
-document.getElementById(document.getElementsByClassName(ClassDivSent)[i].id).style.display='block';
+                    document.getElementById(document.getElementsByClassName(ClassDivSent)[i].id).style.display='none';
+                }else{
+                    document.getElementById(document.getElementsByClassName(ClassDivSent)[i].id).style.display='block';
 
-}
+                }
 
-};
+            };
 
-for(i=0 ; i < document.getElementsByClassName(ClassDivReceive).length;i++)
-{
-if ( !(IdDivMsg.includes('|;|'+document.getElementsByClassName(ClassDivReceive)[i].id+'|;|'))){
+            for(i=0 ; i < document.getElementsByClassName(ClassDivReceive).length;i++)
+            {
+                if ( !(IdDivMsg.includes('|;|'+document.getElementsByClassName(ClassDivReceive)[i].id+'|;|'))){
 
-document.getElementById(document.getElementsByClassName(ClassDivReceive)[i].id).style.display='none';
-}else{
-document.getElementById(document.getElementsByClassName(ClassDivReceive)[i].id).style.display='block';
+                    document.getElementById(document.getElementsByClassName(ClassDivReceive)[i].id).style.display='none';
+                }else{
+                    document.getElementById(document.getElementsByClassName(ClassDivReceive)[i].id).style.display='block';
 
-}
+                }
 
-};
+            };
 // mon javascript ici
 
-}
+        }
 
-function fermeture(){
-var form = document.getElementById('PopUpCompteRendu');
-for(var i = 0; i< form.childElementCount; i++){
-form.children[i].style.display = 'none';
-}
-document.getElementById('OUI_NON_button').style.display = 'block';
-}
-
-
-function OrdreDeRemplirCR(id,rdv){
-ShowWaiter();
-var route = '{{ path('OrdreCompleterCR',{'idUser':'_IDUSER','idRDV':'_IDRDV'}) }}';
-route = route.replace('_IDUSER',id);
-route = route.replace('_IDRDV',rdv);
-$.ajax({
-type:'post',
-url: route,
-error: function(){
-DeleteWaiter();
-alert('une erreur s\'est produite, veuillez réessayer plus tard!');
-},
-success:function(data){
-if(data==1){
-alert('le message a été envoyé correctement!')
-}
-else{
-console.log(data);
-}
-DeleteWaiter();
-},
-error:function(){
-alert('Une erreur s\'est produite sur le serveur');
-DeleteWaiter();
-}
-})
-}
-function ConsulterCR(id){
-ShowWaiter();
-var route = '{{ path('ConsulterCR',{'idRDV':'_IDRDV'}) }}';
-route = route.replace('_IDRDV',id);
-$.ajax({
-type: 'post',
-url: route,
-error: function(){
-DeleteWaiter();
-alert('une erreur s\'est produite, veuillez réessayer plus tard!');
-},
-success:function(data){
-var container = document.getElementById('ComptesRenduContainer');
-container.innerHTML = '';
-
-for(var i = 0; i < data.length; i++){
-var label = document.createElement('label');
-label.style.color = '#2A76CC';
-label.style.textTransform = 'uppercase';
-label.style.float = 'left';
-label.innerHTML = data[i][0] + ' - ' + data[i][2];
-
-var textarea = document.createElement('textarea');
-textarea.style.backgroundColor = '#e4b9b9';
-textarea.innerHTML = data[i][1];
-
-var divCompteRendu = document.createElement('div');
-divCompteRendu.style.marginBottom = "20px";
-divCompteRendu.appendChild(label);
-divCompteRendu.appendChild(textarea);
-
-container.appendChild(divCompteRendu);
-}
-show('ConsultationCompteRendu');
-DeleteWaiter();
-},
-error:function(){
-alert('Une erreur s\'est produite sur le serveur');
-}
-})
-}
+        function fermeture(){
+            var form = document.getElementById('PopUpCompteRendu');
+            for(var i = 0; i< form.childElementCount; i++){
+                form.children[i].style.display = 'none';
+            }
+            document.getElementById('OUI_NON_button').style.display = 'block';
+        }
 
 
-</script>
+        function OrdreDeRemplirCR(id,rdv){
+            ShowWaiter();
+            var route = '{{ path('OrdreCompleterCR',{'idUser':'_IDUSER','idRDV':'_IDRDV'}) }}';
+            route = route.replace('_IDUSER',id);
+            route = route.replace('_IDRDV',rdv);
+            $.ajax({
+                type:'post',
+                url: route,
+                error: function(){
+                    DeleteWaiter();
+                    alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+                },
+                success:function(data){
+                    if(data==1){
+                        alert('le message a été envoyé correctement!')
+                    }
+                    else{
+                        console.log(data);
+                    }
+                    DeleteWaiter();
+                },
+                error:function(){
+                    alert('Une erreur s\'est produite sur le serveur');
+                    DeleteWaiter();
+                }
+            })
+        }
+        function ConsulterCR(id){
+            ShowWaiter();
+            var route = '{{ path('ConsulterCR',{'idRDV':'_IDRDV'}) }}';
+            route = route.replace('_IDRDV',id);
+            $.ajax({
+                type: 'post',
+                url: route,
+                error: function(){
+                    DeleteWaiter();
+                    alert('une erreur s\'est produite, veuillez réessayer plus tard!');
+                },
+                success:function(data){
+                    var container = document.getElementById('ComptesRenduContainer');
+                    container.innerHTML = '';
+
+                    for(var i = 0; i < data.length; i++){
+                        var label = document.createElement('label');
+                        label.style.color = '#2A76CC';
+                        label.style.textTransform = 'uppercase';
+                        label.style.float = 'left';
+                        label.innerHTML = data[i][0] + ' - ' + data[i][2];
+
+                        var textarea = document.createElement('textarea');
+                        textarea.style.backgroundColor = '#e4b9b9';
+                        textarea.innerHTML = data[i][1];
+
+                        var divCompteRendu = document.createElement('div');
+                        divCompteRendu.style.marginBottom = "20px";
+                        divCompteRendu.appendChild(label);
+                        divCompteRendu.appendChild(textarea);
+
+                        container.appendChild(divCompteRendu);
+                    }
+                    show('ConsultationCompteRendu');
+                    DeleteWaiter();
+                },
+                error:function(){
+                    alert('Une erreur s\'est produite sur le serveur');
+                }
+            })
+        }
+
+
+    </script>
 </body>
 </html>

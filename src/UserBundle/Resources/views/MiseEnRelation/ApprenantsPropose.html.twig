@@ -279,7 +279,7 @@
 
                                     {% set rdv=GetRDV(mise.expediteur.getId(),mise.mission.getId()) %}
                                     {% if rdv %}
-                                        {% if (mise.getAction=='Propose rdv' or mise.getAction=='Reporter le RDV') and mise.getId==GetIdTopOfMessges(mise.destinataire,mise.mission) and (GetIdTopOfMessges(mise.destinataire,mise.mission)>GetIdTopOfMessges(mise.expediteur,mise.mission))  %}
+                                        {% if (mise.getAction=='Propose rdv' or mise.getAction=='Reporter le RDV') and mise.getId==GetIdTopOfMessges(mise.destinataire,mise.expediteur,mise.mission) and (GetIdTopOfMessges(mise.destinataire,mise.expediteur,mise.mission)>GetIdTopOfMessges(mise.expediteur,mise.destinataire,mise.mission))  %}
 
 
 
@@ -357,18 +357,19 @@
                                     {% endif %}
                                     {% set rdv=GetRDV(mise.expediteur.getId(),mise.mission.getId()) %}
                                     {% if rdv %}
-                                        {% if  (rdv.getStatut=='1' or rdv.getStatut=='2' ) and mise.getId==GetIdTopOfMessges(mise.destinataire,mise.mission) and (mise.getAction!='En attente' )and (not GetCompteRendu( rdv.id ,mise.destinataire)) and (GetIdTopOfMessges(mise.destinataire,mise.mission)>GetIdTopOfMessges(mise.expediteur,mise.mission))%}
+                                        {% if  (rdv.getStatut=='1' or rdv.getStatut=='2' ) and mise.getId==GetIdTopOfMessges(mise.destinataire,mise.expediteur,mise.mission) and (mise.getAction!='En attente' )and (not GetCompteRendu( rdv.id ,mise.destinataire)) and (GetIdTopOfMessges(mise.destinataire,mise.expediteur,mise.mission)>GetIdTopOfMessges(mise.expediteur,mise.destinataire,mise.mission))%}
                                             {#ici le RETOUR du RDV#}
-
+                                    <form id="formRetourRDV{{ rdv.id }}"    method="post">
 
                                             <br/><br/>
 
                                             <div  id="DivConfirmationRDV{{ rdv.id }}">
 
 
+                                                <br>
 
 
-                                                {% if "now"|date('d-m-Y à H:i')  > rdv.getDate1|date('d-m-Y à H:i') %}
+                                                {% if "now"|date('YmdHi')  > rdv.getDate1|date('YmdHi') %}
                                                     <label>Saisissez le compte rendu du rendez-vous</label>
                                                     <select id="Action_rdv{{ rdv.id }}" style="display: none;" title="Actions" >
 
@@ -377,6 +378,7 @@
 
                                                     </select>
                                                 {% else %}
+                                                    <br/>
                                                     <label>Action :</label>
                                                     <select id="Action_rdv{{ rdv.id }}" onchange="EnableControle(this.selectedIndex,{{ rdv.id }});" title="Actions" >
 
@@ -434,26 +436,26 @@
 
 
 
-                                                <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 100px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="Message" placeholder="Saisissez votre message ici" required ></textarea>
+                                                <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 100px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
                                                 <br/>
                                                 <br/>
 
-                                                <input  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;" type="button" onclick="RetourRDV({{ rdv.id }})"  style="margin-left: 100px" value="Envoyer">
+                                                <input  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;" type="button" onclick="RetourRDV({{ rdv.id }},'formRetourRDV{{ rdv.id }}')"  style="margin-left: 100px" value="Envoyer">
 
                                             </div>
 
-
+                                    </form>
                                         {% endif %}
                                     {% elseif not mise.getStatut() and mise.getStatutaction=='1' %}
 <BR/>
-                                        <form id="formFicheApprenant"    method="post">
+                                        <form id="formFicheApprenant{{ mise.id }}"    method="post">
                                             <div class="col-xs-12" >
 
-                                                <textarea id="textmsgDicliner" style="display:none;margin-top: -10px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="MessageRefus" placeholder="Saisissez votre message ici" required ></textarea>
+                                                <textarea id="textmsgDicliner{{ mise.id }}" style="display:none;margin-top: -10px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="MessageRefus" placeholder="Saisissez votre message ici" required ></textarea>
 
-                                                <textarea  id="textmsgPropoer" style="display:none;margin-top: -10px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_MessagePro" placeholder="Saisissez votre message ici" required ></textarea>
-                                                <input id="btnPropose"  type="button" onclick="ProposeRDV('formFicheApprenant',true,{{ mise.id }})" style="float:right;display:none;border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"  class="blue" type="button" style="margin-left: 270px"  value="Proposez RDV">
-                                                <input id="btnDecline"  type="button" onclick="ProposeRDV('formFicheApprenant',false,{{ mise.id }})" style="float:right;display:none;border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"  class="blue" type="button" style="margin-left: 270px"  value="Décliner">
+                                                <textarea  id="textmsgPropoer{{ mise.id }}" style="display:none;margin-top: -10px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_MessagePro" placeholder="Saisissez votre message ici" required ></textarea>
+                                                <input id="btnPropose{{ mise.id }}"  type="button" onclick="ProposeRDV('formFicheApprenant{{ mise.id }}',true,{{ mise.id }})" style="float:right;display:none;border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"  class="blue" type="button" style="margin-left: 270px"  value="Proposez RDV">
+                                                <input id="btnDecline{{ mise.id }}"  type="button" onclick="ProposeRDV('formFicheApprenant{{ mise.id }}',false,{{ mise.id }})" style="float:right;display:none;border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"  class="blue" type="button" style="margin-left: 270px"  value="Décliner">
 
                                                 <br/><br/>
                                             </div><br/>
@@ -514,18 +516,23 @@
 
                                 {% set rdv=GetRDV(mise.destinataire.getId(),mise.mission.getId()) %}
                                 {% if rdv %}
-                                    {% if  (rdv.getStatut=='1' or rdv.getStatut=='2' )  and mise.getId==GetIdTopOfMessges(mise.destinataire,mise.mission) and (mise.getAction!='En attente' )and (not GetCompteRendu( rdv.id ,mise.expediteur)) and (GetIdTopOfMessges(mise.destinataire,mise.mission)>GetIdTopOfMessges(mise.expediteur,mise.mission))%}
+                                    {% if  (rdv.getStatut=='1' or rdv.getStatut=='2' )  and mise.getId==GetIdTopOfMessges(mise.destinataire,mise.expediteur,mise.mission) and (mise.getAction!='En attente' )and (not GetCompteRendu( rdv.id ,mise.expediteur)) and (GetIdTopOfMessges(mise.destinataire,mise.expediteur,mise.mission)>GetIdTopOfMessges(mise.expediteur,mise.destinataire,mise.mission))%}
                                         {#ici le RETOUR du RDV#}
 
 
                                         <br/><br/>
 
-                                        <div  id="DivConfirmationRDV{{ rdv.id }}">
+
+
+
+                                        {% if mise.destinataire.hasrole('ROLE_APPRENANT') %}
+                    <form id="formRetourRDV{{ rdv.id }}"    method="post">
+                                        <div  id="DivConfirmationRDV{{ rdv.id }}" class="row msg_container base_receive" name="App{{ mise.destinataire.getId() }}_Mission{{mise.mission.getId()}}">
 
 
 
 
-                                            {% if "now"|date('d-m-Y à H:i')  > rdv.getDate1|date('d-m-Y à H:i') %}
+                                            {% if "now"|date('YmdHi')  > rdv.getDate1|date('YmdHi') %}
                                                 <label>Saisissez le compte rendu du rendez-vous</label>
                                                 <select id="Action_rdv{{ rdv.id }}" style="display: none;" title="Actions" >
 
@@ -591,13 +598,96 @@
 
 
 
-                                            <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 100px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="Message" placeholder="Saisissez votre message ici" required ></textarea>
+                                            <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 100px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
                                             <br/>
                                             <br/>
 
-                                            <input  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;" type="button" onclick="RetourRDV({{ rdv.id }})"  style="margin-left: 100px" value="Envoyer">
+                                            <input  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;" type="button" onclick="RetourRDV({{ rdv.id }},'formRetourRDV{{ rdv.id }}')"  style="margin-left: 100px" value="Envoyer">
 
                                         </div>
+                    </form >
+                                           {%  else %}
+                    <form id="formRetourRDV{{ rdv.id }}"    method="post">
+                                               <div  id="DivConfirmationRDV{{ rdv.id }}" class="row msg_container base_sent" name="App{{ mise.destinataire.getId() }}_Mission{{mise.mission.getId()}}">
+
+
+
+
+                                                   {% if "now"|date('YmdHi')  > rdv.getDate1|date('YmdHi') %}
+                                                       <label>Saisissez le compte rendu du rendez-vous</label>
+                                                       <select id="Action_rdv{{ rdv.id }}" style="display: none;" title="Actions" >
+
+                                                           <option value="Compte rendu">Compte rendu</option>
+
+
+                                                       </select>
+                                                   {% else %}
+                                                       <label>Action :</label>
+                                                       <select id="Action_rdv{{ rdv.id }}" onchange="EnableControle(this.selectedIndex,{{ rdv.id }});" title="Actions" >
+
+                                                           <option value="Retour RDV">--?--</option>
+                                                           <option value="Reporter">Reporter RDV</option>
+                                                           <option value="Annuler">Annuler RDV</option>
+
+                                                       </select>
+                                                       <div id="dates_rdv{{ rdv.id }}" >
+
+
+                                                           {% if rdv.date1 %}
+                                                               <label  > Rendez-vous fixé pour le {{ rdv.getDate1|date('d-m-Y à H:i') }}
+
+                                                               </label>
+                                                           {% endif %}
+                                                           {#<br/>
+                                                           {% if rdv.date2 %}
+                                                               <label  > {{ rdv.getDate2|date('d-m-Y à H:i') }}
+                                                                   {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                                                       <input type="radio" id="r2{{ rdv.id }}" name="RadioDate" value="2">
+                                                                   {% endif %}
+                                                               </label>
+                                                           {% endif %}
+                                                           <br/>
+                                                           {% if rdv.date3 %}
+                                                               <label  > {{ rdv.getDate3|date('d-m-Y à H:i') }}
+                                                                   {% if (app.user == rdv.apprenant and rdv.choixApprenant) or (app.user == rdv.tuteur and not rdv.choixApprenant) %}
+                                                                       <input type="radio"  id="r3{{ rdv.id }}" name="RadioDate" value="3">
+                                                                   {% endif %}
+                                                               </label>
+                                                           {% endif %}#}
+
+                                                           <br/>
+                                                           <br/>
+                                                       </div>
+                                                   {% endif %}
+                                                   <br/>
+                                                   <br/>
+
+
+                                                   <div id="Reporter_rdv{{ rdv.id }}" style="display:none;">
+
+                                                       <button type="button" onclick="AddDateTimeDiv(this,{{ rdv.id }})">+</button>
+                                                       <div class="col-xs-4 col-xs-offset-4">
+                                                           <label class="col-xs-1">Le </label><input title="Date du rendez-vous" name="dateRDV[]" type="text" class="col-xs-4" required>
+                                                           <label class="col-xs-1"> à </label><input title="Heure du rendez-vous" name="timeRDV[]{{ rdv.id }}" class="col-xs-4" type="text" required>
+                                                           <button type="button" class="col-xs-offset-1 col-xs-1" onclick="if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}">-</button>
+                                                       </div>
+
+                                                   </div>
+
+
+                                                   <br/><br/>
+
+
+
+                                                   <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 100px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
+                                                   <br/>
+                                                   <br/>
+
+                                                   <input  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;" type="button" onclick="RetourRDV({{ rdv.id }},'formRetourRDV{{ rdv.id }}')"  style="margin-left: 100px" value="Envoyer">
+
+                                               </div>
+                    </form>
+                                         {% endif %}
 
                                     {% endif %}
                                 {% endif %}
@@ -736,7 +826,7 @@
                                 <img style="height:70px;width:70px;float:left;border-radius: 100%" title="Mise en relation" onclick="AfficherChat('{{ mise.expediteur.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc|replace({"'": "\\'"}) }}<br/>{{ mise.mission.intitule|replace({"'": "\\'"}) }}','{{ mise.expediteur.getNom|replace({"'": "\\'"}) }}<br/>{{ mise.expediteur.getPrenom|replace({"'": "\\'"}) }}','{{ asset('image/homme.jpg') }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
                             {% endif %}
 
-                            {% if   GetStatut(mise.expediteur)=='1' or ( GetStatut(mise.expediteur)=='2' and "now"|date('d-m-Y à H:i')  > GetDateTimeRDV(mise.expediteur,mise.mission)|date('d-m-Y à H:i'))  %}
+                            {% if   GetStatut(mise.expediteur)=='1' or ( GetStatut(mise.expediteur)=='2' and "now"|date('YmdHi')  > GetDateTimeRDV(mise.expediteur,mise.mission)|date('YmdHi'))  %}
                                 <img style="height:70px;width:70px;float:left;" title="Action en attente" onclick="" src="{{ asset('image/avirtissement.png') }}">
                             {% endif %}
 
@@ -2472,7 +2562,7 @@
 
 
     }
-    function RetourRDV(IdRdv)
+    function RetourRDV(IdRdv,div)
     {
 
         var DateSelect;
@@ -2508,19 +2598,19 @@
                 }
             }
             ShowWaiter();
-            var route = '{{ path('AjournementRDVTuteur',{'id':'_ID','DateTimeRdv':'_DateTimeRdv','MessageTexte':'_MessageTexte'}) }}';
+            var route = '{{ path('AjournementRDVTuteur',{'id':'_ID','DateTimeRdv':'_DateTimeRdv'}) }}';
 
             DateTimeRdv=replaceAll(DateTimeRdv, '/', '|||');
-            Message=replaceAll(Message, '/', '|||');
+
             route = route.replace('_ID',IdRdv);
             route = route.replace('_DateTimeRdv',DateTimeRdv);
-            route = route.replace('_MessageTexte',Message);
+
 
 
             $.ajax({
                 url: route,
                 type:'POST',
-                data: $('#PopUpAjournement').serialize(),
+                data: $('#'+div).serialize(),
                 error: function(){
                     DeleteWaiter();
                     alert('une erreur s\'est produite, veuillez réessayer plus tard!');
@@ -2528,7 +2618,8 @@
                 success: function(data){
                     //document.getElementById(idDivRDV).style.display="none";
                     //alert(idDivRDV);
-                    document.getElementById(idDivRDV).style.display="none";
+                    window.location.href=data;
+                    //document.getElementById(idDivRDV).style.display="none";
                     DeleteWaiter();
                 }
 
@@ -2542,23 +2633,22 @@
 
             if(confirm('Confirmez-vous l\'annulation du rendez-vous ?')){
                 ShowWaiter();
-                var route = '{{ path('AnnulerRDVTuteur',{'id':'_ID','MessageTexte':'_MessageTexte'}) }}';
-                Message=replaceAll(Message, '/', '|||');
+                var route = '{{ path('AnnulerRDVTuteur',{'id':'_ID'}) }}';
+
                 route = route.replace('_ID',IdRdv);
-                route = route.replace('_MessageTexte',Message);
-                alert(route);
+
+
                 $.ajax({
                     url: route,
                     type:'POST',
+                    data: $('#'+div).serialize(),
                     error: function(){
                         DeleteWaiter();
                         alert('une erreur s\'est produite, veuillez réessayer plus tard!');
                     },
                     success: function(data){
-                        if(data===1){
 
-                            document.getElementById(idDivRDV).style.display="none";
-                        }
+                        window.location.href=data;
                         DeleteWaiter();
                     }
                 });
@@ -2572,26 +2662,31 @@
 
             // ici Compte rendu
 
+
             ShowWaiter();
-            var route = '{{ path('CompteRenduSaisie',{'id':'_ID','MessageTexte':'_MessageTexte','Type':'_Type'}) }}';
-            var Type='tuteur';
-            Message=replaceAll(Message, '/', '|||');
+            var route = '{{ path('CompteRenduSaisie',{'id':'_ID','Type':'_Type'}) }}';
+            var Type='tuteur'
+
             route = route.replace('_ID',IdRdv);
-            route = route.replace('_MessageTexte',Message);
+
             route = route.replace('_Type',Type);
             $.ajax({
                 url: route,
                 type:'get',
+                data: $('#'+div).serialize(),
 
                 error: function(){
                     DeleteWaiter();
                     alert('une erreur s\'est produite, veuillez réessayer plus tard!');
                 },
                 success: function(data){
-                    if(data===1){
 
-                        document.getElementById(idDivRDV).style.display="none";
-                    }
+
+                    // document.getElementById(idDivRDV).style.display="none";
+                  window.location.href=data;
+                    /* document.getElementById('CompteRendu').style.display = 'none';
+                     fermeture();*/
+
                     DeleteWaiter();
                 }
             });
@@ -2711,23 +2806,23 @@
 
 
         if(index=='0'){
-            document.getElementById('btnPropose').style.display="none";
-            document.getElementById('btnDecline').style.display="none";
-            document.getElementById('textmsgPropoer').style.display="none";
-            document.getElementById('textmsgDicliner').style.display="none";
+            document.getElementById('btnPropose'+idMise).style.display="none";
+            document.getElementById('btnDecline'+idMise).style.display="none";
+            document.getElementById('textmsgPropoer'+idMise).style.display="none";
+            document.getElementById('textmsgDicliner'+idMise).style.display="none";
             document.getElementById('Reporter_rdv'+idMise).style.display="none";
         }else if(index=='1'){
 
-            document.getElementById('btnPropose').style.display="block";
-            document.getElementById('btnDecline').style.display="none";
-            document.getElementById('textmsgPropoer').style.display="block";
-            document.getElementById('textmsgDicliner').style.display="none"
+            document.getElementById('btnPropose'+idMise).style.display="block";
+            document.getElementById('btnDecline'+idMise).style.display="none";
+            document.getElementById('textmsgPropoer'+idMise).style.display="block";
+            document.getElementById('textmsgDicliner'+idMise).style.display="none"
             document.getElementById('Reporter_rdv'+idMise).style.display="block";
         }else{
-            document.getElementById('btnPropose').style.display="none";
-            document.getElementById('btnDecline').style.display="block";
-            document.getElementById('textmsgPropoer').style.display="none";
-            document.getElementById('textmsgDicliner').style.display="block"
+            document.getElementById('btnPropose'+idMise).style.display="none";
+            document.getElementById('btnDecline'+idMise).style.display="block";
+            document.getElementById('textmsgPropoer'+idMise).style.display="none";
+            document.getElementById('textmsgDicliner'+idMise).style.display="block"
             document.getElementById('Reporter_rdv'+idMise).style.display="none";
         }
 
