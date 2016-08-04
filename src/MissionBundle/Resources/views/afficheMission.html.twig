@@ -559,26 +559,57 @@
                             {% endif %}
 
 
-                            <div class="col-xs-4" style="margin-left: 10px;margin-top:10px">
-                                <div class="col-xs-12"
-                                     style="height: 30px; text-align: left; padding: 10px;margin-bottom: 15px;"><label style="color:black;margin-right: 10px;" >{{user.getPrenom}}  {{user.getNom}} </label>
+                            <div class="col-xs-6" style="margin-left: 10px">
+                                <div class="col-xs-12"style="height: 30px; text-align: left; padding: 10px;margin-bottom: 15px;">
+                                    <label style="color:black;margin-right: 10px;" >
+                                     {{user.getPrenom}}  {{user.getNom}} 
+                                    </label>
 
                                    {# <button style="background:yellowgreen; border-radius:50%; width:15px;border: none; height:15px;margin-right: 10px;"></button> #}
 
-                                    <label style="font:16px Roboto;margin-right: 10px;" > 5.0 </label>
-                                    <img src="{{ asset('image/bookmark50.png') }}">
+                                    {# NOTE SUPPLEMENTAIRE <label style="font:16px Roboto;margin-right: 10px;" > 5.0 </label> #}
+
+                                    {# ETOILE <img src="{{ asset('image/bookmark50.png') }}"> #}
                                 </div>
 
-                                <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font: small Roboto;"><label style="color:#2975cb">Mis en relation sur {{ CountMission(user.getId) }} mission(s)</label></div>
-                                <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font:small Roboto;">Recherche : {{ GetTypeContrat(user.getId) }}</div>
+                                <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font: small Roboto;">
+                                    <label style="color:#2975cb">
+                                        Mis en relation sur : 
+                                    </label>
+                                    {{ CountMission(user.getId) }} mission(s)
+                                </div>
 
+{#                                 <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font:small Roboto;">Recherche : {{ GetTypeContrat(user.getId) }}</div> #}
 
+                                <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font:small Roboto;">
+                                    <label style="color:#2975cb">
+                                        Dernier Diplôme :
+                                    </label>     
+                                    {{ user.info.getDernierDiplome}} 
+                                </div>
+
+                                <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font:small Roboto;">
+                                    <label style="color:#2975cb">
+                                        Formation en cours : 
+                                    </label> 
+                                    {{ user.info.getFormationactuelle}} 
+                                </div>
+
+{# RAJOUTER LES VERIF IF NOT NULL ET BOUCLER POUR VERIF LES  COMPETENCES #}
+
+                                <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font:small Roboto;">
+                                    <label style="color:#2975cb">
+                                        Compétences :   
+                                    </label> 
+                                    {{ user.info.getCompetence1 }} - {{ user.info.getCompetence2 }} - {{ user.info.getCompetence3 }} - {{ user.info.getCompetence4 }} - {{ user.info.getCompetence5 }}
+                                </div>
 
                                 {# <div class="col-xs-12" style="margin-bottom: 5px;height: 20px; text-align: left; font:small Roboto;">STATUT : <label style="color:#2975cb">3 MISES EN RELATION</label></div>#}
 
-
                             </div>
-                            <div class="col-xs-offset-5 col-xs-1">
+
+
+                            <div class="col-xs-offset-3 col-xs-1">
 
 
                                 {% if  EstRefuse( user.getId() , mission.getId() ) %}
