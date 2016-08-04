@@ -357,12 +357,13 @@ function RechercherApp(){
 var input = document.getElementById('AppSearch').value;
     
     var id='';
+    var saisi='';
  for(i=0 ; i < window.parent.document.getElementsByClassName('RechercherAppClass').length;i++)
         {
            // document.getElementById(document.getElementsByClassName('RechercherAppClass')[i].id).style.display='none';
            id=window.parent.document.getElementsByClassName('RechercherAppClass')[i].id;
-
-           if (window.parent.document.getElementsByClassName('RechercherAppClass')[i].value.includes(input)){
+           saisi=window.parent.document.getElementsByClassName('RechercherAppClass')[i].value.toLowerCase();
+           if (saisi.includes(input.toLowerCase())){
            
                 window.parent.document.getElementsByClassName('RechercherAppClass')[i].style.display='';
 
@@ -381,12 +382,15 @@ function RechercherMis(){
 var input = document.getElementById('MisSearch').value;
     
     var id='';
+    var saisi='';
+
  for(i=0 ; i < window.parent.document.getElementsByClassName('RechercherMisClass').length;i++)
         {
            // document.getElementById(document.getElementsByClassName('RechercherMisClass')[i].id).style.display='none';
            id=window.parent.document.getElementsByClassName('RechercherMisClass')[i].id;
+           saisi=window.parent.document.getElementsByClassName('RechercherMisClass')[i].value.toLowerCase();
 
-           if (window.parent.document.getElementsByClassName('RechercherMisClass')[i].value.includes(input)){
+           if (saisi.includes(input.toLowerCase())){
            
            window.parent.document.getElementsByClassName('RechercherMisClass')[i].style.display='';
             
@@ -405,12 +409,14 @@ function RechercherSoc(){
 var input = document.getElementById('SocSearch').value;
     
     var id='';
+    var saisi='';
  for(i=0 ; i < window.parent.document.getElementsByClassName('RechercherSocClass').length;i++)
         {
            // document.getElementById(document.getElementsByClassName('RechercherSocClass')[i].id).style.display='none';
            id=window.parent.document.getElementsByClassName('RechercherSocClass')[i].id;
+           saisi=window.parent.document.getElementsByClassName('RechercherSocClass')[i].value.toLowerCase();
 
-           if (window.parent.document.getElementsByClassName('RechercherSocClass')[i].value.includes(input)){
+           if (saisi.includes(input.toLowerCase())){
            
            window.parent.document.getElementsByClassName('RechercherSocClass')[i].style.display='';
             

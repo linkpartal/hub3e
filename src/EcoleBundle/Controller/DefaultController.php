@@ -137,7 +137,7 @@ class DefaultController extends Controller
         $tiercreation=$userid->getetablissement()->gettier()->getId();
         $apprenants = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement));
         $formations = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$etablissement));
-        $Allapprenants =array();
+        $Allapprenants = array();
         $Importcandidat = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('etablissement'=>$etablissement));
         // var_dump($etablissement->getId());die;
 
@@ -219,30 +219,17 @@ class DefaultController extends Controller
         $ApprenantRelation=round((count($MyApprenantRelation)*100)/count($Allapprenants), 2);
 
 
+       //Apprenants placés  
 
-       //Apprenants placés refaire le calcul une fois le process terminé sur la plateforme 
-
-        // $sql = "SELECT U FROM GenericBundle:User U WHERE U.place=:place and U.place is not NULL  GROUP BY U.nom ";
-        // $query =$em->createQuery($sql);
-        // $MyApprenantPlacer = $query->getResult();
-
-        // $ApprenantPlacerY=array();
-        // foreach ($MyApprenantPlacer as $AP) 
-        // {
-        //     if(!($AllApprenants))
-        //     {
-        //     }else{
-        //         array_push($ApprenantPlacerY, $AP);
-        //     }    
-        // }
-        // var_dump($ApprenantPlacerY);
-        // die;
-        
-        // $Apprenantplacer=round((count($ApprenantPlacerY)*100)/count($Allappprenants),2);
-
-        // $MyApprenantPlacer=$MyApprenantPlacer;
-        $Apprenantplacer='0';
-
+        $sql = "SELECT U FROM GenericBundle:User U WHERE U.place= 1 GROUP BY U.nom ";
+        $query =$em->createQuery($sql);
+        $MyApprenantPlacer = $query->getResult();
+        if(!($MyApprenantPlacer))
+        {
+            $Apprenantplacer= '0';  
+        }else{             
+            $Apprenantplacer=round((count($MyApprenantPlacer)*100)/count($Allapprenants),2);
+        }
 
        // Missions à pourvoir ( RESTE A REGLER CETTE PUTIN DE VARIABLE $ETABLISSEMENT QUI REND FOU)
 
@@ -261,32 +248,22 @@ class DefaultController extends Controller
                 }
             }    
         }
-
-        // var_dump(count($Allmissions));die;
       
         $Missionapourvoir=round((count($Mymissionapourvoir)*100)/count($Allmissions), 2);
 
         // Missions pourvues
 
-        $Mymissionspourvues=array();
-
-        foreach($Allmissions as $missionp)
+        $sql = " SELECT M FROM GenericBundle:Mission M WHERE M.pourvue= 1 GROUP BY M.id ";
+        $query = $em->createQuery($sql);
+        $MyMissionsPourvues = $query->getResult();
+        if(!($MyMissionsPourvues))
         {
-            if(!($Allmissions))
-            {
-            }else{
-                if($missionp.'statut' == 2) 
-                {
-                    array_push($Mymissionspourvues,$missionp);
-                }
-            }    
+            $MissionsPourvues= '0';  
+        }else{             
+            $MissionsPourvues=round((count($MyMissionsPourvues)*100)/count($Allmissions),2);
         }
 
-        // var_dump(count($Mymissionspourvues));die;
-      
-        $MissionsPourvues=round((count($Mymissionspourvues)*100)/count($Allmissions), 2); 
-
-        // Missions sans formations Pourquoi mon $mymissionssansformations me renvoi 4 ???
+        // Missions sans formations 
 
         $Mymissionssansformations=array();
 
@@ -321,7 +298,7 @@ class DefaultController extends Controller
 
         $MissionsSansFormations=round((count($Mymissionssansformations)*100)/count($Allmissions), 2);
 
-        // Missions sans tuteur ( toujours le même problème rien ne se push dans mon array )
+        // Missions sans tuteur ( toujours le même problème rien ne se push dans mon array A RESOUDRE )
 
         $Mymissionssanstuteur=array();
 
@@ -367,7 +344,7 @@ class DefaultController extends Controller
             'Apprenantplacer'=>$Apprenantplacer,
             'Myapprenantplacer'=>$Myapprenantplacer,
             'MissionAPourvoir'=>$Missionapourvoir,'Mymissionapourvoir'=>$Mymissionapourvoir,
-            'MissionsPourvues'=>$MissionsPourvues, 'Mymissionspourvues'=>$Mymissionspourvues,
+            'MissionsPourvues'=>$MissionsPourvues, //'Mymissionspourvues'=>$Mymissionspourvues,
             'MissionsSansFormations'=>$MissionsSansFormations, 'Mymissionssansformations'=>$Mymissionssansformations,
             'MissionsSansTuteur'=>$MissionsSansTuteur, 'Mymissionssanstuteur'=>$Mymissionssanstuteur,
             'MissionsSansQcm'=>$MissionsSansQcm, //'Mymissionssansqcm'=>$Mymissionssansqcm,
