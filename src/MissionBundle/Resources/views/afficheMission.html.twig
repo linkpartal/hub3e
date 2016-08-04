@@ -144,7 +144,7 @@
 
                     <div id="info_apprenant" style="height: 281px;border-top: 1px solid #B0B0B0;margin: 0;overflow-y: auto;width: 100%;">
                         <div class="col-xs-12 Liste" >
-
+                                <input type="hidden" value="" id="id_user" >
                             <div class="col-xs-12" >
                                 <label class="cell"  style="float:left;">Civilité : <label id="Information_Apprenant_Civilite"></label></label>
                             </div>
@@ -282,18 +282,42 @@
                 </div>
 
 
-
             </div>
 
             <div class="div_button" id="buttonInformationApprenant" style="display: block;">
                 <input id="submitAnnuler" onclick="this.parentNode.parentNode.parentNode.parentNode.style.display='none';" class="blue" style="background:white;color:#666666;border:1px solid #ccc;float: left;margin-left: 5px" type="button" value="Annuler">
-                <input id="submitMettreEnRelation"
+
+
+                    {#  l'apprenant a été refusé sur cette mission #}
+
+                <input id="submitMERRefus"  disabled="disabled" class="btn btn-primary" type="button"  style="display:none;height:40px;border-radius:0px;color: white;background:red;float: right; margin-right: 5px;margin-bottom: 5px" value="REFUSÉ">
+
+                    {#  l'apprenant a été accepté pour cette mission #}
+
+                <input id="submitMERAccepte"  disabled="disabled" class="btn btn-primary" type="button"  style="display:none;height:40px;border-radius:0px;color: white;background:green;float: right; margin-right: 5px;margin-bottom: 5px" value="ACCEPTÉ">
+
+
+                {#  l'apprenant a la possiblité de se mettre en relation #}
+                <input id="submitMER"
                         {% if mission.tuteur %}
                             onclick="Show_MettreEnRelation();"
                         {% else %}
                             onclick="alert('Aucun Tuteur n\'est affecté à cette mission. Vous devez affecter un tuteur avant de pouvoir mettre en relation.')"
                         {% endif %}
-                       class="blue" type="button"  style="float: right; margin-right: 5px;margin-bottom: 5px" value="Mettre en relation">
+                       class="blue" type="button"  style="display:none;float: right; margin-right: 5px;margin-bottom: 5px" value="Mettre en relation">
+
+
+                {#  l'apprenant peut pas postuler le nbre de poste est épuisé #}
+                <input id="submitMERDisact" disabled="disabled" class="btn btn-primary"
+                        {% if mission.tuteur %}
+                            onclick="Show_MettreEnRelation();"
+                        {% else %}
+                            onclick="alert('Aucun Tuteur n\'est affecté à cette mission. Vous devez affecter un tuteur avant de pouvoir mettre en relation.')"
+                        {% endif %}
+                       class="blue" type="button"  style="border-radius:0px;height:40px;display:none;float: right; margin-right: 5px;margin-bottom: 5px" value="Mettre en relation">
+
+
+
             </div>
 
 
@@ -583,12 +607,14 @@
 
                                 {% if  EstRefuse( user.getId() , mission.getId() ) %}
                                 {#  l'apprenant a été refusé sur cette mission #}
+                                    {% set statusMise=0 %}
                                     <button disabled="disabled" class="btn btn-primary"
 
                                             type="button"  style=" width:150px;color: white;height: 30px;border:none;padding:6px 0 6px 0;border-radius:8px;background:red;font:bold 13px Roboto;margin-bottom:10px;margin-top: 20px;margin-left: -100%">
                                         REFUSÉ
                                     </button><br>
                                 {% elseif EstAccepte( user.getId() , mission.getId() ) %}
+                                    {% set statusMise=1 %}
                                 {#  l'apprenant a été accepté pour cette mission #}
                                     <button disabled="disabled" class="btn btn-primary"
                                             {% if mission.tuteur %}
@@ -601,8 +627,10 @@
                                     </button><br>
 
                                 {% else %}
+                                    {% set statusMise=2 %}
                                         <button
                                                 {% if  not mission.getNbrePoste() or (mission.getNbrePoste()==0)%}
+                                                    {% set statusMise=3 %}
                                                 disabled="disabled" class="btn btn-primary"
                                                 {% endif %}
                                                 {% if mission.tuteur %}
@@ -618,7 +646,7 @@
                                 <button onclick="
                                         informationApprenant({{ user.id }},'{{user.getPhotos}}','{{ user.getCivilite }}','{{ user.getNom }}','{{ user.getPrenom }}','{{ user.getEmail }}',
                                         '{{ user.getTelephone }}','{{ user.getInfo.getDateNaissance|date("d/m/Y") }}','{{ user.getInfo.getCpNaissance }}','{{ user.getInfo.getLieunaissance }}',
-                                        '{{ user.getInfo.getAdresse }}','{{ scores[i] }}');show('FicheApprenant');"
+                                        '{{ user.getInfo.getAdresse }}','{{ scores[i] }}','{{ statusMise }}');show('FicheApprenant');"
                         type="button"  style=" background:white;color: #adadad;width:150px;height:30px;padding:6px 0 6px 0;border-radius:8px;font:bold 13px Roboto;border:1px solid #ccc;margin-bottom:10px ;margin-left: -100%"  >
                                     FICHE CONTACT
                                 </button><br>
@@ -922,7 +950,45 @@
 
 
     }
-    function informationApprenant(id,image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse,score) {
+    function informationApprenant(id,image,civilite,nom,prenom,email,telephone,Datenaissance,cpnaissance,lieuNaissance,adresse,score,statusMise) {
+
+
+       if (statusMise==0){
+
+           document.getElementById('submitMERRefus').style.display='block';
+           document.getElementById('submitMERAccepte').style.display='none';
+           document.getElementById('submitMER').style.display='none';
+           document.getElementById('submitMERDisact').style.display='none';
+
+
+       }else if(statusMise==1){
+
+           document.getElementById('submitMERRefus').style.display='none';
+           document.getElementById('submitMERAccepte').style.display='block';
+           document.getElementById('submitMER').style.display='none';
+           document.getElementById('submitMERDisact').style.display='none';
+
+       }else if(statusMise==2){
+
+           document.getElementById('submitMERRefus').style.display='none';
+           document.getElementById('submitMERAccepte').style.display='none';
+           document.getElementById('submitMER').style.display='block';
+           document.getElementById('submitMERDisact').style.display='none';
+
+       }else if(statusMise==3){
+
+           document.getElementById('submitMERRefus').style.display='none';
+           document.getElementById('submitMERAccepte').style.display='none';
+           document.getElementById('submitMER').style.display='none';
+           document.getElementById('submitMERDisact').style.display='block';
+
+       }
+
+
+
+
+
+
 
         var NameDivUser = '_Mission'+id;
         var i=0;
@@ -957,6 +1023,8 @@
         else{
             document.getElementById('formFicheApprenant').getElementsByTagName('img')[0].src ='{{ asset('image/homme.jpg') }}';
         }
+
+        document.getElementById('id_user').value = id;
         document.getElementById('Information_Apprenant_Civilite').innerHTML = civilite;
         document.getElementById('Information_Apprenant_Nom').innerHTML = nom;
         document.getElementById('Information_Apprenant_Prenom').innerHTML= prenom;

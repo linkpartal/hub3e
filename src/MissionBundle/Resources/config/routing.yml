@@ -39,6 +39,10 @@ ModifierStatutMission:
     path: /ModifStatutMission/id={id}/statut={statut}
     defaults: { _controller: MissionBundle:Default:ModifStatutMission}
 
+mission_update:
+    path: /mission_Update
+    defaults: { _controller: MissionBundle:Default:addMissionUpdate}
+
 
 
 

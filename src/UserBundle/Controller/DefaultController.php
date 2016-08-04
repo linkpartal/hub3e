@@ -2011,6 +2011,9 @@ class DefaultController extends Controller
 
             $em->persist($diplome);
             $em->flush();
+            $infcomplimentaire=$this->getDoctrine()->getRepository('GenericBundle:Infocomplementaire')->find($user->getInfo()->getId());
+            $infcomplimentaire->setDernierDiplome($request->get('_Libelle'));
+            $em->flush();
         }
 
 

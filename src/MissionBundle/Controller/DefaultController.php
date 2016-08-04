@@ -54,7 +54,7 @@ class DefaultController extends Controller
 
         $date = new \DateTime();
         $mission->setDatecreation($date);
-        if($request->get('_Remuneration') and !$request->get('_Remuneration') == '' and is_integer($request->get('_Remuneration'))){
+        if($request->get('_Remuneration') and !$request->get('_Remuneration') == '' ){
             $mission->setRemuneration($request->get('_Remuneration'));
         }
         $mission->setHoraire($request->get('_Horaire'));
@@ -110,6 +110,133 @@ class DefaultController extends Controller
         }
 
         if($request->get('reponse')){
+            foreach($request->get('reponse') as $rep){
+                $reponse = $em->getRepository('GenericBundle:Reponsedef')->find($rep);
+                $reponse->addMission($mission);
+                $em->flush();
+
+            }
+        }
+        return $this->redirect($_SERVER['HTTP_REFERER']);
+    }
+
+
+    public function addMissionUpdateAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $usercon = $this->get('security.token_storage')->getToken()->getUser();
+
+        $mission = $this->getDoctrine()->getRepository('GenericBundle:Mission')->find($request->get('_idMission'));
+        $etablissement = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_idetab'));
+
+        $mission->setEtablissement($etablissement);
+
+        $mission->setDescriptif($request->get('_Descriptif'));
+        $mission->setProfil($request->get('_Profil'));
+
+        //$mission->setTypecontrat($request->get('_TypeContrat'));
+
+        $mission->setTypecontrat($request->get('_Stage').' , '.$request->get('_StageAlterne').' , '.$request->get('_ContratProfessionalisation').' , '.$request->get('_ContratApprentissage'));
+
+
+        $mission->setDomaine($request->get('_Domaine'));
+
+
+        if($usercon->getEtablissement()){
+            $mission->setTier($usercon->getEtablissement()->getTier());
+        }
+        elseif($usercon->getTier()){
+            $mission->setTier($usercon->getTier());
+        }
+
+
+        if($usercon->hasRole('ROLE_SUPER_ADMIN') or $usercon->hasRole('ROLE_ADMINSOC')){
+            $mission->setStatut(3);
+        }
+        elseif($usercon->hasRole('ROLE_ADMINECOLE') or $usercon->hasRole('ROLE_RECRUTEUR')){
+            $mission->setStatut(1);
+        }
+
+
+
+
+
+
+        if($request->get('_Remuneration') and !$request->get('_Remuneration') == '' ){
+            $mission->setRemuneration($request->get('_Remuneration'));
+
+        }
+        $mission->setHoraire($request->get('_Horaire'));
+
+        $mission->setDatedebut(date_create_from_format('d/m/Y',$request->get('_Datedebut')) );
+        if($request->get('_Datefin') and !$request->get('_Datefin')==''){
+            $mission->setDatefin(date_create_from_format('d/m/Y',$request->get('_Datefin')) );
+        }
+
+
+        $mission->setNomcontact($request->get('_NomContact'));
+        $mission->setPrenomContact($request->get('_PrenomContact'));
+        $mission->setFonctionContact($request->get('_FonctionContact'));
+        $mission->setTelContact($request->get('_TelContact'));
+        $mission->setEmailContact($request->get('_EmailContact'));
+        $mission->setCommentaire($request->get('_Commentaire'));
+        $mission->setIntitule($request->get('_Intitule'));
+        $mission->setNbreposte($request->get('_Emploi'));
+        if($request->get('_Embauche') == '1'){
+            $mission->setEmploi(true);
+        }
+        else{
+            $mission->setEmploi(false);
+        }
+
+
+        $em->flush();
+        $mission->genererCode();
+        $em->flush();
+        if($request->get('_TUTEURMISSION')){
+            $tuteur = $em->getRepository('GenericBundle:User')->find($request->get('_TUTEURMISSION'));
+            $mission->setTuteur($tuteur);
+            $em->flush();
+        }
+
+        if($request->get('formation')){
+
+            foreach($em->getRepository('GenericBundle:Diffusion')->findBy(array('mission'=>$mission)) as $Diff)
+            {
+
+                    $em->remove($Diff);
+                    $em->flush();
+
+
+            }
+
+
+            foreach($request->get('formation') as $idFormation)
+            {
+                $diffuser = new Diffusion();
+                $formation = $this->getDoctrine()->getRepository('GenericBundle:Formation')->find($idFormation);
+                $diffuser->setFormation($formation);
+                $diffuser->setMission($mission);
+                if($this->get('security.authorization_checker')->isGranted('ROLE_RECRUTEUR')){
+                    $diffuser->setStatut(5);
+                }
+                else{
+                    $diffuser->setStatut(1);
+                }
+
+                $em->persist($diffuser);
+                $em->flush();
+            }
+        }
+
+        if($request->get('reponse')){
+
+
+            $delete = $this->getDoctrine()->getConnection()->prepare("DELETE   FROM reponsedef_mission  WHERE  mission_id=:mission_id ");
+            $delete->bindValue('mission_id', $request->get('_idMission'));
+            $delete->execute();
+
             foreach($request->get('reponse') as $rep){
                 $reponse = $em->getRepository('GenericBundle:Reponsedef')->find($rep);
                 $reponse->addMission($mission);

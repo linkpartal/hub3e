@@ -177,7 +177,7 @@
                                         </select>  #}
                                     <div class="col-xs-12" style="overflow: auto;height: 100px;">
                                           <div class="col-xs-12" >
-                                              <input type="radio" value="Stage" name="_Stage" ><label>Stage</label>
+                                              <input type="radio" value="stage" name="_Stage" ><label>Stage</label>
                                           </div>
                                           <div class="col-xs-12" >
                                               <input type="radio" value="Stage alterné" name="_StageAlterne" ><label>Stage alterné</label>
@@ -192,11 +192,14 @@
 
                                         <input type="number"  class="input " id="Remuneration" name="_Remuneration" placeholder="Rémunération"  max="1000000" style="font:16px Roboto;">
                                         <input type="number" class="input " id="Emploi" name="_Emploi" placeholder="Nbre de poste à pourvoir" required  min="0" max="1000" style="font:16px Roboto;">
-                                        {#<div class="col-xs-12">
-                                            <label class="col-xs12">Embauche à l'issue de la mission?</label>
-                                            <input type="radio" name="_Embauche" value="1" title="Oui" >Oui
-                                            <input type="radio" name="_Embauche" value="0" title="Non" >Non
-                                        </div>#}
+                                        <input style="font:16px Roboto;" type="text" class="input" id="Domaine" name="_Domaine" placeholder="Domaine" required maxlength="45">
+                                      <input style="font:16px Roboto;" type="text" class="input" id="Profil" name="_Profil" placeholder="Profil recherché" required maxlength="250">
+
+                                      {#<div class="col-xs-12">
+                                          <label class="col-xs12">Embauche à l'issue de la mission?</label>
+                                          <input type="radio" name="_Embauche" value="1" title="Oui" >Oui
+                                          <input type="radio" name="_Embauche" value="0" title="Non" >Non
+                                      </div>#}
 
 
 
@@ -340,6 +343,246 @@
                         </form>
                     </div>
                 </div>
+                {# mes modifs #}
+                {% if missions is defined %}
+                    {% for mission in missions %}
+                        {% set iddiv = random()  %}
+                        <div id="addmission{{ mission.getId }}" class="popup" >
+                            <div onclick="document.getElementById('submitaddmission{{ mission.getId }}').click();hide(this)" class="close"></div>
+                            <div class="col-xs-offset-1 col-xs-9 formContainer">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+                                <form id="formaddmission{{ mission.getId }}" class="formulaire" action= "{{ path("mission_update") }}" onsubmit="document.getElementById('submitaddmission{{ mission.getId }}').disabled=true;ShowWaiter();" method="post">
+                                    <input type="hidden" id="idMission" name="_idMission" value="{{ mission.getId }}">
+                                    <input type="hidden" id="idetab{{ mission.getId }}" name="_idetab" value="{{ etablissement.getId }}">
+                                    <div id="NavBarAddMission{{ mission.getId }}" class="col-xs-12 NavBarTier" >
+                                        <button  class="col-xs-3 active" id="BoutonOnlgetDonnéesMission{{ mission.getId }}" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet{{ mission.getId }}','Information_generale{{ mission.getId }}',this);">Données</button>
+                                        <button  class="col-xs-3" id="BoutonOnlgetFormationMission{{ mission.getId }}" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet{{ mission.getId }}','Onglet_Formations{{ mission.getId }}',this);">Formations</button>
+                                        <button  class="col-xs-3" id="BoutonOnlgetContactMission{{ mission.getId }}" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet{{ mission.getId }}','Onglet_Contacts{{ mission.getId }}',this);">Contact</button>
+                                        <button  class="col-xs-3" id="BoutonOnlgetCandidatMission{{ mission.getId }}" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet{{ mission.getId }}','QCM_Affinite{{ mission.getId }}',this);">Candidat rêvé</button>
+                                        {#<button class="col-xs-3" type="button">Documents</button>#}
+                                    </div>
+                                    <div id="PopUpMissionOnglet{{ mission.getId }}">
+                                        <div id="Information_generale{{ mission.getId }}"  class="div_form">
+                                            <div class="col-xs-6 input-colonne">
+                                                <input style="font:16px Roboto;" type="text" class="input" id="Intitule{{ mission.getId }}" name="_Intitule" placeholder="Intitulé mission" required maxlength="75" value="{{ mission.getIntitule }}">
+                                                <!--<textarea style="height: 140px;resize: none;" class="input" id="Profil" name="_Profil" placeholder="Profil" required maxlength="255"></textarea>-->
+                                                <textarea style="font:16px Roboto;height: 200px;resize: none;" class="input" id="Descriptif{{ mission.getId }}" name="_Descriptif" placeholder="Descriptif mission" required MAXLENGTH="255" >{{ mission.getDescriptif() }}</textarea>
+                                                <div class="col-xs-6">
+                                                    <label style="float: left">Date début :</label><input style="font:16px Roboto;" type="text" value="{{ mission.getDatedebut|date('d/m/Y') }}" class="date" id="Datedebut{{ mission.getId }}" name="_Datedebut" title="Datedebut" required >
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    <label style="float: left">Date fin :</label><input  type="text"  class="date" value="{{ mission.getDatefin|date('d/m/Y')  }}" id="Datefin{{ mission.getId }}" name="_Datefin" title="Datefin" >
+                                                </div>
+                                                <div class="div_button" >
+
+                                                    <input id="submitaddmission{{ mission.getId }}" onclick="document.getElementById('BoutonOnlgetFormationMission{{ mission.getId }}').click();" style="margin-right:-40px;float:right" class="blue" type="button" value="suivant">
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="col-xs-6">
+
+                                                <div class="col-xs-12" style="overflow: auto;height: 100px;">
+
+                                                    <div class="col-xs-12" >
+                                                        {% if  'stage' in mission.getTypeContrat   %}
+                                                            <input type="radio" checked value="Stage" name="_Stage" ><label>Stage</label>
+                                                        {% else %}
+                                                            <input type="radio" value="stage" name="_Stage" ><label>Stage</label>
+                                                        {% endif %}
+
+                                                    </div>
+                                                    <div class="col-xs-12" >
+                                                        {% if  'Stage alterné' in mission.getTypeContrat   %}
+                                                            <input type="radio" checked value="Stage alterné" name="_StageAlterne" ><label>Stage alterné</label>
+                                                        {% else %}
+                                                            <input type="radio" value="Stage alterné" name="_StageAlterne" ><label>Stage alterné</label>
+                                                        {% endif %}
+
+                                                    </div>
+                                                    <div class="col-xs-12" >
+                                                        {% if  'Contrat de professionalisation' in mission.getTypeContrat  %}
+                                                            <input type="radio" checked value="Contrat de professionalisation" name="_ContratProfessionalisation"><label>Contrat de professionalisation</label>
+                                                        {% else %}
+                                                            <input type="radio" value="Contrat de professionalisation" name="_ContratProfessionalisation"><label>Contrat de professionalisation</label>
+                                                        {% endif %}
+
+                                                    </div>
+                                                    <div class="col-xs-12" >
+                                                        {% if "Contrat d'apprentissage" in  mission.getTypeContrat()   %}
+                                                            <input type="radio" checked value="Contrat d'apprentissage" name="_ContratApprentissage"><label>Contrat d'apprentissage</label>
+                                                        {% else %}
+                                                            <input type="radio"  value="Contrat d'apprentissage" name="_ContratApprentissage"><label>Contrat d'apprentissage</label>
+                                                        {% endif %}
+
+                                                    </div>
+                                                </div>
+
+                                                <input type="number"  value="{{ mission.getRemuneration}}" class="input " id="Remuneration{{ mission.getId }}" name="_Remuneration" placeholder="Rémunération"  max="1000000" style="font:16px Roboto;">
+                                                <input type="number" value="{{ mission.getNbreposte}}" class="input " id="Emploi{{ mission.getId }}" name="_Emploi" placeholder="Nbre de poste à pourvoir" required  min="0" max="1000" style="font:16px Roboto;">
+                                                <input style="font:16px Roboto;" type="text" value="{{ mission.getDomaine}}"  class="input" id="Domaine{{ mission.getId }}" name="_Domaine" placeholder="Domaine" required maxlength="45">
+                                                <input style="font:16px Roboto;" type="text" value="{{ mission.getProfil}}" class="input" id="Profil{{ mission.getId }}" name="_Profil" placeholder="Profil recherché" required maxlength="250">
+                                                {#<div class="col-xs-12">
+                                                    <label class="col-xs12">Embauche à l'issue de la mission?</label>
+                                                    <input type="radio" name="_Embauche" value="1" title="Oui" >Oui
+                                                    <input type="radio" name="_Embauche" value="0" title="Non" >Non
+                                                </div>#}
+
+
+
+
+                                            </div>
+
+
+
+
+
+
+
+                                        </div>
+                                        <div id="Onglet_Formations{{ mission.getId }}"  class="div_form" style="visibility: hidden;position: absolute;">
+                                            <div class="col-xs-12 input-colonne "  >
+                                                <br>
+                                                <label class="col-xs-12">Liste des formations ciblées pour la mission</label>
+
+                                                {% if app.user.hasRole('ROLE_ADMINECOLE') %}
+
+
+                                                    <div class="col-xs-12" id="SelectMultipleFormation{{ mission.getId }}" style="overflow: auto;" >
+                                                        {% for formation in formations %}
+                                                            {% if formation.etablissement.tier == app.user.tier or formation.etablissement.tier in app.user.tier.tier1|keys %}
+                                                                <input  type="checkbox" {% if GetDiffusion(mission.getId,formation.getId )  %} checked {% endif %}  value="{{ formation.getId }}" name="formation[]" title="formation" >
+                                                                <label style="font: 14px Roboto ;  display: inline;" >{{ formation.nom }} - {{ formation.etablissement.tier.raisonsoc }} - {{ formation.etablissement.adresse }}</label>
+                                                                <a target="_blank" href="{{ asset('formation_pdf/'~ formation.getId ~'.pdf') }}" >
+                                                                    <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px " alt="fichier de formation" >
+                                                                </a><br>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+
+                                                {% elseif app.user.hasRole('ROLE_RECRUTEUR') %}
+
+
+                                                    <div class="col-xs-12" id="SelectMultipleFormation{{ mission.getId }}" style="overflow: auto;">
+                                                        {% for formation in formations %}
+                                                            {% if (formation.etablissement.tier == app.user.etablissement.tier) or (formation.etablissement.tier in app.user.etablissement.tier.tier1) %}
+                                                                <input  type="checkbox" {% if GetDiffusion(mission.getId,formation.getId )  %} checked {% endif %}    value="{{ formation.getId }}" name="formation[]" title="formation" >
+                                                                <label style="font: 14px Roboto ;    display: inline;" >{{ formation.nom }} - {{ formation.etablissement.tier.raisonsoc }} - {{ formation.etablissement.adresse }}</label>
+                                                                <a target="_blank" href="{{ asset('formation_pdf/'~ formation.getId ~'.pdf') }}" >
+                                                                    <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px " alt="fichier de formation" >
+                                                                </a><br>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+
+                                                {% elseif is_granted("ROLE_ADMINSOC") %}
+
+                                                    <div class="col-xs-12" id="SelectMultipleFormation{{ mission.getId }}" style="overflow: auto;">
+                                                        {% for formation in formations %}
+
+                                                            <input  type="checkbox" {% if GetDiffusion(mission.getId,formation.getId )  %} checked {% endif %}   value="{{ formation.getId }}" name="formation[]" title="formation" >
+                                                            <label style="font: 14px Roboto ; display: inline;" >{{ formation.nom }} - {{ formation.etablissement.tier.raisonsoc }} - {{ formation.etablissement.adresse }}</label>
+                                                            <a target="_blank" href="{{ asset('formation_pdf/'~ formation.getId ~'.pdf') }}" >
+                                                                <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px " alt="fichier de formation" >
+                                                            </a><br>
+
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="div_button" >
+                                                <input id="submitaddmission{{ mission.getId }}" onclick="document.getElementById('BoutonOnlgetContactMission{{ mission.getId }}').click();" class="blue" type="button" value="suivant">
+
+                                            </div>
+
+
+                                        </div>
+
+                                        <div id="Onglet_Contacts{{ mission.getId }}" class="div_form" style="visibility: hidden;position: absolute;">
+                                            <label class="col-xs-3 input-colonne">
+                                                Contact
+                                            </label>
+                                            <div class="col-xs-9">
+                                                <input type="text" style="width: calc(33% - 10px);font:16px Roboto;" class="input " value="{{ mission.getNomContact}}" id="NomContact{{ mission.getId }}" name="_NomContact" placeholder="NomContact" required MAXLENGTH="45">
+                                                <input type="text" style="width: calc(33% - 10px);margin-left: 15px;font:16px Roboto;" class="input " value="{{ mission.PrenomContact}} "id="PrenomContact{{ mission.getId }}" name="_PrenomContact" placeholder="PrenomContact" required MAXLENGTH="45">
+                                                <input type="text" style="width: calc(33% - 10px);margin-left: 15px;font:16px Roboto;" class="input" value="{{ mission.FonctionContact}}" id="FonctionContact{{ mission.getId }}" name="_FonctionContact" placeholder="FonctionContact" required MAXLENGTH="45">
+                                                <input type="text" style="width: calc(33% - 10px);font:16px Roboto;" class="input" value="{{ mission.TelContact}}" id="TelContact{{ mission.getId }}" name="_TelContact" placeholder="TelContact" required MAXLENGTH="20">
+                                                <input type="text" style="width: calc(33% - 10px);margin-left: 15px;font:16px Roboto;" class="input" value="{{ mission.EmailContact}} "id="EmailContact{{ mission.getId }}" name="_EmailContact" placeholder="EmailContact" required MAXLENGTH="45">
+                                            </div>
+                                            <label class="col-xs-3 input-colonne">
+                                                Commentaire
+                                            </label>
+                                            <div class="col-xs-9">
+                                                <textarea style="height: 100px;resize: both;font:16px Roboto;" class="input "  id="Commentaire{{ mission.getId }}" name="_Commentaire" placeholder="Commentaire"  MAXLENGTH="255">{{ mission.Commentaire}}</textarea>
+                                            </div>
+
+                                            <label class="col-xs-3 input-colonne">
+                                                Tuteur
+                                            </label>
+                                            <div class="col-xs-9">
+                                                <select title="Tuteur" class="input" name="_TUTEURMISSION" style="font:16px Roboto;">
+                                                    {% if users is defined %}
+                                                        {% for user in users %}
+                                                            {% if user.hasRole('ROLE_TUTEUR') %}
+
+                                                                <option {% if  mission.getTuteur.getNom()==user.nom and  mission.getTuteur.getPrenom()== user.prenom  %} selected {% endif %} value="{{ user.id }}">{{ user.nom }} {{ user.prenom }}</option>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </select>
+                                            </div>
+
+                                            <div class="div_button" >
+                                                <input id="submitaddmission{{ mission.getId }}" onclick="document.getElementById('BoutonOnlgetCandidatMission{{ mission.getId }}').click();" class="blue" type="button" value="suivant">
+
+                                            </div>
+
+                                        </div>
+                                        <div id="QCM_Affinite{{ mission.getId }}" class="div_form" style="visibility: hidden;position: absolute;">
+                                            {% if QCMs is defined %}
+                                                {% set y = 0 %}
+                                                {% for question in Questions %}
+                                                    <div class="inputcontainer" >
+
+
+                                                        <label title="{{ question.question  }}"  style="float: left;text-overflow: ellipsis;overflow: hidden;height:40px;" >{{ question.question  }} :</label>
+                                                        <div >
+
+
+                                                            {% for reponse in reponses[y] %}
+                                                                <div class="col-xs-12" style="float:left;height:30px;" >
+                                                                    <input  type="radio" {% if  GetReponsesDef(mission.getId,reponse.getId )   >=1 %}   checked {% endif %}  name="reponse[{{ reponse.questiondef.id }}]" value="{{ reponse.getId }}" title="reponse" >
+                                                                    <label style="font: 14px Roboto black;" for=idreponse{{ reponse.getId }}">{{ reponse.getReponse }}</label>
+                                                                </div>
+
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                    {% set y = y + 1 %}
+                                                {% endfor %}
+                                            {% endif %}
+                                            <div class="div_button" >
+                                                <input id="submitaddmissionEnovyer{{ mission.getId }}" class="blue" type="submit" value="Envoyer">
+
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+
+
+                                </form>
+                            </div>
+                        </div>
+
+
+                    {% endfor %}
+                {% endif %}
+                {# mes modifs #}
             {% endif %}
         {% else %}
             {% if is_granted('ROLE_ADMINECOLE') %}
@@ -940,7 +1183,9 @@
                                                 <label class="cell" >Date : <label style="font-size: medium"   >{{ mission.getDatecreation|date('d/m/Y H:i')}}</label>
                                                     {# MODIFICATION DU BOUTON MODIFIER ET DE L'ICONE DE SUPPRESSION #}
                                                     <span>
-                                                        <button type="button" class="btn btn-primary" onclick="modifierMission('formMissionModifier',this)">Modifier</button>
+                                                       {#<button type="button" class="btn btn-primary" onclick="modifierMission('formMissionModifier',this)">Modifier</button>#}
+                                                        <button style="margin-left: 50px" type="button" class="btn btn-primary" onclick="show('addmission{{ mission.getId }}');">Modifier</button>
+
                                                     </span>
                                                     <span class="glyphicon glyphicon-remove" style="color:red ; float:right" aria-hidden="true" name="modification" title="Supprimer" onclick="if(confirm('Voulez-vous Supprimer cette mission?')){supprimerligne('{{ path('supprimer_Mission',{'id': mission.getId}) }}',this)}"></span>
                                                     <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#mission{{ iddiv }}"></button>
@@ -972,6 +1217,10 @@
 
                                         </div>
                                     </div>
+
+
+
+
                             </form>
                                 {% endfor %}
                             {% endif %}
@@ -1011,7 +1260,7 @@
                         {% if not etablissement.getTier.getEcole %}
                             {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_ADMINSOC') %}
                                 <button onclick="show('addmission')" type="button" class="col-xs-12 rightMenu">
-                                    Ajouter une mission
+                                 Ajouter une mission
                                 </button>
                             {% endif %}
                         {% else %}
@@ -1050,6 +1299,8 @@
                 </div>
             {% endif %}
         </div>
+
+
     {% endblock %}
 </div>
 
@@ -1650,6 +1901,8 @@
                 $('#submitaddapprenant').val("suivant");
             }
         });
+
+
 
     </script>
 {% endblock %}

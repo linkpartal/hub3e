@@ -73,11 +73,13 @@ class globalExtension extends \Twig_Extension{
             'GetDocumentApp' => new \Twig_Function_Method($this, 'GetDocumentApp'),
             'GetQuestionsApp' => new \Twig_Function_Method($this, 'GetQuestionsApp'),
             'GetReponsesApp' => new \Twig_Function_Method($this, 'GetReponsesApp'),
-
             'GetQuestionsTestApp' => new \Twig_Function_Method($this, 'GetQuestionsTestApp'),
             'GetReponsesTestApp' => new \Twig_Function_Method($this, 'GetReponsesTestApp'),
             'GetScoresApp' => new \Twig_Function_Method($this, 'GetScoresApp'),
             'GetLastMise' => new \Twig_Function_Method($this, 'GetLastMise'),
+            'GetDiffusion' => new \Twig_Function_Method($this, 'GetDiffusion'),
+            'GetReponsesDef' => new \Twig_Function_Method($this, 'GetReponsesDef'),
+
 
 
         );
@@ -188,9 +190,9 @@ class globalExtension extends \Twig_Extension{
 
         // normalement ca peut êtres plusieurs formation en commun mais pour l'instant on affihce juste la premiere formation $Formations[0]
 
-       /* foreach( $Formations as $forma){
-            $Formation=$Formation.';;'.$forma.';;';
-        }*/
+        /* foreach( $Formations as $forma){
+             $Formation=$Formation.';;'.$forma.';;';
+         }*/
 
         $Myformation = $this->em->getRepository('GenericBundle:Formation')->find(array('id'=>$Formations[0]));
 
@@ -953,6 +955,22 @@ class globalExtension extends \Twig_Extension{
 
         $Messages = $query->getResult();; // array of ForumUser objects
         return $Messages[0];
+    }
+
+
+    function GetDiffusion($idMission,$idFormation){
+
+    $Diffusion = $this->em->getRepository('GenericBundle:Diffusion')->findBy(array('mission'=>$idMission,'formation'=>$idFormation));
+
+    return $Diffusion;
+    }
+    function GetReponsesDef($idMission,$rep){
+        $stmt = $this->em->getConnection()->prepare("SELECT *  FROM reponsedef_mission  WHERE reponsedef_id=:reponsedef_id and mission_id=:mission_id");
+        $stmt->bindValue('reponsedef_id', $rep);
+        $stmt->bindValue('mission_id', $idMission);
+        $stmt->execute();
+        return count($stmt->fetchAll());
+
     }
 
 
