@@ -80,6 +80,16 @@ class DefaultController extends Controller
             $mission->setEmploi(false);
         }
 
+        if($request->get('_Metier1') and !$request->get('_Metier1') == '' ){
+            $mission->setMetier1($request->get('_Metier1'));
+        }
+        if($request->get('_Metier2') and !$request->get('_Metier2') == '' ){
+            $mission->setMetier2($request->get('_Metier2'));
+        }
+        if($request->get('_Metier3') and !$request->get('_Metier3') == '' ){
+            $mission->setMetier3($request->get('_Metier3'));
+        }
+
         $em->persist($mission);
         $em->flush();
         $mission->genererCode();
@@ -188,6 +198,24 @@ class DefaultController extends Controller
         }
         else{
             $mission->setEmploi(false);
+        }
+
+        if($request->get('_Metier1') and !$request->get('_Metier1') == '' ){
+            $mission->setMetier1($request->get('_Metier1'));
+        }else{
+            $mission->setMetier1(null);
+        }
+        if($request->get('_Metier2') and !$request->get('_Metier2') == '' ){
+            $mission->setMetier2($request->get('_Metier2'));
+        }
+        else{
+            $mission->setMetier2(null);
+        }
+        if($request->get('_Metier3') and !$request->get('_Metier3') == '' ){
+            $mission->setMetier3($request->get('_Metier3'));
+        }
+        else{
+            $mission->setMetier3(null);
         }
 
 

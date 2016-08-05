@@ -3859,7 +3859,7 @@ function Datepicker() {
 		gotoCurrent: false, // True if today link goes back to current selection instead
 		changeMonth: false, // True if month can be selected directly, false if only prev/next
 		changeYear: false, // True if year can be selected directly, false if only prev/next
-		yearRange: "c-10:c+10", // Range of years to display in drop-down,
+		yearRange: "c-30:c+30", // Range of years to display in drop-down,
 			// either relative to today's year (-nn:+nn), relative to currently displayed year
 			// (c-nn:c+nn), absolute (nnnn:nnnn), or a combination of the above (nnnn:-n)
 		showOtherMonths: false, // True to show dates in other months, false to leave blank
@@ -3867,7 +3867,7 @@ function Datepicker() {
 		showWeek: false, // True to show week of the year, false to not show it
 		calculateWeek: this.iso8601Week, // How to calculate the week of the year,
 			// takes a Date and returns the number of the week for it
-		shortYearCutoff: "+10", // Short year values < this are in the current century,
+		shortYearCutoff: "+30", // Short year values < this are in the current century,
 			// > this are in the previous century,
 			// string value starting with "+" for current year + value
 		minDate: null, // The earliest selectable date, or null for no limit
@@ -4876,7 +4876,7 @@ $.extend(Datepicker.prototype, {
 			iValue = 0,
 			shortYearCutoffTemp = (settings ? settings.shortYearCutoff : null) || this._defaults.shortYearCutoff,
 			shortYearCutoff = (typeof shortYearCutoffTemp !== "string" ? shortYearCutoffTemp :
-				new Date().getFullYear() % 100 + parseInt(shortYearCutoffTemp, 10)),
+				new Date().getFullYear() % 100 + parseInt(shortYearCutoffTemp, 30)),
 			dayNamesShort = (settings ? settings.dayNamesShort : null) || this._defaults.dayNamesShort,
 			dayNames = (settings ? settings.dayNames : null) || this._defaults.dayNames,
 			monthNamesShort = (settings ? settings.monthNamesShort : null) || this._defaults.monthNamesShort,
@@ -5600,9 +5600,9 @@ $.extend(Datepicker.prototype, {
 				years = this._get(inst, "yearRange").split(":");
 				thisYear = new Date().getFullYear();
 				determineYear = function(value) {
-					var year = (value.match(/c[+\-].*/) ? drawYear + parseInt(value.substring(1), 10) :
-						(value.match(/[+\-].*/) ? thisYear + parseInt(value, 10) :
-						parseInt(value, 10)));
+					var year = (value.match(/c[+\-].*/) ? drawYear + parseInt(value.substring(1), 30) :
+						(value.match(/[+\-].*/) ? thisYear + parseInt(value, 30) :
+						parseInt(value, 30)));
 					return (isNaN(year) ? thisYear : year);
 				};
 				year = determineYear(years[0]);
@@ -5726,7 +5726,7 @@ $.extend(Datepicker.prototype, {
 	_getFormatConfig: function(inst) {
 		var shortYearCutoff = this._get(inst, "shortYearCutoff");
 		shortYearCutoff = (typeof shortYearCutoff !== "string" ? shortYearCutoff :
-			new Date().getFullYear() % 100 + parseInt(shortYearCutoff, 10));
+			new Date().getFullYear() % 100 + parseInt(shortYearCutoff, 30));
 		return {shortYearCutoff: shortYearCutoff,
 			dayNamesShort: this._get(inst, "dayNamesShort"), dayNames: this._get(inst, "dayNames"),
 			monthNamesShort: this._get(inst, "monthNamesShort"), monthNames: this._get(inst, "monthNames")};

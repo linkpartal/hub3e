@@ -501,7 +501,7 @@
                         </div>
                                 {% endif %}
                         {% endif %}
-                        <button onclick="modifier('formMission',this);" type="button" class="col-xs-12 rightMenu" >
+                        <button onclick="modifier('formMission',this);clignoter();" type="button" class="col-xs-12 rightMenu" >
                             Modifier la fiche
                         </button>
                         <button onclick="if(confirm('Voulez-vous supprimer la mission ?')){post('{{ path('supprimer_Mission',{'id': mission.getId }) }}',true)}" type="button" class="col-xs-12 rightMenu" >
@@ -888,17 +888,56 @@
         }
     }
 
+    var couleur=["#CCFFFF","#FFFF66","#FF66FF","#99FF66","#FFCC33","#9999FF","#3333FF","#996600","#CC0000"];
+    var i=0;
+    function clignoter()
+    {
+        obj=document.getElementById("Commentaire");
+        obj.style.borderColor=couleur[i];
+        if(i>8){i=0;}else{i++;}
+        setTimeout("clignoter()",50);
+    }
+
+
     function modifier(formid,button) {
-        var inputs = document.getElementById(formid).getElementsByTagName('input');
-        for(var i = 0; i< inputs.length; i++)
-        {
-            inputs[i].readOnly = false;
+        if (formid=='formMission'){
+
+           /* var inputs = document.getElementById(formid).getElementsByTagName('input');
+            for(var i = 0; i< inputs.length; i++)
+            {
+                inputs[i].readOnly = false;
+            }
+            var textareas = document.getElementById(formid).getElementsByTagName('textarea');
+            for( i = 0; i< textareas.length; i++)
+            {
+                textareas[i].readOnly = false;
+            }*/
+
+            document.getElementById('Commentaire').readOnly = false;
+            //document.getElementById('Commentaire').style.borderColor = "red";
+            document.getElementById('Commentaire').style.borderStyle = "solid";
+            document.getElementById('Commentaire').focus();
+            obj=document.getElementById('info_mission');
+            obj.scrollTop = obj.scrollHeight;
+
+
+
+
+        }else{
+
+            var inputs = document.getElementById(formid).getElementsByTagName('input');
+            for(var i = 0; i< inputs.length; i++)
+            {
+                inputs[i].readOnly = false;
+            }
+            var textareas = document.getElementById(formid).getElementsByTagName('textarea');
+            for( i = 0; i< textareas.length; i++)
+            {
+                textareas[i].readOnly = false;
+            }
+
         }
-        var textareas = document.getElementById(formid).getElementsByTagName('textarea');
-        for( i = 0; i< textareas.length; i++)
-        {
-            textareas[i].readOnly = false;
-        }
+
         button.innerHTML="valider";
         button.setAttribute('onclick','document.getElementById(\'formMission\').submit()');
 

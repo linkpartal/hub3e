@@ -1239,7 +1239,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 			}
 
 			// Webkit/Opera - :checked should return selected option elements
-			// http://www.w3.org/TR/2011/REC-css3-selectors-20110929/#checked
+			// http://www.w3.org/TR/2011/REC-shortYearCutoffss3-selectors-20110929/#checked
 			// IE8 throws error here and will not see later tests
 			if ( !div.querySelectorAll(":checked").length ) {
 				rbuggyQSA.push(":checked");
