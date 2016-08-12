@@ -191,9 +191,9 @@
                                       </div>
 
                                         <input type="number"  class="input " id="Remuneration" name="_Remuneration" placeholder="Rémunération"  max="1000000" style="font:16px Roboto;">
-                                        <input type="number" class="input " id="Emploi" name="_Emploi" placeholder="Nbre de poste à pourvoir" required  min="0" max="1000" style="font:16px Roboto;">
+                                        <input type="number" class="input " id="NbrePoste" name="_NbrePoste" placeholder="Nbre de poste à pourvoir" required  min="0" max="1000" style="font:16px Roboto;">
 
-                                      <input style="font:16px Roboto;" type="text" class="input" id="Profil" name="_Profil" placeholder="Profil recherché" required maxlength="250">
+
 
                                       <div style="width: 100%" id="divMetier1">
                                       <label style="margin-top:10px;float: left">Métier 1 :</label>
@@ -472,7 +472,7 @@
                             <div onclick="document.getElementById('submitaddmission{{ mission.getId }}').click();hide(this)" class="close"></div>
                             <div class="col-xs-offset-1 col-xs-9 formContainer">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
-                                <form id="formaddmission{{ mission.getId }}" class="formulaire" action= "{{ path("mission_update") }}" onsubmit="document.getElementById('submitaddmission{{ mission.getId }}').disabled=true;ShowWaiter();" method="post">
+                                <form id="formaddmission{{ mission.getId }}" class="formulaire" action= "{{ path("mission_update") }}" onsubmit="document.getElementById('submitaddmission{{ mission.getId }}').disabled=true;ShowWaiter();" method="post" novalidate>
                                     <input type="hidden" id="idMission" name="_idMission" value="{{ mission.getId }}">
                                     <input type="hidden" id="idetab{{ mission.getId }}" name="_idetab" value="{{ etablissement.getId }}">
                                     <div id="NavBarAddMission{{ mission.getId }}" class="col-xs-12 NavBarTier" >
@@ -496,8 +496,6 @@
                                                 </div>
                                                 <img style="border:0px;height: 80px;width: 0px" src="{{ asset('image/vide.gif') }}" />
                                                 <div class="div_button" >
-
-
 
                                                     <input id="submitaddmission{{ mission.getId }}" onclick="document.getElementById('BoutonOnlgetFormationMission{{ mission.getId }}').click();" style="margin-right:-40px;float:right" class="blue" type="button" value="suivant">
 
@@ -545,8 +543,8 @@
                                                 </div>
 
                                                 <input type="number"  value="{{ mission.getRemuneration}}" class="input " id="Remuneration{{ mission.getId }}" name="_Remuneration" placeholder="Rémunération"  max="1000000" style="font:16px Roboto;">
-                                                <input type="number" value="{{ mission.getNbreposte}}" class="input " id="Emploi{{ mission.getId }}" name="_Emploi" placeholder="Nbre de poste à pourvoir" required  min="0" max="1000" style="font:16px Roboto;">
-                                                <input style="font:16px Roboto;" type="text" value="{{ mission.getProfil}}" class="input" id="Profil{{ mission.getId }}" name="_Profil" placeholder="Profil recherché" required maxlength="250">
+                                                <input type="number" value="{{ mission.getNbreposte}}" class="input " id="NbrePoste{{ mission.getId }}" name="_NbrePoste" placeholder="Nbre de poste à pourvoir" required  min="0" max="1000" style="font:16px Roboto;">
+                                                <input style="font:16px Roboto;" type="text" value="{{ mission.getProfil}}" class="input" id="ProfilRech{{ mission.getId }}" name="_ProfilRech" placeholder="Profil recherché" required maxlength="250">
 
 
 
@@ -818,6 +816,7 @@
                                                 {% endfor %}
                                             {% endif %}
                                             <div class="div_button" >
+                                                <br/>
                                                 <input id="submitaddmissionEnovyer{{ mission.getId }}" class="blue" type="submit" value="Envoyer">
 
                                             </div>

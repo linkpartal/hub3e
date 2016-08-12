@@ -43,6 +43,11 @@ mission_update:
     path: /mission_Update
     defaults: { _controller: MissionBundle:Default:addMissionUpdate}
 
+Ajout_Manuelle:
+    path: /Ajout_Manuelle/idApp={idApp}/idMission={idMission}
+    defaults: { _controller: MissionBundle:Default:AjoutManuelle}
+
+
 
 
 

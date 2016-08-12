@@ -82,6 +82,10 @@ admin_iframeload:
     path: /iframe
     defaults: { _controller: AdminBundle:Default:loadiframe}
 
+Siret_Verifier:
+    path : /VerifierSiret/siret={siret}
+    defaults: { _controller: TierBundle:Default:VerifierSiret}
+
 
 
 

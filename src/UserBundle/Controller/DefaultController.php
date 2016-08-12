@@ -109,7 +109,7 @@ class DefaultController extends Controller
                     }
                 }
 
-                //var_dump($userid->getEtablissement()->getId());die;
+              //  var_dump($userid->getEtablissement()->getQcmdef());die;
 
 
                 return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig', array('User' => $userid,
@@ -2259,4 +2259,118 @@ class DefaultController extends Controller
         return  $this->render('UserBundle:MiseEnRelation:ApprenantsPropose.html.twig',array('MiseEnRelation'=>$MiseEnRelation,'AllMiseEnRelation'=>$AllMiseEnRelation));
 
     }
+
+        public function RechercheAppAction(Request $request){
+
+
+            $em = $this->getDoctrine()->getManager();
+            $response = new JsonResponse();
+            $ids=';';
+
+            $sql = "SELECT i FROM GenericBundle:Infocomplementaire i ";
+
+            if ($request->get('_Dernierdiplome')) {
+                if ($sql=="SELECT i FROM GenericBundle:Infocomplementaire i "){
+                    $sql .= " WHERE i.dernierDiplome LIKE :dernierDiplome";
+                }else{
+
+                    $sql .= " AND i.dernierDiplome LIKE :dernierDiplome";
+                }
+            }
+
+            if ($request->get('_FormationCours')) {
+                if ($sql=="SELECT i FROM GenericBundle:Infocomplementaire i "){
+                    $sql .= " WHERE i.formationactuelle LIKE :formationactuelle";
+                }else{
+
+                    $sql .= " AND i.formationactuelle LIKE :formationactuelle";
+                }
+            }
+
+            if ($request->get('_Langue')) {
+                if ($sql=="SELECT i FROM GenericBundle:Infocomplementaire i "){
+                    $sql .= " WHERE ( i.langue1 LIKE :langue or i.langue2 LIKE :langue or i.langue3 LIKE :langue or i.langue4 LIKE :langue or i.langue5 LIKE :langue  )";
+                }else{
+
+                    $sql .= " AND ( i.langue1 LIKE :langue or i.langue2 LIKE :langue or i.langue3 LIKE :langue or i.langue4 LIKE :langue or i.langue5 LIKE :langue  ) ";
+                }
+            }
+
+            if ($request->get('_CodePostal')) {
+                if ($sql=="SELECT i FROM GenericBundle:Infocomplementaire i "){
+                    $sql .= " WHERE i.cp = :cp";
+                }else{
+
+                    $sql .= " AND i.cp = :cp ";
+                }
+            }
+
+            if ($request->get('_Permis')=='on') {
+                if ($sql=="SELECT i FROM GenericBundle:Infocomplementaire i "){
+                    $sql .= " WHERE i.permis = :permis";
+                }else{
+
+                    $sql .= " AND i.permis = :permis ";
+                }
+            }
+
+            if ($request->get('_vehicule')=='on') {
+                if ($sql=="SELECT i FROM GenericBundle:Infocomplementaire i "){
+                    $sql .= " WHERE i.vehicule = :vehicule";
+                }else{
+
+                    $sql .= " AND i.vehicule = :vehicule ";
+                }
+            }
+
+            $query = $em->createQuery($sql);
+
+            if ($request->get('_Dernierdiplome')) {
+                $query->setParameter('dernierDiplome', '%' . $request->get('_Dernierdiplome') . '%');
+            }
+
+            if ($request->get('_FormationCours')) {
+                $query->setParameter('formationactuelle', '%' . $request->get('_FormationCours') . '%');
+            }
+
+            if ($request->get('_Langue')) {
+                $query->setParameter('langue', '%' . $request->get('_Langue') . '%');
+            }
+
+            if ($request->get('_CodePostal')) {
+                $query->setParameter('permis',  $request->get('_CodePostal'));
+            }
+
+            if ($request->get('_Permis')=='on') {
+                $query->setParameter('permis',  '1');
+            }
+
+            if ($request->get('_vehicule')=='on') {
+                $query->setParameter('vehicule',  '1');
+            }
+
+            $ListInfoApp = $query->getResult();
+
+            foreach( $ListInfoApp as $InfoApp ){
+
+                $user = $this->getDoctrine()->getRepository('GenericBundle:User')->findOneBy(array('info'=>$InfoApp->getId()));
+
+                if ($user){
+                    if ($user->hasRole('ROLE_APPRENANT')){
+                       if($request->get('_Nom')){
+                           if( strstr(strtolower($user->getNom()),strtolower($request->get('_Nom')))) {
+                               $ids=$ids.$user->getId().';';
+                           }
+                       }else{
+                           $ids=$ids.$user->getId().';';
+                       }
+                    }
+                }
+
+            }
+
+            return $response->setData($ids);
+
+        }
+
 }

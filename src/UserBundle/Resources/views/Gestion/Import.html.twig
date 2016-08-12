@@ -367,7 +367,7 @@
 
             ShowWaiter();
             //alert(tableau);
-            for (var i = 0; i < tableau.length; i++) {
+            for (var i = 1; i < tableau.length; i++) {
                 var champs
                 var idChamp
 
@@ -407,24 +407,25 @@
 
 
     }
+
+
     function AjoutAuxMulti(id){
         var idchecked = 'choix'+id
         if(document.getElementById(idchecked).checked == true){
-            if (document.getElementById('Multiselect').value==""){
 
-
-                document.getElementById('Multiselect').value=document.getElementById('Multiselect').value+id;
-            }
-            else{
-                document.getElementById('Multiselect').value=document.getElementById('Multiselect').value+';'+id;
-            }
+            document.getElementById('Multiselect').value=document.getElementById('Multiselect').value+';'+id;
 
         }
-        else{
+        else
+        {
+
+
             document.getElementById('Multiselect').value=document.getElementById('Multiselect').value.replace(';'+id,'')
+
         }
 
     }
+
     function supprimerLigne(route,champs) {
         ShowWaiter();
         $.ajax({

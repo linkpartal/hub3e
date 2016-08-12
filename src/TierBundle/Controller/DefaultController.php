@@ -47,6 +47,7 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+
         $tier = $em->getRepository('GenericBundle:Tier')->findOneBy(array('siren'=>$request->get('_SIREN')));
         if(!$tier){
             $newtier = new Tier();
@@ -72,6 +73,9 @@ class DefaultController extends Controller
 
 
         for($i = 0; $i< count($request->get('_SIRET'));$i++) {
+
+
+
             $etablissement = new Etablissement();
             $etablissement->setSiret($request->get('_SIRET')[$i]);
             $etablissement->setAdresse($request->get('_Adresse')[$i]);
@@ -413,6 +417,66 @@ class DefaultController extends Controller
         $em->flush();
         $reponse = new JsonResponse();
         return $reponse->setData(array('Status'=>'Licence correctement supprimer'));
+    }
+
+
+    public function VerifierSiretAction($siret)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $reponse = new JsonResponse();
+        $etablissement = $em->getRepository('GenericBundle:Etablissement')->findOneBy(array('siret'=>$siret));
+
+
+
+
+
+
+        //getCodepostal();
+
+
+        if($etablissement)
+        {
+            $rue=$etablissement->getAdresse();
+            $codePostal=$etablissement->getCodepostal();
+            $ville=$etablissement->getVille();
+            $tel=$etablissement->getTelephone();
+            $fax=$etablissement->getFax();
+            $site=$etablissement->getSite();
+
+            $nomResp=$etablissement->getNomResp();
+            $prenomResp=$etablissement->getPrenomResp();
+            $telResp=$etablissement->getTelresponsable();
+            $mailResp=$etablissement->getMailresponsable();
+
+            $type=$etablissement->getType();
+            $taille=$etablissement->getTaille();
+            $secteur=$etablissement->getSecteur();
+           return $reponse->setData(array('status'=>'exist',
+                'rue'=>$rue,
+                'codePostal'=>$codePostal,
+                'ville'=>$ville,
+                'tel'=>$tel,
+                'fax'=>$fax,
+                'site'=>$site,
+
+                'nomResp'=>$nomResp,
+                'prenomResp'=>$prenomResp,
+                'telResp'=>$telResp,
+                'mailResp'=>$mailResp,
+
+                'type'=>$type,
+                'taille'=>$taille,
+                'secteur'=>$secteur,
+
+                ));
+        }
+        else
+        {
+            return $reponse->setData(array('status'=>'notexist'));
+
+        }
+
     }
 
 }
