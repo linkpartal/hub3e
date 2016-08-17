@@ -232,8 +232,13 @@ class DefaultController extends Controller
                 $reponses[$keyqst] = $reps;
             }
 
+
+            $contactSociete = $this->getDoctrine()->getRepository('GenericBundle:ContactSociete')->findBy(array('etablissement' => $etablissement));
+
+
+           // var_dump($etablissement->getId());die;
             return $this->render('TierBundle::iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,'users'=>$users,
-                'libs'=>$licences, 'missions'=>$missions ,'QCMs' => $qcm, 'Questions' => $questions,
+                'libs'=>$licences, 'missions'=>$missions,'ContactSociete'=>$contactSociete ,'QCMs' => $qcm, 'Questions' => $questions,
                 'reponses' => $reponses,'formations'=>$this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll()));
         }
         //$licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier(),'suspendu'=>false ));
@@ -478,5 +483,18 @@ class DefaultController extends Controller
         }
 
     }
+
+    public function EnregistrerSuiviAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $etab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_id'));
+        $etab->setSuivicommercial($request->get('_Suivi'));
+        $em->flush();
+        return $this->redirect($_SERVER['HTTP_REFERER']);
+
+
+    }
+
+
 
 }

@@ -119,6 +119,43 @@
                     </form>
                 </div>
             </div>
+            <div id="addContact" class="popup">
+                <div onclick="document.getElementById('submitaddContact').click();hide(this)" class="close">
+                </div>
+                <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block">
+
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+
+                    <form id="formaddContactr" class="formulaire" action="{{ path("contact_added") }}" onsubmit="document.getElementById('submitaddContact').disabled=true;ShowWaiter();" method="post">
+                        <input type="hidden" id="id" name="_id" value="{{ etablissement.getId }}">
+                        <div class="div_form" >
+
+                            <div class="col-xs-6 input-colonne">
+                                <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom" required maxlength="45">
+
+                                <input type="email" class="input " id="mail" name="_mail" placeholder="Email" required maxlength="45">
+
+                                <input type="text" class="input " id="fonction" name="_Fonction" placeholder="Fonction" required maxlength="250">
+
+
+                            </div>
+                            <div class="col-xs-6">
+
+
+                                <input type="text" class="input"  id="Prenom" name="_Prenom" placeholder="Prénom" required maxlength="45">
+
+
+                                <input type="tel" class="input " id="Tel" name="_Tel" placeholder="Tel" required maxlength="20">
+                            </div>
+
+
+                        </div>
+                        <div class="div_button">
+                            <input id="submitaddContact" class="blue" type="submit" value="envoyer">
+                        </div>
+                    </form>
+                </div>
+            </div>
         {% endif %}
 
         {% if not etablissement.getTier.getEcole %}
@@ -439,7 +476,7 @@
                                         {% for question in Questions %}
                                             <div class="inputcontainer" >
 
-                                                {{ question.question  }}
+
                                                 <label title="{{ question.question  }}"  style="float: left;text-overflow: ellipsis;overflow: hidden;height:40px;" >{{ question.question  }} :</label>
                                                 <div >
                                                 {% for reponse in reponses[y] %}
@@ -1272,9 +1309,20 @@
 
                 <div class="col-xs-12" style="height: 46px;">
                     <div style="height: 35px; width: 100%; padding: 15px 0 0 15px;display: flex;">
-
+                        {# c'est ici l'onglet  utilisateurs #}
                         <button id="Button_ETABLISSEMENT" onclick="NaviguerOnglet('OngletEtablissement','info_etab',this)" type="button" class="NavButtonIframe">Informations</button>
-                        <button id="Button_User" onclick="NaviguerOnglet('OngletEtablissement','info_user',this)" type="button" class="NavButtonIframe">Utilisateurs</button>
+                        {# app.user.hasRole('ROLE_APPRENANT') #}
+
+                        {% if app.user.hasRole('ROLE_ADMINECOLE') or app.user.hasRole('ROLE_RECRUTEUR')  %}
+                            <button id="Button_contactSociete" onclick="NaviguerOnglet('OngletEtablissement','info_contactSociete',this)" type="button" class="NavButtonIframe">Contacts société</button>
+
+                            <button id="Button_suivicommercial" onclick="NaviguerOnglet('OngletEtablissement','info_suivicommercial',this)" type="button" class="NavButtonIframe">Suivi commercial</button>
+
+                        {% else %}
+                            <button id="Button_User" onclick="NaviguerOnglet('OngletEtablissement','info_user',this)" type="button" class="NavButtonIframe">Utilisateurs</button>
+
+                        {% endif %}
+
                         {% if is_granted('ROLE_SUPER_ADMIN') %}
                             <button id="Button_Licence" onclick="NaviguerOnglet('OngletEtablissement','info_licence',this)" type="button" class="NavButtonIframe">Licences</button>
                         {% endif %}
@@ -1447,6 +1495,68 @@
 
 
                     </div>
+{# ici l'affichage d'onglet#}
+                    <div id="info_contactSociete" class="list-group affichage" style="display: none;">
+
+                        {% if ContactSociete is defined %}
+                            {% for contact in ContactSociete %}
+
+                                    {% set iddiv = random()  %}
+                                    <div class="col-xs-12 Liste">
+                                        <div class="row">
+
+                                            <label class="cell">Nom : <label>{{ contact.getNom }}</label></label>
+                                            <label class="cell">Prénom : <label>{{ contact.getPrenom }}</label>
+                                                <button class="button" style="float: right" type="button" data-toggle="collapse" data-target="#user{{ iddiv }}"></button>
+                                            </label>
+
+                                        </div>
+                                        <div id="user{{ iddiv }}" class="collapse in" >
+                                            <div class="row">
+                                                <label class="cell">Email : <label>{{ contact.getMail }}</label></label>
+                                                <label class="cell">Téléphone : <label>{{ contact.getTelephone }}</label></label>
+                                            </div>
+                                            <div class="row">
+                                                <label class="cell">Fonction : <label>{{ contact.getFonction }}</label></label>
+
+                                            </div>
+                                            <div class="row">
+                                                <label class="cell" >
+
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                            {% endfor %}
+                        {% endif %}
+
+
+                    </div>
+
+                    <div id="info_suivicommercial" class="list-group affichage" style="display: none;">
+                        <form class="formulaire" id="formsuivi" action="{{ path('Enregistrer_suivi') }}" onsubmit="ShowWaiter();" method="post" enctype="multipart/form-data">
+                            <br/>
+                            <input type="hidden" value="{{ etablissement.getId }}" id="id" name="_id">
+                            <label class="cell">Suivi commercial  :
+
+                        </label><br/>
+                        <textarea style="width: 100%; height: 200px" type="text"  value="{{ etablissement.getSuivicommercial() }}" id="Suivi" name="_Suivi" >{{ etablissement.getSuivicommercial() }}</textarea>
+                            <br/>
+                            <br/>
+
+
+                                <input id="submitSuivi" class="blue" style="float:right;border: 0;font: 18px Roboto;color: white;text-align: left;background-color: rgb(61, 138, 212);height: 40px;" type="submit" value="Enregistrer">
+
+
+
+                         </form>
+
+
+
+                    </div>
+
+
 
                     {% if is_granted('ROLE_SUPER_ADMIN') %}
                         <div id="info_licence" class="list-group"
@@ -1643,12 +1753,19 @@
                                 Instancier une licence
                             </button>
                         {% endif %}
-
-                        {% if (is_granted('ROLE_RECRUTEUR') and etablissement.getTier.getEcole) or (is_granted('ROLE_ADMINSOC') and not etablissement.getTier.getEcole )%}
+                        {# c'est ici le boutton ajouter #}
+                        {% if app.user.hasRole('ROLE_ADMINECOLE') or app.user.hasRole('ROLE_RECRUTEUR')  %}
+                            <button onclick="show('addContact')" type="button" class="col-xs-12 rightMenu">
+                                Ajout contact
+                            </button>
+                        {% else %}
                             <button onclick="show('adduser')" type="button" class="col-xs-12 rightMenu">
                                 Ajouter un utilisateur
                             </button>
+
                         {% endif %}
+
+
 
                         {% if not etablissement.getTier.getEcole %}
                             {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_ADMINSOC') %}
@@ -1656,6 +1773,7 @@
                                  Ajouter une mission
                                 </button>
                             {% endif %}
+
                         {% else %}
                             {% if is_granted('ROLE_ADMINECOLE') %}
                                 <button onclick="show('apprenant')" type="button" class="col-xs-12 rightMenu">

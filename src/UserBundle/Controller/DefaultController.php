@@ -16,6 +16,7 @@ use GenericBundle\Entity\Mission;
 use GenericBundle\Entity\Parents;
 use GenericBundle\Entity\Recommandation;
 use GenericBundle\Entity\User;
+use GenericBundle\Entity\ContactSociete;
 use GenericBundle\Entity\Etablissement;
 use GenericBundle\Entity\Tier;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -59,9 +60,13 @@ class DefaultController extends Controller
             $candidatures = $this->getDoctrine()->getRepository('GenericBundle:Candidature')->findBy(array('user'=>$userid));
 
             if ($userid->getEtablissement()) {
+
+             // avant la correction des intutilés des questions
+              // $QCMs= $userid->getEtablissement()->getQcmdef();
+                $QCMs= $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findBy(array('nom' => 'QCMparDéfault'));
                 $questions = array();
                 $reponses = array();
-                foreach ($userid->getEtablissement()->getQcmdef() as $key => $qcm) {
+                foreach ($QCMs as $key => $qcm) {
 
                     $questions[$key] = $this->getDoctrine()->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef' => $qcm));
                     usort($questions[$key], array('\GenericBundle\Entity\Questiondef', 'sort_questions_by_order'));
@@ -97,6 +102,7 @@ class DefaultController extends Controller
                     }
                     $index++;
                 }
+
                 if($userid->getInfo()){
                     if( $userid->getCivilite() and $userid->getNom() and $userid->getPrenom() and $userid->getPhotos() and $userid->getTelephone() and $userid->getUsername() and $userid->getEmail()
                         and $userid->getInfo()->getDatenaissance() and $userid->getInfo()->getCpnaissance() and $userid->getInfo()->getLieunaissance() and $userid->getInfo()->getAdresse()
@@ -109,12 +115,10 @@ class DefaultController extends Controller
                     }
                 }
 
-              //  var_dump($userid->getEtablissement()->getQcmdef());die;
-
 
                 return $this->render('UserBundle:Gestion:iFrameContentUser.html.twig', array('User' => $userid,
                     'Infocomplementaire' => $info, 'Parents' => $Parents, 'Experience' => $Experience, 'Recommandation' => $Recommandation, 'Diplome' => $Diplome, 'Document' => $Document,
-                    'candidatures' => $candidatures, 'QCMs' => $userid->getEtablissement()->getQcmdef(), 'Questions' => $questions,
+                    'candidatures' => $candidatures, 'QCMs' => $QCMs, 'Questions' => $questions,
                     'reponses' => $reponses, 'QCMtest' => $QCMtest, 'QuestionsTest' => $questionsTest, 'reponsesTest' => $reponsesTest,'formations'=>$formation));
             }
         }
@@ -2372,5 +2376,27 @@ class DefaultController extends Controller
             return $response->setData($ids);
 
         }
+
+
+
+    public function ContactAddedAction(Request $request)
+    {
+        $newcontact = new ContactSociete();
+        $etab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_id'));
+        $newcontact->setEtablissement($etab);
+        $newcontact->setNom($request->get('_Nom'));
+        $newcontact->setPrenom($request->get('_Prenom'));
+        $newcontact->setMail($request->get('_mail'));
+        $newcontact->setTelephone($request->get('_Tel'));
+        $newcontact->setFonction($request->get('_Fonction'));
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($newcontact);
+        $em->flush();
+
+        return $this->redirect($_SERVER['HTTP_REFERER']);
+
+
+
+    }
 
 }

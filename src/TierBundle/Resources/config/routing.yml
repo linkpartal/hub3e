@@ -86,6 +86,10 @@ Siret_Verifier:
     path : /VerifierSiret/siret={siret}
     defaults: { _controller: TierBundle:Default:VerifierSiret}
 
+Enregistrer_suivi:
+    path : /EnregistrerSuivi/
+    defaults: { _controller: TierBundle:Default:EnregistrerSuivi}
+
 
 
 

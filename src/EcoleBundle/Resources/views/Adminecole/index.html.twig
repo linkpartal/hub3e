@@ -108,6 +108,7 @@
                     #}
                     <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Raison sociale</label>
                     <input type="text" class="input" id="RaisonSoc" name="_RaisonSoc" maxlength="45" required>
+
                     <input type="text" style="visibility: hidden" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" required>
                     <div class="col-xs-6 input-colonne">
 
@@ -485,6 +486,7 @@
 
                 </div>
                 <div id="licence" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+
                     {% if AllLicences is defined %}
                         {% for lic in AllLicences %}
                             <button onclick="postiframe('{{ path('admin_afficheLicence',{'id': lic.getId} ) }}')" id="licence{{ lic.getId }}" type="button" class="list-group-item butonLigne">
@@ -899,12 +901,8 @@
         for(var j = 1;j<geocodes.length;j++){
             var siret = document.getElementsByName('_SIRET[]')[j].value;
             var test = siret.substring(0, 9);
-            if(test!=document.getElementById('SIREN').value)
-            {
-                alert('Le siret de l\'adresse '+ j + ' n\'est pas compatible avec le siren donné');
-                document.getElementById('submittier').disabled=false;
-                return;
-            }
+            document.getElementById('SIREN').value=test;
+
         }
         var result_input= [];
         for(var i = 1; i<geocodes.length;i++)

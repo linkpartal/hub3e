@@ -1846,12 +1846,8 @@
         for(var j = 1;j<geocodes.length;j++){
             var siret = document.getElementsByName('_SIRET[]')[j].value;
             var test = siret.substring(0, 9);
-            if(test!=document.getElementById('SIREN').value)
-            {
-                alert('Le siret de l\'adresse '+ j + ' n\'est pas compatible avec le siren donné');
-                document.getElementById('submittier').disabled=false;
-                return;
-            }
+            document.getElementById('SIREN').value=test;
+
         }
         var result_input= [];
         for(var i = 1; i<geocodes.length;i++)
