@@ -1256,7 +1256,7 @@
                                                         <label style="color:black">Administrateur école</label>
                                                     {% elseif role == "ROLE_ADMINSOC" %}
                                                         <label style="color:black">Administrateur Société</label>
-                                                    {% elseif role == "ROLE_TUTEUR" %}
+                                                    {% elseif role == "ROLE_CONTACT_MISSION" %}
                                                         <label style="color:black">Tuteur</label>
                                                     {% elseif role == "ROLE_RECRUTEUR" %}
                                                         <label style="color:black">Recruteur Placeur</label>
@@ -1427,7 +1427,7 @@
                                                 <label style="color:black">Administrateur école</label>
                                             {% elseif role == "ROLE_ADMINSOC" %}
                                                 <label style="color:black">Administrateur Société</label>
-                                            {% elseif role == "ROLE_TUTEUR" %}
+                                            {% elseif role == "ROLE_CONTACT_MISSION" %}
                                                 <label style="color:black">Tuteur</label>
                                             {% elseif role == "ROLE_RECRUTEUR" %}
                                                 <label style="color:black">Recruteur Placeur</label>
@@ -1810,7 +1810,7 @@
                                                         <label class="cell">Id : <label>{{ candidature.id }}</label></label>
 
                                                         <label class="cell"  >Statut : <label id="lblStatut">
-                                                                {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_TUTEUR') %}
+                                                                {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_CONTACT_MISSION') %}
                                                                     {% if candidature.statut == 1 %}
                                                                         En attente compléments
                                                                     {% elseif candidature.statut == 2 %}
@@ -2268,7 +2268,7 @@
 
         $(".slide").click(function(){
             document.getElementById('info_mission').style.visibility= 'hidden';
-            {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
+            {% if is_granted('ROLE_CONTACT_MISSION') or is_granted('ROLE_RECRUTEUR') %}
             document.getElementById('apprenants_mission').style.visibility= 'hidden';
             {% endif %}
             document.getElementById('map').style.visibility= 'hidden';

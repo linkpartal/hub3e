@@ -94,7 +94,7 @@
 
                                     {% else %}
                                         <option value="ROLE_ADMINSOC">Administrateur Société</option>
-                                        <option value="ROLE_TUTEUR">Tuteur</option>
+                                        <option value="ROLE_CONTACT_MISSION">Tuteur</option>
                                     {% endif %}
                                 </select>
                             </div>
@@ -461,7 +461,7 @@
                                         <select title="Tuteur" class="input" name="_TUTEURMISSION" style="font:16px Roboto;">
                                             {% if users is defined %}
                                                 {% for user in users %}
-                                                    {% if user.hasRole('ROLE_TUTEUR') %}
+                                                    {% if user.hasRole('ROLE_CONTACT_MISSION') %}
                                                         <option value="{{ user.id }}">{{ user.nom }} {{ user.prenom }}</option>
                                                     {% endif %}
                                                 {% endfor %}
@@ -814,7 +814,7 @@
                                                 <select title="Tuteur" class="input" name="_TUTEURMISSION" style="font:16px Roboto;">
                                                     {% if users is defined %}
                                                         {% for user in users %}
-                                                            {% if user.hasRole('ROLE_TUTEUR') %}
+                                                            {% if user.hasRole('ROLE_CONTACT_MISSION') %}
 
                                                                 <option {% if  mission.getTuteur.getNom()==user.nom and  mission.getTuteur.getPrenom()== user.prenom  %} selected {% endif %} value="{{ user.id }}">{{ user.nom }} {{ user.prenom }}</option>
                                                             {% endif %}
@@ -1477,7 +1477,7 @@
                                                             <label style="color:black">Administrateur école</label>
                                                         {% elseif role == "ROLE_ADMINSOC" %}
                                                             <label style="color:black">Administrateur Société</label>
-                                                        {% elseif role == "ROLE_TUTEUR" %}
+                                                        {% elseif role == "ROLE_CONTACT_MISSION" %}
                                                             <label style="color:black">Tuteur</label>
                                                         {% elseif role == "ROLE_RECRUTEUR" %}
                                                             <label style="color:black">Recruteur Placeur</label>

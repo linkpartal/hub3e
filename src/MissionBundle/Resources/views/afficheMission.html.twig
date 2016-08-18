@@ -488,25 +488,25 @@
 
 
 
-                                        {% if mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut=='1' %}
+                                        {% if mission.getExpediteur.hasRole('ROLE_CONTACT_MISSION') and mission.getStatut=='1' %}
                                                 <div class="col-xs-12" style="height: auto;horiz-align: center; text-align: center; font: small Roboto;">
                                                     <textarea style="color:#2975cb;" rows="4" disabled cols="50" name="comment" id="comment">
                                                         {{ mission.getMessage }}
                                                     </textarea>
                                                 </div>
-                                        {% elseif not mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut is null %}
+                                        {% elseif not mission.getExpediteur.hasRole('ROLE_CONTACT_MISSION') and mission.getStatut is null %}
                                             <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
                                                         à l'attente d'une réponse de la part de l'apprenant
                                              </textarea>
-                                        {% elseif not mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut=='1' %}
+                                        {% elseif not mission.getExpediteur.hasRole('ROLE_CONTACT_MISSION') and mission.getStatut=='1' %}
                                             <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
                                                         à l'attente d'une réponse de la part du tuteur
                                              </textarea>
-                                        {% elseif  mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut=='-1' %}
+                                        {% elseif  mission.getExpediteur.hasRole('ROLE_CONTACT_MISSION') and mission.getStatut=='-1' %}
                                             <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
                                                         offre déclinée par le tuteur
                                              </textarea>
-                                        {% elseif  not mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut=='-1' %}
+                                        {% elseif  not mission.getExpediteur.hasRole('ROLE_CONTACT_MISSION') and mission.getStatut=='-1' %}
                                             <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
                                                         offre déclinée par l'apprenant
                                              </textarea>
@@ -630,7 +630,7 @@
 
 
 <div class="row" style="margin: 0;">
-    {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
+    {% if is_granted('ROLE_CONTACT_MISSION') or is_granted('ROLE_RECRUTEUR') %}
     <button id="ButtonInfoMission" class="col-xs-4 onglet slide"  type="button" data-show="info_mission" > FICHE MISSION</button>
     <button id="ButtonApprenantMission" class="col-xs-4 onglet slide"  type="button" data-show="apprenants_mission" >LISTE DES APPRENANTS</button>
     <button id="ButtonMap" class="col-xs-4 onglet slide"  type="button" data-show="map" >CARTE DES APPRENANTS</button>
@@ -799,7 +799,7 @@
 
 
     </div>
-{% if is_granted('ROLE_ADMINSOC') or is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_TUTEUR') %}
+{% if is_granted('ROLE_ADMINSOC') or is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_CONTACT_MISSION') %}
     <div id="apprenants_mission" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;width: 100%;height: 82%;visibility: hidden;position: absolute;">
         <div class="row" style="margin:10px 0 0 10px;display: none;"  >
             <div>
@@ -980,7 +980,7 @@
 
 
 
-    {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
+    {% if is_granted('ROLE_CONTACT_MISSION') or is_granted('ROLE_RECRUTEUR') %}
     <div id="wrapper" class="infobox-wrapper">
         {% set i =0 %}
         {% for apprenant in users %}
@@ -1414,7 +1414,7 @@
     }
     $(".slide").click(function(){
         document.getElementById('info_mission').style.visibility= 'hidden';
-        {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
+        {% if is_granted('ROLE_CONTACT_MISSION') or is_granted('ROLE_RECRUTEUR') %}
         document.getElementById('apprenants_mission').style.visibility= 'hidden';
         {% endif %}
         document.getElementById('map').style.visibility= 'hidden';
@@ -1516,7 +1516,7 @@
     function putAppMarker()
     {
         var oms = new OverlappingMarkerSpiderfier(map);
-        {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
+        {% if is_granted('ROLE_CONTACT_MISSION') or is_granted('ROLE_RECRUTEUR') %}
 
 
         var informations_users = JSON.parse('{{ informations_maps|json_encode }}'.replace(/&quot;/g,'"'));
@@ -1660,7 +1660,7 @@
             visible: true,
             icon: '{{ asset('image/societe.png') }}'
         });
-        {% if not is_granted('ROLE_TUTEUR') and not is_granted('ROLE_RECRUTEUR') %}
+        {% if not is_granted('ROLE_CONTACT_MISSION') and not is_granted('ROLE_RECRUTEUR') %}
         infobox = new InfoBox({
             content: document.getElementById("Societe_Info")
             ,disableAutoPan: false
@@ -1709,7 +1709,7 @@
                     visible: true,
                     icon: '{{ asset('image/societe.png') }}'
                 });
-                {% if not is_granted('ROLE_TUTEUR') and not is_granted('ROLE_RECRUTEUR') %}
+                {% if not is_granted('ROLE_CONTACT_MISSION') and not is_granted('ROLE_RECRUTEUR') %}
                 infobox = new InfoBox({
                     content: document.getElementById("Societe_Info")
                     ,disableAutoPan: false

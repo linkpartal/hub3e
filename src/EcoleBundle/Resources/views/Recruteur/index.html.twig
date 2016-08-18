@@ -556,7 +556,7 @@
                         <select title="Tuteur" class="input" name="_TUTEURMISSION" style="font:16px Roboto;">
                             {% if users is defined %}
                                 {% for user in users %}
-                                    {% if user.hasRole('ROLE_TUTEUR') %}
+                                    {% if user.hasRole('ROLE_CONTACT_MISSION') %}
                                         <option value="{{ user.id }}">{{ user.nom }} {{ user.prenom }}</option>
                                     {% endif %}
                                 {% endfor %}
@@ -658,7 +658,7 @@
 
 
 
-                                     {% if mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut=='1' %}
+                                     {% if mission.getExpediteur.hasRole('ROLE_CONTACT_MISSION') and mission.getStatut=='1' %}
 
                                          <div class="col-xs-12" style="height: auto;horiz-align: center; text-align: center; font: small Roboto;">
 
@@ -672,26 +672,26 @@
                                          </div>
 
 
-                                     {% elseif not mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut is null %}
+                                     {% elseif not mission.getExpediteur.hasRole('ROLE_CONTACT_MISSION') and mission.getStatut is null %}
                                          <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
                                                                      à l'attente d'une réponse de la part de l'apprenant
 
                                                           </textarea>
 
-                                     {% elseif not mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut=='1' %}
+                                     {% elseif not mission.getExpediteur.hasRole('ROLE_CONTACT_MISSION') and mission.getStatut=='1' %}
                                          <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
                                                                      à l'attente d'une réponse de la part du tuteur
 
                                                           </textarea>
 
 
-                                     {% elseif  mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut=='-1' %}
+                                     {% elseif  mission.getExpediteur.hasRole('ROLE_CONTACT_MISSION') and mission.getStatut=='-1' %}
                                          <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
                                                                      offre déclinée par le tuteur
 
                                                           </textarea>
 
-                                     {% elseif  not mission.getExpediteur.hasRole('ROLE_TUTEUR') and mission.getStatut=='-1' %}
+                                     {% elseif  not mission.getExpediteur.hasRole('ROLE_CONTACT_MISSION') and mission.getStatut=='-1' %}
                                          <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
                                                                      offre déclinée par l'apprenant
 

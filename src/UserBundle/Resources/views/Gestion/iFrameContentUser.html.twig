@@ -555,8 +555,8 @@
                                                 <label style="color:black">Administrateur école</label>
                                             {% elseif role == "ROLE_ADMINSOC" %}
                                                 <label style="color:black">Administrateur Société</label>
-                                            {% elseif role == "ROLE_TUTEUR" %}
-                                                <label style="color:black">Tuteur</label>
+                                            {% elseif role == "ROLE_CONTACT_MISSION" %}
+                                                <label style="color:black">Contact mission</label>
                                             {% elseif role == "ROLE_RECRUTEUR" %}
                                                 <label style="color:black">Recruteur Placeur</label>
                                             {% elseif role == "ROLE_SUPER_ADMIN" %}
@@ -726,8 +726,8 @@
                                                 <label style="color:black">Administrateur école</label>
                                             {% elseif role == "ROLE_ADMINSOC" %}
                                                 <label style="color:black">Administrateur Société</label>
-                                            {% elseif role == "ROLE_TUTEUR" %}
-                                                <label style="color:black">Tuteur</label>
+                                            {% elseif role == "ROLE_CONTACT_MISSION" %}
+                                                <label style="color:black">Contact mission</label>
                                             {% elseif role == "ROLE_RECRUTEUR" %}
                                                 <label style="color:black">Recruteur Placeur</label>
                                             {% elseif role == "ROLE_SUPER_ADMIN" %}
@@ -1207,7 +1207,7 @@
                                                 <label class="cell">Id : <label>{{ candidature.id }}</label></label>
 
                                                 <label class="cell"  >Statut : <label id="lblStatut">
-                                                        {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_TUTEUR') %}
+                                                        {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_CONTACT_MISSION') %}
                                                             {% if candidature.statut == 1 %}
                                                                 En attente compléments
                                                             {% elseif candidature.statut == 2 %}
@@ -1442,7 +1442,7 @@
                         <button onclick="if(confirm('Voulez-vous Supprimer cet utilisateur ?')){window.location.href = '{{ path('supprimerUtilisateur',{'id': User.getId }) }}';}" type="button" class="col-xs-12 rightMenu" >
                             Supprimer l'utilisateur
                         </button>
-                        {% if User.hasRole('ROLE_TUTEUR') or User.hasRole('ROLE_RECRUTEUR') %}
+                        {% if User.hasRole('ROLE_CONTACT_MISSION') or User.hasRole('ROLE_RECRUTEUR') %}
                             <button onclick="ChangeRole()" type="button" class="col-xs-12 rightMenu" >
                                 Promouvoir
                             </button>
@@ -1541,7 +1541,7 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
-    {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
+    {% if is_granted('ROLE_CONTACT_MISSION') or is_granted('ROLE_RECRUTEUR') %}
     function ChangeRole(){
         $.ajax({
             type:'Post',

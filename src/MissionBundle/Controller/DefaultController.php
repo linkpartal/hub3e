@@ -287,7 +287,7 @@ class DefaultController extends Controller
         $tuteurs = array();
         foreach($em->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$mission->getEtablissement())) as $users_etablissement)
         {
-            if($users_etablissement->hasRole('ROLE_TUTEUR'))
+            if($users_etablissement->hasRole('ROLE_CONTACT_MISSION'))
             {
                 array_push($tuteurs,$users_etablissement);
             }
@@ -323,7 +323,7 @@ class DefaultController extends Controller
 
                 }
             }
-            elseif(($Userconnecte->hasRole('ROLE_ADMINECOLE') or $Userconnecte->hasRole('ROLE_TUTEUR')) and $Userconnecte->getTier() == $diffusion->getFormation()->getEtablissement()->getTier()){
+            elseif(($Userconnecte->hasRole('ROLE_ADMINECOLE') or $Userconnecte->hasRole('ROLE_CONTACT_MISSION')) and $Userconnecte->getTier() == $diffusion->getFormation()->getEtablissement()->getTier()){
                 foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
                 {
                     if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3 ){

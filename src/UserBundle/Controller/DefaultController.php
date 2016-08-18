@@ -256,7 +256,7 @@ class DefaultController extends Controller
         if($user->hasRole('ROLE_APPRENANT')){
             $rendezvous = $this->getDoctrine()->getRepository('GenericBundle:RDV')->findBy(array('apprenant'=>$user ));
         }
-        elseif ($user->hasRole('ROLE_TUTEUR')){
+        elseif ($user->hasRole('ROLE_CONTACT_MISSION')){
             $rendezvous = $this->getDoctrine()->getRepository('GenericBundle:RDV')->findBy(array('tuteur'=>$user ));
         }
         elseif($user->hasRole('ROLE_SUPER_ADMIN')){
@@ -348,7 +348,7 @@ class DefaultController extends Controller
             $newuser->setEtablissement($etab);
         }
 
-        if($request->get('_role')=='ROLE_RECRUTEUR' || $request->get('_role')=='ROLE_TUTEUR')
+        if($request->get('_role')=='ROLE_RECRUTEUR' || $request->get('_role')=='ROLE_CONTACT_MISSION')
         {
             $etab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_id'));
             $newuser->setEtablissement($etab);
@@ -2138,11 +2138,11 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $response = new JsonResponse();
         $user = $em->getRepository('GenericBundle:User')->find($idUser);
-        if($user->hasRole('ROLE_TUTEUR') or $user->hasRole('ROLE_RECRUTEUR')){
+        if($user->hasRole('ROLE_CONTACT_MISSION') or $user->hasRole('ROLE_RECRUTEUR')){
             $user->setTier($user->getEtablissement()->getTier());
             $user->setEtablissement(null);
-            if($user->hasRole('ROLE_TUTEUR')){
-                $user->removeRole('ROLE_TUTEUR');
+            if($user->hasRole('ROLE_CONTACT_MISSION')){
+                $user->removeRole('ROLE_CONTACT_MISSION');
                 $user->addRole('ROLE_ADMINSOC');
             }
             else{
@@ -2167,7 +2167,7 @@ class DefaultController extends Controller
             }
             else{
                 $user->removeRole('ROLE_ADMINSOC');
-                $user->addRole('ROLE_TUTEUR');
+                $user->addRole('ROLE_CONTACT_MISSION');
             }
             $em->flush();
             return $response->setData(1);

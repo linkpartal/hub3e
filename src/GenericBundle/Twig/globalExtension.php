@@ -293,7 +293,7 @@ class globalExtension extends \Twig_Extension{
        $tuteurs = array();
        foreach($this->em->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$mission->getEtablissement())) as $users_etablissement)
        {
-           if($users_etablissement->hasRole('ROLE_TUTEUR'))
+           if($users_etablissement->hasRole('ROLE_CONTACT_MISSION'))
            {
                array_push($tuteurs,$users_etablissement);
            }

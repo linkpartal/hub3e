@@ -1040,7 +1040,7 @@
 
         $(".slide").click(function(){
             document.getElementById('info_mission').style.visibility= 'hidden';
-            {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
+            {% if is_granted('ROLE_CONTACT_MISSION') or is_granted('ROLE_RECRUTEUR') %}
             document.getElementById('apprenants_mission').style.visibility= 'hidden';
             {% endif %}
             document.getElementById('map').style.visibility= 'hidden';
