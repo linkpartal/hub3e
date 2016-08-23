@@ -231,7 +231,7 @@ class DefaultController extends Controller
             $Apprenantplacer=round((count($MyApprenantPlacer)*100)/count($Allapprenants),2);
         }
 
-       // Missions à pourvoir ( RESTE A REGLER CETTE PUTIN DE VARIABLE $ETABLISSEMENT QUI REND FOU)
+       // Missions à pourvoir 
 
         $Allmissions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('tier'=>$tiercreation));
 
