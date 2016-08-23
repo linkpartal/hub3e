@@ -6,6 +6,7 @@ use GenericBundle\Entity\Diffusion;
 use GenericBundle\Entity\Message;
 use GenericBundle\Entity\Mission;
 use GenericBundle\Entity\Postulation;
+use GenericBundle\Entity\AjoutManuelle;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +25,7 @@ class DefaultController extends Controller
         $mission->setEtablissement($etablissement);
 
         $mission->setDescriptif($request->get('_Descriptif'));
-        $mission->setProfil($request->get('_Profil'));
+        $mission->setProfil($request->get('_ProfilRech'));
 
         //$mission->setTypecontrat($request->get('_TypeContrat'));
 
@@ -72,12 +73,22 @@ class DefaultController extends Controller
         $mission->setEmailContact($request->get('_EmailContact'));
         $mission->setCommentaire($request->get('_Commentaire'));
         $mission->setIntitule($request->get('_Intitule'));
-        $mission->setNbreposte($request->get('_Emploi'));
+        $mission->setNbreposte($request->get('_NbrePoste'));
         if($request->get('_Embauche') == '1'){
             $mission->setEmploi(true);
         }
         else{
             $mission->setEmploi(false);
+        }
+
+        if($request->get('_Metier1') and !$request->get('_Metier1') == '' ){
+            $mission->setMetier1($request->get('_Metier1'));
+        }
+        if($request->get('_Metier2') and !$request->get('_Metier2') == '' ){
+            $mission->setMetier2($request->get('_Metier2'));
+        }
+        if($request->get('_Metier3') and !$request->get('_Metier3') == '' ){
+            $mission->setMetier3($request->get('_Metier3'));
         }
 
         $em->persist($mission);
@@ -133,7 +144,7 @@ class DefaultController extends Controller
         $mission->setEtablissement($etablissement);
 
         $mission->setDescriptif($request->get('_Descriptif'));
-        $mission->setProfil($request->get('_Profil'));
+        $mission->setProfil($request->get('_ProfilRech'));
 
         //$mission->setTypecontrat($request->get('_TypeContrat'));
 
@@ -182,12 +193,30 @@ class DefaultController extends Controller
         $mission->setEmailContact($request->get('_EmailContact'));
         $mission->setCommentaire($request->get('_Commentaire'));
         $mission->setIntitule($request->get('_Intitule'));
-        $mission->setNbreposte($request->get('_Emploi'));
+        $mission->setNbreposte($request->get('_NbrePoste'));
         if($request->get('_Embauche') == '1'){
             $mission->setEmploi(true);
         }
         else{
             $mission->setEmploi(false);
+        }
+
+        if($request->get('_Metier1') and !$request->get('_Metier1') == '' ){
+            $mission->setMetier1($request->get('_Metier1'));
+        }else{
+            $mission->setMetier1(null);
+        }
+        if($request->get('_Metier2') and !$request->get('_Metier2') == '' ){
+            $mission->setMetier2($request->get('_Metier2'));
+        }
+        else{
+            $mission->setMetier2(null);
+        }
+        if($request->get('_Metier3') and !$request->get('_Metier3') == '' ){
+            $mission->setMetier3($request->get('_Metier3'));
+        }
+        else{
+            $mission->setMetier3(null);
         }
 
 
@@ -258,7 +287,7 @@ class DefaultController extends Controller
         $tuteurs = array();
         foreach($em->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$mission->getEtablissement())) as $users_etablissement)
         {
-            if($users_etablissement->hasRole('ROLE_TUTEUR'))
+            if($users_etablissement->hasRole('ROLE_CONTACT_MISSION'))
             {
                 array_push($tuteurs,$users_etablissement);
             }
@@ -294,7 +323,7 @@ class DefaultController extends Controller
 
                 }
             }
-            elseif(($Userconnecte->hasRole('ROLE_ADMINECOLE') or $Userconnecte->hasRole('ROLE_TUTEUR')) and $Userconnecte->getTier() == $diffusion->getFormation()->getEtablissement()->getTier()){
+            elseif(($Userconnecte->hasRole('ROLE_ADMINECOLE') or $Userconnecte->hasRole('ROLE_CONTACT_MISSION')) and $Userconnecte->getTier() == $diffusion->getFormation()->getEtablissement()->getTier()){
                 foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
                 {
                     if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3 ){
@@ -312,6 +341,14 @@ class DefaultController extends Controller
                     }
                 }
             }
+        }
+
+        $ajoutmanuelle = $this->getDoctrine()->getRepository('GenericBundle:AjoutManuelle')->findBy(array('mission'=>$id));
+
+        foreach($ajoutmanuelle as $ajoutMan)
+        {
+            array_push($users,$ajoutMan->getApprenant());
+
         }
 
 
@@ -368,21 +405,14 @@ class DefaultController extends Controller
         $miseEnrelation = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('mission'=>$mission));
 
 
-       // $Messages = $this->getDoctrine()->getRepository('GenericBundle:Message')->findAll();
+
 
 
         $sql="SELECT Max(M.id) FROM GenericBundle:Message M  GROUP BY M.destinataire,M.mission order by M.id  " ;
         $query = $em->createQuery($sql);
         $max= $query->getResult();
 
-      // implode($max);
 
-
-
-
-
-
-       // $Messages = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('id'=>$max));
 
         if(substr($this->array2string($max), 0, -1)==''){
 
@@ -395,36 +425,43 @@ class DefaultController extends Controller
         }
 
 
-
-        /*$CountMessions = array();
-        foreach($users as $apprenant)
+        $listeApprenanats = array();
+        foreach($this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($this->get('security.token_storage')->getToken()->getUser()->getTier()) as $apprenanats_etablissement)
         {
-
-            array_push($CountMessions,$apprenant);
-        }
-
-
-         var_dump($CountMessions);die;*/
-        //var_dump($Messages);die;
-
-        /*$user = $this->getDoctrine()->getRepository('GenericBundle:User')->find('5');
-        $QcmDef = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findOneBy(array('nom'=>'QCMparDéfault'));
-        $QuestionDef = $this->getDoctrine()->getRepository('GenericBundle:Questiondef')->findOneBy(array('ordre'=>'7','qcmdef'=>$QcmDef));
-        $TypeContrat=null;
-        foreach($em->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef'=>$QuestionDef)) as $rep)
-        {
-            if(in_array($rep,$user->getReponsedef()->toArray()))
+            if($apprenanats_etablissement->hasRole('ROLE_APPRENANT'))
             {
-                $TypeContrat=$rep->getReponse();
+                if (!in_array($apprenanats_etablissement, $users)) {
+
+                    array_push($listeApprenanats,$apprenanats_etablissement);
+                }
+
             }
         }
 
-        var_dump($TypeContrat);die;*/
+        usort($listeApprenanats, array($this, "cmpN"));
 
-         // var_dump(count($users));die;
+        foreach($listeApprenanats as $apprenant)
+        {
+            if($apprenant->getPhotos() and !is_string($apprenant->getPhotos()))
+            {
+                $apprenant->setPhotos(base64_encode(stream_get_contents($apprenant->getPhotos())));
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+        // var_dump(count($listeApprenanats));die;
+
 
         return $this->render('MissionBundle::afficheMission.html.twig',array('mission'=>$mission,'users'=>$users,'formations_prop'=>$formations_prop,'informations_maps'=>$informations_maps,
-            'tuteur_etablissement'=>$tuteurs,'scores'=>$scores,'Diffusions'=>$Diffusion,'miseEnrelation'=>$miseEnrelation,'Messages'=>$Messages));
+            'tuteur_etablissement'=>$tuteurs,'scores'=>$scores,'Diffusions'=>$Diffusion,'miseEnrelation'=>$miseEnrelation,'Messages'=>$Messages,'listeApprenants'=>$listeApprenanats));
 
 
     }
@@ -469,8 +506,8 @@ class DefaultController extends Controller
         if($request->get('_Descriptif') and !$request->get('_Descriptif')==''){
             $mission->setDescriptif($request->get('_Descriptif'));
         }
-        if($request->get('_Profil') and !$request->get('_Profil')==''){
-            $mission->setProfil($request->get('_Profil'));
+        if($request->get('_ProfilRech') and !$request->get('_ProfilRech')==''){
+            $mission->setProfil($request->get('_ProfilRech'));
         }
         if($request->get('_Commentaire') and !$request->get('_Commentaire')==''){
             $mission->setCommentaire($request->get('_Commentaire'));
@@ -651,6 +688,27 @@ class DefaultController extends Controller
     function cmpN($c,$d){
         return strcmp(mb_strtoupper($c->getPrenom().' '. $c->getNom()), mb_strtoupper($d->getPrenom().' '.$d->getNom()));
     }
+
+    public function AjoutManuelleAction($idApp,$idMission){
+        $em = $this->getDoctrine()->getEntityManager();
+
+       $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($idApp);
+
+       $mission = $this->getDoctrine()->getRepository('GenericBundle:Mission')->find($idMission);
+
+        $ajoutManuelle = new AjoutManuelle();
+
+        $ajoutManuelle->setApprenant($user);
+        $ajoutManuelle->setMission($mission);
+
+        $ajoutManuelle->setDate(date_create());
+        $em->persist($ajoutManuelle);
+        $em->flush();
+
+        $response = new JsonResponse();
+        return $response->setData(array('status'=>1,'redirect'=>$_SERVER['HTTP_REFERER']));
+    }
+
 
 
 

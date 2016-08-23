@@ -185,6 +185,15 @@ class Etablissement
     private $users;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="suivi_commercial ", type="string", length=255, nullable=true)
+     */
+    private $suivicommercial;
+
+
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -705,5 +714,29 @@ class Etablissement
     public function getSecteur()
     {
         return $this->secteur;
+    }
+
+    /**
+     * Set suivicommercial
+     *
+     * @param string $suivicommercial
+     *
+     * @return Etablissement
+     */
+    public function setSuivicommercial($suivicommercial)
+    {
+        $this->suivicommercial = $suivicommercial;
+
+        return $this;
+    }
+
+    /**
+     * Get suivicommercial
+     *
+     * @return string
+     */
+    public function getSuivicommercial()
+    {
+        return $this->suivicommercial;
     }
 }

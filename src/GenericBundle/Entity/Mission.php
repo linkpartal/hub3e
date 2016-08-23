@@ -120,6 +120,27 @@ class Mission
     private $pourvue;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="Metier1", type="string", length=100, nullable=true)
+     */
+    private $metier1;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Metier2", type="string", length=100, nullable=true)
+     */
+    private $metier2;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Metier3", type="string", length=1000, nullable=true)
+     */
+    private $metier3;
+
+    /**
      * @var \GenericBundle\Entity\Tier
      *
      * @ORM\ManyToOne(targetEntity="Tier")
@@ -957,5 +978,77 @@ class Mission
     public function getPourvue()
     {
         return $this->pourvue;
+    }
+
+    /**
+     * Set metier1
+     *
+     * @param string $metier1
+     *
+     * @return Mission
+     */
+    public function setMetier1($metier1)
+    {
+        $this->metier1 = $metier1;
+
+        return $this;
+    }
+
+    /**
+     * Get metier1
+     *
+     * @return string
+     */
+    public function getMetier1()
+    {
+        return $this->metier1;
+    }
+
+    /**
+     * Set metier2
+     *
+     * @param string $metier2
+     *
+     * @return Mission
+     */
+    public function setMetier2($metier2)
+    {
+        $this->metier2 = $metier2;
+
+        return $this;
+    }
+
+    /**
+     * Get metier2
+     *
+     * @return string
+     */
+    public function getMetier2()
+    {
+        return $this->metier2;
+    }
+
+    /**
+     * Set metier3
+     *
+     * @param string $metier3
+     *
+     * @return Mission
+     */
+    public function setMetier3($metier3)
+    {
+        $this->metier3 = $metier3;
+
+        return $this;
+    }
+
+    /**
+     * Get metier3
+     *
+     * @return string
+     */
+    public function getMetier3()
+    {
+        return $this->metier3;
     }
 }

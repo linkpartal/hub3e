@@ -94,7 +94,7 @@
 
                                     {% else %}
                                         <option value="ROLE_ADMINSOC">Administrateur Société</option>
-                                        <option value="ROLE_TUTEUR">Tuteur</option>
+                                        <option value="ROLE_CONTACT_MISSION">Tuteur</option>
                                     {% endif %}
                                 </select>
                             </div>
@@ -115,6 +115,43 @@
                         </div>
                         <div class="div_button">
                             <input id="submitadduser" class="blue" type="submit" value="envoyer">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="addContact" class="popup">
+                <div onclick="document.getElementById('submitaddContact').click();hide(this)" class="close">
+                </div>
+                <div class="col-xs-offset-1 col-xs-9" style="padding: 0;border:20px solid white;display: block">
+
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+
+                    <form id="formaddContactr" class="formulaire" action="{{ path("contact_added") }}" onsubmit="document.getElementById('submitaddContact').disabled=true;ShowWaiter();" method="post">
+                        <input type="hidden" id="id" name="_id" value="{{ etablissement.getId }}">
+                        <div class="div_form" >
+
+                            <div class="col-xs-6 input-colonne">
+                                <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom" required maxlength="45">
+
+                                <input type="email" class="input " id="mail" name="_mail" placeholder="Email" required maxlength="45">
+
+                                <input type="text" class="input " id="fonction" name="_Fonction" placeholder="Fonction" required maxlength="250">
+
+
+                            </div>
+                            <div class="col-xs-6">
+
+
+                                <input type="text" class="input"  id="Prenom" name="_Prenom" placeholder="Prénom" required maxlength="45">
+
+
+                                <input type="tel" class="input " id="Tel" name="_Tel" placeholder="Tel" required maxlength="20">
+                            </div>
+
+
+                        </div>
+                        <div class="div_button">
+                            <input id="submitaddContact" class="blue" type="submit" value="envoyer">
                         </div>
                     </form>
                 </div>
@@ -191,9 +228,130 @@
                                       </div>
 
                                         <input type="number"  class="input " id="Remuneration" name="_Remuneration" placeholder="Rémunération"  max="1000000" style="font:16px Roboto;">
-                                        <input type="number" class="input " id="Emploi" name="_Emploi" placeholder="Nbre de poste à pourvoir" required  min="0" max="1000" style="font:16px Roboto;">
-                                        <input style="font:16px Roboto;" type="text" class="input" id="Domaine" name="_Domaine" placeholder="Domaine" required maxlength="45">
-                                      <input style="font:16px Roboto;" type="text" class="input" id="Profil" name="_Profil" placeholder="Profil recherché" required maxlength="250">
+                                        <input type="number" class="input " id="NbrePoste" name="_NbrePoste" placeholder="Nbre de poste à pourvoir" required  min="0" max="1000" style="font:16px Roboto;">
+
+
+
+                                      <div style="width: 100%" id="divMetier1">
+                                      <label style="margin-top:10px;float: left">Métier 1 :</label>
+                                      <select title="Métier 1"  class="input" id="Metier1" name="_Metier1" style="width:365px;font:16px Roboto;" >
+                                          <option value=""  ></option>
+                                          <option value="Achat">Achat</option>
+                                          <option value="Administration/Secrétariat">Administration/Secrétariat</option>
+                                          <option value="Agriculture/Elevage">Agriculture/Elevage</option>
+                                          <option value="Animation/Evénementiel">Animation/Evénementiel</option>
+                                          <option value="Artisanat">Artisanat</option>
+                                          <option value="Banque/Assurance">Banque/Assurance</option>
+                                          <option value="Bâtiment/Travaux publics">Bâtiment/Travaux publics</option>
+                                          <option value="Conseil/Audit">Conseil/Audit</option>
+                                          <option value="Commerce/Vente">Commerce/Vente</option>
+                                          <option value="Droit/Fiscalité">Droit/Fiscalité</option>
+                                          <option value="Edition/Journalisme">Edition/Journalisme</option>
+                                          <option value="Etude/Recherche">Etude/Recherche</option>
+                                          <option value="Finance/Comptabilité">Finance/Comptabilité</option>
+                                          <option value="Formation/Enseignement">Formation/Enseignement</option>
+                                          <option value="Immobilier">Immobilier</option>
+                                          <option value="Industrie/Production">Industrie/Production</option>
+                                          <option value="Informatique/Télécommunication">Informatique/Télécommunication</option>
+                                          <option value="Informatique/Développement">Informatique/Développement</option>
+                                          <option value="Management/Gestion">Management/Gestion</option>
+                                          <option value="Marketting/Communication/Publicité">Marketting/Communication/Publicité</option>
+                                          <option value="Pharmaceutique/Chimie">Pharmaceutique/Chimie</option>
+                                          <option value="Ressources Humaines">Ressources Humaines</option>
+                                          <option value="Hôtelerie/Restauration">Hôtelerie/Restauration</option>
+                                          <option value="Tourisme">Tourisme</option>
+                                          <option value="Santé">Santé</option>
+                                          <option value="Sécurité/Défense">Sécurité/Défense</option>
+                                          <option value="Social">Social</option>
+                                          <option value="Sport/Loisir">Sport/Loisir</option>
+                                          <option value="Soin/Beauté">Soin/Beauté</option>
+                                          <option value="Transport/Logistique">Transport/Logistique</option>
+
+                                      </select>
+                                          <button id="idbtnPlus1" style="margin-left:5px;margin-top:10px;float:left;"type="button" onclick="AddMetier(1)">+</button>
+                                          <button id="idbtnMoins1" style="margin-left:5px;margin-top:10px;float:left;display:none;"type="button" > - </button>
+                                          <img style="border:0px;height: 0px;width: 40px" src="{{ asset('image/vide.gif') }}" />
+                                      </div>
+                                      <div style="width: 100%;display:none;" id="divMetier2">
+                                     <label id="lblMetier2" style="margin-top:10px;float: left">Métier 2 :</label>
+                                      <select title="Métier 2"  class="input" id="Metier2" name="_Metier2" style="width:365px;font:16px Roboto;" >
+                                          <option value=""  ></option>
+                                          <option value="Achat">Achat</option>
+                                          <option value="Administration/Secrétariat">Administration/Secrétariat</option>
+                                          <option value="Agriculture/Elevage">Agriculture/Elevage</option>
+                                          <option value="Animation/Evénementiel">Animation/Evénementiel</option>
+                                          <option value="Artisanat">Artisanat</option>
+                                          <option value="Banque/Assurance">Banque/Assurance</option>
+                                          <option value="Bâtiment/Travaux publics">Bâtiment/Travaux publics</option>
+                                          <option value="Conseil/Audit">Conseil/Audit</option>
+                                          <option value="Commerce/Vente">Commerce/Vente</option>
+                                          <option value="Droit/Fiscalité">Droit/Fiscalité</option>
+                                          <option value="Edition/Journalisme">Edition/Journalisme</option>
+                                          <option value="Etude/Recherche">Etude/Recherche</option>
+                                          <option value="Finance/Comptabilité">Finance/Comptabilité</option>
+                                          <option value="Formation/Enseignement">Formation/Enseignement</option>
+                                          <option value="Immobilier">Immobilier</option>
+                                          <option value="Industrie/Production">Industrie/Production</option>
+                                          <option value="Informatique/Télécommunication">Informatique/Télécommunication</option>
+                                          <option value="Informatique/Développement">Informatique/Développement</option>
+                                          <option value="Management/Gestion">Management/Gestion</option>
+                                          <option value="Marketting/Communication/Publicité">Marketting/Communication/Publicité</option>
+                                          <option value="Pharmaceutique/Chimie">Pharmaceutique/Chimie</option>
+                                          <option value="Ressources Humaines">Ressources Humaines</option>
+                                          <option value="Hôtelerie/Restauration">Hôtelerie/Restauration</option>
+                                          <option value="Tourisme">Tourisme</option>
+                                          <option value="Santé">Santé</option>
+                                          <option value="Sécurité/Défense">Sécurité/Défense</option>
+                                          <option value="Social">Social</option>
+                                          <option value="Sport/Loisir">Sport/Loisir</option>
+                                          <option value="Soin/Beauté">Soin/Beauté</option>
+                                          <option value="Transport/Logistique">Transport/Logistique</option>
+
+                                      </select>
+                                          <button id="idbtnPlus2" style="margin-left:5px;margin-top:10px;float:left;"type="button" onclick="AddMetier(2)">+</button>
+                                          <button id="idbtnMoins2" style="margin-left:5px;margin-top:10px;float:left;display:none;"type="button" onclick="MoinsMetier(2)"> - </button>
+                                          <img style="border:0px;height: 0px;width: 40px" src="{{ asset('image/vide.gif') }}" />
+                                      </div>
+                                      <div style="width: 100%;display:none;" id="divMetier3">
+                                          <label id="lblMetier3" style="margin-top:10px;float: left">Métier 3 :</label>
+                                      <select title="Métier 3"  class="input" id="Metier3" name="_Metier3" style="width:365px;font:16px Roboto;" >
+                                          <option value=""  ></option>
+                                          <option value="Achat">Achat</option>
+                                          <option value="Administration/Secrétariat">Administration/Secrétariat</option>
+                                          <option value="Agriculture/Elevage">Agriculture/Elevage</option>
+                                          <option value="Animation/Evénementiel">Animation/Evénementiel</option>
+                                          <option value="Artisanat">Artisanat</option>
+                                          <option value="Banque/Assurance">Banque/Assurance</option>
+                                          <option value="Bâtiment/Travaux publics">Bâtiment/Travaux publics</option>
+                                          <option value="Conseil/Audit">Conseil/Audit</option>
+                                          <option value="Commerce/Vente">Commerce/Vente</option>
+                                          <option value="Droit/Fiscalité">Droit/Fiscalité</option>
+                                          <option value="Edition/Journalisme">Edition/Journalisme</option>
+                                          <option value="Etude/Recherche">Etude/Recherche</option>
+                                          <option value="Finance/Comptabilité">Finance/Comptabilité</option>
+                                          <option value="Formation/Enseignement">Formation/Enseignement</option>
+                                          <option value="Immobilier">Immobilier</option>
+                                          <option value="Industrie/Production">Industrie/Production</option>
+                                          <option value="Informatique/Télécommunication">Informatique/Télécommunication</option>
+                                          <option value="Informatique/Développement">Informatique/Développement</option>
+                                          <option value="Management/Gestion">Management/Gestion</option>
+                                          <option value="Marketting/Communication/Publicité">Marketting/Communication/Publicité</option>
+                                          <option value="Pharmaceutique/Chimie">Pharmaceutique/Chimie</option>
+                                          <option value="Ressources Humaines">Ressources Humaines</option>
+                                          <option value="Hôtelerie/Restauration">Hôtelerie/Restauration</option>
+                                          <option value="Tourisme">Tourisme</option>
+                                          <option value="Santé">Santé</option>
+                                          <option value="Sécurité/Défense">Sécurité/Défense</option>
+                                          <option value="Social">Social</option>
+                                          <option value="Sport/Loisir">Sport/Loisir</option>
+                                          <option value="Soin/Beauté">Soin/Beauté</option>
+                                          <option value="Transport/Logistique">Transport/Logistique</option>
+
+                                      </select>
+                                          <button id="idbtnPlus3" style="margin-left:5px;margin-top:10px;float:left;"type="button" onclick="AddMetier(3)">+</button>
+                                          <button id="idbtnMoins3" style="margin-left:5px;margin-top:10px;float:left;display:none;"type="button" onclick="MoinsMetier(3)"> - </button>
+                                      </div>
+
 
                                       {#<div class="col-xs-12">
                                           <label class="col-xs12">Embauche à l'issue de la mission?</label>
@@ -303,7 +461,7 @@
                                         <select title="Tuteur" class="input" name="_TUTEURMISSION" style="font:16px Roboto;">
                                             {% if users is defined %}
                                                 {% for user in users %}
-                                                    {% if user.hasRole('ROLE_TUTEUR') %}
+                                                    {% if user.hasRole('ROLE_CONTACT_MISSION') %}
                                                         <option value="{{ user.id }}">{{ user.nom }} {{ user.prenom }}</option>
                                                     {% endif %}
                                                 {% endfor %}
@@ -318,7 +476,7 @@
                                         {% for question in Questions %}
                                             <div class="inputcontainer" >
 
-                                                {{ question.question  }}
+
                                                 <label title="{{ question.question  }}"  style="float: left;text-overflow: ellipsis;overflow: hidden;height:40px;" >{{ question.question  }} :</label>
                                                 <div >
                                                 {% for reponse in reponses[y] %}
@@ -351,7 +509,7 @@
                             <div onclick="document.getElementById('submitaddmission{{ mission.getId }}').click();hide(this)" class="close"></div>
                             <div class="col-xs-offset-1 col-xs-9 formContainer">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
-                                <form id="formaddmission{{ mission.getId }}" class="formulaire" action= "{{ path("mission_update") }}" onsubmit="document.getElementById('submitaddmission{{ mission.getId }}').disabled=true;ShowWaiter();" method="post">
+                                <form id="formaddmission{{ mission.getId }}" class="formulaire" action= "{{ path("mission_update") }}" onsubmit="document.getElementById('submitaddmission{{ mission.getId }}').disabled=true;ShowWaiter();" method="post" novalidate>
                                     <input type="hidden" id="idMission" name="_idMission" value="{{ mission.getId }}">
                                     <input type="hidden" id="idetab{{ mission.getId }}" name="_idetab" value="{{ etablissement.getId }}">
                                     <div id="NavBarAddMission{{ mission.getId }}" class="col-xs-12 NavBarTier" >
@@ -373,6 +531,7 @@
                                                 <div class="col-xs-6">
                                                     <label style="float: left">Date fin :</label><input  type="text"  class="date" value="{{ mission.getDatefin|date('d/m/Y')  }}" id="Datefin{{ mission.getId }}" name="_Datefin" title="Datefin" >
                                                 </div>
+                                                <img style="border:0px;height: 80px;width: 0px" src="{{ asset('image/vide.gif') }}" />
                                                 <div class="div_button" >
 
                                                     <input id="submitaddmission{{ mission.getId }}" onclick="document.getElementById('BoutonOnlgetFormationMission{{ mission.getId }}').click();" style="margin-right:-40px;float:right" class="blue" type="button" value="suivant">
@@ -421,9 +580,138 @@
                                                 </div>
 
                                                 <input type="number"  value="{{ mission.getRemuneration}}" class="input " id="Remuneration{{ mission.getId }}" name="_Remuneration" placeholder="Rémunération"  max="1000000" style="font:16px Roboto;">
-                                                <input type="number" value="{{ mission.getNbreposte}}" class="input " id="Emploi{{ mission.getId }}" name="_Emploi" placeholder="Nbre de poste à pourvoir" required  min="0" max="1000" style="font:16px Roboto;">
-                                                <input style="font:16px Roboto;" type="text" value="{{ mission.getDomaine}}"  class="input" id="Domaine{{ mission.getId }}" name="_Domaine" placeholder="Domaine" required maxlength="45">
-                                                <input style="font:16px Roboto;" type="text" value="{{ mission.getProfil}}" class="input" id="Profil{{ mission.getId }}" name="_Profil" placeholder="Profil recherché" required maxlength="250">
+                                                <input type="number" value="{{ mission.getNbreposte}}" class="input " id="NbrePoste{{ mission.getId }}" name="_NbrePoste" placeholder="Nbre de poste à pourvoir" required  min="0" max="1000" style="font:16px Roboto;">
+                                                <input style="font:16px Roboto;" type="text" value="{{ mission.getProfil}}" class="input" id="ProfilRech{{ mission.getId }}" name="_ProfilRech" placeholder="Profil recherché" required maxlength="250">
+
+
+
+                                                <div style="width: 100%" id="divMetier1{{  mission.getId}}">
+                                                    <label style="margin-top:10px;float: left">Métier 1 :</label>
+                                                    <select title="Métier 1"  class="input" id="Metier1{{  mission.getId}}" name="_Metier1" style="width:365px;font:16px Roboto;" >
+                                                        <option value=""  ></option>
+                                                        <option value="Achat" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Achat' %} selected {% endif %}{% endif %}>Achat</option>
+                                                        <option value="Administration/Secrétariat" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Administration/Secrétariat' %} selected {% endif %}{% endif %}>Administration/Secrétariat</option>
+                                                        <option value="Agriculture/Elevage" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Agriculture/Elevage' %} selected {% endif %}{% endif %} >Agriculture/Elevage</option>
+                                                        <option value="Animation/Evénementiel" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Animation/Evénementiel' %} selected {% endif %}{% endif %}>Animation/Evénementiel</option>
+                                                        <option value="Artisanat" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Artisanat' %} selected {% endif %}{% endif %}>Artisanat</option>
+                                                        <option value="Banque/Assurance" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Banque/Assurance' %} selected {% endif %}{% endif %}>Banque/Assurance</option>
+                                                        <option value="Bâtiment/Travaux publics" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Bâtiment/Travaux publics' %} selected {% endif %}{% endif %}>Bâtiment/Travaux publics</option>
+                                                        <option value="Conseil/Audit" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Conseil/Audit' %} selected {% endif %}{% endif %}>Conseil/Audit</option>
+                                                        <option value="Commerce/Vente" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Commerce/Vente' %} selected {% endif %}{% endif %}>Commerce/Vente</option>
+                                                        <option value="Droit/Fiscalité" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Droit/Fiscalité' %} selected {% endif %}{% endif %}>Droit/Fiscalité</option>
+                                                        <option value="Edition/Journalisme" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Edition/Journalisme' %} selected {% endif %}{% endif %}>Edition/Journalisme</option>
+                                                        <option value="Etude/Recherche" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Etude/Recherche' %} selected {% endif %}{% endif %}>Etude/Recherche</option>
+                                                        <option value="Finance/Comptabilité" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Finance/Comptabilité' %} selected {% endif %}{% endif %}>Finance/Comptabilité</option>
+                                                        <option value="Formation/Enseignement" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Formation/Enseignement' %} selected {% endif %}{% endif %}>Formation/Enseignement</option>
+                                                        <option value="Immobilier" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Immobilier' %} selected {% endif %}{% endif %}>Immobilier</option>
+                                                        <option value="Industrie/Production" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Industrie/Production' %} selected {% endif %}{% endif %}>Industrie/Production</option>
+                                                        <option value="Informatique/Télécommunication" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Informatique/Télécommunication' %} selected {% endif %}{% endif %}>Informatique/Télécommunication</option>
+                                                        <option value="Informatique/Développement" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Informatique/Développement' %} selected {% endif %}{% endif %}>Informatique/Développement</option>
+                                                        <option value="Management/Gestion" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Management/Gestion' %} selected {% endif %}{% endif %}>Management/Gestion</option>
+                                                        <option value="Marketting/Communication/Publicité" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Marketting/Communication/Publicité' %} selected {% endif %}{% endif %}>Marketting/Communication/Publicité</option>
+                                                        <option value="Pharmaceutique/Chimie" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Pharmaceutique/Chimie' %} selected {% endif %}{% endif %}>Pharmaceutique/Chimie</option>
+                                                        <option value="Ressources Humaines" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Ressources Humaines' %} selected {% endif %}{% endif %}>Ressources Humaines</option>
+                                                        <option value="Hôtelerie/Restauration" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Hôtelerie/Restauration' %} selected {% endif %}{% endif %}>Hôtelerie/Restauration</option>
+                                                        <option value="Tourisme" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Tourisme' %} selected {% endif %}{% endif %}>Tourisme</option>
+                                                        <option value="Santé" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Santé' %} selected {% endif %}{% endif %}>Santé</option>
+                                                        <option value="Sécurité/Défense" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Sécurité/Défense' %} selected {% endif %}{% endif %}>Sécurité/Défense</option>
+                                                        <option value="Social" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Social' %} selected {% endif %}{% endif %}>Social</option>
+                                                        <option value="Sport/Loisir" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Sport/Loisir' %} selected {% endif %}{% endif %}>Sport/Loisir</option>
+                                                        <option value="Soin/Beauté" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Soin/Beauté' %} selected {% endif %}{% endif %}>Soin/Beauté</option>
+                                                        <option value="Transport/Logistique" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Transport/Logistique' %} selected {% endif %}{% endif %}>Transport/Logistique</option>
+                                                    </select>
+                                                    <button id="idbtnPlus1{{  mission.getId}}" style="margin-left:5px;margin-top:10px;float:left;"type="button" onclick="AddMetierUpdate(1,{{  mission.getId}})">+</button>
+                                                    <button id="idbtnMoins1{{  mission.getId}}" style="margin-left:5px;margin-top:10px;float:left;display:none;"type="button" > - </button>
+                                                    <img style="border:0px;height: 0px;width: 40px" src="{{ asset('image/vide.gif') }}" />
+                                                </div>
+
+                                                {% if mission.getMetier1() is defined %}
+
+                                                {% endif  %}
+
+
+
+                                                <div {% if  mission.getMetier2() is null  %} style="display:none;" {% endif  %} style="width: 100%;" id="divMetier2{{  mission.getId}}">
+                                                    <label id="lblMetier2{{  mission.getId}}" style="margin-top:10px;float: left">Métier 2 :</label>
+                                                    <select title="Métier 2"  class="input" id="Metier2{{  mission.getId}}" name="_Metier2" style="width:365px;font:16px Roboto;" >
+                                                        <option value=""  ></option>
+                                                        <option value="Achat" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Achat' %} selected {% endif %}{% endif %}>Achat</option>
+                                                        <option value="Administration/Secrétariat" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Administration/Secrétariat' %} selected {% endif %}{% endif %}>Administration/Secrétariat</option>
+                                                        <option value="Agriculture/Elevage" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Agriculture/Elevage' %} selected {% endif %}{% endif %} >Agriculture/Elevage</option>
+                                                        <option value="Animation/Evénementiel" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Animation/Evénementiel' %} selected {% endif %}{% endif %}>Animation/Evénementiel</option>
+                                                        <option value="Artisanat" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Artisanat' %} selected {% endif %}{% endif %}>Artisanat</option>
+                                                        <option value="Banque/Assurance" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Banque/Assurance' %} selected {% endif %}{% endif %}>Banque/Assurance</option>
+                                                        <option value="Bâtiment/Travaux publics" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Bâtiment/Travaux publics' %} selected {% endif %}{% endif %}>Bâtiment/Travaux publics</option>
+                                                        <option value="Conseil/Audit" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Conseil/Audit' %} selected {% endif %}{% endif %}>Conseil/Audit</option>
+                                                        <option value="Commerce/Vente" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Commerce/Vente' %} selected {% endif %}{% endif %}>Commerce/Vente</option>
+                                                        <option value="Droit/Fiscalité" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Droit/Fiscalité' %} selected {% endif %}{% endif %}>Droit/Fiscalité</option>
+                                                        <option value="Edition/Journalisme" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Edition/Journalisme' %} selected {% endif %}{% endif %}>Edition/Journalisme</option>
+                                                        <option value="Etude/Recherche" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Etude/Recherche' %} selected {% endif %}{% endif %}>Etude/Recherche</option>
+                                                        <option value="Finance/Comptabilité" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Finance/Comptabilité' %} selected {% endif %}{% endif %}>Finance/Comptabilité</option>
+                                                        <option value="Formation/Enseignement" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Formation/Enseignement' %} selected {% endif %}{% endif %}>Formation/Enseignement</option>
+                                                        <option value="Immobilier" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Immobilier' %} selected {% endif %}{% endif %}>Immobilier</option>
+                                                        <option value="Industrie/Production" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Industrie/Production' %} selected {% endif %}{% endif %}>Industrie/Production</option>
+                                                        <option value="Informatique/Télécommunication" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Informatique/Télécommunication' %} selected {% endif %}{% endif %}>Informatique/Télécommunication</option>
+                                                        <option value="Informatique/Développement" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Informatique/Développement' %} selected {% endif %}{% endif %}>Informatique/Développement</option>
+                                                        <option value="Management/Gestion" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Management/Gestion' %} selected {% endif %}{% endif %}>Management/Gestion</option>
+                                                        <option value="Marketting/Communication/Publicité" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Marketting/Communication/Publicité' %} selected {% endif %}{% endif %}>Marketting/Communication/Publicité</option>
+                                                        <option value="Pharmaceutique/Chimie" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Pharmaceutique/Chimie' %} selected {% endif %}{% endif %}>Pharmaceutique/Chimie</option>
+                                                        <option value="Ressources Humaines" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Ressources Humaines' %} selected {% endif %}{% endif %}>Ressources Humaines</option>
+                                                        <option value="Hôtelerie/Restauration" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Hôtelerie/Restauration' %} selected {% endif %}{% endif %}>Hôtelerie/Restauration</option>
+                                                        <option value="Tourisme" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Tourisme' %} selected {% endif %}{% endif %}>Tourisme</option>
+                                                        <option value="Santé" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Santé' %} selected {% endif %}{% endif %}>Santé</option>
+                                                        <option value="Sécurité/Défense" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Sécurité/Défense' %} selected {% endif %}{% endif %}>Sécurité/Défense</option>
+                                                        <option value="Social" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Social' %} selected {% endif %}{% endif %}>Social</option>
+                                                        <option value="Sport/Loisir" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Sport/Loisir' %} selected {% endif %}{% endif %}>Sport/Loisir</option>
+                                                        <option value="Soin/Beauté" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Soin/Beauté' %} selected {% endif %}{% endif %}>Soin/Beauté</option>
+                                                        <option value="Transport/Logistique" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Transport/Logistique' %} selected {% endif %}{% endif %}>Transport/Logistique</option>
+
+                                                    </select>
+                                                    <button id="idbtnPlus2{{  mission.getId}}" style="margin-left:5px;margin-top:10px;float:left;"type="button" onclick="AddMetierUpdate(2,{{  mission.getId}})">+</button>
+                                                    <button id="idbtnMoins2{{  mission.getId}}" {% if not mission.getMetier2() is defined %} style="display:none;" {% endif  %} style="margin-left:5px;margin-top:10px;float:left;"type="button" onclick="MoinsMetierUpdate('2','{{  mission.getId}}')"> - </button>
+                                                    <img style="border:0px;height: 0px;width: 40px" src="{{ asset('image/vide.gif') }}" />
+                                                </div>
+                                                <div {% if  mission.getMetier3() is null %} style="display:none;" {% endif  %} style="width: 100%;" id="divMetier3{{  mission.getId}}">
+                                                    <label id="lblMetier3{{  mission.getId}}" style="margin-top:10px;float: left">Métier 3 :</label>
+                                                    <select title="Métier 3"  class="input" id="Metier3{{  mission.getId}}" name="_Metier3" style="width:365px;font:16px Roboto;" >
+                                                        <option value=""  ></option>
+                                                        <option value="Achat" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Achat' %} selected {% endif %}{% endif %}>Achat</option>
+                                                        <option value="Administration/Secrétariat" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Administration/Secrétariat' %} selected {% endif %}{% endif %}>Administration/Secrétariat</option>
+                                                        <option value="Agriculture/Elevage" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Agriculture/Elevage' %} selected {% endif %}{% endif %} >Agriculture/Elevage</option>
+                                                        <option value="Animation/Evénementiel" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Animation/Evénementiel' %} selected {% endif %}{% endif %}>Animation/Evénementiel</option>
+                                                        <option value="Artisanat" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Artisanat' %} selected {% endif %}{% endif %}>Artisanat</option>
+                                                        <option value="Banque/Assurance" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Banque/Assurance' %} selected {% endif %}{% endif %}>Banque/Assurance</option>
+                                                        <option value="Bâtiment/Travaux publics" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Bâtiment/Travaux publics' %} selected {% endif %}{% endif %}>Bâtiment/Travaux publics</option>
+                                                        <option value="Conseil/Audit" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Conseil/Audit' %} selected {% endif %}{% endif %}>Conseil/Audit</option>
+                                                        <option value="Commerce/Vente" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Commerce/Vente' %} selected {% endif %}{% endif %}>Commerce/Vente</option>
+                                                        <option value="Droit/Fiscalité" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Droit/Fiscalité' %} selected {% endif %}{% endif %}>Droit/Fiscalité</option>
+                                                        <option value="Edition/Journalisme" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Edition/Journalisme' %} selected {% endif %}{% endif %}>Edition/Journalisme</option>
+                                                        <option value="Etude/Recherche" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Etude/Recherche' %} selected {% endif %}{% endif %}>Etude/Recherche</option>
+                                                        <option value="Finance/Comptabilité" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Finance/Comptabilité' %} selected {% endif %}{% endif %}>Finance/Comptabilité</option>
+                                                        <option value="Formation/Enseignement" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Formation/Enseignement' %} selected {% endif %}{% endif %}>Formation/Enseignement</option>
+                                                        <option value="Immobilier" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Immobilier' %} selected {% endif %}{% endif %}>Immobilier</option>
+                                                        <option value="Industrie/Production" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Industrie/Production' %} selected {% endif %}{% endif %}>Industrie/Production</option>
+                                                        <option value="Informatique/Télécommunication" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Informatique/Télécommunication' %} selected {% endif %}{% endif %}>Informatique/Télécommunication</option>
+                                                        <option value="Informatique/Développement" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Informatique/Développement' %} selected {% endif %}{% endif %}>Informatique/Développement</option>
+                                                        <option value="Management/Gestion" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Management/Gestion' %} selected {% endif %}{% endif %}>Management/Gestion</option>
+                                                        <option value="Marketting/Communication/Publicité" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Marketting/Communication/Publicité' %} selected {% endif %}{% endif %}>Marketting/Communication/Publicité</option>
+                                                        <option value="Pharmaceutique/Chimie" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Pharmaceutique/Chimie' %} selected {% endif %}{% endif %}>Pharmaceutique/Chimie</option>
+                                                        <option value="Ressources Humaines" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Ressources Humaines' %} selected {% endif %}{% endif %}>Ressources Humaines</option>
+                                                        <option value="Hôtelerie/Restauration" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Hôtelerie/Restauration' %} selected {% endif %}{% endif %}>Hôtelerie/Restauration</option>
+                                                        <option value="Tourisme" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Tourisme' %} selected {% endif %}{% endif %}>Tourisme</option>
+                                                        <option value="Santé" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Santé' %} selected {% endif %}{% endif %}>Santé</option>
+                                                        <option value="Sécurité/Défense" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Sécurité/Défense' %} selected {% endif %}{% endif %}>Sécurité/Défense</option>
+                                                        <option value="Social" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Social' %} selected {% endif %}{% endif %}>Social</option>
+                                                        <option value="Sport/Loisir" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Sport/Loisir' %} selected {% endif %}{% endif %}>Sport/Loisir</option>
+                                                        <option value="Soin/Beauté" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Soin/Beauté' %} selected {% endif %}{% endif %}>Soin/Beauté</option>
+                                                        <option value="Transport/Logistique" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Transport/Logistique' %} selected {% endif %}{% endif %}>Transport/Logistique</option>
+
+                                                    </select>
+                                                    <button id="idbtnPlus3{{  mission.getId}}" style="margin-left:5px;margin-top:10px;float:left;"type="button" onclick="AddMetierUpdate(3,{{  mission.getId}})">+</button>
+                                                    <button id="idbtnMoins3{{  mission.getId}}" {% if not mission.getMetier3() is defined %} style="display:none;" {% endif  %} style="margin-left:5px;margin-top:10px;float:left;"type="button" onclick="MoinsMetierUpdate('3','{{  mission.getId}}')"> - </button>
+                                                </div>
+
+
                                                 {#<div class="col-xs-12">
                                                     <label class="col-xs12">Embauche à l'issue de la mission?</label>
                                                     <input type="radio" name="_Embauche" value="1" title="Oui" >Oui
@@ -526,7 +814,7 @@
                                                 <select title="Tuteur" class="input" name="_TUTEURMISSION" style="font:16px Roboto;">
                                                     {% if users is defined %}
                                                         {% for user in users %}
-                                                            {% if user.hasRole('ROLE_TUTEUR') %}
+                                                            {% if user.hasRole('ROLE_CONTACT_MISSION') %}
 
                                                                 <option {% if  mission.getTuteur.getNom()==user.nom and  mission.getTuteur.getPrenom()== user.prenom  %} selected {% endif %} value="{{ user.id }}">{{ user.nom }} {{ user.prenom }}</option>
                                                             {% endif %}
@@ -565,6 +853,7 @@
                                                 {% endfor %}
                                             {% endif %}
                                             <div class="div_button" >
+                                                <br/>
                                                 <input id="submitaddmissionEnovyer{{ mission.getId }}" class="blue" type="submit" value="Envoyer">
 
                                             </div>
@@ -593,10 +882,151 @@
                         <form  class="formulaire" id="formAjouterformation" action="{{ path('addFormation') }}" onsubmit="document.getElementById('submitaddformation').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data">
                             <div class="div_form"  id="document_formation">
                                 <input type="hidden" id="idetab" name="_idetab" value="{{etablissement.getId}}">
-                                <input type="text" class="input" id="Description" name="_Description" placeholder="Description" required maxlength="45">
-                                <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom" required maxlength="45">
+                                <input type="text" class="input" id="Nom" name="_Nom" placeholder="Nom formation" required maxlength="45">
+                                <input type="text" class="input" id="Description" name="_Description" placeholder="Description formation" required maxlength="45">
+                                <input type="text" class="input" id="NomResponsable" name="_NomResponsable" placeholder="Nom responsable" required maxlength="45">
+                                <input type="text" class="input" id="PrenomResponsable" name="_PrenomResponsable" placeholder="Prenom responsable" required maxlength="45">
+                                <input type="text" class="input" id="TelResponsable" name="_TelResponsable" placeholder="Tél responsable" required maxlength="20">
+                                <input type="text" class="input" id="MailResponsable" name="_MailResponsable" placeholder="Mail responsable" required maxlength="45">
+                                <input type="text" class="input" id="FonctionResponsable" name="_FonctionResponsable" placeholder="Fonction responsable" required maxlength="45">
+
+                                <div style="width: 100%" id="divMetier1">
+                                    <label style="margin-top:10px;float: left">Métier 1 :</label>
+                                    <select title="Métier 1"  class="input" id="Metier1" name="_Metier1" style="width:360px;font:16px Roboto;" >
+                                        <option value=""  ></option>
+                                        <option value="Achat">Achat</option>
+                                        <option value="Administration/Secrétariat">Administration/Secrétariat</option>
+                                        <option value="Agriculture/Elevage">Agriculture/Elevage</option>
+                                        <option value="Animation/Evénementiel">Animation/Evénementiel</option>
+                                        <option value="Artisanat">Artisanat</option>
+                                        <option value="Banque/Assurance">Banque/Assurance</option>
+                                        <option value="Bâtiment/Travaux publics">Bâtiment/Travaux publics</option>
+                                        <option value="Conseil/Audit">Conseil/Audit</option>
+                                        <option value="Commerce/Vente">Commerce/Vente</option>
+                                        <option value="Droit/Fiscalité">Droit/Fiscalité</option>
+                                        <option value="Edition/Journalisme">Edition/Journalisme</option>
+                                        <option value="Etude/Recherche">Etude/Recherche</option>
+                                        <option value="Finance/Comptabilité">Finance/Comptabilité</option>
+                                        <option value="Formation/Enseignement">Formation/Enseignement</option>
+                                        <option value="Immobilier">Immobilier</option>
+                                        <option value="Industrie/Production">Industrie/Production</option>
+                                        <option value="Informatique/Télécommunication">Informatique/Télécommunication</option>
+                                        <option value="Informatique/Développement">Informatique/Développement</option>
+                                        <option value="Management/Gestion">Management/Gestion</option>
+                                        <option value="Marketting/Communication/Publicité">Marketting/Communication/Publicité</option>
+                                        <option value="Pharmaceutique/Chimie">Pharmaceutique/Chimie</option>
+                                        <option value="Ressources Humaines">Ressources Humaines</option>
+                                        <option value="Hôtelerie/Restauration">Hôtelerie/Restauration</option>
+                                        <option value="Tourisme">Tourisme</option>
+                                        <option value="Santé">Santé</option>
+                                        <option value="Sécurité/Défense">Sécurité/Défense</option>
+                                        <option value="Social">Social</option>
+                                        <option value="Sport/Loisir">Sport/Loisir</option>
+                                        <option value="Soin/Beauté">Soin/Beauté</option>
+                                        <option value="Transport/Logistique">Transport/Logistique</option>
+
+                                    </select>
+                                    <button id="idbtnPlus1" style="margin-left:5px;margin-top:10px;float:left;"type="button" onclick="AddMetier(1)">+</button>
+                                    <button id="idbtnMoins1" style="margin-left:5px;margin-top:10px;float:left;display:none;"type="button" > - </button>
+                                    <img style="border:0px;height: 0px;width: 40px" src="{{ asset('image/vide.gif') }}" />
+                                </div>
+                                <div style="width: 100%;display:none;" id="divMetier2">
+                                    <label id="lblMetier2" style="margin-top:10px;float: left">Métier 2 :</label>
+                                    <select title="Métier 2"  class="input" id="Metier2" name="_Metier2" style="width:360px;font:16px Roboto;" >
+                                        <option value=""  ></option>
+                                        <option value="Achat">Achat</option>
+                                        <option value="Administration/Secrétariat">Administration/Secrétariat</option>
+                                        <option value="Agriculture/Elevage">Agriculture/Elevage</option>
+                                        <option value="Animation/Evénementiel">Animation/Evénementiel</option>
+                                        <option value="Artisanat">Artisanat</option>
+                                        <option value="Banque/Assurance">Banque/Assurance</option>
+                                        <option value="Bâtiment/Travaux publics">Bâtiment/Travaux publics</option>
+                                        <option value="Conseil/Audit">Conseil/Audit</option>
+                                        <option value="Commerce/Vente">Commerce/Vente</option>
+                                        <option value="Droit/Fiscalité">Droit/Fiscalité</option>
+                                        <option value="Edition/Journalisme">Edition/Journalisme</option>
+                                        <option value="Etude/Recherche">Etude/Recherche</option>
+                                        <option value="Finance/Comptabilité">Finance/Comptabilité</option>
+                                        <option value="Formation/Enseignement">Formation/Enseignement</option>
+                                        <option value="Immobilier">Immobilier</option>
+                                        <option value="Industrie/Production">Industrie/Production</option>
+                                        <option value="Informatique/Télécommunication">Informatique/Télécommunication</option>
+                                        <option value="Informatique/Développement">Informatique/Développement</option>
+                                        <option value="Management/Gestion">Management/Gestion</option>
+                                        <option value="Marketting/Communication/Publicité">Marketting/Communication/Publicité</option>
+                                        <option value="Pharmaceutique/Chimie">Pharmaceutique/Chimie</option>
+                                        <option value="Ressources Humaines">Ressources Humaines</option>
+                                        <option value="Hôtelerie/Restauration">Hôtelerie/Restauration</option>
+                                        <option value="Tourisme">Tourisme</option>
+                                        <option value="Santé">Santé</option>
+                                        <option value="Sécurité/Défense">Sécurité/Défense</option>
+                                        <option value="Social">Social</option>
+                                        <option value="Sport/Loisir">Sport/Loisir</option>
+                                        <option value="Soin/Beauté">Soin/Beauté</option>
+                                        <option value="Transport/Logistique">Transport/Logistique</option>
+
+                                    </select>
+                                    <button id="idbtnPlus2" style="margin-left:5px;margin-top:10px;float:left;"type="button" onclick="AddMetier(2)">+</button>
+                                    <button id="idbtnMoins2" style="margin-left:5px;margin-top:10px;float:left;display:none;"type="button" onclick="MoinsMetier(2)"> - </button>
+                                    <img style="border:0px;height: 0px;width: 40px" src="{{ asset('image/vide.gif') }}" />
+                                </div>
+                                <div style="width: 100%;display:none;" id="divMetier3">
+                                    <label id="lblMetier3" style="margin-top:10px;float: left">Métier 3 :</label>
+                                    <select title="Métier 3"  class="input" id="Metier3" name="_Metier3" style="width:360px;font:16px Roboto;" >
+                                        <option value=""  ></option>
+                                        <option value="Achat">Achat</option>
+                                        <option value="Administration/Secrétariat">Administration/Secrétariat</option>
+                                        <option value="Agriculture/Elevage">Agriculture/Elevage</option>
+                                        <option value="Animation/Evénementiel">Animation/Evénementiel</option>
+                                        <option value="Artisanat">Artisanat</option>
+                                        <option value="Banque/Assurance">Banque/Assurance</option>
+                                        <option value="Bâtiment/Travaux publics">Bâtiment/Travaux publics</option>
+                                        <option value="Conseil/Audit">Conseil/Audit</option>
+                                        <option value="Commerce/Vente">Commerce/Vente</option>
+                                        <option value="Droit/Fiscalité">Droit/Fiscalité</option>
+                                        <option value="Edition/Journalisme">Edition/Journalisme</option>
+                                        <option value="Etude/Recherche">Etude/Recherche</option>
+                                        <option value="Finance/Comptabilité">Finance/Comptabilité</option>
+                                        <option value="Formation/Enseignement">Formation/Enseignement</option>
+                                        <option value="Immobilier">Immobilier</option>
+                                        <option value="Industrie/Production">Industrie/Production</option>
+                                        <option value="Informatique/Télécommunication">Informatique/Télécommunication</option>
+                                        <option value="Informatique/Développement">Informatique/Développement</option>
+                                        <option value="Management/Gestion">Management/Gestion</option>
+                                        <option value="Marketting/Communication/Publicité">Marketting/Communication/Publicité</option>
+                                        <option value="Pharmaceutique/Chimie">Pharmaceutique/Chimie</option>
+                                        <option value="Ressources Humaines">Ressources Humaines</option>
+                                        <option value="Hôtelerie/Restauration">Hôtelerie/Restauration</option>
+                                        <option value="Tourisme">Tourisme</option>
+                                        <option value="Santé">Santé</option>
+                                        <option value="Sécurité/Défense">Sécurité/Défense</option>
+                                        <option value="Social">Social</option>
+                                        <option value="Sport/Loisir">Sport/Loisir</option>
+                                        <option value="Soin/Beauté">Soin/Beauté</option>
+                                        <option value="Transport/Logistique">Transport/Logistique</option>
+
+                                    </select>
+                                    <button id="idbtnPlus3" style="margin-left:5px;margin-top:10px;float:left;"type="button" onclick="AddMetier(3)">+</button>
+                                    <button id="idbtnMoins3" style="margin-left:5px;margin-top:10px;float:left;display:none;"type="button" onclick="MoinsMetier(3)"> - </button>
+                                    <img style="border:0px;height: 0px;width: 40px" src="{{ asset('image/vide.gif') }}" />
+
+                                </div>
+
+
+
+
+
+
+
+
+                            </div>
+                            <div>
+
+
+
                                 <label for="Pdf">
-                                    <img onclick="this.src='{{ asset('image/wait_x300.gif') }}'; "  id="pdf" style="height: 100px;width: 100px" src="{{ asset('image/upload-arrow.png') }}"/>
+
+                                    <br/><img onclick="this.src='{{ asset('image/wait_x300.gif') }}'; "  id="pdf"  src="{{ asset('image/ajouterdoc.png') }}"/>
                                 </label>
                                 <br>
                                 <input onchange="readURL(this,'pdf');"  accept="application/pdf" type="file" class="input" id="Pdf" name="_PDF" style="display: none">
@@ -605,7 +1035,7 @@
                                 <br>
                             </div>
                             <div class="div_button">
-                                <input id="submitaddformation" class="blue" type="submit" value="Valider">
+                               <input id="submitaddformation" class="blue" type="submit" value="Valider">
                             </div>
                         </form>
                     </div>
@@ -879,9 +1309,20 @@
 
                 <div class="col-xs-12" style="height: 46px;">
                     <div style="height: 35px; width: 100%; padding: 15px 0 0 15px;display: flex;">
-
+                        {# c'est ici l'onglet  utilisateurs #}
                         <button id="Button_ETABLISSEMENT" onclick="NaviguerOnglet('OngletEtablissement','info_etab',this)" type="button" class="NavButtonIframe">Informations</button>
-                        <button id="Button_User" onclick="NaviguerOnglet('OngletEtablissement','info_user',this)" type="button" class="NavButtonIframe">Utilisateurs</button>
+                        {# app.user.hasRole('ROLE_APPRENANT') #}
+
+                        {% if app.user.hasRole('ROLE_ADMINECOLE') or app.user.hasRole('ROLE_RECRUTEUR')  %}
+                            <button id="Button_contactSociete" onclick="NaviguerOnglet('OngletEtablissement','info_contactSociete',this)" type="button" class="NavButtonIframe">Contacts société</button>
+
+                            <button id="Button_suivicommercial" onclick="NaviguerOnglet('OngletEtablissement','info_suivicommercial',this)" type="button" class="NavButtonIframe">Suivi commercial</button>
+
+                        {% else %}
+                            <button id="Button_User" onclick="NaviguerOnglet('OngletEtablissement','info_user',this)" type="button" class="NavButtonIframe">Utilisateurs</button>
+
+                        {% endif %}
+
                         {% if is_granted('ROLE_SUPER_ADMIN') %}
                             <button id="Button_Licence" onclick="NaviguerOnglet('OngletEtablissement','info_licence',this)" type="button" class="NavButtonIframe">Licences</button>
                         {% endif %}
@@ -1036,7 +1477,7 @@
                                                             <label style="color:black">Administrateur école</label>
                                                         {% elseif role == "ROLE_ADMINSOC" %}
                                                             <label style="color:black">Administrateur Société</label>
-                                                        {% elseif role == "ROLE_TUTEUR" %}
+                                                        {% elseif role == "ROLE_CONTACT_MISSION" %}
                                                             <label style="color:black">Tuteur</label>
                                                         {% elseif role == "ROLE_RECRUTEUR" %}
                                                             <label style="color:black">Recruteur Placeur</label>
@@ -1054,6 +1495,68 @@
 
 
                     </div>
+{# ici l'affichage d'onglet#}
+                    <div id="info_contactSociete" class="list-group affichage" style="display: none;">
+
+                        {% if ContactSociete is defined %}
+                            {% for contact in ContactSociete %}
+
+                                    {% set iddiv = random()  %}
+                                    <div class="col-xs-12 Liste">
+                                        <div class="row">
+
+                                            <label class="cell">Nom : <label>{{ contact.getNom }}</label></label>
+                                            <label class="cell">Prénom : <label>{{ contact.getPrenom }}</label>
+                                                <button class="button" style="float: right" type="button" data-toggle="collapse" data-target="#user{{ iddiv }}"></button>
+                                            </label>
+
+                                        </div>
+                                        <div id="user{{ iddiv }}" class="collapse in" >
+                                            <div class="row">
+                                                <label class="cell">Email : <label>{{ contact.getMail }}</label></label>
+                                                <label class="cell">Téléphone : <label>{{ contact.getTelephone }}</label></label>
+                                            </div>
+                                            <div class="row">
+                                                <label class="cell">Fonction : <label>{{ contact.getFonction }}</label></label>
+
+                                            </div>
+                                            <div class="row">
+                                                <label class="cell" >
+
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                            {% endfor %}
+                        {% endif %}
+
+
+                    </div>
+
+                    <div id="info_suivicommercial" class="list-group affichage" style="display: none;">
+                        <form class="formulaire" id="formsuivi" action="{{ path('Enregistrer_suivi') }}" onsubmit="ShowWaiter();" method="post" enctype="multipart/form-data">
+                            <br/>
+                            <input type="hidden" value="{{ etablissement.getId }}" id="id" name="_id">
+                            <label class="cell">Suivi commercial  :
+
+                        </label><br/>
+                        <textarea style="width: 100%; height: 200px" type="text"  value="{{ etablissement.getSuivicommercial() }}" id="Suivi" name="_Suivi" >{{ etablissement.getSuivicommercial() }}</textarea>
+                            <br/>
+                            <br/>
+
+
+                                <input id="submitSuivi" class="blue" style="float:right;border: 0;font: 18px Roboto;color: white;text-align: left;background-color: rgb(61, 138, 212);height: 40px;" type="submit" value="Enregistrer">
+
+
+
+                         </form>
+
+
+
+                    </div>
+
+
 
                     {% if is_granted('ROLE_SUPER_ADMIN') %}
                         <div id="info_licence" class="list-group"
@@ -1250,12 +1753,19 @@
                                 Instancier une licence
                             </button>
                         {% endif %}
-
-                        {% if (is_granted('ROLE_RECRUTEUR') and etablissement.getTier.getEcole) or (is_granted('ROLE_ADMINSOC') and not etablissement.getTier.getEcole )%}
+                        {# c'est ici le boutton ajouter #}
+                        {% if app.user.hasRole('ROLE_ADMINECOLE') or app.user.hasRole('ROLE_RECRUTEUR')  %}
+                            <button onclick="show('addContact')" type="button" class="col-xs-12 rightMenu">
+                                Ajout contact
+                            </button>
+                        {% else %}
                             <button onclick="show('adduser')" type="button" class="col-xs-12 rightMenu">
                                 Ajouter un utilisateur
                             </button>
+
                         {% endif %}
+
+
 
                         {% if not etablissement.getTier.getEcole %}
                             {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_ADMINSOC') %}
@@ -1263,6 +1773,7 @@
                                  Ajouter une mission
                                 </button>
                             {% endif %}
+
                         {% else %}
                             {% if is_granted('ROLE_ADMINECOLE') %}
                                 <button onclick="show('apprenant')" type="button" class="col-xs-12 rightMenu">
@@ -1901,6 +2412,55 @@
                 $('#submitaddapprenant').val("suivant");
             }
         });
+
+        function AddMetier(nbre){
+           var id=nbre+1;
+            document.getElementById('divMetier'+id).style.display="block";
+            document.getElementById('idbtnMoins'+id).style.display="block";
+            if (nbre==2){
+                document.getElementById('idbtnMoins'+nbre).style.display="none";
+            }
+
+        }
+        function MoinsMetier(nbre){
+            var e = document.getElementById('Metier'+nbre);
+
+            e.options[e.selectedIndex].value='';
+
+            document.getElementById('divMetier'+nbre).style.display="none";
+
+            if (nbre==3){
+                document.getElementById('idbtnMoins2').style.display="block";
+            }
+
+
+        }
+
+
+
+        function MoinsMetierUpdate(nbre,idMission){
+            var e = document.getElementById('Metier'+nbre+idMission);
+
+            e.options[e.selectedIndex].value='';
+
+            document.getElementById('divMetier'+nbre+idMission).style.display="none";
+
+            if (nbre=='3'){
+                document.getElementById('idbtnMoins2'+idMission).style.display="block";
+            }
+
+
+        }
+
+
+        function AddMetierUpdate(nbre,idMission){
+            var id=nbre+1;
+            document.getElementById('divMetier'+id+idMission).style.display="block";
+            document.getElementById('idbtnMoins'+id+idMission).style.display="block";
+            if (nbre==2){
+                document.getElementById('idbtnMoins'+nbre+idMission).style.display="none";
+            }
+        }
 
 
 

@@ -180,3 +180,12 @@ Propose_RDV:
     path: /ProposeRDV/message={idmessage}
     defaults: { _controller: UserBundle:MiseEnRelation:ProposeRDV}
 
+Chercher_App:
+    path: /RechercheApp/
+    defaults: { _controller: UserBundle:Default:RechercheApp}
+
+contact_added:
+    path:  /admin/Contactadded
+    defaults: {_controller: UserBundle:Default:ContactAdded}
+
+

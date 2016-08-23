@@ -47,6 +47,7 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+
         $tier = $em->getRepository('GenericBundle:Tier')->findOneBy(array('siren'=>$request->get('_SIREN')));
         if(!$tier){
             $newtier = new Tier();
@@ -72,6 +73,9 @@ class DefaultController extends Controller
 
 
         for($i = 0; $i< count($request->get('_SIRET'));$i++) {
+
+
+
             $etablissement = new Etablissement();
             $etablissement->setSiret($request->get('_SIRET')[$i]);
             $etablissement->setAdresse($request->get('_Adresse')[$i]);
@@ -228,8 +232,13 @@ class DefaultController extends Controller
                 $reponses[$keyqst] = $reps;
             }
 
+
+            $contactSociete = $this->getDoctrine()->getRepository('GenericBundle:ContactSociete')->findBy(array('etablissement' => $etablissement));
+
+
+           // var_dump($etablissement->getId());die;
             return $this->render('TierBundle::iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,'users'=>$users,
-                'libs'=>$licences, 'missions'=>$missions ,'QCMs' => $qcm, 'Questions' => $questions,
+                'libs'=>$licences, 'missions'=>$missions,'ContactSociete'=>$contactSociete ,'QCMs' => $qcm, 'Questions' => $questions,
                 'reponses' => $reponses,'formations'=>$this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll()));
         }
         //$licences = $this->getDoctrine()->getRepository('GenericBundle:Licence')->findBy(array('tier'=>$etablissement->getTier(),'suspendu'=>false ));
@@ -414,5 +423,78 @@ class DefaultController extends Controller
         $reponse = new JsonResponse();
         return $reponse->setData(array('Status'=>'Licence correctement supprimer'));
     }
+
+
+    public function VerifierSiretAction($siret)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $reponse = new JsonResponse();
+        $etablissement = $em->getRepository('GenericBundle:Etablissement')->findOneBy(array('siret'=>$siret));
+
+
+
+
+
+
+        //getCodepostal();
+
+
+        if($etablissement)
+        {
+            $rue=$etablissement->getAdresse();
+            $codePostal=$etablissement->getCodepostal();
+            $ville=$etablissement->getVille();
+            $tel=$etablissement->getTelephone();
+            $fax=$etablissement->getFax();
+            $site=$etablissement->getSite();
+
+            $nomResp=$etablissement->getNomResp();
+            $prenomResp=$etablissement->getPrenomResp();
+            $telResp=$etablissement->getTelresponsable();
+            $mailResp=$etablissement->getMailresponsable();
+
+            $type=$etablissement->getType();
+            $taille=$etablissement->getTaille();
+            $secteur=$etablissement->getSecteur();
+           return $reponse->setData(array('status'=>'exist',
+                'rue'=>$rue,
+                'codePostal'=>$codePostal,
+                'ville'=>$ville,
+                'tel'=>$tel,
+                'fax'=>$fax,
+                'site'=>$site,
+
+                'nomResp'=>$nomResp,
+                'prenomResp'=>$prenomResp,
+                'telResp'=>$telResp,
+                'mailResp'=>$mailResp,
+
+                'type'=>$type,
+                'taille'=>$taille,
+                'secteur'=>$secteur,
+
+                ));
+        }
+        else
+        {
+            return $reponse->setData(array('status'=>'notexist'));
+
+        }
+
+    }
+
+    public function EnregistrerSuiviAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $etab = $this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_id'));
+        $etab->setSuivicommercial($request->get('_Suivi'));
+        $em->flush();
+        return $this->redirect($_SERVER['HTTP_REFERER']);
+
+
+    }
+
+
 
 }

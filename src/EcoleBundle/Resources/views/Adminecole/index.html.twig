@@ -32,10 +32,11 @@
 
                 <label style="margin: 10px 0;text-transform: uppercase;font: input-group col-xs-118px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Adresse Secondaire</label>
                 <label for="Adresse" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Siret</label>
-                <input placeholder="Siret" class="input" type="text" id="SIRET" name="_SIRET[]" pattern=".{14}" maxlength="14" required>
+                <input placeholder="Siret" class="input" onChange="VerifierSiret(this)"  type="text" id="SIRET" name="_SIRET[]" pattern=".{14}" maxlength="14" required>
 
+                {#<button  class="blue" type="button" onclick="VerifierSiret(this)">Vérifier si la société existe</button>#}
                 <label for="Adresse" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Rue</label>
-                <input class="input" type="text" id="Adresse" name="_Adresse[]" maxlength="45" required>
+                <input class="input" type="text" id="Rue" name="_Adresse[]" maxlength="45" required>
 
                 <label for="CodeP" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Code postal</label>
                 <label for="Ville" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Ville</label>
@@ -85,6 +86,7 @@
                     <option value="Secondaire">Secondaire</option>
                     <option value="Tertiaire">Tertiaire</option>
                     <option value="Quaternaire">Quaternaire</option>
+
                 </select>
 
                 <input type="hidden" class="form-control" id="Geocode" name="_Geocode[]" required>
@@ -104,9 +106,12 @@
                     {# JE RECUPERE CETTE SECTION EN TITRE DE POPUP PLUS HAUT
                         <label style="text-transform: uppercase;font: 16px Roboto;color: rgb(75, 75, 75);font-weight: bold;text-align: left;" class="col-xs-12">Informations générales</label>
                     #}
+                    <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Raison sociale</label>
+                    <input type="text" class="input" id="RaisonSoc" name="_RaisonSoc" maxlength="45" required>
+
+                    <input type="text" style="visibility: hidden" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" required>
                     <div class="col-xs-6 input-colonne">
-                        <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Siren *</label>
-                        <input type="text" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" required>
+
 
                         <label for="Logo" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Importer un logo</label>
                         <label style="display: flex;float: left;" for="Logo">
@@ -116,8 +121,10 @@
                     </div>
 
                     <div class="col-xs-6 input-colonne">
-                        <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Raison sociale</label>
-                        <input type="text" class="input" id="RaisonSoc" name="_RaisonSoc" maxlength="45" required>
+
+
+
+
 
                         <label for="Logo" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Importer un fond'écran</label>
                         <label style="float: left;" for="image">
@@ -136,61 +143,65 @@
                             <div id="demo" class="collapse in">
                                 <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Adresse Principale</label>
                                 <label for="Adresse" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Siret</label>
-                                <input placeholder="Siret" class="input" type="text" id="SIRET" name="_SIRET[]" pattern=".{14}" maxlength="14" required>
+                                <input placeholder="Siret" class="input" onChange="VerifierSiret(this)" type="text" id="SIRETP" name="_SIRET[]" pattern=".{14}" maxlength="14" required>
+
+                                {#<button id="P"  class="blue" type="button" onclick="VerifierSiret(this)">Vérifier si la société existe</button>#}
 
                                 <label for="Adresse" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Rue</label>
-                                <input class="input" type="text" id="Adresse" name="_Adresse[]" maxlength="45" required>
+                                <input class="input" type="text" id="RueP" name="_Adresse[]" maxlength="45" required>
 
                                 <label for="CodeP" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Code postal</label>
                                 <label for="Ville" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Ville</label>
-                                <input class="input" type="text" id="CodeP" name="_CodeP[]" style="width: calc(50% - 10px); margin-right: 10px" maxlength="10" required>
-                                <input class="input" type="text" id="Ville" name="_Ville[]" style="width: 50%;" maxlength="20" required>
+                                <input class="input" type="text" id="CodePP" name="_CodeP[]" style="width: calc(50% - 10px); margin-right: 10px" maxlength="10" required>
+                                <input class="input" type="text" id="VilleP" name="_Ville[]" style="width: 50%;" maxlength="20" required>
 
                                 <label for="Tel" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Téléphone</label>
                                 <label for="Fax" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Fax</label>
-                                <input class="input" type="tel" id="Tel" name="_Tel[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="20" required>
-                                <input class="input" type="tel" id="Fax" name="_Fax[]" style="width: 50%;" maxlength="20" required>
+                                <input class="input" type="tel" id="TelP" name="_Tel[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="20" required>
+                                <input class="input" type="tel" id="FaxP" name="_Fax[]" style="width: 50%;" maxlength="20" required>
 
                                 <label for="Site" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Site web</label>
-                                <input class="input" type="url" id="Site" name="_Site[]" maxlength="45" required>
+                                <input class="input" type="url" id="SiteP" name="_Site[]" maxlength="45" required>
                                 <!----------------------------------------------------------------------------------------------------------------------------------------------->
                                 <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Responsable</label>
                                 <label for="Resp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Nom</label>
                                 <label for="RespPrenom" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Prénom</label>
-                                <input class="input" type="text" id="Resp" name="_Resp[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="45" required>
-                                <input class="input" type="text" id="RespPrenom" name="_RespPrenom[]" style="width: 50%;" maxlength="45" required>
+                                <input class="input" type="text" id="RespP" name="_Resp[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="45" required>
+                                <input class="input" type="text" id="RespPrenomP" name="_RespPrenom[]" style="width: 50%;" maxlength="45" required>
 
                                 <label for="TelResp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Téléphone</label>
                                 <label for="MailResp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Email</label>
-                                <input class="input" type="tel" id="TelResp" name="_TelResp[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="20" required>
-                                <input class="input" type="email" id="MailResp" name="_MailResp[]" style="width: 50%;" maxlength="45" required>
+                                <input class="input" type="tel" id="TelRespP" name="_TelResp[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="20" required>
+                                <input class="input" type="email" id="MailRespP" name="_MailResp[]" style="width: 50%;" maxlength="45" required>
                                 <!----------------------------------------------------------------------------------------------------------------------------------------------->
-                                <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Société</label>
-                                <label for="TypeSoc" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Type d'entreprise</label>
-                                <label for="Taille" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Taille de la socété</label>
-                                <select class="input" id="TypeSoc" name="_TypeSoc[]" style="width: calc(50% - 10px);margin-right: 10px" required>
-                                    <option value="Start Up">Start Up</option>
-                                    <option value="TPE PME">TPE PME</option>
-                                    <option value="Groupe">Groupe</option>
-                                    <option value="Groupe Multinational">Groupe Multinational</option>
-                                    <option value="Institution Publique">Institution Publique</option>
-                                    <option value="ONG Association">ONG Association</option>
-                                    <option value="Ecole Centre de formation">Ecole Centre de formation</option>
-                                </select>
-                                <select class="input" id="Taille" name="_Taille[]" style="width: 50%;" required>
-                                    <option value="Moins de 10 salariés">Moins de 10 salariés</option>
-                                    <option value="Moins de 100 salariés">Moins de 100 salariés</option>
-                                    <option value="Plus de 100salariés">Plus de 100 salariés</option>
-                                </select>
+                                <div id="InfoAddsociete">
+                                    <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Société </label>
+                                    <label for="TypeSoc" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Type d'entreprise</label>
+                                    <label for="Taille" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Taille de la socété</label>
+                                    <select class="input" id="TypeSocP" name="_TypeSoc[]" style="width: calc(50% - 10px);margin-right: 10px" required>
+                                        <option value="Start Up">Start Up</option>
+                                        <option value="TPE PME">TPE PME</option>
+                                        <option value="Groupe">Groupe</option>
+                                        <option value="Groupe Multinational">Groupe Multinational</option>
+                                        <option value="Institution Publique">Institution Publique</option>
+                                        <option value="ONG Association">ONG Association</option>
+                                        <option value="Ecole Centre de formation">Ecole Centre de formation</option>
+                                    </select>
+                                    <select class="input" id="TailleP" name="_Taille[]" style="width: 50%;" required>
+                                        <option value="Moins de 10 salariés">Moins de 10 salariés</option>
+                                        <option value="Moins de 100 salariés">Moins de 100 salariés</option>
+                                        <option value="Plus de 100salariés">Plus de 100 salariés</option>
+                                    </select>
 
-                                <label for="Secteur" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Secteur d"activité</label>
-                                <select class="input" id="Secteur" name="_Secteur[]" style="width: 50%;" required>
-                                    <option value="Primaire">Primaire</option>
-                                    <option value="Secondaire">Secondaire</option>
-                                    <option value="Tertiaire">Tertiaire</option>
-                                    <option value="Quaternaire">Quaternaire</option>
-                                </select>
-
+                                    <label for="Secteur" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Secteur d"activité</label>
+                                    <select class="input" id="SecteurP" name="_Secteur[]" style="width: 50%;" required>
+                                        <option value="Primaire">Primaire</option>
+                                        <option value="Secondaire">Secondaire</option>
+                                        <option value="Tertiaire">Tertiaire</option>
+                                        <option value="Quaternaire">Quaternaire</option>
+                                    </select>
+                                </div>
+                                <!----------------------------------------------------------------------------------------------------------------------------------------------->
                                 <input type="hidden" class="form-control" id="Geocode" name="_Geocode[]" required>
 
                             </div>
@@ -475,6 +486,7 @@
 
                 </div>
                 <div id="licence" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+
                     {% if AllLicences is defined %}
                         {% for lic in AllLicences %}
                             <button onclick="postiframe('{{ path('admin_afficheLicence',{'id': lic.getId} ) }}')" id="licence{{ lic.getId }}" type="button" class="list-group-item butonLigne">
@@ -807,6 +819,7 @@
     }#}
 
     function dupliqueradresse() {
+
         var dup = document.getElementById("div_adresse");
         var clone = dup.cloneNode(true);
         var toggle = clone.children[0];
@@ -816,6 +829,24 @@
         var div = clone.children[2];
         div.setAttribute("id","Adresse" + i);
         clone.style.display = 'inline-block';
+
+        div.children[2].id=div.children[2].id+i;
+        //div.children[3].id=i;
+        // if boutton ajouter +1
+        div.children[4].id=div.children[4].id+i;
+        div.children[5].id=div.children[5].id+i;
+        div.children[7].id=div.children[7].id+i;
+        div.children[8].id=div.children[8].id+i;
+        div.children[11].id=div.children[11].id+i;
+        div.children[12].id=div.children[12].id+i;
+        div.children[14].id=div.children[14].id+i;
+        div.children[18].id=div.children[18].id+i;
+        div.children[19].id=div.children[19].id+i;
+        div.children[22].id=div.children[22].id+i;
+        div.children[23].id=div.children[23].id+i;
+        div.children[27].id=div.children[27].id+i;
+        div.children[28].id=div.children[28].id+i;
+        div.children[30].id=div.children[30].id+i;
 
         document.getElementById("adressecontainer").appendChild(clone);
         var parentdiv = dup.parentNode;
@@ -870,12 +901,8 @@
         for(var j = 1;j<geocodes.length;j++){
             var siret = document.getElementsByName('_SIRET[]')[j].value;
             var test = siret.substring(0, 9);
-            if(test!=document.getElementById('SIREN').value)
-            {
-                alert('Le siret de l\'adresse '+ j + ' n\'est pas compatible avec le siren donné');
-                document.getElementById('submittier').disabled=false;
-                return;
-            }
+            document.getElementById('SIREN').value=test;
+
         }
         var result_input= [];
         for(var i = 1; i<geocodes.length;i++)
@@ -920,6 +947,53 @@
     function disabling(champ){
         if(champ.options[champ.selectedIndex].value ==0){champ.nextElementSibling.style.display = 'inline-block';}
         else{champ.nextElementSibling.style.display = 'none';}
+    }
+    function VerifierSiret(button){
+
+
+        //var siret= button.previousElementSibling.value;
+        var siret= button.value;
+        var idCompliment=button.id.replace('SIRET','');
+        var route = '{{ path('Siret_Verifier',{'siret':"_siret"}) }}';
+        route = route.replace('_siret',siret);
+        ShowWaiter();
+
+        $.ajax({
+            type: "POST",
+            url: route,
+
+            success: function(data)
+            {
+
+                if(data['status']==='exist')
+                {
+
+                    document.getElementById('Rue'+idCompliment).value=data['rue'];
+                    document.getElementById('CodeP'+idCompliment).value=data['codePostal'];
+                    document.getElementById('Ville'+idCompliment).value=data['ville'];
+                    document.getElementById('Tel'+idCompliment).value=data['tel'];
+                    document.getElementById('Fax'+idCompliment).value=data['fax'];
+                    document.getElementById('Site'+idCompliment).value=data['site'];
+                    document.getElementById('Resp'+idCompliment).value=data['nomResp'];
+                    document.getElementById('RespPrenom'+idCompliment).value=data['prenomResp'];
+                    document.getElementById('TelResp'+idCompliment).value=data['telResp'];
+                    document.getElementById('MailResp'+idCompliment).value=data['mailResp'];
+                    document.getElementById('TypeSoc'+idCompliment).value=data['type'];
+                    document.getElementById('Taille'+idCompliment).value=data['taille'];
+                    document.getElementById('Secteur'+idCompliment).value=data['secteur'];
+                    button.style.borderColor = "red";
+
+                }else {
+
+                    button.style.borderColor = "green";
+
+                }
+
+                DeleteWaiter();
+            }
+
+        });
+
     }
 </script>
 

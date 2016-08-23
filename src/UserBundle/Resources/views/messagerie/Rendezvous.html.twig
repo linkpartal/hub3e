@@ -122,7 +122,7 @@
 
                 <div id="{{ rdv.id }}" class="Liste" style="border: 1px solid #ddd;margin: 0;height:100px;width: 100%;" >
                     <div name="Recherche" style="display: none;">{{ rdv.apprenant.nom }},{{ rdv.apprenant.prenom }},{{ rdv.apprenant.email }},{{ rdv.tuteur.nom }},{{ rdv.tuteur.prenom }},{{ rdv.tuteur.email }},{% if rdv.mission %}{{ rdv.mission.intitule }},{{ rdv.mission.codemission }},{{ rdv.mission.descriptif }},{{ rdv.mission.domaine }},{% if rdv.mission.etablissement %}{{ rdv.mission.etablissement.siret }},{{ rdv.mission.etablissement.adresse }},{{ rdv.mission.etablissement.secteur }},{{ rdv.mission.etablissement.tier.raisonsoc }}{% endif %}{% endif %}</div>
-                    {% if app.user.hasRole('ROLE_TUTEUR') %}
+                    {% if app.user.hasRole('ROLE_CONTACT_MISSION') %}
                         <div class="col-xs-2" >
                             <div style="border: 15px solid transparent">
                                 {% if rdv.apprenant.getPhotos %}

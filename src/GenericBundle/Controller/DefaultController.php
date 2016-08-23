@@ -56,7 +56,7 @@ class DefaultController extends Controller
                // return $this->redirect($this->generateUrl('ecole_recruteur',array('ecole'=>$user->getEtablissement()->getTier()->getRaisonSoc())));
                 return $this->redirect($this->generateUrl('ecole_recruteur',array('ecole'=>$user->getEtablissement()->getTier()->getRaisonSoc())));
             }
-            elseif(true == $this->get('security.authorization_checker')->isGranted('ROLE_TUTEUR'))
+            elseif(true == $this->get('security.authorization_checker')->isGranted('ROLE_CONTACT_MISSION'))
             {
                 return $this->redirect($this->generateUrl('societe_tuteur',array('societe'=>$user->getEtablissement()->getTier()->getRaisonSoc())));
             }
@@ -100,7 +100,7 @@ class DefaultController extends Controller
         {
             return $this->redirect($this->generateUrl('ecole_recruteur',array('ecole'=>$user->getEtablissement()->getTier()->getRaisonSoc())));
         }
-        elseif(true == $this->get('security.authorization_checker')->isGranted('ROLE_TUTEUR'))
+        elseif(true == $this->get('security.authorization_checker')->isGranted('ROLE_CONTACT_MISSION'))
         {
             return $this->redirect($this->generateUrl('societe_tuteur',array('societe'=>$user->getEtablissement()->getTier()->getRaisonSoc())));
         }

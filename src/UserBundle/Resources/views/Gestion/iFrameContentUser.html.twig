@@ -555,8 +555,8 @@
                                                 <label style="color:black">Administrateur école</label>
                                             {% elseif role == "ROLE_ADMINSOC" %}
                                                 <label style="color:black">Administrateur Société</label>
-                                            {% elseif role == "ROLE_TUTEUR" %}
-                                                <label style="color:black">Tuteur</label>
+                                            {% elseif role == "ROLE_CONTACT_MISSION" %}
+                                                <label style="color:black">Contact mission</label>
                                             {% elseif role == "ROLE_RECRUTEUR" %}
                                                 <label style="color:black">Recruteur Placeur</label>
                                             {% elseif role == "ROLE_SUPER_ADMIN" %}
@@ -726,8 +726,8 @@
                                                 <label style="color:black">Administrateur école</label>
                                             {% elseif role == "ROLE_ADMINSOC" %}
                                                 <label style="color:black">Administrateur Société</label>
-                                            {% elseif role == "ROLE_TUTEUR" %}
-                                                <label style="color:black">Tuteur</label>
+                                            {% elseif role == "ROLE_CONTACT_MISSION" %}
+                                                <label style="color:black">Contact mission</label>
                                             {% elseif role == "ROLE_RECRUTEUR" %}
                                                 <label style="color:black">Recruteur Placeur</label>
                                             {% elseif role == "ROLE_SUPER_ADMIN" %}
@@ -1207,7 +1207,7 @@
                                                 <label class="cell">Id : <label>{{ candidature.id }}</label></label>
 
                                                 <label class="cell"  >Statut : <label id="lblStatut">
-                                                        {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_TUTEUR') %}
+                                                        {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_CONTACT_MISSION') %}
                                                             {% if candidature.statut == 1 %}
                                                                 En attente compléments
                                                             {% elseif candidature.statut == 2 %}
@@ -1286,10 +1286,95 @@
                                             {% for question in Questions[i] %}
                                                 <div class="inputcontainer">
                                                     <!--<label class="list-group-item" style="height: 60px;" for="Question">Question :</label>-->
-                                                    <label class="champ" style="width: 100%;" >{{question.getQuestion  }}</label>
+                                                    <label class="champ" style="width: 100%;" >
+                                                        {% if question.getQuestion=='Ma société est'  %}
+                                                            J'aimerais travailler dans
+                                                        {% elseif question.getQuestion=="Mon secteur d'activité est"  %}
+                                                            Le secteur d'activité qui m'intéresse est
+
+                                                        {% elseif question.getQuestion=="Dans mon entreprises les horaires sont"  %}
+                                                            J'aime bien travailler avec des
+
+                                                        {% elseif question.getQuestion=="Mon entreprise propose en standard" %}
+                                                            Je serais plus motivé si l'entreprise me propose
+
+                                                        {% elseif question.getQuestion=="Mon entreprise recherche un apprenant"  %}
+                                                            De façon idéal mon tuteur devra être
+
+                                                        {% elseif question.getQuestion=="Le type de contrat que je propose" %}
+                                                            Le type de contrat que je souhaite avoir
+
+                                                        {% elseif question.getQuestion=="Pour réaliser la mission, des déplassements sont" %}
+                                                            Dans le cadre de ma mission, j'accepte des déplacements
+
+                                                        {% elseif question.getQuestion=="Quelles est la qualités principale recherchée chez votre apprenant"  %}
+                                                            Choisissez votre principales qualités
+
+                                                        {% elseif question.getQuestion=="Quelles est la qualités secondaire recherchée chez votre apprenant"  %}
+                                                            Choisissez votre qualités secondaire
+
+                                                        {% elseif question.getQuestion=="Si la colaboration est positive, à la suite du contrat"  %}
+                                                            A la suite du contrat, j'aimerais poursuivre dans la même société
+                                                          {% else %}
+
+                                                            {{question.getQuestion  }}
+                                                        {% endif %}
+
+
+
+
+
+                                                    </label>
                                                     {% for reponse in reponses[i][y] %}
                                                         <div>
-                                                            <input type="radio" onclick="envoyerNouvelleReponse({{ reponse.getId }})" name="reponse[{{ reponse.questiondef.id }}]" title="{{ reponse.getReponse }}" value="{{ reponse.getId }}"{% if reponse in User.reponsedef %} checked{% endif %}><label style="font: 14px Roboto black;height: inherit;">{{ reponse.getReponse }}</label>
+                                                            <input type="radio" onclick="envoyerNouvelleReponse({{ reponse.getId }})" name="reponse[{{ reponse.questiondef.id }}]" title="{{ reponse.getReponse }}" value="{{ reponse.getId }}"{% if reponse in User.reponsedef %} checked{% endif %}>
+                                                            <label style="font: 14px Roboto black;height: inherit;">
+
+
+
+
+                                                                {% if reponse.getReponse=="Personne nécessitant un accompagnement quotidien"  %}
+                                                                    Personne très présente ( Supervision quotidienne )
+                                                                {% elseif reponse.getReponse=="Personne semi-autonome"  %}
+                                                                    Personne présente en cas de besoin ( Supervision hebdomadaire )
+
+                                                                {% elseif reponse.getReponse=="Personne totalement autonome"  %}
+                                                                    Personne peu présente, grande autonomie ( supervision 2/3 fois par mois )
+
+                                                                {% elseif reponse.getReponse=="Le goût du challenge" %}
+                                                                    Votre goût du challenge
+
+                                                                {% elseif reponse.getReponse=="Son Autonomie / Maturité"  %}
+                                                                    Votre autonomie / Maturité
+
+                                                                {% elseif reponse.getReponse=="Son dynamisme" %}
+                                                                    Votre Dynamisme
+
+                                                                {% elseif reponse.getReponse=="Ouvert d'esprit" %}
+                                                                    Votre ouverture d'esprit
+
+                                                                {% elseif reponse.getReponse=="Authentique / Loyal"  %}
+                                                                    Votre authenticité / Loyauté
+
+                                                                {% elseif reponse.getReponse=="Grand sens du relationnel"  %}
+                                                                    Votre relationnel
+
+                                                                {% elseif reponse.getReponse=="Adaptabilité / Polyvalence"  %}
+                                                                    Votre adaptabilité / Polyvalence
+
+                                                                {% elseif reponse.getReponse=="Je peux proposer une poursuite"  %}
+                                                                    Oui
+                                                                {% elseif reponse.getReponse=="Je préfère former un autre apprenant"  %}
+                                                                    Non
+
+                                                                {% else %}
+
+                                                                    {{ reponse.getReponse }}
+                                                                {% endif %}
+
+
+
+                                                            </label>
                                                         </div>
                                                     {% endfor %}
                                                 </div>
@@ -1357,7 +1442,7 @@
                         <button onclick="if(confirm('Voulez-vous Supprimer cet utilisateur ?')){window.location.href = '{{ path('supprimerUtilisateur',{'id': User.getId }) }}';}" type="button" class="col-xs-12 rightMenu" >
                             Supprimer l'utilisateur
                         </button>
-                        {% if User.hasRole('ROLE_TUTEUR') or User.hasRole('ROLE_RECRUTEUR') %}
+                        {% if User.hasRole('ROLE_CONTACT_MISSION') or User.hasRole('ROLE_RECRUTEUR') %}
                             <button onclick="ChangeRole()" type="button" class="col-xs-12 rightMenu" >
                                 Promouvoir
                             </button>
@@ -1456,7 +1541,7 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
-    {% if is_granted('ROLE_TUTEUR') or is_granted('ROLE_RECRUTEUR') %}
+    {% if is_granted('ROLE_CONTACT_MISSION') or is_granted('ROLE_RECRUTEUR') %}
     function ChangeRole(){
         $.ajax({
             type:'Post',

@@ -22,6 +22,29 @@ class FormationController extends Controller
         $formation->setEtablissement($etablissement);
         $formation->setDescriptif($request->get('_Description'));
 
+        $formation->setNomResponsable($request->get('_NomResponsable'));
+        $formation->setPrenomResponsable($request->get('_PrenomResponsable'));
+        $formation->setTelResponsable($request->get('_TelResponsable'));
+        $formation->setMailResponsable($request->get('_MailResponsable'));
+        $formation->setFonctionResponsable($request->get('_FonctionResponsable'));
+        if($request->get('_Metier1') and !$request->get('_Metier1') == '' )
+        {
+        $formation->setMetier1($request->get('_Metier1'));
+        }
+        if($request->get('_Metier2') and !$request->get('_Metier2') == '' ){
+            $formation->setMetier2($request->get('_Metier2'));
+        }
+        if($request->get('_Metier3') and !$request->get('_Metier3') == '' ){
+            $formation->setMetier3($request->get('_Metier3'));
+        }
+
+
+
+
+
+
+
+
         $formation->setNom($request->get('_Nom'));
         $formation->setNomDoc($_FILES['_PDF']['name']);
         $em->persist($formation);

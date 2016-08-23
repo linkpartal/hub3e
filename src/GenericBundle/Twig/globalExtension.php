@@ -79,6 +79,9 @@ class globalExtension extends \Twig_Extension{
             'GetLastMise' => new \Twig_Function_Method($this, 'GetLastMise'),
             'GetDiffusion' => new \Twig_Function_Method($this, 'GetDiffusion'),
             'GetReponsesDef' => new \Twig_Function_Method($this, 'GetReponsesDef'),
+            'GetFormationApp' => new \Twig_Function_Method($this, 'GetFormationApp'),
+            'EstManuelle' => new \Twig_Function_Method($this, 'EstManuelle'),
+
 
 
 
@@ -290,7 +293,7 @@ class globalExtension extends \Twig_Extension{
        $tuteurs = array();
        foreach($this->em->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$mission->getEtablissement())) as $users_etablissement)
        {
-           if($users_etablissement->hasRole('ROLE_TUTEUR'))
+           if($users_etablissement->hasRole('ROLE_CONTACT_MISSION'))
            {
                array_push($tuteurs,$users_etablissement);
            }
@@ -971,6 +974,31 @@ class globalExtension extends \Twig_Extension{
         $stmt->execute();
         return count($stmt->fetchAll());
 
+    }
+
+
+
+    function GetFormationApp($idApp){
+
+        $Candidature = $this->em->getRepository('GenericBundle:Candidature')->findBy(array('user'=>$idApp));
+
+        return $Candidature;
+    }
+
+
+    public function EstManuelle($idapp,$idMission){
+
+        $user = $this->em->getRepository('GenericBundle:User')->find($idapp);
+        $Mission = $this->em->getRepository('GenericBundle:Mission')->find($idMission);
+        $ajoutmanuelle = $this->em->getRepository('GenericBundle:AjoutManuelle')->findOneBy(array('apprenant'=>$user,'mission'=>$Mission));
+        if($ajoutmanuelle){
+                $rep=true;
+        }else{
+
+            $rep=false;
+        }
+
+        return $rep;
     }
 
 
