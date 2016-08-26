@@ -94,7 +94,7 @@
 
                                     {% else %}
                                         <option value="ROLE_ADMINSOC">Administrateur Société</option>
-                                        <option value="ROLE_CONTACT_MISSION">Tuteur</option>
+                                        <option value="ROLE_CONTACT_MISSION">Contact mission</option>
                                     {% endif %}
                                 </select>
                             </div>
@@ -170,7 +170,7 @@
                             <div id="NavBarAddMission" class="col-xs-12 NavBarTier" >
                                 <button  class="col-xs-3 active" id="BoutonOnlgetDonnéesMission" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Information_generale',this);">Données</button>
                                 <button  class="col-xs-3" id="BoutonOnlgetFormationMission" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Onglet_Formations',this);">Formations</button>
-                                <button  class="col-xs-3" id="BoutonOnlgetContactMission" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Onglet_Contacts',this);">Contact</button>
+                                <button  class="col-xs-3" id="BoutonOnlgetContactMission" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','Onglet_Contacts',this);">Contact mission</button>
                                 <button  class="col-xs-3" id="BoutonOnlgetCandidatMission" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet','QCM_Affinite',this);">Candidat rêvé</button>
                                 {#<button class="col-xs-3" type="button">Documents</button>#}
                             </div>
@@ -438,6 +438,29 @@
                                 </div>
 
                                 <div id="Onglet_Contacts" class="div_form" style="visibility: hidden;position: absolute;">
+                                    <input type="hidden" id="idcontact" name="_idcontact" value="">
+                                    <label class="col-xs-3 input-colonne">
+                                        Contacts mission
+                                    </label>
+                                    <div class="col-xs-9">
+                                        <select id="listeContact" onchange="AfficherContact(this,'')" title="Contcats société" class="input"  name="_contact" style="font:16px Roboto;">
+
+                                            {% if ContactSociete is defined %}
+                                                <option value=""  ></option>
+                                                {% for contact in ContactSociete %}
+
+                                                        <option value="{{ contact.id }}">{{ contact.nom }} {{ contact.prenom }}</option>
+
+                                                {% endfor %}
+                                                <option value="-99"  >Autre</option>
+
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                    <div id="divContact" style="display:none;">
+
+
+
                                     <label class="col-xs-3 input-colonne">
                                         Contact
                                     </label>
@@ -453,7 +476,14 @@
                                     </label>
                                     <div class="col-xs-9">
                                         <textarea style="height: 100px;resize: both;font:16px Roboto;" class="input " id="Commentaire" name="_Commentaire" placeholder="Commentaire"  MAXLENGTH="255"></textarea>
-                                        </div>
+                                    </div>
+
+
+
+                                    </div>
+
+                                    {#
+                                    enlever le champ tuteur
                                     <label class="col-xs-3 input-colonne">
                                         Tuteur
                                     </label>
@@ -468,6 +498,10 @@
                                             {% endif %}
                                         </select>
                                     </div>
+
+                                    #}
+
+
 
                                 </div>
                                 <div id="QCM_Affinite" class="div_form" style="visibility: hidden;position: absolute;">
@@ -515,7 +549,7 @@
                                     <div id="NavBarAddMission{{ mission.getId }}" class="col-xs-12 NavBarTier" >
                                         <button  class="col-xs-3 active" id="BoutonOnlgetDonnéesMission{{ mission.getId }}" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet{{ mission.getId }}','Information_generale{{ mission.getId }}',this);">Données</button>
                                         <button  class="col-xs-3" id="BoutonOnlgetFormationMission{{ mission.getId }}" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet{{ mission.getId }}','Onglet_Formations{{ mission.getId }}',this);">Formations</button>
-                                        <button  class="col-xs-3" id="BoutonOnlgetContactMission{{ mission.getId }}" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet{{ mission.getId }}','Onglet_Contacts{{ mission.getId }}',this);">Contact</button>
+                                        <button  class="col-xs-3" id="BoutonOnlgetContactMission{{ mission.getId }}" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet{{ mission.getId }}','Onglet_Contacts{{ mission.getId }}',this);">Contact mission</button>
                                         <button  class="col-xs-3" id="BoutonOnlgetCandidatMission{{ mission.getId }}" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet{{ mission.getId }}','QCM_Affinite{{ mission.getId }}',this);">Candidat rêvé</button>
                                         {#<button class="col-xs-3" type="button">Documents</button>#}
                                     </div>
@@ -790,6 +824,42 @@
                                         </div>
 
                                         <div id="Onglet_Contacts{{ mission.getId }}" class="div_form" style="visibility: hidden;position: absolute;">
+                                            <input type="hidden" id="idcontact{{ mission.getId }}" name="_idcontact" value="">
+                                            <label class="col-xs-3 input-colonne">
+                                                Contacts mission
+                                            </label>
+                                            <div class="col-xs-9">
+                                                {% if  mission.getTuteur is not null  %}
+
+                                                {% set idContact = GetIdContactMission(mission.tuteur.getId()) %}
+                                                {% else %}
+                                                    {% set idContact = '' %}
+                                                {% endif %}
+
+                                                <select  id="listeContact{{ mission.getId }}" onchange="AfficherContact(this,{{ mission.getId }})" title="Contcats société" class="input"  name="_contact" style="font:16px Roboto;">
+
+                                                    {% if ContactSociete is defined %}
+                                                        {% if idContact=='' %}<option value="" selected  ></option>{% else %}<option value=""  ></option>{% endif %}
+
+                                                        {% for contact in ContactSociete %}
+
+
+                                                            {% if idContact==contact.id  %}
+                                                                <option value="{{ contact.id }}" selected  >{{ contact.nom }} {{ contact.prenom }}</option>
+                                                            {% else %}
+                                                                <option value="{{ contact.id }}">{{ contact.nom }} {{ contact.prenom }}</option>
+                                                            {% endif %}
+
+                                                        {% endfor %}
+                                                        <option value="-99"  >Autre</option>
+
+                                                    {% endif %}
+                                                </select>
+                                            </div>
+                                            <div id="divContact{{ mission.getId }}" {% if idContact=='' or idContact=='-99' %} style="display:none;" {% endif %}  >
+
+
+
                                             <label class="col-xs-3 input-colonne">
                                                 Contact
                                             </label>
@@ -806,7 +876,8 @@
                                             <div class="col-xs-9">
                                                 <textarea style="height: 100px;resize: both;font:16px Roboto;" class="input "  id="Commentaire{{ mission.getId }}" name="_Commentaire" placeholder="Commentaire"  MAXLENGTH="255">{{ mission.Commentaire}}</textarea>
                                             </div>
-
+                                            </div>
+                                            {#
                                             <label class="col-xs-3 input-colonne">
                                                 Tuteur
                                             </label>
@@ -822,6 +893,9 @@
                                                     {% endif %}
                                                 </select>
                                             </div>
+
+                                            #}
+
 
                                             <div class="div_button" >
                                                 <input id="submitaddmission{{ mission.getId }}" onclick="document.getElementById('BoutonOnlgetCandidatMission{{ mission.getId }}').click();" class="blue" type="button" value="suivant">
@@ -2461,6 +2535,61 @@
                 document.getElementById('idbtnMoins'+nbre+idMission).style.display="none";
             }
         }
+
+        function AfficherContact(liste,idMission)
+        {
+            //alert(liste.value)
+            if (liste.value==''){
+                document.getElementById('divContact'+idMission).style.display='none';
+                document.getElementById('NomContact'+idMission).value='';
+                document.getElementById('PrenomContact'+idMission).value='';
+                document.getElementById('FonctionContact'+idMission).value='';
+                document.getElementById('TelContact'+idMission).value='';
+                document.getElementById('EmailContact'+idMission).value='';
+                document.getElementById('Commentaire'+idMission).value='';
+                document.getElementById('idcontact'+idMission).value='';
+
+            }else if (liste.value!='-99'){
+
+                var route = '{{path('chercher_contact',{'id':"_id" })}}';
+                route = route.replace("_id", liste.value);
+
+                $.ajax({
+                    type: 'get',
+                    url: route,
+                    dataType: 'json',
+
+                    success: function(data) {
+
+
+                        document.getElementById('NomContact'+idMission).value=data['nom'];
+                        document.getElementById('PrenomContact'+idMission).value=data['prenom'];
+                        document.getElementById('FonctionContact'+idMission).value=data['fonction'];
+                        document.getElementById('TelContact'+idMission).value=data['tel'];
+                        document.getElementById('EmailContact'+idMission).value=data['mail'];
+                        document.getElementById('idcontact'+idMission).value=liste.value;
+
+                        document.getElementById('divContact'+idMission).style.display='block';
+
+                    }
+                });
+
+
+            }
+            else{
+
+                document.getElementById('NomContact'+idMission).value='';
+                document.getElementById('PrenomContact'+idMission).value='';
+                document.getElementById('FonctionContact'+idMission).value='';
+                document.getElementById('TelContact'+idMission).value='';
+                document.getElementById('EmailContact'+idMission).value='';
+                document.getElementById('Commentaire'+idMission).value='';
+                document.getElementById('idcontact'+idMission).value='';
+                document.getElementById('divContact'+idMission).style.display='block';
+
+            }
+        }
+
 
 
 

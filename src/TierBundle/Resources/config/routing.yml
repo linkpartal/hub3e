@@ -90,6 +90,11 @@ Enregistrer_suivi:
     path : /EnregistrerSuivi/
     defaults: { _controller: TierBundle:Default:EnregistrerSuivi}
 
+chercher_contact:
+    path: /chercher_contact/id={id}
+    defaults: { _controller: TierBundle:Default:chercherContact}
+
+
 
 
 

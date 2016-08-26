@@ -5,6 +5,8 @@ namespace MissionBundle\Controller;
 use GenericBundle\Entity\Diffusion;
 use GenericBundle\Entity\Message;
 use GenericBundle\Entity\Mission;
+use GenericBundle\Entity\Notification;
+use GenericBundle\Entity\ContactSociete;
 use GenericBundle\Entity\Postulation;
 use GenericBundle\Entity\AjoutManuelle;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -95,10 +97,149 @@ class DefaultController extends Controller
         $em->flush();
         $mission->genererCode();
         $em->flush();
-        if($request->get('_TUTEURMISSION')){
-            $tuteur = $em->getRepository('GenericBundle:User')->find($request->get('_TUTEURMISSION'));
+        if($request->get('_contact') ){
+           /* $tuteur = $em->getRepository('GenericBundle:User')->find($request->get('_TUTEURMISSION'));
             $mission->setTuteur($tuteur);
-            $em->flush();
+            $em->flush();*/
+            if ($request->get('_contact')=='-99'){
+
+                $newcontact = new ContactSociete();
+
+                $newcontact->setEtablissement($etablissement);
+                $newcontact->setNom($request->get('_NomContact'));
+                $newcontact->setPrenom($request->get('_PrenomContact'));
+                $newcontact->setMail($request->get('_EmailContact'));
+                $newcontact->setTelephone($request->get('_TelContact'));
+                $newcontact->setFonction($request->get('_FonctionContact'));
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($newcontact);
+                $em->flush();
+
+                $contact = $newcontact;
+
+
+            }
+            else
+            {
+
+                $contact = $em->getRepository('GenericBundle:ContactSociete')->find($request->get('_contact'));
+            }
+
+
+
+
+            if ($contact->getUser() ){
+                $mission->setTuteur($contact->getUser());
+                $em->flush();
+
+
+
+                $MessageTexte='Vous avez été désigné contact de référence pour la mission '.$mission->getIntitule().', vous pouvez vous connecter à la plateforme à l\'adresse hub3e.atpmg.com ';
+
+
+                $modele = 'GenericBundle:Mail:EmailStandard.html.twig';
+                $message = \Swift_Message::newInstance()
+                    ->setSubject('Email')
+                    ->setFrom(array('ne-pas-repondre-svp@atpmg.com'=>"HUB3E"))
+                    ->setTo($contact->getMail())
+                    ->setBody($this->renderView($modele,array('Message'=>$MessageTexte))
+                        ,'text/html'
+                    );
+                $this->get('mailer')->send($message);
+
+
+
+
+
+            }else{
+
+                // creation de user role_contact_mission
+                $Nom=$contact->getNom();
+                $Prenom=$contact->getPrenom();
+
+
+                $userManager = $this->get('fos_user.user_manager');
+                $newuser = $userManager->createUser();
+
+                    $usernameexist = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('username'=>$Nom.'.'.$Prenom));
+                    if($usernameexist){
+                        $newuser->setUsername($Nom.'.'.$Prenom.''.count($usernameexist));
+                    }
+                    else{
+                        $newuser->setUsername($Nom.'.'.$Prenom);
+                    }
+                    $newuser->setEmail($contact->getMail());
+                    $newuser->addRole('ROLE_CONTACT_MISSION');
+                    //$newuser->setCivilite($request->get('civilite'));
+                    $newuser->setTelephone($contact->getTelephone());
+                    $newuser->setPrenom($contact->getPrenom());
+                    $newuser->setNom($contact->getNom());
+
+
+
+                //generate a password
+                $tokenGenerator = $this->get('fos_user.util.token_generator');
+                $password = substr($tokenGenerator->generateToken(), 0, 8); // 8 chars
+                $hash =  $this->get('security.password_encoder')->encodePassword($newuser, $password);
+                $newuser->setPassword($hash);
+
+                $etab = $etablissement;
+                $newuser->setEtablissement($etab);
+
+
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($newuser);
+                $em->flush();
+
+                $superadmins = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_SUPER_ADMIN');
+                $usercon = $this->get('security.token_storage')->getToken()->getUser();
+                $superadmins = array_merge($superadmins, $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$usercon->getTier())));
+
+                foreach($superadmins as $admin){
+                    if(!$this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('entite'=>$newuser->getId(),'type'=>'Utilisateur','user'=>$admin))){
+                        $notif = new Notification();
+                        $notif->setEntite($newuser->getId());
+                        $notif->setType('Utilisateur');
+                        $notif->setUser($admin);
+                        $em->persist($notif);
+                        $em->flush();
+                    }
+                }
+
+                //send password
+
+
+
+                $MessageTexte='Vous avez été désigné contact de référence pour la mission '.$mission->getIntitule().', vos identifiants de connexion sont : '.$newuser->getUsername().' / '.$password.' , vous pouvez vous connecter à la plateforme à l\'adresse hub3e.atpmg.com';
+
+                $modele = 'GenericBundle:Mail:EmailStandard.html.twig';
+
+                $message = \Swift_Message::newInstance()
+                    ->setSubject('Email')
+                    ->setFrom(array('ne-pas-repondre-svp@atpmg.com'=>"HUB3E"))
+                    ->setTo($contact->getMail())
+                    ->setBody($this->renderView($modele,array('Message'=>$MessageTexte))
+                        ,'text/html'
+                    );
+                $this->get('mailer')->send($message);
+
+                $mission->setTuteur($newuser);
+                $em->flush();
+
+
+                $contact->setUser($newuser);
+                $em->flush();
+
+
+
+
+
+
+            }
+
+
+
         }
 
         if($request->get('formation')){
@@ -223,10 +364,154 @@ class DefaultController extends Controller
         $em->flush();
         $mission->genererCode();
         $em->flush();
-        if($request->get('_TUTEURMISSION')){
-            $tuteur = $em->getRepository('GenericBundle:User')->find($request->get('_TUTEURMISSION'));
-            $mission->setTuteur($tuteur);
-            $em->flush();
+        $anciennecontact=$this->getDoctrine()->getRepository('GenericBundle:ContactSociete')->find($request->get('_contact'));
+
+        if($request->get('_contact')  ){
+
+            if($request->get('_contact')!=strval($anciennecontact->getId()))
+            {
+
+
+            if ($request->get('_contact')=='-99'){
+
+                $newcontact = new ContactSociete();
+
+                $newcontact->setEtablissement($etablissement);
+                $newcontact->setNom($request->get('_NomContact'));
+                $newcontact->setPrenom($request->get('_PrenomContact'));
+                $newcontact->setMail($request->get('_EmailContact'));
+                $newcontact->setTelephone($request->get('_TelContact'));
+                $newcontact->setFonction($request->get('_FonctionContact'));
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($newcontact);
+                $em->flush();
+
+                $contact = $newcontact;
+
+
+            }
+            else
+            {
+
+                $contact = $em->getRepository('GenericBundle:ContactSociete')->find($request->get('_contact'));
+            }
+
+
+
+
+            if ($contact->getUser() ){
+                $mission->setTuteur($contact->getUser());
+                $em->flush();
+
+
+
+                $MessageTexte='Vous avez été désigné contact de référence pour la mission '.$mission->getIntitule().', vous pouvez vous connecter à la plateforme à l\'adresse hub3e.atpmg.com ';
+
+
+                $modele = 'GenericBundle:Mail:EmailStandard.html.twig';
+                $message = \Swift_Message::newInstance()
+                    ->setSubject('Email')
+                    ->setFrom(array('ne-pas-repondre-svp@atpmg.com'=>"HUB3E"))
+                    ->setTo($contact->getMail())
+                    ->setBody($this->renderView($modele,array('Message'=>$MessageTexte))
+                        ,'text/html'
+                    );
+                $this->get('mailer')->send($message);
+
+
+
+
+
+            }else{
+
+                // creation de user role_contact_mission
+                $Nom=$contact->getNom();
+                $Prenom=$contact->getPrenom();
+
+
+                $userManager = $this->get('fos_user.user_manager');
+                $newuser = $userManager->createUser();
+
+                $usernameexist = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('username'=>$Nom.'.'.$Prenom));
+                if($usernameexist){
+                    $newuser->setUsername($Nom.'.'.$Prenom.''.count($usernameexist));
+                }
+                else{
+                    $newuser->setUsername($Nom.'.'.$Prenom);
+                }
+                $newuser->setEmail($contact->getMail());
+                $newuser->addRole('ROLE_CONTACT_MISSION');
+                //$newuser->setCivilite($request->get('civilite'));
+                $newuser->setTelephone($contact->getTelephone());
+                $newuser->setPrenom($contact->getPrenom());
+                $newuser->setNom($contact->getNom());
+
+
+
+                //generate a password
+                $tokenGenerator = $this->get('fos_user.util.token_generator');
+                $password = substr($tokenGenerator->generateToken(), 0, 8); // 8 chars
+                $hash =  $this->get('security.password_encoder')->encodePassword($newuser, $password);
+                $newuser->setPassword($hash);
+
+                $etab = $etablissement;
+                $newuser->setEtablissement($etab);
+
+
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($newuser);
+                $em->flush();
+
+                $superadmins = $this->getDoctrine()->getRepository('GenericBundle:User')->findByRole('ROLE_SUPER_ADMIN');
+                $usercon = $this->get('security.token_storage')->getToken()->getUser();
+                $superadmins = array_merge($superadmins, $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$usercon->getTier())));
+
+                foreach($superadmins as $admin){
+                    if(!$this->getDoctrine()->getRepository('GenericBundle:Notification')->findOneBy(array('entite'=>$newuser->getId(),'type'=>'Utilisateur','user'=>$admin))){
+                        $notif = new Notification();
+                        $notif->setEntite($newuser->getId());
+                        $notif->setType('Utilisateur');
+                        $notif->setUser($admin);
+                        $em->persist($notif);
+                        $em->flush();
+                    }
+                }
+
+                //send password
+
+
+
+                $MessageTexte='Vous avez été désigné contact de référence pour la mission '.$mission->getIntitule().', vos identifiants de connexion sont : '.$newuser->getUsername().' / '.$password.' , vous pouvez vous connecter à la plateforme à l\'adresse hub3e.atpmg.com';
+
+                $modele = 'GenericBundle:Mail:EmailStandard.html.twig';
+
+                $message = \Swift_Message::newInstance()
+                    ->setSubject('Email')
+                    ->setFrom(array('ne-pas-repondre-svp@atpmg.com'=>"HUB3E"))
+                    ->setTo($contact->getMail())
+                    ->setBody($this->renderView($modele,array('Message'=>$MessageTexte))
+                        ,'text/html'
+                    );
+                $this->get('mailer')->send($message);
+
+                $mission->setTuteur($newuser);
+                $em->flush();
+
+
+                $contact->setUser($newuser);
+                $em->flush();
+
+
+
+
+
+
+            }
+
+
+            }
+
         }
 
         if($request->get('formation')){
@@ -450,14 +735,6 @@ class DefaultController extends Controller
         }
 
 
-
-
-
-
-
-
-
-        // var_dump(count($listeApprenanats));die;
 
 
         return $this->render('MissionBundle::afficheMission.html.twig',array('mission'=>$mission,'users'=>$users,'formations_prop'=>$formations_prop,'informations_maps'=>$informations_maps,

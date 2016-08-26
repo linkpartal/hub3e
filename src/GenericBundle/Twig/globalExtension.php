@@ -81,6 +81,7 @@ class globalExtension extends \Twig_Extension{
             'GetReponsesDef' => new \Twig_Function_Method($this, 'GetReponsesDef'),
             'GetFormationApp' => new \Twig_Function_Method($this, 'GetFormationApp'),
             'EstManuelle' => new \Twig_Function_Method($this, 'EstManuelle'),
+            'GetIdContactMission' => new \Twig_Function_Method($this, 'GetIdContactMission'),
 
 
 
@@ -1001,6 +1002,20 @@ class globalExtension extends \Twig_Extension{
         return $rep;
     }
 
+
+
+    function GetIdContactMission($idTuteur){
+
+        $Contact = $this->em->getRepository('GenericBundle:ContactSociete')->findOneBy(array('user'=>$idTuteur));
+        if ($Contact){
+            return $Contact->getId();
+        }else{
+
+            return '';
+        }
+
+
+    }
 
 
 

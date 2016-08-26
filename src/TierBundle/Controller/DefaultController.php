@@ -136,6 +136,8 @@ class DefaultController extends Controller
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
 
+        $contactSociete = $this->getDoctrine()->getRepository('GenericBundle:ContactSociete')->findBy(array('etablissement' => $etablissement));
+
         //Suppression de la notification de l'utilisateur connecté concernant l'etablissement affiché
         if($etablissement->getTier()->getEcole())
         {
@@ -187,7 +189,7 @@ class DefaultController extends Controller
                 array_push($etablisementlier ,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$value)));
             }
             return $this->render('TierBundle::iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,'tiers'=>$tiers,'users'=>$users,
-                'formations'=>$formation,'libs'=>$licences,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab,'etablissementslier'=>$etablisementlier));
+                'formations'=>$formation,'libs'=>$licences,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab,'etablissementslier'=>$etablisementlier,'ContactSociete'=>$contactSociete));
         }
         else{
             // missions non suspendu
@@ -233,7 +235,7 @@ class DefaultController extends Controller
             }
 
 
-            $contactSociete = $this->getDoctrine()->getRepository('GenericBundle:ContactSociete')->findBy(array('etablissement' => $etablissement));
+
 
 
            // var_dump($etablissement->getId());die;
@@ -491,6 +493,27 @@ class DefaultController extends Controller
         $etab->setSuivicommercial($request->get('_Suivi'));
         $em->flush();
         return $this->redirect($_SERVER['HTTP_REFERER']);
+
+
+    }
+
+    public function chercherContactAction($id){
+
+
+        $reponse = new JsonResponse();
+        //$contact = $this->getDoctrine()->getRepository('GenericBundle:ContactSociete')->findOneBy($id);
+        $contact = $this->getDoctrine()->getRepository('GenericBundle:ContactSociete')->find($id);
+
+        return $reponse->setData(array(
+            'nom'=>$contact->getNom(),
+            'prenom'=>$contact->getPrenom(),
+            'fonction'=>$contact->getFonction(),
+            'tel'=>$contact->getTelephone(),
+            'mail'=>$contact->getMail(),
+
+
+
+        ));
 
 
     }

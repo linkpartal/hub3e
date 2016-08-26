@@ -69,11 +69,15 @@ class ContactSociete
      */
     private $fonction;
 
-  
-	 
-	 
-
-
+    /**
+     * @var \GenericBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="users_id", referencedColumnName="id", onDelete="CASCADE")
+     * })
+     */
+    private $user;
 
     /**
      * Get id
@@ -227,5 +231,29 @@ class ContactSociete
     public function getEtablissement()
     {
         return $this->etablissement;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \GenericBundle\Entity\User $user
+     *
+     * @return ContactSociete
+     */
+    public function setUser(\GenericBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \GenericBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
