@@ -152,18 +152,20 @@ class DefaultController extends Controller
         }
 
         $TousLesApprenants=$Allapprenants;
+
         $Myapprenantplacer=$Allapprenants;
         foreach($Importcandidat as $userd)
         {
             array_push($Allapprenants,$userd);
         }
+        // var_dump(count($Allapprenants));die;
 
         // Postulation en cours
 
         $Postulation = $this->getDoctrine()->getRepository('GenericBundle:Postulation')->findAll();
         $MyPostulation = array();
 
-        $PostulationEnCours=round((count($Myapprenantplacer)*100)/count($Allapprenants), 2);
+        $PostulationEnCours=round((count($Myapprenantplacer)*100)/count($TousLesApprenants), 2);
 
         // formation à valider
 
@@ -173,14 +175,15 @@ class DefaultController extends Controller
         $query = $em->createQuery($sql);
         $query->setParameter('statut', '2');
         $FormationCandidature = $query->getResult(); // array of ForumUser objects
+        // var_dump(count($FormationCandidature));die;
 
         $MyFormationAvalider =array();
         foreach($FormationCandidature as $formation)
         {
-            if(!($Allapprenants))
+            if(!($TousLesApprenants))
             {
             }else{
-                if( in_array($formation->getuser(),$Allapprenants)  )
+                if( in_array($formation->getuser(),$TousLesApprenants)  )
                 {
                     array_push($MyFormationAvalider,$formation);
                 }
@@ -188,12 +191,23 @@ class DefaultController extends Controller
 
         }
 
-        $FormationAvalider=round((count($MyFormationAvalider)*100)/count($Allapprenants), 2);
+        $FormationAvalider=round((count($MyFormationAvalider)*100)/count($TousLesApprenants), 2);
 
        // apprenants à placer
 
-        $MyapprenantAplacer=$Importcandidat;
-        $ApprenantAplacer=round((count($Importcandidat)*100)/count($Allapprenants), 2);
+        // $MyapprenantAplacer=$Importcandidat;
+        // $ApprenantAplacer=round((count($Importcandidat)*100)/count($TousLesApprenants), 2);
+
+        $sql = "SELECT I FROM GenericBundle:Infocomplementaire I WHERE I.profilcomplet = 3 GROUP BY I.id ";
+        $query =$em->createQuery($sql);
+        $MyapprenantAplacer = $query->getResult();
+        // var_dump(count($MyapprenantAplacer));die;
+        if(!($MyapprenantAplacer))
+        {
+            $ApprenantAplacer= '0';  
+        }else{             
+            $ApprenantAplacer=round((count($MyapprenantAplacer)*100)/count($TousLesApprenants),2);
+        }
 
 
        // Apprenants mis en relation
@@ -206,10 +220,10 @@ class DefaultController extends Controller
         $MyApprenantRelation=array();
         foreach($ApprenantMiseRelation as $appMise)
         {
-            if(!($Allapprenants))
+            if(!($TousLesApprenants))
             {
             }else{
-                if( in_array($appMise->getDestinataire(),$Allapprenants)  )
+                if( in_array($appMise->getDestinataire(),$TousLesApprenants)  )
                 {
                     array_push($MyApprenantRelation,$appMise);
                 }
@@ -217,9 +231,7 @@ class DefaultController extends Controller
 
         }
 
-
-        $ApprenantRelation=round((count($MyApprenantRelation)*100)/count($Allapprenants), 2);
-
+        $ApprenantRelation=round((count($MyApprenantRelation)*100)/count($TousLesApprenants), 2);
 
        //Apprenants placés  
 
@@ -230,28 +242,31 @@ class DefaultController extends Controller
         {
             $Apprenantplacer= '0';  
         }else{             
-            $Apprenantplacer=round((count($MyApprenantPlacer)*100)/count($Allapprenants),2);
+            $Apprenantplacer=round((count($MyApprenantPlacer)*100)/count($TousLesApprenants),2);
         }
 
        // Missions à pourvoir 
 
         $Allmissions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('tier'=>$tiercreation));
 
-        $Mymissionapourvoir=array();
-
-        foreach($Allmissions as $missionap)
+        $sql = " SELECT M FROM GenericBundle:Mission M WHERE M.pourvue is NUll GROUP BY M.id ";
+        $query = $em->createQuery($sql);
+        $MyMissionsAP = $query->getResult();
+        //var_dump(count($Allmissions));die;
+        if(!($MyMissionsAP))
         {
-            if(!($Allmissions))
-            {
-            }else{
-                if($missionap.'statut' != 2) 
-                {
-                    array_push($Mymissionapourvoir,$missionap);
-                }
-            }    
+            $MissionsAPourvoir= '0';  
+        }else{             
+            $MissionsAPourvoir=round((count($MyMissionsAP)*100)/count($Allmissions),2);
         }
+        // FINIR DE CORRIGER CE POINT
+
+        // var_dump($MyMissionsAP);
+        // var_dump($Allmissions);
+
+         // var_dump($MissionsAPourvoir);
+         // die;
       
-        $Missionapourvoir=round((count($Mymissionapourvoir)*100)/count($Allmissions), 2);
 
         // Missions pourvues
 
@@ -265,6 +280,10 @@ class DefaultController extends Controller
             $MissionsPourvues=round((count($MyMissionsPourvues)*100)/count($Allmissions),2);
         }
 
+        // var_dump($MissionsPourvues);
+        // die;
+
+
         // Missions sans formations 
 
         $Mymissionssansformations=array();
@@ -272,35 +291,26 @@ class DefaultController extends Controller
         foreach($Allmissions as $missionsf)
         {  
 
-        // Code Abdellah à mettre dans le foreach pour tenter de résoude le problème lié au getStatut()   
-        $em = $this->getDoctrine()->getEntityManager();
-        $sql="SELECT C.statut FROM GenericBundle:Diffusion C WHERE C.mission=:mission ";
-        $query = $em->createQuery($sql);
-        $query->setParameter('mission', $missionsf->getId());
-        $Statut = $query->getResult(); // array of ForumUser object
+            // Code Abdellah à mettre dans le foreach pour tenter de résoude le problème lié au getStatut()   
+            $em = $this->getDoctrine()->getEntityManager();
+            $sql="SELECT C.statut FROM GenericBundle:Diffusion C WHERE C.mission=:mission ";
+            $query = $em->createQuery($sql);
+            $query->setParameter('mission', $missionsf->getId());
+            $Statut = $query->getResult(); // array of ForumUser object
 
             if(!($Allmissions))
             {
             }else{    
-                if ($Statut)
-                {
-                    if( $Statut == 5)
-                    {   
-                    // var_dump(count($missionsf));die;  
-                    }else{
-                        array_push($Mymissionssansformations,$missionsf);
-                    } 
-                }
-            }
-            
+                if(!$Statut)
+                {   
+                    array_push($Mymissionssansformations,$missionsf);
+                } 
+            }  
         }
-  
-        // var_dump(count($Allmissions),count($Mymissionssansformations));die;
-        // var_dump(count($Mymissionssansformations));die;
 
         $MissionsSansFormations=round((count($Mymissionssansformations)*100)/count($Allmissions), 2);
 
-        // Missions sans tuteur ( toujours le même problème rien ne se push dans mon array A RESOUDRE )
+        // Missions sans tuteur ( A MODIFIER SUITE AU CHANGEMENT TUTEUR -> CONTACT MISSION )
 
         $Mymissionssanstuteur=array();
 
@@ -345,13 +355,14 @@ class DefaultController extends Controller
             'ApprenantRelation'=>$ApprenantRelation,'MyApprenantRelation'=>$MyApprenantRelation,
             'Apprenantplacer'=>$Apprenantplacer,
             'Myapprenantplacer'=>$Myapprenantplacer,
-            'MissionAPourvoir'=>$Missionapourvoir,'Mymissionapourvoir'=>$Mymissionapourvoir,
+            'MissionsAPourvoir'=>$MissionsAPourvoir,//'Mymissionsapourvoir'=>$Mymissionsapourvoir,
             'MissionsPourvues'=>$MissionsPourvues, //'Mymissionspourvues'=>$Mymissionspourvues,
             'MissionsSansFormations'=>$MissionsSansFormations, 'Mymissionssansformations'=>$Mymissionssansformations,
             'MissionsSansTuteur'=>$MissionsSansTuteur, 'Mymissionssanstuteur'=>$Mymissionssanstuteur,
             'MissionsSansQcm'=>$MissionsSansQcm, //'Mymissionssansqcm'=>$Mymissionssansqcm,
             'CountLesMissions'=>$CountLesMissions,
             'CountLesApprenants'=>$CountLesApprenants,
+            'missions'=>$Allmissions
 
         ));
 
