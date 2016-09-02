@@ -990,7 +990,7 @@
                 <tbody>
                     {% if missions is defined %}
                         {% for m in missions %}
-                            {% if m.statut != 2 %}
+                            {% if m.getPourvue() == NULL %}
                                 <tr>
                                     <td> {{ m.intitule }} </td>
                                     <td> {{ m.etablissement.tier.raisonsoc }} </td>
@@ -1045,7 +1045,7 @@
                                         </button>
                                     </td>
                                 </tr>
-                            {% elseif m.getPourvue() == null %}
+                            {% elseif missions == null %}
                                 <tr> Aucunes Missions à afficher </tr>
                             {% endif %}
                         {% endfor %}
@@ -1073,10 +1073,7 @@
                 </thead>
                 <tbody>
 
-                {% set MesMissionsSansFormation=GetMissionSansformation(etablissement.getTier.getId) %}
-                    {% if MesMissionsSansFormation == null %}
-                        <tr> Aucunes Missions à afficher </tr>
-                    {% endif %}    
+                {% set MesMissionsSansFormation=GetMissionSansformation(etablissement.getTier.getId) %}   
                     {% for m in MesMissionsSansFormation.mission %}
                         <tr>
                             <td> {{ m.intitule }} </td>
@@ -1089,15 +1086,18 @@
                                     </a>
                                 </button>
                             </td>
-                        </tr>                          
+                        </tr>
+                    {% if MesMissionsSansFormation == null %}
+                        <tr> Aucunes Missions à afficher </tr>
+                    {% endif %}                           
                     {% endfor %}
-
                 </tbody>    
             </table>
     </div>
 </div>
 
 {# POPUP MISSIONS SANS TUTEUR #}
+{# A MODIFIER SUITE AU CHANGEMENT EFFECTUE TUTEUR -> CONTACT MISSION #}
 
 <div id="MissionSansTuteur" class="popup" >
     <div onclick="document.getElementById('MissionSansTuteur').click();hide(this)" class="close"></div>
@@ -1129,10 +1129,10 @@
                                         </button>
                                     </td>
                                 </tr>
+                            {% elseif missions == null %}
+                                <tr> Aucunes Missions à afficher </tr>
                             {% endif %}
                         {% endfor %}
-                        {% elseif missions == null %}
-                        <tr> Aucunes Missions à afficher </tr>
                     {% endif %}
                 </tbody>    
             </table>
@@ -1156,10 +1156,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% set MesMissionsSansFormation=GetMissionSansformation(etablissement.getTier.getId) %}
-                    {% if MesMissionsSansFormation == null %}
-                        <tr> Aucunes Missions à afficher </tr>
-                    {% endif %} 
+                {% set MesMissionsSansFormation=GetMissionSansformation(etablissement.getTier.getId) %} 
                     {% for m in MesMissionsSansFormation.mission %}
                         <tr>
                             <td> {{ m.intitule }} </td>
@@ -1173,6 +1170,9 @@
                                 </button>
                             </td>
                         </tr>
+                    {% if MesMissionsSansFormation == null %}
+                        <tr> Aucunes Missions à afficher </tr>
+                    {% endif %}
                     {% endfor %}
                 </tbody>    
             </table>
@@ -1243,7 +1243,7 @@
                     {% if apprenants is defined %}   
                         {% for user in apprenants %}
                             {% if user.info %}
-                                {% if user.info.profilcomplet == 2 %}
+                                {% if user.info.profilcomplet != 3  %}
                                     <tr>
                                         <td> 
                                             <img src="{{ user.getPhotos }} " style="height: 100%" >
@@ -1259,11 +1259,11 @@
                                             </button>
                                         </td>
                                     </tr>
+                                {% elseif apprenants == null %}
+                                    <tr> Aucuns Apprenants à afficher </tr>    
                                 {% endif %}
                             {% endif %} 
-                        {% endfor %}
-                        {% elseif apprenants == null %}
-                        <tr> Aucuns Apprenants à afficher </tr> 
+                        {% endfor %} 
                     {% endif %}
                 </tbody>    
             </table>
@@ -1306,18 +1306,18 @@
                                         </button>
                                     </td>
                                 </tr>
+                            {% elseif apprenants == null %}
+                                <tr> Aucuns Apprenants à afficher </tr>     
                             {% endif %}
                             {% endif %}
-                        {% endfor %}
-                        {% elseif apprenants == null %}
-                        <tr> Aucuns Apprenants à afficher </tr>   
+                        {% endfor %}  
                     {% endif %}
                 </tbody>    
             </table>
     </div>
 </div>
 
-{# POPUP APPRENANTS MIS EN RELATION quelle variable gère le fait qu'un apprenant est mis en relation #}
+{# POPUP APPRENANTS MIS EN RELATION quelle variable gère le fait qu'un apprenant est mis en relation POINT A TERMINER  #}
 
 <div id="ApprenantsMisEnRelation" class="popup" >
     <div onclick="document.getElementById('ApprenantsMisEnRelation').click();hide(this)" class="close"></div>
@@ -1352,11 +1352,11 @@
                                             </button>
                                         </td>
                                     </tr>
+                                {% elseif apprenants == null %}
+                                    <tr> Aucuns Apprenants à afficher </tr>     
                                 {% endif %}
                             {% endfor %}
-                        {% endif %}
-                        {% elseif apprenants == null %}
-                        <tr> Aucuns Apprenants à afficher </tr>    
+                        {% endif %}   
                     {% endif %}
                 </tbody>    
             </table>
@@ -1398,7 +1398,7 @@
                                         </button>
                                     </td>
                                 </tr>
-                            {% elseif user.getPlace() == null %}
+                            {% elseif apprenants == null %}
                                 <tr> Aucuns Apprenants à afficher </tr>
                             {% endif %} 
                         {% endfor %}    

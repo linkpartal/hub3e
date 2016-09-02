@@ -845,7 +845,8 @@
 
 {# COMPETENCES #}
                                     <div class="inputcontainer">
-                                        <label class="list-group-item" style="height: 60px;vertical-align: top;" for="Competences">Compétences :</label>
+                                        <label class="list-group-item" style="height: 60px;vertical-align: top;" for="Competences">Compétences (5 maximum) : </label>
+
                                         <div id="CompetencesContainer" style="display: inline-block;">
                                             {% if  User.getInfo.getCompetence1  %}
                                                 <div id="competence" >
@@ -885,7 +886,7 @@
 {# END COMPETENCES  #}                                                                       
 
                                     <div class="inputcontainer">
-                                        <label class="list-group-item" style="height: 60px;vertical-align: top;" >Langues :</label>
+                                        <label class="list-group-item" style="height: 60px;vertical-align: top;" >Langues (5 maximum) :</label>
                                         <div id="LanguesContainer" style="display: inline-block;">
                                             {% if User.getInfo.getLangue1 %}
                                                 {% set langue = User.getInfo.getLangue1|split(',') %}
@@ -960,7 +961,7 @@
                                     </div>
 
                                     <div class="inputcontainer">
-                                        <label class="list-group-item" style="height: 60px;vertical-align: top;" for="Hobbies">Hobbies :</label>
+                                        <label class="list-group-item" style="height: 60px;vertical-align: top;" for="Hobbies">Hobbies (5 maximum) :</label>
                                         <div id="HobbiesContainer" style="display: inline-block;">
                                             {% if  User.getInfo.getHobbie1  %}
                                                 <div id="hobbie" >
@@ -1452,9 +1453,9 @@
                                 Promouvoir
                             </button>
                         {% elseif User.hasRole('ROLE_ADMINECOLE') or User.hasRole('ROLE_ADMINSOC') %}
-                            <button onclick="ChangeRole()" type="button" class="col-xs-12 rightMenu" >
+                            {# <button onclick="ChangeRole()" type="button" class="col-xs-12 rightMenu" >
                                 Rétrograder
-                            </button>
+                            </button> #}
                         {% endif %}
                     {% endif %}
                     {% if User.hasRole('ROLE_APPRENANT') and is_granted('ROLE_RECRUTEUR') %}
