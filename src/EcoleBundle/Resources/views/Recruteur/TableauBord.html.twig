@@ -67,7 +67,7 @@
             {# <strong class="barre" style="background: #66b3f4;width: 36%;">36%</strong> #}
             {%  if MissionsAPourvoir is defined %} <strong class="barre"  style="background: #66b3f4;width: {{ MissionsAPourvoir }}%;">{{ MissionsAPourvoir }}%</strong> 
                 {% elseif MissionsAPourvoir == null %} 
-            <strong class="barre"  style="background: #66b3f4; width:0%" 0% </strong> 
+            <strong class="barre"  style="background: #66b3f4; width:0%"> 0% </strong>
             {% endif %}
         </div>
     </div>
@@ -85,7 +85,7 @@
         <div onclick="showDiv('PostulationEnCours')" style="border: 1px solid #fcb552;" class="graphe">
             {%  if PostulationEnCours is defined %} <strong class="barre"  style="background: #fcb552;width: {{ PostulationEnCours }}%;">{{ PostulationEnCours }}%</strong> 
                 {% elseif PostulationEnCours == null %} 
-            <strong class="barre"  style="background: #fcb552; width:0%" 0% </strong> 
+            <strong class="barre"  style="background: #fcb552; width:0%" >0% </strong>
             {% endif %}
 
         </div>
@@ -104,7 +104,7 @@
         <div onclick="showDiv('MissionPourvues')" style="border: 1px solid #81c785;" class="graphe">
             {%  if MissionsPourvues is defined %} <strong class="barre"  style="background: #81c785;width: {{ MissionsPourvues }}%;">{{ MissionsPourvues }}%</strong> 
                 {% elseif MissionsPourvues == null %} 
-            <strong class="barre"  style="background: #81c785; width:0%" 0% </strong> 
+            <strong class="barre"  style="background: #81c785; width:0%" >0% </strong>
             {% endif %}
         </div>
     </div>
@@ -123,7 +123,7 @@
         <div onclick="showDiv('FormationAValider')" style="border: 1px solid #ec6494;" class="graphe">
             {%  if FormationAvalider is defined %} <strong class="barre" style="background: #ec6494;width: {{ FormationAvalider }}%;">{{ FormationAvalider }}%</strong> 
                 {% elseif FormationAvalider == null %} 
-            <strong class="barre"  style="background: #ec6494; width:0%" 0% </strong> 
+            <strong class="barre"  style="background: #ec6494; width:0%" >0% </strong>
             {% endif %}
         </div>
     </div>
@@ -140,7 +140,7 @@
         <div onclick="showDiv('MissionSansFormations')" style="border: 1px solid #feb450;" class="graphe">
             {%  if MissionsSansFormations is defined %} <strong class="barre"  style="background: #feb450;width: {{ MissionsSansFormations }}%;">{{ MissionsSansFormations }}%</strong> 
                 {% elseif MissionsSansFormations == null %} 
-            <strong class="barre"  style="background: #feb450; width:0%" 0% </strong> 
+            <strong class="barre"  style="background: #feb450; width:0%" >0% </strong>
             {% endif %}
         </div>
     </div>
@@ -157,7 +157,7 @@
         <div onclick="showDiv('ApprenantsAPlacer')" style="border: 1px solid #e77379;" class="graphe">
             {%  if ApprenantAplacer is defined %} <strong class="barre" style="background: #e77379;width: {{ ApprenantAplacer }}%;">{{ ApprenantAplacer }}%</strong> 
                 {% elseif ApprenantAplacer == null %} 
-            <strong class="barre"  style="background: #e77379; width:0%" 0% </strong> 
+            <strong class="barre"  style="background: #e77379; width:0%" >0% </strong>
             {% endif %} 
         </div>
     </div>
@@ -175,7 +175,7 @@
         <div onclick="showDiv('MissionSansTuteur')" style="border: 1px solid #e77379;" class="graphe">
             {%  if MissionsSansTuteur is defined %} <strong class="barre"  style="background: #e77379;width: {{ MissionsSansTuteur }}%;">{{ MissionsSansTuteur }}%</strong> 
                 {% elseif MissionsSansTuteur == null %} 
-            <strong class="barre"  style="background: #e77379; width:0%" 0% </strong> 
+            <strong class="barre"  style="background: #e77379; width:0%" >0% </strong>
             {% endif %} 
         </div>
     </div>
@@ -195,7 +195,7 @@
         <div onclick="showDiv('ApprenantsMisEnRelation')" style="border: 1px solid #64b5f4;" class="graphe">
             {%  if ApprenantRelation is defined %} <strong  class="barre" style="background: #64b5f4;width: {{ ApprenantRelation }}%;">{{ ApprenantRelation }}%</strong> 
                 {% elseif ApprenantRelation == null %} 
-            <strong class="barre"  style="background: #64b5f4; width:0%" 0% </strong> 
+            <strong class="barre"  style="background: #64b5f4; width:0%" >0% </strong>
             {% endif %}
         </div>
     </div>
@@ -214,7 +214,7 @@
         <div onclick="showDiv('MissionSansQCM')" style="border: 1px solid #ef6192;" class="graphe">
             {%  if MissionsSansQcm is defined %} <strong class="barre"  style="background: #ef6192;width: {{ MissionsSansQcm }}%;">{{ MissionsSansQcm }}%</strong> 
                 {% elseif MissionsSansQcm == null %} 
-            <strong class="barre"  style="background: #ef6192; width:0%" 0% </strong> 
+            <strong class="barre"  style="background: #ef6192; width:0%" >0% </strong>
             {% endif %}
         </div>
     </div>
@@ -232,7 +232,7 @@
         <div  onclick="showDiv('ApprenantsPlaces')" style="border: 1px solid #80c681;text-align:right"  class="graphe">
             {%  if Apprenantplacer is defined %} <strong   class="barre" style="background: #80c681;width: {{ Apprenantplacer }}%;">{{ Apprenantplacer }}%</strong> 
                 {% elseif Apprenantplacer == null %} 
-            <strong class="barre"  style="background: #80c681; width:0%" 0% </strong> 
+            <strong class="barre"  style="background: #80c681; width:0%"> 0% </strong>
             {% endif %}
 
         </div>

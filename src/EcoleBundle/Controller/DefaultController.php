@@ -145,7 +145,7 @@ class DefaultController extends Controller
 
         foreach($apprenants as $userd)
         {              
-            if($userd->hasRole('ROLE_APPRENANT'))
+            if($userd->hasRole('ROLE_APPRENANT') and $userd->getInfo()->getProfilcomplet()==3)
             {
                 array_push($Allapprenants,$userd);
             }              
@@ -198,9 +198,17 @@ class DefaultController extends Controller
         // $MyapprenantAplacer=$Importcandidat;
         // $ApprenantAplacer=round((count($Importcandidat)*100)/count($TousLesApprenants), 2);
 
-        $sql = "SELECT I FROM GenericBundle:Infocomplementaire I WHERE I.profilcomplet = 3 GROUP BY I.id ";
+        /*$sql = "SELECT I FROM GenericBundle:Infocomplementaire I WHERE I.profilcomplet = 3 GROUP BY I.id ";
         $query =$em->createQuery($sql);
-        $MyapprenantAplacer = $query->getResult();
+        $MyapprenantAplacer = $query->getResult();*/
+        $MyapprenantAplacer= array();
+        foreach($TousLesApprenants as $userd)
+        {
+            if($userd->getPlace()==null or $userd->getPlace()==0)
+            {
+                array_push($MyapprenantAplacer,$userd);
+            }
+        }
         // var_dump(count($MyapprenantAplacer));die;
         if(!($MyapprenantAplacer))
         {
@@ -233,11 +241,19 @@ class DefaultController extends Controller
 
         $ApprenantRelation=round((count($MyApprenantRelation)*100)/count($TousLesApprenants), 2);
 
-       //Apprenants placés  
+       //Apprenants placés
 
-        $sql = "SELECT U FROM GenericBundle:User U WHERE U.place= 1 GROUP BY U.nom ";
-        $query =$em->createQuery($sql);
-        $MyApprenantPlacer = $query->getResult();
+        $MyApprenantPlacer= array();
+        foreach($TousLesApprenants as $userd)
+        {
+            if($userd->getPlace()==1)
+            {
+                array_push($MyApprenantPlacer,$userd);
+            }
+        }
+
+
+
         if(!($MyApprenantPlacer))
         {
             $Apprenantplacer= '0';  
@@ -249,8 +265,9 @@ class DefaultController extends Controller
 
         $Allmissions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('tier'=>$tiercreation));
 
-        $sql = " SELECT M FROM GenericBundle:Mission M WHERE M.pourvue is NUll GROUP BY M.id ";
+        $sql = " SELECT M FROM GenericBundle:Mission M WHERE M.pourvue is NUll and M.tier=:tier GROUP BY M.id ";
         $query = $em->createQuery($sql);
+        $query->setParameter('tier', $tiercreation);
         $MyMissionsAP = $query->getResult();
         //var_dump(count($Allmissions));die;
         if(!($MyMissionsAP))
@@ -264,8 +281,8 @@ class DefaultController extends Controller
         // var_dump($MyMissionsAP);
         // var_dump($Allmissions);
 
-         // var_dump($MissionsAPourvoir);
-         // die;
+        //  var_dump(count($MyMissionsAP),count($Allmissions));
+        // die;
       
 
         // Missions pourvues
