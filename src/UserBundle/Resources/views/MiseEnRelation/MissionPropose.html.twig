@@ -358,16 +358,16 @@
 
                                         <div id="postulation{{ mise.getId }}" class="row msg_container base_receive" name="App{{ mise.expediteur.getId() }}_Mission{{mise.mission.getId()}}">
                                             <div class="col-xs-12" >
-                                                <input id="hidden" type="hidden" name="_input" value="">
+                                                <input id="texthidden{{mise.getId()}}" type="hidden" name="_texthidden" >
                                                 <textarea  style="margin-top: -10px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
                                                 <br/><br/>
                                             </div>
 
 
 
-                                            <input onclick="document.getElementById('hidden').value='decliner';"    style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"   type="submit"  value="Décliner">
+                                            <input   onclick="document.getElementById('texthidden{{mise.getId()}}').value='decliner';"   style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"   type="submit"  value="Décliner">
 
-                                            <input onclick="document.getElementById('hidden').value='postuler';"  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"  class="blue" type="submit" style="margin-left: 270px"  value="Postuler">
+                                            <input  onclick="document.getElementById('texthidden{{mise.getId()}}').value='postuler';"   style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"  class="blue" type="submit" style="margin-left: 270px"  value="Postuler">
                                         </div>
                                     {% endif %}
                                     </form>
@@ -854,14 +854,13 @@
 
 
 
-                {% set i=i+1 %}
 
-                {% endfor %}
+
+
 
             </div>
-
-
-
+                {% set i=i+1 %}
+            {% endfor %}
 
         </div>
     </div>
@@ -942,6 +941,7 @@
         </div>
 
     </div>
+
     <script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
     <script src="{{ asset('js/paginate.js') }}"></script>
     <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
@@ -1295,9 +1295,11 @@
         }
 
         function Afficher(idMission){
+
             for(i=0 ; i < document.getElementsByClassName('divMissionPopup').length;i++)
             {
                 document.getElementById(document.getElementsByClassName('divMissionPopup')[i].id).style.display='none';
+
             }
             document.getElementById('Div_'+idMission).style.display='block';
         }

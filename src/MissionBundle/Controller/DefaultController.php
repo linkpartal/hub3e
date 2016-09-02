@@ -9,6 +9,7 @@ use GenericBundle\Entity\Notification;
 use GenericBundle\Entity\ContactSociete;
 use GenericBundle\Entity\Postulation;
 use GenericBundle\Entity\AjoutManuelle;
+use GenericBundle\Entity\Tier;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -161,9 +162,9 @@ class DefaultController extends Controller
                 $userManager = $this->get('fos_user.user_manager');
                 $newuser = $userManager->createUser();
 
-                    $usernameexist = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('username'=>$Nom.'.'.$Prenom));
+                $usernameexist = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('nom'=>$Nom,'prenom'=>$Prenom));
                     if($usernameexist){
-                        $newuser->setUsername($Nom.'.'.$Prenom.''.count($usernameexist));
+                        $newuser->setUsername($Nom.'.'.$Prenom.count($usernameexist));
                     }
                     else{
                         $newuser->setUsername($Nom.'.'.$Prenom);
@@ -364,11 +365,26 @@ class DefaultController extends Controller
         $em->flush();
         $mission->genererCode();
         $em->flush();
-        $anciennecontact=$this->getDoctrine()->getRepository('GenericBundle:ContactSociete')->find($request->get('_contact'));
+
+
+
 
         if($request->get('_contact')  ){
 
-            if($request->get('_contact')!=strval($anciennecontact->getId()))
+            if ($mission->getTuteur()){
+                $anciennecontact=$this->getDoctrine()->getRepository('GenericBundle:ContactSociete')->find($mission->getTuteur());
+
+            }else{
+                $anciennecontact=null;
+            }
+
+            if ($anciennecontact){
+                $idAncienContact=$anciennecontact->getId();
+            }else{
+                $idAncienContact=0;
+            }
+
+            if($request->get('_contact')!=strval($idAncienContact))
             {
 
 
@@ -393,8 +409,10 @@ class DefaultController extends Controller
             else
             {
 
-                $contact = $em->getRepository('GenericBundle:ContactSociete')->find($request->get('_contact'));
+                $contact = $this->getDoctrine()->getRepository('GenericBundle:ContactSociete')->find($request->get('_contact'));
+
             }
+
 
 
 
@@ -432,9 +450,9 @@ class DefaultController extends Controller
                 $userManager = $this->get('fos_user.user_manager');
                 $newuser = $userManager->createUser();
 
-                $usernameexist = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('username'=>$Nom.'.'.$Prenom));
+                $usernameexist = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('nom'=>$Nom,'prenom'=>$Prenom));
                 if($usernameexist){
-                    $newuser->setUsername($Nom.'.'.$Prenom.''.count($usernameexist));
+                    $newuser->setUsername($Nom.'.'.$Prenom.count($usernameexist));
                 }
                 else{
                     $newuser->setUsername($Nom.'.'.$Prenom);
@@ -711,7 +729,16 @@ class DefaultController extends Controller
 
 
         $listeApprenanats = array();
-        foreach($this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($this->get('security.token_storage')->getToken()->getUser()->getTier()) as $apprenanats_etablissement)
+
+        $Tier = new Tier();
+        if ($this->get('security.token_storage')->getToken()->getUser()->getTier()){
+
+            $Tier=$this->get('security.token_storage')->getToken()->getUser()->getTier();
+        }else{
+
+            $Tier=$this->get('security.token_storage')->getToken()->getUser()->getEtablissement()->getTier()->getId();
+        }
+        foreach($this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($Tier) as $apprenanats_etablissement)
         {
             if($apprenanats_etablissement->hasRole('ROLE_APPRENANT'))
             {

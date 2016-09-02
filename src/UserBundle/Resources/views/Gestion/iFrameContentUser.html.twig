@@ -73,14 +73,14 @@
                         <div class="div_form" style="">
 
                             <div class="col-xs-3 input-colonne">
-                                <input list="STATUTDATALIST" class="input" title="Statut" name="_Statutparent" placeholder="Statut" required>
+                                {#<<input list="STATUTDATALIST" class="input" title="Statut" name="_Statutparent" placeholder="Statut" required>#}
                                 {#<span class="glyphicon glyphicon-play" aria-hidden="true"
                                 style="position: absolute;right: 0;z-index: 5;margin: 10px 0 0 10px;-webkit-transform: rotate(90deg);transform: rotate(90deg);-ms-transform:rotate(90deg);margin-right: 5px;"></span>#}
-                                <datalist id="STATUTDATALIST" class="List-visible" title="Statut">
-                                    <option value="Père">
-                                    <option value="Mère">
-                                    <option value="Tuteur légal">
-                                </datalist>
+                                <select id="STATUTDATALIST" class="input" title="Statut" name="_Statutparent" >
+                                    <option value="Père">Père</option>
+                                    <option value="Mère">Mère</option>
+                                    <option value="Tuteur légal">Tuteur légal</option>
+                                </select>
                                 <input placeholder="Nom" class="input" type="text" id="Nomparent" name="_Nomparent" maxlength="45" required >
                             </div>
                             <div class="col-xs-3 input-colonne">
@@ -253,18 +253,22 @@
 
                         <input type="hidden" id="id" name="_idUser" value="{{ User.getId }}">
 
-                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px Roboto normal">Document</Label>
+                        <Label   style="background-color: #2975cb;color:white;width:300px;height:40px;font:20px Roboto normal">Document </Label>
                         <div class="div_form" style="">
 
 
                             <div class="col-xs-12 input-colonne">
 
-                                <select class="input "  title=""  name="_Type">
+                                <select class="input " onChange="AffichageSousType(this)" title=""  name="_Type">
                                     <option value="lettre de motivation" >lettre de motivation</option>
                                     <option value="cv" >Cv</option>
                                     <option value="Autre" >Autre</option>
                                 </select>
                             </div>
+
+                            <input type="text" style="display:none;" placeholder="Type doc"  class="input" id="Soustype" name="_Soustype" value=" "  required>
+
+
                             <input type="file" class="input" id="document" name="_Document" size="800000" required>
 
                         </div>
@@ -1008,12 +1012,13 @@
                                             <div class="row">
 
 
-                                                <label class="cell">Statut : <input list="STATUTDATALIST" class="input" title="Statut" value="{{ parent.statut }}" name="_Statutparent" required>
-                                                    <datalist id="STATUTDATALIST" class="input" title="Statut">
-                                                        <option value="Père">
-                                                        <option value="Mère">
-                                                        <option value="Tuteur légal">
-                                                    </datalist></label>
+                                                <label class="cell">Statut :
+                                                    {#<input list="STATUTDATALIST" class="input" title="Statut" value="{{ parent.statut }}" name="_Statutparent" required>#}
+                                                    <select id="STATUTDATALIST" class="input" title="Statut" name="_Statutparent" >
+                                                        <option value="Père" {% if parent.statut == 'Père' %}selected{% endif %}>Père</option>
+                                                        <option value="Mère" {% if parent.statut == 'Mère' %}selected{% endif %}>Mère</option>
+                                                        <option value="Tuteur légal" {% if parent.statut == 'Tuteur légal' %}selected{% endif %}>Tuteur légal</option>
+                                                    </select></label>
                                                 <label class="cell">Civilité : <select class="input "  title="" name="_Civiliteparent">
                                                         <option value="Monsieur" {% if parent.civilite == 'Monsieur' %}selected{% endif %}>Mr.</option>
                                                         <option value="Madame" {% if parent.civilite == 'Madame' %}selected{% endif %}>Mme.</option>
@@ -1920,6 +1925,18 @@
             url: route
         });
     }
+      function AffichageSousType(select){
+
+          if (select.value=='Autre'){
+              document.getElementById('Soustype').style.display='block'
+              document.getElementById('Soustype').value='';
+          }else{
+              document.getElementById('Soustype').style.display='none'
+              document.getElementById('Soustype').value=' ';
+
+          }
+
+      }
     {% endif %}
 </script>
 </body>

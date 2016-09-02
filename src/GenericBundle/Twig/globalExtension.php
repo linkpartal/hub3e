@@ -82,6 +82,10 @@ class globalExtension extends \Twig_Extension{
             'GetFormationApp' => new \Twig_Function_Method($this, 'GetFormationApp'),
             'EstManuelle' => new \Twig_Function_Method($this, 'EstManuelle'),
             'GetIdContactMission' => new \Twig_Function_Method($this, 'GetIdContactMission'),
+            'GetDocumentsApp' => new \Twig_Function_Method($this, 'GetDocumentsApp'),
+
+
+
 
 
 
@@ -1015,6 +1019,11 @@ class globalExtension extends \Twig_Extension{
         }
 
 
+    }
+
+    function GetDocumentsApp($Import){
+        $Document =  $this->em->getRepository('GenericBundle:Document')->findBy(array('importCandidat'=>$Import));
+        return $Document;
     }
 
 

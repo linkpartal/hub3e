@@ -14,93 +14,7 @@
     <title>Title</title>
 </head>
 <body onload="loading();" onunload="window.parent.document.getElementById('iframe').style.position ='static';window.parent.document.getElementById('iframe').style.height ='calc(100% - 72px)';">
-<div id="FicheApprenant" class="popup" >
-    <div onclick="hide(this);document.getElementById('ModifierSAS').setAttribute('type','button');document.getElementById('ModifierSAS').setAttribute('onclick','modifierApprenant()');"
-         class="close"></div>
-    <div class="col-xs-offset-4 col-xs-4 formContainer" >
-        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
-        <div id="formFicheApprenant" class="formulaire">
-            <div style="text-align: center;">
-                <div class="col-lg-12" >
-                    <img src="" style="border-radius:50%; width:50px; height:50px" >
-                </div>
-                <div class="col-lg-12">
-                    <label id="Information_Apprenant_titre" style="color:black" ></label>
-                </div>
-                <div id="Information_Apprenant_titre_adresse" class="col-xs-12" style="height: 20px;color: #666666;font:medium Roboto;margin-bottom: 40px"></div>
-            </div>
-            <div class="div_form"  id="information_apprenant" style="border: none;">
-                <div class="row" style=" margin-bottom: 20px">
-                    <div class="row" >
-                        <button onclick="document.getElementById('info_apprenant').style.display ='block';document.getElementById('FormationSouhaitee').style.display ='none';"  class="col-xs-4 onglet"  type="button" style="margin-left: 20px;width: 50%" >FICHE APPRENANT</button>
-                        <button onclick="document.getElementById('FormationSouhaitee').style.display ='block';document.getElementById('info_apprenant').style.display ='none';" class="col-xs-4 onglet"  type="button" style="width: calc(50% - 50px)" >Formation Souhaitée</button>
-                    </div>
 
-                    <div id="info_apprenant" style="border-top: 1px solid #B0B0B0;margin: 0;overflow-y: auto;width: 100%;">
-                        <form id="formFicheApprenant" action="{{ path('ModifAppSas') }}"  method="post" enctype="multipart/form-data">
-
-                            <div class="col-xs-12 Liste" >
-                                <input type="hidden" id="Information_Apprenant_ID" name="_ID">
-                                <div class="col-xs-12" >
-                                    <label class="cell"  style="float:left;">Civilité : <input id="Information_Apprenant_Civilite" name="_Civilite" ></label>
-                                </div>
-                                <div class="col-xs-10 ">
-                                    <label class="cell" style="float:left;">Nom : <input id="Information_Apprenant_Nom" name="_NomAppr" > </label>
-                                </div>
-                                <div class="col-xs-10">
-                                    <label class="cell" style="float:left;">Prenom : <input id="Information_Apprenant_Prenom" name="_PrenomAppr" ></label>
-
-                                </div>
-                                <div class="col-xs-10">
-                                    <label class="cell" style="float:left;">Email  : <input id="Information_Apprenant_Email" name="_EmailAppr" ></label>
-                                </div>
-                                <div class="col-xs-10">
-                                    <label class="cell" style="float:left;">Téléphone : <input id="Information_Apprenant_Telephone" name="_telAppr"></label>
-
-                                </div>
-                                <div class="col-xs-10">
-                                    <label class="cell" style="float:left;">Date naissance : <input id="Information_Apprenant_DateNaissance" name="_DateNaissance" ></label>
-                                </div>
-                                <div class="col-xs-10">
-                                    <label class="cell" style="float:left;">Cp naissance  : <input id="Information_Apprenant_CpNaissance" name="_CpNaissance"></label>
-                                </div>
-
-                                <div class="col-xs-10">
-                                    <label class="cell" style="float:left;">Lieu naissance: <input id="Information_Apprenant_LieuNaissance" name="_LieuNaissance"></label>
-                                </div>
-                                <div class="col-xs-10">
-                                    <label class="cell" style="float:left;">Adresse       : <input id="Information_Apprenant_Adresse" name="_Adresse" ></label>
-                                </div>
-                                <div class="col-xs-10">
-                                    <label class="cell" style="float:left;">Dernier diplome : <input id="Information_Apprenant_Diplome" name="_Diplome" ></label>
-                                </div>
-                                <div class="col-xs-10">
-                                    <label class="cell" style="float:left;">Formation en cours : <input id="Information_Apprenant_Formation" name="_Formation" ></label>
-                                </div>
-                            </div>
-
-                        <span>
-                          <input type="button" class="btn btn-primary" id="ModifierSAS" onclick="modifierApprenant()" value="Modifier">
-                        </span>
-                        </form>
-                    </div>
-
-                    <div id="FormationSouhaitee" class="col-xs-10 col-xs-offset-1" style="border-top: 1px solid #B0B0B0;margin: 0;height: 281px;width: 100%;display:none;">
-                    </div>
-
-
-                </div>
-
-
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-</div>
 <div id="DuplicaPopUp" class="popup">
     <div onclick="hide(this)" class="close"></div>
     <div class="col-xs-offset-1 col-xs-10" style="background-color: white;border-top: 4px solid white;border-bottom: 4px solid white;border-radius: 4px;box-shadow: 0 1px 40px 0 rgb(0, 0, 0);">
@@ -150,74 +64,74 @@
 <form class="form-inline">
 <div class="col-xs-offset-1 col-xs-10 form-group" style="margin-top:10px;margin-bottom:10px;" >
 
-    <input style="float:left;" placeholder="Nom" class="form-control" type="text" id="Nom" name="_Nom" maxlength="45" {% if  NomRech is defined   %} {% if NomRech=="|||"  %}  {% else %} value={{ NomRech }} {% endif %}{% endif %} >
+    <input style="width:150px;float:left;" placeholder="Nom" class="form-control" type="text" id="Nom" name="_Nom" maxlength="45" {% if  NomRech is defined   %} {% if NomRech=="|||"  %}  {% else %} value={{ NomRech }} {% endif %}{% endif %} >
     
-    <input style="float:left;" class="form-control" type="number"  min="1" max="999" placeholder="Age" id="Age" name="_Age" required maxlength="3" {% if  AgeRech is defined   %} {% if AgeRech=="|||"  %}  {% else %} value={{ AgeRech }} {% endif %}{% endif %}>
+    <input style="width:70px;float:left;" class="form-control" type="number"  min="1" max="999" placeholder="Age" id="Age" name="_Age" required maxlength="3" {% if  AgeRech is defined   %} {% if AgeRech=="|||"  %}  {% else %} value={{ AgeRech }} {% endif %}{% endif %}>
 
-    <input style="float:left;" placeholder="Ville" class="form-control" type="text" id="Ville" name="_Ville" maxlength="45" {% if  VilleRech is defined   %}  {% if VilleRech=="|||"  %}  {% else %} value={{ VilleRech }} {% endif %}{% endif %}>
-    
-    <select name="_Type" id="TypeApp" style="float:left;" class="form-control">
+    <input style="width:150px;float:left;" placeholder="Ville" class="form-control" type="text" id="Ville" name="_Ville" maxlength="45" {% if  VilleRech is defined   %}  {% if VilleRech=="|||"  %}  {% else %} value={{ VilleRech }} {% endif %}{% endif %}>
+
+    <label style="float:left;margin-top:6px; margin-left: 3px;" >Type d'apprenants :</label><select name="_Type" id="TypeApp" style="width:120px;float:left;" class="form-control">
 
         {% if  TypeRech is defined   %}
             {% if TypeRech=="|||"  %}
-                <option value="" selected>Type d'apprenants</option>
+                <option value="" selected></option>
                 <option value="import">Apprenants importés</option>
                 <option value="ajout" >Apprenants ajoutés</option>
             {% elseif TypeRech=="import" %}
-                <option value="" > Type d'apprenants</option>
+                <option value="" ></option>
                 <option value="import" selected>Apprenants importés</option>
                 <option value="ajout" >Apprenants ajoutés</option>
             {% elseif TypeRech=="ajout" %}
-                <option value="" > Type d'apprenants</option>
+                <option value="" ></option>
                 <option value="import" >Apprenants importés</option>
                 <option value="ajout" selected>Apprenants ajoutés</option>
             {% endif %}
         {% else %}
-            <option value="" selected> Type d'apprenants</option>
+            <option value="" selected></option>
             <option value="import">Apprenants importés</option>
             <option value="ajout" >Apprenants ajoutés</option>
         {% endif %}
 
 
     </select>
-    
-    <select name="_DateInscrip" id="DateInscrip" class="form-control" style="float:left;">
+
+    <label style="float:left;margin-top:6px; margin-left: 3px;" >Date d'inscription :</label> <select name="_DateInscrip" id="DateInscrip" class="form-control" style="width:120px;float:left;">
 
         
         {% if  DateInscrip is defined   %}
             {% if DateInscrip=="0"  %}
-                <option value="0" selected>Date d'inscription</option>
+                <option value="0" selected></option>
                 <option value="1">Aujourd'hui</option>
                 <option value="2" >Hier</option>
                 <option value="3" >Cette semaine</option>
                 <option value="4" >Ce mois</option>
             {% elseif DateInscrip=="1" %}
-                <option value="0" >Date d'inscription</option>
+                <option value="0" ></option>
                 <option value="1" selected>Aujourd'hui</option>
                 <option value="2" >Hier</option>
                 <option value="3" >Cette semaine</option>
                 <option value="4" >Ce mois</option>
             {% elseif DateInscrip=="2" %}
-                <option value="0" >Date d'inscription</option>
+                <option value="0" ></option>
                 <option value="1" >Aujourd'hui</option>
                 <option value="2" selected>Hier</option>
                 <option value="3" >Cette semaine</option>
                 <option value="4" >Ce mois</option>
             {% elseif DateInscrip=="3" %}
-                <option value="0" >Date d'inscription</option>
+                <option value="0" ></option>
                 <option value="1" >Aujourd'hui</option>
                 <option value="2" >Hier</option>
                 <option value="3" selected>Cette semaine</option>
                 <option value="4" >Ce mois</option>
             {% elseif DateInscrip=="4" %}
-                <option value="0" >Date d'inscription</option>
+                <option value="0" ></option>
                 <option value="1" >Aujourd'hui</option>
                 <option value="2" >Hier</option>
                 <option value="3" >Cette semaine</option>
                 <option value="4" selected >Ce mois</option>
             {% endif %}
         {% else %}
-            <option value="0" selected> Date d'inscription </option>
+            <option value="0" selected></option>
             <option value="1">Aujourd'hui</option>
             <option value="2" >Hier</option>
             <option value="3" >Cette semaine</option>
@@ -235,7 +149,7 @@
         rechercher
     </button>
     #}
-    <button class="col-xs-3"  title="Lancer la recherche" type="button" onclick="Rechercher()" style="height: 100%;background-color: transparent;border: none;margin-left: 5px;float:left;">
+    <button   title="Lancer la recherche" type="button" onclick="Rechercher()" style="height: 100%;background-color: transparent;border: none;margin-left: 5px;float:left;">
         <span class="glyphicon glyphicon-search" style="color: #1C5AA5" style="margin-left: 5px;float:left;"></span>
     </button>
 
@@ -244,6 +158,150 @@
 </button>
 </div>
 </form>
+{% for import in imports %}
+    <div id="FicheApprenant{{ import.id }}" class="popup" >
+        <div onclick="hide(this);document.getElementById('ModifierSAS').setAttribute('type','button');document.getElementById('ModifierSAS').setAttribute('onclick','modifierApprenant({{ import.getId() }})');"
+             class="close"></div>
+        <div class="col-xs-offset-4 col-xs-4 formContainer" >
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div id="formFicheApprenant" class="formulaire">
+                <div style="text-align: center;">
+                    <div class="col-lg-12" >
+                        {% if import.getPhotos %}
+                            <img src="data:image/jpg;base64,{{ import.getPhotos }}" style="border-radius:50%; width:50px; height:50px" >
+                            {% elseif import.getCivilite == 'Mme' or import.getCivilite =='Madame' or import.getCivilite == 'Mademoiselle'  %}
+                                <img src="{{ asset('image/femme.jpg') }}" style="border-radius:50%; width:50px; height:50px" >
+                            {% else %}
+                            <img src="{{ asset('image/homme.jpg') }}" style="border-radius:50%; width:50px; height:50px" >
+                        {% endif %}
+
+
+
+                    </div>
+                    <div class="col-lg-12">
+                        <label id="Information_Apprenant_titre" style="color:black" >{{ import.getNom }} {{ import.getPrenom }}</label>
+                    </div>
+                    <div id="Information_Apprenant_titre_adresse" class="col-xs-12" style="height: 20px;color: #666666;font:medium Roboto;margin-bottom: 40px">{{ import.getInfo.getAdresse }}</div>
+                </div>
+                <div class="div_form"  id="information_apprenant" style="border: none;">
+                    <div class="row" style=" margin-bottom: 20px">
+                        <div class="row" >
+                            <button onclick="document.getElementById('info_apprenant{{ import.getId() }}').style.display ='block';document.getElementById('FormationSouhaitee{{ import.getId() }}').style.display ='none';document.getElementById('Documents{{ import.getId() }}').style.display ='none';"  class="col-xs-4 onglet"  type="button" style="margin-left: 20px;width: 33%" >FICHE APPRENANT</button>
+                            <button onclick="document.getElementById('Documents{{ import.getId() }}').style.display ='block';document.getElementById('info_apprenant{{ import.getId() }}').style.display ='none';document.getElementById('FormationSouhaitee{{ import.getId() }}').style.display ='none';" class="col-xs-4 onglet"  type="button" style="width: calc(33% - 33px)" >DOCUMENTS</button>
+                            <button onclick="document.getElementById('FormationSouhaitee{{ import.getId() }}').style.display ='block';document.getElementById('info_apprenant{{ import.getId() }}').style.display ='none';document.getElementById('Documents{{ import.getId() }}').style.display ='none';" class="col-xs-4 onglet"  type="button" style="width: calc(33% - 33px)" >FORMATION SOUHAITÉE</button>
+                        </div>
+
+                        <div id="info_apprenant{{ import.getId() }}" style="border-top: 1px solid #B0B0B0;margin: 0;overflow-y: auto;width: 100%;">
+                            <form id="formFicheApprenant{{ import.getId() }}" action="{{ path('ModifAppSas') }}"  method="post" enctype="multipart/form-data">
+
+                                <div class="col-xs-12 Liste" >
+                                    <input type="hidden" id="Information_Apprenant_ID"  value="{{ import.id }}" name="_ID">
+                                    <div class="col-xs-12" >
+                                        <label class="cell"  style="float:left;">Civilité : </label><input style="width: 300px;float:left" readonly  id="Information_Apprenant_Civilite{{ import.getId() }}" name="_Civilite" value="{{ import.getCivilite() }}" >
+                                    </div>
+                                    <div class="col-xs-10 ">
+                                        <label class="cell" style="float:left;">Nom : </label><input  style="width: 300px;float:left" readonly  id="Information_Apprenant_Nom{{ import.getId() }}" name="_NomAppr" value="{{ import.getNom() }}" >
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <label class="cell" style="float:left;">Prénom : </label><input  style="width: 300px;float:left" readonly  id="Information_Apprenant_Prenom{{ import.getId() }}" name="_PrenomAppr" value="{{ import.getPrenom() }}" >
+
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <label class="cell" style="float:left;">Email  : </label><input style="width: 300px;float:left" readonly  id="Information_Apprenant_Email{{ import.getId() }}" name="_EmailAppr" value="{{ import.getEmail() }}" >
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <label class="cell" style="float:left;">Téléphone : </label><input style="width: 300px;float:left" readonly  id="Information_Apprenant_Telephone{{ import.getId() }}" name="_telAppr" value="{{ import.getTelephone() }}" >
+
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <label class="cell" style="float:left;">Date naissance : </label><input style="width: 300px;float:left" readonly  id="Information_Apprenant_DateNaissance{{ import.getId() }}" name="_DateNaissance" {% if import.getInfo is defined %} value="{{ import.getInfo.getDateNaissance|date("d/m/Y")  }}" {% endif %} >
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <label class="cell" style="float:left;">CP naissance  : </label><input style="width: 300px;float:left" readonly id="Information_Apprenant_CpNaissance{{ import.getId() }}" name="_CpNaissance" {% if import.getInfo is defined %}value="{{ import.getInfo.getCpnaissance()}}"{% endif %}>
+                                    </div>
+
+                                    <div class="col-xs-10">
+                                        <label class="cell" style="float:left;">Lieu naissance: </label><input style="width: 300px;float:left" readonly  id="Information_Apprenant_LieuNaissance{{ import.getId() }}" name="_LieuNaissance"   {% if import.getInfo is defined %}value="{{ import.getInfo.getLieunaissance()}}"{% endif %} >
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <label class="cell" style="float:left;">Adresse       : </label><input style="width: 300px;float:left" readonly  id="Information_Apprenant_Adresse{{ import.getId() }}" name="_Adresse" {% if import.getInfo %}value="{{ import.getInfo.getAdresse()}}"{% endif %} >
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <label class="cell" style="float:left;">Dernier diplôme : </label><input style="width: 300px;float:left" readonly  id="Information_Apprenant_Diplome{{ import.getId() }}" name="_Diplome" {% if import.getInfo %} value="{{import.info.dernierDiplome()  }}"{% endif %}>
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <label class="cell" style="float:left;">Formation en cours : </label><input style="width: 300px;float:left" readonly  id="Information_Apprenant_Formation{{ import.getId() }}" name="_Formation"  {% if import.getInfo   %}value="{{  import.info.getFormationactuelle }}"{% endif %} >
+                                    </div>
+
+                                </div>
+
+
+                                <input type="button" class="btn btn-primary" style="display:none;" id="ModifierSAS{{ import.getId() }}" onclick="modifierApprenant({{ import.getId() }})" value="Modifier">
+
+                        <span>
+
+                          <input type="button" class="btn btn-primary" id="ModifierFicheSAS{{ import.getId() }}" onclick="modifierFicheApprenant({{ import.getId() }})" value="Modifier la fiche">
+                        </span>
+                            </form>
+                        </div>
+
+                        <div id="Documents{{ import.getId() }}" class="col-xs-10 col-xs-offset-1" style="border-top: 1px solid #B0B0B0;margin: 0;height: 281px;width: 100%;display:none;">
+                            {% set Document=GetDocumentsApp(import.id) %}
+
+                            {% if Document is defined %}
+                                {% for Doc in Document %}
+                                    {% set iddiv = random()  %}
+
+                                    <div class="col-xs-12 Liste">
+                                        <div class="row" style="width:100%">
+                                            <label class="cell" style="font-size: small">Type   : <label style="font-weight:100;font-size: small;">{{ Doc.type }}</label></label>
+                                            <label class="cell" style="font-size: small">Extention : <label style="font-weight:100;font-size: small;">{{Doc.getExtension }}</label>
+
+                                                <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#doc{{ iddiv }}"></button></label>
+
+
+                                        </div>
+                                        <div id="doc{{ iddiv }}" class="collapse in" >
+                                            <div class="row" style="width:100%">
+                                                <label class="cell" style="font-size: small">Taille  : <label style="font-weight:100;" >{{ Doc.taille}}</label></label>
+                                                <label class="cell" style="font-size: small">Document  :
+                                                    {% if Doc.extension == 'application/pdf' %}
+                                                        <a target="_blank" href="{{ path('show_Document',{'id':Doc.id}) }}" >
+                                                            <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px;" title="{{ Doc.name }}" alt="{{ Doc.name }}" >
+                                                        </a>
+                                                    {% else %}
+                                                        <a target="_blank" href="{{ path('show_Document',{'id':Doc.id}) }}" >
+                                                            <img src="{{ asset('image/file.png') }}"  style="width:40px; height:40px;" title="{{ Doc.name }}" alt="{{ Doc.name }}" >
+                                                        </a>
+                                                    {% endif %}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div id="FormationSouhaitee{{ import.getId() }}" class="col-xs-10 col-xs-offset-1" style="border-top: 1px solid #B0B0B0;margin: 0;height: 281px;width: 100%;display:none;">
+
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+{% endfor %}
+
+
 <div id="SASListe" class="col-xs-12" style="margin-bottom: 40px;height: 100%;">
 {% for import in imports %}
 
@@ -274,8 +332,8 @@
             {{ import.getEmail }}
         </div>
         <div class="col-xs-2" style="height: 100%">
-            <button class="col-xs-3" title="Voir plus d'information" type="button" onclick="
-                    informationApprenant('{{import.getPhotos|e('js')}}',{{ import.id|e('js') }},'{{ import.getCivilite|e('js') }}','{{ import.getNom|e('js') }}','{{ import.getPrenom|e('js') }}','{{ import.getEmail|e('js') }}','{{ import.getTelephone|e('js') }}'{% if import.getInfo|e('js') %},'{{ import.getInfo.getDateNaissance|date("d/m/Y")|e('js') }}','{{ import.getInfo.getCpNaissance|e('js') }}','{{ import.getInfo.getLieunaissance|e('js') }}','{{ import.getInfo.getAdresse|e('js') }}','{{ import.info.formationactuelle|e('js') }}','{{ import.info.dernierDiplome|e('js') }}'{% endif %}{% if candidatures is defined %},'{{ candidatures[loop.index0]|e('js') }}'{% endif %});show('FicheApprenant');" style="height: 100%;background-color: transparent;border: none">
+            <button class="col-xs-3" title="Voir plus d'information" type="button" onclick="show('FicheApprenant{{ import.id }}');" {#onclick="
+                    informationApprenant('{{import.getPhotos|e('js')}}',{{ import.id|e('js') }},'{{ import.getCivilite|e('js') }}','{{ import.getNom|e('js') }}','{{ import.getPrenom|e('js') }}','{{ import.getEmail|e('js') }}','{{ import.getTelephone|e('js') }}'{% if import.getInfo|e('js') %},'{{ import.getInfo.getDateNaissance|date("d/m/Y")|e('js') }}','{{ import.getInfo.getCpNaissance|e('js') }}','{{ import.getInfo.getLieunaissance|e('js') }}','{{ import.getInfo.getAdresse|e('js') }}','{{ import.info.formationactuelle|e('js') }}','{{ import.info.dernierDiplome|e('js') }}'{% endif %}{% if candidatures is defined %},'{{ candidatures[loop.index0]|e('js') }}'{% endif %});show('FicheApprenant');"#} style="height: 100%;background-color: transparent;border: none">
                 <span class="glyphicon glyphicon-search" style="color: #1C5AA5"></span>
             </button>
             {% if not import.erreur == null %}
@@ -302,6 +360,8 @@
             {% endif %}
         </div>
     </div>
+
+
 
 {% endfor %}
     <input type="hidden" id="Multiselect" name="Multiselect" value="">
@@ -603,10 +663,32 @@
         }
 
     }
-    function modifierApprenant() {
-        var button = document.getElementById("ModifierSAS");
+    function modifierFicheApprenant(id){
+        document.getElementById("Information_Apprenant_Civilite"+id).readOnly=false;
+        document.getElementById("Information_Apprenant_Nom"+id).readOnly=false;
+        document.getElementById("Information_Apprenant_Prenom"+id).readOnly=false;
+        document.getElementById("Information_Apprenant_Email"+id).readOnly=false;
+        document.getElementById("Information_Apprenant_Telephone"+id).readOnly=false;
+        document.getElementById("Information_Apprenant_DateNaissance"+id).readOnly=false;
+        document.getElementById("Information_Apprenant_CpNaissance"+id).readOnly=false;
+        document.getElementById("Information_Apprenant_LieuNaissance"+id).readOnly=false;
+        document.getElementById("Information_Apprenant_Adresse"+id).readOnly=false;
+        document.getElementById("Information_Apprenant_Diplome"+id).readOnly=false;
+        document.getElementById("Information_Apprenant_Formation"+id).readOnly=false;
 
-        var inputs = document.getElementById("formFicheApprenant").getElementsByTagName('input');
+        document.getElementById("ModifierSAS"+id).style.display='';
+        document.getElementById("ModifierFicheSAS"+id).style.display='none';
+
+
+
+
+
+    }
+
+    function modifierApprenant(id) {
+        var button = document.getElementById("ModifierSAS"+id);
+
+        var inputs = document.getElementById("formFicheApprenant"+id).getElementsByTagName('input');
         for(var i = 0; i< inputs.length; i++)
         {
             inputs[i].readOnly = false;

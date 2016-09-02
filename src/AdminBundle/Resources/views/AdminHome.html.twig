@@ -48,7 +48,7 @@
                 <input class="input" type="tel" id="Fax" name="_Fax[]" style="width: 50%;" maxlength="20" required>
 
                 <label for="Site" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Site web</label>
-                <input class="input" type="url" id="Site" name="_Site[]" maxlength="45" required>
+                <input class="input" type="text" id="Site" name="_Site[]" maxlength="45" required>
                 <!----------------------------------------------------------------------------------------------------------------------------------------------->
                 <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Responsable</label>
                 <label for="Resp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Nom</label>
@@ -107,7 +107,7 @@
                 #}
                 <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Raison sociale</label>
                 <input type="text" class="input" id="RaisonSoc" name="_RaisonSoc" maxlength="45" required>
-                <input type="text" style="visibility: hidden" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" required>
+                <input type="text" style="visibility: hidden" class="input" id="SIREN" name="_SIREN[]"  pattern=".{9}" maxlength="9" required>
                 <div class="col-xs-6 input-colonne">
 
 
@@ -159,7 +159,7 @@
                             <input class="input" type="tel" id="FaxP" name="_Fax[]" style="width: 50%;" maxlength="20" required>
 
                             <label for="Site" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Site web</label>
-                            <input class="input" type="url" id="SiteP" name="_Site[]" maxlength="45" required>
+                            <input class="input" type="text" id="SiteP" name="_Site[]" maxlength="45" required>
                             <!----------------------------------------------------------------------------------------------------------------------------------------------->
                             <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Responsable</label>
                             <label for="Resp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Nom</label>
@@ -947,7 +947,11 @@
         for(var j = 1;j<geocodes.length;j++){
             var siret = document.getElementsByName('_SIRET[]')[j].value;
             var test = siret.substring(0, 9);
+
+
             document.getElementById('SIREN').value=test;
+          // document.getElementsByName('_SIREN[]')[j].value=test;
+
 
         }
         var result_input= [];
@@ -1205,8 +1209,10 @@
         //var siret= button.previousElementSibling.value;
         var siret= button.value;
         var idCompliment=button.id.replace('SIRET','');
+
         var route = '{{ path('Siret_Verifier',{'siret':"_siret"}) }}';
         route = route.replace('_siret',siret);
+
         ShowWaiter();
 
        $.ajax({

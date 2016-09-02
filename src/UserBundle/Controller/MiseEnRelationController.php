@@ -222,7 +222,8 @@ class MiseEnRelationController extends Controller
     }
 
     public function PostulerMessagerieAction($idmessage,Request $request){
-        $action=$request->get('_input');
+        $action=$request->get('_texthidden');
+
         if ($action=='postuler'){
             $reponsejson = new JsonResponse();
             $em = $this->getDoctrine()->getEntityManager();
@@ -284,7 +285,7 @@ class MiseEnRelationController extends Controller
 
 
 
-        }else
+        }elseif ($action=='decliner')
         {
             $em = $this->getDoctrine()->getEntityManager();
             $userConnecte = $this->get('security.token_storage')->getToken()->getUser();

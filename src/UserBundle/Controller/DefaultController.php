@@ -1888,7 +1888,10 @@ class DefaultController extends Controller
     public function AjouterParentAction(Request $request){
         $em = $this->getDoctrine()->getEntityManager();
 
+        //var_dump($request->get('_Statutparent'),$request->get('_IDPARENT'));die;
+
         if($request->get('_IDPARENT')){
+
             $parent = $em->getRepository('GenericBundle:Parents')->find($request->get('_IDPARENT'));
             $parent->setCivilite($request->get('_Civiliteparent'));
             $parent->setNom($request->get('_Nomresp'));
@@ -1917,6 +1920,7 @@ class DefaultController extends Controller
             $em->persist($parent);
             $em->flush();
         }
+
 
         return $this->redirect($_SERVER['HTTP_REFERER']);
 
@@ -2035,7 +2039,13 @@ class DefaultController extends Controller
             $document = new Document();
             $user = $this->getDoctrine()->getRepository('GenericBundle:User')->find($request->get('_idUser'));
             $document->setUser($user);
-            $document->setType($request->get('_Type'));
+            if ($request->get('_Type')=='Autre'){
+                $document->setType($request->get('_Soustype'));
+            }else{
+
+                $document->setType($request->get('_Type'));
+            }
+
             $document->setExtension($_FILES['_Document']['type']);
             $document->setName($_FILES['_Document']['name']);
             $document->setTaille($_FILES['_Document']['size']);
@@ -2237,7 +2247,7 @@ class DefaultController extends Controller
 
 
 
-      // var_dump($MiseEnRelation);die;
+       var_dump($MiseEnRelation);die;
 
 
         return  $this->render('UserBundle:MiseEnRelation:MissionPropose.html.twig',array('MiseEnRelation'=>$MiseEnRelation,'AllMiseEnRelation'=>$AllMiseEnRelation));

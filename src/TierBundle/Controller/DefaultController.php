@@ -46,7 +46,7 @@ class DefaultController extends Controller
     public function tieraddedAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-
+        var_dump($request->get('_SIREN'));die;
 
         $tier = $em->getRepository('GenericBundle:Tier')->findOneBy(array('siren'=>$request->get('_SIREN')));
         if(!$tier){
@@ -135,7 +135,7 @@ class DefaultController extends Controller
         $users = array();
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('tier'=>$etablissement->getTier() )));
         $users = array_merge($users,$this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement )));
-
+        $users = array_unique($users);
         $contactSociete = $this->getDoctrine()->getRepository('GenericBundle:ContactSociete')->findBy(array('etablissement' => $etablissement));
 
         //Suppression de la notification de l'utilisateur connecté concernant l'etablissement affiché
@@ -188,6 +188,7 @@ class DefaultController extends Controller
             foreach ($etablissement->getTier()->getTier1() as $value ){
                 array_push($etablisementlier ,$this->getDoctrine()->getRepository('GenericBundle:Etablissement')->findBy(array('tier'=>$value)));
             }
+
             return $this->render('TierBundle::iFrameContent.html.twig',array('licencedef'=>$licencedef,'etablissement'=>$etablissement,'tiers'=>$tiers,'users'=>$users,
                 'formations'=>$formation,'libs'=>$licences,'QCMS'=>$qcmstest,'QCMSNOTETAB'=>$QcmNotEtab,'etablissementslier'=>$etablisementlier,'ContactSociete'=>$contactSociete));
         }

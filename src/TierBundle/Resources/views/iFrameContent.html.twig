@@ -1116,18 +1116,19 @@
                 </div>
                 <div id="addQCM" class="popup" >
                     <div onclick="hide(this)" class="close"></div>
-                    <div class="col-xs-offset-1 col-xs-9 formContainer" >
+                    <div class="col-xs-offset-1 col-xs-9 formContainer" style="width:auto " >
                         <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
                         <div id="formaddQCM" class="formulaire" style="text-align: center" >
                             <label style="display:none" id="idformation"></label>
-                            <div class="div_form" style="text-align: center" >
+                            <div class="div_form" style="text-align: center;border:0px;" >
+
                                 <section style="text-align: center" >
-                                    <table class="tblQCM" style="text-align: center ;" >
+                                    <table class="tblQCM" style="text-align: center;" >
                                         <tr>
                                             
                                             <td>
                                                 <div>
-                                                    <select title="Tests" onclick="ConsultationQCM('divconsQCM')" id="leftValues" size="10" multiple required>
+                                                    <select style="width:250px" title="Tests" onclick="ConsultationQCM('divconsQCM')" id="leftValues" size="10" multiple required>
 
                                                         {% if QCMS is defined %}
                                                             {% for qcm in QCMS %}
@@ -1140,21 +1141,22 @@
                                             </td>
                                             {% if is_granted('ROLE_SUPER_ADMIN') %}
                                             <td>
-                                                <div >
-                                                    <input type="button" id="btnRight" value="&gt;&gt;" />
-                                                    <input type="button" id="btnLeft" value="&lt;&lt;" />
+                                                <div style="width:50px" >
+                                                    <input type="button" style="background-color: #3c8ad4;color:white" id="btnRight" value="&gt;&gt;" />
+                                                    <input type="button" style="background-color: #3c8ad4;color:white" id="btnLeft" value="&lt;&lt;" />
                                                 </div>
                                             </td>
                                                 {% endif %}
                                             <td>
                                                 <div>
-                                                    <select title="Tests liés à cette formation" onclick="ConsultationQCM('divconsQCM')" id="rightValues" size="10" multiple>
+                                                    <select style="width:250px"  title="Tests liés à cette formation" onclick="ConsultationQCM('divconsQCM')" id="rightValues" size="10" multiple>
                                                     </select>
                                                 </div>
                                             </td>
                                         </tr>
                                     </table>
                                 </section>
+                                <br/>
                                 <div id="divconsQCM"></div>
                             </div>
                             <div class="div_button">
@@ -1165,7 +1167,7 @@
                 </div>
                 <div id="addQCMAff" class="popup" >
                     <div onclick="hide(this)" class="close"></div>
-                    <div class="col-xs-offset-1 col-xs-9 formContainer" >
+                    <div class="col-xs-offset-1 col-xs-9 formContainer" style="width:auto ">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
                         <div id="formaddQCMAff" class="formulaire" style="text-align: center" >
                             <div class="div_form" style="text-align: center" >
@@ -1175,7 +1177,7 @@
                                             {% if is_granted('ROLE_SUPER_ADMIN') %}
                                                 <td>
                                                     <div>
-                                                        <select title="Tests d'affinité disponible" onclick="ConsultationQCMAff('divconsQCMAFF')" id="leftValuesAff" size="10" multiple required>
+                                                        <select style="width:250px"  title="Tests d'affinité disponible" onclick="ConsultationQCMAff('divconsQCMAFF')" id="leftValuesAff" size="10" multiple required>
                                                             {% if QCMSNOTETAB is defined %}
                                                                 {% for qcm in QCMSNOTETAB %}
                                                                     <option name="_idqcmleftaff" value="{{ qcm.getId }}">{{ qcm.getNom }}</option>
@@ -1185,15 +1187,15 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div >
-                                                        <input type="button" id="btnRightaff" value="&gt;&gt;" />
-                                                        <input type="button" id="btnLeftaff" value="&lt;&lt;" />
+                                                    <div style="width:50px" >
+                                                        <input type="button" style="background-color: #3c8ad4;color:white" id="btnRightaff" value="&gt;&gt;" />
+                                                        <input type="button"  style="background-color: #3c8ad4;color:white" id="btnLeftaff" value="&lt;&lt;" />
                                                     </div>
                                                 </td>
                                             {% endif %}
                                             <td>
                                                 <div>
-                                                    <select title="Tests d'affinité déjà associé" onclick="ConsultationQCMAff('divconsQCMAFF')" id="rightValuesAff" size="10" multiple>
+                                                    <select style="width:250px"  title="Tests d'affinité déjà associé" onclick="ConsultationQCMAff('divconsQCMAFF')" id="rightValuesAff" size="10" multiple>
                                                         {% for testaff in etablissement.getQcmdef %}
                                                             <option name="_idqcmrightaff" value="{{ testaff.getId }}">{{ testaff.getNom }}</option>
                                                         {% endfor %}
@@ -1202,6 +1204,7 @@
                                             </td>
                                         </tr>
                                     </table>
+                                    <br/>
                                     <div id="divconsQCMAFF"></div>
                                 </section>
                             </div>
@@ -1483,7 +1486,7 @@
                             </div>
                             <div class="inputcontainer">
                                 <label class="list-group-item" style="height: 60px;" for="Site">Site web : </label>
-                                <input value="{{ etablissement.getSite }}" type="url" class="champ form-control" id="Site" name="_Site" maxlength="45" readonly>
+                                <input value="{{ etablissement.getSite }}" type="text" class="champ form-control" id="Site" name="_Site" maxlength="45" readonly>
                             </div>
                             <div class="inputcontainer">
 
@@ -1522,7 +1525,9 @@
                             {% for user in users %}
                                 {% if not user.hasRole('ROLE_APPRENANT') %}
                                     {% set iddiv = random()  %}
+
                                     <div class="col-xs-12 Liste">
+
                                         <div class="row">
                                             <label class="cell">Email : <label>{{ user.getEmail }}</label></label>
                                             <label class="cell">Pseudo : <label>{{ user.getUsername }}</label>
@@ -1969,10 +1974,12 @@
 
 
         function loading(){
-            $("input:radio").on('dblclick',function(){
+            /*$("input:radio").on('dblclick',function(){
                 $(this).prop( "checked", false );
             });
-            var onglet = sessionStorage.getItem('onglet_tier');
+            var onglet = sessionStorage.getItem('onglet_tier');*/
+            // on selectionne l'onglet informations suite au demande dans le fichier navette du 04-08-2016
+            var onglet = document.getElementById('Button_ETABLISSEMENT').id;
             if(onglet)
             {
                 document.getElementById(onglet).click();
