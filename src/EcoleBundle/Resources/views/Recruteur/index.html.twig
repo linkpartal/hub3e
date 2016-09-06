@@ -265,7 +265,7 @@
                             <select class="input "  title="" name="_Civilite" style="font:16px Roboto;" required>
                                 <option value="Monsieur">Mr.</option>
                                 <option value="Madame">Mme.</option>
-                                <option value="Madame">Mlle.</option>
+
                             </select>
                         </div>
                         <div class="col-xs-6 input-colonne" style="border: 0">
@@ -867,16 +867,49 @@
                 <div id="user" class="list-group col-xs-2 leftbar">
                     {% if apprenants is defined %}
                         {% for u in apprenants %}
-                            <button onclick="postiframe('{{ path('metier_user_afficheUser',{'id': u.getId} ) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
+                            <button onclick="postiframe('{{ path('metier_user_afficheUser',{'id': u.getId }) }}',this)" id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
+
+
 
                                 {% if  u.getPlace!=1   %}
 
                                     {% set place=2 %}
 
                                 {% else %}
-                                    {% set place=u.getPlace %}
+                                    {% set place=1 %}
                                 {% endif %}
-                                <div name="Recherche" style="display: none;">{{ place }},{{ u.nom }},{{ u.getUsername }},{{ u.prenom }},{{ u.email }},{% if u.info %}{{ u.info.adresse }},{{ u.info.cp }}{% endif %},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
+
+                                {% if  u.getInfo.getHandicape==1   %}
+
+                                    {% set Handicape=3 %}
+                                {% else %}
+                                    {% set Handicape=30 %}
+                                {% endif %}
+
+                                {% if  u.getInfo.getEntrepreneur==1   %}
+
+                                    {% set Entrepreneur=4 %}
+                                {% else %}
+                                    {% set Entrepreneur=40 %}
+                                {% endif %}
+
+                                {% if  u.getInfo.getPermis==1   %}
+
+                                    {% set Permis=5 %}
+                                {% else %}
+                                    {% set Permis=50 %}
+                                {% endif %}
+
+                                {% if  u.getInfo.getVehicule==1   %}
+
+                                    {% set Vehicule=6 %}
+                                {% else %}
+                                    {% set Vehicule=60 %}
+                                {% endif %}
+
+
+
+                                <div name="Recherche" style="display: none;">{{ place }},{{ Handicape }},{{ Entrepreneur }},{{ Permis }},{{ Vehicule }},{{ u.nom }},{{ u.getUsername }},{{ u.prenom }},{{ u.email }},{% if u.info %}{{ u.info.adresse }},{{ u.info.cp }}{% endif %},{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
                                 <div style="display: none;"></div>
                                 <div class="col-xs-12 part" title="{{u.getUsername}}">{{u.getUsername}}</div>
 
@@ -892,6 +925,9 @@
 
                                         {% endif %}
                                     </label>
+
+
+
                                     {% if u.info %}
                                         {% if u.info.profilcomplet == 3 %}
                                             <div class="col-xs-1 active" id="activeUser{{ u.getId }}"></div>
@@ -900,11 +936,11 @@
                                         {% elseif u.info.profilcomplet == 1 %}
                                             <div class="col-xs-1" style="background: #2A76CC;height:9px;border-radius: 100%;margin: 3px 0;width: 9px;float: right;" id="activeUser{{ u.getId }}"></div>
                                         {% else %}
-                                            <div class="col-xs-1" style="background: orangered;height:9px;border-radius: 100%;margin: 3px 0;width: 9px;float: right;" id="activeUser{{ u.getId }}"></div>
+                                            <div class="col-xs-1" style="background: #c77405;height:9px;border-radius: 100%;margin: 3px 0;width: 9px;float: right;" id="activeUser{{ u.getId }}"></div>
                                         {% endif %}
                                     {% endif %}
-
                                 </div>
+
                             </button>
                         {% endfor %}
                     {% endif %}
@@ -953,6 +989,15 @@
                         <li data-rec="0">Tous les apprenants</li>
                         <li data-rec="1">Apprenants placés</li>
                         <li data-rec="2">Apprenants à placer</li>
+                        <li data-rec="3">Handicapé</li>
+                        <li data-rec="4">Entrepreneur</li>
+                        <li data-rec="5">Permis</li>
+                        <li data-rec="6">Véhiculé</li>
+
+
+
+
+
 
                     </ul>
                 </div>
@@ -1958,10 +2003,39 @@
         {
             Recherches[i].parentNode.style.display="";
             var recherchermot = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g)[0];
+            var rechercherHandicape = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g)[1];
+            var rechercherEntrepreneur = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g)[2];
+            var rechercherPermis = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g)[3];
+            var rechercherVehicule = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g)[4];
+
+
+            // alert('recheche mot '+recherchermot);
+            // alert('data-rec '+$(this).attr("data-rec"));
 
             if(recherchermot != $(this).attr("data-rec") && $(this).attr("data-rec") != "0" ){
-                Recherches[i].parentNode.style.display="none";
+                if(rechercherHandicape != $(this).attr("data-rec") && $(this).attr("data-rec") != "0" ){
+                    if(rechercherEntrepreneur != $(this).attr("data-rec") && $(this).attr("data-rec") != "0" ){
+                        if(rechercherPermis != $(this).attr("data-rec") && $(this).attr("data-rec") != "0" ){
+                            if(rechercherVehicule != $(this).attr("data-rec") && $(this).attr("data-rec") != "0" ){
+                                Recherches[i].parentNode.style.display="none";
+                            }else{
+                                Recherches[i].parentNode.style.display="block";
+                            }
+                        }else{
+                            Recherches[i].parentNode.style.display="block";
+                        }
+                    }else{
+                        Recherches[i].parentNode.style.display="block";
+                    }
+
+                }else {
+                    Recherches[i].parentNode.style.display="block";
+                }
             }
+
+            //alert('recheche mot '+rechercherHandicape);
+            //alert('data-rec '+$(this).attr("data-rec"));
+
         }
     })
 

@@ -187,7 +187,7 @@ class Etablissement
     /**
      * @var string
      *
-     * @ORM\Column(name="suivi_commercial ", type="string", length=255, nullable=true)
+     * @ORM\Column(name="suivi_commercial ", type="text", nullable=true)
      */
     private $suivicommercial;
 

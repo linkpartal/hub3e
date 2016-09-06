@@ -2247,7 +2247,7 @@ class DefaultController extends Controller
 
 
 
-       var_dump($MiseEnRelation);die;
+       //var_dump($MiseEnRelation);die;
 
 
         return  $this->render('UserBundle:MiseEnRelation:MissionPropose.html.twig',array('MiseEnRelation'=>$MiseEnRelation,'AllMiseEnRelation'=>$AllMiseEnRelation));

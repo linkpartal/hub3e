@@ -439,17 +439,13 @@
                                                 <option value="Mr">Mr.</option>
                                             {% endif %}
 
-                                            {% if User.getCivilite == 'Mme' %}
+                                            {% if User.getCivilite == 'Mme' or User.getCivilite == 'Madame' %}
                                                 <option selected="selected" value="Mme">Mme.</option>
                                             {% else %}
                                                 <option value="Mme">Mme.</option>
                                             {% endif %}
 
-                                            {% if User.getCivilite == 'Mlle' %}
-                                                <option selected="selected" value="Mlle">Mlle.</option>
-                                            {% else %}
-                                                <option value="Mlle">Mlle.</option>
-                                            {% endif %}
+
                                         </select>
                                     </div>
 
@@ -599,17 +595,13 @@
                                                 <option value="Mr">Mr.</option>
                                             {% endif %}
 
-                                            {% if User.getCivilite == 'Mme' %}
+                                            {% if User.getCivilite == 'Mme' or User.getCivilite == 'Madame' %}
                                                 <option selected="selected" value="Mme">Mme.</option>
                                             {% else %}
                                                 <option value="Mme">Mme.</option>
                                             {% endif %}
 
-                                            {% if User.getCivilite == 'Mlle' %}
-                                                <option selected="selected" value="Mlle">Mlle.</option>
-                                            {% else %}
-                                                <option value="Mlle">Mlle.</option>
-                                            {% endif %}
+
                                         </select>
                                     </div>
 
@@ -996,10 +988,17 @@
                                         </div>
                                         <span class="glyphicon glyphicon-plus" style="color:green;vertical-align: top;float: right;margin: 9px;" aria-hidden="true" name="modification" title="Ajouter" OnClick="ajouterHobbie()"></span>
                                         {#<img  OnClick="ajouterHobbie()" style="vertical-align: top;float: right;margin: 9px;"  src="{{ asset('image/add_x30.png') }}"/>#}
-                                    </div>                                    
+                                    </div>
+
+
 
                                 {% endif %}
                             </form>
+                            <br/>
+                            <button onclick="document.getElementById('formUserSubmit').click()" type="button" class="col-xs-4 col-xs-offset-4 btn btn-primary" style="width: 200px" >
+                                Valider
+
+                            </button>
                         </div>
                         <div id="info_parents" class="list-group affichage" style="display:none">
 
@@ -1440,9 +1439,7 @@
                             Désactiver
                         </button>
                     {% endif %}
-                    <button onclick="document.getElementById('formUserSubmit').click()" type="button" class="col-xs-12 rightMenu" >
-                        Valider
-                    </button>
+
 
                     {% if (is_granted('ROLE_ADMINSOC') or is_granted('ROLE_ADMINECOLE')) and not User.hasRole('ROLE_APPRENANT') %}
                         <button onclick="if(confirm('Voulez-vous Supprimer cet utilisateur ?')){window.location.href = '{{ path('supprimerUtilisateur',{'id': User.getId }) }}';}" type="button" class="col-xs-12 rightMenu" >
