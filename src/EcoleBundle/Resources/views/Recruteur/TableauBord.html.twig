@@ -263,7 +263,8 @@
 <div style="text-align:center; align-items:center; margin-top:20px; background-color:#d2d2d2; margin-left:5px; width:96.3%; height:50px" class="col-xs-10 SASPaginate" >
     <div class="col-xs-2" style="text-align:center; width:100%">
         <label style="font-size: 20px;font-weight: bold ;font:x-large Roboto;">
-            MISSIONS PUBLIQUES
+            OPPORTUNITÉS PUBLIQUES
+            
         </label>
     </div>
 </div>
@@ -281,9 +282,11 @@
                 </tr>
             </thead>
             <tbody>
-                {% if missions is defined %}
-                    {% for m in missions %}
-                        {% if m.statut == 3 %}
+                {% if MissionsPublic is defined %}
+                    {% set i=0 %}
+                    {% for m in MissionsPublic %}
+                {% if EstRecupere(m.etablissement.id(),etablissement.getId()) == false %}
+                        {% if i < 5 %}
                             <tr>
                                 <td> {{ m.intitule }} </td>
                                 <td> {{ m.etablissement.tier.raisonsoc }} </td>
@@ -291,13 +294,16 @@
                                 <td> {{ m.datecreation | date ('m/Y') }} </td>
                                 <td> 
                                     <button class= "btn btn-default btn-xs"> 
-                                        <a href="{{ path('admin_afficheMission',{'id': m.getId,'idFor': "-1" } ) }}" target="_blank">
+                                        <a href="{{ path('admin_afficheMissionpublic',{'id': m.getId,'idFor': "-1" } ) }}" target="_blank">
                                             <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
                                         </a>
                                     </button>
                                 </td>
                             </tr>
-                        {% endif %}  
+                         {% endif %}
+                        {% set i=i+1 %}
+                {% endif %}
+
                     {% endfor %}
                     {# {% elseif missions == null %} #}
                     {# <tr> Aucunes Missions à afficher </tr>
@@ -309,7 +315,7 @@
 
 <div  style="text-align:center; align-items:center; margin-left:5px; width:96.3%; height:50px" class="col-xs-10 SASPaginate" >
     <div class="col-xs-1" style="text-align: center; width: 100%">
-        <button  onclick="" class="btn btn-primary" type="button">
+        <button  onclick="showDiv('MissionPublic')" class="btn btn-primary" type="button">
             VOIR PLUS
         </button>
     </div>
@@ -393,6 +399,10 @@
 
 
 
+
+
+
+
 <script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
@@ -406,6 +416,7 @@ function showDiv(div){
     popup.style.display = 'block';
 
 }
+
 
 function RechercherApp(){
 

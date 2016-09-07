@@ -47,6 +47,10 @@ Ajout_Manuelle:
     path: /Ajout_Manuelle/idApp={idApp}/idMission={idMission}
     defaults: { _controller: MissionBundle:Default:AjoutManuelle}
 
+admin_afficheMissionpublic:
+    path: /affichageMissionPublicForm/id={id}/idFor={idFor}
+    defaults: { _controller: MissionBundle:Default:affichageMissionPublicForm}
+
 
 
 

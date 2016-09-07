@@ -5,6 +5,8 @@ namespace MissionBundle\Controller;
 use GenericBundle\Entity\Diffusion;
 use GenericBundle\Entity\Message;
 use GenericBundle\Entity\Mission;
+use GenericBundle\Entity\MissionPublic;
+use GenericBundle\Entity\RecupSociete;
 use GenericBundle\Entity\Notification;
 use GenericBundle\Entity\ContactSociete;
 use GenericBundle\Entity\Postulation;
@@ -18,6 +20,8 @@ class DefaultController extends Controller
 {
     public function addMissionAction(Request $request)
     {
+
+       // var_dump($request->get('_Recup'));die;
         $em = $this->getDoctrine()->getEntityManager();
 
         $usercon = $this->get('security.token_storage')->getToken()->getUser();
@@ -237,6 +241,7 @@ class DefaultController extends Controller
 
 
 
+
             }
 
 
@@ -266,6 +271,22 @@ class DefaultController extends Controller
             foreach($request->get('reponse') as $rep){
                 $reponse = $em->getRepository('GenericBundle:Reponsedef')->find($rep);
                 $reponse->addMission($mission);
+                $em->flush();
+
+            }
+        }
+
+
+        if ($request->get('_Recup')){
+            if ($request->get('_Recup')=='Recup'){
+
+                $recup = new RecupSociete();
+
+                $recup->setEcole($usercon->getEtablissement());
+                $recup->setSociete($this->getDoctrine()->getRepository('GenericBundle:Etablissement')->find($request->get('_Societe')));
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($recup);
                 $em->flush();
 
             }
@@ -588,6 +609,7 @@ class DefaultController extends Controller
 
         $users = array();
         $tuteurs = array();
+
         foreach($em->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$mission->getEtablissement())) as $users_etablissement)
         {
             if($users_etablissement->hasRole('ROLE_CONTACT_MISSION'))
@@ -730,36 +752,42 @@ class DefaultController extends Controller
 
         $listeApprenanats = array();
 
-        $Tier = new Tier();
-        if ($this->get('security.token_storage')->getToken()->getUser()->getTier()){
+        if( !$Userconnecte->hasRole('ROLE_SUPER_ADMIN')){
+            $Tier = new Tier();
+            if ($this->get('security.token_storage')->getToken()->getUser()->getTier()){
 
-            $Tier=$this->get('security.token_storage')->getToken()->getUser()->getTier();
-        }else{
+                $Tier=$this->get('security.token_storage')->getToken()->getUser()->getTier();
+            }else{
 
-            $Tier=$this->get('security.token_storage')->getToken()->getUser()->getEtablissement()->getTier()->getId();
-        }
-        foreach($this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($Tier) as $apprenanats_etablissement)
-        {
-            if($apprenanats_etablissement->hasRole('ROLE_APPRENANT'))
+                $Tier=$this->get('security.token_storage')->getToken()->getUser()->getEtablissement()->getTier()->getId();
+            }
+            foreach($this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($Tier) as $apprenanats_etablissement)
             {
-                if (!in_array($apprenanats_etablissement, $users)) {
+                if($apprenanats_etablissement->hasRole('ROLE_APPRENANT'))
+                {
+                    if (!in_array($apprenanats_etablissement, $users)) {
 
-                    array_push($listeApprenanats,$apprenanats_etablissement);
+                        array_push($listeApprenanats,$apprenanats_etablissement);
+                    }
+
+                }
+            }
+
+            usort($listeApprenanats, array($this, "cmpN"));
+
+            foreach($listeApprenanats as $apprenant)
+            {
+                if($apprenant->getPhotos() and !is_string($apprenant->getPhotos()))
+                {
+                    $apprenant->setPhotos(base64_encode(stream_get_contents($apprenant->getPhotos())));
                 }
 
             }
         }
 
-        usort($listeApprenanats, array($this, "cmpN"));
 
-        foreach($listeApprenanats as $apprenant)
-        {
-            if($apprenant->getPhotos() and !is_string($apprenant->getPhotos()))
-            {
-                $apprenant->setPhotos(base64_encode(stream_get_contents($apprenant->getPhotos())));
-            }
 
-        }
+
 
 
 
@@ -769,6 +797,206 @@ class DefaultController extends Controller
 
 
     }
+
+    public function affichageMissionPublicFormAction($id,$idFor){
+
+        $em = $this->getDoctrine()->getManager();
+        $mission = $this->getDoctrine()->getRepository('GenericBundle:MissionPublic')->find($id);
+
+        $formation =$this->getDoctrine()->getRepository('GenericBundle:Formation')->find($idFor);
+
+        $users = array();
+        $tuteurs = array();
+
+        foreach($em->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$mission->getEtablissement())) as $users_etablissement)
+        {
+            if($users_etablissement->hasRole('ROLE_CONTACT_MISSION'))
+            {
+                array_push($tuteurs,$users_etablissement);
+            }
+        }
+
+        if($formation){
+            $diffusions = $em->getRepository('GenericBundle:Diffusion')->findBy(array('mission'=>$mission,'formation'=>$formation));
+        }
+        else{
+            $diffusions = $em->getRepository('GenericBundle:Diffusion')->findBy(array('mission'=>$mission));
+        }
+
+
+        foreach($diffusions as $diffusion)
+        {
+            $Userconnecte = $this->get('security.token_storage')->getToken()->getUser();
+            if($Userconnecte->hasRole('ROLE_SUPER_ADMIN') and ($diffusion->getStatut() == 2 or $diffusion->getStatut() == 5)) {
+                foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
+                {
+                    if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3  ){
+                        array_push($users,$candidature->getUser());
+                    }
+
+                }
+            }
+            elseif($Userconnecte->hasRole('ROLE_ADMINSOC') and $diffusion->getStatut() == 2)
+            {
+                foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
+                {
+                    if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3  ){
+                        array_push($users,$candidature->getUser());
+                    }
+
+                }
+            }
+            elseif(($Userconnecte->hasRole('ROLE_ADMINECOLE') or $Userconnecte->hasRole('ROLE_CONTACT_MISSION')) and $Userconnecte->getTier() == $diffusion->getFormation()->getEtablissement()->getTier()){
+                foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
+                {
+                    if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3 ){
+                        array_push($users,$candidature->getUser());
+                    }
+                }
+            }
+
+            elseif($Userconnecte->hasRole('ROLE_RECRUTEUR') and $Userconnecte->getEtablissement() == $diffusion->getFormation()->getEtablissement())
+            {
+                foreach($em->getRepository('GenericBundle:Candidature')->findBy(array('formation'=>$diffusion->getFormation(),'statut'=>3)) as $candidature)
+                {
+                    if($candidature->getUser() and $candidature->getUser()->getInfo()->getProfilcomplet() == 3 ){
+                        array_push($users,$candidature->getUser());
+                    }
+                }
+            }
+        }
+
+        $ajoutmanuelle = $this->getDoctrine()->getRepository('GenericBundle:AjoutManuelle')->findBy(array('mission'=>$id));
+
+        foreach($ajoutmanuelle as $ajoutMan)
+        {
+            array_push($users,$ajoutMan->getApprenant());
+
+        }
+
+
+        usort($users, array($this, "cmpN"));
+
+
+
+        //calcul Score
+        $scores = array();
+        foreach($users as $apprenant)
+        {
+            if($apprenant->getPhotos() and !is_string($apprenant->getPhotos()))
+            {
+                $apprenant->setPhotos(base64_encode(stream_get_contents($apprenant->getPhotos())));
+            }
+            $scoreapprenant = 0;
+
+
+            foreach($mission->getReponsedef() as $rep){
+                if(in_array($rep,$apprenant->getReponsedef()->toArray())){
+
+                    $scoreapprenant = $scoreapprenant + $rep->getScore();
+                }
+                else{$scoreapprenant++;}
+            }
+            array_push($scores,$scoreapprenant);
+        }
+
+        if($mission->getEtablissement()->getTier()->getLogo())
+        {
+            $mission->getEtablissement()->getTier()->setLogo(base64_encode(stream_get_contents($mission->getEtablissement()->getTier()->getLogo())));
+        }
+        if($mission->getEtablissement()->getTier()->getFondecran())
+        {
+            $mission->getEtablissement()->getTier()->setFondecran(base64_encode(stream_get_contents($mission->getEtablissement()->getTier()->getFondecran())));
+        }
+
+
+
+        $formations_prop = null;
+        $formations_prop = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findAll();
+
+
+        $informations_maps = array();
+        foreach($users as $user)
+        {
+            array_push($informations_maps,[$user->getNom() .' '. $user->getPrenom(),$user->getInfo()->getAdresse() .' '. $user->getInfo()->getCp()]);
+        }
+
+
+
+        $Diffusion = $this->getDoctrine()->getRepository('GenericBundle:Diffusion')->findBy(array('mission'=>$mission));
+
+        $miseEnrelation = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('mission'=>$mission));
+
+
+
+
+
+        $sql="SELECT Max(M.id) FROM GenericBundle:Message M  GROUP BY M.destinataire,M.mission order by M.id  " ;
+        $query = $em->createQuery($sql);
+        $max= $query->getResult();
+
+
+
+        if(substr($this->array2string($max), 0, -1)==''){
+
+            $Messages = $this->getDoctrine()->getRepository('GenericBundle:Message')->findAll();
+        }else{
+
+            $sql="SELECT M FROM GenericBundle:Message M  WHERE M.id in (".substr($this->array2string($max), 0, -1).")  " ;
+            $query = $em->createQuery($sql);
+            $Messages = $query->getResult();
+        }
+
+
+        $listeApprenanats = array();
+
+        if( !$this->get('security.token_storage')->getToken()->getUser()->hasRole('ROLE_SUPER_ADMIN')){
+            $Tier = new Tier();
+            if ($this->get('security.token_storage')->getToken()->getUser()->getTier()){
+
+                $Tier=$this->get('security.token_storage')->getToken()->getUser()->getTier();
+            }else{
+
+                $Tier=$this->get('security.token_storage')->getToken()->getUser()->getEtablissement()->getTier()->getId();
+            }
+            foreach($this->getDoctrine()->getRepository('GenericBundle:User')->getUserofTier($Tier) as $apprenanats_etablissement)
+            {
+                if($apprenanats_etablissement->hasRole('ROLE_APPRENANT'))
+                {
+                    if (!in_array($apprenanats_etablissement, $users)) {
+
+                        array_push($listeApprenanats,$apprenanats_etablissement);
+                    }
+
+                }
+            }
+
+            usort($listeApprenanats, array($this, "cmpN"));
+
+            foreach($listeApprenanats as $apprenant)
+            {
+                if($apprenant->getPhotos() and !is_string($apprenant->getPhotos()))
+                {
+                    $apprenant->setPhotos(base64_encode(stream_get_contents($apprenant->getPhotos())));
+                }
+
+            }
+        }
+
+
+
+
+
+
+
+
+        return $this->render('MissionBundle::afficheMission.html.twig',array('mission'=>$mission,'users'=>$users,'formations_prop'=>$formations_prop,'informations_maps'=>$informations_maps,
+            'tuteur_etablissement'=>$tuteurs,'scores'=>$scores,'Diffusions'=>$Diffusion,'miseEnrelation'=>$miseEnrelation,'Messages'=>$Messages,'listeApprenants'=>$listeApprenanats));
+
+
+    }
+
+
 
     public function array2string($data){
         $log_a = "";

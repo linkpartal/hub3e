@@ -444,17 +444,18 @@
                                     </label>
                                     <div class="col-xs-9">
                                         <select id="listeContact" onchange="AfficherContact(this,'')" title="Contcats société" class="input"  name="_contact" style="font:16px Roboto;">
-
+                                            <option value=""  ></option>
                                             {% if ContactSociete is defined %}
-                                                <option value=""  ></option>
+
                                                 {% for contact in ContactSociete %}
 
                                                         <option value="{{ contact.id }}">{{ contact.nom }} {{ contact.prenom }}</option>
 
                                                 {% endfor %}
-                                                <option value="-99"  >Autre</option>
+
 
                                             {% endif %}
+                                            <option value="-99"  >Autre</option>
                                         </select>
                                     </div>
                                     <div id="divContact" style="display:none;">
@@ -658,13 +659,6 @@
                                                     <button id="idbtnMoins1{{  mission.getId}}" style="margin-left:5px;margin-top:10px;float:left;display:none;"type="button" > - </button>
                                                     <img style="border:0px;height: 0px;width: 40px" src="{{ asset('image/vide.gif') }}" />
                                                 </div>
-
-                                                {% if mission.getMetier1() is defined %}
-
-                                                {% endif  %}
-
-
-
                                                 <div {% if  mission.getMetier2() is null  %} style="display:none;" {% endif  %} style="width: 100%;" id="divMetier2{{  mission.getId}}">
                                                     <label id="lblMetier2{{  mission.getId}}" style="margin-top:10px;float: left">Métier 2 :</label>
                                                     <select title="Métier 2"  class="input" id="Metier2{{  mission.getId}}" name="_Metier2" style="width:365px;font:16px Roboto;" >
@@ -837,9 +831,9 @@
                                                 {% endif %}
 
                                                 <select  id="listeContact{{ mission.getId }}" onchange="AfficherContact(this,{{ mission.getId }})" title="Contcats société" class="input"  name="_contact" style="font:16px Roboto;">
-
+                                                    {% if idContact=='' %}<option value="" selected  ></option>{% else %}<option value=""  ></option>{% endif %}
                                                     {% if ContactSociete is defined %}
-                                                        {% if idContact=='' %}<option value="" selected  ></option>{% else %}<option value=""  ></option>{% endif %}
+
 
                                                         {% for contact in ContactSociete %}
 
@@ -851,9 +845,10 @@
                                                             {% endif %}
 
                                                         {% endfor %}
-                                                        <option value="-99"  >Autre</option>
+
 
                                                     {% endif %}
+                                                    <option value="-99"  >Autre</option>
                                                 </select>
                                             </div>
                                             <div id="divContact{{ mission.getId }}" {% if idContact=='' or idContact=='-99' %} style="display:none;" {% endif %}  >

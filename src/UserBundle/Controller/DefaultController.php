@@ -13,6 +13,7 @@ use GenericBundle\Entity\ImportCandidat;
 use GenericBundle\Entity\Infocomplementaire;
 use GenericBundle\Entity\Langue;
 use GenericBundle\Entity\Mission;
+use GenericBundle\Entity\MissionPublic;
 use GenericBundle\Entity\Parents;
 use GenericBundle\Entity\Recommandation;
 use GenericBundle\Entity\User;
@@ -1220,7 +1221,7 @@ class DefaultController extends Controller
                     $etab_mission = $newetab;
                 }
 
-                $mission = new Mission();
+                $mission = new MissionPublic();
                 $mission->setTypecontrat(mb_convert_encoding($row[16],'UTF-8','auto'));
                 $mission->setIntitule(mb_convert_encoding($row[18],'UTF-8','auto'));
                 if( strlen( mb_convert_encoding($row[19],'UTF-8','auto')) < 255)

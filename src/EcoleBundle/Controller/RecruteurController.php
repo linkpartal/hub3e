@@ -3,6 +3,7 @@
 namespace EcoleBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use GenericBundle\Entity\MissionPublic;
 
 class RecruteurController extends Controller
 {
@@ -15,6 +16,8 @@ class RecruteurController extends Controller
             $user->setPhotos(base64_encode(stream_get_contents($user->getPhotos())));
         }
 
+        $MissionsPublic =$this->getDoctrine()->getRepository('GenericBundle:MissionPublic')->findBy([], ['id' => 'DESC']);
+        $contactSociete = $this->getDoctrine()->getRepository('GenericBundle:ContactSociete')->findBy(array('etablissement' => $etablissement));
         $messages = $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$user));
         $messageNonLu = 0;
         foreach($messages as $msg){
@@ -36,7 +39,7 @@ class RecruteurController extends Controller
                 unset($apprenants[$key]);
             }
         }
-
+       // $apprenants = array_unique($apprenants);
 
         $mes_missions = array();
         $societes =array();
@@ -74,10 +77,35 @@ class RecruteurController extends Controller
 
 
         $societes = array_merge($societes,$user->getReferenciel()->toArray());
+
+        $recupsocietes=$this->getDoctrine()->getRepository('GenericBundle:RecupSociete')->findBy(array('ecole'=>$etablissement));
+
+        foreach($recupsocietes as $Recup)
+        {
+            array_push($societes, $Recup->getSociete());
+        }
+
         $uniquesocietes = array_unique($societes);
 
+
+
+        $qcm = null;
+        $questions = null;
+        $reponses = null;
+
+        $qcm = $this->getDoctrine()->getRepository('GenericBundle:Qcmdef')->findOneBy(array('nom'=>'QCMparDéfault'));
+        $questions = $this->getDoctrine()->getRepository('GenericBundle:Questiondef')->findBy(array('qcmdef' => $qcm));
+        usort($questions, array('\GenericBundle\Entity\Questiondef', 'sort_questions_by_order'));
+        $reponses = array();
+
+        foreach ($questions as $keyqst => $qst) {
+            $reps = $this->getDoctrine()->getRepository('GenericBundle:Reponsedef')->findBy(array('questiondef' => $qst));
+            usort($reps, array('\GenericBundle\Entity\Reponsedef', 'sort_reponses_by_order'));
+            $reponses[$keyqst] = $reps;
+        }
+
         return $this->render('EcoleBundle:Recruteur:index.html.twig', array(/*'notifications'=>$jsonContent ,*/'apprenants'=>$apprenants,'societes'=>$uniquesocietes,'missions'=>$mes_missions,
-            'image'=>$user->getPhotos(),'formations'=>$formations,'messages'=>$messageNonLu,'etablissement'=>$etablissement,'formations'=>$formations,));
+            'image'=>$user->getPhotos(),'formations'=>$formations,'messages'=>$messageNonLu,'etablissement'=>$etablissement,'formations'=>$formations,'MissionsPublic'=>$MissionsPublic,'ContactSociete'=>$contactSociete,'QCMs' => $qcm, 'Questions' => $questions,'reponses' => $reponses));
     }
 
 

@@ -743,11 +743,13 @@
 
                    {#  {% if is_granted('ROLE_RECRUTEUR') or is_granted('ROLE_ADMINSOC') %} #}
                     {% set modif = false %}
+
                     {% if is_granted('ROLE_SUPER_ADMIN') or (mission.tier == app.user.tier and (is_granted('ROLE_ADMINSOC') or is_granted('ROLE_ADMINECOLE'))) %}
                         {% set modif = true %}
                     {% elseif app.user.etablissement and mission.tier == app.user.etablissement.tier and is_granted('ROLE_RECRUTEUR') %}
                         {% set modif = true %}
                     {% endif %}
+
 
                     {% if modif %}
                         {% if mission.tier %}

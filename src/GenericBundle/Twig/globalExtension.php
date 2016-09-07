@@ -83,6 +83,7 @@ class globalExtension extends \Twig_Extension{
             'EstManuelle' => new \Twig_Function_Method($this, 'EstManuelle'),
             'GetIdContactMission' => new \Twig_Function_Method($this, 'GetIdContactMission'),
             'GetDocumentsApp' => new \Twig_Function_Method($this, 'GetDocumentsApp'),
+            'EstRecupere' => new \Twig_Function_Method($this, 'EstRecupere'),
 
 
 
@@ -1005,6 +1006,22 @@ class globalExtension extends \Twig_Extension{
 
         return $rep;
     }
+
+
+    public function EstRecupere($idSociete,$ecole){
+
+
+        $recup = $this->em->getRepository('GenericBundle:RecupSociete')->findOneBy(array('ecole'=>$ecole,'societe'=>$idSociete));
+        if($recup){
+            $rep=true;
+        }else{
+
+            $rep=false;
+        }
+
+        return $rep;
+    }
+
 
 
 

@@ -5,6 +5,7 @@ namespace EcoleBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use GenericBundle\Entity\Diffusion;
+use GenericBundle\Entity\MissionPublic;
 
 
 class DefaultController extends Controller
@@ -83,12 +84,23 @@ class DefaultController extends Controller
                 array_push($notapprenant,$userd);
             }
         }
+        $societes =array();
+        $societes = array_merge($societes,$user->getReferenciel()->toArray());
+        $etablissement=$user->getEtablissement();
+        $recupsocietes=$this->getDoctrine()->getRepository('GenericBundle:RecupSociete')->findBy(array('ecole'=>$etablissement));
+
+        foreach($recupsocietes as $Recup)
+        {
+            array_push($societes, $Recup->getSociete());
+        }
+
+        $uniquesocietes = array_unique($societes);
 
        /// $licences = $this->getDoctrine()->getRepository('GenericBundle:Licencedef')->findAll();
         //$missions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('suspendu'=>false),array('date'=>'DESC'));
 
         return $this->render('EcoleBundle:Adminecole:index.html.twig', array('ecoles'=>$ecoles,/*'notifications'=>$jsonContent ,*/'users'=>$notapprenant,
-            'societes'=>$user->getReferenciel(),'missions'=>$mes_missions,'missions_propose'=>$missions_propose,'apprenants'=>$apprenants,'image'=>$user->getPhotos(),'messages'=>$messageNonLu));
+            'societes'=>$uniquesocietes,'missions'=>$mes_missions,'missions_propose'=>$missions_propose,'apprenants'=>$apprenants,'image'=>$user->getPhotos(),'messages'=>$messageNonLu));
 
 
        // return $this->render('EcoleBundle:Adminecole:index.html.twig', array('ecoles'=>$ecoles,/*'notifications'=>$jsonContent ,*/'users'=>$notapprenant,'AllLicences'=>$licences,
@@ -139,6 +151,8 @@ class DefaultController extends Controller
         $tiercreation=$userid->getetablissement()->gettier()->getId();
         $apprenants = $this->getDoctrine()->getRepository('GenericBundle:User')->findBy(array('etablissement'=>$etablissement));
         $formations = $this->getDoctrine()->getRepository('GenericBundle:Formation')->findBy(array('etablissement'=>$etablissement));
+
+        $MissionPublic =$this->getDoctrine()->getRepository('GenericBundle:MissionPublic')->findBy([], ['id' => 'DESC']);
         $Allapprenants = array();
         $Importcandidat = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('etablissement'=>$etablissement));
         // var_dump($etablissement->getId());die;
@@ -363,6 +377,7 @@ class DefaultController extends Controller
 
 
 
+
         return $this->render('EcoleBundle:Recruteur:TableauBord.html.twig', array(
             'etablissement'=>$etablissement,
             'formations'=>$formations,
@@ -379,7 +394,8 @@ class DefaultController extends Controller
             'MissionsSansQcm'=>$MissionsSansQcm, //'Mymissionssansqcm'=>$Mymissionssansqcm,
             'CountLesMissions'=>$CountLesMissions,
             'CountLesApprenants'=>$CountLesApprenants,
-            'missions'=>$Allmissions
+            'missions'=>$Allmissions,
+            'MissionsPublic'=>$MissionPublic
 
         ));
 
