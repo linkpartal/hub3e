@@ -24,7 +24,12 @@
     <title>HUB3E - {% block title %}Home{% endblock %}</title>
 
 </head>
-<body onload="loading()" >
+<body onload="loading();
+{% if User.hasRole('ROLE_APPRENANT') %}
+    {% if User.info.getProfilcomplet==1 %}
+            parent.document.getElementById('activeUser{{User.id }}').style.background='#2A76CC';
+    {% endif %}
+{% endif %}" >
 
 <div class="container" style="padding: 0;">
     {# DEBUT DU BLOCK ( IFRAME CENTRALE ) #}
@@ -1430,11 +1435,11 @@
 
             <div class="col-xs-3" style="height: 100%;">
                 <div style="margin: 15px 0 0 15px;position: fixed;width: calc(25% - 20px);">
-                    {% if not User.isExpired and not User.hasRole('ROLE_APPRENANT') %}
+                    {% if not User.isExpired and  User.hasRole('ROLE_SUPER_ADMIN') %}
                         <button onclick="expire('{{ path('expired',{'id':User.getId}) }}')" id="expired" type="button" class="col-xs-12 rightMenu" style="background-color: #94C400;color:white;">
                             Activer
                         </button>
-                    {% elseif not User.hasRole('ROLE_APPRENANT') %}
+                    {% elseif  User.hasRole('ROLE_SUPER_ADMIN') %}
                         <button onclick="expire('{{ path('expired',{'id':User.getId}) }}')" id="expired" type="button" class="col-xs-12 rightMenu" style="background-color: red;color:white;">
                             Désactiver
                         </button>
@@ -1459,7 +1464,7 @@
                         <button onclick="if(confirm('Voulez-vous Supprimer cet utilisateur ?')){window.location.href = '{{ path('supprimerUtilisateur',{'id': User.getId }) }}';}" type="button" class="col-xs-12 rightMenu" >
                             Supprimer l'apprenant
                         </button>
-                        <button  onclick="CompleterProfil();"  type="button" class="col-xs-12 rightMenu" >
+                        <button  onclick="CompleterProfil();"  type="button" class="col-xs-12 rightMenu" {% if User.info.getProfilcomplet==1 or User.info.getProfilcomplet==3  %} style="cursor: not-allowed;" disabled="disabled" {% endif %}>
                             Demande d'enrichissement
                         </button>
                         <div class="col-xs-12 btn-group">
@@ -1467,8 +1472,8 @@
                                     {% elseif User.info and User.info.profilcomplet == 2 %}background: red;{% elseif User.info and User.info.profilcomplet == 1 %}background: #2A76CC;
                                     {% else %}background: orangered;{% endif %}color: #0f0f0f;"
                                     data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">Statut en cours</button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    aria-expanded="false">Statut en cours  <span class="glyphicon glyphicon-triangle-bottom" style="margin-left:20px"></span></button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" style="width: 100%">
                                 <li><button onclick="ChangerStatut(2)" style="background: transparent;border:none;width:100%">Refuser</button></li>
                                 <li><button onclick="ChangerStatut(3)" style="background: transparent;border:none;width:100%">Accepter</button></li>
                             </ul>
@@ -1584,8 +1589,9 @@
                     div.style.display='none';
                     div.previousElementSibling.style.display='none';
                     div.previousElementSibling.previousElementSibling.style.display='none';
-                    document.getElementById('STATUT_APPRENANT').style.backgroundColor = "#94C400";
-                    window.parent.document.getElementById('activeUser{{ User.id }}').style.backgroundColor = "#94C400";
+                    // c'est ici la modif de la tache des statut qui changent l'heure du clic sur valider ou refuser une formation
+                    //document.getElementById('STATUT_APPRENANT').style.backgroundColor = "#94C400";
+                   // window.parent.document.getElementById('activeUser{{ User.id }}').style.backgroundColor = "#94C400";
 
                 }
                 if(value === 99)
@@ -1598,8 +1604,8 @@
                     div.style.display='none';
                     div.nextElementSibling.style.display='none';
                     div.nextElementSibling.nextElementSibling.style.display='none';
-                    document.getElementById('STATUT_APPRENANT').style.backgroundColor = "red";
-                    window.parent.document.getElementById('activeUser{{ User.id }}').style.backgroundColor = "red";
+                   // document.getElementById('STATUT_APPRENANT').style.backgroundColor = "red";
+                    //window.parent.document.getElementById('activeUser{{ User.id }}').style.backgroundColor = "red";
                 }
             }
         });
@@ -1688,6 +1694,11 @@
             $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
         }
     });
+
+      $('#iframe').load(function(){
+          console.log('load the iframe');
+          //the console won't show anything even if the iframe is loaded.
+      });
 
     function supprimerLangue(div){
 

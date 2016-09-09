@@ -46,12 +46,12 @@ class DefaultController extends Controller
     public function tieraddedAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        var_dump($request->get('_SIREN'));die;
+        $sirenn=$request->get('_SIREN');
 
-        $tier = $em->getRepository('GenericBundle:Tier')->findOneBy(array('siren'=>$request->get('_SIREN')));
+        $tier = $em->getRepository('GenericBundle:Tier')->findOneBy(array('siren'=>$sirenn[0]));
         if(!$tier){
             $newtier = new Tier();
-            $newtier->setSiren($request->get('_SIREN'));
+            $newtier->setSiren($sirenn[0]);
             $newtier->setRaisonsoc($request->get('_RaisonSoc'));
             $newtier->setEcole(intval($request->get('_Ecole')));
             $newtier->setAxe($request->get('_Axe'));
@@ -66,6 +66,7 @@ class DefaultController extends Controller
                 $newtier->setFondecran(file_get_contents($_FILES['_image']['tmp_name']));
             }
             $em->persist($newtier);
+
             $em->flush();
             $tier = $newtier;
         }

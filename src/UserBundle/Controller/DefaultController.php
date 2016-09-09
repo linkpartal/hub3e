@@ -2206,11 +2206,17 @@ class DefaultController extends Controller
         }
         $MiseEnRelation = array();
         foreach($apprenants as $apprenant){
-           // var_dump( $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$apprenant ),array('id' => 'desc')));die;
+            // var_dump( $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$apprenant ),array('id' => 'desc')));die;
             $MiseEnRelation = array_merge($MiseEnRelation, $this->getDoctrine()->getRepository('GenericBundle:Message')->findBy(array('destinataire'=>$apprenant ),array('id' => 'desc'),array('mission' => 'desc')));
         }
 
-       //var_dump($MiseEnRelation);die;
+
+       // usort($MiseEnRelation, 'date desc');
+
+
+      //  ->orderBy('date', 'DESC')
+
+      // var_dump($MiseEnRelation);die;
 
 
 
@@ -2267,6 +2273,8 @@ class DefaultController extends Controller
         $query->setParameter('destinataire', $user);
 
         $MiseEnRelation  = $query->getResult(); // array of ForumUser objects
+
+        //var_dump(count($MiseEnRelation));die;
 
 
 
@@ -2353,7 +2361,7 @@ class DefaultController extends Controller
             }
 
             if ($request->get('_CodePostal')) {
-                $query->setParameter('permis',  $request->get('_CodePostal'));
+                $query->setParameter('cp',  $request->get('_CodePostal'));
             }
 
             if ($request->get('_Permis')=='on') {
