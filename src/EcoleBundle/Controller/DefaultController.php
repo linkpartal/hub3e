@@ -399,12 +399,7 @@ if($Allmissions){
         $CountLesApprenants=count($TousLesApprenants)+count($Importcandidat);
 
 
-<<<<<<< HEAD
 
-
-=======
-//var_dump(count($MyApprenantRelation));die;
->>>>>>> origin/DjibrilLinkPart
         return $this->render('EcoleBundle:Recruteur:TableauBord.html.twig', array(
             'etablissement'=>$etablissement,
             'formations'=>$formations,
