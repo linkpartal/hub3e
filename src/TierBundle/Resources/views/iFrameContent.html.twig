@@ -465,11 +465,11 @@
                                         Contact
                                     </label>
                                     <div class="col-xs-9">
-                                        <input type="text" style="width: calc(33% - 10px);font:16px Roboto;" class="input " id="NomContact" name="_NomContact" placeholder="NomContact" required MAXLENGTH="45">
-                                        <input type="text" style="width: calc(33% - 10px);margin-left: 15px;font:16px Roboto;" class="input " id="PrenomContact" name="_PrenomContact" placeholder="PrenomContact" required MAXLENGTH="45">
-                                        <input type="text" style="width: calc(33% - 10px);margin-left: 15px;font:16px Roboto;" class="input" id="FonctionContact" name="_FonctionContact" placeholder="FonctionContact" required MAXLENGTH="45">
-                                        <input type="text" style="width: calc(33% - 10px);font:16px Roboto;" class="input" id="TelContact" name="_TelContact" placeholder="TelContact" required MAXLENGTH="20">
-                                        <input type="text" style="width: calc(33% - 10px);margin-left: 15px;font:16px Roboto;" class="input" id="EmailContact" name="_EmailContact" placeholder="EmailContact" required MAXLENGTH="45">
+                                        <input type="text" style="width: calc(33% - 10px);font:16px Roboto;" class="input " id="NomContact" name="_NomContact" placeholder="Nom" required MAXLENGTH="45">
+                                        <input type="text" style="width: calc(33% - 10px);margin-left: 15px;font:16px Roboto;" class="input " id="PrenomContact" name="_PrenomContact" placeholder="Prenom" required MAXLENGTH="45">
+                                        <input type="text" style="width: calc(33% - 10px);margin-left: 15px;font:16px Roboto;" class="input" id="FonctionContact" name="_FonctionContact" placeholder="Fonction" required MAXLENGTH="45">
+                                        <input type="text" style="width: calc(33% - 10px);font:16px Roboto;" class="input" id="TelContact" name="_TelContact" placeholder="Tel" required MAXLENGTH="20">
+                                        <input type="text" style="width: calc(33% - 10px);margin-left: 15px;font:16px Roboto;" class="input" id="EmailContact" name="_EmailContact" placeholder="Email" required MAXLENGTH="45">
                                     </div>
                                     <label class="col-xs-3 input-colonne">
                                         Commentaire
@@ -1085,31 +1085,28 @@
                                     <img style="border:0px;height: 0px;width: 40px" src="{{ asset('image/vide.gif') }}" />
 
                                 </div>
-
-
-
-
-
-
-
-
                             </div>
+
                             <div>
-
-
 
                                 <label for="Pdf">
 
-                                    <br/><img onclick="this.src='{{ asset('image/wait_x300.gif') }}'; "  id="pdf"  src="{{ asset('image/ajouterdoc.png') }}"/>
+                                {# <button class="btn btn-primary" onclick="this.src='{{ asset('image/wait_x300.gif') }}'; "  id="pdf"  src="{{ asset('image/ajouterdoc.png') }}">
+                                Ajouter Document
+                                </button> #}
+
+                                <br/><img onclick="this.src='{{ asset('image/wait_x300.gif') }}'; "  id="pdf"  src="{{ asset('image/ajouterdoc.png') }}"/>
                                 </label>
                                 <br>
                                 <input onchange="readURL(this,'pdf');"  accept="application/pdf" type="file" class="input" id="Pdf" name="_PDF" style="display: none">
                                 <br>
                                 <label class="cell" id="NomPDF"></label>
                                 <br>
+
                             </div>
+                            
                             <div class="div_button">
-                               <input id="submitaddformation" class="blue" type="submit" value="Valider">
+                               <input id="submitaddformation" class="btn btn-primary" type="submit" value="Valider">
                             </div>
                         </form>
                     </div>
@@ -1299,6 +1296,7 @@
 
                                 </div>
                                 <div class="div_form" id="document_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
+
                                     <div class="col-xs-12">
                                         <div class="col-xs-3 input-colonne">
                                             <select class="input"  name="_Type[]">
@@ -1308,13 +1306,17 @@
                                                 <option value="Dernier diplome">Dernier diplome</option>
                                             </select>
                                         </div>
+
                                         <div class="col-xs-7 input-colonne" >
+                                            <div class="col-xs-11">
                                             <input  type="file" class="input" id="document" name="_Document[]">
+                                            </div>
+                                            <div class="col-xs-1">
+                                            <button class=" btn btn-default "  onclick ="dupliquerDocument()" type="button" > + </button>
+                                            </div>
                                         </div>
 
-                                        <div class="col-xs-2 input-colonne" style="float: right;">
-                                            <button  type="button" >OK</button>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -1575,41 +1577,54 @@
 
                     </div>
 {# ici l'affichage d'onglet#}
+
                     <div id="info_contactSociete" class="list-group affichage" style="display: none;">
+                        <form class="formulaire" id="formContactSociete" action="">
 
                         {% if ContactSociete is defined %}
                             {% for contact in ContactSociete %}
 
                                     {% set iddiv = random()  %}
-                                    <div class="col-xs-12 Liste">
-                                        <div class="row">
 
-                                            <label class="cell">Nom : <label>{{ contact.getNom }}</label></label>
-                                            <label class="cell">Prénom : <label>{{ contact.getPrenom }}</label>
-                                                <button class="button" style="float: right" type="button" data-toggle="collapse" data-target="#user{{ iddiv }}"></button>
-                                            </label>
-
+                                    <div class="inputcontainer">
+                                        <div class="col-xs-6 " style="text-align:left">
+                                            <label class="list-group-item">Nom : </label>
+                                            <label class="champ form-control">{{ contact.getNom }}</label>
                                         </div>
-                                        <div id="user{{ iddiv }}" class="collapse in" >
-                                            <div class="row">
-                                                <label class="cell">Email : <label>{{ contact.getMail }}</label></label>
-                                                <label class="cell">Téléphone : <label>{{ contact.getTelephone }}</label></label>
-                                            </div>
-                                            <div class="row">
-                                                <label class="cell">Fonction : <label>{{ contact.getFonction }}</label></label>
-
-                                            </div>
-                                            <div class="row">
-                                                <label class="cell" >
-
-                                                </label>
-                                            </div>
+                                        <div class="col-xs-6 " style="text-align:left">
+                                            <label class="list-group-item">Prénom :</label>
+                                            <label class="champ form-control">{{ contact.getPrenom }}</label>
+                                            {# <button class="button" style="float: right" type="button" data-toggle="collapse" #} 
                                         </div>
                                     </div>
 
+                                    {# <div id="user{{ iddiv }}" class=" inputcontainer collapse in" > #}
+                                    <div class="inputcontainer">
+                                        <div class="col-xs-6 " style="text-align:left">
+                                            <label class="list-group-item">Fonction : </label>
+                                            <label class="champ form-control">{{ contact.getFonction }}</label>
+                                        </div>
+                                        <div class="col-xs-6 " style="text-align:left">
+                                            <label class="list-group-item">Email : </label>
+                                            <label class="champ form-control">{{ contact.getMail }}</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="inputcontainer">
+                                        <div class="col-xs-6 " style="text-align:left">
+                                            <label class="list-group-item">Téléphone : </label>
+                                            <label class="champ form-control">{{ contact.getTelephone }}</label>
+                                        </div>
+                                        <div class="col-xs-6 " style="text-align:left">
+                                            {# modif telephone en portable ci dessous , une fois add en BDD et popup #}
+                                            <label class="list-group-item">Portable : </label>
+                                            <label class="champ form-control">{{ contact.getTelephone }}</label>   
+                                        </div>
+                                    </div>
+                                <br>
                             {% endfor %}
                         {% endif %}
-
+                        </form>
 
                     </div>
 
@@ -1620,7 +1635,7 @@
                             <label class="cell">Suivi commercial  :
 
                         </label><br/>
-                        <textarea style="width: 100%; height: 200px" type="text"  value="{{ etablissement.getSuivicommercial() }}" id="Suivi" name="_Suivi" >{{ etablissement.getSuivicommercial() }}</textarea>
+                        <textarea class="champ form-control "style="width: 100%; height: 200px" type="text"  value="{{ etablissement.getSuivicommercial() }}" id="Suivi" name="_Suivi" >{{ etablissement.getSuivicommercial() }}</textarea>
                             <br/>
                             <br/>
 
@@ -1727,16 +1742,20 @@
                                             </div>
                                             <div id="formation{{ iddiv }}" class="collapse in" >
                                                 <div class="row">
+
                                                     <label class="cell">Document :
                                                         <a target="_blank" href="{{ asset('formation_pdf/'~ formation.getId ~'.pdf') }}" >
                                                             <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px " alt="fichier de formation" >
                                                         </a>
                                                     </label>
-                                                    <button  style="border: 0;font: 18px Roboto white;background-color: rgb(61, 138, 212);height: 40px; width: 150px;"  onclick="if(confirm('Voulez-vous supprimer cette formation ?')){supprimerformation('{{ path('supprimerFormation',{'id':formation.getId}) }}', this)}">
-                                                        Supprimer
 
-                                                    </button>&nbsp;&nbsp;
-                                                    <button  style="border: 0;font: 18px Roboto white;background-color: rgb(61, 138, 212);height: 40px; width: 150px;"  onclick="showqcm('addQCM',{{ formation.getId }})" >
+                                                    <button class="btn btn-danger" style="border: 0;font: 18px Roboto; height: 40px; width: 150px;"  onclick="if(confirm('Voulez-vous supprimer cette formation ?')){supprimerformation('{{ path('supprimerFormation',{'id':formation.getId}) }}', this)}">
+                                                        Supprimer
+                                                    </button>
+
+                                                    &nbsp;&nbsp;
+
+                                                    <button class="btn btn-primary" style="border: 0;font: 18px Roboto; height: 40px; width: 150px;"  onclick="showqcm('addQCM',{{ formation.getId }})" >
                                                         Ajouter un test
                                                     </button>
 
@@ -1759,51 +1778,94 @@
                                         {% set iddiv = random()  %}
                             <form class="formulaire" id="formMissionModifier" action="{{ path('missionModif') }}" method="post" enctype="multipart/form-data">
                                 <input type="hidden" value="{{ mission.getId }}" id="id" name="_ID">
-                                        <div class="col-xs-12 Liste">
-                                            <div class="row">
-                                                <label class="cell"  >CodeMission : <label   id="CodeMission" name="_Codemission" >{{ mission.getCodemission }}</label></label>
-                                                <label class="cell" >Date : <label style="font-size: medium"   >{{ mission.getDatecreation|date('d/m/Y H:i')}}</label>
-                                                    {# MODIFICATION DU BOUTON MODIFIER ET DE L'ICONE DE SUPPRESSION #}
-                                                    <span>
-                                                       {#<button type="button" class="btn btn-primary" onclick="modifierMission('formMissionModifier',this)">Modifier</button>#}
-                                                        <button style="margin-left: 50px" type="button" class="btn btn-primary" onclick="show('addmission{{ mission.getId }}');">Modifier</button>
-
-                                                    </span>
-                                                    <span class="glyphicon glyphicon-remove" style="color:red ; float:right" aria-hidden="true" name="modification" title="Supprimer" onclick="if(confirm('Voulez-vous Supprimer cette mission?')){supprimerligne('{{ path('supprimer_Mission',{'id': mission.getId}) }}',this)}"></span>
-                                                    <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#mission{{ iddiv }}"></button>
-                                                </label>
+                                        <div class="inputcontainer">
+                                            <div class="col-xs-6" style="text-align:left">
+                                                <label class="list-group-item"  >CodeMissionTest :</label> 
+                                                <label class="champ form-control" id="CodeMission" name="_Codemission" >{{ mission.getCodemission }}</label>
                                             </div>
-                                            <div id="mission{{ iddiv }}" class="collapse in" >
-                                                <div class="row">
-                                                    <label class="cell">EmailContact  : <input type="text"  value="{{ mission.EmailContact }}" id="Emailcontact" name="_Emailcontact" readonly></label>
-                                                    <label class="cell">Profil : <textarea type="text"  value="{{ mission.getProfil }}" id="Profil" name="_Profil" readonly></textarea></label>
-                                                </div>
-                                                <div class="row">
+                                            <div class="col-xs-6" style="text-align:left">
+                                                <label class="list-group-item" >Déposée le : </label>
+                                                <label class="champ form-control"style="font-size: medium"   >{{ mission.getDatecreation|date('d/m/Y H:i')}}</label>
 
-                                                    <label class="cell" >Date Debut :<input type="text" class="date"  value="{{ mission.getDatedebut|date('d/m/Y')}}" name="_Datedebut" readonly> </label>
-                                                    <label class="cell" >Date fin :<input type="text" class="date" value="{{mission.getDatefin|date('d/m/Y')}}" name="_Datefin" readonly > </label>
+                                                {#   <span class="glyphicon glyphicon-remove" style="color:red ; float:right" aria-hidden="true" name="modification" title="Supprimer" onclick="if(confirm('Voulez-vous Supprimer cette mission?')){supprimerligne('{{ path('supprimer_Mission',{'id': mission.getId}) }}',this)}"></span> #}
 
-
+                                                <button class="button" style="float: right;" type="button" data-toggle="collapse" data-target="#mission{{ iddiv }}"></button>
                                             </div>
-                                            <div class="row">
-                                                <label class="cell">Typecontrat  : <input type="text"  value="{{ mission.getTypecontrat }}" id="TypeContrat" name="_TypeContrat" readonly></label>
-                                                <label class="cell">NomContact  : <input type="text"  value="{{ mission.getNomContact }}"  id="NomContact" name="_NomContact" readonly></label>
-                                            </div>
-                                            <div class="row">
-                                                <label class="cell">Domaine  : <input type="text"  value="{{ mission.getDomaine }}" id="Domaine" name="_Domaine" readonly></label>
-                                                <label class="cell">Tuteur  : <label  id="Tuteur" name="_Tuteur" >{{ mission.getTuteur }}</label></label>
-                                            </div>
-                                            <div class="row">
-                                                <label class="cell" style="height: 280px;word-wrap: break-word;width: 150px;hyphens: auto;max-width: 100px;">Descriptif : <textarea style="resize: both;width:600px;height:90%" id="Descriptif" name="_Descriptif" maxlength="255" readonly >{{ mission.getDescriptif }}</textarea></label>
-                                            </div>
-
                                         </div>
-                                    </div>
+
+                                        <div class="inputcontainer">
+                                            <div class="col-xs-6" style="text-align:left">
+                                                <label class="list-group-item">Intitulé :</label>
+                                                <input class="champ form-control" type="text"  value="{{ mission.getIntitule }}" id="Intitule" name="_Intitule" readonly>
+                                            </div>
+                                            <div class="col-xs-6" style="text-align:left">
+                                                <label class="list-group-item">Domaine :</label>
+                                                <input class="champ form-control" type="text"  value="{{ mission.getDomaine }}" id="Domaine" name="_Domaine" readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="inputcontainer">
+                                            <div class="col-xs-6" style="text-align:left">
+                                                <label class="list-group-item">Typecontrat : </label>
+                                                <input class="champ form-control" type="text"  value="{{ mission.getTypecontrat }}" id="TypeContrat" name="_TypeContrat" readonly>
+                                            </div>
+                                            <div class="col-xs-6" style="text-align:left">
+                                                <label class="list-group-item">Rémunération :</label>
+                                                <input class="champ form-control" type="text"  value="{{ mission.getRemuneration }}"  id="Remuneration" name="_Remuneration" readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="inputcontainer">
+                                            <div class="col-xs-6" style="text-align:left">
+                                                <label class="list-group-item" >Date Debut :</label>
+                                                <input class="champ form-control" type="text" value="{{ mission.getDatedebut|date('d/m/Y')}}" name="_Datedebut" readonly> 
+                                            </div>
+                                            <div class="col-xs-6" style="text-align:left">
+                                                    <label class="list-group-item" >Date fin :</label>
+                                                    <input class="champ form-control" type="text" value="{{mission.getDatefin|date('d/m/Y')}}" name="_Datefin" readonly > 
+                                            </div>
+                                        </div> 
+
+                                        <div class="inputcontainer">
+                                            <div class="col-xs-6" style="text-align:left">
+                                                <label class="list-group-item">Nom Contact  :</label>
+                                                <input class="champ form-control" type="text"  value="{{ mission.getNomContact }}"  id="NomContact" name="_NomContact" readonly>
+                                            </div>
+                                            <div class="col-xs-6" style="text-align:left">
+                                                <label class="list-group-item">Fonction : </label>
+                                                <input class="champ form-control" type="text"  value="{{ mission.getFonctioncontact }}" id="FonctionContact" name="_FonctionContact" readonly>
+                                            </div>
+                                        </div>                                        
+
+                                        <div id="mission{{ iddiv }}" class=" inputcontainer collapse in" >
+                                            <div class="col-xs-6" style="text-align:left">
+                                                <label class="list-group-item">Email :</label>
+                                                <input class="champ form-control"  value="{{ mission.EmailContact }}" id="Emailcontact" name="_Emailcontact" readonly>
+                                            </div>
+                                            <div class="col-xs-6" style="text-align:left">
+                                                <label class="list-group-item">Tél : </label>
+                                                <input class="champ form-control"  value="{{ mission.getTelcontact }}" id="TelContact" name="_TelContact" readonly></textarea>
+                                            </div>
+                                        </div>
 
 
 
+                                        <div class="inputcontainer">
+                                            <div class="col-xs-12" style="text-align:left">
+                                                <label class="list-group-item" style="height: 280px;word-wrap: break-word;width: 150px;hyphens: auto;max-width: 100px;">Descriptif : </label>
+                                                <textarea class="champ form-control" style="resize: both;width:690px;height:250px" id="Descriptif" name="_Descriptif" maxlength="255" readonly >{{ mission.getDescriptif }}</textarea>
+                                            </div>
+                                        </div>
 
-                            </form>
+                                        <div class="inputcontainer">
+                                            <div class="col-xs-12" style="text-align:center; margin-top:5px"> 
+                                                <button style="margin-left: 50px; margin-top:5 px;" type="button" class="btn btn-primary" onclick="show('addmission{{ mission.getId }}');">Modifier</button>
+                                                <button style="margin-left: 50px; margin-top:5 px;" type="button" class="btn btn-danger" name="modification" title="Supprimer" onclick="if(confirm('Voulez-vous Supprimer cette mission?')){supprimerligne('{{ path('supprimer_Mission',{'id': mission.getId}) }}',this)}">Supprimer</button>
+                                            </div>    
+                                        </div>
+
+                                    </form>
+                                    <br>
                                 {% endfor %}
                             {% endif %}
 
@@ -1816,7 +1878,8 @@
                 <div class="col-xs-3" style="height: 100%;">
                     <div style="margin: 15px 0 0 15px;position: fixed;width: calc(25% - 20px);">
 
-                        {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
+{#  Bouton Activer/désactiver commenté car inutile.
+                       {% if is_granted('ROLE_ADMINECOLE') or is_granted('ROLE_ADMINSOC') %}
                         {% if etablissement.getActive %}
                             <button onclick="active('{{ path('activate',{'id':etablissement.getId}) }}')" id="activate" type="button" class="col-xs-12 rightMenu" style="color: white;background-color: #94C400;">
                                 ACTIVE
@@ -1826,7 +1889,7 @@
                                 DÉSACTIVE
                             </button>
                         {% endif %}
-                        {% endif %}
+                        {% endif %} #}
                         {% if is_granted('ROLE_SUPER_ADMIN') %}
                             <button onclick="show('instanceLicence')"  type="button" class="col-xs-12 rightMenu">
                                 Instancier une licence
@@ -1862,7 +1925,7 @@
                                     Ajouter une formation
                                 </button>
                                 <button onclick="show('addQCMAff',{{ etablissement.getId }})" type="button" class="col-xs-12 rightMenu">
-                                    Ajouter un test d'affinité
+                                    Ajouter un test 
                                 </button>
                             {% endif %}
                             {% if is_granted('ROLE_SUPER_ADMIN') %}

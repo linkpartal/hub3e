@@ -18,7 +18,7 @@
 <div id="addtier" class="popup col-xs-3">
 
     <div onclick="document.getElementById('submittier').click();hide(this)" class="close"></div>
-    <div class="col-xs-offset-3 col-xs-6 formContainer">
+    <div class="col-xs-offset-3 col-xs-6 ">
         <button style="width: 40px;height: 40px;float:right;" type="button" onclick="this.parentElement.previousElementSibling.click();">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
 
@@ -361,12 +361,14 @@
 
             </div>
             <div class="input-group col-xs-1" style=" margin-left: 10px;border: 0;padding: 4px;height: 21px;float: left;">
-                <button onclick="show('addLicenceDef')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
-                ></button>
+                {# <button onclick="show('addLicenceDef')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
+                ></button> #}
+
+                <button id="licencetop" style="color:white;background: #1654b7 ; border:none;white-space: nowrap;overflow: hidden;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">{% if AllLicences is defined %}{{ AllLicences|length }}{% endif %} Licences</button>
 
 
-                <button id="licencetop" style="color:white;white-space: nowrap;overflow: hidden; ">{% if AllLicences is defined %}{{ AllLicences|length }}{% endif %} Licences</button>
             </div>
+
             <div class="input-group col-xs-1" style=" margin-left: 10px;border: 0;padding: 4px;height: 21px;float: left;">
                 <button onclick="show('addsuperuser')" type="button" class="glyphicon glyphicon-plus input-group-addon topbaradd"
                 ></button>
@@ -374,14 +376,23 @@
 
                 <button id="usertop" style="color:white;white-space: nowrap;overflow: hidden; ">{% if users is defined %}{{ users|length }}{% endif %} Utilisateurs</button>
             </div>
-            <div class="input-group col-xs-1" style=" margin-left: 10px;border: 0;padding: 4px;height: 21px;float: left;">
+
+{#             <div class="input-group col-xs-1" style=" margin-left: 10px;border: 0;padding: 4px;height: 21px;float: left;">
                 <button onclick="show('import')" style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">Importer</button>
-            </div>
+            </div> #}
+            
             <div class="input-group col-xs-1" style=" margin-left: 10px;border: 0;padding: 4px;height: 21px;float: left;">
 
                 <button onclick="document.getElementById('iframe').src='{{ path('afficher_import') }}'"
                         style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">SAS Admissions</button>
+            </div>
 
+            <div class="input-group col-xs-1" style="margin-left: 10px;border: 0;padding: 5px;height: 21px;float: left;">
+                <a href="{{ path('metier_user_login') }}" >     
+                    <button style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">
+                        Tableau de bord 
+                    </button>       
+                </a>
             </div>
 
 
@@ -411,7 +422,7 @@
                 <ul id="profil" class="dropdown-menu" aria-labelledby="dropdownMenu1" style="color:white;background: #2975cb;">
                     <li><button onclick="postiframe('{{ path('afficher_profil') }}')" style="background: transparent;border:transparent;width:100%">PROFIL</button></li>
                     <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_messagerie') }}';" style="background: transparent;border:transparent;width:100%">MESSAGERIE</button></li>
-                    <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_rendezvous') }}';" style="background: transparent;border:transparent;width:100%">Rendez-vous</button></li>
+                    <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_MiseEnRelation') }}';" style="background: transparent;border:transparent;width:100%">MISES EN RELATION</button></li>
                     <li><a onclick="sessionStorage.clear()" href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">DECONNEXION</button> </a></li>
 
                 </ul>
