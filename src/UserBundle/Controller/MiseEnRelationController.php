@@ -32,7 +32,7 @@ class MiseEnRelationController extends Controller
             $message->setExpediteur($expediteur);
             $message->setDestinataire($destinataire);
             $message->setMission($mission);
-            $message->setAction('Propose mission');
+            $message->setAction('Proposition recruteur');
             $message->setCouleur('green');
             $message->setStatutaction(0);
             $em->persist($message);

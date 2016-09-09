@@ -154,8 +154,17 @@ class DefaultController extends Controller
 
         $MissionPublic =$this->getDoctrine()->getRepository('GenericBundle:MissionPublic')->findBy([], ['id' => 'DESC']);
         $Allapprenants = array();
+        $TotalApprenants = array();
         $Importcandidat = $this->getDoctrine()->getRepository('GenericBundle:ImportCandidat')->findBy(array('etablissement'=>$etablissement));
         // var_dump($etablissement->getId());die;
+
+        foreach($apprenants as $useru)
+        {
+            if($useru->hasRole('ROLE_APPRENANT'))
+            {
+                array_push($TotalApprenants,$useru);
+            }
+        }
 
         foreach($apprenants as $userd)
         {              
@@ -168,53 +177,58 @@ class DefaultController extends Controller
         $TousLesApprenants=$Allapprenants;
 
         $Myapprenantplacer=$Allapprenants;
+
         foreach($Importcandidat as $userd)
         {
             array_push($Allapprenants,$userd);
         }
-        // var_dump(count($Allapprenants));die;
 
-        // Postulation en cours
+        // POSTULATION EN COURS
 
         $Postulation = $this->getDoctrine()->getRepository('GenericBundle:Postulation')->findAll();
         $MyPostulation = array();
+        $PostulEnCours = array();
 
-        $PostulationEnCours=round((count($Myapprenantplacer)*100)/count($TousLesApprenants), 2);
+        foreach($apprenants as $userz)
+        {              
+            if($userz->hasRole('ROLE_APPRENANT') and $userz->getInfo()->getProfilcomplet() == 0)
+            {
+                array_push($PostulEnCours,$userd);
+            }              
+        }
+//var_dump($TotalApprenants);die;
+if ($TotalApprenants){
+    $PostulationEnCours=round((count($PostulEnCours)*100)/count($TotalApprenants), 2);
+}else{
+    $PostulationEnCours=0;
+}
+        
 
-        // formation à valider
+        // FORMATION A VALIDER
+
+        $MyFormationAvalider = array();
+
+        foreach($apprenants as $userabc)
+        {              
+            if($userabc->hasRole('ROLE_APPRENANT') and $userabc->getInfo()->getProfilcomplet() != 3)
+            {
+                array_push($MyFormationAvalider,$userabc);
+            }              
+        }
+
+        if ($TotalApprenants){
+    
+    $FormationAvalider=round((count($MyFormationAvalider)*100)/count($TotalApprenants), 2);
+}else{
+    $FormationAvalider=0;
+}
+
+        
 
         $em = $this->getDoctrine()->getEntityManager();
 
-        $sql="SELECT C FROM GenericBundle:Candidature C WHERE C.statut=:statut and C.user is not null GROUP BY C.user,C.statut " ;
-        $query = $em->createQuery($sql);
-        $query->setParameter('statut', '2');
-        $FormationCandidature = $query->getResult(); // array of ForumUser objects
-        // var_dump(count($FormationCandidature));die;
+       // APPRENANTS A PLACER
 
-        $MyFormationAvalider =array();
-        foreach($FormationCandidature as $formation)
-        {
-            if(!($TousLesApprenants))
-            {
-            }else{
-                if( in_array($formation->getuser(),$TousLesApprenants)  )
-                {
-                    array_push($MyFormationAvalider,$formation);
-                }
-            }    
-
-        }
-
-        $FormationAvalider=round((count($MyFormationAvalider)*100)/count($TousLesApprenants), 2);
-
-       // apprenants à placer
-
-        // $MyapprenantAplacer=$Importcandidat;
-        // $ApprenantAplacer=round((count($Importcandidat)*100)/count($TousLesApprenants), 2);
-
-        /*$sql = "SELECT I FROM GenericBundle:Infocomplementaire I WHERE I.profilcomplet = 3 GROUP BY I.id ";
-        $query =$em->createQuery($sql);
-        $MyapprenantAplacer = $query->getResult();*/
         $MyapprenantAplacer= array();
         foreach($TousLesApprenants as $userd)
         {
@@ -223,16 +237,17 @@ class DefaultController extends Controller
                 array_push($MyapprenantAplacer,$userd);
             }
         }
+
         // var_dump(count($MyapprenantAplacer));die;
         if(!($MyapprenantAplacer))
         {
             $ApprenantAplacer= '0';  
         }else{             
-            $ApprenantAplacer=round((count($MyapprenantAplacer)*100)/count($TousLesApprenants),2);
+            $ApprenantAplacer=round((count($MyapprenantAplacer)*100)/count($TotalApprenants),2);
         }
 
 
-       // Apprenants mis en relation
+       // APPRENANTS MIS EN RELATION
 
         $sql="SELECT M FROM GenericBundle:Message M   GROUP BY M.destinataire " ;
         $query =$em->createQuery($sql);
@@ -253,12 +268,17 @@ class DefaultController extends Controller
 
         }
 
-        $ApprenantRelation=round((count($MyApprenantRelation)*100)/count($TousLesApprenants), 2);
+        if ($TotalApprenants){
+            $ApprenantRelation=round((count($MyApprenantRelation)*100)/count($TotalApprenants), 2);
+        }else{
+            $ApprenantRelation=0;
+        }
+        
 
-       //Apprenants placés
+       // APPRENANTS PLACES
 
         $MyApprenantPlacer= array();
-        foreach($TousLesApprenants as $userd)
+        foreach($TotalApprenants as $userd)
         {
             if($userd->getPlace()==1)
             {
@@ -266,16 +286,14 @@ class DefaultController extends Controller
             }
         }
 
-
-
         if(!($MyApprenantPlacer))
         {
             $Apprenantplacer= '0';  
         }else{             
-            $Apprenantplacer=round((count($MyApprenantPlacer)*100)/count($TousLesApprenants),2);
+            $Apprenantplacer=round((count($MyApprenantPlacer)*100)/count($TotalApprenants),2);
         }
 
-       // Missions à pourvoir 
+       // MISSIONS A POURVOIR
 
         $Allmissions = $this->getDoctrine()->getRepository('GenericBundle:Mission')->findBy(array('tier'=>$tiercreation));
 
@@ -284,38 +302,28 @@ class DefaultController extends Controller
         $query->setParameter('tier', $tiercreation);
         $MyMissionsAP = $query->getResult();
         //var_dump(count($Allmissions));die;
+
         if(!($MyMissionsAP))
         {
             $MissionsAPourvoir= '0';  
         }else{             
             $MissionsAPourvoir=round((count($MyMissionsAP)*100)/count($Allmissions),2);
         }
-        // FINIR DE CORRIGER CE POINT
-
-        // var_dump($MyMissionsAP);
-        // var_dump($Allmissions);
-
-        //  var_dump(count($MyMissionsAP),count($Allmissions));
-        // die;
       
-
-        // Missions pourvues
+        // MISSIONS POURVUES
 
         $sql = " SELECT M FROM GenericBundle:Mission M WHERE M.pourvue= 1 GROUP BY M.id ";
         $query = $em->createQuery($sql);
         $MyMissionsPourvues = $query->getResult();
-        if(!($MyMissionsPourvues))
+
+        if(!($Allmissions))
         {
             $MissionsPourvues= '0';  
         }else{             
             $MissionsPourvues=round((count($MyMissionsPourvues)*100)/count($Allmissions),2);
         }
 
-        // var_dump($MissionsPourvues);
-        // die;
-
-
-        // Missions sans formations 
+        // MISSIONS SANS FORMATIONS 
 
         $Mymissionssansformations=array();
 
@@ -339,9 +347,14 @@ class DefaultController extends Controller
             }  
         }
 
-        $MissionsSansFormations=round((count($Mymissionssansformations)*100)/count($Allmissions), 2);
+        if($Allmissions){
+            $MissionsSansFormations=round((count($Mymissionssansformations)*100)/count($Allmissions), 2);
+        }else{
+            $MissionsSansFormations=0;
+        }
 
-        // Missions sans tuteur ( A MODIFIER SUITE AU CHANGEMENT TUTEUR -> CONTACT MISSION )
+       
+        // MISSIONS SANS TUTEUR
 
         $Mymissionssanstuteur=array();
 
@@ -350,18 +363,21 @@ class DefaultController extends Controller
             if(!($Allmissions))
             {
             }else{
-                if($missionst.'tuteur_id' == null )
+                if(!($missionst->getTuteur()))
                 {
                     array_push($Mymissionssanstuteur,$missionst);
                 } 
             }       
         }
 
-        // var_dump(count($Mymissionssanstuteur));die;
+        if($Allmissions){
+            $MissionsSansTuteur=round((count($Mymissionssanstuteur)*100)/count($Allmissions),2);
+        }else{
+            $MissionsSansTuteur=0;
+        }
+        
 
-        $MissionsSansTuteur=round((count($missionst.'tuteur_id' == null)*100)/count($Allmissions),2);
-
-        // Missions Sans QCM REMPLACER LE $Mymissionssansformations une fois la relation Mission -> Formation -> Qcm gérée
+        // MISSIONS SANS QCM ( comment récupérer le fait que le qcm ne soit pas remplis ?)
 
         // $MymissionsssansQCM=array();
 
@@ -370,14 +386,25 @@ class DefaultController extends Controller
         //     if($missionsq.)
         // }
 
-        $MissionsSansQcm=round((count($Mymissionssansformations)*100)/count($Allmissions),2); 
+if($Allmissions){
+            $MissionsSansQcm=round((count($Mymissionssansformations)*100)/count($Allmissions),2); 
+
+        }else{
+            $MissionsSansQcm=0;
+        }
+        
+        
 
         $CountLesMissions=count($Allmissions);   
         $CountLesApprenants=count($TousLesApprenants)+count($Importcandidat);
 
 
+<<<<<<< HEAD
 
 
+=======
+//var_dump(count($MyApprenantRelation));die;
+>>>>>>> origin/DjibrilLinkPart
         return $this->render('EcoleBundle:Recruteur:TableauBord.html.twig', array(
             'etablissement'=>$etablissement,
             'formations'=>$formations,
@@ -396,6 +423,7 @@ class DefaultController extends Controller
             'CountLesApprenants'=>$CountLesApprenants,
             'missions'=>$Allmissions,
             'MissionsPublic'=>$MissionPublic
+
 
         ));
 

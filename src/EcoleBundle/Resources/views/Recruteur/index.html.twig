@@ -362,11 +362,12 @@
                             </select>
                         </div>
                         <div class="col-xs-7 input-colonne" >
-                            <input  type="file" class="input" id="document" name="_Document[]">
-                        </div>
-
-                        <div class="col-xs-2 input-colonne" style="float: right;">
-                            <button  onclick="dupliquerDocument()" type="button" >OK</button>
+                            <div class="col-xs-11">
+                                <input  type="file" class="input" id="document" name="_Document[]">
+                            </div>
+                            <div class="col-xs-1">
+                                <button class="btn btn-default" onclick ="dupliquerDocument()" type="button" > + </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -816,16 +817,16 @@
             <table class="table table-bordered table-hover table-responsive">
                 <thead style="background-color:#3988d7">
                     <tr>
-                        <th> INTITULE </th>
-                        <th> SOCIETE </th>
-                        <th> DATE DEPOT </th>
-                        <th> ACTION </th>
+                        <th style="text-align:center"> INTITULE </th>
+                        <th style="text-align:center"> SOCIETE </th>
+                        <th style="text-align:center"> DATE DEPOT </th>
+                        <th style="text-align:center"> ACTION </th>
                     </tr>
                 </thead>
                 <tbody>
                     {% if missions is defined %}
                         {% for m in missions %}
-                            {% if m.getPourvue() == NULL %}
+                            {% if not m.getPourvue() %}
                                 <tr>
                                     <td> {{ m.intitule }} </td>
                                     <td> {{ m.etablissement.tier.raisonsoc }} </td>
@@ -858,10 +859,10 @@
             <table class="table table-bordered table-hover table-responsive">
                 <thead style="background-color:#3988d7">
                     <tr>
-                        <th> INTITULE </th>
-                        <th> SOCIETE </th>
-                        <th> DATE DEPOT </th>
-                        <th> ACTION </th>
+                        <th style="text-align:center"> INTITULE </th>
+                        <th style="text-align:center"> SOCIETE </th>
+                        <th style="text-align:center"> DATE DEPOT </th>
+                        <th style="text-align:center"> ACTION </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -900,10 +901,10 @@
             <table class="table table-bordered table-hover table-responsive">
                 <thead style="background-color:#3988d7">
                     <tr>
-                        <th> INTITULE </th>
-                        <th> SOCIETE </th>
-                        <th> DATE DEPOT </th>
-                        <th> ACTION </th>
+                        <th style="text-align:center"> INTITULE </th>
+                        <th style="text-align:center"> SOCIETE </th>
+                        <th style="text-align:center"> DATE DEPOT </th>
+                        <th style="text-align:center"> ACTION </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -942,10 +943,10 @@
             <table class="table table-bordered table-hover table-responsive">
                 <thead style="background-color:#3988d7">
                     <tr>
-                        <th> INTITULE </th>
-                        <th> SOCIETE </th>
-                        <th> DATE DEPOT </th>
-                        <th> ACTION </th>
+                        <th style="text-align:center"> INTITULE </th>
+                        <th style="text-align:center"> SOCIETE </th>
+                        <th style="text-align:center"> DATE DEPOT </th>
+                        <th style="text-align:center"> ACTION </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -984,10 +985,10 @@
             <table class="table table-bordered table-hover table-responsive">
                 <thead style="background-color:#3988d7">
                     <tr>
-                        <th> INTITULE </th>
-                        <th> SOCIETE </th>
-                        <th> DATE DEPOT </th>
-                        <th> ACTION </th>
+                        <th style="text-align:center"> INTITULE </th>
+                        <th style="text-align:center"> SOCIETE </th>
+                        <th style="text-align:center"> DATE DEPOT </th>
+                        <th style="text-align:center"> ACTION </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1025,30 +1026,34 @@
             <table class="table table-bordered table-hover table-responsive">
                 <thead style="background-color:#3988d7">
                     <tr>
-                        <th> NOM PRENOM </th>
-                        <th> DATE DE CREATION </th>
-                        <th> ACTION </th>
+                        <th style="text-align:center"> NOM PRENOM </th>
+                        <th style="text-align:center"> DATE DE CREATION </th>
+                        <th style="text-align:center"> ACTION </th>
                     </tr>
                 </thead>
                 <tbody>
                     {% if apprenants is defined %}   
                         {% for user in apprenants %}
-                                <tr>
-                                    <td> 
-                                        <img src="{{ user.getPhotos }} " style="height: 100%" >
-                                        {{ user.getNom }} 
-                                        {{ user.getPrenom }} 
-                                    </td>
-                                    <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
-                                    
-                                    <td> 
-                                        <button class= "btn btn-default btn-xs"> 
-                                                <a href="{{ path('metier_user_afficheUser',{'id': user.getId} ) }}" target="_blank">
-                                                    <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
-                                                </a>
-                                        </button>
-                                    </td>
-                                </tr> 
+                            {% if user.info %}
+                                {% if user.info.profilcomplet == 0 %}
+                                    <tr>
+                                        <td> 
+                                            <img src="{{ user.getPhotos }} " style="height: 100%" >
+                                            {{ user.getNom }} 
+                                            {{ user.getPrenom }} 
+                                        </td>
+                                        <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
+                                        
+                                        <td> 
+                                            <button class= "btn btn-default btn-xs"> 
+                                                    <a href="{{ path('metier_user_afficheUser',{'id': user.getId} ) }}" target="_blank">
+                                                        <span class= "glyphicon glyphicon-search" aria-hidden="true"></span> 
+                                                    </a>
+                                            </button>
+                                        </td>
+                                    </tr> 
+                                {% endif %}
+                            {% endif %}
                         {% endfor %}
                         {% elseif apprenants == null %}
                         <tr> Aucuns Apprenants à afficher </tr>
@@ -1069,9 +1074,9 @@
             <table class="table table-bordered table-hover table-responsive">
                 <thead style="background-color:#3988d7">
                     <tr>
-                        <th> NOM PRENOM </th>
-                        <th> DATE CREATION </th>
-                        <th> ACTION </th>
+                        <th style="text-align:center"> NOM PRENOM </th>
+                        <th style="text-align:center"> DATE CREATION </th>
+                        <th style="text-align:center"> ACTION </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1116,14 +1121,15 @@
             <table class="table table-bordered table-hover table-responsive">
                 <thead style="background-color:#3988d7">
                     <tr>
-                        <th> NOM PRENOM </th>
-                        <th> DATE CREATION </th>
-                        <th> ACTION </th>
+                        <th style="text-align:center"> NOM PRENOM </th>
+                        <th style="text-align:center"> DATE CREATION </th>
+                        <th style="text-align:center"> ACTION </th>
                     </tr>
                 </thead>
                 <tbody>
                     {% if apprenants is defined %} 
                         {% for user in apprenants %}
+                            {% if user.place != 1 %}
                             {% if user.info %}
                             {% if user.info.profilcomplet == 3 %}
                                 <tr>
@@ -1145,6 +1151,7 @@
                                 <tr> Aucuns Apprenants à afficher </tr>     
                             {% endif %}
                             {% endif %}
+                            {% endif %}
                         {% endfor %}  
                     {% endif %}
                 </tbody>    
@@ -1158,20 +1165,23 @@
     <div onclick="document.getElementById('ApprenantsMisEnRelation').click();hide(this)" class="close"></div>
     <div class="col-xs-offset-2 col-xs-8 formContainer">
         <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
-            <div> <p> <h3> APPRENANTS MIS EN RELATION</h3> </p></div>
+            <div> <p> <h3> APPRENANTS MIS EN RELATION </h3></p></div>
             <table class="table table-bordered table-hover table-responsive">
                 <thead style="background-color:#3988d7">
                     <tr>
-                        <th> NOM PRENOM </th>
-                        <th> DATE CREATION </th>
-                        <th> ACTION </th>
+                        <th style="text-align:center"> NOM PRENOM </th>
+                        <th style="text-align:center"> DATE CREATION </th>
+                        <th style="text-align:center"> ACTION </th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% if apprenants is defined %} 
-                        {% if message is defined %}  
-                            {% for user in apprenants %}
-                                 {% if user.message.getDestinataire()%} 
+{# MyApprenantRelation n'est pas récupérable ici , il faut donc refaire la requête pour le retrouver. #}
+
+                    {% if MyApprenantRelation is defined %} 
+
+                        {% for user in MyApprenantRelation %}
+                               {{ user.getNom }} 
+                                 
                                     <tr>
                                         <td> 
                                             <img src="{{ user.getPhotos }} " style="height: 100%" > 
@@ -1187,11 +1197,9 @@
                                             </button>
                                         </td>
                                     </tr>
-                                {% elseif apprenants == null %}
-                                    <tr> Aucuns Apprenants à afficher </tr>     
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}   
+                        
+                            
+                        {% endfor %}   
                     {% endif %}
                 </tbody>    
             </table>
@@ -1209,9 +1217,9 @@
             <table class="table table-bordered table-hover table-responsive">
                 <thead style="background-color:#3988d7">
                     <tr>
-                        <th> NOM PRENOM </th>
-                        <th> DATE CREATION </th>
-                        <th> ACTION </th>
+                        <th style="text-align:center"> NOM PRENOM </th>
+                        <th style="text-align:center"> DATE CREATION </th>
+                        <th style="text-align:center"> ACTION </th>
                     </tr>
                 </thead>
                 <tbody>

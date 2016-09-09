@@ -43,7 +43,8 @@ class DefaultController extends Controller
 
     }
 
-    public function tieraddedAction(Request $request)
+       
+      public function tieraddedAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $sirenn=$request->get('_SIREN');
@@ -108,7 +109,6 @@ class DefaultController extends Controller
 
         return $this->redirect($_SERVER['HTTP_REFERER']);
     }
-
     public function affichageAction($id)
     {
         // Utilisateur actuellement connecté.
