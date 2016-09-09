@@ -1525,21 +1525,14 @@
 
             <div class="col-xs-3" style="height: 100%;">
                 <div style="margin: 15px 0 0 15px;position: fixed;width: calc(25% - 20px);">
-<<<<<<< HEAD
+
                     {% if not User.isExpired and  User.hasRole('ROLE_SUPER_ADMIN') %}
                         <button onclick="expire('{{ path('expired',{'id':User.getId}) }}')" id="expired" type="button" class="col-xs-12 rightMenu" style="background-color: #94C400;color:white;">
                             Activer
                         </button>
                     {% elseif  User.hasRole('ROLE_SUPER_ADMIN') %}
                         <button onclick="expire('{{ path('expired',{'id':User.getId}) }}')" id="expired" type="button" class="col-xs-12 rightMenu" style="background-color: red;color:white;">
-=======
-                    {% if not User.isExpired and not User.hasRole('ROLE_APPRENANT') %}
-                        {# <button onclick="expire('{{ path('expired',{'id':User.getId}) }}')" id="expired" type="button" class="col-xs-12 rightMenu" style="background-color: #94C400;color:white;">
-                            Activer
-                        </button> #}
-                    {% elseif not User.hasRole('ROLE_APPRENANT') %}
-                        {# <button onclick="expire('{{ path('expired',{'id':User.getId}) }}')" id="expired" type="button" class="col-xs-12 rightMenu" style="background-color: red;color:white;">
->>>>>>> origin/DjibrilLinkPart
+
                             Désactiver
                         </button> #}
                     {% endif %}
@@ -1571,6 +1564,7 @@
                                     {% elseif User.info and User.info.profilcomplet == 2 %}background: red;{% elseif User.info and User.info.profilcomplet == 1 %}background: #2A76CC;
                                     {% else %}background: orangered;{% endif %}color: #0f0f0f;"
                                     data-toggle="dropdown" aria-haspopup="true"
+
                                     aria-expanded="false">Statut en cours  <span class="glyphicon glyphicon-triangle-bottom" style="margin-left:20px"></span></button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" style="width: 100%">
 
@@ -1689,15 +1683,11 @@
                     div.style.display='none';
                     div.previousElementSibling.style.display='none';
                     div.previousElementSibling.previousElementSibling.style.display='none';
-<<<<<<< HEAD
+
                     // c'est ici la modif de la tache des statut qui changent l'heure du clic sur valider ou refuser une formation
                     //document.getElementById('STATUT_APPRENANT').style.backgroundColor = "#94C400";
                    // window.parent.document.getElementById('activeUser{{ User.id }}').style.backgroundColor = "#94C400";
-=======
-                    document.getElementById('STATUT_APPRENANT').style.backgroundColor = "#94C400";
-                    document.getElementById('STATUT_APPRENANT').location.reload();
-                    window.parent.document.getElementById('activeUser{{ User.id }}').style.backgroundColor = "#94C400";
->>>>>>> origin/DjibrilLinkPart
+
 
                 }
                 if(value === 99)
@@ -1710,14 +1700,10 @@
                     div.style.display='none';
                     div.nextElementSibling.style.display='none';
                     div.nextElementSibling.nextElementSibling.style.display='none';
-<<<<<<< HEAD
+
                    // document.getElementById('STATUT_APPRENANT').style.backgroundColor = "red";
                     //window.parent.document.getElementById('activeUser{{ User.id }}').style.backgroundColor = "red";
-=======
-                    document.getElementById('STATUT_APPRENANT').style.backgroundColor = "red";
-                    document.getElementById('STATUT_APPRENANT').location.reload();
-                    window.parent.document.getElementById('activeUser{{ User.id }}').style.backgroundColor = "red";
->>>>>>> origin/DjibrilLinkPart
+
                 }
             }
         });
