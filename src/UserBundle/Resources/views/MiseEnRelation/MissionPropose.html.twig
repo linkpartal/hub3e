@@ -32,13 +32,13 @@
         }
         .panel{
             margin-bottom: 0px;
-            background-color: #66afe9;
+            background-color: #E6E6E6;
         }
         .chat-window{
             bottom:0;
 
 
-            margin-left:10px;
+            margin-left:0px;
         }
         .chat-window > div > .panel{
             border-radius: 5px 5px 0 0;
@@ -210,29 +210,29 @@
 <div id="MiseEnRelationPopup" class="popup" >
 
     <div onclick="fermeture();hide(this)" class="close"></div>
-    <div class="col-xs-offset-1 col-xs-7" style="background-color: white;padding: 0;border:20px solid white;display: block; margin-left: 20%; ">
-        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+    <div class="col-xs-offset-1 col-xs-7" style="background-color: #E6E6E6;padding: 0;{# border:20px solid white; #}display: block; margin-left: 20%; ">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; padding-top:5px; margin-right:5px; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
 
-        <div class="row chat-window col-xs-5 col-md-3" id="chat_window_1" style="width:90%;margin-left:10px;background-color: #66afe9">
-            <div style="height: 120px ">
-                <img id="imgSociete" style="margin-top:10px;float:left;margin-left: 20px;height:70px;width:70px;margin:15px 40px;border-radius: 100%" src="{{ asset('image/entreprise.jpg') }}">
-                <label id="lblSociete" style="margin-top:10px;float:left;margin-left: 20px"></label>
+            <div class="row chat-window col-xs-5 col-md-3" id="chat_window_1" style="width:100%;background-color: #2975cb">
+                <div style="height: 80px ">
+                    <img id="imgSociete" style="margin-top:10px;float:left;margin-left: 20px;height:50px;width:50px;margin:15px 5px;border-radius: 100%" src="{{ asset('image/entreprise.jpg') }}">
+                    <label id="lblSociete" style="margin-top:20px;float:left;margin-left: 20px; font-size:17px"></label>
 
-                <img id="imgApp" style="margin-top:10px;float:right;margin-right: 20px;height:70px;width:70px;margin:15px 40px;border-radius: 100%" src="">
-                <label id="lblApp"style="margin-top:10px;float:right;" ></label>
-            </div>
-            <div class="col-xs-12 col-md-12">
+                    <img id="imgApp" style="margin-top:10px;float:right;margin-right: 20px;height:50px;width:50px;margin:15px 5px;border-radius: 100%" src="">
+                    <label id="lblApp"style="margin-top:20px;float:right;font-size:17px" ></label>
+                </div>
+                <div class="col-xs-12 col-md-12">
 
-                <div class="panel panel-default">
+                    <div class="panel panel-default" style="padding-top:10px">
 
                     {% if AllMiseEnRelation is defined %}
                         {% set i=0 %}
                         {% for mise in AllMiseEnRelation %}
                             {% if mise.expediteur.hasrole('ROLE_APPRENANT') %}
 
-                                <div id="Msg{{ i }}" class="row msg_container base_receive" style="margin-right: 1px;margin-left: 50px" name="App{{ mise.expediteur.getId() }}_Mission{{mise.mission.getId()}}">
-                                    <div class="col-md-10 col-xs-10">
-                                        <div class="messages msg_sent" style="background: #F5F6CE";>
+                                <div id="Msg{{ i }}" class="row msg_container base_receive" style="margin-right: 5px;margin-left: 5px" name="App{{ mise.expediteur.getId() }}_Mission{{mise.mission.getId()}}">
+                                    <div class="col-md-11 col-xs-11">
+                                        <div class="messages msg_sent" style="background: #CED8F6";>
 
                                             <p style="width: 70%">{{ mise.getMessage }}</p>
 
@@ -240,16 +240,13 @@
 
                                         </div>
                                     </div>
-                                    <div class="col-md-10 col-xs-10">
-
-                                    </div>
-                                    <div class="col-md-2 col-xs-2 avatar">
+                                    <div class="col-md-1 col-xs-1 avatar">
                                         {% if mise.expediteur.getPhotos %}
-                                            <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="data:image/jpg;base64,{{GetMyPhoto(mise.expediteur.getId())}}">
+                                            <img style="height:50px;width:50px;margin:0 25px;border-radius: 100%" src="data:image/jpg;base64,{{GetMyPhoto(mise.expediteur.getId())}}">
                                         {% elseif mise.expediteur.getCivilite == 'Mme' or mise.expediteur.getCivilite == 'Madame' or mise.expediteur.getCivilite == 'Mademoiselle' %}
-                                            <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/femme.jpg') }}">
+                                            <img style="height:50px;width:50px;margin:0 25px;border-radius: 100%" src="{{ asset('image/femme.jpg') }}">
                                         {% else %}
-                                            <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/homme.jpg') }}">
+                                            <img style="height:50px;width:50px;margin:0 25px;border-radius: 100%" src="{{ asset('image/homme.jpg') }}">
                                         {% endif %}
 
 
@@ -335,16 +332,13 @@
 
                                                 </div>
 
-
                                                 <br/><br/>
 
-
-
-                                                <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 100px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
+                                                <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 5px;background-color:#FFFFFF;width:98%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
                                                 <br/>
                                                 <br/>
 
-                                                <input  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;" type="button" onclick="RetourRDV({{ rdv.id }},'formRetourRDV{{ rdv.id }}')"  style="margin-left: 100px" value="Envoyer">
+                                                <input class="btn btn-primary" style="border: 0;font: 18px Roboto;text-align: left;height: 40px;" type="button" onclick="RetourRDV({{ rdv.id }},'formRetourRDV{{ rdv.id }}')"  style="margin-left: 100px" value="Envoyer">
 
                                             </div>
                                         </form>
@@ -359,15 +353,15 @@
                                         <div id="postulation{{ mise.getId }}" class="row msg_container base_receive" name="App{{ mise.expediteur.getId() }}_Mission{{mise.mission.getId()}}">
                                             <div class="col-xs-12" >
                                                 <input id="texthidden{{mise.getId()}}" type="hidden" name="_texthidden" >
-                                                <textarea  style="margin-top: -10px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
+                                                <textarea  style="margin-top: -10px;background-color:#FFFFFF;;width:100%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
                                                 <br/><br/>
                                             </div>
 
 
 
-                                            <input   onclick="document.getElementById('texthidden{{mise.getId()}}').value='decliner';"   style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"   type="submit"  value="Décliner">
+                                            <input class="btn btn-danger" onclick="document.getElementById('texthidden{{mise.getId()}}').value='decliner';"   style="border: 0;font: 18px Roboto;text-align: left;height: 40px;"   type="submit"  value="Décliner">
 
-                                            <input  onclick="document.getElementById('texthidden{{mise.getId()}}').value='postuler';"   style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;"  class="blue" type="submit" style="margin-left: 270px"  value="Postuler">
+                                            <input class="btn btn-success" onclick="document.getElementById('texthidden{{mise.getId()}}').value='postuler';"   style="border: 0;font: 18px Roboto;text-align: left;height: 40px;"  class="blue" type="submit" style="margin-left: 270px"  value="Postuler">
                                         </div>
                                     {% endif %}
                                     </form>
@@ -384,14 +378,13 @@
 
 
 
-                                <div id="Msg{{ i }}" class="row msg_container base_sent"  style="margin-right: 50px;margin-left: -45px"  name="App{{ mise.destinataire.getId() }}_Mission{{mise.mission.getId()}}">
-                                    <div class="col-md-2 col-xs-2 avatar">
-                                        <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/Entreprise.jpg') }}">
-
+                                <div id="Msg{{ i }}" class="row msg_container base_sent"  style="margin-right: 5px;margin-left:5px; text-align:center;"  name="App{{ mise.destinataire.getId() }}_Mission{{mise.mission.getId()}}">
+                                    <div class="col-md-1 col-xs-2 avatar">
+                                        <img style="height:50px;width:50px;border-radius: 100%" src="{{ asset('image/Entreprise.jpg') }}">
                                     </div>
-                                    <div class="col-md-10 col-xs-10">
-                                        <div class="messages msg_receive" style="background: #CEECF5;">
-                                            <p style="width: 70%;margin-left: 30%">{{ mise.getMessage }}
+                                    <div class="col-md-11 col-xs-11" style="text-align:center">
+                                        <div class="messages msg_receive" style="background: #D8D8D8; text-align:center">
+                                            <p style="width: 70%;margin-left: 30%;text-align:center">{{ mise.getMessage }}
                                                 {#or mise.getAction=='Reporter le RDV' #}
                                                 {% if mise.getAction=='Propose rdv' %}
                                                     <br/>
@@ -420,32 +413,22 @@
                                     <form id="formRetourRDV{{ rdv.id }}"    method="post">
                                             <div  id="DivConfirmationRDV{{ rdv.id }}">
 
-
-
-
                                                 {% if "now"|date('YmdHi')  > rdv.getDate1|date('YmdHi') %}
                                                     <label>Saisissez le compte rendu du rendez-vous</label>
                                                     <select id="Action_rdv{{ rdv.id }}" style="display: none;" title="Actions" >
-
                                                         <option value="Compte rendu">Compte rendu</option>
-
-
                                                     </select>
                                                 {% else %}
                                                     <label>Action :</label>
                                                     <select id="Action_rdv{{ rdv.id }}" onchange="EnableControle(this.selectedIndex,{{ rdv.id }});" title="Actions" >
-
                                                         <option value="Retour RDV">--?--</option>
                                                         <option value="Reporter">Reporter RDV</option>
                                                         <option value="Annuler">Annuler RDV</option>
-
                                                     </select>
                                                     <div id="dates_rdv{{ rdv.id }}" >
 
-
                                                         {% if rdv.date1 %}
                                                             <label  > Rendez-vous fixé pour le {{ rdv.getDate1|date('d-m-Y à H:i') }}
-
                                                             </label>
                                                         {% endif %}
                                                         {#<br/>
@@ -472,28 +455,22 @@
                                                 <br/>
                                                 <br/>
 
-
                                                 <div id="Reporter_rdv{{ rdv.id }}" style="display:none;">
-
                                                     <button type="button" onclick="AddDateTimeDivPro(this,{{ rdv.id }})">+</button>
                                                     <div class="col-xs-4 col-xs-offset-4">
                                                         <label class="col-xs-1">Le </label><input title="Date du rendez-vous" name="dateRDV[]" type="text" class="col-xs-4" required>
                                                         <label class="col-xs-1"> à </label><input title="Heure du rendez-vous" name="timeRDV[]{{ rdv.id }}" class="col-xs-4" type="text" required>
                                                         <button type="button" class="col-xs-offset-1 col-xs-1" onclick="if(this.parentElement.parentElement.children.length > 2){this.parentNode.parentNode.removeChild(this.parentNode);}">-</button>
                                                     </div>
-
                                                 </div>
-
 
                                                 <br/><br/>
 
-
-
-                                                <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 100px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
+                                                <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 0px;background-color:#FFFFFF;;width:100%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
                                                 <br/>
                                                 <br/>
 
-                                                <input  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;" type="button" onclick="RetourRDV({{ rdv.id }},'formRetourRDV{{ rdv.id }}')"  style="margin-left: 100px" value="Envoyer">
+                                                <input class="btn btn-primary" style="border: 0;font: 18px Roboto;text-align: left;height: 40px;" type="button" onclick="RetourRDV({{ rdv.id }},'formRetourRDV{{ rdv.id }}')"  style="margin-left: 100px" value="Envoyer">
 
                                             </div>
                                     </form>
@@ -507,18 +484,22 @@
                                             {% if not rdv.getStatut or  (rdv.getStatut=='-1' and mise.getAction=='Reporter le RDV')  %}
                                                 <form id="formconfirmationRDV"    method="post">
                                                     <div  id="DivConfirmationRDV{{ rdv.id }}">
-
-                                                        <label>Action :</label>
-                                                        <select id="Action_rdv{{ rdv.id }}" onchange="EnableControle(this.selectedIndex,{{ rdv.id }});" title="Actions" >
-                                                            <option value="Accepter">Accepter RDV</option>
-                                                            <option value="Reporter">Reporter RDV</option>
-                                                            <option value="Annuler">Annuler RDV</option>
-                                                        </select>
-                                                        <br/>
-                                                        <br/>
-
+                                                        <div class="col-xs-6 col-xs-offset-4">
+                                                            <div class="col-xs-2" style="padding-top:8px"> 
+                                                                <label>Action :</label>
+                                                            </div>
+                                                            <div class="col-xs-4">
+                                                                <select class="form-control" id="Action_rdv{{ rdv.id }}" onchange="EnableControle(this.selectedIndex,{{ rdv.id }});" title="Actions" >
+                                                                <option value="Accepter">Accepter RDV</option>
+                                                                <option value="Reporter">Reporter RDV</option>
+                                                                <option value="Annuler">Annuler RDV</option>
+                                                                </select>
+                                                                <br/>
+                                                            </div>
+                                                        </div>
+                                                    
                                                         <div id="dates_rdv{{ rdv.id }}" >
-
+                                                            <div class="col-xs-4 col-xs-offset-4"> 
 
                                                             {% if rdv.date1 %}
                                                                 <label  > {{ rdv.getDate1|date('d-m-Y à H:i') }}
@@ -544,10 +525,11 @@
                                                                     {% endif %}
                                                                 </label>
                                                             {% endif %}
+                                                            <br/>
 
-                                                            <br/>
-                                                            <br/>
+                                                            </div>
                                                         </div>
+
                                                         <div id="Reporter_rdv{{ rdv.id }}" style="display:none;">
 
                                                             <button type="button" onclick="AddDateTimeDivPro(this,{{ rdv.id }})">+</button>
@@ -559,46 +541,29 @@
 
                                                         </div>
 
-
                                                         <br/><br/>
 
-
-
-                                                        <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 100px;background-color:#F5F6CE;;width:80%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
+                                                        <textarea id="Message_rdv{{ rdv.id }}" style="margin-left: 0px;background-color:#FFFFFF;;width:100%;height: 100px;resize: none;" class="input" name="_Message" placeholder="Saisissez votre message ici" required ></textarea>
                                                         <br/>
                                                         <br/>
 
-                                                        <input  style="border: 0;font: 18px Roboto;text-align: left;background-color:white ;height: 40px;" type="button" onclick="EnvoyerRDV({{ rdv.id }},'formconfirmationRDV')"  style="margin-left: 100px" value="Envoyer">
-
+                                                        <input class="btn btn-primary" style="border: 0;font: 18px Roboto;text-align: left;height: 40px;" type="button" onclick="EnvoyerRDV({{ rdv.id }},'formconfirmationRDV')"  style="margin-left: 100px" value="Envoyer">
                                                     </div>
                                                 </form>
                                             {% endif %}
-
-
-
-
-
                                         {% endif %}
                                     {% endif %}
                                 </div>
                             {% endif %}
-
                             {% set i = i + 1 %}
                         {% endfor %}
                     {% endif %}
-
                 </div>
             </div>
         </div>
-
-
-
     </div>
-
-
-
-
 </div>
+
 <div style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;height: 100%;padding-bottom: 40px;overflow: hidden;">
     <div class="col-xs-10 col-xs-offset-1" style="margin-top: 10px;">
         {# <select class="input col-xs-2" title="messages" style="height:40px;">
@@ -616,7 +581,6 @@
     <div id="ListeMissionPropose"  class="col-xs-10 col-xs-offset-1">
         {% if MiseEnRelation is defined %}
             {% for mise in MiseEnRelation %}
-
                 <div id="{{ mise.id }}" class="Liste" style="border: 1px solid #ddd;margin: 0;height:100px;width: 100%;" >
                     {# <div name="Recherche" style="display: none;">{{ rdv.destinataire.nom }},{{ rdv.destinataire.prenom }},{{ rdv.destinataire.email }},{{ rdv.tuteur.nom }},{{ rdv.tuteur.prenom }},{{ rdv.tuteur.email }},{% if rdv.mission %}{{ rdv.mission.intitule }},{{ rdv.mission.codemission }},{{ rdv.mission.descriptif }},{{ rdv.mission.domaine }},{% if rdv.mission.etablissement %}{{ rdv.mission.etablissement.siret }},{{ rdv.mission.etablissement.adresse }},{{ rdv.mission.etablissement.secteur }},{{ rdv.mission.etablissement.tier.raisonsoc }}{% endif %}{% endif %}</div>#}
 
@@ -638,7 +602,7 @@
                     <div id="date{{ mise.id }}" class="col-xs-2" style="width:20%;-webkit-flex-wrap: wrap;flex-wrap: wrap;display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;;display:flex;height: 100px;text-align: left; ">
 
                         <label style="font:18px Roboto;margin: auto;" > {{ mise.mission.intitule }}<br/></label><br/>
-                        <img  style="height:30px;width:30px;float:right;margin: auto;"
+                        <img  style="height:30px;width:30px;float:right;margin: auto;cursor:pointer"
 
 
 
@@ -661,18 +625,18 @@
 
                     <div class="col-xs-2" style="width:20%;">
                         <div style="border: 15px solid transparent">
-                            <img style="height:70px;width:70px;float:left;" onclick="Afficher({{ mise.mission.getId }});show('MissionPopup');" src="{{ asset('image/loupe.jpg') }}">
+                            <img style="height:70px;width:70px;float:left;cursor:pointer" onclick="Afficher({{ mise.mission.getId }});show('MissionPopup');" src="{{ asset('image/loupe.jpg') }}">
 
                             {% if mise.destinataire.getPhotos %}
 
-                                <img style="height:70px;width:70px;float:left;border-radius: 100%" onclick="AfficherChat('{{ mise.destinataire.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc|replace({"'": "\\'"}) }}<br/>{{ mise.mission.intitule|replace({"'": "\\'"}) }}','{{ mise.destinataire.getNom|replace({"'": "\\'"}) }}<br/>{{ mise.destinataire.getPrenom|replace({"'": "\\'"}) }}','data:image/jpg;base64,{{ mise.destinataire.getPhotos }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
+                                <img style="height:70px;width:70px;float:left;border-radius: 100%;cursor:pointer" onclick="AfficherChat('{{ mise.destinataire.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc|replace({"'": "\\'"}) }}<br/>{{ mise.mission.intitule|replace({"'": "\\'"}) }}','{{ mise.destinataire.getNom|replace({"'": "\\'"}) }}<br/>{{ mise.destinataire.getPrenom|replace({"'": "\\'"}) }}','data:image/jpg;base64,{{ mise.destinataire.getPhotos }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
                             {% elseif mise.destinataire.getCivilite == 'Mme' or mise.destinataire.getCivilite == 'Madame' or mise.destinataire.getCivilite == 'Mademoiselle' %}
 
 
-                                <img style="height:70px;width:70px;float:left;border-radius: 100%" onclick="AfficherChat('{{ mise.destinataire.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc|replace({"'": "\\'"}) }}<br/>{{ mise.mission.intitule|replace({"'": "\\'"}) }}','{{ mise.destinataire.getNom|replace({"'": "\\'"}) }}<br/>{{ mise.destinataire.getPrenom|replace({"'": "\\'"}) }}','{{ asset('image/femme.jpg') }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
+                                <img style="height:70px;width:70px;float:left;border-radius: 100%;cursor:pointer" onclick="AfficherChat('{{ mise.destinataire.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc|replace({"'": "\\'"}) }}<br/>{{ mise.mission.intitule|replace({"'": "\\'"}) }}','{{ mise.destinataire.getNom|replace({"'": "\\'"}) }}<br/>{{ mise.destinataire.getPrenom|replace({"'": "\\'"}) }}','{{ asset('image/femme.jpg') }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
                             {% else %}
 
-                                <img style="height:70px;width:70px;float:left;border-radius: 100%" onclick="AfficherChat('{{ mise.destinataire.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc|replace({"'": "\\'"}) }}<br/>{{ mise.mission.intitule|replace({"'": "\\'"}) }}','{{ mise.destinataire.getNom|replace({"'": "\\'"}) }}<br/>{{ mise.destinataire.getPrenom|replace({"'": "\\'"}) }}','{{ asset('image/homme.jpg') }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
+                                <img style="height:70px;width:70px;float:left;border-radius: 100%;cursor:pointer" onclick="AfficherChat('{{ mise.destinataire.getId()}}','{{ mise.mission.getId() }}','{{ mise.mission.getEtablissement.getTier.getRaisonsoc|replace({"'": "\\'"}) }}<br/>{{ mise.mission.intitule|replace({"'": "\\'"}) }}','{{ mise.destinataire.getNom|replace({"'": "\\'"}) }}<br/>{{ mise.destinataire.getPrenom|replace({"'": "\\'"}) }}','{{ asset('image/homme.jpg') }}');show('MiseEnRelationPopup');" src="{{ asset('image/MiseEnRelation.png') }}">
                             {% endif %}
 
                             {% if   GetStatut(mise.destinataire) =='0'  or ( GetStatut(mise.destinataire)=='2' and "now"|date('YmdHi')  > GetDateTimeRDV(mise.destinataire,mise.mission)|date('YmdHi')) %}
@@ -681,18 +645,13 @@
 
                         </div>
                     </div>
-
-
-
-
                 </div>
-
             {% endfor %}
         {% endif %}
     </div>
 
-    <div id="MissionPopup" class="popup" >
 
+    <div id="MissionPopup" class="popup" >
         <div onclick="fermeture();hide(this)" class="close"></div>
         <div class="col-xs-offset-1 col-xs-7" style="background-color: white;padding: 0;border:20px solid white;display: block; margin-left: 20%; ">
             <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
@@ -703,10 +662,7 @@
 
 
             <div class="divMissionPopup" id="Div_{{MyMission.mission.getId}}" style="padding: 0;display:none">
-
-
                 <div class="row" style="margin: 0;">
-
                     <img class="col-xs-1" src="data:image/jpg;base64,{{ MyMission.mission.getEtablissement.getTier.getLogo }}" style="height: 60px;width: 60px;border: 5px solid transparent;">
                     <div class="col-xs-4">
                         <div class="col-xs-12" style="height: 35px;text-align: left; ">
@@ -717,32 +673,20 @@
                             {{MyMission.mission.getEtablissement.getAdresse }}, {{ MyMission.mission.getEtablissement.getCodePostal }} {{ MyMission.mission.getEtablissement.getVille }}
                         </div>
                     </div>
-
-
-
                 </div>
-
-
-
 
                 <div class="row" style="margin: 0;">
-
                     <button id="ButtonInfoMission" style="width: 100%;" class="col-xs-6 onglet slide"  type="button" data-show="info_mission{{ i }}"> FICHE MISSION</button>
-
-                    <div id="baronglet" class="col-xs-6" style="height: 5px;background-color: #257ef0; z-index: 60;width: 100%;"></div>
-
+                    <div id="baronglet" class="col-xs-6" style="height: 5px;background-color: #257ef0; z-index: 60;width: 100%;">    
+                    </div>
                 </div>
-
-
 
                 <div id="info_mission{{ i }}" style="border-top: 1px solid #B0B0B0;background-color:  rgb(238, 241, 246);margin: 0;overflow-y: auto;">
                     <form id="formMission" action="{{ path('missionModif') }}" onsubmit="ShowWaiter();" method="post" enctype="multipart/form-data">
                         <input type="hidden" value="{{ MyMission.mission.getId }}" id="id" name="_ID">
                         <div class="col-xs-9" style="width:65%;background: rgb(238, 241, 246); height: 100%;">
-
                             <div class="col-xs-12" style="margin-bottom: 50px">
                                 <div class="list-group affichage">
-
                                     <label class="list-group-item mission" >LA MISSION : <br/>
                                         <textarea id="Descriptif" name="_Descriptif" maxlength="255"  style="height:60px;color:black; font-weight: lighter" readonly >{{MyMission.mission.getDescriptif}}</textarea>
                                     </label>
@@ -777,16 +721,15 @@
                                                 {% endif %}
                                             </div>
                                         {% endfor %}
-
                                     </label>
 
                                     <label class="list-group-item mission" >Commentaire :<br/>
                                         <textarea style="color:black;height: 100px; font-weight: lighter" id="Commentaire" name="_Commentaire"  maxlength="255" readonly >{{MyMission.mission.getCommentaire}}</textarea>
                                     </label>
-
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-xs-3"
                              style="height: 100%;width: 35%">
                             <div class="list-group"
@@ -839,31 +782,16 @@
                                 {% elseif app.user.etablissement and MyMission.mission.tier == app.user.etablissement.tier and is_granted('ROLE_RECRUTEUR') %}
                                     {% set modif = true %}
                                 {% endif %}
-
-
                             </div>
-
                         </div>
                     </form>
-
-
                 </div>
-
-
-
-
-
-
-
-
-
-
             </div>
-                {% set i=i+1 %}
+            {% set i=i+1 %}
             {% endfor %}
-
         </div>
     </div>
+
     <div id="FicheMission" class="popup">
         <div onclick="hide(this)" class="close"></div>
         <div class="col-xs-offset-1 col-xs-7" style="background-color: white;padding: 0;border:20px solid white;display: block; margin-left: 20%; ">

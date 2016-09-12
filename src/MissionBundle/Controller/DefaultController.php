@@ -439,26 +439,28 @@ class DefaultController extends Controller
 
 
             if ($contact->getUser() ){
+           // var_dump($contact->getUser()->getId(),$mission->getTuteur()->getId());die;
+
+                if ($contact->getUser()->getId()!=$mission->getTuteur()->getId()){
+
+
+
+                    $MessageTexte='Vous avez été désigné contact de référence pour la mission '.$mission->getIntitule().', vous pouvez vous connecter à la plateforme à l\'adresse hub3e.atpmg.com ';
+
+
+                    $modele = 'GenericBundle:Mail:EmailStandard.html.twig';
+                    $message = \Swift_Message::newInstance()
+                        ->setSubject('Email')
+                        ->setFrom(array('ne-pas-repondre-svp@atpmg.com'=>"HUB3E"))
+                        ->setTo($contact->getMail())
+                        ->setBody($this->renderView($modele,array('Message'=>$MessageTexte))
+                            ,'text/html'
+                        );
+                    $this->get('mailer')->send($message);
+                }
+
                 $mission->setTuteur($contact->getUser());
                 $em->flush();
-
-
-
-                $MessageTexte='Vous avez été désigné contact de référence pour la mission '.$mission->getIntitule().', vous pouvez vous connecter à la plateforme à l\'adresse hub3e.atpmg.com ';
-
-
-                $modele = 'GenericBundle:Mail:EmailStandard.html.twig';
-                $message = \Swift_Message::newInstance()
-                    ->setSubject('Email')
-                    ->setFrom(array('ne-pas-repondre-svp@atpmg.com'=>"HUB3E"))
-                    ->setTo($contact->getMail())
-                    ->setBody($this->renderView($modele,array('Message'=>$MessageTexte))
-                        ,'text/html'
-                    );
-                $this->get('mailer')->send($message);
-
-
-
 
 
             }else{

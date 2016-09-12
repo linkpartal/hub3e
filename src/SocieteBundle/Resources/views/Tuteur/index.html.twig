@@ -14,7 +14,7 @@
     <title>HUB3E - {% block title %}Ecole{% endblock %}</title>
 
 </head>
-<body onload="loading();putbadged()">
+<body onload="loading();putbadged();postiframeUser('{{ path('afficher_ApprenantPropose') }}')">
 
 <div class="container">
     {% block TopBar %}
