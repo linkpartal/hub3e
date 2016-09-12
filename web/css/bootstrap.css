@@ -1770,6 +1770,7 @@ pre code {
   margin-left: 16.66666667%;
 }
 .col-xs-offset-1 {
+  background:rgba(0,0,0,0.5);
   margin-left: 8.33333333%;
 }
 .col-xs-offset-0 {

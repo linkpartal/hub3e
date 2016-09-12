@@ -754,7 +754,7 @@
                     {% if modif %}
                         {% if mission.tier %}
                             {% if mission.tier.ecole %}
-                                {#
+
                             <div class="rightMenu" style="padding: 8px !important;">
                             <select  title=""   name="_Statut" onchange="modifierStatutMission(this.value,'{{ mission.id }}')"   >
                                 <option  value="1" {% if mission.statut == 1 %} selected {% endif %} >Prive</option>
@@ -762,7 +762,7 @@
                                 <option   value="3"  {% if mission.statut == 3 %} selected  {% endif %} >Public</option>
                             </select>
                         </div>
-                            #}
+
 
 
                                 {% endif %}
@@ -1798,13 +1798,13 @@
                 //alert(data);
                 if(data['status']===1)
                 {
-                    alert('action correctement executer');
+                    alert('action correctement executée');
 
                     document.location.href=data['redirect'];
                 }
                 else
                 {
-                    alert('Une erreur s\'est produit sur le serveur!');
+                    alert('Une erreur s\'est produite sur le serveur!');
                 }
                 DeleteWaiter();
             }
@@ -1846,7 +1846,7 @@
                         }
                         else
                         {
-                            alert('Une erreur s\'est produit sur le serveur!');
+                            alert('Une erreur s\'est produite sur le serveur!');
                         }
 
                     }

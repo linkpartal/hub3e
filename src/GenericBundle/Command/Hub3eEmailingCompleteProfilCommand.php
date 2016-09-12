@@ -88,7 +88,7 @@ class Hub3eEmailingCompleteProfilCommand extends ContainerAwareCommand
             // ...
         }
 
-        $output->writeln('Commande executer correctement.');
+        $output->writeln('Commande executée correctement.');
     }
 
 }

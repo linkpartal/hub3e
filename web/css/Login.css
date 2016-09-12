@@ -18,18 +18,20 @@ body {
 
 .Titre{
     text-align: center;
-    color: white;
+    color: #fefffd;
     font: 20px Roboto;
     margin: 20px 0;
 }
 
+/*Couleur fond accueil login*/
 .login {
     overflow: hidden;
-    background: #3d8dde;
-    border-radius: 6px;
+    background-color: rgba(86, 103, 120, 0.45);
+    /*background: #566778;
+    */border-radius: 6px;
     margin: 10%;
-    opacity: 0.95;
-    box-shadow: 0 0 50px rgba(0,0,0,.5);
+    /*opacity: 0.55;
+    */box-shadow: 0 0 50px rgba(0,0,0,.5);
 }
 
 .Changelogin {
