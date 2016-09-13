@@ -3,48 +3,58 @@
 {% trans_default_domain 'FOSUserBundle' %}
 {% block title %}Login{% endblock %}
 {% block fos_user_content %}
-    <section class="login col-xs-offset-1 col-xs-3" >
-        <div class="row">
-            <label class="Titre col-lg-12">Connectez vous</label>
-        </div>
-        <div class="row">
-            <div class="col-lg-10 col-lg-offset-1">
-                {% if error is defined %}
-                    <div style="color: red;">{{ error }}</div>
-                {% endif %}
 
-                <form action="{{ path("metier_user_check") }}" method="POST">
-                    <div class="row">
-                        {% if csrf_token is defined %}
-                            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+    {#Box de Login#}
+    <div class="container">
+            <div class="row">
+
+                <section class="login col-sm-4 col-ms-6" >
+                    <label class="Titre col-lg-12">Connectez vous</label>
+                    <div class="col-lg-10">
+                        {% if error is defined %}
+                            <div style="color: red;">{{ error }}</div>
                         {% endif %}
-                        <input class="champ col-xs-12" type="text" id="username" name="_username" required title="Username required" placeholder="{{ 'security.login.username'|trans }}" data-icon="U"/>
+                        <form action="{{ path("metier_user_check") }}" method="POST">
+                                            <div class="row">
+                                                {% if csrf_token is defined %}
+                                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                                                {% endif %}
+                                                <input class="champ col-xs-12" type="text" id="username" name="_username" required title="Username required" placeholder="{{ 'security.login.username'|trans }}" data-icon="U"/>
 
-                        <input class="champ col-xs-12" id="password" name="_password" type="password" required title="Password required"
-                               placeholder="{{ 'security.login.password'|trans }}" data-icon="x"/>
+                                                <input class="champ col-xs-12" id="password" name="_password" type="password" required title="Password required"
+                                                       placeholder="{{ 'security.login.password'|trans }}" data-icon="x"/>
 
-                        <input class="button col-xs-12" type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
+                                                <input class="button col-xs-12" type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
+                                            </div>
+                                            <div class="row olvido">
+                                                <div class="col-lg-6" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+                                                    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                                                    <label for="remember_me"><mark></mark> {{ 'security.login.remember_me'|trans }}</label>
+                                                </div>
+                                                <div class="col-lg-6" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+                                                    <a href="{{ path('fos_user_resetting_request') }}" title="Récupérer mon mot de passe" style="color: white;">Mot de passe oublié?</a>
+                                                </div>
+                                            </div>
+
+                                        </form>
                     </div>
-                    <div class="row olvido">
-                        <div class="col-lg-6" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
-                            <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-                            <label for="remember_me"><mark></mark> {{ 'security.login.remember_me'|trans }}</label>
-                        </div>
-                        <div class="col-lg-6" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
-                            <a href="{{ path('fos_user_resetting_request') }}" title="Récupérer mon mot de passe" style="color: white;">Mot de passe oublié?</a>
-                        </div>
-                    </div>
+                </section>
 
-                </form>
             </div>
         </div>
-    </section>
-    <footer style="position: static; clear: both">
-        <a style="color: white; text-decoration: none; font: 12px Arial; font-size: 16px; font-weight: bold;"
-           class="col-lg-offset-1 col-lg-1">contactez-nous</a>
-        <a style="color: white; text-decoration: none; font: 12px Arial; font-size: 16px; font-weight: bold;"
-           class="col-lg-1">| </a>
-        <a style="color: white; text-decoration: none; font: 12px Arial; font-size: 16px; font-weight: bold;text-align: left"
-           class="col-lg-2" >mentions Légales</a>
-    </footer>
+
+    {#Contactez nous mentions legale login menu + css#}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4 col-ms-6">
+
+             <footer style="position: static; clear: both">
+                     <a style="color: white; text-decoration: none; font: 20% Arial; font-size: 1em; font-weight: bold;"
+                     class="col-sm-11">Contactez-nous</a>
+                <a style="color: white; text-decoration: none; font: 12px Arial; font-size: 1em; font-weight: bold;"
+                        class="col-sm-6" >Mentions légales</a>
+            </footer>
+            </div>
+        </div>
+    </div>
 {% endblock fos_user_content %}
