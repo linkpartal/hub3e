@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="web/css/Dashboard.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/mission.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/ajout.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}" />
+
+    <link rel="stylesheet" href="{{ asset('css/Form.css') }}" />
+
+
+    <title>Tableau de Bord</title>
+</head>
+<body>
+
+<br>
+
+{#BLOC mission#}
+<div class="row">
+<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6" style="margin-top: 2%; margin-bottom: 2%;">
+<div  style="text-align:left;margin-left:5px; width:95%; height: 400px;align-items:center; background-color:#d2d2d2" id="Mission" class="SASPaginate" >
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div style="text-align:center;margin-left: 10px;">
+                    <label style="font-size: 20px;font-weight: bold ;font:x-large Roboto;">
+                        {%  if CountLesMissions is defined %} MES MISSIONS({{ CountLesMissions }})
+                            {% elseif CountLesMissions == null %} MISSIONS(0)
+                        {% endif %}
+                    </label>
+                </div>
+            </div>
+            <div class="col-lg-12 col-xs-12">
+                {#1#}      <div  style="text-align:left; width: 95%; height: 60px;align-items: center" id="Mission1" class="SASPaginate">
+
+                            <div class="col-lg-12 col-xs-12" style="text-align: left;margin-left: 10px; width: 50%" onclick="showDiv('MissionAPourvoir')">
+                                <label style="font:large Roboto;cursor:pointer; .hd;">Missions à pourvoir</label><br>
+                                <div class="hidden-xs hidden-sm">
+                                <label style="font:12px Roboto;cursor:pointer"><i>Cliquez pour découvrir les missions disponibles</i></label>
+                                </div>
+                            </div>
+
+
+                    <div id="Nom96" title="" class="col-lg-6 col-xs-12" style="margin-right: 5px; overflow: hidden; width: 50%">
+                        <div onclick="showDiv('MissionAPourvoir')" style="border: 1px solid #66b3f4;" class="graphe">
+                            {# <strong class="barre" style="background: #66b3f4;width: 36%;">36%</strong> #}
+                            {%  if MissionsAPourvoir is defined %} <strong class="barre"  style="background: #66b3f4;width: {{ MissionsAPourvoir }}%;">{{ MissionsAPourvoir }}%</strong>
+                            {% elseif MissionsAPourvoir == null %}
+                                <strong class="barre"  style="background: #66b3f4; width:0%"> 0% </strong>
+                            {% endif %}
+                        </div>
+                    </div>
+                        </div>
+                        </div>
+            {#2#}   <div class="col-lg-12 col-xs-12">
+                            <div  style="text-align:left; width: 95%; height: 60px;align-items: center" id="Mission2" class="SASPaginate" >
+
+                                <div class="" style="text-align: left;margin-left: 10px;; width: 50%" onclick="showDiv('MissionPourvues')">
+                                    <a href="#"><label style="font:large Roboto; .hd; cursor:pointer">Missions pourvues</label></a>
+                                    <div class="hidden-xs hidden-sm">
+                                        <label style="font:12px Roboto;cursor:pointer"><i>Cliquez pour découvrir la liste des missions pourvues</i></label>
+
+                                    </div>
+                                </div>
+
+                                <div id="Nomapprenanat12" title="" class="col-lg-6 col-xs-12" style="margin-right: 5px; overflow: hidden; width: 50%">
+                                    <div onclick="showDiv('MissionPourvues')" style="border: 1px solid #81c785;" class="graphe">
+                                        {%  if MissionsPourvues is defined %} <strong class="barre"  style="background: #81c785;width: {{ MissionsPourvues }}%;">{{ MissionsPourvues }}%</strong>
+                                        {% elseif MissionsPourvues == null %}
+                                            <strong class="barre"  style="background: #81c785; width:0%" >0% </strong>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </div>
+                      </div>
+            {#3#}   <div class="col-lg-12 col-xs-12">
+                            <div  style="text-align:left; width: 95%; height: 60px;align-items: center" id="Mission3" class="SASPaginate" >
+
+                                <div class="col-lg-12 col-xs-12" style="text-align: left;margin-left: 10px; width: 50%" onclick="showDiv('MissionSansFormations')">
+                                    <a href="#"><label style="font:large Roboto; .hd;cursor:pointer">Missions sans formations</label></a>
+                                    <div class="hidden-xs hidden-sm">
+                                        <label style="font:11px Roboto;cursor:pointer"><i>Cliquez pour découvrir les missions sur lesquelles aucunes formations n'a été sélectionnée</i></label>
+                                    </div>
+                                </div>
+
+                                <div id="Nomapprenanat4" title="" class="col-lg-6 col-xs-12" style="margin-right: 5px; overflow: hidden; width: 50%">
+                                   <div onclick="showDiv('MissionSansFormations')" style="border: 1px solid #feb450;" class="graphe">
+                                <strong class="barre"  style="background: #feb450;width: {{ MissionsSansFormations }}%;">{{ MissionsSansFormations }}%</strong></div>
+
+                                        {%  if MissionsSansFormations is defined %}      {% elseif MissionsSansFormations == null %}
+                                            <strong class="barre"  style="background: #feb450; width:0%" >0% </strong>
+                                        {% endif %}
+                                    </div>
+
+                            </div>
+                        </div>
+            {#4#}   <div class="col-lg-12 col-xs-12">
+                <div  style="text-align:left; width: 95%; height: 60px;align-items: center" id="Mission4" class="SASPaginate" >
+
+                    <div class="col-lg-12 col-xs-12" style="text-align: left;margin-left: 10px; width: 50%" onclick="showDiv('MissionSansTuteur')">
+
+                        <a href="#"><label style="font:large Roboto;cursor:pointer">Missions sans tuteur</label></a>
+                        <div class="hidden-xs hidden-sm">
+                        <label style="font:12px Roboto;.hd; cursor:pointer"><i>Cliquez pour associer un tuteur à ces missions</i></label>
+                         </div>
+                    </div>
+
+                    <div id="Nomapprenanat6" title="" class="col-lg-6 col-xs-12" style="margin-right: 5px; overflow: hidden; width: 50%">
+                        <div onclick="showDiv('MissionSansTuteur')" style="border: 1px solid #e77379;" class="graphe">
+                            <strong class="barre"  style="background: #e77379;width: {{ MissionsSansTuteur }}%;">{{ MissionsSansTuteur }}%</strong>
+                            {%  if MissionsSansTuteur is defined %}   {% elseif MissionsSansTuteur == null %}
+                                <strong class="barre"  style="background: #e77379; width:0%" >0% </strong>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div></div>
+            {#5#}   <div class="col-lg-12 col-xs-12">
+                <div  style="text-align:left; width: 95%; height: 60px;align-items: center" id="Mission5" class="SASPaginate" >
+
+                <div class="col-lg-12 col-xs-12" style="text-align: left;margin-left: 10px; width: 50%" onclick="showDiv('MissionSansQCM')">
+
+                        <a href="#"><label style="font:large Roboto; .hd;cursor:pointer">Missions sans QCM affinité</label></a>
+                        <div class="hidden-xs hidden-sm">
+                        <label style="font:12px Roboto; .hd; cursor:pointer"><i>Cliquez pour remplir le QCM lié à cette mission</i></label>
+                        </div>
+                    </div>
+
+
+                    <div id="Nom" title="" class="col-lg-6 col-xs-12" style="margin-right: 5px; overflow: hidden; width: 50%;">
+                        <div onclick="showDiv('MissionSansQCM')" style="border: 1px solid #ef6192;" class="graphe">
+                            <strong class="barre"  style="background: #ef6192;width: {{ MissionsSansQcm }}%;">{{ MissionsSansQcm }}%</strong>
+
+                            {%  if MissionsSansQcm is defined %}{% elseif MissionsSansQcm == null %}
+                                <strong class="barre"  style="background: #ef6192; width:0%" >0% </strong>
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+       <div class="col-lg-12 col-xs-12">
+            <div  style="text-align:left;width: 95%;align-items: center" id="MissionBtn" class="SASPaginate" >
+
+                <div class="col-xs-12" style="text-align: center; width: 100%">
+                    {# Button disabled pour le moment #}
+                    <button onclick="showDiv('addmission')"  class="btn btn-primary" type="button" disabled="disabled">
+                        CRÉER UNE MISSION
+                    </button>
+                </div>
+            </div></div>
+    {# <div id="Nom" title="" class="" style="text-align: center;margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"> #}
+
+    </div>
+    </div>
+</div>
+{#BLOC APPRENANT#}
+<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6" style="margin-top: 2%; margin-bottom: 2%;">
+<div  style="text-align:left;margin-left:5px; width:95%; height: 400px;align-items:center; background-color:#d2d2d2" id="Apprenant" class="SASPaginate" >
+    <div class="panel panel-default">
+        <div class="panel-body">
+                        <div style="text-align:center;margin-left: 10px;">
+                             <label style="font-size: 20px;font-weight: bold ;font:x-large Roboto;">
+                                    {%  if CountLesApprenants is defined %} MES APPRENANTS({{ CountLesApprenants }})
+                                        {% elseif CountLesApprenants == null %} APPRENANTS(0)
+                                    {% endif %}
+                              </label>
+                        </div>
+
+</div>
+        {#1#}    <div  style="text-align:left; width: 95%; height: 60px;align-items: center" id="apprenanat1" class="col-lg-12 col-xs-12 SASPaginate" >
+
+                        <div class="col-lg-12 col-xs-12" style="text-align: left;margin-left: 10px; width: 50%" onclick="showDiv('PostulationEnCours')">
+                            <label style="font:large Roboto; .hd; cursor:pointer">Postulation en cours </label>
+                            <div class="hidden-xs hidden-sm">
+                            <label style="font:10px Roboto; .hd; cursor:pointer"><i>Cliquez pour découvrir la liste des apprenants qui doivent remplir leur dossier de candidature</i></label>
+                            </div>
+                        </div>
+
+
+                      <div id="Nomapprenanat1" title="" class="col-lg-6 col-xs-12" style="margin-right: 5px; overflow: hidden; width: 50%;">
+                       <div onclick="showDiv('PostulationEnCours')" style="border: 1px solid #fcb552;" class="graphe">
+                            <strong class="barre"  style="background: #fcb552;width: {{ PostulationEnCours }}%;">{{ PostulationEnCours }}%</strong> </div>
+                            {%  if PostulationEnCours is defined %}    {% elseif PostulationEnCours == null %}
+                                <strong class="barre"  style="background: #fcb552; width:56%" >0% </strong>
+                            {% endif %}
+
+                        </div>
+                      </div>
+                 <div  style="text-align:left; width: 95%; height: 60px;align-items: center" id="apprenanat2" class="col-lg-12 col-xs-12 SASPaginate" >
+
+                    <div class="col-lg-12 col-xs-12" style="text-align: left;margin-left: 10px; width: 50%" onclick="showDiv('FormationAValider')">
+
+                        <a href="#"><label style="font:large Roboto; .hd;cursor:pointer">Formation à valider </label></a>
+                        <div class="hidden-xs hidden-sm">
+                            <label style="font:10px Roboto;cursor:pointer"><i>Cliquez pour découvrir la liste des apprenants qui doivent être associés à une formation</i></label>
+                        </div>
+                        </div>
+
+
+                        <div id="Nomapprenanat3" title="" class="col-lg-6 col-xs-12" style="margin-right: 5px; overflow: hidden; width: 50%;">
+                         <div onclick="showDiv('FormationAValider')" style="border: 1px solid #ec6494;" class="graphe">
+                            <strong class="barre" style="background: #ec6494;width: {{ FormationAvalider }}%;">{{ FormationAvalider }}%</strong> </div>
+                            {%  if FormationAvalider is defined %}          {% elseif FormationAvalider == null %}
+                                    <strong class="barre"  style="background: #ec6494; width:66.67%" >0% </strong>
+                                {% endif %}
+                        </div>
+                    </div>
+                 <div  style="text-align:left; width: 95%; height: 60px;align-items: center" id="apprenanat3" class="col-lg-12 col-xs-12 SASPaginate" >
+
+            <div class="col-lg-12 col-xs-12" style="text-align: left;margin-left: 10px; width: 50%" onclick="showDiv('ApprenantsAPlacer')">
+            <a href="#"><label style="font:large Roboto;.hd;cursor:pointer">Apprenants à placer</label></a>
+                <div class="hidden-xs hidden-sm">
+            <label style="font:10px Roboto;cursor:pointer"><i>Cliquez pour découvrir la liste des apprenants qui peuvent être mis en relation avec une mission</i></label>
+            </div>
+                </div>
+
+            <div id="Nomapprenanat5" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
+            <div onclick="showDiv('ApprenantsAPlacer')" style="border: 1px solid #e77379;" class="graphe">
+                {%  if ApprenantAplacer is defined %} <strong class="barre" style="background: #e77379;width: {{ ApprenantAplacer }}%;">{{ ApprenantAplacer }}%</strong>
+                {% elseif ApprenantAplacer == null %}
+                    <strong class="barre"  style="background: #e77379; width:0%" >0% </strong>
+                {% endif %}
+            </div>
+            </div>
+
+            </div>
+                <div  style="text-align:left; width: 95%; height: 60px;align-items: center" id="apprenanat4" class="col-lg-12 col-xs-12 SASPaginate" >
+
+                    <div class="col-lg-12 col-xs-12" style="text-align: left;margin-left: 10px; width: 50%" onclick="showDiv('ApprenantsMisEnRelation')">
+
+                        <a href="#"><label style="font:large Roboto;.hd; cursor:pointer">Apprenants mis en relation</label></a>
+                        <div class="hidden-xs hidden-sm">
+                            <label style="font:10px Roboto;cursor:pointer"><i>Cliquez pour découvrir la liste des apprenants qui sont en cours de placement</i></label>
+                           </div>
+                    </div>
+
+
+                            <div id="Nom85" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
+                            <div onclick="showDiv('ApprenantsMisEnRelation')" style="border: 1px solid #64b5f4;" class="graphe">
+                                {%  if ApprenantRelation is defined %} <strong  class="barre" style="background: #64b5f4;width: {{ ApprenantRelation }}%;">{{ ApprenantRelation }}%</strong>
+                                {% elseif ApprenantRelation == null %}
+                                    <strong class="barre"  style="background: #64b5f4; width:0%" >0% </strong>
+                                {% endif %}
+                        </div>
+                    </div>
+
+            </div>
+                 <div  style="text-align:left; width: 95%; height: 60px;align-items: center" id="apprenanat5" class="col-lg-12 col-xs-12 SASPaginate" >
+
+                <div class="col-lg-12 col-xs-12" style="text-align: left;.hd; margin-left: 10px; width: 50%" onclick="showDiv('ApprenantsPlaces')">
+
+                    <a href="#"><label style="font:large Roboto;cursor:pointer">Apprenants placés</label></a>
+                    <div class="hidden-xs hidden-sm">
+                    <label style="font:10px Roboto;cursor:pointer"><i>Cliquez pour découvrir la liste des apprenants validés sur une mission</i></label>
+                        </div>
+                    </div>
+
+                    <div id="Nom84" title="" class="col-xs-2" style="text-align: right;margin-right: 5px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 50%">
+                    <div  onclick="showDiv('ApprenantsPlaces')" style="border: 1px solid #80c681;text-align:right"  class="graphe">
+                        {%  if Apprenantplacer is defined %} <strong   class="barre" style="background: #80c681;width: {{ Apprenantplacer }}%;">{{ Apprenantplacer }}%</strong>
+                        {% elseif Apprenantplacer == null %}
+                            <strong class="barre"  style="background: #80c681; width:0%"> 0% </strong>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div style="text-align:left;width:95%;align-items: center" id="apprenanatBtn"
+                 class="col-lg-12 col-xs-12 SASPaginate">
+                <div class="col-xs-12" style="text-align: center; width: 100%">
+                    <button onclick="showDiv('apprenant');" class="btn btn-primary" type="button">
+                        CRÉER UN APPRENANT
+                    </button>
+                </div>
+            </div>
+{#<div id="Nom85" title="" class="col-xs-2" style="text-align: center;margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+
+            </div>#}
+        </div>
+</div></div>
+</div>
+</div>
+{# A MODIFIER SUITE AU CHANGEMENT A VENIR SUR LES MISSIONS PUBLIQUES CAR ACTUELLEMENT AUCUNE MISSIONS PUBLIQUES N'EST ASSOCIEES A UNE ECOLE #}
+
+{#OPPORTUNITE PUBLIQUES#}
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+                <div  style="text-align:center; align-items:center; margin-left:5px; width:96.3%; margin-top:12px; height:50px; margin-right:10px;" class="col-xs-10 SASPaginate" >
+                    <div class="col-xs-2" style="text-align:center; width:100%">
+                        <label style="font-size: 20px;font-weight: bold ;font:x-large Roboto;">
+                            OPPORTUNITÉS PUBLIQUES
+
+                        </label>
+                    </div>
+                </div>
+
+
+                        <table class="table table-bordered table-hover table-responsive col-lg-12">
+                            <thead style="background-color:#3988d7">
+                                <tr>
+                                    <th style="text-align:center"> INTITULE </th>
+                                    <th style="text-align:center"> SOCIETE </th>
+                                    <th style="text-align:center"> DOMAINE </th>
+                                    <th style="text-align:center"> DATE DEPOT </th>
+                                    <th style="text-align:center"> ACTIONS </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if MissionsPublic is defined %}
+                                    {% set i=0 %}
+                                    {% for m in MissionsPublic %}
+                                {% if EstRecupere(m.etablissement.id(),etablissement.getId()) == false %}
+                                        {% if i < 5 %}
+                                            <tr>
+                                                <td> {{ m.intitule }} </td>
+                                                <td> {{ m.etablissement.tier.raisonsoc }} </td>
+                                                <td> {{ m.domaine }} </td>
+                                                <td> {{ m.datecreation | date ('m/Y') }} </td>
+                                                <td>
+                                                    <button class= "btn btn-default btn-xs ">
+                                                        <a href="{{ path('admin_afficheMissionpublic',{'id': m.getId,'idFor': "-1" } ) }}" target="_blank">
+                                                            <span class= "glyphicon glyphicon-search" aria-hidden="true"></span>
+                                                        </a>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                         {% endif %}
+                                        {% set i=i+1 %}
+                                {% endif %}
+
+                                    {% endfor %}
+                                    {# {% elseif missions == null %} #}
+                                    {# <tr> Aucunes Missions à afficher </tr>
+                 #}                {% endif %}
+                            </tbody>
+                        </table>
+
+<div  style="text-align:center; align-items:center; margin-left:5px; width:96.3%; height:50px" class="col-xs-10 SASPaginate" >
+                    <div class="col-xs-1" style="text-align: center; width: 100%">
+                        <button  onclick="showDiv('MissionPublic')" class="btn btn-primary" type="button">
+                            VOIR PLUS
+                        </button>
+                    </div>
+                </div>
+</div>
+    </div>
+{#RECHERCHE AVANCE#}
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-12">
+<div style="text-align:center; align-items:center; margin-top:20px; background-color:#d2d2d2; margin-left:5px; width:96.3%; height:50px" class="col-xs-10 SASPaginate" >
+    <div class="col-xs-2" style="text-align:center; width:100%">
+        <label style="font-size: 20px;font-weight: bold ;font:x-large Roboto;">
+            RECHERCHE AVANCEE
+        </label>
+    </div>
+</div>
+<div style="text-align:center; align-items:center; margin-left:5px; width:96.3%; height:200px" class="col-xs-10 SASPaginate" >
+
+    <div style="text-align:center; align-items:center; width:100%; height:100%" class="col-xs-4 SASPaginate">
+        <div class="row">
+            <div class="col-xs-10" style="text-align:center; width:100%">
+                <label style="font:large Roboto;font-size: 14px ">RECHERCHER DANS LES APPRENANTS</label>
+            </div>
+            <div class="col-xs-12" style="text-align:center; align-items:center; width:100%; margin-top:10px">
+                <div class="col-xs-3" style="margin-top:8px">
+
+                    <div class="col-xs-3 hidden-xs" style="margin-top:8px">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <input type="text" class="form-control" id="AppSearch" nom="_AppSearch" style="width:100%">
+                </div>
+                <div class="col-xs-3">
+                    <button onclick="RechercherApp();showDiv('RechercheAvancee')" class="btn btn-primary" type="button">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div style="text-align:center; align-items:center; width:100%; height:100%" class="col-xs-4 SASPaginate">
+        <div class="row">
+            <div class="col-xs-10" style="text-align:center; width:100%">
+                <label style="font:large Roboto; font-size: 14px">RECHERCHER DANS LES MISSIONS</label>
+            </div>
+            <div class="col-xs-12" style="text-align:center; width:100%; margin-top:10px">
+                {#petit bouton#}
+                <div class="col-xs-3 hidden-xs" style="margin-top:8px">
+                    <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                </div>
+                <div class="col-xs-6">
+                    <input type="text" class="form-control" id="MisSearch" nom="_MisSearch" style="width:100%">
+                </div>
+                <div class="col-xs-3">
+                    <button onclick="RechercherMis();showDiv('RechercheMission')" class="btn btn-primary" type="button">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div style="text-align:center; align-items:center; width:100%; height:100%" class="col-xs-4 SASPaginate">
+        <div class="row">
+            <div class="col-xs-10" style="text-align:center; width:100%">
+                <label style="font:large Roboto; font-size: 14px">RECHERCHER DANS LES SOCIETES</label>
+            </div>
+            <div class="col-xs-12" style="text-align:center; width:100% ; margin-top:10px">
+                <div class="col-xs-3" style="margin-top:8px">
+
+                    <div class="col-xs-3 hidden-xs" style="margin-top:8px">
+                        <span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <input type="text" class="form-control" id="SocSearch" nom="_SocSearch" style="width:100%">
+                </div>
+                <div class="col-xs-3">
+                    <button onclick="RechercherSoc();showDiv('RechercheSociete')" class="btn btn-primary" type="button">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+<script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+<script src="{{ asset('js/PopUp.js') }}"></script>
+<script src="http://maps.googleapis.com/maps/api/js"></script>
+<script language="JavaScript">
+
+
+function showDiv(div){
+    var popup = window.parent.document.getElementById(div);
+    popup.style.display = 'block';
+
+}
+
+
+function RechercherApp(){
+
+var input = document.getElementById('AppSearch').value;
+    
+    var id='';
+    var saisi='';
+ for(i=0 ; i < window.parent.document.getElementsByClassName('RechercherAppClass').length;i++)
+        {
+           // document.getElementById(document.getElementsByClassName('RechercherAppClass')[i].id).style.display='none';
+           id=window.parent.document.getElementsByClassName('RechercherAppClass')[i].id;
+           saisi=window.parent.document.getElementsByClassName('RechercherAppClass')[i].value.toLowerCase();
+           if (saisi.includes(input.toLowerCase())){
+           
+                window.parent.document.getElementsByClassName('RechercherAppClass')[i].style.display='';
+
+                window.parent.document.getElementById('RowApp'+id).style.display='';
+
+           }else{
+                window.parent.document.getElementsByClassName('RechercherAppClass')[i].style.display='none';
+                window.parent.document.getElementById('RowApp'+id).style.display='none';         
+           }    
+        }
+        //document.getElementById('Div_App_'+idApp).style.display='block';
+}
+
+function RechercherMis(){
+
+var input = document.getElementById('MisSearch').value;
+    
+    var id='';
+    var saisi='';
+
+ for(i=0 ; i < window.parent.document.getElementsByClassName('RechercherMisClass').length;i++)
+        {
+           // document.getElementById(document.getElementsByClassName('RechercherMisClass')[i].id).style.display='none';
+           id=window.parent.document.getElementsByClassName('RechercherMisClass')[i].id;
+           saisi=window.parent.document.getElementsByClassName('RechercherMisClass')[i].value.toLowerCase();
+
+           if (saisi.includes(input.toLowerCase())){
+           
+           window.parent.document.getElementsByClassName('RechercherMisClass')[i].style.display='';
+            
+            window.parent.document.getElementById('RowMis'+id).style.display='';
+
+           }else{
+             window.parent.document.getElementsByClassName('RechercherMisClass')[i].style.display='none';
+            window.parent.document.getElementById('RowMis'+id).style.display='none';         
+           }    
+        }
+        //document.getElementById('Div_Mis_'+idMis.style.display='block';
+}
+
+function RechercherSoc(){
+
+var input = document.getElementById('SocSearch').value;
+    
+    var id='';
+    var saisi='';
+ for(i=0 ; i < window.parent.document.getElementsByClassName('RechercherSocClass').length;i++)
+        {
+           // document.getElementById(document.getElementsByClassName('RechercherSocClass')[i].id).style.display='none';
+           id=window.parent.document.getElementsByClassName('RechercherSocClass')[i].id;
+           saisi=window.parent.document.getElementsByClassName('RechercherSocClass')[i].value.toLowerCase();
+
+           if (saisi.includes(input.toLowerCase())){
+           
+           window.parent.document.getElementsByClassName('RechercherSocClass')[i].style.display='';
+            
+            window.parent.document.getElementById('RowSoc'+id).style.display='';
+
+           }else{
+             window.parent.document.getElementsByClassName('RechercherSocClass')[i].style.display='none';
+            window.parent.document.getElementById('RowSoc'+id).style.display='none';         
+           }    
+        }
+        //document.getElementById('Div_Soc_'+idSoc).style.display='block';
+}
+
+</script>
+</body>
+</html>

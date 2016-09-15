@@ -523,7 +523,7 @@
 
     </div>
 
-    <div id="ListeMiseEnRelation"  class="col-xs-10 col-xs-offset-1">
+    <div id="ListeMiseEnRelation"  class="col-xs-12 col-lg-11 col-mg-12 col-xs-offset-1">
         {% if MiseEnRelation is defined %}
             {% set i = 0 %}
             {% set nbreNull = 0 %}
@@ -532,11 +532,10 @@
                 <div id="{{ mise.id }}" class="Liste" style="border: 1px solid #ddd;margin: 0;height:100px;width: 100%;" >
                    {# <div name="Recherche" style="display: none;">{{ rdv.destinataire.nom }},{{ rdv.destinataire.prenom }},{{ rdv.destinataire.email }},{{ rdv.tuteur.nom }},{{ rdv.tuteur.prenom }},{{ rdv.tuteur.email }},{% if rdv.mission %}{{ rdv.mission.intitule }},{{ rdv.mission.codemission }},{{ rdv.mission.descriptif }},{{ rdv.mission.domaine }},{% if rdv.mission.etablissement %}{{ rdv.mission.etablissement.siret }},{{ rdv.mission.etablissement.adresse }},{{ rdv.mission.etablissement.secteur }},{{ rdv.mission.etablissement.tier.raisonsoc }}{% endif %}{% endif %}</div>#}
 
-                        <div class="col-xs-2" style="width:10%;" >
+                        <div class="col-xs-1 col-md-2 col-lg-2 hidden-xs hidden-sm" style="width:10%;" >
                             <div style="border: 15px solid transparent">
                                 {% if mise.destinataire.getPhotos  %}
                                     <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="data:image/jpg;base64,{{GetMyPhoto(mise.destinataire.getId())}}">
-
 
                                 {% elseif mise.destinataire.getCivilite == 'Mme' or mise.destinataire.getCivilite == 'Madame' or mise.destinataire.getCivilite == 'Mademoiselle' %}
                                     <img style="height:70px;width:70px;margin:0 40px;border-radius: 100%" src="{{ asset('image/femme.jpg') }}">
@@ -546,7 +545,7 @@
                             </div>
                         </div>
 
-                    <div id="date{{ mise.id }}" class="col-xs-2" style="width:20%;-webkit-flex-wrap: wrap;flex-wrap: wrap;display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;;display:flex;height: 100px;text-align: left; ">
+                    <div id="date{{ mise.id }}" class="col-xs-1 col-md-2 col-lg-2" style="width:20%;-webkit-flex-wrap: wrap;flex-wrap: wrap;display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;;display:flex;height: 100px;text-align: left; ">
 
                         <label style="font:18px Roboto;margin: auto;" > {{ mise.destinataire.getNom }}<br/>{{ mise.destinataire.getPrenom }}</label><br/>
 
@@ -567,7 +566,7 @@
 
                     </div>
 
-                    <div id="date{{ mise.id }}" class="col-xs-2" style="width:35%;-webkit-flex-wrap: wrap;flex-wrap: wrap;display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;;display:flex;height: 100px;text-align: left; ">
+                    <div id="date{{ mise.id }}" class="col-xs-1 col-md-2 col-lg-2" style="width:35%;-webkit-flex-wrap: wrap;flex-wrap: wrap;display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;;display:flex;height: 100px;text-align: left; ">
 
                         <label style="font:18px Roboto;margin: auto;" > {{ mise.mission.getEtablissement.getTier.getRaisonsoc }}<br/>{{ mise.mission.intitule }}<br/></label><br/>
                         <img  style="height:30px;width:30px;float:right;margin: auto;cursor:pointer"
@@ -584,13 +583,13 @@
 
                     </div>
 
-                    <div id="date{{ mise.id }}" class="col-xs-2" style="width:15%;-webkit-flex-wrap: wrap;flex-wrap: wrap;display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;;display:flex;height: 100px;text-align: left; ">
+                    <div id="date{{ mise.id }}" class="col-xs-1 col-md-2 col-lg-2" style="width:15%;-webkit-flex-wrap: wrap;flex-wrap: wrap;display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;;display:flex;height: 100px;text-align: left; ">
 
                         <label style="font:18px Roboto;margin: auto;" > {{ mise.getDate|date('d-m-Y à H:i') }}</label>
 
                     </div>
 
-                    <div class="col-xs-2" style="width:20%;">
+                    <div class="col-xs-1 col-md-2 col-lg-2" style="width:20%;">
                         <div style="border: 15px solid transparent">
 
                             {% if mise.destinataire.getPhotos %}

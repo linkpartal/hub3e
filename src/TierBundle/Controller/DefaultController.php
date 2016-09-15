@@ -11,6 +11,8 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
+
+
 class DefaultController extends Controller
 {
     public function checkExistAction(Request $request)

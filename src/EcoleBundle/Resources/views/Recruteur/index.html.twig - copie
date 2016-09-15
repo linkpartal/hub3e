@@ -1,0 +1,2656 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('image/Logo_Hub_3e.png') }}" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="{{ asset('css/paginate.css') }}" />
+
+
+
+    {% block CSS %}
+        <style>
+            .ui-widget-header{color:black;}
+        </style>
+    {% endblock %}
+
+    <title>HUB3E - {% block title %}Ecole{% endblock %}</title>
+
+</head>
+<body onload="loading();">
+
+<div id="addtier" class="popup col-xs-3">
+
+    <div onclick="hide(this)" class="close"></div>
+    <div class="col-xs-offset-3 col-xs-6 formContainer" >
+         <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+
+        <div id="div_adresse" name="ajouterAdresse" style="border-bottom: 10px;display: none;">
+
+            <button class="toggle" type="button" data-toggle="collapse" style="background-color: rgb(215,215,215);height: 40px;border: none;margin-top: 40px;"  data-target="#demo"></button>
+            <button class="toggle" type="button" style="background-color: rgb(215,215,215);height: 40px;border: none;margin-top: 40px;" onclick="supprimerAdresse(this)" >-</button>
+
+            <div id="demo" class="collapse in">
+
+
+                <label style="margin: 10px 0;text-transform: uppercase;font: input-group col-xs-118px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Adresse Secondaire</label>
+                <label for="Adresse" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Siret</label>
+                <input placeholder="Siret" class="input" onChange="VerifierSiret(this)"  type="text" id="SIRET" name="_SIRET[]" pattern=".{14}" maxlength="14" required>
+
+                {#<button  class="blue" type="button" onclick="VerifierSiret(this)">Vérifier si la société existe</button>#}
+                <label for="Adresse" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Rue</label>
+                <input class="input" type="text" id="Rue" name="_Adresse[]" maxlength="45" required>
+
+                <label for="CodeP" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Code postal</label>
+                <label for="Ville" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Ville</label>
+                <input class="input" type="text" id="CodeP" name="_CodeP[]" style="width: calc(50% - 10px); margin-right: 10px" maxlength="10" required>
+                <input class="input" type="text" id="Ville" name="_Ville[]" style="width: 50%;" maxlength="20" required>
+
+                <label for="Tel" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Téléphone</label>
+                <label for="Fax" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Fax</label>
+                <input class="input" type="tel" id="Tel" name="_Tel[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="20" required>
+                <input class="input" type="tel" id="Fax" name="_Fax[]" style="width: 50%;" maxlength="20" required>
+
+                <label for="Site" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Site web</label>
+                <input class="input" type="text" id="Site" name="_Site[]" maxlength="45" required>
+                <!----------------------------------------------------------------------------------------------------------------------------------------------->
+                <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Responsable</label>
+                <label for="Resp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Nom</label>
+                <label for="RespPrenom" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Prénom</label>
+                <input class="input" type="text" id="Resp" name="_Resp[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="45" required>
+                <input class="input" type="text" id="RespPrenom" name="_RespPrenom[]" style="width: 50%;" maxlength="45" required>
+
+                <label for="TelResp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Téléphone</label>
+                <label for="MailResp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Email</label>
+                <input class="input" type="tel" id="TelResp" name="_TelResp[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="20" required>
+                <input class="input" type="email" id="MailResp" name="_MailResp[]" style="width: 50%;" maxlength="45" required>
+                <!----------------------------------------------------------------------------------------------------------------------------------------------->
+                <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Société</label>
+                <label for="TypeSoc" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Type d'entreprise</label>
+                <label for="RespPrenom" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Taille de la socété</label>
+                <select class="input" id="TypeSoc" name="_TypeSoc[]" style="width: calc(50% - 10px);margin-right: 10px" required>
+                    <option value="Start Up">Start Up</option>
+                    <option value="TPE PME">TPE PME</option>
+                    <option value="Groupe">Groupe</option>
+                    <option value="Groupe Multinational">Groupe Multinational</option>
+                    <option value="Institution Publique">Institution Publique</option>
+                    <option value="ONG Association">ONG Association</option>
+                    <option value="Ecole Centre de formation">Ecole Centre de formation</option>
+                </select>
+                <select class="input" id="Taille" name="_Taille[]" style="width: 50%;" required>
+                    <option value="Moins de 10 salariés">Moins de 10 salariés</option>
+                    <option value="Moins de 100 salariés">Moins de 100 salariés</option>
+                    <option value="Plus de 100salariés">Plus de 100 salariés</option>
+                </select>
+
+                <label for="TelResp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Secteur d"activité</label>
+                <select class="input" id="Secteur" name="_Secteur[]" style="width: 50%;" required>
+                    <option value="Primaire">Primaire</option>
+                    <option value="Secondaire">Secondaire</option>
+                    <option value="Tertiaire">Tertiaire</option>
+                    <option value="Quaternaire">Quaternaire</option>
+
+                </select>
+
+                <input type="hidden" class="form-control" id="Geocode" name="_Geocode[]" required>
+
+            </div>
+        </div>
+
+        <form id="formTier" action="{{ path('tieradded') }}" onsubmit="document.getElementById('submittier').disabled = true;ShowWaiter();" method="post" enctype="multipart/form-data">
+            <div class="NavBarTier col-xs-12" >
+                <button class="col-xs-12 active" onclick="NaviguerOnglet('PopUpAddTierOnglet','InformationTierObligatoire',this);">Informations Générales</button>
+                {# L'ONGET DOCUMENTS NE SERA PAS UTILISE POUR LE MOMENT
+                    <button class="col-xs-6" type="button" onclick="NaviguerOnglet('PopUpAddTierOnglet','InformationComp',this);">Documents/Infos</button>
+                 #}
+            </div>
+            <div id="PopUpAddTierOnglet">
+                <div id="InformationTierObligatoire" class="div_form" style="display: inline-table;" >
+                    {# JE RECUPERE CETTE SECTION EN TITRE DE POPUP PLUS HAUT
+                        <label style="text-transform: uppercase;font: 16px Roboto;color: rgb(75, 75, 75);font-weight: bold;text-align: left;" class="col-xs-12">Informations générales</label>
+                    #}
+                    <label style="text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Raison sociale</label>
+                    <input type="text" class="input" id="RaisonSoc" name="_RaisonSoc" maxlength="45" required>
+                    <input type="text" style="visibility: hidden" class="input" id="SIREN" name="_SIREN" pattern=".{9}" maxlength="9" required>
+                    <div class="col-xs-6 input-colonne">
+
+
+                        <label for="Logo" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Importer un logo</label>
+                        <label style="display: flex;float: left;" for="Logo">
+                            <img id="Logoimg" style="border: 1px solid rgb(230, 230, 230);background-image: -moz-linear-gradient( 90deg, rgb(215,215,215) 0%, rgb(255,255,255) 100%);background-image: -webkit-linear-gradient( 90deg, rgb(215,215,215) 0%, rgb(255,255,255) 100%);background-image: -ms-linear-gradient( 90deg, rgb(215,215,215) 0%, rgb(255,255,255) 100%);width: 100px;height: 90px;" src="" onclick="this.src='{{ asset('image/wait_x300.gif') }}'" />
+                        </label>
+                        <input onchange="readURL(this,'Logoimg');"  accept="image/*" type="file" class="input" id="Logo" name="_Logo" style="display: none">
+                    </div>
+
+                    <div class="col-xs-6 input-colonne">
+
+
+
+
+
+                        <label for="Logo" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Importer un fond'écran</label>
+                        <label style="float: left;" for="image">
+                            <img id="backimg" style="border: 1px solid rgb(230, 230, 230);background-image: -moz-linear-gradient( 90deg, rgb(215,215,215) 0%, rgb(255,255,255) 100%);background-image: -webkit-linear-gradient( 90deg, rgb(215,215,215) 0%, rgb(255,255,255) 100%);background-image: -ms-linear-gradient( 90deg, rgb(215,215,215) 0%, rgb(255,255,255) 100%);width: 255px;height: 90px;" src="" onclick="this.src='{{ asset('image/wait_x300.gif') }}'" />
+                        </label>
+                        <input onchange="readURL(this,'backimg');" accept="image/*" type="file" class="input" id="image" name="_image" style="display: none">
+                    </div>
+
+                    <input  type="hidden" id="EcoleBool" name="_Ecole">
+
+
+                    <div id="adressecontainer">
+                        <div id="div_adresse" name="ajouterAdresse" style="border-bottom: 10px;display: inline-block;">
+                            <button class="toggle" type="button" data-toggle="collapse" data-target="#demo" style="display: none;"></button>
+                            <button class="toggle" type="button" onclick="supprimerAdresse(this)" style="display: none;">-</button>
+                            <div id="demo" class="collapse in">
+                                <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Adresse Principale</label>
+                                <label for="Adresse" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Siret</label>
+                                <input placeholder="Siret" class="input" onChange="VerifierSiret(this)" type="text" id="SIRETP" name="_SIRET[]" pattern=".{14}" maxlength="14" required>
+
+                                {#<button id="P"  class="blue" type="button" onclick="VerifierSiret(this)">Vérifier si la société existe</button>#}
+
+                                <label for="Adresse" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Rue</label>
+                                <input class="input" type="text" id="RueP" name="_Adresse[]" maxlength="45" required>
+
+                                <label for="CodeP" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Code postal</label>
+                                <label for="Ville" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Ville</label>
+                                <input class="input" type="text" id="CodePP" name="_CodeP[]" style="width: calc(50% - 10px); margin-right: 10px" maxlength="10" required>
+                                <input class="input" type="text" id="VilleP" name="_Ville[]" style="width: 50%;" maxlength="20" required>
+
+                                <label for="Tel" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Téléphone</label>
+                                <label for="Fax" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Fax</label>
+                                <input class="input" type="tel" id="TelP" name="_Tel[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="20" required>
+                                <input class="input" type="tel" id="FaxP" name="_Fax[]" style="width: 50%;" maxlength="20" required>
+
+                                <label for="Site" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Site web</label>
+                                <input class="input" type="text" id="SiteP" name="_Site[]" maxlength="45" required>
+                                <!----------------------------------------------------------------------------------------------------------------------------------------------->
+                                <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Responsable</label>
+                                <label for="Resp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Nom</label>
+                                <label for="RespPrenom" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Prénom</label>
+                                <input class="input" type="text" id="RespP" name="_Resp[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="45" required>
+                                <input class="input" type="text" id="RespPrenomP" name="_RespPrenom[]" style="width: 50%;" maxlength="45" required>
+
+                                <label for="TelResp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Téléphone</label>
+                                <label for="MailResp" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Email</label>
+                                <input class="input" type="tel" id="TelRespP" name="_TelResp[]" style="width: calc(50% - 10px);margin-right: 10px" maxlength="20" required>
+                                <input class="input" type="email" id="MailRespP" name="_MailResp[]" style="width: 50%;" maxlength="45" required>
+                                <!----------------------------------------------------------------------------------------------------------------------------------------------->
+                                <div id="InfoAddsociete">
+                                    <label style="margin: 10px 0;text-transform: uppercase;font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Société </label>
+                                    <label for="TypeSoc" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Type d'entreprise</label>
+                                    <label for="Taille" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-6">Taille de la socété</label>
+                                    <select class="input" id="TypeSocP" name="_TypeSoc[]" style="width: calc(50% - 10px);margin-right: 10px" required>
+                                        <option value="Start Up">Start Up</option>
+                                        <option value="TPE PME">TPE PME</option>
+                                        <option value="Groupe">Groupe</option>
+                                        <option value="Groupe Multinational">Groupe Multinational</option>
+                                        <option value="Institution Publique">Institution Publique</option>
+                                        <option value="ONG Association">ONG Association</option>
+                                        <option value="Ecole Centre de formation">Ecole Centre de formation</option>
+                                    </select>
+                                    <select class="input" id="TailleP" name="_Taille[]" style="width: 50%;" required>
+                                        <option value="Moins de 10 salariés">Moins de 10 salariés</option>
+                                        <option value="Moins de 100 salariés">Moins de 100 salariés</option>
+                                        <option value="Plus de 100salariés">Plus de 100 salariés</option>
+                                    </select>
+
+                                    <label for="Secteur" style="font: 18px Roboto;color: rgb(75, 75, 75);text-align: left;" class="col-xs-12">Secteur d"activité</label>
+                                    <select class="input" id="SecteurP" name="_Secteur[]" style="width: 50%;" required>
+                                        <option value="Primaire">Primaire</option>
+                                        <option value="Secondaire">Secondaire</option>
+                                        <option value="Tertiaire">Tertiaire</option>
+                                        <option value="Quaternaire">Quaternaire</option>
+                                    </select>
+                                </div>
+                                <!----------------------------------------------------------------------------------------------------------------------------------------------->
+                                <input type="hidden" class="form-control" id="Geocode" name="_Geocode[]" required>
+
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="col-xs-12" style="background-color: rgb(215,215,215);height: 40px;border: none;" onclick="dupliqueradresse()">
+                        Ajouter une adresse
+                    </button>
+                </div>
+                <div id="InformationComp" class="div_form" style="display: inline-table;position: absolute;visibility: hidden;" >
+                    <label for="Axe" style="text-transform: uppercase;font: 16px Roboto;color: rgb(75, 75, 75);font-weight: bold;text-align: left;" class="col-xs-6">Axe stratégique de développement : </label>
+                    <select class="input" id="Axe" name="_Axe" style="width: 50%;">
+                        <option value="Internationanalisation">Internationanalisation</option>
+                        <option value="Responsabilité Sociétale">Responsabilité Sociétale</option>
+                        <option value="Environnementale">Environnementale</option>
+                        <option value="Optimisation productivité">Optimisation productivité</option>
+                        <option value="Innovation">Innovation</option>
+                    </select>
+                    <label for="Avantages" style="text-transform: uppercase;font: 16px Roboto;color: rgb(75, 75, 75);font-weight: bold;text-align: left;" class="col-xs-6">Avantages : </label>
+                    <select class="input" id="Avantages" name="_Avantages" style="width: 50%;">
+                        <option value="Ticket resto">Ticket resto</option>
+                        <option value="Commité entreprise">Commité entreprise</option>
+                        <option value="Matériel fct.">Matériel Fct.</option>
+                        <option value="Véhicule fct, Carte essence, Télépéage">Véhicule fct, Carte essence, Télépéage</option>
+                        <option value="Primes participation/interessement">Primes participation/interessement</option>
+                    </select>
+
+                </div>
+            </div>
+            <div class="div_button">
+                <input type="submit" style="display: none">
+
+                <button id="submittier" class="blue" type="button" onclick="envoyeradresses()">Envoyer</button>
+
+            </div>
+        </form>
+    </div>
+
+</div>
+<div id="apprenant" class="popup" >
+    <div onclick="document.getElementById('submitaddapprenant').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-9 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+
+        <form class="formulaire" id="formApprenant" action="{{ path("apprenant_added") }}" onsubmit="document.getElementById('submitaddapprenant').disabled=true;ShowWaiter();" method="post" enctype="multipart/form-data" style="margin-top: 50px"   >
+            <input type="hidden" id="idEtab" name="_idEtab" value="{{ app.user.etablissement.getId }}">
+            <div id="NavBarAddApprenant" class="col-xs-12 NavBarTier" >
+                <button class="col-xs-4 active" style="white-space: nowrap;" id="BoutonOnlgetDonnéesApprenant" type="button" onclick="NaviguerOnglet('PopUpApprenantOnglet','infoapprenant',this)">Données</button>
+                <button class="col-xs-4" style="white-space: nowrap;" id="BoutonOnlgetFormationApprenant" type="button" onclick="NaviguerOnglet('PopUpApprenantOnglet','apprenant_formation',this)">Formation Souhaitée</button>
+                <button class="col-xs-4" style="white-space: nowrap;" id="ButtonOngletDocument" type="button" onclick="NaviguerOnglet('PopUpApprenantOnglet','document_apprenant',this)">Documents</button>
+            </div>
+            <div id="PopUpApprenantOnglet">
+                <div class="div_form" id="infoapprenant" style="border-bottom:1px solid #2b542c;"  >
+                    <div class="col-xs-6 input-colonne">
+                        <div class="col-xs-6 input-colonne">
+                            <select class="input "  title="" name="_Civilite" style="font:16px Roboto;" required>
+                                <option value="Monsieur">Mr.</option>
+                                <option value="Madame">Mme.</option>
+
+                            </select>
+                        </div>
+                        <div class="col-xs-6 input-colonne" style="border: 0">
+                            <input type="text" style="font:16px Roboto;" class="input" id="Nom" name="_Nom"  placeholder="Nom"  maxlength="45" required>
+                        </div>
+
+                        <input placeholder="Prenom" style="font:16px Roboto;" class="input" type="text" id="Prenom" name="_Prenom" maxlength="45" required >
+                        <input placeholder="Adresse email" style="font:16px Roboto;" class="input" type="text" id="Email" name="_Email" maxlength="45" required >
+                        <input placeholder="Téléphone portable" style="font:16px Roboto;" class="input" type="text" id="Portable" name="_Portable" maxlength="45" required >
+                        <input placeholder="Téléphone Fix" style="font:16px Roboto;" class="input" type="text" id="Telephone" name="_Telephone" maxlength="45" required >
+                        <input placeholder="Adresse" style="font:16px Roboto;" class="input" type="text" id="Adresse" name="_Adresse" maxlength="45" required >
+
+                        <div class="col-xs-6 input-colonne" >
+                            <input placeholder="Code postal" style="font:16px Roboto;" class="input" type="text" id="Codepostal" name="_Codepostal" maxlength="45" required >
+                        </div>
+                        <div class="col-xs-6 input-colonne" style="border-right: 0 ">
+                            <input placeholder="Ville" style="font:16px Roboto;" class="input" type="text" id="Ville" name="_Ville" maxlength="45" required >
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6 input-colonne">
+                        <input placeholder="CP Naissance" style="font:16px Roboto;" class="input" type="text" id="Cpnaissance" name="_Cpnaissance" maxlength="45" required >
+                        <input placeholder="Ville Naissance" style="font: 16px Roboto;" class="input" type="text" id="Lieunaissance" name="_Lieunaissance" maxlength="45" required >
+                        <input placeholder="Date de Naissance" style="font: 16px Roboto;" type="text" class="date" id="Datenaissance" name="_Datenaissance" title="Date de Naissance" maxlength="45" required >
+                        <input placeholder="Diplômes  obtenus" style="font: 16px Roboto;" class="input" id="Diplome" name="_Diplome" type="text" maxlength="45"   >
+                        <input placeholder="Formation en cours" style="font: 16px Roboto;" class="input" id="FormationCours" name="_FormationCours" type="text" >
+                        <div class="col-xs-12">
+                            <input type="checkbox" name="_handicap" value="1"> &nbsp<label>Handicap</label>
+                            <br/>
+                            <input type="checkbox" name="_entrepreneur" value="1"> &nbsp<label>Entrepreneurs</label>
+                        </div>
+                        <div class="col-xs-12">
+                            <label>Permis</label>
+                            <input type="radio" name="_Permis" value="1" title="Oui"><label>oui</label>
+                            <input type="radio" name="_Permis" value="-1" title="Non"><label>non</label>
+                            <input type="radio" name="_Permis" value="0" title="EnCours"><label>en cours</label>
+                        </div>
+                        <div class="col-xs-12">
+                            <label>Véhicule</label>
+                            <input type="radio" name="_Vehicule" value="1" title="Oui"><label>oui</label>
+                            <input type="radio" name="_Vehicule" value="0" title="Non"><label>non</label>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="div_form" id="apprenant_formation" style="position: absolute;visibility: hidden;border-bottom:1px solid #2b542c;" >
+                    <div class="col-xs-12 input-colonne " >
+                        <input class="row" style="width:100%" type="text" placeholder="Recherche" onkeyup="rechercheformation(this.value)">
+                    </div>
+                    <br>
+                    <div>  </div>
+                   {#<div class="col-xs-12 input-colonne " > <i>Pour sélectionner plusieurs formations utiliser ctrl+clic </i> </div>#}
+                    <div class="col-xs-12 input-colonne " >
+                        {#<select id="SelectMultipleFormation" style="width: 100%; overflow-x: auto" title="" class="row" name="formations[]" multiple required>
+                            {% for formation in formations %}
+                                <option value="{{ formation.id }}">{{ formation.nom }} - {{ formation.etablissement.tier.raisonsoc }} - {{ formation.etablissement.adresse }}</option>
+                            {% endfor %}
+                        </select>
+                        <select id="SelectMultipleRechercheFormation" style="display: none" title="SelectFormation">
+                            {% for formation in formations %}
+                                <option value="Recherche" style="display: none;" disabled>{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}</option>
+                            {% endfor %}
+                        </select>#}
+
+                        <div id="SelectMultipleFormation" style="overflow: auto;">
+                            {% for formation in formations %}
+                                <div data-rec="{{ formation.id }};{{ formation.nom }};{{ formation.etablissement.tier.raisonsoc }};{{ formation.etablissement.adresse }};{{ formation.etablissement.siret }}">
+                                    <input  type="checkbox"   value="{{ formation.getId }}" name="formations[]" title="formation" >
+                                    <label style="font: 14px Roboto black;" >{{ formation.nom }} - {{ formation.etablissement.tier.raisonsoc }} - {{ formation.etablissement.adresse }}</label>
+                                    <a target="_blank" href="{{ asset('formation_pdf/'~ formation.getId ~'.pdf') }}" >
+                                        <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px " alt="fichier de formation" >
+                                    </a><br>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+                <div class="div_form" id="document_apprenant" style="position: absolute;visibility:hidden;border-bottom:1px solid #2b542c;">
+                    <div class="col-xs-12">
+                        <div class="col-xs-3 input-colonne">
+                            <select class="input"  name="_Type[]">
+                                <option value="CV">CV</option>
+                                <option value="lettre de motivation">Lettre de motivation</option>
+                                <option value="Notes">Notes</option>
+                                <option value="Dernier diplome">Dernier diplome</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-7 input-colonne" >
+                            <div class="col-xs-11">
+                                <input  type="file" class="input" id="document" name="_Document[]">
+                            </div>
+                            <div class="col-xs-1">
+                                <button class="btn btn-default" onclick ="dupliquerDocument()" type="button" > + </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="div_button" style="margin-top: 10px" >
+                <input class="blue" id="submitaddapprenant" type="button"  style="margin-right: 10px" value="suivant">
+                <input id="hiddenSubmitApprenant" style="display: none;" type="submit">
+                {#<input class="blue" type="submit" value="Annuler" >#}
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
+
+
+{# PARTIE DE CODE DE ABDELLAH SUR POSTULATION EN COURS ET ???? COMMENTE SUITE A MA REPRISE DE CETTE PARTIE #}
+
+{# <div id="PostulationEnCours" class="popup" >
+    <div onclick="document.getElementById('PostulationEnCours').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-1 col-xs-9 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+
+        <form id="postulation">
+
+            <div id="Postulation"  style="height: 281px;border-top: 1px solid #B0B0B0;margin: 0;overflow-y: auto;width: 100%;">
+                <div class="col-xs-12 Liste" >
+
+
+                    <div id="MissionsListe" class="col-xs-12" style="margin-bottom: 10px;height: 100%;">
+
+                        <div  name="_Mission" class="col-xs-10 col-xs-offset-1 listMission" style="height: auto;">
+
+                            <div  title="Mission" class="col-xs-1" title="id" style="text-align: center;margin: auto;width:20%;">
+                                Mission
+                            </div>
+                            <div  title="société" class="col-xs-2" style="text-align: center;margin: auto; width:20%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+
+                                Société
+                            </div>
+                            <div  title="Date de mise en relation" class="col-xs-2" style="text-align: center;margin: auto;width:30%; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                Date de mise en relation
+                            </div>
+                            <div   class="col-xs-2" style="text-align: center;margin: auto;width:20%; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                Actions
+                            </div>
+
+                        </div> 
+#}
+
+                        {#{% if Messages is defined %}
+                             {% set i = 0 %}
+                             {% for mission in Messages %}
+
+
+                                 <div id="Mission{{ i }}" name="_Mission{{ mission.getDestinataire.getId() }}" class="col-xs-10 col-xs-offset-1 SASPaginate" style="height: auto;">
+
+                                     <div id="Nom" title="Mission" class="col-xs-1" title="id" style="text-align: center;margin: auto;width:20%;">
+                                         {{ mission.getMission.getCodemission() }}
+                                     </div>
+                                     <div id="societe" title="société" class="col-xs-2" style="text-align: center;margin: auto; width:20%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+
+                                         {{ mission.getMission.getEtablissement.getTier.getRaisonsoc() }}
+                                     </div>
+                                     <div id="DateMis" title="Date de mise en relation" class="col-xs-2" style="text-align: center;margin: auto;width:30%; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                         {{ mission.getDate()|date('d/m/Y H:i') }}
+                                     </div>
+                                     <div id="action"  class="col-xs-2" style="text-align: center;margin: auto;width:20%; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                         <input id="submitAnnuler" onclick="OpenUrl({{mission.getMission.getId()}},'-1');" class="blue" style="color:#666666;border:1px solid #ccc;float: left;margin-left: 5px;width:90px" type="button" value="Voir Mission">
+                                         <input id="submitAnnuler" onclick="afficher({{ i }});" class="blue" style="color:#666666;border:1px solid #ccc;float: left;margin-left: 5px ; width:90px" type="button" value="Retour RDV">
+
+                                     </div>
+
+
+                                 </div>
+                                 <div id="DivRDV{{ i }}"  class="col-xs-10 col-xs-offset-1 SASPaginate" style="text-align:left;height: auto;">
+
+
+
+                                     {% if mission.getExpediteur.hasRole('ROLE_CONTACT_MISSION') and mission.getStatut=='1' %}
+
+                                         <div class="col-xs-12" style="height: auto;horiz-align: center; text-align: center; font: small Roboto;">
+
+                                                                 <textarea style="color:#2975cb;" rows="4" disabled cols="50" name="comment" id="comment">
+                                                                     {{ mission.getMessage }}
+
+                                                                 </textarea>
+
+
+
+                                         </div>
+
+
+                                     {% elseif not mission.getExpediteur.hasRole('ROLE_CONTACT_MISSION') and mission.getStatut is null %}
+                                         <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
+                                                                     à l'attente d'une réponse de la part de l'apprenant
+
+                                                          </textarea>
+
+                                     {% elseif not mission.getExpediteur.hasRole('ROLE_CONTACT_MISSION') and mission.getStatut=='1' %}
+                                         <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
+                                                                     à l'attente d'une réponse de la part du tuteur
+
+                                                          </textarea>
+
+
+                                     {% elseif  mission.getExpediteur.hasRole('ROLE_CONTACT_MISSION') and mission.getStatut=='-1' %}
+                                         <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
+                                                                     offre déclinée par le tuteur
+
+                                                          </textarea>
+
+                                     {% elseif  not mission.getExpediteur.hasRole('ROLE_CONTACT_MISSION') and mission.getStatut=='-1' %}
+                                         <textarea style="color:#2975cb;" rows="2" disabled cols="50" name="comment" id="comment">
+                                                                     offre déclinée par l'apprenant
+
+                                                          </textarea>
+
+                                     {% endif %}
+                                     <input id="submitAnnuler" onclick="cacher({{ i }});" class="blue" style="color:#666666;border:1px solid #ccc;float: right;margin-right: 5px" type="button" value="Annuler">
+
+
+                                 </div>
+
+                                 {% set i = i + 1 %}
+                             {% endfor %}
+
+                         {% endif %}#}
+
+
+
+{#                     </div>
+
+
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div> #}
+
+
+<div class="container">
+    {% block TopBar %}
+        <div class="row" style="height: 32px; background: #2975cb;">
+                <div class=" col-sm-1 col-md-1 col-xs-1" style="height: 100%;">
+                    <a href="{{ path('metier_user_login') }}"> <img src="{{ asset('image/Logo_Hub_3e.png') }}"
+                                                                    style="height: 100%"> </a>
+                </div>
+                <div class="input-group hidden-xs col-sm-1 col-md-1 col-xs-1"
+                     style="display: inline; margin-left: 10px;border: 0;padding: 5px;height: 21px;float: left;">
+                    <button onclick="show('apprenant')" type="button"
+                            class="glyphicon glyphicon-plus input-group-addon topbaradd"
+                    ></button>
+
+                    <button id="usertop"
+                            style="color:white;white-space: nowrap;overflow: hidden; ">{{ apprenants|length }}
+                        Apprenants
+                    </button>
+                </div>
+                <div class="input-group hidden-xs col-sm-1 col-md-1 col-xs-1"
+                     style=" margin-left: 10px;border: 0;padding: 5px;height: 21px;float: left;">
+                    <button onclick="show('addtier',0)" type="button"
+                            class="glyphicon glyphicon-plus input-group-addon topbaradd"
+                    ></button>
+
+                    <button id="societetop"
+                            style="color:white;white-space: nowrap;overflow: hidden; ">{{ societes|length }} Sociétés
+                    </button>
+
+                </div>
+                <div class="input-group hidden-xs col-sm-1 col-md-1 col-xs-1"
+                     style=" margin-left: 10px;border: 0;padding: 5px;height: 21px;float: left;">
+                    <button onclick="document.getElementById('iframe').src='{{ path('afficher_import') }}'"
+                            style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">
+                        SAS Admissions
+                    </button>
+                </div>
+
+                <div class="input-group hidden-xs "
+                     style="margin-left: 10px;border: 0;padding: 5px;height: 21px;float: left;">
+                    <button onclick="document.getElementById('iframe').src='{{ path('affiche_etab',{'id':app.user.etablissement.id }) }}'"
+                            style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">
+                        Votre Ecole
+                    </button>
+                </div>
+
+                {# BOUTON TABLEAU DE BORD #}
+                <div class="input-group hidden-xs "
+                     style="margin-left: 10px;border: 0;padding: 5px;height: 21px;float: left;">
+                    <a href="{{ path('metier_user_login') }}">
+                        <button style="color:white;white-space: nowrap;overflow: hidden;padding: 0;background: #1654b7 ;border: none;margin: 0 ;height: 21px;width: 100%;font: 14px Roboto; ">
+                            Tableau de bord
+                        </button>
+                    </a>
+                </div>
+
+                {# <div class="col-xs-offset-3 col-xs-1 btn-group" style="height: 20px; float: right; margin-right: 40px;">
+                     <button type="button" class="btn btn-default dropdown-toggle"
+                             data-toggle="dropdown" aria-haspopup="true"
+                             aria-expanded="false"
+                             style="padding:0;width: 100%; height: 20px; border-radius: 0; background: none; border: 0;color: white">
+                         {% if image %}
+                             <img  src="data:image/jpg;base64,{{image}}" style="border-radius:50%; width:32px; height:32px" ><span style="width:12px;height:12px;border-radius: 50%;left:36px;background:#cc0000;color:white;font:10px Roboto;position:absolute;">{% if messages is defined %}
+                             {{ messages }}
+                         {% endif %}</span>
+                         {% elseif app.user.getCivilite == 'Mme' or app.user.getCivilite == 'Madame' or app.user.getCivilite == 'Mademoiselle' %}
+                             <img  src="{{ asset('image/femme.jpg') }}" style="border-radius:50%; width:32px; height:32px" ><span style="width:12px;height:12px;border-radius: 50%;left:36px;background:#cc0000;color:white;font:10px Roboto;position:absolute;">{% if messages is defined %}
+                             {{ messages }}
+                         {% endif %}</span>
+                         {% else %}
+                             <img  src="{{ asset('image/homme.jpg') }}" style="border-radius:50%; width:32px; height:32px" ><span style="width:12px;height:12px;border-radius: 50%;left:36px;background:#cc0000;color:white;font:10px Roboto;position:absolute;">{% if messages is defined %}
+                             {{ messages }}
+                         {% endif %}</span>
+                         {% endif %}
+                         {{ app.user.username }}<span class="glyphicon glyphicon-triangle-bottom"
+                                                      aria-hidden="true"></span>
+                     </button>
+                     <ul id="profil" class="dropdown-menu" aria-labelledby="dropdownMenu1" style="color:white;background: #2975cb;">
+
+                         <li><button onclick="postiframe('{{ path('afficher_profil') }}')" style="background: transparent;border:transparent;width:100%">PROFIL</button></li>
+                         <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_messagerie') }}';" style="background: transparent;border:transparent;width:100%">MESSAGERIE</button></li>
+                         #}{#<li><button onclick="document.getElementById('iframe').src='{{ path('afficher_rendezvous') }}';" style="background: transparent;border:transparent;width:100%">RENDEZ-VOUS</button></li>#}{#
+                         <li><button onclick="document.getElementById('iframe').src='{{ path('afficher_MiseEnRelation') }}';" style="background: transparent;border:transparent;width:100%">MISES EN RELATION</button></li>
+                         <li><a onclick="sessionStorage.clear()" href="{{ path('logout') }}" style="color:white;background: #2975cb;"><button style="background: transparent;border:transparent;width:100% ">DECONNEXION</button> </a></li>
+
+
+
+                     </ul>
+                 </div>#}
+
+        </div>
+
+
+    {% endblock %}
+    <div class="row" style="height: 100%">
+
+        {% block underTopBar %}
+            {% block LeftBar %}
+                <div class="col-xs-2">
+
+                    <select title="" id="leftselect" name="myddl" class="btn btn-default dropdown-toggle">
+                        <option value="user">Voir Apprenants</option>
+                        <option value="societe">Voir Sociétés</option>
+                        <option value="mission">Voir Missions</option>
+                    </select>
+
+                    <div id="societe" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                        {% if societes is defined %}
+                            {% for s in societes %}
+                                <button onclick="postiframe('{{ path('affiche_etab',{'id': s.getId }) }}',{{ s.getId }},this)"
+                                        id="etablissement{{ s.getId }}" type="button"
+                                        class="list-group-item butonLigne">
+                                    <div name="Recherche" style="display: none;">{{ s.getTier.getRaisonSoc }}
+                                        ,{{ s.siret }},{{ s.adresse }},{{ s.codepostal }},{{ s.ville }}</div>
+                                    <div style="display: none;"></div>
+                                    <div class="col-xs-12 part"
+                                         title="{{ s.getTier.getRaisonSoc }}">{{ s.getTier.getRaisonSoc }}</div>
+                                    <div class="col-xs-12 part"
+                                         style="height: 31px; text-align: left;">
+                                        <div class="col-xs-9 part" title="{{ s.getVille }}">{{ s.getVille }}</div>
+                                        {% if s.getActive %}
+                                            <div class="col-xs-1 active" id="activeSociete{{ s.getId }}"></div>
+                                        {% else %}
+                                            <div class="col-xs-1 inactive" id="activeSociete{{ s.getId }}"></div>
+                                        {% endif %}
+                                    </div>
+                                </button>
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+                    <div id="mission" class="list-group col-xs-2 leftbar" style="visibility: hidden;">
+                        {% if missions is defined %}
+                            {% for m in missions %}
+                                <button onclick="postiframe('{{ path('admin_afficheMission',{'id': m.getId ,'idFor': "-1"  }) }}',this)"
+                                        id="mission{{ m.getId }}" type="button" class="list-group-item butonLigne">
+                                    <div name="Recherche" style="display: none;">{{ m.statut }},{{ m.intitule }}
+                                        ,{{ m.profil }},{{ m.typecontrat }},{{ m.codemission }},{{ m.domaine }}
+                                        ,{{ m.etablissement.tier.raisonsoc }},{{ m.etablissement.siret }}
+                                        ,{{ m.etablissement.adresse }},{{ m.etablissement.codepostal }}
+                                        ,{{ m.etablissement.ville }}</div>
+                                    <div style="display: none;"></div>
+                                    <div class="col-xs-12 part" title="{{ m.intitule }}">{{ m.intitule }}
+                                        <label class="StatutMission">
+                                            {% if m.statut == 1 %}
+                                                Prive
+                                            {% elseif m.statut == 2 %}
+                                                Semi Public
+                                            {% elseif m.statut == 3 %}
+                                                Public
+                                            {% endif %}
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-12 part"
+                                         style="height: 31px; text-align: left;">
+
+                                        <div class="col-xs-9 part" title="{{ m.getDomaine }}">{{ m.getDomaine }}</div>
+
+
+                                        {% if not m.getSuspendu %}
+                                            <div class="col-xs-1 active" id="active{{ m.getId }}"></div>
+                                        {% else %}
+                                            <div class="col-xs-1 inactive" id="active{{ m.getId }}"></div>
+                                        {% endif %}
+
+                                    </div>
+                                </button>
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+                    <div id="user" class="list-group col-xs-2 leftbar">
+                        {% if apprenants is defined %}
+                            {% for u in apprenants %}
+                                <button onclick="postiframe('{{ path('metier_user_afficheUser',{'id': u.getId }) }}',this)"
+                                        id="user{{ u.getId }}" type="button" class="list-group-item butonLigne">
+
+
+                                    {% if  u.getPlace!=1 %}
+
+                                        {% set place=2 %}
+
+                                    {% else %}
+                                        {% set place=1 %}
+                                    {% endif %}
+
+                                    {% if  u.getInfo.getHandicape==1 %}
+
+                                        {% set Handicape=3 %}
+                                    {% else %}
+                                        {% set Handicape=30 %}
+                                    {% endif %}
+
+                                    {% if  u.getInfo.getEntrepreneur==1 %}
+
+                                        {% set Entrepreneur=4 %}
+                                    {% else %}
+                                        {% set Entrepreneur=40 %}
+                                    {% endif %}
+
+                                    {% if  u.getInfo.getPermis==1 %}
+
+                                        {% set Permis=5 %}
+                                    {% else %}
+                                        {% set Permis=50 %}
+                                    {% endif %}
+
+                                    {% if  u.getInfo.getVehicule==1 %}
+
+                                        {% set Vehicule=6 %}
+                                    {% else %}
+                                        {% set Vehicule=60 %}
+                                    {% endif %}
+
+
+                                    <div name="Recherche" style="display: none;">{{ place }},{{ Handicape }}
+                                        ,{{ Entrepreneur }},{{ Permis }},{{ Vehicule }},{{ u.nom }},{{ u.getUsername }}
+                                        ,{{ u.prenom }},{{ u.email }}
+                                        ,{% if u.info %}{{ u.info.adresse }},{{ u.info.cp }}{% endif %}
+                                        ,{% if u.etablissement %}{{ u.etablissement.siret }}{% endif %}</div>
+                                    <div style="display: none;"></div>
+                                    <div class="col-xs-12 part" title="{{ u.getUsername }}">{{ u.getUsername }}</div>
+
+                                    <div class="col-xs-12 part"
+                                         style="height: 31px; text-align: left;">
+
+                                        <div class="col-xs-9 part" title="{{ u.getEmail }}">{{ u.getEmail }}</div>
+                                        <label class="StatutApp">
+                                            {% if u.getPlace == 1 %}
+                                                Placé
+                                            {% else %}
+                                                A placer
+
+                                            {% endif %}
+                                        </label>
+
+
+                                        {% if u.info %}
+                                            {% if u.info.profilcomplet == 3 %}
+                                                <div class="col-xs-1 active" id="activeUser{{ u.getId }}"></div>
+                                            {% elseif u.info.profilcomplet == 2 %}
+                                                <div class="col-xs-1 inactive" id="activeUser{{ u.getId }}"></div>
+                                            {% elseif u.info.profilcomplet == 1 %}
+                                                <div class="col-xs-1"
+                                                     style="background: #2A76CC;height:9px;border-radius: 100%;margin: 3px 0;width: 9px;float: right;"
+                                                     id="activeUser{{ u.getId }}"></div>
+                                            {% else %}
+                                                <div class="col-xs-1"
+                                                     style="background: #c77405;height:9px;border-radius: 100%;margin: 3px 0;width: 9px;float: right;"
+                                                     id="activeUser{{ u.getId }}"></div>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+
+                                </button>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endblock %}
+
+
+            <div class="col-xs-10" style="height: 100%">
+
+                <div class="row" style="height: 40px; margin: 0; background: #3988d7;">
+
+                    <div class="input-group col-xs-offset-1 col-xs-6" style="margin-top: 5px; float: left;">
+                    <span class="glyphicon glyphicon-search input-group-addon topbaradd"
+                          id="basic-addon1" style="width: 27px;height: 27px;padding: 7px"></span>
+                        <input onkeyup="search(this.value)" type="text" class="recherche"
+                               aria-describedby="basic-addon1"
+                               style="height: 27px;">
+                    </div>
+
+                    <div id="divfiltreMission" class="col-xs-offset-3 col-xs-1 btn-group"
+                         style="height: 20px;visibility: hidden;">
+                        {# FILTRE Caché#}
+                        <button type="button" class="btn btn-default dropdown-toggle"
+                                data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false"
+                                style="font:17px Roboto; width: 100%; height: 20px; border-radius: 0; background: none; border: 0;color: white">
+                            Filtres <span class="glyphicon glyphicon-menu-down"
+                                          aria-hidden="true"></span>
+                        </button>
+                        <ul id="filtre" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li data-rec="0">Toutes les mission</li>
+                            <li data-rec="1">Missions privées</li>
+                            <li data-rec="2">Missions semi-public</li>
+
+                        </ul>
+                    </div>
+                    <div id="divfiltreApp" class="col-xs-offset-3 col-xs-1 btn-group"
+                         style="height: 20px;margin-top: -20px;visibility: hidden;">
+                        {# FILTRE Caché#}
+                        <button type="button" class="btn btn-default dropdown-toggle"
+                                data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false"
+                                style="font:17px Roboto; width: 100%; height: 20px; border-radius: 0; background: none; border: 0;color: white">
+                            Filtres <span class="glyphicon glyphicon-menu-down"
+                                          aria-hidden="true"></span>
+                        </button>
+                        <ul id="filtreApp" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li data-rec="0">Tous les apprenants</li>
+                            <li data-rec="1">Apprenants placés</li>
+                            <li data-rec="2">Apprenants à placer</li>
+                            <li data-rec="3">Handicapé</li>
+                            <li data-rec="4">Entrepreneur</li>
+                            <li data-rec="5">Permis</li>
+                            <li data-rec="6">Véhiculé</li>
+
+
+                        </ul>
+                    </div>
+                </div>
+
+                {% block Content %}
+
+                    {#<iframe id="iframe" src="{{ path('afficher_profil') }}"></iframe>#}
+                    <iframe id="iframe" src="{{ path('afficher_TableauBord') }}"></iframe>
+
+                {% endblock %}
+            </div>
+        {% endblock %}
+    </div>
+
+</div>
+
+{# POPUP MISSIONS A POURVOIR #}
+{# RECOPIER LINK VERS MISSIONS / PROFIL APPRENANTS DANS LES AUTRES BLOCS #}
+
+<div id="MissionAPourvoir" class="popup" >
+    <div onclick="document.getElementById('MissionAPourvoir').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3>MISSIONS A POURVOIR </h3> </p> </div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead style="background-color:#3988d7">
+                    <tr>
+                        <th style="text-align:center"> INTITULE </th>
+                        <th style="text-align:center"> SOCIETE </th>
+                        <th style="text-align:center"> DATE DEPOT </th>
+                        <th style="text-align:center"> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if missions is defined %}
+                        {% for m in missions %}
+                            {% if not m.getPourvue() %}
+                                <tr>
+                                    <td> {{ m.intitule }} </td>
+                                    <td> {{ m.etablissement.tier.raisonsoc }} </td>
+                                    <td> {{ m.datecreation | date ('m/Y') }} </td>
+                                    <td>
+                                        <button class= "btn btn-default btn-xs">
+                                            <a href="{{ path('admin_afficheMission',{'id': m.getId,'idFor': "-1" } ) }}" target="_blank">
+                                                <span class= "glyphicon glyphicon-search" aria-hidden="true"></span>
+                                            </a>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        {% elseif missions == null %}
+                        <tr> Aucunes Missions à afficher </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+    </div>
+</div>
+
+{# POPUP MISSIONS POURVUES A REGLER QUAND LE PROCESSUS SERA TERMINE#}
+
+<div id="MissionPourvues" class="popup" >
+    <div onclick="document.getElementById('MissionPourvues').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3> MISSIONS POURVUES </h3> </p></div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead style="background-color:#3988d7">
+                    <tr>
+                        <th style="text-align:center"> INTITULE </th>
+                        <th style="text-align:center"> SOCIETE </th>
+                        <th style="text-align:center"> DATE DEPOT </th>
+                        <th style="text-align:center"> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if missions is defined %}
+                        {% for m in missions %}
+                            {% if m.getPourvue() == 1 %}
+                                <tr>
+                                    <td> {{ m.intitule }} </td>
+                                    <td> {{ m.etablissement.tier.raisonsoc }} </td>
+                                    <td> {{ m.datecreation | date ('m/Y') }} </td>
+                                    <td>
+                                        <button class= "btn btn-default btn-xs">
+                                            <a href="{{ path('admin_afficheMission',{'id': m.getId,'idFor': "-1" } ) }}" target="_blank">
+                                                <span class= "glyphicon glyphicon-search" aria-hidden="true"></span>
+                                            </a>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% elseif missions == null %}
+                                <tr> Aucunes Missions à afficher </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+    </div>
+</div>
+
+{# POPUP MISSIONS SANS FORMATIONS #}
+
+<div id="MissionSansFormations" class="popup" >
+    <div onclick="document.getElementById('MissionSansFormations').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3>MISSIONS SANS FORMATIONS </h3> </p> </div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead style="background-color:#3988d7">
+                    <tr>
+                        <th style="text-align:center"> INTITULE </th>
+                        <th style="text-align:center"> SOCIETE </th>
+                        <th style="text-align:center"> DATE DEPOT </th>
+                        <th style="text-align:center"> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                {% set MesMissionsSansFormation=GetMissionSansformation(etablissement.getTier.getId) %}
+                    {% for m in MesMissionsSansFormation.mission %}
+                        <tr>
+                            <td> {{ m.intitule }} </td>
+                            <td> {{ m.etablissement.tier.raisonsoc }} </td>
+                            <td> {{ m.datecreation | date ('m/Y') }} </td>
+                            <td>
+                                <button class= "btn btn-default btn-xs">
+                                    <a href="{{ path('admin_afficheMission',{'id': m.getId,'idFor': "-1" } ) }}" target="_blank">
+                                        <span class= "glyphicon glyphicon-search" aria-hidden="true"></span>
+                                    </a>
+                                </button>
+                            </td>
+                        </tr>
+                    {% if MesMissionsSansFormation == null %}
+                        <tr> Aucunes Missions à afficher </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+    </div>
+</div>
+
+{# POPUP MISSIONS SANS TUTEUR #}
+{# A MODIFIER SUITE AU CHANGEMENT EFFECTUE TUTEUR -> CONTACT MISSION #}
+
+<div id="MissionSansTuteur" class="popup" >
+    <div onclick="document.getElementById('MissionSansTuteur').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p><h3> MISSIONS SANS TUTEUR  </h3></p></div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead style="background-color:#3988d7">
+                    <tr>
+                        <th style="text-align:center"> INTITULE </th>
+                        <th style="text-align:center"> SOCIETE </th>
+                        <th style="text-align:center"> DATE DEPOT </th>
+                        <th style="text-align:center"> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if missions is defined %}
+                        {% for m in missions %}
+                            {% if not m.getTuteur()%}
+                                <tr>
+                                    <td> {{ m.intitule }} </td>
+                                    <td> {{ m.etablissement.tier.raisonsoc }} </td>
+                                    <td> {{ m.datecreation | date ('m/Y') }} </td>
+                                    <td>
+                                        <button class= "btn btn-default btn-xs">
+                                            <a href="{{ path('admin_afficheMission',{'id': m.getId,'idFor': "-1" } ) }}" target="_blank">
+                                                <span class= "glyphicon glyphicon-search" aria-hidden="true"></span>
+                                            </a>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% elseif missions == null %}
+                                <tr> Aucunes Missions à afficher </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+    </div>
+</div>
+
+{# POPUP MISSIONS SANS QCM ( remplacer la méthode mesmissionssansformation par la futur methode mesmissionssansqcm #}
+
+<div id="MissionSansQCM" class="popup" >
+    <div onclick="document.getElementById('MissionSansQCM').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3>MISSIONS SANS QCM</h3> </p></div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead style="background-color:#3988d7">
+                    <tr>
+                        <th style="text-align:center"> INTITULE </th>
+                        <th style="text-align:center"> SOCIETE </th>
+                        <th style="text-align:center"> DATE DEPOT </th>
+                        <th style="text-align:center"> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% set MesMissionsSansFormation=GetMissionSansformation(etablissement.getTier.getId) %}
+                    {% for m in MesMissionsSansFormation.mission %}
+                        <tr>
+                            <td> {{ m.intitule }} </td>
+                            <td> {{ m.etablissement.tier.raisonsoc }} </td>
+                            <td> {{ m.datecreation | date ('m/Y') }} </td>
+                            <td>
+                                <button class= "btn btn-default btn-xs">
+                                    <a href="{{ path('admin_afficheMission',{'id': m.getId,'idFor': "-1" } ) }}" target="_blank">
+                                        <span class= "glyphicon glyphicon-search" aria-hidden="true"></span>
+                                    </a>
+                                </button>
+                            </td>
+                        </tr>
+                    {% if MesMissionsSansFormation == null %}
+                        <tr> Aucunes Missions à afficher </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+    </div>
+</div>
+
+{# POPUP POSTULATIONS EN COURS #}
+{# POPUP EN COURS D'AVANCEMENT POUR POUVOIR ENCHAINER SUR LES AUTRES #}
+
+<div id="PostulationEnCours" class="popup" >
+    <div onclick="document.getElementById('PostulationEnCours').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3>POSTULATIONS EN COURS</h3> </p></div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead style="background-color:#3988d7">
+                    <tr>
+                        <th style="text-align:center"> NOM PRENOM </th>
+                        <th style="text-align:center"> DATE DE CREATION </th>
+                        <th style="text-align:center"> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if apprenants is defined %}
+                        {% for user in apprenants %}
+                            {% if user.info %}
+                                {% if user.info.profilcomplet == 0 %}
+                                    <tr>
+                                        <td>
+                                            <img src="{{ user.getPhotos }} " style="height: 100%" >
+                                            {{ user.getNom }}
+                                            {{ user.getPrenom }}
+                                        </td>
+                                        <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
+
+                                        <td>
+                                            <button class= "btn btn-default btn-xs">
+                                                    <a href="{{ path('metier_user_afficheUser',{'id': user.getId} ) }}" target="_blank">
+                                                        <span class= "glyphicon glyphicon-search" aria-hidden="true"></span>
+                                                    </a>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% elseif apprenants == null %}
+                        <tr> Aucuns Apprenants à afficher </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+    </div>
+</div>
+
+{# POPUP FORMATION A VALIDER #}
+{# RESTE A REGLER LES SOUCIS CONCERNANT LA DATE DE CREATION #}
+
+<div id="FormationAValider" class="popup" >
+    <div onclick="document.getElementById('FormationAValider').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3>FORMATION A VALIDER </h3></p></div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead style="background-color:#3988d7">
+                    <tr>
+                        <th style="text-align:center"> NOM PRENOM </th>
+                        <th style="text-align:center"> DATE CREATION </th>
+                        <th style="text-align:center"> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if apprenants is defined %}
+                        {% for user in apprenants %}
+                            {% if user.info %}
+                                {% if user.info.profilcomplet != 3  %}
+                                    <tr>
+                                        <td>
+                                            <img src="{{ user.getPhotos }} " style="height: 100%" >
+                                            {{ user.getNom }}
+                                            {{ user.getPrenom }}
+                                        </td>
+                                        <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
+                                        <td>
+                                            <button class= "btn btn-default btn-xs">
+                                                    <a href="{{ path('metier_user_afficheUser',{'id': user.getId} ) }}" target="_blank">
+                                                        <span class= "glyphicon glyphicon-search" aria-hidden="true"></span>
+                                                    </a>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% elseif apprenants == null %}
+                                    <tr> Aucuns Apprenants à afficher </tr>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+    </div>
+</div>
+
+{# POPUP APPRENANTS A PLACER #}
+{# RESTE A REGLER LES SOUCIS CONCERNANT LA DATE DE CREATION #}
+
+<div id="ApprenantsAPlacer" class="popup" >
+    <div onclick="document.getElementById('ApprenantsAPlacer').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3> APPRENANTS A PLACER </h3></p></div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead style="background-color:#3988d7">
+                    <tr>
+                        <th style="text-align:center"> NOM PRENOM </th>
+                        <th style="text-align:center"> DATE CREATION </th>
+                        <th style="text-align:center"> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if apprenants is defined %}
+                        {% for user in apprenants %}
+                            {% if user.place != 1 %}
+                            {% if user.info %}
+                            {% if user.info.profilcomplet == 3 %}
+                                <tr>
+                                    <td>
+                                        <img src="{{ user.getPhotos }} " style="height: 100%" >
+                                        {{ user.getNom }}
+                                        {{ user.getPrenom }}
+                                    </td>
+                                    <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
+                                    <td>
+                                        <button class= "btn btn-default btn-xs">
+                                                <a href="{{ path('metier_user_afficheUser',{'id': user.getId} ) }}" target="_blank">
+                                                    <span class= "glyphicon glyphicon-search" aria-hidden="true"></span>
+                                                </a>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% elseif apprenants == null %}
+                                <tr> Aucuns Apprenants à afficher </tr>
+                            {% endif %}
+                            {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+    </div>
+</div>
+
+{# POPUP APPRENANTS MIS EN RELATION quelle variable gère le fait qu'un apprenant est mis en relation POINT A TERMINER  #}
+
+<div id="ApprenantsMisEnRelation" class="popup" >
+    <div onclick="document.getElementById('ApprenantsMisEnRelation').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3> APPRENANTS MIS EN RELATION </h3></p></div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead style="background-color:#3988d7">
+                    <tr>
+                        <th style="text-align:center"> NOM PRENOM </th>
+                        <th style="text-align:center"> DATE CREATION </th>
+                        <th style="text-align:center"> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+{# MyApprenantRelation n'est pas récupérable ici , il faut donc refaire la requête pour le retrouver. #}
+
+                    {% if MyApprenantRelation is defined %}
+
+                        {% for user in MyApprenantRelation %}
+                               {{ user.getNom }}
+
+                                    <tr>
+                                        <td>
+                                            <img src="{{ user.getPhotos }} " style="height: 100%" >
+                                            {{ user.getNom }}
+                                            {{ user.getPrenom }}
+                                        </td>
+                                        <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
+                                        <td>
+                                            <button class= "btn btn-default btn-xs">
+                                                    <a href="{{ path('metier_user_afficheUser',{'id': user.getId} ) }}" target="_blank">
+                                                        <span class= "glyphicon glyphicon-search" aria-hidden="true"></span>
+                                                    </a>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+    </div>
+</div>
+
+
+{# POPUP APPRENANTS PLACES RESTE A MODIF LA REQUETE UNE FOIS QUE LE PROCESSUS SERA COMPLET SUR LA PLATEFORME#}
+
+<div id="ApprenantsPlaces" class="popup" >
+    <div onclick="document.getElementById('ApprenantsPlaces').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3>APPRENANTS PLACES</h3> </p></div>
+            <table class="table table-bordered table-hover table-responsive">
+                <thead style="background-color:#3988d7">
+                    <tr>
+                        <th style="text-align:center"> NOM PRENOM </th>
+                        <th style="text-align:center"> DATE CREATION </th>
+                        <th style="text-align:center"> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if apprenants is defined %}
+                        {% for user in apprenants %}
+                            {% if user.getPlace() == 1 %}
+                                <tr>
+                                    <td>
+                                        <img src="{{ user.getPhotos }} " style="height: 100%" >
+                                        {{ user.getNom }}
+                                        {{ user.getPrenom }}
+                                    </td>
+                                    <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
+                                    <td>
+                                        <button class= "btn btn-default btn-xs">
+                                                <a href="{{ path('metier_user_afficheUser',{'id': user.getId} ) }}" target="_blank">
+                                                    <span class= "glyphicon glyphicon-search" aria-hidden="true"></span>
+                                                </a>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% elseif apprenants == null %}
+                                <tr> Aucuns Apprenants à afficher </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+    </div>
+</div>
+
+{# POPUPS RECHERCHE AVANCEE #}
+
+<div id="RechercheAvancee" class="popup" >
+    <div onclick="document.getElementById('RechercheAvancee').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3> RESULTAT DE LA RECHERCHE </h3> </p> </div>
+            <div class="col-xs-offset-3 col-xs-6">
+                    <table class="table table-bordered table-hover table-responsive">
+                        <thead style="background-color:#3988d7">
+                            <tr>
+                                <th style="text-align:center"> NOM PRENOM </th>
+                                <th style="text-align:center"> DATE CREATION </th>
+                                <th style="text-align:center"> ACTION </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if apprenants is defined %}
+                                {% for user in apprenants %}
+                                    <tr id="RowApp{{user.getId}}">
+                                        <input type="hidden" class="RechercherAppClass" id="{{user.getId}}"
+
+                                        value="
+                                            {{user.getNom()}};
+                                            {{user.getPrenom()}};
+                                            {{user.getEmail()}};
+                                            {{user.info.getAdresse()}};
+                                            {{user.info.getCp()}};
+                                            {{user.info.getHandicape()}};
+                                            {{user.info.getEntrepreneur()}};
+                                            {{user.info.getFormationactuelle()}};
+                                            {{user.info.getLangue1()}};
+                                            {{user.info.getLangue2()}};
+                                            {{user.info.getLangue3()}};
+                                            {{user.info.getLangue4()}};
+                                            {{user.info.getLangue5()}};
+                                            {{user.info.getCompetence1()}};
+                                            {{user.info.getCompetence2()}};
+                                            {{user.info.getCompetence3()}};
+                                            {{user.info.getCompetence4()}};
+                                            {{user.info.getCompetence5()}};
+                                        " >
+                                        <td>
+                                            <img src="{{ user.getPhotos }} " style="height: 100%" >
+                                            {{ user.getNom }}
+                                            {{ user.getPrenom }}
+                                        </td>
+                                        <td> {{ user.info.getDatecreation | date ('m/Y') }} </td>
+                                        <td>
+                                            <button class= "btn btn-default btn-xs">
+                                             <a href="{{ path('metier_user_afficheUser',{'id': user.getId} ) }}" target="_blank">
+                                                    <span class= "glyphicon glyphicon-search" aria-hidden="true"></span>
+                                                </a>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                {% elseif apprenants == null %}
+                                <tr> Aucuns Apprenants à afficher </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+            </div>
+    </div>
+</div>
+
+<div id="RechercheMission" class="popup" >
+    <div onclick="document.getElementById('RechercheMission').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3> RESULTAT DE LA RECHERCHE </h3> </p> </div>
+            <div class="col-xs-offset-3 col-xs-6">
+                    <table class="table table-bordered table-hover table-responsive">
+                        <thead style="background-color:#3988d7">
+                            <tr>
+                                <th style="text-align:center"> INTITULE </th>
+                                <th style="text-align:center"> SOCIETE </th>
+                                <th style="text-align:center"> DATE DEPOT </th>
+                                <th style="text-align:center"> ACTION </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if missions is defined %}
+                                {% for m in missions %}
+                                    <tr id="RowMis{{m.getId}}">
+                                        <input type="hidden" class="RechercherMisClass" id="{{m.getId}}"
+
+                                        value="
+                                            {{m.getIntitule()}};
+                                            {{m.getDomaine()}};
+                                            {{m.getEmploi()}};
+                                            {{m.getEtablissement()}};
+                                            {{m.getTuteur()}}; {# A CHANGER EN GETCONTACT ET ADD MAILCONTACT #}
+                                            {{m.getCommentaire()}};
+                                            {{m.getDescriptif()}};
+                                            {# RAJOUTER PROFIL RECHERCHE #}
+                                        " >
+                                    <td> {{ m.intitule }} </td>
+                                    <td> {{ m.etablissement.tier.raisonsoc }} </td>
+                                    <td> {{ m.datecreation | date ('m/Y') }} </td>
+                                    <td>
+                                        <button class= "btn btn-default btn-xs">
+                                            <a href="{{ path('admin_afficheMission',{'id': m.getId,'idFor': "-1" } ) }}" target="_blank">
+                                                <span class= "glyphicon glyphicon-search" aria-hidden="true"></span>
+                                            </a>
+                                        </button>
+                                    </td>
+                                    </tr>
+                                {% endfor %}
+                                {% elseif missions == null %}
+                                <tr> Aucunes Missions à afficher </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+            </div>
+    </div>
+</div>
+
+<div id="RechercheSociete" class="popup" >
+    <div onclick="document.getElementById('RechercheSociete').click();hide(this)" class="close"></div>
+    <div class="col-xs-offset-2 col-xs-8 formContainer">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+            <div> <p> <h3> RESULTAT DE LA RECHERCHE </h3> </p> </div>
+            <div class="col-xs-offset-3 col-xs-6">
+                    <table class="table table-bordered table-hover table-responsive">
+                        <thead style="background-color:#3988d7">
+                            <tr>
+                                <th style="text-align:center"> RAISON SOCIALE </th>
+                                <th style="text-align:center"> CODE POSTAL </th>
+                                <th style="text-align:center"> VILLE </th>
+                                <th style="text-align:center"> ACTION </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if societes is defined %}
+                                {% for s in societes %}
+                                    <tr id="RowSoc{{s.getId}}">
+                                        <input type="hidden" class="RechercherSocClass" id="{{s.getId}}"
+
+                                        value="
+                                            {{s.getTier.getRaisonSoc()}};
+                                            {{s.getSiret()}};
+                                            {{s.getAdresse()}};
+                                            {{s.getCodepostal()}};
+                                            {{s.getVille()}};
+                                            {# AJOUTER CONTACT QUAND ON AURA CHANGER USER EN CONTACT #}
+                                        " >
+                                        <td> {{ s.getTier.getRaisonsoc }}  </td>
+                                        <td> {{ s.getCodepostal }} </td>
+                                        <td> {{ s.getVille }}</td>
+                                        <td>
+                                            <button class= "btn btn-default btn-xs">
+                                             <a href="{{ path('affiche_etab',{'id': s.getId }) }}" target="_blank">
+                                                    <span class= "glyphicon glyphicon-search" aria-hidden="true"></span>
+                                                </a>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                {% elseif societes == null %}
+                                <tr> Aucunes Sociétés à afficher </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+            </div>
+    </div>
+</div>
+
+{# FIN POPUPS RECHERCHE AVANCEE
+
+#}
+
+{# popup missions public#}
+
+
+    <div id="MissionPublic" class="popup" style="width: 100%" >
+        <div  class="close"></div>
+        <div class="col-xs-offset-3 col-xs-6 formContainer" style="margin-top:3%;margin-left:10%;width:80%">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="hide(this.parentElement.previousElementSibling);"> </span>
+
+            <div id="apprenant" class="col-xs-10 col-xs-offset-1 SASPaginate"  style="background-color:#3DCDF2;color:white;height: 30px;" >
+
+                <div id="intitule" class="col-xs-2" style="width:20%;text-align: center;margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                    INTITULE
+                </div>
+
+                <div id="SOCIETE"  class="col-xs-2" style="width:20%;text-align: center;margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                    SOCIETE
+                </div>
+
+                <div id="DOMAINE" class="col-xs-2" style="width:20%;text-align: center;margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                    DOMAINE
+                </div>
+
+
+
+
+
+
+
+                <div id="DATEDEPOT"  class="col-xs-2" style="width:20%;text-align: center;margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                    DATE DEPOT
+                </div>
+
+
+
+                <div id="ACTION" class="col-xs-2" style="width:20%;text-align: center;margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+
+
+                    ACTION
+
+
+                </div>
+
+
+
+
+
+
+                </div>
+
+
+            {% for mission in MissionsPublic %}
+
+
+
+                {% if EstRecupere(mission.etablissement.id(),etablissement.getId()) == false %}
+                    <div id="mission{{ mission.getId }}" class="col-xs-10 col-xs-offset-1 SASPaginate" name="ListeApprenants" style="height: auto;" >
+
+
+
+
+                        <div id="intitule{{ mission.id }}" title="{{ mission.intitule }}" class="col-xs-2" style="width:20%;text-align: center;margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                            {{ mission.intitule }}
+                        </div>
+                        <div id="societe{{ mission.id }}" title="{{ mission.etablissement.tier.raisonsoc }}" class="col-xs-2" style="width:20%;text-align: center;margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                            {{ mission.etablissement.tier.raisonsoc }}
+                        </div>
+                        <div id="domaine{{ mission.id }}" title="{{ mission.domaine }}" class="col-xs-2" style="width:20%;text-align: center;margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                            {{ mission.domaine }}
+                        </div>
+
+                        <div id="DateCreation{{ mission.id }}" title="{{ mission.datecreation | date ('m/Y') }}" class="col-xs-2" style="width:20%;text-align: center;margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                            {{ mission.datecreation | date ('m/Y') }}
+                        </div>
+
+                        <div id="Action{{ mission.id }}"  class="col-xs-2" style="width:20%;text-align: center;margin: auto; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                            <button title="Consulter la fiche" class= "btn btn-default btn-xs">
+                                <a href="{{ path('admin_afficheMissionpublic',{'id': mission.getId,'idFor': "-1" } ) }}" target="_blank">
+                                    <span class= "glyphicon glyphicon-search" aria-hidden="true"></span>
+                                </a>
+                            </button>
+                            <img title="Récuperer" id="btnRecupMission{{ mission.id }}" onclick="show('addmission{{ mission.getId }}');" style="margin-left:10px"  src="{{ asset('image/imgAjouter.png') }}">
+
+
+                        </div>
+
+
+
+                    </div>
+                {% endif %}
+
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+{% if MissionsPublic is defined %}
+    {% for mission in MissionsPublic %}
+        {% set iddiv = random()  %}
+        <div id="addmission{{ mission.getId }}" class="popup" >
+            <div onclick="document.getElementById('submitaddmission{{ mission.getId }}').click();hide(this)" class="close"></div>
+            <div class="col-xs-offset-1 col-xs-9 formContainer">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true" style="float:right; height:40px; font-size:20px"onclick="this.parentElement.previousElementSibling.click();"> </span>
+                <form id="formaddmission{{ mission.getId }}" class="formulaire" action= "{{ path("mission_added") }}" onsubmit="document.getElementById('submitaddmission{{ mission.getId }}').disabled=true;ShowWaiter();" method="post" novalidate>
+                    <input type="hidden" id="idMission" name="_idMission" value="{{ mission.getId }}">
+                    <input type="hidden" id="idetab{{ mission.getId }}" name="_idetab" value="{{ etablissement.getId }}">
+                    <input type="hidden" id="Recup" name="_Recup" value="Recup">
+                    <input type="hidden" id="idSociete" name="_Societe" value="{{ mission.etablissement.getId }}">
+
+                    <div id="NavBarAddMission{{ mission.getId }}" class="col-xs-12 NavBarTier" >
+                        <button  class="col-xs-3 active" id="BoutonOnlgetDonnéesMission{{ mission.getId }}" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet{{ mission.getId }}','Information_generale{{ mission.getId }}',this);">Données</button>
+                        <button  class="col-xs-3" id="BoutonOnlgetFormationMission{{ mission.getId }}" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet{{ mission.getId }}','Onglet_Formations{{ mission.getId }}',this);">Formations</button>
+                        <button  class="col-xs-3" id="BoutonOnlgetContactMission{{ mission.getId }}" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet{{ mission.getId }}','Onglet_Contacts{{ mission.getId }}',this);">Contact mission</button>
+                        <button  class="col-xs-3" id="BoutonOnlgetCandidatMission{{ mission.getId }}" type="button" onclick="NaviguerOnglet('PopUpMissionOnglet{{ mission.getId }}','QCM_Affinite{{ mission.getId }}',this);">Candidat rêvé</button>
+                        {#<button class="col-xs-3" type="button">Documents</button>#}
+                    </div>
+                    <div id="PopUpMissionOnglet{{ mission.getId }}">
+                        <div id="Information_generale{{ mission.getId }}"  class="div_form">
+                            <div class="col-xs-6 input-colonne">
+                                <input style="font:16px Roboto;" type="text" class="input" id="Intitule{{ mission.getId }}" name="_Intitule" placeholder="Intitulé mission" required maxlength="75" value="{{ mission.getIntitule }}">
+                                <!--<textarea style="height: 140px;resize: none;" class="input" id="Profil" name="_Profil" placeholder="Profil" required maxlength="255"></textarea>-->
+                                <textarea style="font:16px Roboto;height: 200px;resize: none;" class="input" id="Descriptif{{ mission.getId }}" name="_Descriptif" placeholder="Descriptif mission" required MAXLENGTH="255" >{{ mission.getDescriptif() }}</textarea>
+                                <div class="col-xs-6">
+                                    <label style="float: left">Date début :</label><input style="font:16px Roboto;" type="text" value="{{ mission.getDatedebut|date('d/m/Y') }}" class="date" id="Datedebut{{ mission.getId }}" name="_Datedebut" title="Datedebut" required >
+                                </div>
+                                <div class="col-xs-6">
+                                    <label style="float: left">Date fin :</label><input  type="text"  class="date" value="{{ mission.getDatefin|date('d/m/Y')  }}" id="Datefin{{ mission.getId }}" name="_Datefin" title="Datefin" >
+                                </div>
+                                <img style="border:0px;height: 80px;width: 0px" src="{{ asset('image/vide.gif') }}" />
+                                <div class="div_button" >
+
+                                    <input id="submitaddmission{{ mission.getId }}" onclick="document.getElementById('BoutonOnlgetFormationMission{{ mission.getId }}').click();" style="margin-right:-40px;float:right" class="blue" type="button" value="suivant">
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-xs-6">
+
+                                <div class="col-xs-12" style="overflow: auto;height: 100px;">
+
+                                    <div class="col-xs-12" >
+                                        {% if  'stage' in mission.getTypeContrat   %}
+                                            <input type="radio" checked value="Stage" name="_Stage" ><label>Stage</label>
+                                        {% else %}
+                                            <input type="radio" value="stage" name="_Stage" ><label>Stage</label>
+                                        {% endif %}
+
+                                    </div>
+                                    <div class="col-xs-12" >
+                                        {% if  'Stage alterné' in mission.getTypeContrat   %}
+                                            <input type="radio" checked value="Stage alterné" name="_StageAlterne" ><label>Stage alterné</label>
+                                        {% else %}
+                                            <input type="radio" value="Stage alterné" name="_StageAlterne" ><label>Stage alterné</label>
+                                        {% endif %}
+
+                                    </div>
+                                    <div class="col-xs-12" >
+                                        {% if  'Contrat de professionalisation' in mission.getTypeContrat  %}
+                                            <input type="radio" checked value="Contrat de professionalisation" name="_ContratProfessionalisation"><label>Contrat de professionalisation</label>
+                                        {% else %}
+                                            <input type="radio" value="Contrat de professionalisation" name="_ContratProfessionalisation"><label>Contrat de professionalisation</label>
+                                        {% endif %}
+
+                                    </div>
+                                    <div class="col-xs-12" >
+                                        {% if "Contrat d'apprentissage" in  mission.getTypeContrat()   %}
+                                            <input type="radio" checked value="Contrat d'apprentissage" name="_ContratApprentissage"><label>Contrat d'apprentissage</label>
+                                        {% else %}
+                                            <input type="radio"  value="Contrat d'apprentissage" name="_ContratApprentissage"><label>Contrat d'apprentissage</label>
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+
+                                <input type="number"  value="{{ mission.getRemuneration}}" class="input " id="Remuneration{{ mission.getId }}" name="_Remuneration" placeholder="Rémunération"  max="1000000" style="font:16px Roboto;">
+                                <input type="number" value="{{ mission.getNbreposte}}" class="input " id="NbrePoste{{ mission.getId }}" name="_NbrePoste" placeholder="Nbre de poste à pourvoir" required  min="0" max="1000" style="font:16px Roboto;">
+                                <input style="font:16px Roboto;" type="text" value="{{ mission.getProfil}}" class="input" id="ProfilRech{{ mission.getId }}" name="_ProfilRech" placeholder="Profil recherché" required maxlength="250">
+                                <table style="border:hidden 0px">
+    <tr>
+        <td style="border:hidden 0px">
+            <div style="width: 100%" id="divMetier1{{  mission.getId}}">
+                <label style="margin-top:10px;float: left">Métier 1 :</label>
+                <select title="Métier 1"  class="input" id="Metier1{{  mission.getId}}" name="_Metier1" style="width:365px;font:16px Roboto;" >
+                    <option value=""  ></option>
+                    <option value="Achat" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Achat' %} selected {% endif %}{% endif %}>Achat</option>
+                    <option value="Administration/Secrétariat" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Administration/Secrétariat' %} selected {% endif %}{% endif %}>Administration/Secrétariat</option>
+                    <option value="Agriculture/Elevage" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Agriculture/Elevage' %} selected {% endif %}{% endif %} >Agriculture/Elevage</option>
+                    <option value="Animation/Evénementiel" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Animation/Evénementiel' %} selected {% endif %}{% endif %}>Animation/Evénementiel</option>
+                    <option value="Artisanat" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Artisanat' %} selected {% endif %}{% endif %}>Artisanat</option>
+                    <option value="Banque/Assurance" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Banque/Assurance' %} selected {% endif %}{% endif %}>Banque/Assurance</option>
+                    <option value="Bâtiment/Travaux publics" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Bâtiment/Travaux publics' %} selected {% endif %}{% endif %}>Bâtiment/Travaux publics</option>
+                    <option value="Conseil/Audit" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Conseil/Audit' %} selected {% endif %}{% endif %}>Conseil/Audit</option>
+                    <option value="Commerce/Vente" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Commerce/Vente' %} selected {% endif %}{% endif %}>Commerce/Vente</option>
+                    <option value="Droit/Fiscalité" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Droit/Fiscalité' %} selected {% endif %}{% endif %}>Droit/Fiscalité</option>
+                    <option value="Edition/Journalisme" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Edition/Journalisme' %} selected {% endif %}{% endif %}>Edition/Journalisme</option>
+                    <option value="Etude/Recherche" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Etude/Recherche' %} selected {% endif %}{% endif %}>Etude/Recherche</option>
+                    <option value="Finance/Comptabilité" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Finance/Comptabilité' %} selected {% endif %}{% endif %}>Finance/Comptabilité</option>
+                    <option value="Formation/Enseignement" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Formation/Enseignement' %} selected {% endif %}{% endif %}>Formation/Enseignement</option>
+                    <option value="Immobilier" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Immobilier' %} selected {% endif %}{% endif %}>Immobilier</option>
+                    <option value="Industrie/Production" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Industrie/Production' %} selected {% endif %}{% endif %}>Industrie/Production</option>
+                    <option value="Informatique/Télécommunication" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Informatique/Télécommunication' %} selected {% endif %}{% endif %}>Informatique/Télécommunication</option>
+                    <option value="Informatique/Développement" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Informatique/Développement' %} selected {% endif %}{% endif %}>Informatique/Développement</option>
+                    <option value="Management/Gestion" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Management/Gestion' %} selected {% endif %}{% endif %}>Management/Gestion</option>
+                    <option value="Marketting/Communication/Publicité" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Marketting/Communication/Publicité' %} selected {% endif %}{% endif %}>Marketting/Communication/Publicité</option>
+                    <option value="Pharmaceutique/Chimie" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Pharmaceutique/Chimie' %} selected {% endif %}{% endif %}>Pharmaceutique/Chimie</option>
+                    <option value="Ressources Humaines" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Ressources Humaines' %} selected {% endif %}{% endif %}>Ressources Humaines</option>
+                    <option value="Hôtelerie/Restauration" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Hôtelerie/Restauration' %} selected {% endif %}{% endif %}>Hôtelerie/Restauration</option>
+                    <option value="Tourisme" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Tourisme' %} selected {% endif %}{% endif %}>Tourisme</option>
+                    <option value="Santé" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Santé' %} selected {% endif %}{% endif %}>Santé</option>
+                    <option value="Sécurité/Défense" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Sécurité/Défense' %} selected {% endif %}{% endif %}>Sécurité/Défense</option>
+                    <option value="Social" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Social' %} selected {% endif %}{% endif %}>Social</option>
+                    <option value="Sport/Loisir" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Sport/Loisir' %} selected {% endif %}{% endif %}>Sport/Loisir</option>
+                    <option value="Soin/Beauté" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Soin/Beauté' %} selected {% endif %}{% endif %}>Soin/Beauté</option>
+                    <option value="Transport/Logistique" {% if mission.getMetier1() is defined %}{% if mission.getMetier1=='Transport/Logistique' %} selected {% endif %}{% endif %}>Transport/Logistique</option>
+                </select>
+                <button id="idbtnPlus1{{  mission.getId}}" style="margin-left:5px;margin-top:10px;float:left;"type="button" onclick="AddMetierUpdate(1,{{  mission.getId}})">+</button>
+                <button id="idbtnMoins1{{  mission.getId}}" style="margin-left:5px;margin-top:10px;float:left;display:none;"type="button" > - </button>
+                <img style="border:0px;height: 0px;width: 40px" src="{{ asset('image/vide.gif') }}" />
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="border:hidden 0px">
+            <div {% if  mission.getMetier2() is null  %} style="display:none;" {% endif  %} style="width: 100%;" id="divMetier2{{  mission.getId}}">
+                <label id="lblMetier2{{  mission.getId}}" style="margin-top:10px;float: left">Métier 2 :</label>
+                <select title="Métier 2"  class="input" id="Metier2{{  mission.getId}}" name="_Metier2" style="width:365px;font:16px Roboto;" >
+                    <option value=""  ></option>
+                    <option value="Achat" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Achat' %} selected {% endif %}{% endif %}>Achat</option>
+                    <option value="Administration/Secrétariat" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Administration/Secrétariat' %} selected {% endif %}{% endif %}>Administration/Secrétariat</option>
+                    <option value="Agriculture/Elevage" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Agriculture/Elevage' %} selected {% endif %}{% endif %} >Agriculture/Elevage</option>
+                    <option value="Animation/Evénementiel" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Animation/Evénementiel' %} selected {% endif %}{% endif %}>Animation/Evénementiel</option>
+                    <option value="Artisanat" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Artisanat' %} selected {% endif %}{% endif %}>Artisanat</option>
+                    <option value="Banque/Assurance" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Banque/Assurance' %} selected {% endif %}{% endif %}>Banque/Assurance</option>
+                    <option value="Bâtiment/Travaux publics" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Bâtiment/Travaux publics' %} selected {% endif %}{% endif %}>Bâtiment/Travaux publics</option>
+                    <option value="Conseil/Audit" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Conseil/Audit' %} selected {% endif %}{% endif %}>Conseil/Audit</option>
+                    <option value="Commerce/Vente" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Commerce/Vente' %} selected {% endif %}{% endif %}>Commerce/Vente</option>
+                    <option value="Droit/Fiscalité" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Droit/Fiscalité' %} selected {% endif %}{% endif %}>Droit/Fiscalité</option>
+                    <option value="Edition/Journalisme" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Edition/Journalisme' %} selected {% endif %}{% endif %}>Edition/Journalisme</option>
+                    <option value="Etude/Recherche" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Etude/Recherche' %} selected {% endif %}{% endif %}>Etude/Recherche</option>
+                    <option value="Finance/Comptabilité" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Finance/Comptabilité' %} selected {% endif %}{% endif %}>Finance/Comptabilité</option>
+                    <option value="Formation/Enseignement" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Formation/Enseignement' %} selected {% endif %}{% endif %}>Formation/Enseignement</option>
+                    <option value="Immobilier" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Immobilier' %} selected {% endif %}{% endif %}>Immobilier</option>
+                    <option value="Industrie/Production" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Industrie/Production' %} selected {% endif %}{% endif %}>Industrie/Production</option>
+                    <option value="Informatique/Télécommunication" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Informatique/Télécommunication' %} selected {% endif %}{% endif %}>Informatique/Télécommunication</option>
+                    <option value="Informatique/Développement" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Informatique/Développement' %} selected {% endif %}{% endif %}>Informatique/Développement</option>
+                    <option value="Management/Gestion" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Management/Gestion' %} selected {% endif %}{% endif %}>Management/Gestion</option>
+                    <option value="Marketting/Communication/Publicité" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Marketting/Communication/Publicité' %} selected {% endif %}{% endif %}>Marketting/Communication/Publicité</option>
+                    <option value="Pharmaceutique/Chimie" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Pharmaceutique/Chimie' %} selected {% endif %}{% endif %}>Pharmaceutique/Chimie</option>
+                    <option value="Ressources Humaines" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Ressources Humaines' %} selected {% endif %}{% endif %}>Ressources Humaines</option>
+                    <option value="Hôtelerie/Restauration" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Hôtelerie/Restauration' %} selected {% endif %}{% endif %}>Hôtelerie/Restauration</option>
+                    <option value="Tourisme" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Tourisme' %} selected {% endif %}{% endif %}>Tourisme</option>
+                    <option value="Santé" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Santé' %} selected {% endif %}{% endif %}>Santé</option>
+                    <option value="Sécurité/Défense" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Sécurité/Défense' %} selected {% endif %}{% endif %}>Sécurité/Défense</option>
+                    <option value="Social" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Social' %} selected {% endif %}{% endif %}>Social</option>
+                    <option value="Sport/Loisir" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Sport/Loisir' %} selected {% endif %}{% endif %}>Sport/Loisir</option>
+                    <option value="Soin/Beauté" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Soin/Beauté' %} selected {% endif %}{% endif %}>Soin/Beauté</option>
+                    <option value="Transport/Logistique" {% if mission.getMetier2() is defined %}{% if mission.getMetier2=='Transport/Logistique' %} selected {% endif %}{% endif %}>Transport/Logistique</option>
+
+                </select>
+                <button id="idbtnPlus2{{  mission.getId}}" style="margin-left:5px;margin-top:10px;float:left;"type="button" onclick="AddMetierUpdate(2,{{  mission.getId}})">+</button>
+                <button id="idbtnMoins2{{  mission.getId}}" {% if not mission.getMetier2() is defined %} style="display:none;" {% endif  %} style="margin-left:5px;margin-top:10px;float:left;"type="button" onclick="MoinsMetierUpdate('2','{{  mission.getId}}')"> - </button>
+                <img style="border:0px;height: 0px;width: 40px" src="{{ asset('image/vide.gif') }}" />
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="border:hidden 0px">
+            <div {% if  mission.getMetier3() is null %} style="display:none;" {% endif  %} style="width: 100%;" id="divMetier3{{  mission.getId}}">
+                <label id="lblMetier3{{  mission.getId}}" style="margin-top:10px;float: left">Métier 3 :</label>
+                <select title="Métier 3"  class="input" id="Metier3{{  mission.getId}}" name="_Metier3" style="width:365px;font:16px Roboto;" >
+                    <option value=""  ></option>
+                    <option value="Achat" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Achat' %} selected {% endif %}{% endif %}>Achat</option>
+                    <option value="Administration/Secrétariat" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Administration/Secrétariat' %} selected {% endif %}{% endif %}>Administration/Secrétariat</option>
+                    <option value="Agriculture/Elevage" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Agriculture/Elevage' %} selected {% endif %}{% endif %} >Agriculture/Elevage</option>
+                    <option value="Animation/Evénementiel" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Animation/Evénementiel' %} selected {% endif %}{% endif %}>Animation/Evénementiel</option>
+                    <option value="Artisanat" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Artisanat' %} selected {% endif %}{% endif %}>Artisanat</option>
+                    <option value="Banque/Assurance" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Banque/Assurance' %} selected {% endif %}{% endif %}>Banque/Assurance</option>
+                    <option value="Bâtiment/Travaux publics" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Bâtiment/Travaux publics' %} selected {% endif %}{% endif %}>Bâtiment/Travaux publics</option>
+                    <option value="Conseil/Audit" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Conseil/Audit' %} selected {% endif %}{% endif %}>Conseil/Audit</option>
+                    <option value="Commerce/Vente" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Commerce/Vente' %} selected {% endif %}{% endif %}>Commerce/Vente</option>
+                    <option value="Droit/Fiscalité" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Droit/Fiscalité' %} selected {% endif %}{% endif %}>Droit/Fiscalité</option>
+                    <option value="Edition/Journalisme" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Edition/Journalisme' %} selected {% endif %}{% endif %}>Edition/Journalisme</option>
+                    <option value="Etude/Recherche" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Etude/Recherche' %} selected {% endif %}{% endif %}>Etude/Recherche</option>
+                    <option value="Finance/Comptabilité" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Finance/Comptabilité' %} selected {% endif %}{% endif %}>Finance/Comptabilité</option>
+                    <option value="Formation/Enseignement" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Formation/Enseignement' %} selected {% endif %}{% endif %}>Formation/Enseignement</option>
+                    <option value="Immobilier" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Immobilier' %} selected {% endif %}{% endif %}>Immobilier</option>
+                    <option value="Industrie/Production" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Industrie/Production' %} selected {% endif %}{% endif %}>Industrie/Production</option>
+                    <option value="Informatique/Télécommunication" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Informatique/Télécommunication' %} selected {% endif %}{% endif %}>Informatique/Télécommunication</option>
+                    <option value="Informatique/Développement" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Informatique/Développement' %} selected {% endif %}{% endif %}>Informatique/Développement</option>
+                    <option value="Management/Gestion" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Management/Gestion' %} selected {% endif %}{% endif %}>Management/Gestion</option>
+                    <option value="Marketting/Communication/Publicité" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Marketting/Communication/Publicité' %} selected {% endif %}{% endif %}>Marketting/Communication/Publicité</option>
+                    <option value="Pharmaceutique/Chimie" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Pharmaceutique/Chimie' %} selected {% endif %}{% endif %}>Pharmaceutique/Chimie</option>
+                    <option value="Ressources Humaines" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Ressources Humaines' %} selected {% endif %}{% endif %}>Ressources Humaines</option>
+                    <option value="Hôtelerie/Restauration" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Hôtelerie/Restauration' %} selected {% endif %}{% endif %}>Hôtelerie/Restauration</option>
+                    <option value="Tourisme" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Tourisme' %} selected {% endif %}{% endif %}>Tourisme</option>
+                    <option value="Santé" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Santé' %} selected {% endif %}{% endif %}>Santé</option>
+                    <option value="Sécurité/Défense" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Sécurité/Défense' %} selected {% endif %}{% endif %}>Sécurité/Défense</option>
+                    <option value="Social" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Social' %} selected {% endif %}{% endif %}>Social</option>
+                    <option value="Sport/Loisir" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Sport/Loisir' %} selected {% endif %}{% endif %}>Sport/Loisir</option>
+                    <option value="Soin/Beauté" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Soin/Beauté' %} selected {% endif %}{% endif %}>Soin/Beauté</option>
+                    <option value="Transport/Logistique" {% if mission.getMetier3() is defined %}{% if mission.getMetier3=='Transport/Logistique' %} selected {% endif %}{% endif %}>Transport/Logistique</option>
+
+                </select>
+                <button id="idbtnPlus3{{  mission.getId}}" style="margin-left:5px;margin-top:10px;float:left;"type="button" onclick="AddMetierUpdate(3,{{  mission.getId}})">+</button>
+                <button id="idbtnMoins3{{  mission.getId}}" {% if not mission.getMetier3() is defined %} style="display:none;" {% endif  %} style="margin-left:5px;margin-top:10px;float:left;"type="button" onclick="MoinsMetierUpdate('3','{{  mission.getId}}')"> - </button>
+            </div>
+        </td>
+    </tr>
+
+
+
+</table>
+
+
+
+
+
+                                {#<div class="col-xs-12">
+                                    <label class="col-xs12">Embauche à l'issue de la mission?</label>
+                                    <input type="radio" name="_Embauche" value="1" title="Oui" >Oui
+                                    <input type="radio" name="_Embauche" value="0" title="Non" >Non
+                                </div>#}
+
+
+
+
+                            </div>
+
+
+
+
+
+
+
+                        </div>
+                        <div id="Onglet_Formations{{ mission.getId }}"  class="div_form" style="visibility: hidden;position: absolute;">
+                            <div class="col-xs-12 input-colonne "  >
+                                <br>
+                                <label class="col-xs-12">Liste des formations ciblées pour la mission</label>
+
+                                {% if app.user.hasRole('ROLE_ADMINECOLE') %}
+
+
+                                    <div class="col-xs-12" id="SelectMultipleFormation{{ mission.getId }}" style="overflow: auto;" >
+                                        {% for formation in formations %}
+                                            {% if formation.etablissement.tier == app.user.tier or formation.etablissement.tier in app.user.tier.tier1|keys %}
+                                                <input  type="checkbox" {% if GetDiffusion(mission.getId,formation.getId )  %} checked {% endif %}  value="{{ formation.getId }}" name="formation[]" title="formation" >
+                                                <label style="font: 14px Roboto ;  display: inline;" >{{ formation.nom }} - {{ formation.etablissement.tier.raisonsoc }} - {{ formation.etablissement.adresse }}</label>
+                                                <a target="_blank" href="{{ asset('formation_pdf/'~ formation.getId ~'.pdf') }}" >
+                                                    <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px " alt="fichier de formation" >
+                                                </a><br>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+
+                                {% elseif app.user.hasRole('ROLE_RECRUTEUR') %}
+
+
+                                    <div class="col-xs-12" id="SelectMultipleFormation{{ mission.getId }}" style="overflow: auto;">
+                                        {% for formation in formations %}
+                                            {% if (formation.etablissement.tier == app.user.etablissement.tier) or (formation.etablissement.tier in app.user.etablissement.tier.tier1) %}
+                                                <input  type="checkbox" {% if GetDiffusion(mission.getId,formation.getId )  %} checked {% endif %}    value="{{ formation.getId }}" name="formation[]" title="formation" >
+                                                <label style="font: 14px Roboto ;    display: inline;" >{{ formation.nom }} - {{ formation.etablissement.tier.raisonsoc }} - {{ formation.etablissement.adresse }}</label>
+                                                <a target="_blank" href="{{ asset('formation_pdf/'~ formation.getId ~'.pdf') }}" >
+                                                    <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px " alt="fichier de formation" >
+                                                </a><br>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+
+                                {% elseif is_granted("ROLE_ADMINSOC") %}
+
+                                    <div class="col-xs-12" id="SelectMultipleFormation{{ mission.getId }}" style="overflow: auto;">
+                                        {% for formation in formations %}
+
+                                            <input  type="checkbox" {% if GetDiffusion(mission.getId,formation.getId )  %} checked {% endif %}   value="{{ formation.getId }}" name="formation[]" title="formation" >
+                                            <label style="font: 14px Roboto ; display: inline;" >{{ formation.nom }} - {{ formation.etablissement.tier.raisonsoc }} - {{ formation.etablissement.adresse }}</label>
+                                            <a target="_blank" href="{{ asset('formation_pdf/'~ formation.getId ~'.pdf') }}" >
+                                                <img src="{{ asset('image/PDF.jpg') }}"  style="width:40px; height:40px " alt="fichier de formation" >
+                                            </a><br>
+
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="div_button" >
+                                <input id="submitaddmission{{ mission.getId }}" onclick="document.getElementById('BoutonOnlgetContactMission{{ mission.getId }}').click();" class="blue" type="button" value="suivant">
+
+                            </div>
+
+
+                        </div>
+
+                        <div id="Onglet_Contacts{{ mission.getId }}" class="div_form" style="visibility: hidden;position: absolute;">
+                            <input type="hidden" id="idcontact{{ mission.getId }}" name="_idcontact" value="">
+                            <label class="col-xs-3 input-colonne">
+                                Contacts mission
+                            </label>
+                            <div class="col-xs-9">
+                                {% if  mission.getTuteur is not null  %}
+
+                                    {% set idContact = GetIdContactMission(mission.tuteur.getId()) %}
+                                {% else %}
+                                    {% set idContact = '' %}
+                                {% endif %}
+
+                                <select  id="listeContact{{ mission.getId }}" onchange="AfficherContact(this,{{ mission.getId }})" title="Contcats société" class="input"  name="_contact" style="font:16px Roboto;">
+                                    {% if idContact=='' %}<option value="" selected  ></option>{% else %}<option value=""  ></option>{% endif %}
+                                    {% if ContactSociete is defined %}
+
+
+                                        {% for contact in ContactSociete %}
+
+
+                                            {% if idContact==contact.id  %}
+                                                <option value="{{ contact.id }}" selected  >{{ contact.nom }} {{ contact.prenom }}</option>
+                                            {% else %}
+                                                <option value="{{ contact.id }}">{{ contact.nom }} {{ contact.prenom }}</option>
+                                            {% endif %}
+
+                                        {% endfor %}
+
+
+                                    {% endif %}
+                                    <option value="-99"  >Autre</option>
+                                </select>
+                            </div>
+                            <div id="divContact{{ mission.getId }}" {% if idContact=='' or idContact=='-99' %} style="display:none;" {% endif %}  >
+
+
+
+                                <label class="col-xs-3 input-colonne">
+                                    Contact
+                                </label>
+                                <div class="col-xs-9">
+                                    <input type="text" style="width: calc(33% - 10px);font:16px Roboto;" class="input " value="{{ mission.getNomContact}}" id="NomContact{{ mission.getId }}" name="_NomContact" placeholder="NomContact" required MAXLENGTH="45">
+                                    <input type="text" style="width: calc(33% - 10px);margin-left: 15px;font:16px Roboto;" class="input " value="{{ mission.PrenomContact}} "id="PrenomContact{{ mission.getId }}" name="_PrenomContact" placeholder="PrenomContact" required MAXLENGTH="45">
+                                    <input type="text" style="width: calc(33% - 10px);margin-left: 15px;font:16px Roboto;" class="input" value="{{ mission.FonctionContact}}" id="FonctionContact{{ mission.getId }}" name="_FonctionContact" placeholder="FonctionContact" required MAXLENGTH="45">
+                                    <input type="text" style="width: calc(33% - 10px);font:16px Roboto;" class="input" value="{{ mission.TelContact}}" id="TelContact{{ mission.getId }}" name="_TelContact" placeholder="TelContact" required MAXLENGTH="20">
+                                    <input type="text" style="width: calc(33% - 10px);margin-left: 15px;font:16px Roboto;" class="input" value="{{ mission.EmailContact}} "id="EmailContact{{ mission.getId }}" name="_EmailContact" placeholder="EmailContact" required MAXLENGTH="45">
+                                </div>
+                                <label class="col-xs-3 input-colonne">
+                                    Commentaire
+                                </label>
+                                <div class="col-xs-9">
+                                    <textarea style="height: 100px;resize: both;font:16px Roboto;" class="input "  id="Commentaire{{ mission.getId }}" name="_Commentaire" placeholder="Commentaire"  MAXLENGTH="255">{{ mission.Commentaire}}</textarea>
+                                </div>
+                            </div>
+                            {#
+                            <label class="col-xs-3 input-colonne">
+                                Tuteur
+                            </label>
+                            <div class="col-xs-9">
+                                <select title="Tuteur" class="input" name="_TUTEURMISSION" style="font:16px Roboto;">
+                                    {% if users is defined %}
+                                        {% for user in users %}
+                                            {% if user.hasRole('ROLE_CONTACT_MISSION') %}
+
+                                                <option {% if  mission.getTuteur.getNom()==user.nom and  mission.getTuteur.getPrenom()== user.prenom  %} selected {% endif %} value="{{ user.id }}">{{ user.nom }} {{ user.prenom }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+
+                            #}
+
+
+                            <div class="div_button" >
+                                <input id="submitaddmission{{ mission.getId }}" onclick="document.getElementById('BoutonOnlgetCandidatMission{{ mission.getId }}').click();" class="blue" type="button" value="suivant">
+
+                            </div>
+
+                        </div>
+                        <div id="QCM_Affinite{{ mission.getId }}" class="div_form" style="visibility: hidden;position: absolute;">
+                            {% if QCMs is defined %}
+                                {% set y = 0 %}
+                                {% for question in Questions %}
+                                    <div class="inputcontainer" >
+
+
+                                        <label title="{{ question.question  }}"  style="float: left;text-overflow: ellipsis;overflow: hidden;height:40px;" >{{ question.question  }} :</label>
+                                        <div >
+
+
+                                            {% for reponse in reponses[y] %}
+                                                <div class="col-xs-12" style="float:left;height:30px;" >
+                                                    <input  type="radio" {% if  GetReponsesDef(mission.getId,reponse.getId )   >=1 %}   checked {% endif %}  name="reponse[{{ reponse.questiondef.id }}]" value="{{ reponse.getId }}" title="reponse" >
+                                                    <label style="font: 14px Roboto black;" for=idreponse{{ reponse.getId }}">{{ reponse.getReponse }}</label>
+                                                </div>
+
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    {% set y = y + 1 %}
+                                {% endfor %}
+                            {% endif %}
+
+                            <div class="div_button" >
+
+                                <br/>
+                                <input style="margin-top: 1500px;margin-left: -6%;" id="submitaddmissionEnovyer{{ mission.getId }}" class="blue" type="submit" value="Envoyer">
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+
+
+    {% endfor %}
+{% endif %}
+
+
+
+
+
+
+
+<script src="{{ asset('js/jquery-1.11.3.js') }}"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+<script src="{{ asset('js/PopUp.js') }}"></script>
+<script src="http://maps.googleapis.com/maps/api/js"></script>
+<script language="JavaScript">
+    var i = 1;
+    $('.date:not([readonly])').datepicker( {
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'dd/mm/yy',
+        monthNames: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+        monthNamesShort: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+        onClose: function(dateText, inst) {
+            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+        }
+    });
+
+    document.getElementById("leftselect").onchange = function(){
+        var x = document.getElementById("leftselect").value;
+        if(x=='mission'){
+            document.getElementById('divfiltreApp').style.visibility= 'hidden';
+            document.getElementById('divfiltreMission').style.visibility='visible';
+
+
+        }else if(x=='user'){
+            document.getElementById('divfiltreMission').style.visibility= 'hidden';
+            document.getElementById('divfiltreApp').style.visibility='visible';
+        }else {
+
+            document.getElementById('divfiltreMission').style.visibility= 'hidden';
+            document.getElementById('divfiltreApp').style.visibility='hidden';
+        }
+        document.getElementById('mission').style.visibility= 'hidden';
+        document.getElementById('societe').style.visibility= 'hidden';
+        document.getElementById('user').style.visibility= 'hidden';
+        document.getElementById(x).style.visibility='visible';
+        sessionStorage.setItem('leftonglet',x);
+    };
+
+    {# $('#submitaddapprenant').on('click', function(){
+        if($("#SelectMultipleFormation").find("option:selected").length == 0){
+            document.getElementById('BoutonOnlgetFormationApprenant').click();
+        }
+
+        else if($("#formApprenant").find("input").filter(function () {
+                    return !this.value;
+                }).length != 0){
+            document.getElementById('BoutonOnlgetDonnéesApprenant').click();
+
+        }
+        $('#hiddenSubmitApprenant').click();
+    }); #}
+    function loading(){
+        $("input:radio").on('dblclick',function(){
+            $(this).prop( "checked", false );
+        });
+        var onglet = sessionStorage.getItem('leftonglet');
+        if(onglet)
+        {
+            $('#leftselect').find('option[value="' + onglet + '"]').prop('selected', true).change();
+        }
+    }
+    function postiframe(url,id,button) {
+        document.getElementById("iframe").src = url;
+       /* var route = '{{path('adresses_tier',{'id':"_id" })}}';
+        route = route.replace("_id", id);
+        $.ajax({
+            type: 'get',
+            url: route,
+            dataType: 'json',
+            success: function(data){
+                var filtre = document.getElementById("filtre");
+                while (filtre.firstChild) {
+                    filtre.removeChild(filtre.firstChild);
+                }
+                for (var i = 0; i < data.adresses.length; i++)
+                {
+                    var obj = JSON.parse(data.adresses[i]);
+
+                    var li = document.createElement("li");
+
+                    var a = document.createElement("a");
+                    a.setAttribute('href',obj.id);
+                    a.innerHTML = obj.adresse;
+
+                    li.appendChild(a);
+
+                    filtre.appendChild(li);
+                }
+
+            }
+        });*/
+        var elements = button.getElementsByClassName("badge");
+        if(elements.length > 0)
+        {
+            elements[0].parentNode.removeChild(elements[0]);
+        }
+
+        sessionStorage.setItem('_Iframe',url);
+
+    }
+    function postiframeUser(url,button) {
+        document.getElementById("iframe").src = url;
+        sessionStorage.setItem('_Iframe',url);
+        if(button)
+        {
+            var elements = button.getElementsByClassName("badge");
+            if(elements.length > 0)
+            {
+                elements[0].parentNode.removeChild(elements[0]);
+            }
+        }
+    }
+    function search(mot){
+        var mots = mot.toUpperCase().trim().split(/ +/g);
+        var Recherches = document.getElementsByName('Recherche');
+        for(var i = 0; i < Recherches.length; i++)
+        {
+            var score = 0;
+            Recherches[i].parentNode.style.display="block";
+            var recherchermot = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g);
+            for(var k = 0; k< recherchermot.length; k++)
+            {
+                for(var j = 0; j< mots.length;j++)
+                {
+                    if (stringWith(recherchermot[k], mots[j])) {
+                        score++;
+                    }
+                }
+            }
+            if(score === 0 ){
+                Recherches[i].parentNode.style.display="none";
+                Recherches[i].nextElementSibling.innerHTML = score;
+            }
+            else {
+                Recherches[i].nextElementSibling.innerHTML = score;
+            }
+        }
+
+        SortDiv('societe');
+        SortDiv('user');
+        SortDiv('mission');
+    }
+    function SortDiv(divId){
+        var toSort = document.getElementById(divId).children;
+        toSort = Array.prototype.slice.call(toSort, 0);
+
+        toSort.sort(function(a, b) {
+            var aord = +a.children[1].innerHTML;
+            var bord = +b.children[1].innerHTML;
+            // two elements never have the same ID hence this is sufficient:
+            return (aord > bord) ? -1 : 1;
+        });
+        var parent = document.getElementById(divId);
+        parent.innerHTML = "";
+
+        for(var t = 0, l = toSort.length; t < l; t++) {
+            parent.appendChild(toSort[t]);
+        }
+    }
+    function dupliqueradresse() {
+
+        var dup = document.getElementById("div_adresse");
+        var clone = dup.cloneNode(true);
+        var toggle = clone.children[0];
+        toggle.setAttribute("data-target","#Adresse" + i);
+        toggle.innerHTML="Adresse " + i;
+
+        var div = clone.children[2];
+        div.setAttribute("id","Adresse" + i);
+        clone.style.display = 'inline-block';
+
+        div.children[2].id=div.children[2].id+i;
+        //div.children[3].id=i;
+        // if boutton ajouter +1
+        div.children[4].id=div.children[4].id+i;
+        div.children[5].id=div.children[5].id+i;
+        div.children[7].id=div.children[7].id+i;
+        div.children[8].id=div.children[8].id+i;
+        div.children[11].id=div.children[11].id+i;
+        div.children[12].id=div.children[12].id+i;
+        div.children[14].id=div.children[14].id+i;
+        div.children[18].id=div.children[18].id+i;
+        div.children[19].id=div.children[19].id+i;
+        div.children[22].id=div.children[22].id+i;
+        div.children[23].id=div.children[23].id+i;
+        div.children[27].id=div.children[27].id+i;
+        div.children[28].id=div.children[28].id+i;
+        div.children[30].id=div.children[30].id+i;
+
+        document.getElementById("adressecontainer").appendChild(clone);
+        var parentdiv = dup.parentNode;
+        var close =dup.parentNode.parentNode;
+        if(parentdiv.offsetHeight  > close.offsetHeight )
+        {
+            close.style.height = parentdiv.offsetHeight;
+            clone.children[0].style.height = parentdiv.offsetHeight;
+        }
+
+        i++;
+    }
+    function submitAjaxForm(url,form){
+
+        var route;
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $("#"+form).serialize(),
+            success: function(data)
+            {
+                if(data['status']==='success')
+                {
+                    $("#"+form+" input[type=submit]").click();
+                    document.getElementById('submittier').disabled=false;
+                }
+                else if(data['status']==='exist')
+                {
+                    route='{{ path('etablissement_exist') }}';
+                    var tier = JSON.parse(data['Tier']);
+                    var etablissements = JSON.parse(data['Etablissements']);
+                    var string_checkbox='';
+                    for (var i = 0; i < etablissements.length; i++) {
+                        string_checkbox += '<input type="checkbox" name="etablissement[]"  value="'+etablissements[i].id+'" > '+ etablissements[i].adresse+ ' - '+ etablissements[i].ville+' - '+etablissements[i].codepostal+'<br>';
+                    }
+
+                    document.getElementById(form).parentNode.style.display = 'none';
+                    var newdiv = document.createElement("div");
+                    var innerhtml_newdiv ='<form action="'+route+'" class="col-xs-offset-3 col-xs-6" style="padding: 0;border:20px solid white;display: block;background-color: white">'+
+                            '<label style="width: 50%">SIREN : '+tier.siren+' </label><label style="width: 50%">Raison sociale : '+tier.raisonsoc+'</label>'+
+                            '_checkbox_etablissements'+
+                            '<input type="submit" value="récupérer">'+
+                            '<button type="button" onclick="declinertier(this)">Décliner</button>'+
+                            '</form>';
+
+                    innerhtml_newdiv = innerhtml_newdiv.replace('_checkbox_etablissements',string_checkbox);
+                    newdiv.innerHTML = innerhtml_newdiv;
+                    document.getElementById(form).parentNode.parentNode.appendChild(newdiv);
+                    document.getElementById('submittier').disabled=false;
+
+                }
+                else if(data['status']==='is_ecole')
+                {
+                    alert('Le siren indiqué appartient à une école!');
+                    document.getElementById('submittier').disabled=false;
+                }
+                else
+                {
+                    alert('Une erreur s\'est produite sur le serveur');
+                    document.getElementById('submittier').disabled=false;
+                }
+            }
+        });
+    }
+    function envoyeradresses(){
+
+        document.getElementById('submittier').disabled=true;
+        var geocodes = document.getElementsByName('_Geocode[]');
+        if(geocodes.length==1)
+        {
+            alert('Vous devez remplir au moins une adresse');
+            document.getElementById('submittier').disabled=false;
+        }
+        for(var j = 1;j<geocodes.length;j++){
+            var siret = document.getElementsByName('_SIRET[]')[j].value;
+            var test = siret.substring(0, 9);
+            document.getElementById('SIREN').value=test;
+
+        }
+        var result_input= [];
+        for(var i = 1; i<geocodes.length;i++)
+        {
+            var address = document.getElementsByName('_Adresse[]')[i].value +' ' +document.getElementsByName('_Ville[]')[i].value + ' ' + document.getElementsByName('_CodeP[]')[i].value  ;
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({'address': address}, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    result_input.push(results[0].geometry.location);
+                    if(result_input.length == geocodes.length - 1)
+                    {
+                        for(var y = 1; y< geocodes.length; y++)
+                        {
+                            geocodes[y].value = result_input[y - 1] ;
+                        }
+                        var check = '{{ path('tier_checkExist') }}';
+                        submitAjaxForm(check,'formTier');
+                    }
+                } else {
+                    alert('Pas de géocodage trouvé pour l\'adresse spécifiée');
+                    document.getElementById('submittier').disabled=false;
+                }
+            });
+        }
+    }
+    function readURL(input,baliseimg) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#'+ baliseimg)
+                        .attr('src', e.target.result)
+                        .width(150)
+                        .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function supprimerAdresse(div){
+        div.parentNode.parentNode.removeChild(div.parentNode);
+    }
+    function disabling(champ){
+        if(champ.options[champ.selectedIndex].value ==0){champ.nextElementSibling.style.display = 'inline-block';}
+        else{champ.nextElementSibling.style.display = 'none';}
+    }
+    function declinertier(button){
+        button.parentNode.parentNode.parentNode.removeChild(button.parentNode.parentNode);
+        document.getElementById('formtier').parentNode.style.display = 'block';
+    }
+    function rechercheformation(mot) {
+        var mots = mot.toUpperCase().trim().split(/ +/g);
+        var formations = document.getElementById('SelectMultipleFormation').children;
+
+        for(var i = 0; i < formations.length; i++)
+        {
+            formations[i].style.display = "none";
+            for(var j = 0; j< mots.length;j++)
+            {
+                if (stringWith(formations[i].getAttribute("data-rec"), mots[j])) {
+                    formations[i].style.display = "";
+                    break;
+                }
+            }
+        }
+    }
+    var DocumentCount = 1;
+    function dupliquerDocument() {
+        var dup = document.getElementById("div_document");
+        var clone = dup.cloneNode(true);
+        var toggle = clone.children[0];
+        toggle.setAttribute("data-target","#document" + DocumentCount);
+        toggle.innerHTML="document " + DocumentCount;
+
+        var div = clone.children[2];
+        div.setAttribute("id","Document" + DocumentCount);
+        clone.style.display = 'block';
+
+        document.getElementById("documentcontainer").appendChild(clone);
+        var parentdiv = dup.parentNode;
+        var close =dup.parentNode.parentNode;
+        if(parentdiv.offsetHeight  > close.offsetHeight )
+        {
+            close.style.height = parentdiv.offsetHeight;
+            clone.children[0].style.height = parentdiv.offsetHeight;
+        }
+
+        DocumentCount++;
+    }
+
+    $('#filtre').find('li').on('click',function(){
+
+        var Recherches = $('#mission').find('div[name="Recherche"]');
+        for(var i = 0; i < Recherches.length; i++)
+        {
+            Recherches[i].parentNode.style.display="";
+            var recherchermot = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g)[0];
+
+            if(recherchermot != $(this).attr("data-rec") && $(this).attr("data-rec") != "0" ){
+                Recherches[i].parentNode.style.display="none";
+            }
+        }
+    })
+
+    $('#filtreApp').find('li').on('click',function(){
+
+        var Recherches = $('#user').find('div[name="Recherche"]');
+        for(var i = 0; i < Recherches.length; i++)
+        {
+            Recherches[i].parentNode.style.display="";
+            var recherchermot = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g)[0];
+            var rechercherHandicape = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g)[1];
+            var rechercherEntrepreneur = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g)[2];
+            var rechercherPermis = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g)[3];
+            var rechercherVehicule = Recherches[i].innerHTML.toUpperCase().trim().split(/,+/g)[4];
+
+
+            // alert('recheche mot '+recherchermot);
+            // alert('data-rec '+$(this).attr("data-rec"));
+
+            if(recherchermot != $(this).attr("data-rec") && $(this).attr("data-rec") != "0" ){
+                if(rechercherHandicape != $(this).attr("data-rec") && $(this).attr("data-rec") != "0" ){
+                    if(rechercherEntrepreneur != $(this).attr("data-rec") && $(this).attr("data-rec") != "0" ){
+                        if(rechercherPermis != $(this).attr("data-rec") && $(this).attr("data-rec") != "0" ){
+                            if(rechercherVehicule != $(this).attr("data-rec") && $(this).attr("data-rec") != "0" ){
+                                Recherches[i].parentNode.style.display="none";
+                            }else{
+                                Recherches[i].parentNode.style.display="block";
+                            }
+                        }else{
+                            Recherches[i].parentNode.style.display="block";
+                        }
+                    }else{
+                        Recherches[i].parentNode.style.display="block";
+                    }
+
+                }else {
+                    Recherches[i].parentNode.style.display="block";
+                }
+            }
+
+            //alert('recheche mot '+rechercherHandicape);
+            //alert('data-rec '+$(this).attr("data-rec"));
+
+        }
+    })
+
+
+    $('#submitaddapprenant').on('click',function(){
+        var id = $('#NavBarAddApprenant').find('.active')[0].id;
+        if(id=="ButtonOngletDocument"){
+            if($("#infoapprenant").find("input").filter(function () {
+                        return !this.value;
+                    }).length != 0){
+                document.getElementById('BoutonOnlgetDonnéesApprenant').click();
+            }
+            $('#hiddenSubmitApprenant').click();
+        }
+        else if(id=="BoutonOnlgetFormationApprenant"){
+            $('#ButtonOngletDocument').click();
+            $('#submitaddapprenant').val("envoyer");
+
+        }
+        else if(id=="BoutonOnlgetDonnéesApprenant"){
+            $('#BoutonOnlgetFormationApprenant').click();
+        }
+    });
+
+
+
+
+    $('#NavBarAddApprenant').find('button').on('click',function(){
+
+        if($(this).attr('id')=="ButtonOngletDocument"){
+            $('#submitaddapprenant').val("envoyer");
+        }
+        else if($(this).attr('id')=="BoutonOnlgetFormationApprenant"){
+            $('#submitaddapprenant').val("suivant");
+        }
+        else if($(this).attr('id')=="BoutonOnlgetDonnéesApprenant"){
+            $('#submitaddapprenant').val("suivant");
+        }
+    });
+
+    $('#NavBarAddMission').find('button').on('click',function(){
+
+        if($(this).attr('id')=="BoutonOnlgetCandidatMission"){
+            $('#submitaddmission').val("envoyer");
+        }
+        else if($(this).attr('id')=="BoutonOnlgetFormationMission"){
+            $('#submitaddmission').val("suivant");
+        }
+        else if($(this).attr('id')=="BoutonOnlgetContactMission"){
+            $('#submitaddmission').val("suivant");
+        }
+        else if($(this).attr('id')=="BoutonOnlgetDonnéesMission"){
+            $('#submitaddmission').val("suivant");
+        }
+    });
+
+    $('#submitaddmission').on('click',function(){
+        var id = $('#NavBarAddMission').find('.active')[0].id;
+        if(id=="BoutonOnlgetCandidatMission"){
+            if($("#Onglet_Contacts").find("input").filter(function () {
+                        return !this.value;
+                    }).length != 0){
+                document.getElementById('BoutonOnlgetContactMission').click();
+
+            }
+            else if($("#Onglet_Formations").find("input").filter(function () {
+                        return !this.value;
+                    }).length != 0){
+                document.getElementById('BoutonOnlgetFormationMission').click();
+
+            }
+            else if($("#Information_generale").find("input").filter(function () {
+                        return !this.value;
+                    }).length != 0){
+                document.getElementById('BoutonOnlgetDonnéesMission').click();
+            }
+            $('#hiddenSubmitMission').click();
+        }
+        else if(id=="BoutonOnlgetContactMission"){
+            $('#BoutonOnlgetCandidatMission').click();
+            $('#submitaddmission').val("envoyer");
+
+        }
+        else if(id=="BoutonOnlgetDonnéesMission"){
+            $('#BoutonOnlgetFormationMission').click();
+        }
+        else if(id=="BoutonOnlgetFormationMission"){
+            $('#BoutonOnlgetContactMission').click();
+        }
+    });
+
+
+    $("#document_apprenant").find('button').on("click",checkFileSize );
+
+    function VerifierSiret(button){
+
+
+        //var siret= button.previousElementSibling.value;
+        var siret= button.value;
+        var idCompliment=button.id.replace('SIRET','');
+        var route = '{{ path('Siret_Verifier',{'siret':"_siret"}) }}';
+        route = route.replace('_siret',siret);
+        ShowWaiter();
+
+        $.ajax({
+            type: "POST",
+            url: route,
+
+            success: function(data)
+            {
+
+                if(data['status']==='exist')
+                {
+
+                    document.getElementById('Rue'+idCompliment).value=data['rue'];
+                    document.getElementById('CodeP'+idCompliment).value=data['codePostal'];
+                    document.getElementById('Ville'+idCompliment).value=data['ville'];
+                    document.getElementById('Tel'+idCompliment).value=data['tel'];
+                    document.getElementById('Fax'+idCompliment).value=data['fax'];
+                    document.getElementById('Site'+idCompliment).value=data['site'];
+                    document.getElementById('Resp'+idCompliment).value=data['nomResp'];
+                    document.getElementById('RespPrenom'+idCompliment).value=data['prenomResp'];
+                    document.getElementById('TelResp'+idCompliment).value=data['telResp'];
+                    document.getElementById('MailResp'+idCompliment).value=data['mailResp'];
+                    document.getElementById('TypeSoc'+idCompliment).value=data['type'];
+                    document.getElementById('Taille'+idCompliment).value=data['taille'];
+                    document.getElementById('Secteur'+idCompliment).value=data['secteur'];
+                    button.style.borderColor = "red";
+
+                }else {
+
+                    button.style.borderColor = "green";
+
+                }
+
+                DeleteWaiter();
+            }
+
+        });
+
+    }
+    function AfficherContact(liste,idMission)
+    {
+        //alert(liste.value)
+        if (liste.value==''){
+            document.getElementById('divContact'+idMission).style.display='none';
+            document.getElementById('NomContact'+idMission).value='';
+            document.getElementById('PrenomContact'+idMission).value='';
+            document.getElementById('FonctionContact'+idMission).value='';
+            document.getElementById('TelContact'+idMission).value='';
+            document.getElementById('EmailContact'+idMission).value='';
+            document.getElementById('Commentaire'+idMission).value='';
+            document.getElementById('idcontact'+idMission).value='';
+
+        }else if (liste.value!='-99'){
+
+            var route = '{{path('chercher_contact',{'id':"_id" })}}';
+            route = route.replace("_id", liste.value);
+
+            $.ajax({
+                type: 'get',
+                url: route,
+                dataType: 'json',
+
+                success: function(data) {
+
+
+                    document.getElementById('NomContact'+idMission).value=data['nom'];
+                    document.getElementById('PrenomContact'+idMission).value=data['prenom'];
+                    document.getElementById('FonctionContact'+idMission).value=data['fonction'];
+                    document.getElementById('TelContact'+idMission).value=data['tel'];
+                    document.getElementById('EmailContact'+idMission).value=data['mail'];
+                    document.getElementById('idcontact'+idMission).value=liste.value;
+
+                    document.getElementById('divContact'+idMission).style.display='block';
+
+                }
+            });
+
+
+        }
+        else{
+
+            document.getElementById('NomContact'+idMission).value='';
+            document.getElementById('PrenomContact'+idMission).value='';
+            document.getElementById('FonctionContact'+idMission).value='';
+            document.getElementById('TelContact'+idMission).value='';
+            document.getElementById('EmailContact'+idMission).value='';
+            document.getElementById('Commentaire'+idMission).value='';
+            document.getElementById('idcontact'+idMission).value='';
+            document.getElementById('divContact'+idMission).style.display='block';
+
+        }
+    }
+
+    function AddMetier(nbre){
+        var id=nbre+1;
+        document.getElementById('divMetier'+id).style.display="block";
+        document.getElementById('idbtnMoins'+id).style.display="block";
+        if (nbre==2){
+            document.getElementById('idbtnMoins'+nbre).style.display="none";
+        }
+
+    }
+    function MoinsMetier(nbre){
+        var e = document.getElementById('Metier'+nbre);
+
+        e.options[e.selectedIndex].value='';
+
+        document.getElementById('divMetier'+nbre).style.display="none";
+
+        if (nbre==3){
+            document.getElementById('idbtnMoins2').style.display="block";
+        }
+
+
+    }
+
+
+
+    function MoinsMetierUpdate(nbre,idMission){
+        var e = document.getElementById('Metier'+nbre+idMission);
+
+        e.options[e.selectedIndex].value='';
+
+        document.getElementById('divMetier'+nbre+idMission).style.display="none";
+
+        if (nbre=='3'){
+            document.getElementById('idbtnMoins2'+idMission).style.display="block";
+        }
+
+
+    }
+
+
+    function AddMetierUpdate(nbre,idMission){
+        var id=nbre+1;
+        document.getElementById('divMetier'+id+idMission).style.display="block";
+        document.getElementById('idbtnMoins'+id+idMission).style.display="block";
+        if (nbre==2){
+            document.getElementById('idbtnMoins'+nbre+idMission).style.display="none";
+        }
+    }
+
+
+
+
+</script>
+
+{% block JS %}
+
+{% endblock %}
+</body>
+</html>

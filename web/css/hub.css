@@ -1,0 +1,140 @@
+/*NAVBAR TOP*/
+
+#navbar{
+	background-color:#2975cb;
+	border:none;
+}
+
+#navlogo{
+	border-right-width:0px;
+}
+
+#navnotif{
+	border-right-width:0px;
+	border-left-width:0px;
+}
+
+/* BLOC GAUCHE LISTING/RECHERCHE */
+
+.mes-rows{
+	width: 100% !important	
+}
+
+.fixedrows{
+	height:78px !important;
+	position:fixed !important;
+	width: 100% !important	
+}
+
+#leftdiv{
+	padding-left:0px;
+	padding-right:0px;
+	text-align:center;
+	vertical-align:center;
+}
+
+#leftselect{
+	width:100%;
+	height:40px;
+	background-color:#1C5AA5;
+	text-align: center;
+	vertical-align: middle;
+	color:black;
+	border:none;
+	padding-right:0px;
+	
+}
+
+#option{
+	height:30px;
+	text-align:center;
+	vertical-align:middle;
+}
+
+#leftsearch{
+	background-color:#2975cb;
+	color:white;
+	margin:0;
+	margin-bottom:0;
+	position:relative;
+    padding-bottom:0px;
+    padding-top:0px;
+    padding-right:0px;
+    padding-left:16px;
+    border-left-width:0px;
+    border-right-width:0px;
+    border-top-width:0px;
+    border-bottom-width:0px;
+}
+
+.leftbar{
+	background: #1B2024;
+    margin:0;
+    height:100%;
+    position:fixed;
+    padding-left:0px;
+    padding-right:0px;
+}
+
+#leftbaraddbtn{
+	padding-left:15px;
+	padding-right:15px;
+	height:40px;	
+}
+
+#leftbartext{
+	padding-left:10px;
+}
+
+.listbutton{
+	background: #1B2024;
+	color:#E4E4E4;
+	border-top-width:0px;
+    padding-right:0px;
+    border-left-width:0px;
+    border-right-width:0px;
+    border-bottom-width:1px;
+    padding-bottom:0px;
+    padding-top:0px;
+    padding-left:0px;
+    height:60px;
+    margin-bottom: 0px;
+    text-align: left;
+}
+
+.nopadright{
+	padding-right:0px !important;
+}
+
+.nopadleft{
+	padding-left:0px !important;
+}
+
+.noborder{
+	border-top-width: 0px;
+	border-bottom-width: 0px;
+	border-left-width: 0px;
+	border-right-width: 0px;
+}
+
+.centtext{
+	text-align: center;
+}
+
+.overflowon{
+	overflow-y:scroll;
+	overflow-x:hidden;
+}
+
+.overflowoff{
+	overflow-y:hidden;
+}
+
+.isfixed{
+	position: fixed;
+}
+  
+.logosoc{
+	padding:10px;
+	height:78px;
+}
