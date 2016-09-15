@@ -658,7 +658,7 @@
                     <ul class="nav navbar-nav">
 
 
-                            <li><a href="#" onclick="show('apprenant')"> Ajouter Apprenants </a></li>
+                            <li><a href="#" onclick="show('apprenant')"> Ajouter Apprenant </a></li>
 
                             <li><a href="#" onclick="show('addtier',0)"> Ajouter Societé </a></li>
 
@@ -697,7 +697,7 @@
                             <li class="dropdown">
 
 
-                               
+
                                 <a href="#" class="dropdown-toggle user" data-toggle="dropdown">
 
 
@@ -707,7 +707,7 @@
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="app-student-profile.html"> Mon compte </a></li>
                                     <li><a href="app-student-billing.html"> Mon agenda </a></li>
-                                    <li><a href="login.html"> Me déconnecter </a></li>
+                                    <li><a onclick="sessionStorage.clear()" href="{{ path('logout') }}"> Me déconnecter </a></li>
                                 </ul>
                                 </li>
                             <!-- // User -->
