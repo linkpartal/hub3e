@@ -109,7 +109,7 @@
   right: 0;
   top: 0;
   -webkit-transition: all 0.2s ease;
-          transition: all 0.2s ease;
+  transition: all 0.2s ease;
   font-size: 1.23rem;
   font-weight: normal;
   height: 48px;
