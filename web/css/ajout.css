@@ -6,7 +6,7 @@ body{
 
 .inputcontainer
 {
-    height: 60px;
+    height: 0px;
     border: none !important;
     border-radius: 0 !important;
     border-bottom: 1px solid #EEE  !important;
@@ -18,16 +18,28 @@ body{
     background-color: white;
 }
 
-.inputcontainer label
+.inputcontainer
 {
-    height: 60px;
+    height: 10px;
     padding: 10px 0 10px 0 !important;
     display: inline-block !important;
     border: none !important;
     color: #7F7F7F !important;
     font : 20px Roboto;
     margin: 0 !important;
-    line-height: 200%;
+    line-height: 100%;
+}
+
+.inputcontainer label
+{
+    height: 10px;
+    padding: 10px 0 10px 0 !important;
+    display: inline-block !important;
+    border: none !important;
+    color: #7F7F7F !important;
+    font : 20px Roboto;
+    margin: 0 !important;
+    line-height: 100%;
 }
 .inputcontainer .champ
 {
