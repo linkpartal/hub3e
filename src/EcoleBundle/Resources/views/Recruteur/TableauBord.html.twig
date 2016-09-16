@@ -57,9 +57,8 @@
                              style="margin-right: 5px; overflow: hidden; width: 50%">
                             <div onclick="showDiv('MissionAPourvoir')" style="border: 1px solid #66b3f4;"
                                  class="graphe">
-                                {# <strong class="barre" style="background: #66b3f4;width: 36%;">36%</strong> #}
-                                {% if MissionsAPourvoir is defined %} <strong class="barre"
-                                                                              style="background: #66b3f4;width: {{ MissionsAPourvoir }}%;">{{ MissionsAPourvoir }}
+                                {% if MissionsAPourvoir is defined %}
+                                <strong class="barre" style="background: #66b3f4;width: {{ MissionsAPourvoir }}%;">{{ MissionsAPourvoir }}
                                     %</strong>
                                 {% elseif MissionsAPourvoir == null %}
                                     <strong class="barre" style="background: #66b3f4; width:0%"> 0% </strong>
@@ -73,7 +72,7 @@
                     <div style="text-align:left; width: 95%; height: 60px;align-items: center" id="Mission2"
                          class="SASPaginate">
 
-                        <div class="" style="text-align: left;margin-left: 10px;; width: 50%"
+                        <div class="col-lg-12 col-xs-12" style="text-align: left;margin-left: 10px; width: 50%"
                              onclick="showDiv('MissionPourvues')">
                             <a href="#"><label style="font:large Roboto; .hd; cursor:pointer">Missions pourvues</label></a>
                             <div class="hidden-xs hidden-sm">
@@ -85,12 +84,13 @@
 
                         <div id="Nomapprenanat12" title="" class="col-lg-6 col-xs-12"
                              style="margin-right: 5px; overflow: hidden; width: 50%">
-                            <div onclick="showDiv('MissionPourvues')" style="border: 1px solid #81c785;" class="graphe">
-                                {% if MissionsPourvues is defined %} <strong class="barre"
-                                                                             style="background: #81c785;width: {{ MissionsPourvues }}%;">{{ MissionsPourvues }}
+                            <div onclick="showDiv('MissionPourvues')" style="border: 1px solid #81c785;"
+                                 class="graphe">
+                                {% if MissionsPourvues is defined %}
+                                    <strong class="barre" style="background: #81c785;width: {{ MissionsPourvues }}%;">{{ MissionsPourvues }}
                                     %</strong>
-                                {% elseif MissionsPourvues == null %}
-                                    <strong class="barre" style="background: #81c785; width:0%">0% </strong>
+                                {% elseif MissionsPorvues == null %}
+                                    <strong class="barre" style="background: #66b3f4; width:0%"> 0% </strong>
                                 {% endif %}
                             </div>
                         </div>
@@ -223,7 +223,7 @@
 
                 </div>
                 {#1#}
-                <div style="text-align:left; width: 95%; height: 60px;align-items: center" id="apprenanat1"
+                <div style="text-align:left; width: 95%; height: 60px;align-items: center;margin-left:14px" id="apprenanat1"
                      class="col-lg-12 col-xs-12 SASPaginate">
 
                     <div class="col-lg-12 col-xs-12" style="text-align: left;margin-left: 10px; width: 50%"
@@ -248,7 +248,7 @@
 
                     </div>
                 </div>
-                <div style="text-align:left; width: 95%; height: 60px;align-items: center" id="apprenanat2"
+                <div style="text-align:left; width: 95%; height: 60px;align-items: center ;margin-left:14px" id="apprenanat2"
                      class="col-lg-12 col-xs-12 SASPaginate">
 
                     <div class="col-lg-12 col-xs-12" style="text-align: left;margin-left: 10px; width: 50%"
@@ -274,7 +274,7 @@
                         {% endif %}
                     </div>
                 </div>
-                <div style="text-align:left; width: 95%; height: 60px;align-items: center" id="apprenanat3"
+                <div style="text-align:left; width: 95%; height: 60px;align-items: center ;margin-left:14px" id="apprenanat3"
                      class="col-lg-12 col-xs-12 SASPaginate">
 
                     <div class="col-lg-12 col-xs-12" style="text-align: left;margin-left: 10px; width: 50%"
@@ -299,7 +299,7 @@
                     </div>
 
                 </div>
-                <div style="text-align:left; width: 95%; height: 60px;align-items: center" id="apprenanat4"
+                <div style="text-align:left; width: 95%; height: 60px;align-items: center ;margin-left:14px" id="apprenanat4"
                      class="col-lg-12 col-xs-12 SASPaginate">
 
                     <div class="col-lg-12 col-xs-12" style="text-align: left;margin-left: 10px; width: 50%"
@@ -328,7 +328,7 @@
                     </div>
 
                 </div>
-                <div style="text-align:left; width: 95%; height: 60px;align-items: center" id="apprenanat5"
+                <div style="text-align:left; width: 95%; height: 60px;align-items: center;margin-left:14px" id="apprenanat5"
                      class="col-lg-12 col-xs-12 SASPaginate">
 
                     <div class="col-lg-12 col-xs-12" style="text-align: left;.hd; margin-left: 10px; width: 50%"
@@ -358,7 +358,7 @@
                 </div>
 
 
-                <div style="text-align:left;width:95%;align-items: center" id="apprenanatBtn"
+                <div style="text-align:left;width:95%;align-items: center;margin-left:14px" id="apprenanatBtn"
                      class="col-lg-12 col-xs-12 SASPaginate">
                     <div class="col-xs-12" style="text-align: center; width: 100%">
                         <button onclick="showDiv('apprenant');" class="btn btn-primary" type="button">
