@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/ajout.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/SuperUser.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/all.css') }}"/>
 
-    <link rel="stylesheet" href="{{ asset('css/ajout.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/PopUp.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/Form.css') }}"/>
@@ -554,7 +554,7 @@
                 </div>
 
 
-                <div id="OngletApprenant" class="col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2"
+                <div id="OngletApprenant" class="col-md-9 col-lg-8 col-md-offset-1 col-lg-offset-2"
                      style="margin-bottom: 50px">
 
 
@@ -568,38 +568,41 @@
                                         <div class="form-group form-control-material ">
                                             <input value="{{ User.getPrenom }}" type="email" class="form-control"
                                                    id="exampleInputFirstName" placeholder="Votre Prénom">
-                                            <div class="col-md-1"><label for="exampleInputFirstName">Prénom</label></div>
+                                            <div class="col-md-1"><label for="exampleInputFirstName">Prénom</label>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-2"style="margin-top:10px"></div>
+                                    <div class="col-md-2" style="margin-top:10px"></div>
                                     <div class="col-md-5" style="margin-top:10px">
                                         <div class="form-group form-control-material">
                                             <input value="{{ User.getNom }}" type="email" class="form-control"
                                                    id="exampleInputLastName" placeholder="Nom de Famille">
-                                            <div class="col-md-1"> <label for="exampleInputLastName">Nom</label> </div>
+                                            <div class="col-md-1"><label for="exampleInputLastName">Nom</label></div>
                                         </div>
                                     </div>
-                                    <div class="col-md-5"style="margin-top:10px">
+                                    <div class="col-md-5" style="margin-top:10px">
                                         <div class="form-group form-control-material">
                                             <input value="{{ User.getUserName }}" type="email" class="form-control"
                                                    id="Pseudo" placeholder="Pseudo">
-                                            <div class="col-md-1"><label for="exampleinputfirstname">Pseudo</label></div>
+                                            <div class="col-md-1"><label for="exampleinputfirstname">Pseudo</label>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-2"style="margin-top:10px"></div>
-                                    <div class="col-md-5"style="margin-top:10px">
-                                       <div class="form-group form-control-material">
+                                    <div class="col-md-2" style="margin-top:10px"></div>
+                                    <div class="col-md-5" style="margin-top:10px">
+                                        <div class="form-group form-control-material">
                                             <input value="{{ User.getEmail }}" type="email" class="form-control"
                                                    id="exampleInputEmail1" placeholder="Votre Adresse Email">
-                                           <div class="col-md-1"> <label for="exampleInputEmail1">Adresse</label></div>
-                                           <div class="col-md-5"> <label for="exampleInputEmail1">Email</label></div>
+                                            <div class="col-md-1"><label for="exampleInputEmail1">Adresse</label></div>
+                                            <div class="col-md-5"><label for="exampleInputEmail1">Email</label></div>
                                         </div>
                                     </div>
-                                    <div class="col-md-5"style="margin-top:10px">
+                                    <div class="col-md-5" style="margin-top:10px">
                                         <div class="form-group form-control-material">
                                             <input value="{{ User.getTelephone }}" type="email" class="form-control"
                                                    id="exampleInputPassword1" placeholder="Telephone">
-                                            <div class="col-md-1"> <label for="exampleInputLastName">Telephone</label></div>
+                                            <div class="col-md-1"><label for="exampleInputLastName">Telephone</label>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-7"></div>
@@ -644,186 +647,186 @@
                                 </div>
                             </div>
                         </div>
-                        
-{#
-                        Ancienne fiche profil
-#}
-                      {#  <div id="info_user" class="list-group affichage">
-                            <form class="formulaire" id="formUser" action="{{ path('userModif') }}"
-                                  onsubmit="ShowWaiter();" method="post" enctype="multipart/form-data">
-                                <input type="hidden" value="{{ User.getId }}" id="id" name="_ID">
 
-                                <div class="row">
-                                    <div class="col-lg-12 col-md-12 col-xs-12 col-ml-12">
-                                        <Label style="font:20px Roboto;width:99%; height: 40px;line-height: 40px; background: #1C5AA5; color: white;text-align:center;">Détails</Label>
-                                    </div>
-                                </div>
+                        {#
+                                                Ancienne fiche profil
+                        #}
+                        {#  <div id="info_user" class="list-group affichage">
+                              <form class="formulaire" id="formUser" action="{{ path('userModif') }}"
+                                    onsubmit="ShowWaiter();" method="post" enctype="multipart/form-data">
+                                  <input type="hidden" value="{{ User.getId }}" id="id" name="_ID">
 
-
-                                #}{#Civilité#}{#
-                                <div class="inputcontainer">
-
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 profile">
-                                        <label class="list-group-item" style="height: 20px;"> Civilitéy : </label>
-                                        <select class="champ form-control" title="" id="civilite" name="_Civilite">
-                                            {% if User.getCivilite == 'Mr' %}
-                                                <option selected="selected" value="Mr">Mr.</option>
-                                            {% else %}
-                                                <option value="Mr">Mr.</option>
-                                            {% endif %}
-
-                                            {% if User.getCivilite == 'Mme' or User.getCivilite == 'Madame' %}
-                                                <option selected="selected" value="Mme">Mme.</option>
-                                            {% else %}
-                                                <option value="Mme">Mme.</option>
-                                            {% endif %}
-
-                                        </select>
-                                    </div>
-
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 profile">
-                                        <label class="list-group-item" style="height: 40px;" for="Photos">Photo :
-                                            {% if User.getPhotos %}
-                                                <img id="Photosimg" alt="Photos" style="height:40px"
-                                                     src="data:image/jpg;base64,{{ User.getPhotos }}">
-                                            {% elseif User.getCivilite == 'Mme' or User.getCivilite == 'Madame' or User.getCivilite == 'Mademoiselle' %}
-                                                <img id="Photosimg" alt="Photos" style="height:40px"
-                                                     src="{{ asset('image/femme.jpg') }}">
-                                            {% else %}
-                                                <img id="Photosimg" alt="Photos" style="height:40px"
-                                                     src="{{ asset('image/homme.jpg') }}">
-                                            {% endif %}
-                                        </label>
-                                        <input onchange="readURL(this,'Photosimg');" accept="image/*" type="file"
-                                               class="champ form-control" id="Photos" name="_Photos"
-                                               style="display: none !important;">
-                                        <label><i>Pour modifier votre avatar cliquez sur l'icône</i></label>
-                                    </div>
-                                </div>
-
-                                #}{#Nom Prenom tel mail woo#}{#
-                                <div class="inputcontainer">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 profile">
-                                        <label class="list-group-item" style="height: 60px;" for="Nom">Nom :</label>
-                                        <input value="{{ User.getNom }}" type="text" class="champ form-control" id="Nom"
-                                               name="_Nom" maxlength="45">
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 profile">
-                                        <label class="list-group-item" style="height: 60px;" for="Prenom">Prénom
-                                            :</label>
-                                        <input value="{{ User.getPrenom }}" type="text" class="champ form-control"
-                                               id="Prenom" name="_Prenom" maxlength="45">
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 profile">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 profile">
-                                        <label class="list-group-item" style="height: 60px;" for="Tel">Téléphone
-                                            : </label>
-                                        <input value="{{ User.getTelephone }}" type="tel" class="champ form-control"
-                                               id="Tel" name="_Tel" maxlength="20">
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 profile">
-                                        <label class="list-group-item" style="height: 60px;" for="Mail">E-mail :</label>
-                                        <input value="{{ User.getEmail }}" type="text" class="champ form-control"
-                                               id="Mail" name="_Mail" maxlength="45">
-                                    </div>
-                                </div>
-
-                                #}{#                                 <div class="inputcontainer">
-                                                                    <div class="col-xs-6" style="text-align:left">
-                                                                    <label class="list-group-item" style="height: 60px;" for="Adresse">Adresse : </label>
-                                                                    <input value="{{User.getInfo.getAdresse}}" type="text" class="champ form-control" minlength="40" id="Adresse" name="_Adresse" maxlength="100" >
-                                                                    </div>
-                                                                    <div class="col-xs-6" style="text-align:left">
-                                                                    <label class="list-group-item" style="height: 60px;" for="Codepostal">Code postal :</label>
-                                                                    <input value="{{User.getInfo.getCp}}" type="text" class="champ form-control" id="Codepostal" name="_Codepostal" maxlength="45" >
-                                                                    </div>
-                                                                </div> #}{#
-
-                                #}{#                                 <div class="inputcontainer">
-                                                                    <div class="col-xs-6" style="text-align:left">
-                                                                        <label class="list-group-item" style="height: 60px;" for="Datenaissance">Date de naissance : </label>
-                                                                        <input value="{{User.getInfo.getDatenaissance|date('d/m/Y') }}" type="text" class="champ form-control" id="Datenaissance" name="_Datenaissance" maxlength="45" required >
-                                                                    </div>
-
-                                                                    <div class="col-xs-6" style="text-align:left">
-                                                                        <label class="list-group-item" style="height: 60px;" for="Lieunaissance">Lieu de naissance:</label>
-                                                                        <input value="{{User.getInfo.getLieunaissance}}" type="text" class="champ form-control" id="Lieunaissance" name="_Lieunaissance" maxlength="45" required >
-                                                                    </div>
-                                                                </div> #}{#
-
-                                #}{# LE PSEUDO EST IL UTILE ? #}{#
-                                <div class="inputcontainer">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 profile">
-                                        <label class="list-group-item" style="height: 60px;" for="UserName">Pseudo
-                                            :</label>
-                                        <input value="{{ User.getUserName }}" type="text" class="champ form-control"
-                                               id="UserName" name="_Username" maxlength="45">
-                                    </div>
-                                </div>
-                                #}{#Ecole#}{#
-                                <div class="inputcontainer">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 profile">
-                                        {% if User.getEtablissement %}
-                                            {% if User.getEtablissement.getTier.getEcole == 0 %}
-                                                <label class="list-group-item " style="height: 60px;">Société : <label
-                                                            style="color:black">{{ User.getEtablissement.getTier.getRaisonSoc }}</label></label>
-
-                                            {% elseif User.getEtablissement.getTier.getEcole == 1 %}
-                                                <label class="list-group-item " style="height: 60px;">Ecole : <label
-                                                            style="color:black">{{ User.getEtablissement.getTier.getRaisonSoc }}</label></label>
-                                            {% endif %}
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 profile">
-                                        <label class="list-group-item" style="height: 60px;">Dernière connexion
-                                            : </label><label
-                                                style="color:black"> {{ User.getLastLogin|date('d/m/Y') }}</label>
-                                    </div>
-                                </div>
-                                #}{#                                 <div class="inputcontainer">
-                                                                    <label class="list-group-item" style="height: 60px;" >Expiré le : </label>
-                                                                    <label style="color:black" >
-
-                                                                        {% if User.getExpiredAt is null %}
-                                                                            &nbsp;
-                                                                        {% else %}
-                                                                            {{ User.getExpiredAt|date('d/m/Y H:i') }}
-                                                                        {% endif %}
+                                  <div class="row">
+                                      <div class="col-lg-12 col-md-12 col-xs-12 col-ml-12">
+                                          <Label style="font:20px Roboto;width:99%; height: 40px;line-height: 40px; background: #1C5AA5; color: white;text-align:center;">Détails</Label>
+                                      </div>
+                                  </div>
 
 
-                                                                    </label>
+                                  #}{#Civilité#}{#
+                                  <div class="inputcontainer">
+
+                                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 profile">
+                                          <label class="list-group-item" style="height: 20px;"> Civilitéy : </label>
+                                          <select class="champ form-control" title="" id="civilite" name="_Civilite">
+                                              {% if User.getCivilite == 'Mr' %}
+                                                  <option selected="selected" value="Mr">Mr.</option>
+                                              {% else %}
+                                                  <option value="Mr">Mr.</option>
+                                              {% endif %}
+
+                                              {% if User.getCivilite == 'Mme' or User.getCivilite == 'Madame' %}
+                                                  <option selected="selected" value="Mme">Mme.</option>
+                                              {% else %}
+                                                  <option value="Mme">Mme.</option>
+                                              {% endif %}
+
+                                          </select>
+                                      </div>
+
+                                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 profile">
+                                          <label class="list-group-item" style="height: 40px;" for="Photos">Photo :
+                                              {% if User.getPhotos %}
+                                                  <img id="Photosimg" alt="Photos" style="height:40px"
+                                                       src="data:image/jpg;base64,{{ User.getPhotos }}">
+                                              {% elseif User.getCivilite == 'Mme' or User.getCivilite == 'Madame' or User.getCivilite == 'Mademoiselle' %}
+                                                  <img id="Photosimg" alt="Photos" style="height:40px"
+                                                       src="{{ asset('image/femme.jpg') }}">
+                                              {% else %}
+                                                  <img id="Photosimg" alt="Photos" style="height:40px"
+                                                       src="{{ asset('image/homme.jpg') }}">
+                                              {% endif %}
+                                          </label>
+                                          <input onchange="readURL(this,'Photosimg');" accept="image/*" type="file"
+                                                 class="champ form-control" id="Photos" name="_Photos"
+                                                 style="display: none !important;">
+                                          <label><i>Pour modifier votre avatar cliquez sur l'icône</i></label>
+                                      </div>
+                                  </div>
+
+                                  #}{#Nom Prenom tel mail woo#}{#
+                                  <div class="inputcontainer">
+                                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 profile">
+                                          <label class="list-group-item" style="height: 60px;" for="Nom">Nom :</label>
+                                          <input value="{{ User.getNom }}" type="text" class="champ form-control" id="Nom"
+                                                 name="_Nom" maxlength="45">
+                                      </div>
+                                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 profile">
+                                          <label class="list-group-item" style="height: 60px;" for="Prenom">Prénom
+                                              :</label>
+                                          <input value="{{ User.getPrenom }}" type="text" class="champ form-control"
+                                                 id="Prenom" name="_Prenom" maxlength="45">
+                                      </div>
+                                  </div>
+
+                                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 profile">
+                                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 profile">
+                                          <label class="list-group-item" style="height: 60px;" for="Tel">Téléphone
+                                              : </label>
+                                          <input value="{{ User.getTelephone }}" type="tel" class="champ form-control"
+                                                 id="Tel" name="_Tel" maxlength="20">
+                                      </div>
+                                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 profile">
+                                          <label class="list-group-item" style="height: 60px;" for="Mail">E-mail :</label>
+                                          <input value="{{ User.getEmail }}" type="text" class="champ form-control"
+                                                 id="Mail" name="_Mail" maxlength="45">
+                                      </div>
+                                  </div>
+
+                                  #}{#                                 <div class="inputcontainer">
+                                                                      <div class="col-xs-6" style="text-align:left">
+                                                                      <label class="list-group-item" style="height: 60px;" for="Adresse">Adresse : </label>
+                                                                      <input value="{{User.getInfo.getAdresse}}" type="text" class="champ form-control" minlength="40" id="Adresse" name="_Adresse" maxlength="100" >
+                                                                      </div>
+                                                                      <div class="col-xs-6" style="text-align:left">
+                                                                      <label class="list-group-item" style="height: 60px;" for="Codepostal">Code postal :</label>
+                                                                      <input value="{{User.getInfo.getCp}}" type="text" class="champ form-control" id="Codepostal" name="_Codepostal" maxlength="45" >
+                                                                      </div>
+                                                                  </div> #}{#
+
+                                  #}{#                                 <div class="inputcontainer">
+                                                                      <div class="col-xs-6" style="text-align:left">
+                                                                          <label class="list-group-item" style="height: 60px;" for="Datenaissance">Date de naissance : </label>
+                                                                          <input value="{{User.getInfo.getDatenaissance|date('d/m/Y') }}" type="text" class="champ form-control" id="Datenaissance" name="_Datenaissance" maxlength="45" required >
+                                                                      </div>
+
+                                                                      <div class="col-xs-6" style="text-align:left">
+                                                                          <label class="list-group-item" style="height: 60px;" for="Lieunaissance">Lieu de naissance:</label>
+                                                                          <input value="{{User.getInfo.getLieunaissance}}" type="text" class="champ form-control" id="Lieunaissance" name="_Lieunaissance" maxlength="45" required >
+                                                                      </div>
+                                                                  </div> #}{#
+
+                                  #}{# LE PSEUDO EST IL UTILE ? #}{#
+                                  <div class="inputcontainer">
+                                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 profile">
+                                          <label class="list-group-item" style="height: 60px;" for="UserName">Pseudo
+                                              :</label>
+                                          <input value="{{ User.getUserName }}" type="text" class="champ form-control"
+                                                 id="UserName" name="_Username" maxlength="45">
+                                      </div>
+                                  </div>
+                                  #}{#Ecole#}{#
+                                  <div class="inputcontainer">
+                                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 profile">
+                                          {% if User.getEtablissement %}
+                                              {% if User.getEtablissement.getTier.getEcole == 0 %}
+                                                  <label class="list-group-item " style="height: 60px;">Société : <label
+                                                              style="color:black">{{ User.getEtablissement.getTier.getRaisonSoc }}</label></label>
+
+                                              {% elseif User.getEtablissement.getTier.getEcole == 1 %}
+                                                  <label class="list-group-item " style="height: 60px;">Ecole : <label
+                                                              style="color:black">{{ User.getEtablissement.getTier.getRaisonSoc }}</label></label>
+                                              {% endif %}
+                                          {% endif %}
+                                      </div>
+                                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 profile">
+                                          <label class="list-group-item" style="height: 60px;">Dernière connexion
+                                              : </label><label
+                                                  style="color:black"> {{ User.getLastLogin|date('d/m/Y') }}</label>
+                                      </div>
+                                  </div>
+                                  #}{#                                 <div class="inputcontainer">
+                                                                      <label class="list-group-item" style="height: 60px;" >Expiré le : </label>
+                                                                      <label style="color:black" >
+
+                                                                          {% if User.getExpiredAt is null %}
+                                                                              &nbsp;
+                                                                          {% else %}
+                                                                              {{ User.getExpiredAt|date('d/m/Y H:i') }}
+                                                                          {% endif %}
 
 
-                                                                </div> #}{#
-                                <div class="inputcontainer">
-                                    <div class="col-lg-6 col-md-3 col-sm-4 col-xs-12 profile">
-                                        <label class="list-group-item" style="height: 60px;">Roles :
-                                            {% for role in User.getRoles %}
-                                                {% if role == "ROLE_APPRENANT" %}
-                                                    <label style="color:black">APPRENANT</label>
-                                                {% elseif role == "ROLE_ADMINECOLE" %}
-                                                    <label style="color:black">Administrateur école</label>
-                                                {% elseif role == "ROLE_ADMINSOC" %}
-                                                    <label style="color:black">Administrateur Société</label>
-                                                {% elseif role == "ROLE_CONTACT_MISSION" %}
-                                                    <label style="color:black">Contact mission</label>
-                                                {% elseif role == "ROLE_RECRUTEUR" %}
-                                                    <label style="color:black">Recruteur Placeur</label>
-                                                {% elseif role == "ROLE_SUPER_ADMIN" %}
-                                                    <label style="color:black">Super Administrateur</label>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </label>
-                                    </div>
-                                </div>
+                                                                      </label>
 
-                                <input id="formUserSubmit" type="submit" style="display: none;">
 
-                            </form>
+                                                                  </div> #}{#
+                                  <div class="inputcontainer">
+                                      <div class="col-lg-6 col-md-3 col-sm-4 col-xs-12 profile">
+                                          <label class="list-group-item" style="height: 60px;">Roles :
+                                              {% for role in User.getRoles %}
+                                                  {% if role == "ROLE_APPRENANT" %}
+                                                      <label style="color:black">APPRENANT</label>
+                                                  {% elseif role == "ROLE_ADMINECOLE" %}
+                                                      <label style="color:black">Administrateur école</label>
+                                                  {% elseif role == "ROLE_ADMINSOC" %}
+                                                      <label style="color:black">Administrateur Société</label>
+                                                  {% elseif role == "ROLE_CONTACT_MISSION" %}
+                                                      <label style="color:black">Contact mission</label>
+                                                  {% elseif role == "ROLE_RECRUTEUR" %}
+                                                      <label style="color:black">Recruteur Placeur</label>
+                                                  {% elseif role == "ROLE_SUPER_ADMIN" %}
+                                                      <label style="color:black">Super Administrateur</label>
+                                                  {% endif %}
+                                              {% endfor %}
+                                          </label>
+                                      </div>
+                                  </div>
 
-                        </div>#}
+                                  <input id="formUserSubmit" type="submit" style="display: none;">
+
+                              </form>
+
+                          </div>#}
 
 
                         {# MODIF A FAIRE PROFIL VUE IF NOT APPRENANT #}

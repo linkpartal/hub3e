@@ -701,8 +701,8 @@
                             <a href="#" class="dropdown-toggle user" data-toggle="dropdown">
 
 
-                                <img src="images/people/110/joker.jpg" alt="Nom" class="img-circle"
-                                     width="40"/> {{ app.user.username }} <span class="caret"></span>
+                                <img src="" alt="" class=""
+                                     width="0"/> {{ app.user.username }} <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a onclick="postiframe('{{ path('afficher_profil') }}')"> Mon compte </a></li>
@@ -810,8 +810,8 @@
 
         {% block underTopBar %}
 
-            {#{% block LeftBar %}
-                <div class="col-xs-2">
+            {% block LeftBar %}
+                <div class="col-xs-2" style="margin-top: 60px">
 
                     <select title="" id="leftselect" name="myddl" class="btn btn-default dropdown-toggle">
                         <option value="user">Voir Apprenants</option>
@@ -975,7 +975,7 @@
             {% endblock %}#}
 
 
-            <div class="col-xs-12" style="height: 100%;">
+            <div class="col-xs-10" style="height: 100%;">
 
                 <div class="row" style="height: 40px; margin-top: 0px;">
 
