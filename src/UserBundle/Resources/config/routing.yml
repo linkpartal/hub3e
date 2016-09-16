@@ -188,4 +188,8 @@ contact_added:
     path:  /admin/Contactadded
     defaults: {_controller: UserBundle:Default:ContactAdded}
 
+Chercher_Mise:
+    path: /RechercheMise/
+    defaults: { _controller: UserBundle:Default:RechercheMise}
+
 

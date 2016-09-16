@@ -513,6 +513,7 @@
        {# <select class="input col-xs-2" title="messages" style="height:40px;">
             <option value="les messages">Tous les rendez-vous</option>
         </select>#}
+
         <div class="col-xs-2" style="margin-left: 20px;height:40px;display: flex;">
             <span class="glyphicon glyphicon-search col-xs-2" id="basic-addon1" style="height: 30px;padding: 7px;float: left;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;background-color: transparent;"></span>
             <input class="col-xs-10" type="text" onkeyup="search(this.value)" aria-describedby="basic-addon1" style="height: 31px;border: none;border-bottom: 1px solid #CCCCCC;margin: auto 0;background-color: transparent;" placeholder="Recherche ...">
@@ -521,15 +522,54 @@
             <button  class="blue" style="background:white;color:#257ef0;border:1px solid #ccc;height:40px;width: 40px;float: right;" type="button" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
         </div>
 
+
     </div>
 
     <div id="ListeMiseEnRelation"  class="col-xs-12 col-lg-11 col-mg-12 col-xs-offset-1">
+        <form id="formFiltre">
+        <div class="col-xs-offset-1 col-xs-10 form-group" style="margin-top:10px;margin-bottom:10px;" >
+
+            <input style="width:150px;float:left;" placeholder="Nom" class="form-control" type="text" id="Nom" name="_Nom" maxlength="45"  >
+
+            <input style="width:150px;float:left;" placeholder="Prenom" class="form-control" type="text" id="Prenom" name="_Prenom" maxlength="45"  >
+
+            <input style="width:150px;float:left;" placeholder="Société" class="form-control" type="text" id="Societe" name="_Societe" maxlength="45"  >
+
+            <label style="float:left;margin-top:6px; margin-left: 3px;" >Date mise en relation :</label> <select name="_DateMise" id="DateMise" class="form-control" style="width:120px;float:left;">
+
+
+
+                    <option value="0" selected></option>
+                    <option value="1">Aujourd'hui</option>
+                    <option value="2" >Hier</option>
+                    <option value="3" >Cette semaine</option>
+                    <option value="4" >Ce mois</option>
+
+
+
+
+            </select>
+            {#
+            <label style="color: rgb(75, 75, 75);text-align: left;" >Apprenants importés  : </label><input placeholder="AppImporte" class="input" type="text" id="AppImporte" name="_AppImporte" maxlength="45" >
+            <label style="color: rgb(75, 75, 75);text-align: left;" >Apprenants ajoutés  : </label><input placeholder="AppAjout" class="input" type="text" id="AppAjout" name="_AppAjout" maxlength="45" >
+
+            <button class="btn btn-primary" style="background-color: #247ef0;float:left; height: 25px;margin-left: 5px;vertical-align: middle ;" onclick="AjoutMulti()" type="button" title="rechercher" >
+                rechercher
+            </button>
+            #}
+            <button   title="Lancer la recherche" type="button" onclick="Rechercher()" style="margin-top:10px;height: 100%;background-color: transparent;border: none;margin-left: 5px;float:left;">
+                <span class="glyphicon glyphicon-search" style="color: #1C5AA5" style="margin-left: 5px;float:left;"></span>
+            </button>
+
+
+        </div>
+        </form>
         {% if MiseEnRelation is defined %}
             {% set i = 0 %}
             {% set nbreNull = 0 %}
             {% for mise in MiseEnRelation %}
 
-                <div id="{{ mise.id }}" class="Liste" style="border: 1px solid #ddd;margin: 0;height:100px;width: 100%;" >
+                <div id="{{ mise.id }}" class="Liste" name="ListeMise" style="border: 1px solid #ddd;margin: 0;height:100px;width: 100%;" >
                    {# <div name="Recherche" style="display: none;">{{ rdv.destinataire.nom }},{{ rdv.destinataire.prenom }},{{ rdv.destinataire.email }},{{ rdv.tuteur.nom }},{{ rdv.tuteur.prenom }},{{ rdv.tuteur.email }},{% if rdv.mission %}{{ rdv.mission.intitule }},{{ rdv.mission.codemission }},{{ rdv.mission.descriptif }},{{ rdv.mission.domaine }},{% if rdv.mission.etablissement %}{{ rdv.mission.etablissement.siret }},{{ rdv.mission.etablissement.adresse }},{{ rdv.mission.etablissement.secteur }},{{ rdv.mission.etablissement.tier.raisonsoc }}{% endif %}{% endif %}</div>#}
 
                         <div class="col-xs-1 col-md-2 col-lg-2 hidden-xs hidden-sm" style="width:10%;" >
@@ -1216,6 +1256,50 @@
             }
         })
 
+    }
+
+
+
+    function Rechercher(){
+
+        ShowWaiter();
+        var route = '{{ path('Chercher_Mise') }}';
+        $.ajax({
+            type: "POST",
+            url: route,
+            data: $("#formFiltre").serialize(),
+            error: DeleteWaiter(),
+            success: function(data)
+            {
+                //alert(data);
+                var tousApp = document.getElementsByName('ListeMise');
+                var arrayOfidsApp = data.split(';');
+                if(data){
+
+
+                   /* for (var i=0; i < tousApp.length; i++){
+
+                        tousApp.item(i).style.display ='none';
+                    }
+
+                    for (var i=1; i < arrayOfidsApp.length-1; i++){
+
+                        if (document.getElementById('apprenant'+arrayOfidsApp[i]))
+                        {
+                            document.getElementById('apprenant'+arrayOfidsApp[i]).style.display ='block';
+                        }
+
+
+                    }*/
+
+
+
+                }
+
+
+                DeleteWaiter();
+            }
+        });
     }
 
     function RefuserApp(idApp,idMission){
